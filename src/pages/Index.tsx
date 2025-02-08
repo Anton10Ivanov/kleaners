@@ -8,6 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -56,17 +63,21 @@ const Index = () => {
     <div className="grid md:grid-cols-2 gap-8">
       <div className="space-y-4">
         <h3 className="text-xl font-semibold mb-4">Select Service</h3>
-        <RadioGroup value={selectedService} onValueChange={setSelectedService}>
-          {services.map((service) => (
-            <div key={service.id} className="flex items-start space-x-3 p-4 border rounded-lg">
-              <RadioGroupItem value={service.id} id={service.id} />
-              <div className="space-y-1">
-                <Label htmlFor={service.id}>{service.title}</Label>
-                <p className="text-sm text-gray-500">{service.description}</p>
-              </div>
-            </div>
-          ))}
-        </RadioGroup>
+        <Select onValueChange={setSelectedService} value={selectedService}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Choose a service" />
+          </SelectTrigger>
+          <SelectContent>
+            {services.map((service) => (
+              <SelectItem key={service.id} value={service.id}>
+                <div className="flex flex-col">
+                  <span className="font-medium">{service.title}</span>
+                  <span className="text-sm text-gray-500">{service.description}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="space-y-4">
         <h3 className="text-xl font-semibold mb-4">Enter Postal Code</h3>
@@ -314,4 +325,3 @@ const services = [
 ];
 
 export default Index;
-
