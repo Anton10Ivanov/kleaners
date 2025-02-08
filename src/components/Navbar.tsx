@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <span className="font-raleway font-bold text-2xl text-primary">SparkleClean</span>
+            <span className="font-raleway font-bold text-2xl text-primary">Kleaners.de</span>
           </div>
           
           {/* Desktop Menu */}
