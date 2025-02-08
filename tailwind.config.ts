@@ -21,12 +21,12 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9b87f5",
+          DEFAULT: "#221F26",
           foreground: "#FFFFFF",
         },
         secondary: {
           DEFAULT: "#F8F9FA",
-          foreground: "#333333",
+          foreground: "#221F26",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -37,7 +37,7 @@ export default {
           foreground: "#666666",
         },
         accent: {
-          DEFAULT: "#9b87f5",
+          DEFAULT: "#221F26",
           foreground: "#FFFFFF",
         },
         popover: {
@@ -85,3 +85,4 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
