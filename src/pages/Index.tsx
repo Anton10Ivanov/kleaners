@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowRight, Sparkles, Shield, Clock, Phone, X, Check } from 'lucide-react';
+import { ArrowRight, Feather, Shield, Clock, Phone, Check } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -50,12 +50,12 @@ const Index = () => {
   const calculatePrice = (basePrice: number) => {
     let price = basePrice;
     if (frequency === 'weekly') {
-      price *= 0.8; // 20% discount for weekly
+      price *= 0.8;
     } else if (frequency === 'biweekly') {
-      price *= 0.9; // 10% discount for bi-weekly
+      price *= 0.9;
     }
-    if (isFlexible) price *= 0.95; // 5% discount for flexible timing
-    if (hasKey) price *= 0.95; // 5% discount for key access
+    if (isFlexible) price *= 0.95;
+    if (hasKey) price *= 0.95;
     return price;
   };
 
@@ -89,7 +89,10 @@ const Index = () => {
             placeholder="Enter postal code"
             className="w-full"
           />
-          <Button onClick={handleNextStep}>
+          <Button 
+            onClick={handleNextStep}
+            className="bg-primary hover:bg-primary/90"
+          >
             Next <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -205,13 +208,15 @@ const Index = () => {
     <div className="min-h-screen font-raleway">
       <Navbar />
       
-      {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 bg-gradient-to-b from-white to-secondary">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 animate-fadeIn text-center">
+          <div className="flex justify-center mb-8">
+            <Feather className="w-12 h-12 text-primary" />
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fadeIn text-center">
             Book Your Cleaning Service
           </h1>
-          <div className="bg-white p-8 rounded-lg shadow-lg">
+          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
             {currentStep === 1 && renderStep1()}
             {currentStep === 2 && renderStep2()}
             {currentStep === 3 && renderStep3()}
@@ -220,15 +225,14 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section */}
       <section id="services" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Services</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="bg-secondary p-6 rounded-lg hover:shadow-lg transition-shadow">
+              <div key={index} className="bg-secondary p-6 rounded-lg hover:shadow-lg transition-shadow border border-gray-100">
                 <div className="text-primary mb-4">
-                  <Sparkles size={32} />
+                  <Feather size={32} />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                 <p className="text-gray-600">{service.description}</p>
@@ -238,10 +242,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
       <section id="about" className="py-20 px-4 bg-secondary">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose Us</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">Why Choose Us</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Feature
               icon={<Shield className="w-8 h-8 text-primary" />}
@@ -249,7 +252,7 @@ const Index = () => {
               description="Fully insured and bonded cleaning services you can trust"
             />
             <Feature
-              icon={<Sparkles className="w-8 h-8 text-primary" />}
+              icon={<Feather className="w-8 h-8 text-primary" />}
               title="Expert Team"
               description="Professionally trained and experienced cleaning specialists"
             />
@@ -262,36 +265,35 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section id="contact" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12">Get in Touch</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-primary">Get in Touch</h2>
           <div className="max-w-md mx-auto">
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full"
                 required
               />
-              <button
+              <Button
                 type="submit"
-                className="w-full bg-primary text-white px-8 py-3 rounded-md font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-primary hover:bg-primary/90 flex items-center justify-center gap-2"
               >
                 Contact Us
                 <Phone size={20} />
-              </button>
+              </Button>
             </form>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-secondary py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center text-gray-600">
-          <p>&copy; 2024 SparkleClean. All rights reserved.</p>
+      <footer className="bg-primary text-white py-8 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <Feather className="w-8 h-8 mx-auto mb-4" />
+          <p>&copy; 2024 Kleaners.de. All rights reserved.</p>
         </div>
       </footer>
     </div>
@@ -299,7 +301,7 @@ const Index = () => {
 };
 
 const Feature = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
-  <div className="text-center p-6 bg-white rounded-lg hover:shadow-lg transition-shadow">
+  <div className="text-center p-6 bg-white rounded-lg hover:shadow-lg transition-shadow border border-gray-100">
     <div className="flex justify-center mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
     <p className="text-gray-600">{description}</p>
@@ -325,3 +327,4 @@ const services = [
 ];
 
 export default Index;
+
