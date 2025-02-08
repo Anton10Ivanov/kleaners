@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, Sparkles, Shield, Clock, Phone, X, Check } from 'lucide-react';
@@ -16,6 +17,7 @@ const Index = () => {
   const [isFlexible, setIsFlexible] = useState(false);
   const [hasKey, setHasKey] = useState(false);
   const [promoCode, setPromoCode] = useState('');
+  const [email, setEmail] = useState('');
 
   const validatePostalCode = (code: string) => code === "1";
 
@@ -31,6 +33,11 @@ const Index = () => {
       }
     }
     setCurrentStep(prev => prev + 1);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Message sent successfully!");
   };
 
   const calculatePrice = (basePrice: number) => {
@@ -307,3 +314,4 @@ const services = [
 ];
 
 export default Index;
+
