@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
@@ -13,7 +14,7 @@ const Index = () => {
   const [selectedService, setSelectedService] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [hours, setHours] = useState(3);
+  const [hours, setHours] = useState(2);
   const [extras, setExtras] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hasPets, setHasPets] = useState(false);
@@ -42,6 +43,21 @@ const Index = () => {
   };
 
   const currentPrice = calculatePrice(frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34);
+
+  const extraServices = [
+    { id: 'windows', name: 'Windows', icon: <Shield className="w-6 h-6" />, price: 15 },
+    { id: 'dishes', name: 'Dishes', icon: <Feather className="w-6 h-6" />, price: 10 },
+    { id: 'laundry', name: 'Laundry', icon: <Clock className="w-6 h-6" />, price: 12 },
+    { id: 'fridge', name: 'Fridge', icon: <Phone className="w-6 h-6" />, price: 20 },
+  ];
+
+  const toggleExtra = (extraId: string) => {
+    setExtras(current =>
+      current.includes(extraId)
+        ? current.filter(id => id !== extraId)
+        : [...current, extraId]
+    );
+  };
 
   const renderProgressBar = () => (
     <div className="flex items-center justify-between mb-12 max-w-2xl mx-auto">
@@ -144,18 +160,20 @@ const Index = () => {
   const renderExtras = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
       <h3 className="text-xl font-semibold mb-6">Which extras would you be interested in?</h3>
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
-        <div className="flex flex-col items-center text-center space-y-2">
-          <div className="p-4 border rounded-lg cursor-pointer hover:border-primary">
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <line x1="8" y1="12" x2="16" y2="12" />
-            </svg>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {extraServices.map((service) => (
+          <div
+            key={service.id}
+            onClick={() => toggleExtra(service.id)}
+            className={`flex flex-col items-center text-center space-y-2 cursor-pointer`}
+          >
+            <div className={`p-4 border rounded-lg transition-all ${extras.includes(service.id) ? 'border-primary bg-primary/10' : 'border-gray-200 hover:border-primary/50'}`}>
+              {service.icon}
+            </div>
+            <span className="font-medium">{service.name}</span>
+            <span className="text-sm text-gray-500">+{service.price}€</span>
           </div>
-          <span>Windows</span>
-          <span className="text-sm text-gray-500">Add</span>
-        </div>
-        {/* Add other extra options similarly */}
+        ))}
       </div>
     </div>
   );
@@ -172,7 +190,8 @@ const Index = () => {
         <Button 
           variant="outline" 
           size="icon"
-          onClick={() => setHours(prev => Math.max(1, prev - 0.5))}
+          onClick={() => setHours(prev => Math.max(2, prev - 0.5))}
+          disabled={hours <= 2}
         >
           <Minus className="h-4 w-4" />
         </Button>
@@ -187,14 +206,14 @@ const Index = () => {
       </div>
       <div className="flex items-center justify-center mt-4 text-sm text-gray-500">
         <Info className="w-4 h-4 mr-2" />
-        Recommended for: 2 bedrooms, 1 bathroom
+        Minimum booking: 2 hours
       </div>
     </div>
   );
 
   const renderCalendar = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Choose a date and time for your first cleaning</h3>
+      <h3 className="text-xl font-semibold mb-6">Choose your preferred date</h3>
       <div className="flex flex-col md:flex-row gap-8">
         <div>
           <CalendarComponent
@@ -202,6 +221,7 @@ const Index = () => {
             selected={date}
             onSelect={setDate}
             className="rounded-md border"
+            disabled={(date) => date < new Date()}
           />
         </div>
         <div className="flex-1">
@@ -219,48 +239,47 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6">
-        <div className="flex items-start gap-2">
-          <Checkbox
-            id="pets"
-            checked={hasPets}
-            onCheckedChange={(checked) => setHasPets(checked as boolean)}
-          />
-          <label htmlFor="pets" className="text-sm">
-            I have pets
-          </label>
-        </div>
-        <div className="flex items-start gap-2 mt-4">
-          <Checkbox
-            id="supplies"
-            checked={hasCleaningSupplies}
-            onCheckedChange={(checked) => setHasCleaningSupplies(checked as boolean)}
-          />
-          <label htmlFor="supplies" className="text-sm">
-            I confirm that I have all necessary cleaning supplies at home
-          </label>
-        </div>
-      </div>
     </div>
   );
 
   const renderSummary = () => (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-8">
       <h3 className="text-xl font-semibold mb-6">Summary</h3>
       <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <Clock className="w-5 h-5 text-gray-400" />
-          <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
-          <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Feather className="w-5 h-5 text-gray-400" />
-          <span>House Cleaning</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Clock className="w-5 h-5 text-gray-400" />
-          <span>{hours} Cleaning Hours</span>
-        </div>
+        {selectedService && (
+          <div className="flex items-center gap-3">
+            <Check className="w-5 h-5 text-gray-400" />
+            <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+          </div>
+        )}
+        {frequency && (
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5 text-gray-400" />
+            <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
+            <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
+          </div>
+        )}
+        {hours > 0 && (
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5 text-gray-400" />
+            <span>{hours} Cleaning Hours</span>
+          </div>
+        )}
+        {extras.length > 0 && (
+          <div className="space-y-2">
+            <div className="font-medium">Extra Services:</div>
+            {extras.map(extraId => {
+              const service = extraServices.find(s => s.id === extraId);
+              return service ? (
+                <div key={extraId} className="flex items-center gap-3 pl-4">
+                  <Check className="w-4 h-4 text-gray-400" />
+                  <span>{service.name}</span>
+                  <span className="ml-auto">+{service.price}€</span>
+                </div>
+              ) : null;
+            })}
+          </div>
+        )}
         {date && (
           <div className="flex items-center gap-3">
             <Calendar className="w-5 h-5 text-gray-400" />
@@ -275,7 +294,15 @@ const Index = () => {
         <div className="border-t pt-4 mt-6">
           <div className="flex justify-between font-semibold">
             <span>TOTAL</span>
-            <span>{(currentPrice * hours).toFixed(2)} €</span>
+            <span>
+              {(
+                currentPrice * hours +
+                extras.reduce((acc, extraId) => {
+                  const service = extraServices.find(s => s.id === extraId);
+                  return acc + (service?.price || 0);
+                }, 0)
+              ).toFixed(2)} €
+            </span>
           </div>
           <div className="text-sm text-gray-500">per cleaning</div>
         </div>
@@ -297,7 +324,9 @@ const Index = () => {
               {currentStep === 2 && (
                 <>
                   {renderServiceOptions()}
+                  {renderHoursSelection()}
                   {renderExtras()}
+                  {renderCalendar()}
                 </>
               )}
               {currentStep === 3 && renderCalendar()}
@@ -334,3 +363,4 @@ const Index = () => {
 };
 
 export default Index;
+
