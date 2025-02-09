@@ -1,50 +1,30 @@
 
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowRight, Feather, Shield, Clock, Phone, Check } from 'lucide-react';
+import { ArrowRight, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedService, setSelectedService] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [isFlexible, setIsFlexible] = useState(false);
-  const [hasKey, setHasKey] = useState(false);
-  const [promoCode, setPromoCode] = useState('');
-  const [email, setEmail] = useState('');
+  const [hours, setHours] = useState(3);
+  const [extras, setExtras] = useState<string[]>([]);
 
   const validatePostalCode = (code: string) => code === "1";
 
   const handleNextStep = () => {
     if (currentStep === 1) {
-      if (!selectedService) {
-        toast.error("Please select a service");
-        return;
-      }
       if (!validatePostalCode(postalCode)) {
         toast.error("Service not available in your area");
         return;
       }
     }
     setCurrentStep(prev => prev + 1);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Message sent successfully!");
   };
 
   const calculatePrice = (basePrice: number) => {
@@ -54,277 +34,162 @@ const Index = () => {
     } else if (frequency === 'biweekly') {
       price *= 0.9;
     }
-    if (isFlexible) price *= 0.95;
-    if (hasKey) price *= 0.95;
     return price;
   };
 
-  const renderStep1 = () => (
-    <div className="grid md:grid-cols-2 gap-8">
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold mb-4">Select Service</h3>
-        <Select onValueChange={setSelectedService} value={selectedService}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Choose a service" />
-          </SelectTrigger>
-          <SelectContent>
-            {services.map((service) => (
-              <SelectItem key={service.id} value={service.id}>
-                <div className="flex flex-col">
-                  <span className="font-medium">{service.title}</span>
-                  <span className="text-sm text-gray-500">{service.description}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+  const currentPrice = calculatePrice(frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34);
+
+  const renderProgressBar = () => (
+    <div className="flex items-center justify-between mb-12 max-w-2xl mx-auto">
+      <div className="flex items-center">
+        <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
+          <Check className="w-5 h-5" />
+        </div>
+        <div className="ml-2">Ihre Postleitzahl</div>
       </div>
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold mb-4">Enter Postal Code</h3>
-        <div className="flex space-x-4">
-          <Input 
-            type="text" 
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            placeholder="Enter postal code"
-            className="w-full"
-          />
-          <Button 
-            onClick={handleNextStep}
-            className="bg-primary hover:bg-primary/90"
-          >
-            Next <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+      <div className="h-1 w-24 bg-gray-200 mx-4">
+        <div className="h-full bg-primary" style={{ width: `${(currentStep / 3) * 100}%` }} />
+      </div>
+      <div className="flex items-center">
+        <div className={`w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
+          2
+        </div>
+        <div className="ml-2">Reinigungsinformation</div>
+      </div>
+      <div className="h-1 w-24 bg-gray-200 mx-4">
+        <div className="h-full bg-primary" style={{ width: `${Math.max(0, (currentStep - 2) / 1) * 100}%` }} />
+      </div>
+      <div className="flex items-center">
+        <div className={`w-8 h-8 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
+          3
+        </div>
+        <div className="ml-2">Kasse</div>
+      </div>
+    </div>
+  );
+
+  const renderServiceOptions = () => (
+    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+      <h3 className="text-xl font-semibold mb-6">Wie oft sollen wir reinigen?</h3>
+      <div className="grid grid-cols-3 gap-6">
+        <div 
+          className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'onetime' ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency('onetime')}
+        >
+          <h4 className="font-semibold mb-2">Ein Mal</h4>
+          <p className="text-gray-600">{34.00} €/Stunde</p>
+        </div>
+        <div 
+          className={`p-6 rounded-lg border cursor-pointer transition-all relative ${frequency === 'weekly' ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency('weekly')}
+        >
+          {frequency === 'weekly' && (
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-sm">
+              Beliebteste
+            </div>
+          )}
+          <h4 className="font-semibold mb-2">Wöchentlich</h4>
+          <p className="text-gray-600">{29.00} €/Stunde</p>
+          <p className="text-sm text-gray-500 mt-2">Sie bekommen die selbe Reinigungskraft</p>
+        </div>
+        <div 
+          className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'biweekly' ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency('biweekly')}
+        >
+          <h4 className="font-semibold mb-2">Alle 2 Wochen</h4>
+          <p className="text-gray-600">{32.00} €/Stunde</p>
+          <p className="text-sm text-gray-500 mt-2">Sie bekommen die selbe Reinigungskraft</p>
         </div>
       </div>
     </div>
   );
 
-  const renderStep2 = () => (
-    <div className="space-y-8">
-      <h3 className="text-xl font-semibold">Cleaning Frequency</h3>
-      <RadioGroup value={frequency} onValueChange={setFrequency}>
-        <div className="grid gap-4">
-          <div className="relative flex items-start p-4 border rounded-lg">
-            {frequency === 'weekly' && (
-              <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-1 rounded-full text-xs">
-                Best Value!
-              </div>
-            )}
-            <RadioGroupItem value="weekly" id="weekly" />
-            <div className="ml-3 space-y-1">
-              <Label htmlFor="weekly">Weekly Cleaning</Label>
-              <p className="text-sm text-gray-500">
-                ${calculatePrice(30)}/hour (20% discount)
-              </p>
-            </div>
-          </div>
-          <div className="flex items-start p-4 border rounded-lg">
-            <RadioGroupItem value="biweekly" id="biweekly" />
-            <div className="ml-3 space-y-1">
-              <Label htmlFor="biweekly">Bi-weekly Cleaning</Label>
-              <p className="text-sm text-gray-500">
-                ${calculatePrice(35)}/hour (10% discount)
-              </p>
-            </div>
-          </div>
-          <div className="flex items-start p-4 border rounded-lg">
-            <RadioGroupItem value="onetime" id="onetime" />
-            <div className="ml-3 space-y-1">
-              <Label htmlFor="onetime">One-time Cleaning</Label>
-              <p className="text-sm text-gray-500">${calculatePrice(40)}/hour</p>
-            </div>
-          </div>
-        </div>
-      </RadioGroup>
-      <Button onClick={handleNextStep} className="mt-4">Next</Button>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Additional Options</h3>
-      <div className="space-y-4">
-        <Input
-          type="text"
-          placeholder="Enter promo code"
-          value={promoCode}
-          onChange={(e) => setPromoCode(e.target.value)}
-          className="w-full"
-        />
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="flexible"
-              checked={isFlexible}
-              onCheckedChange={(checked) => setIsFlexible(checked as boolean)}
-            />
-            <label htmlFor="flexible" className="text-sm">
-              Flexible timing (5% discount)
-            </label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="key"
-              checked={hasKey}
-              onCheckedChange={(checked) => setHasKey(checked as boolean)}
-            />
-            <label htmlFor="key" className="text-sm">
-              Key access available (5% discount)
-            </label>
-          </div>
-        </div>
+  const renderHoursSelection = () => (
+    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-semibold">Wie viel Zeit würden Sie benötigen?</h3>
+        <Button variant="link" className="text-primary">
+          Zeit berechnen
+        </Button>
       </div>
-      <Button onClick={handleNextStep}>Next</Button>
+      <div className="flex items-center justify-center gap-4">
+        <Button 
+          variant="outline" 
+          size="icon"
+          onClick={() => setHours(prev => Math.max(1, prev - 1))}
+        >
+          <Minus className="h-4 w-4" />
+        </Button>
+        <span className="text-xl font-semibold min-w-[100px] text-center">{hours} Stunden</span>
+        <Button 
+          variant="outline" 
+          size="icon"
+          onClick={() => setHours(prev => prev + 1)}
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+      <div className="flex items-center justify-center mt-4 text-sm text-gray-500">
+        <Info className="w-4 h-4 mr-2" />
+        Empfohlen für: 2 Schlafzimmer, 1 Badezimmer
+      </div>
     </div>
   );
 
-  const renderStep4 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Payment</h3>
-      <div className="p-6 border rounded-lg">
-        <div className="space-y-2">
-          <p className="text-lg font-medium">Order Summary</p>
-          <div className="flex justify-between">
-            <span>Service:</span>
-            <span>{services.find(s => s.id === selectedService)?.title}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>Frequency:</span>
-            <span>{frequency}</span>
-          </div>
-          <div className="border-t my-2"></div>
+  const renderSummary = () => (
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 w-80 fixed right-8 top-32">
+      <h3 className="text-xl font-semibold mb-6">Zusammenfassung</h3>
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <Clock className="w-5 h-5 text-gray-400" />
+          <span>Wöchentlich</span>
+          <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Feather className="w-5 h-5 text-gray-400" />
+          <span>Hausreinigung</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Clock className="w-5 h-5 text-gray-400" />
+          <span>{hours} Reinigungsstunden</span>
+        </div>
+        <div className="border-t pt-4 mt-6">
           <div className="flex justify-between font-semibold">
-            <span>Total:</span>
-            <span>${calculatePrice(frequency === 'weekly' ? 30 : frequency === 'biweekly' ? 35 : 40)}/hour</span>
+            <span>GESAMTSUMME</span>
+            <span>{(currentPrice * hours).toFixed(2)} €</span>
           </div>
+          <div className="text-sm text-gray-500">pro Reinigung</div>
         </div>
       </div>
-      <Button onClick={() => toast.success("Booking completed!")}>Complete Booking</Button>
     </div>
   );
 
   return (
-    <div className="min-h-screen font-raleway">
+    <div className="min-h-screen font-raleway bg-gray-50">
       <Navbar />
       
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-b from-white to-secondary">
+      <div className="pt-32 pb-20 px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex justify-center mb-8">
-            <Feather className="w-12 h-12 text-primary" />
+          {renderProgressBar()}
+          
+          <div className="relative">
+            {renderServiceOptions()}
+            {renderHoursSelection()}
+            {renderSummary()}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fadeIn text-center">
-            Book Your Cleaning Service
-          </h1>
-          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
-            {currentStep === 1 && renderStep1()}
-            {currentStep === 2 && renderStep2()}
-            {currentStep === 3 && renderStep3()}
-            {currentStep === 4 && renderStep4()}
-          </div>
-        </div>
-      </section>
 
-      <section id="services" className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">Our Services</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="bg-secondary p-6 rounded-lg hover:shadow-lg transition-shadow border border-gray-100">
-                <div className="text-primary mb-4">
-                  <Feather size={32} />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
-              </div>
-            ))}
+          <div className="flex justify-end mt-8">
+            <Button 
+              onClick={handleNextStep}
+              className="bg-primary hover:bg-primary/90"
+            >
+              Weiter <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
-      </section>
-
-      <section id="about" className="py-20 px-4 bg-secondary">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary">Why Choose Us</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Feature
-              icon={<Shield className="w-8 h-8 text-primary" />}
-              title="Trusted & Reliable"
-              description="Fully insured and bonded cleaning services you can trust"
-            />
-            <Feature
-              icon={<Feather className="w-8 h-8 text-primary" />}
-              title="Expert Team"
-              description="Professionally trained and experienced cleaning specialists"
-            />
-            <Feature
-              icon={<Clock className="w-8 h-8 text-primary" />}
-              title="Flexible Scheduling"
-              description="Convenient scheduling that works around your timetable"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-primary">Get in Touch</h2>
-          <div className="max-w-md mx-auto">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full"
-                required
-              />
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 flex items-center justify-center gap-2"
-              >
-                Contact Us
-                <Phone size={20} />
-              </Button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-primary text-white py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <Feather className="w-8 h-8 mx-auto mb-4" />
-          <p>&copy; 2024 Kleaners.de. All rights reserved.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };
 
-const Feature = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
-  <div className="text-center p-6 bg-white rounded-lg hover:shadow-lg transition-shadow border border-gray-100">
-    <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-  </div>
-);
-
-const services = [
-  {
-    id: 'home',
-    title: "Home Cleaning",
-    description: "Comprehensive cleaning services for homes of all sizes",
-  },
-  {
-    id: 'office',
-    title: "Office Cleaning",
-    description: "Professional cleaning solutions for commercial spaces",
-  },
-  {
-    id: 'deep',
-    title: "Deep Cleaning",
-    description: "Thorough deep cleaning for a pristine environment",
-  },
-];
-
 export default Index;
-
