@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
@@ -18,7 +19,7 @@ const Index = () => {
   const [hasPets, setHasPets] = useState(false);
   const [hasCleaningSupplies, setHasCleaningSupplies] = useState(false);
 
-  const validatePostalCode = (code: string) => code === "1";
+  const validatePostalCode = (code: string) => true; // Accept any input
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -52,7 +53,7 @@ const Index = () => {
         <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
           <Check className="w-5 h-5" />
         </div>
-        <div className="ml-2">Ihre Postleitzahl</div>
+        <div className="ml-2">Your Postal Code</div>
       </div>
       <div className="h-1 w-24 bg-gray-200 mx-4">
         <div className="h-full bg-primary" style={{ width: `${(currentStep / 3) * 100}%` }} />
@@ -61,7 +62,7 @@ const Index = () => {
         <div className={`w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
           2
         </div>
-        <div className="ml-2">Reinigungsinformation</div>
+        <div className="ml-2">Cleaning Information</div>
       </div>
       <div className="h-1 w-24 bg-gray-200 mx-4">
         <div className="h-full bg-primary" style={{ width: `${Math.max(0, (currentStep - 2) / 1) * 100}%` }} />
@@ -70,21 +71,21 @@ const Index = () => {
         <div className={`w-8 h-8 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
           3
         </div>
-        <div className="ml-2">Kasse</div>
+        <div className="ml-2">Checkout</div>
       </div>
     </div>
   );
 
   const renderServiceOptions = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Wie oft sollen wir reinigen?</h3>
+      <h3 className="text-xl font-semibold mb-6">How often should we clean?</h3>
       <div className="grid grid-cols-3 gap-6">
         <div 
           className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'onetime' ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency('onetime')}
         >
-          <h4 className="font-semibold mb-2">Ein Mal</h4>
-          <p className="text-gray-600">{34.00} €/Stunde</p>
+          <h4 className="font-semibold mb-2">One Time</h4>
+          <p className="text-gray-600">{34.00} €/hour</p>
         </div>
         <div 
           className={`p-6 rounded-lg border cursor-pointer transition-all relative ${frequency === 'weekly' ? 'border-primary' : 'border-gray-200'}`}
@@ -92,20 +93,20 @@ const Index = () => {
         >
           {frequency === 'weekly' && (
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-sm">
-              Beliebteste
+              Most Popular
             </div>
           )}
-          <h4 className="font-semibold mb-2">Wöchentlich</h4>
-          <p className="text-gray-600">{29.00} €/Stunde</p>
-          <p className="text-sm text-gray-500 mt-2">Sie bekommen die selbe Reinigungskraft</p>
+          <h4 className="font-semibold mb-2">Weekly</h4>
+          <p className="text-gray-600">{29.00} €/hour</p>
+          <p className="text-sm text-gray-500 mt-2">You get the same cleaning professional</p>
         </div>
         <div 
           className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'biweekly' ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency('biweekly')}
         >
-          <h4 className="font-semibold mb-2">Alle 2 Wochen</h4>
-          <p className="text-gray-600">{32.00} €/Stunde</p>
-          <p className="text-sm text-gray-500 mt-2">Sie bekommen die selbe Reinigungskraft</p>
+          <h4 className="font-semibold mb-2">Every 2 Weeks</h4>
+          <p className="text-gray-600">{32.00} €/hour</p>
+          <p className="text-sm text-gray-500 mt-2">You get the same cleaning professional</p>
         </div>
       </div>
     </div>
@@ -113,7 +114,7 @@ const Index = () => {
 
   const renderExtras = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Für welche Extras würden Sie sich interessieren?</h3>
+      <h3 className="text-xl font-semibold mb-6">Which extras would you be interested in?</h3>
       <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="p-4 border rounded-lg cursor-pointer hover:border-primary">
@@ -122,8 +123,8 @@ const Index = () => {
               <line x1="8" y1="12" x2="16" y2="12" />
             </svg>
           </div>
-          <span>Fenster</span>
-          <span className="text-sm text-gray-500">Hinzufügen</span>
+          <span>Windows</span>
+          <span className="text-sm text-gray-500">Add</span>
         </div>
         {/* Add other extra options similarly */}
       </div>
@@ -133,9 +134,9 @@ const Index = () => {
   const renderHoursSelection = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold">Wie viel Zeit würden Sie benötigen?</h3>
+        <h3 className="text-xl font-semibold">How much time would you need?</h3>
         <Button variant="link" className="text-primary">
-          Zeit berechnen
+          Calculate Time
         </Button>
       </div>
       <div className="flex items-center justify-center gap-4">
@@ -146,7 +147,7 @@ const Index = () => {
         >
           <Minus className="h-4 w-4" />
         </Button>
-        <span className="text-xl font-semibold min-w-[100px] text-center">{hours} Stunden</span>
+        <span className="text-xl font-semibold min-w-[100px] text-center">{hours} hours</span>
         <Button 
           variant="outline" 
           size="icon"
@@ -157,14 +158,14 @@ const Index = () => {
       </div>
       <div className="flex items-center justify-center mt-4 text-sm text-gray-500">
         <Info className="w-4 h-4 mr-2" />
-        Empfohlen für: 2 Schlafzimmer, 1 Badezimmer
+        Recommended for: 2 bedrooms, 1 bathroom
       </div>
     </div>
   );
 
   const renderCalendar = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Wählen Sie ein Datum und eine Uhrzeit für die erste Reinigung</h3>
+      <h3 className="text-xl font-semibold mb-6">Choose a date and time for your first cleaning</h3>
       <div className="flex flex-col md:flex-row gap-8">
         <div>
           <CalendarComponent
@@ -175,7 +176,7 @@ const Index = () => {
           />
         </div>
         <div className="flex-1">
-          <h4 className="font-semibold mb-4">Verfügbare Zeiten</h4>
+          <h4 className="font-semibold mb-4">Available Times</h4>
           <div className="grid grid-cols-3 gap-2">
             {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'].map((time) => (
               <Button
@@ -197,7 +198,7 @@ const Index = () => {
             onCheckedChange={(checked) => setHasPets(checked as boolean)}
           />
           <label htmlFor="pets" className="text-sm">
-            Ich habe Haustiere
+            I have pets
           </label>
         </div>
         <div className="flex items-start gap-2 mt-4">
@@ -207,7 +208,7 @@ const Index = () => {
             onCheckedChange={(checked) => setHasCleaningSupplies(checked as boolean)}
           />
           <label htmlFor="supplies" className="text-sm">
-            Ich bestätige, dass ich alle erforderlichen Reinigungsmaterialien zu Hause habe.
+            I confirm that I have all necessary cleaning supplies at home
           </label>
         </div>
       </div>
@@ -215,26 +216,26 @@ const Index = () => {
   );
 
   const renderSummary = () => (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 w-80 fixed right-8 top-32">
-      <h3 className="text-xl font-semibold mb-6">Zusammenfassung</h3>
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h3 className="text-xl font-semibold mb-6">Summary</h3>
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Clock className="w-5 h-5 text-gray-400" />
-          <span>{frequency === 'weekly' ? 'Wöchentlich' : frequency === 'biweekly' ? 'Alle 2 Wochen' : 'Ein Mal'}</span>
+          <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
           <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
         </div>
         <div className="flex items-center gap-3">
           <Feather className="w-5 h-5 text-gray-400" />
-          <span>Hausreinigung</span>
+          <span>House Cleaning</span>
         </div>
         <div className="flex items-center gap-3">
           <Clock className="w-5 h-5 text-gray-400" />
-          <span>{hours} Reinigungsstunden</span>
+          <span>{hours} Cleaning Hours</span>
         </div>
         {date && (
           <div className="flex items-center gap-3">
             <Calendar className="w-5 h-5 text-gray-400" />
-            <span>{date.toLocaleDateString('de-DE', { 
+            <span>{date.toLocaleDateString('en-US', { 
               weekday: 'long',
               year: 'numeric',
               month: 'long',
@@ -244,10 +245,10 @@ const Index = () => {
         )}
         <div className="border-t pt-4 mt-6">
           <div className="flex justify-between font-semibold">
-            <span>GESAMTSUMME</span>
+            <span>TOTAL</span>
             <span>{(currentPrice * hours).toFixed(2)} €</span>
           </div>
-          <div className="text-sm text-gray-500">pro Reinigung</div>
+          <div className="text-sm text-gray-500">per cleaning</div>
         </div>
       </div>
     </div>
@@ -258,19 +259,23 @@ const Index = () => {
       <Navbar />
       
       <div className="pt-32 pb-20 px-4">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {renderProgressBar()}
           
-          <div className="relative">
-            {currentStep === 1 && renderServiceOptions()}
-            {currentStep === 2 && (
-              <>
-                {renderHoursSelection()}
-                {renderExtras()}
-              </>
-            )}
-            {currentStep === 3 && renderCalendar()}
-            {renderSummary()}
+          <div className="flex gap-8">
+            <div className="w-[70%]">
+              {currentStep === 1 && renderServiceOptions()}
+              {currentStep === 2 && (
+                <>
+                  {renderHoursSelection()}
+                  {renderExtras()}
+                </>
+              )}
+              {currentStep === 3 && renderCalendar()}
+            </div>
+            <div className="w-[30%]">
+              {renderSummary()}
+            </div>
           </div>
 
           <div className="flex justify-between mt-8">
@@ -279,7 +284,7 @@ const Index = () => {
                 onClick={handleBackStep}
                 variant="outline"
               >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Zurück
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
             )}
             <div className="ml-auto">
@@ -287,7 +292,7 @@ const Index = () => {
                 onClick={handleNextStep}
                 className="bg-primary hover:bg-primary/90"
               >
-                Weiter <ArrowRight className="ml-2 h-4 w-4" />
+                Next <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -298,3 +303,4 @@ const Index = () => {
 };
 
 export default Index;
+
