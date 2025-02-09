@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -19,14 +19,10 @@ const Index = () => {
   const [hasPets, setHasPets] = useState(false);
   const [hasCleaningSupplies, setHasCleaningSupplies] = useState(false);
 
-  const validatePostalCode = (code: string) => true; // Accept any input
-
   const handleNextStep = () => {
-    if (currentStep === 1) {
-      if (!validatePostalCode(postalCode)) {
-        toast.error("Service not available in your area");
-        return;
-      }
+    if (currentStep === 1 && !selectedService) {
+      toast.error("Please select a service type");
+      return;
     }
     setCurrentStep(prev => prev + 1);
   };
@@ -50,28 +46,61 @@ const Index = () => {
   const renderProgressBar = () => (
     <div className="flex items-center justify-between mb-12 max-w-2xl mx-auto">
       <div className="flex items-center">
-        <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
-          <Check className="w-5 h-5" />
+        <div className={`w-8 h-8 rounded-full ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
+          1
         </div>
-        <div className="ml-2">Your Postal Code</div>
+        <div className="ml-2">Service Details</div>
       </div>
       <div className="h-1 w-24 bg-gray-200 mx-4">
-        <div className="h-full bg-primary" style={{ width: `${(currentStep / 3) * 100}%` }} />
+        <div className="h-full bg-primary" style={{ width: `${(currentStep - 1) * 50}%` }} />
       </div>
       <div className="flex items-center">
         <div className={`w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
           2
         </div>
-        <div className="ml-2">Cleaning Information</div>
+        <div className="ml-2">Cleaning Details</div>
       </div>
       <div className="h-1 w-24 bg-gray-200 mx-4">
-        <div className="h-full bg-primary" style={{ width: `${Math.max(0, (currentStep - 2) / 1) * 100}%` }} />
+        <div className="h-full bg-primary" style={{ width: `${Math.max(0, (currentStep - 2) * 50)}%` }} />
       </div>
       <div className="flex items-center">
         <div className={`w-8 h-8 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
           3
         </div>
-        <div className="ml-2">Checkout</div>
+        <div className="ml-2">Schedule</div>
+      </div>
+    </div>
+  );
+
+  const renderInitialStep = () => (
+    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+      <h3 className="text-xl font-semibold mb-6">Select Your Service</h3>
+      <div className="grid grid-cols-3 gap-6">
+        <Select value={selectedService} onValueChange={setSelectedService}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select service type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="regular">Regular Cleaning</SelectItem>
+            <SelectItem value="deep">Deep Cleaning</SelectItem>
+            <SelectItem value="moving">Move In/Out Cleaning</SelectItem>
+          </SelectContent>
+        </Select>
+        
+        <Input
+          type="text"
+          placeholder="Enter postal code or city"
+          value={postalCode}
+          onChange={(e) => setPostalCode(e.target.value)}
+          className="w-full"
+        />
+        
+        <Button 
+          onClick={handleNextStep}
+          className="w-full bg-primary hover:bg-primary/90"
+        >
+          Next <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
@@ -264,10 +293,10 @@ const Index = () => {
           
           <div className="flex gap-8">
             <div className="w-[70%]">
-              {currentStep === 1 && renderServiceOptions()}
+              {currentStep === 1 && renderInitialStep()}
               {currentStep === 2 && (
                 <>
-                  {renderHoursSelection()}
+                  {renderServiceOptions()}
                   {renderExtras()}
                 </>
               )}
@@ -287,14 +316,16 @@ const Index = () => {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
             )}
-            <div className="ml-auto">
-              <Button 
-                onClick={handleNextStep}
-                className="bg-primary hover:bg-primary/90"
-              >
-                Next <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
+            {currentStep > 1 && currentStep < 3 && (
+              <div className="ml-auto">
+                <Button 
+                  onClick={handleNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Next <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -303,4 +334,3 @@ const Index = () => {
 };
 
 export default Index;
-
