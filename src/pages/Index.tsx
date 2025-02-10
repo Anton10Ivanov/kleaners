@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -17,6 +18,9 @@ const Index = () => {
   const [hours, setHours] = useState(2);
   const [extras, setExtras] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+  const [bedrooms, setBedrooms] = useState(1);
+  const [bathrooms, setBathrooms] = useState(1);
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -101,10 +105,13 @@ const Index = () => {
   );
 
   const renderInitialStep = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8 w-full">
       <h3 className="text-xl font-semibold mb-6">Select Your Service</h3>
       <div className="grid grid-cols-3 gap-6">
-        <Select value={selectedService} onValueChange={setSelectedService}>
+        <Select value={selectedService} onValueChange={(value) => {
+          setSelectedService(value);
+          handleNextStep();
+        }}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select service type" />
           </SelectTrigger>
@@ -119,18 +126,86 @@ const Index = () => {
           type="text"
           placeholder="Enter postal code or city"
           value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
+          onChange={(e) => {
+            setPostalCode(e.target.value);
+            if (e.target.value && selectedService) {
+              handleNextStep();
+            }
+          }}
           className="w-full"
         />
-        
-        <Button 
-          onClick={handleNextStep}
-          className="w-full bg-primary hover:bg-primary/90"
-        >
-          Next <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </div>
     </div>
+  );
+
+  const renderTimeCalculator = () => (
+    <Dialog open={isCalculatorOpen} onOpenChange={setIsCalculatorOpen}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Calculate Cleaning Time</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-6 py-4">
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Bedrooms</label>
+              <div className="flex items-center gap-4">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setBedrooms(prev => Math.max(1, prev - 1))}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <span className="text-xl font-semibold min-w-[40px] text-center">{bedrooms}</span>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setBedrooms(prev => prev + 1)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Bathrooms</label>
+              <div className="flex items-center gap-4">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setBathrooms(prev => Math.max(1, prev - 1))}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <span className="text-xl font-semibold min-w-[40px] text-center">{bathrooms}</span>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setBathrooms(prev => prev + 1)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="pt-4 text-center">
+              <p className="text-muted-foreground">
+                We recommend you {calculateRecommendedTime()} hours of cleaning
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Living room, kitchen & all commons areas are included!
+              </p>
+            </div>
+          </div>
+          <Button 
+            onClick={() => {
+              setHours(calculateRecommendedTime());
+              setIsCalculatorOpen(false);
+            }}
+          >
+            Apply Recommendation
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 
   const renderServiceOptions = () => (
@@ -194,7 +269,7 @@ const Index = () => {
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-semibold">How much time would you need?</h3>
-        <Button variant="link" className="text-primary">
+        <Button variant="link" className="text-primary" onClick={() => setIsCalculatorOpen(true)}>
           Calculate Time
         </Button>
       </div>
@@ -435,6 +510,10 @@ const Index = () => {
     );
   };
 
+  const calculateRecommendedTime = () => {
+    return bathrooms * 0.5 + bedrooms * 0.5 + 1; // Base time of 1 hour + 0.5 per room
+  };
+
   return (
     <div className="min-h-screen font-raleway bg-gray-50">
       <Navbar />
@@ -443,22 +522,25 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           {renderProgressBar()}
           
-          <div className="flex gap-8">
-            <div className="w-[70%]">
+          <div className={`flex ${currentStep === 1 ? 'block' : 'gap-8'}`}>
+            <div className={currentStep === 1 ? 'w-full' : 'w-[70%]'}>
               {currentStep === 1 && renderInitialStep()}
               {currentStep === 2 && (
                 <>
                   {renderServiceOptions()}
                   {renderHoursSelection()}
+                  {renderTimeCalculator()}
                   {renderExtras()}
                   {renderCalendar()}
                 </>
               )}
               {currentStep === 3 && renderFinalStep()}
             </div>
-            <div className="w-[30%]">
-              {renderSummary()}
-            </div>
+            {currentStep > 1 && (
+              <div className="w-[30%]">
+                {renderSummary()}
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between mt-8">
@@ -470,7 +552,7 @@ const Index = () => {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
             )}
-            {currentStep < 3 && (
+            {currentStep < 3 && currentStep !== 1 && (
               <div className="ml-auto">
                 <Button 
                   onClick={handleNextStep}
