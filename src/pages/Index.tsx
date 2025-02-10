@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -17,8 +17,20 @@ const Index = () => {
   const [hours, setHours] = useState(2);
   const [extras, setExtras] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [accessMethod, setAccessMethod] = useState<string[]>([]);
+  
+  const [instructions, setInstructions] = useState('');
   const [hasPets, setHasPets] = useState(false);
-  const [hasCleaningSupplies, setHasCleaningSupplies] = useState(false);
+  
+  const [promoCode, setPromoCode] = useState('');
 
   const handleNextStep = () => {
     if (currentStep === 1 && !selectedService) {
@@ -242,73 +254,186 @@ const Index = () => {
     </div>
   );
 
-  const renderSummary = () => (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-8">
-      <h3 className="text-xl font-semibold mb-6">Summary</h3>
-      <div className="space-y-4">
-        {selectedService && (
-          <div className="flex items-center gap-3">
-            <Check className="w-5 h-5 text-gray-400" />
-            <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+  const renderFinalStep = () => (
+    <div className="space-y-8">
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Personal Information</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="tel"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Cleaning Address</h3>
+        <div className="space-y-4">
+          <Input
+            placeholder="Street Address"
+            value={street}
+            onChange={(e) => setStreet(e.target.value)}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <Input
+              placeholder="Postal Code"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+            />
           </div>
-        )}
-        {frequency && (
-          <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-gray-400" />
-            <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
-            <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="How can we get in?" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="keys">Keys will be provided</SelectItem>
+              <SelectItem value="present">Someone will be present</SelectItem>
+              <SelectItem value="code">Door code will be provided</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Special Instructions</h3>
+        <Textarea
+          placeholder="Any special instructions for our cleaning team?"
+          value={instructions}
+          onChange={(e) => setInstructions(e.target.value)}
+          className="mb-4"
+        />
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="pets"
+            checked={hasPets}
+            onCheckedChange={(checked) => setHasPets(checked as boolean)}
+          />
+          <label htmlFor="pets" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Do you have pets?
+          </label>
+        </div>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Promo Code</h3>
+        <div className="flex gap-4">
+          <Input
+            placeholder="Enter promo code"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+          />
+          <Button variant="outline">Apply</Button>
+        </div>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Payment Details</h3>
+        <div className="space-y-4">
+          <Input placeholder="Card Number" />
+          <div className="grid grid-cols-3 gap-4">
+            <Input placeholder="MM/YY" />
+            <Input placeholder="CVC" />
+            <Input placeholder="ZIP Code" />
           </div>
-        )}
-        {hours > 0 && (
-          <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-gray-400" />
-            <span>{hours} Cleaning Hours</span>
-          </div>
-        )}
-        {extras.length > 0 && (
-          <div className="space-y-2">
-            <div className="font-medium">Extra Services:</div>
-            {extras.map(extraId => {
-              const service = extraServices.find(s => s.id === extraId);
-              return service ? (
-                <div key={extraId} className="flex items-center gap-3 pl-4">
-                  <Check className="w-4 h-4 text-gray-400" />
-                  <span>{service.name}</span>
-                  <span className="ml-auto">+{service.price}€</span>
-                </div>
-              ) : null;
-            })}
-          </div>
-        )}
-        {date && (
-          <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-gray-400" />
-            <span>{date.toLocaleDateString('en-US', { 
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}</span>
-          </div>
-        )}
-        <div className="border-t pt-4 mt-6">
-          <div className="flex justify-between font-semibold">
-            <span>TOTAL</span>
-            <span>
-              {(
-                currentPrice * hours +
-                extras.reduce((acc, extraId) => {
-                  const service = extraServices.find(s => s.id === extraId);
-                  return acc + (service?.price || 0);
-                }, 0)
-              ).toFixed(2)} €
-            </span>
-          </div>
-          <div className="text-sm text-gray-500">per cleaning</div>
         </div>
       </div>
     </div>
   );
+
+  const renderSummary = () => {
+    if (currentStep === 1) return null;
+    
+    return (
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-8">
+        <h3 className="text-xl font-semibold mb-6">Summary</h3>
+        <div className="space-y-4">
+          {selectedService && (
+            <div className="flex items-center gap-3">
+              <Check className="w-5 h-5 text-gray-400" />
+              <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+            </div>
+          )}
+          {frequency && (
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-gray-400" />
+              <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
+              <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
+            </div>
+          )}
+          {hours > 0 && (
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-gray-400" />
+              <span>{hours} Cleaning Hours</span>
+            </div>
+          )}
+          {extras.length > 0 && (
+            <div className="space-y-2">
+              <div className="font-medium">Extra Services:</div>
+              {extras.map(extraId => {
+                const service = extraServices.find(s => s.id === extraId);
+                return service ? (
+                  <div key={extraId} className="flex items-center gap-3 pl-4">
+                    <Check className="w-4 h-4 text-gray-400" />
+                    <span>{service.name}</span>
+                    <span className="ml-auto">+{service.price}€</span>
+                  </div>
+                ) : null;
+              })}
+            </div>
+          )}
+          {date && (
+            <div className="flex items-center gap-3">
+              <Calendar className="w-5 h-5 text-gray-400" />
+              <span>{date.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </div>
+          )}
+          <div className="border-t pt-4 mt-6">
+            <div className="flex justify-between font-semibold">
+              <span>TOTAL</span>
+              <span>
+                {(
+                  currentPrice * hours +
+                  extras.reduce((acc, extraId) => {
+                    const service = extraServices.find(s => s.id === extraId);
+                    return acc + (service?.price || 0);
+                  }, 0)
+                ).toFixed(2)} €
+              </span>
+            </div>
+            <div className="text-sm text-gray-500">per cleaning</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50">
@@ -329,7 +454,7 @@ const Index = () => {
                   {renderCalendar()}
                 </>
               )}
-              {currentStep === 3 && renderCalendar()}
+              {currentStep === 3 && renderFinalStep()}
             </div>
             <div className="w-[30%]">
               {renderSummary()}
@@ -345,7 +470,7 @@ const Index = () => {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
             )}
-            {currentStep > 1 && currentStep < 3 && (
+            {currentStep < 3 && (
               <div className="ml-auto">
                 <Button 
                   onClick={handleNextStep}
@@ -363,4 +488,3 @@ const Index = () => {
 };
 
 export default Index;
-
