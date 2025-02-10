@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
@@ -108,10 +109,7 @@ const Index = () => {
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8 w-full">
       <h3 className="text-xl font-semibold mb-6">Select Your Service</h3>
       <div className="grid grid-cols-3 gap-6">
-        <Select value={selectedService} onValueChange={(value) => {
-          setSelectedService(value);
-          handleNextStep();
-        }}>
+        <Select value={selectedService} onValueChange={setSelectedService}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select service type" />
           </SelectTrigger>
@@ -126,12 +124,7 @@ const Index = () => {
           type="text"
           placeholder="Enter postal code or city"
           value={postalCode}
-          onChange={(e) => {
-            setPostalCode(e.target.value);
-            if (e.target.value && selectedService) {
-              handleNextStep();
-            }
-          }}
+          onChange={(e) => setPostalCode(e.target.value)}
           className="w-full"
         />
       </div>
@@ -551,6 +544,17 @@ const Index = () => {
               >
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
+            )}
+            {currentStep === 1 && (
+              <div className="ml-auto">
+                <Button 
+                  onClick={handleNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                  disabled={!selectedService || !postalCode}
+                >
+                  Next <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
             )}
             {currentStep < 3 && currentStep !== 1 && (
               <div className="ml-auto">
