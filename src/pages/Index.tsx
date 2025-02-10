@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar, HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { Slider } from "@/components/ui/slider";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -36,11 +37,19 @@ const Index = () => {
   const [hasPets, setHasPets] = useState(false);
   
   const [promoCode, setPromoCode] = useState('');
+  const [cleanlinessLevel, setCleanlinessLevel] = useState(2);
+  const [teamType, setTeamType] = useState('normal');
 
   const handleNextStep = () => {
-    if (currentStep === 1 && !selectedService) {
-      toast.error("Please select a service type");
-      return;
+    if (currentStep === 1) {
+      if (!selectedService) {
+        toast.error("Please select a service type");
+        return;
+      }
+      if (selectedService !== 'regular' && selectedService !== 'deep') {
+        toast.error("This service is currently not available");
+        return;
+      }
     }
     setCurrentStep(prev => prev + 1);
   };
@@ -108,7 +117,7 @@ const Index = () => {
   const renderInitialStep = () => (
     <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8 w-full">
       <h3 className="text-xl font-semibold mb-6">Select Your Service</h3>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="space-y-6">
         <Select value={selectedService} onValueChange={setSelectedService}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select service type" />
@@ -120,13 +129,22 @@ const Index = () => {
           </SelectContent>
         </Select>
         
-        <Input
-          type="text"
-          placeholder="Enter postal code or city"
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-          className="w-full"
-        />
+        <div className="flex gap-4">
+          <Input
+            type="text"
+            placeholder="Enter postal code or city"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            className="flex-1"
+          />
+          <Button 
+            onClick={handleNextStep}
+            className="bg-primary hover:bg-primary/90"
+            disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
+          >
+            Next <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -146,6 +164,7 @@ const Index = () => {
                   variant="outline" 
                   size="icon"
                   onClick={() => setBedrooms(prev => Math.max(1, prev - 1))}
+                  disabled={bedrooms <= 1}
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -153,7 +172,8 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => setBedrooms(prev => prev + 1)}
+                  onClick={() => setBedrooms(prev => Math.min(10, prev + 1))}
+                  disabled={bedrooms >= 10}
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -166,6 +186,7 @@ const Index = () => {
                   variant="outline" 
                   size="icon"
                   onClick={() => setBathrooms(prev => Math.max(1, prev - 1))}
+                  disabled={bathrooms <= 1}
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
@@ -173,7 +194,8 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => setBathrooms(prev => prev + 1)}
+                  onClick={() => setBathrooms(prev => Math.min(10, prev + 1))}
+                  disabled={bathrooms >= 10}
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -199,6 +221,103 @@ const Index = () => {
         </div>
       </DialogContent>
     </Dialog>
+  );
+
+  const renderDeepCleaningStep = () => (
+    <div className="space-y-8">
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-xl font-semibold mb-6">Property Details</h3>
+        <div className="space-y-6">
+          <div>
+            <label className="text-sm font-medium mb-2 block">Square Meters</label>
+            <Input 
+              type="number" 
+              placeholder="Enter square meters"
+              min="1"
+            />
+          </div>
+          
+          <div>
+            <label className="text-sm font-medium mb-2 block">Number of Bathrooms</label>
+            <Input 
+              type="number" 
+              placeholder="Enter number of bathrooms"
+              min="1"
+              max="10"
+            />
+          </div>
+          
+          <div>
+            <label className="text-sm font-medium mb-2 block">Number of Rooms</label>
+            <Input 
+              type="number" 
+              placeholder="Enter number of rooms"
+              min="1"
+              max="10"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Current Cleanliness Level</label>
+              <span className="text-sm text-muted-foreground">
+                {["Very Clean", "Clean", "Dirty", "Very Dirty"][cleanlinessLevel - 1]}
+              </span>
+            </div>
+            <Slider
+              value={[cleanlinessLevel]}
+              onValueChange={(value) => setCleanlinessLevel(value[0])}
+              max={4}
+              min={1}
+              step={1}
+              className="w-full"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">Choose the cleaning team</label>
+              <HoverCard>
+                <HoverCardTrigger>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Cleaning Team Types</h4>
+                    <p className="text-sm">Normal: Standard cleaning team for regular tasks</p>
+                    <p className="text-sm">Experienced: Skilled team with 3+ years experience</p>
+                    <p className="text-sm">Expert: Master cleaners with specialized training</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div 
+                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'normal' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+                onClick={() => setTeamType('normal')}
+              >
+                <h4 className="font-semibold">Normal</h4>
+                <p className="text-sm text-gray-500 mt-2">Standard cleaning service</p>
+              </div>
+              <div 
+                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'experienced' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+                onClick={() => setTeamType('experienced')}
+              >
+                <h4 className="font-semibold">Experienced</h4>
+                <p className="text-sm text-gray-500 mt-2">3+ years experience</p>
+              </div>
+              <div 
+                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'expert' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+                onClick={() => setTeamType('expert')}
+              >
+                <h4 className="font-semibold">Expert</h4>
+                <p className="text-sm text-gray-500 mt-2">Specialized training</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
   const renderServiceOptions = () => (
@@ -504,7 +623,7 @@ const Index = () => {
   };
 
   const calculateRecommendedTime = () => {
-    return bathrooms * 0.5 + bedrooms * 0.5 + 1; // Base time of 1 hour + 0.5 per room
+    return Math.min(Math.max(bathrooms * 0.5 + bedrooms * 0.5 + 1, 2), 8);
   };
 
   return (
@@ -518,7 +637,7 @@ const Index = () => {
           <div className={`flex ${currentStep === 1 ? 'block' : 'gap-8'}`}>
             <div className={currentStep === 1 ? 'w-full' : 'w-[70%]'}>
               {currentStep === 1 && renderInitialStep()}
-              {currentStep === 2 && (
+              {currentStep === 2 && selectedService === 'regular' && (
                 <>
                   {renderServiceOptions()}
                   {renderHoursSelection()}
@@ -527,6 +646,7 @@ const Index = () => {
                   {renderCalendar()}
                 </>
               )}
+              {currentStep === 2 && selectedService === 'deep' && renderDeepCleaningStep()}
               {currentStep === 3 && renderFinalStep()}
             </div>
             {currentStep > 1 && (
@@ -550,7 +670,7 @@ const Index = () => {
                 <Button 
                   onClick={handleNextStep}
                   className="bg-primary hover:bg-primary/90"
-                  disabled={!selectedService || !postalCode}
+                  disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
