@@ -39,6 +39,16 @@ const Index = () => {
   const [promoCode, setPromoCode] = useState('');
   const [cleanlinessLevel, setCleanlinessLevel] = useState(2);
   const [teamType, setTeamType] = useState('normal');
+  const [squareMeters, setSquareMeters] = useState(50);
+  const [lastCleaningLevel, setLastCleaningLevel] = useState(2);
+  const [deepCleaningIssues, setDeepCleaningIssues] = useState({
+    mold: false,
+    feces: false,
+    animalHair: false,
+    flood: false,
+    cloggedDrains: false,
+    cloggedToilets: false
+  });
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -230,43 +240,99 @@ const Index = () => {
         <div className="space-y-6">
           <div>
             <label className="text-sm font-medium mb-2 block">Square Meters</label>
-            <Input 
-              type="number" 
-              placeholder="Enter square meters"
-              min="1"
-            />
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setSquareMeters(prev => Math.max(50, prev - 5))}
+                disabled={squareMeters <= 50}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="text-xl font-semibold min-w-[60px] text-center">{squareMeters}</span>
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setSquareMeters(prev => prev + 5)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           <div>
             <label className="text-sm font-medium mb-2 block">Number of Bathrooms</label>
-            <Input 
-              type="number" 
-              placeholder="Enter number of bathrooms"
-              min="1"
-              max="10"
-            />
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setBathrooms(prev => Math.max(1, prev - 1))}
+                disabled={bathrooms <= 1}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="text-xl font-semibold min-w-[40px] text-center">{bathrooms}</span>
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setBathrooms(prev => Math.min(10, prev + 1))}
+                disabled={bathrooms >= 10}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           <div>
             <label className="text-sm font-medium mb-2 block">Number of Rooms</label>
-            <Input 
-              type="number" 
-              placeholder="Enter number of rooms"
-              min="1"
-              max="10"
-            />
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setBedrooms(prev => Math.max(1, prev - 1))}
+                disabled={bedrooms <= 1}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="text-xl font-semibold min-w-[40px] text-center">{bedrooms}</span>
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setBedrooms(prev => Math.min(10, prev + 1))}
+                disabled={bedrooms >= 10}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Current Cleanliness Level</label>
               <span className="text-sm text-muted-foreground">
-                {["Very Clean", "Clean", "Dirty", "Very Dirty"][cleanlinessLevel - 1]}
+                {getCleanlinessDescription(cleanlinessLevel)}
               </span>
             </div>
             <Slider
               value={[cleanlinessLevel]}
               onValueChange={(value) => setCleanlinessLevel(value[0])}
+              max={4}
+              min={1}
+              step={1}
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Last Time Cleaned</label>
+              <span className="text-sm text-muted-foreground">
+                {getLastCleaningDescription(lastCleaningLevel)}
+              </span>
+            </div>
+            <Slider
+              value={[lastCleaningLevel]}
+              onValueChange={(value) => setLastCleaningLevel(value[0])}
               max={4}
               min={1}
               step={1}
@@ -315,6 +381,68 @@ const Index = () => {
               </div>
             </div>
           </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-medium">Special Conditions</h4>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="mold"
+                  checked={deepCleaningIssues.mold}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, mold: checked as boolean}))}
+                />
+                <label htmlFor="mold" className="text-sm">Mold Present</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="feces"
+                  checked={deepCleaningIssues.feces}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, feces: checked as boolean}))}
+                />
+                <label htmlFor="feces" className="text-sm">Feces Present</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="animalHair"
+                  checked={deepCleaningIssues.animalHair}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, animalHair: checked as boolean}))}
+                />
+                <label htmlFor="animalHair" className="text-sm">Animal Hair</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="flood"
+                  checked={deepCleaningIssues.flood}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, flood: checked as boolean}))}
+                />
+                <label htmlFor="flood" className="text-sm">Flood Damage</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="cloggedDrains"
+                  checked={deepCleaningIssues.cloggedDrains}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, cloggedDrains: checked as boolean}))}
+                />
+                <label htmlFor="cloggedDrains" className="text-sm">Clogged Shower Drains</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="cloggedToilets"
+                  checked={deepCleaningIssues.cloggedToilets}
+                  onCheckedChange={(checked) => 
+                    setDeepCleaningIssues(prev => ({...prev, cloggedToilets: checked as boolean}))}
+                />
+                <label htmlFor="cloggedToilets" className="text-sm">Clogged Toilets</label>
+              </div>
+            </div>
+          </div>
+
+          {renderExtras()}
         </div>
       </div>
     </div>
@@ -366,7 +494,7 @@ const Index = () => {
             onClick={() => toggleExtra(service.id)}
             className={`flex flex-col items-center text-center space-y-2 cursor-pointer`}
           >
-            <div className={`p-4 border rounded-lg transition-all ${extras.includes(service.id) ? 'border-primary bg-primary/10' : 'border-gray-200 hover:border-primary/50'}`}>
+            <div className={`p-4 border rounded-lg transition-all ${extras.includes(service.id) ? 'border-primary bg-primary/10' : 'border-gray-200'}`}>
               {service.icon}
             </div>
             <span className="font-medium">{service.name}</span>
@@ -624,6 +752,36 @@ const Index = () => {
 
   const calculateRecommendedTime = () => {
     return Math.min(Math.max(bathrooms * 0.5 + bedrooms * 0.5 + 1, 2), 8);
+  };
+
+  const getCleanlinessDescription = (level: number) => {
+    switch(level) {
+      case 1:
+        return "Very Clean - Regular maintenance, minimal dirt";
+      case 2:
+        return "Clean - Light dust and dirt, needs refresh";
+      case 3:
+        return "Dirty - Visible dirt, stains, and dust buildup";
+      case 4:
+        return "Very Dirty - Heavy dirt, tough stains, neglected areas";
+      default:
+        return "";
+    }
+  };
+
+  const getLastCleaningDescription = (level: number) => {
+    switch(level) {
+      case 1:
+        return "Recently (within last week)";
+      case 2:
+        return "Within last month";
+      case 3:
+        return "Several months ago";
+      case 4:
+        return "Over 6 months ago or never";
+      default:
+        return "";
+    }
   };
 
   return (
