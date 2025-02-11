@@ -94,17 +94,37 @@ const Index = () => {
     }));
   }, [currentStep, form.getValues()]);
 
-  // Load progress from localStorage
+  // Load progress from localStorage with proper type checking
   React.useEffect(() => {
     const savedProgress = localStorage.getItem('bookingProgress');
     if (savedProgress) {
-      const { step, formData } = JSON.parse(savedProgress);
-      Object.entries(formData).forEach(([key, value]) => {
-        setValue(key as keyof BookingFormData, value);
-      });
-      setCurrentStep(step);
+      try {
+        const parsed = JSON.parse(savedProgress) as {
+          step: number;
+          formData: Partial<BookingFormData>;
+        };
+        
+        // Only set values if they match expected types
+        if (parsed.formData) {
+          Object.entries(parsed.formData).forEach(([key, value]) => {
+            // Convert date string back to Date object if it exists
+            if (key === 'date' && typeof value === 'string') {
+              setValue(key as keyof BookingFormData, new Date(value));
+            } else {
+              setValue(key as keyof BookingFormData, value as any);
+            }
+          });
+        }
+        
+        if (typeof parsed.step === 'number') {
+          setCurrentStep(parsed.step);
+        }
+      } catch (error) {
+        console.error('Error loading saved progress:', error);
+        localStorage.removeItem('bookingProgress');
+      }
     }
-  }, []);
+  }, [setValue]);
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
