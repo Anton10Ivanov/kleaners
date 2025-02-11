@@ -1,46 +1,22 @@
-import React from 'react';
-import { useState } from 'react';
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import WhyChooseUs from '../components/WhyChooseUs';
 import Testimonials from '../components/Testimonials';
-import ServiceOptions from '../components/booking/ServiceOptions';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
-import Calendar from '../components/booking/Calendar';
-import Extras from '../components/booking/Extras';
-import DeepCleaningStep from '../components/booking/DeepCleaningStep';
-import HoursSelection from '../components/booking/HoursSelection';
-import TimeCalculator from '../components/booking/TimeCalculator';
-import FinalStep from '../components/booking/FinalStep';
-import { bookingSchema, type BookingFormData } from '../schemas/booking';
+import BookingContent from '../components/booking/BookingContent';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useBookingForm } from '../hooks/useBookingForm';
+import { calculatePrice } from '../utils/bookingCalculations';
 
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  
-  const form = useForm<BookingFormData>({
-    resolver: zodResolver(bookingSchema),
-    defaultValues: {
-      service: undefined,
-      postalCode: '',
-      frequency: 'onetime',
-      hours: 2,
-      bedrooms: 1,
-      bathrooms: 1,
-      extras: [],
-      date: undefined,
-    }
-  });
+  const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
 
-  const { handleSubmit, watch, setValue, formState: { errors } } = form;
   const selectedService = watch('service');
   const frequency = watch('frequency');
   const hours = watch('hours');
@@ -49,90 +25,10 @@ const Index = () => {
   const bathrooms = watch('bathrooms');
   const selectedExtras = watch('extras') || [];
 
-  const calculateRecommendedTime = () => {
-    const baseTime = 2;
-    const bedroomTime = bedrooms * 0.5;
-    const bathroomTime = bathrooms * 0.5;
-    return Math.max(2, Math.ceil(baseTime + bedroomTime + bathroomTime));
-  };
-
-  const handleNextStep = handleSubmit(() => {
-    if (currentStep === 1) {
-      if (!selectedService) {
-        toast.error("Please select a service type");
-        return;
-      }
-      if (selectedService !== 'regular' && selectedService !== 'deep') {
-        toast.error("This service is currently not available");
-        return;
-      }
-    }
-    
-    if (Object.keys(errors).length > 0) {
-      toast.error("Please fill in all required fields correctly");
-      return;
-    }
-    
-    setCurrentStep(prev => prev + 1);
-  });
-
-  const handleBackStep = () => {
-    setCurrentStep(prev => Math.max(1, prev - 1));
-  };
-
-  const calculatePrice = (basePrice: number) => {
-    let price = basePrice;
-    if (frequency === 'weekly') {
-      price *= 0.8;
-    } else if (frequency === 'biweekly') {
-      price *= 0.9;
-    }
-    return price;
-  };
-
-  const currentPrice = calculatePrice(frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34);
-
-  // Save progress to localStorage
-  React.useEffect(() => {
-    const formData = form.getValues();
-    localStorage.setItem('bookingProgress', JSON.stringify({
-      step: currentStep,
-      formData: {
-        ...formData,
-        date: formData.date?.toISOString(),
-      }
-    }));
-  }, [currentStep, form.getValues()]);
-
-  // Load progress from localStorage with proper type checking
-  React.useEffect(() => {
-    const savedProgress = localStorage.getItem('bookingProgress');
-    if (savedProgress) {
-      try {
-        const parsed = JSON.parse(savedProgress) as {
-          step: number;
-          formData: Partial<BookingFormData> & { date?: string };
-        };
-        
-        if (parsed.formData) {
-          Object.entries(parsed.formData).forEach(([key, value]) => {
-            if (key === 'date' && typeof value === 'string') {
-              setValue(key as keyof BookingFormData, new Date(value));
-            } else if (value !== undefined) {
-              setValue(key as keyof BookingFormData, value as any);
-            }
-          });
-        }
-        
-        if (typeof parsed.step === 'number') {
-          setCurrentStep(parsed.step);
-        }
-      } catch (error) {
-        console.error('Error loading saved progress:', error);
-        localStorage.removeItem('bookingProgress');
-      }
-    }
-  }, [setValue]);
+  const currentPrice = calculatePrice(
+    frequency || 'onetime',
+    frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34
+  );
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
@@ -169,53 +65,22 @@ const Index = () => {
               <ProgressBar currentStep={currentStep} />
               
               <div className="flex flex-col md:flex-row gap-8">
-                <div className="w-full md:w-[70%]">
-                  {currentStep === 2 && selectedService === 'regular' && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="space-y-6"
-                    >
-                      <ServiceOptions 
-                        frequency={frequency} 
-                        setFrequency={(freq) => setValue('frequency', freq)} 
-                      />
-                      <TimeCalculator 
-                        bedrooms={bedrooms}
-                        setBedrooms={(val) => setValue('bedrooms', val)}
-                        bathrooms={bathrooms}
-                        setBathrooms={(val) => setValue('bathrooms', val)}
-                      />
-                      <HoursSelection 
-                        hours={hours}
-                        setHours={(val) => setValue('hours', val)}
-                        recommendedTime={calculateRecommendedTime()}
-                      />
-                      <Calendar 
-                        date={date}
-                        setDate={(date) => setValue('date', date)}
-                      />
-                      <Extras
-                        selectedExtras={selectedExtras}
-                        setSelectedExtras={(extras) => setValue('extras', extras)}
-                      />
-                    </motion.div>
-                  )}
-                  {currentStep === 2 && selectedService === 'deep' && (
-                    <DeepCleaningStep
-                      date={date}
-                      setDate={(date) => setValue('date', date)}
-                      hours={hours}
-                      setHours={(val) => setValue('hours', val)}
-                    />
-                  )}
-                  {currentStep === 3 && <FinalStep />}
-                </div>
+                <BookingContent 
+                  currentStep={currentStep}
+                  selectedService={selectedService || ''}
+                  frequency={frequency || ''}
+                  hours={hours}
+                  date={date}
+                  bedrooms={bedrooms}
+                  bathrooms={bathrooms}
+                  selectedExtras={selectedExtras}
+                  setValue={setValue}
+                />
                 <div className="w-full md:w-[30%]">
                   <div className="md:sticky md:top-8">
                     <BookingSummary 
-                      selectedService={selectedService}
-                      frequency={frequency}
+                      selectedService={selectedService || ''}
+                      frequency={frequency || ''}
                       hours={hours}
                       currentPrice={currentPrice}
                     />
