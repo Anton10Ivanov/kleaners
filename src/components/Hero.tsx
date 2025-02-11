@@ -18,18 +18,10 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-32">
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3"
-          alt="Clean home interior"
-          className="w-full h-full object-cover brightness-50"
-        />
-      </div>
-      
+    <div className="relative min-h-[80vh] flex items-center justify-center px-4 py-32 bg-gradient-to-b from-primary/10 to-transparent">
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid place-items-center">
-          <div className="w-full max-w-2xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 md:p-12 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+          <div className="w-full max-w-2xl bg-white dark:bg-gray-900 p-8 md:p-12 rounded-xl shadow-lg">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-center">
               Professional Cleaning Services for Your Home
             </h1>
