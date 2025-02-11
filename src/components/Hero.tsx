@@ -19,31 +19,20 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
         <img 
           src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3"
           alt="Clean home interior"
-          className="w-full h-full object-cover brightness-75"
+          className="w-full h-full object-cover brightness-50"
         />
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-white space-y-6">
-            <h1 className="text-5xl font-bold leading-tight">
+            <h1 className="text-6xl font-bold leading-tight">
               Professional Cleaning Services for Your Home
             </h1>
-            <p className="text-xl opacity-90">
-              Experience the difference with our expert cleaning services. Book your cleaning session today.
-            </p>
-            <div className="flex gap-4">
-              <Button className="bg-primary hover:bg-primary/90 text-white">
-                Learn More
-              </Button>
-              <Button variant="outline" className="text-white border-white hover:bg-white/10">
-                Our Services
-              </Button>
-            </div>
           </div>
 
-          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 dark:text-white">Book Your Cleaning Service</h3>
+          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <h3 className="text-2xl font-semibold mb-6 dark:text-white">Book Your Cleaning Service</h3>
             <div className="space-y-6">
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger className="w-full">
