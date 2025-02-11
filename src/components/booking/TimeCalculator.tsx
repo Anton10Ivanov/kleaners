@@ -8,7 +8,7 @@ interface TimeCalculatorProps {
 
 const TimeCalculator = ({ bedrooms, setBedrooms, bathrooms, setBathrooms }: TimeCalculatorProps) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+    <div>
       <h3 className="text-xl font-semibold">Calculate cleaning time</h3>
       <div className="grid md:grid-cols-2 gap-6">
         <div>

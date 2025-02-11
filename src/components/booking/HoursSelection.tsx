@@ -21,7 +21,7 @@ const HoursSelection = ({ hours, setHours, recommendedTime }: HoursSelectionProp
           <PopoverTrigger className="text-primary text-sm hover:underline">
             Calculate cleaning time
           </PopoverTrigger>
-          <PopoverContent className="w-[300px]">
+          <PopoverContent className="w-[300px] bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
             <div className="space-y-2">
               <p className="text-sm text-gray-600">
                 Based on your home size:
