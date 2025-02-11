@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,9 @@ import BookingSummary from '../components/booking/BookingSummary';
 import HoursSelection from '../components/booking/HoursSelection';
 import TimeCalculator from '../components/booking/TimeCalculator';
 import FinalStep from '../components/booking/FinalStep';
+import Calendar from '../components/booking/Calendar';
+import Extras from '../components/booking/Extras';
+import DeepCleaningStep from '../components/booking/DeepCleaningStep';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -25,6 +27,7 @@ const Index = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
+  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
   const calculateRecommendedTime = () => {
     const baseTime = 2; // Base cleaning time
@@ -102,10 +105,25 @@ const Index = () => {
                         setHours={setHours}
                         recommendedTime={calculateRecommendedTime()}
                       />
+                      <Calendar 
+                        date={date}
+                        setDate={setDate}
+                      />
+                      <Extras
+                        selectedExtras={selectedExtras}
+                        setSelectedExtras={setSelectedExtras}
+                      />
                     </div>
                   </>
                 )}
-                {currentStep === 2 && selectedService === 'deep' && <FinalStep />}
+                {currentStep === 2 && selectedService === 'deep' && (
+                  <DeepCleaningStep
+                    date={date}
+                    setDate={setDate}
+                    hours={hours}
+                    setHours={setHours}
+                  />
+                )}
                 {currentStep === 3 && <FinalStep />}
               </div>
               <div className="w-[30%]">
