@@ -1,7 +1,10 @@
+
 import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
@@ -11,32 +14,48 @@ import Testimonials from '../components/Testimonials';
 import ServiceOptions from '../components/booking/ServiceOptions';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
-import HoursSelection from '../components/booking/HoursSelection';
-import TimeCalculator from '../components/booking/TimeCalculator';
-import FinalStep from '../components/booking/FinalStep';
 import Calendar from '../components/booking/Calendar';
 import Extras from '../components/booking/Extras';
 import DeepCleaningStep from '../components/booking/DeepCleaningStep';
+import HoursSelection from '../components/booking/HoursSelection';
+import TimeCalculator from '../components/booking/TimeCalculator';
+import FinalStep from '../components/booking/FinalStep';
+import { bookingSchema, type BookingFormData } from '../schemas/booking';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedService, setSelectedService] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [frequency, setFrequency] = useState('');
-  const [hours, setHours] = useState(2);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [bedrooms, setBedrooms] = useState(1);
-  const [bathrooms, setBathrooms] = useState(1);
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
+  
+  const form = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      service: '',
+      postalCode: '',
+      frequency: '',
+      hours: 2,
+      bedrooms: 1,
+      bathrooms: 1,
+      extras: [],
+    }
+  });
+
+  const { handleSubmit, watch, setValue } = form;
+  const selectedService = watch('service');
+  const frequency = watch('frequency');
+  const hours = watch('hours');
+  const date = watch('date');
+  const bedrooms = watch('bedrooms');
+  const bathrooms = watch('bathrooms');
+  const selectedExtras = watch('extras') || [];
 
   const calculateRecommendedTime = () => {
-    const baseTime = 2; // Base cleaning time
-    const bedroomTime = bedrooms * 0.5; // 30 mins per bedroom
-    const bathroomTime = bathrooms * 0.5; // 30 mins per bathroom
+    const baseTime = 2;
+    const bedroomTime = bedrooms * 0.5;
+    const bathroomTime = bathrooms * 0.5;
     return Math.max(2, Math.ceil(baseTime + bedroomTime + bathroomTime));
   };
 
-  const handleNextStep = () => {
+  const handleNextStep = handleSubmit(() => {
     if (currentStep === 1) {
       if (!selectedService) {
         toast.error("Please select a service type");
@@ -48,7 +67,7 @@ const Index = () => {
       }
     }
     setCurrentStep(prev => prev + 1);
-  };
+  });
 
   const handleBackStep = () => {
     setCurrentStep(prev => Math.max(1, prev - 1));
@@ -66,95 +85,136 @@ const Index = () => {
 
   const currentPrice = calculatePrice(frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34);
 
+  // Save progress to localStorage
+  React.useEffect(() => {
+    const formData = form.getValues();
+    localStorage.setItem('bookingProgress', JSON.stringify({
+      step: currentStep,
+      formData
+    }));
+  }, [currentStep, form.getValues()]);
+
+  // Load progress from localStorage
+  React.useEffect(() => {
+    const savedProgress = localStorage.getItem('bookingProgress');
+    if (savedProgress) {
+      const { step, formData } = JSON.parse(savedProgress);
+      Object.entries(formData).forEach(([key, value]) => {
+        setValue(key as keyof BookingFormData, value);
+      });
+      setCurrentStep(step);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
-      {currentStep === 1 ? (
-        <>
-          <Hero 
-            selectedService={selectedService}
-            setSelectedService={setSelectedService}
-            postalCode={postalCode}
-            setPostalCode={setPostalCode}
-            handleNextStep={handleNextStep}
-          />
-          <Services />
-          <WhyChooseUs />
-          <Testimonials />
-        </>
-      ) : (
-        <div className="pt-32 pb-20 px-4">
-          <div className="max-w-7xl mx-auto">
-            <ProgressBar currentStep={currentStep} />
-            
-            <div className="flex gap-8">
-              <div className="w-[70%]">
-                {currentStep === 2 && selectedService === 'regular' && (
-                  <>
-                    <ServiceOptions frequency={frequency} setFrequency={setFrequency} />
-                    <div className="space-y-6 mt-8">
+      <AnimatePresence mode="wait">
+        {currentStep === 1 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Hero 
+              selectedService={selectedService}
+              setSelectedService={(service) => setValue('service', service)}
+              postalCode={watch('postalCode')}
+              setPostalCode={(code) => setValue('postalCode', code)}
+              handleNextStep={handleNextStep}
+            />
+            <Services />
+            <WhyChooseUs />
+            <Testimonials />
+          </motion.div>
+        ) : (
+          <motion.div
+            className="pt-32 pb-20 px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="max-w-7xl mx-auto">
+              <ProgressBar currentStep={currentStep} />
+              
+              <div className="flex flex-col md:flex-row gap-8">
+                <div className="w-full md:w-[70%]">
+                  {currentStep === 2 && selectedService === 'regular' && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="space-y-6"
+                    >
+                      <ServiceOptions 
+                        frequency={frequency} 
+                        setFrequency={(freq) => setValue('frequency', freq)} 
+                      />
                       <TimeCalculator 
                         bedrooms={bedrooms}
-                        setBedrooms={setBedrooms}
+                        setBedrooms={(val) => setValue('bedrooms', val)}
                         bathrooms={bathrooms}
-                        setBathrooms={setBathrooms}
+                        setBathrooms={(val) => setValue('bathrooms', val)}
                       />
                       <HoursSelection 
                         hours={hours}
-                        setHours={setHours}
+                        setHours={(val) => setValue('hours', val)}
                         recommendedTime={calculateRecommendedTime()}
                       />
                       <Calendar 
                         date={date}
-                        setDate={setDate}
+                        setDate={(date) => setValue('date', date)}
                       />
                       <Extras
                         selectedExtras={selectedExtras}
-                        setSelectedExtras={setSelectedExtras}
+                        setSelectedExtras={(extras) => setValue('extras', extras)}
                       />
-                    </div>
-                  </>
-                )}
-                {currentStep === 2 && selectedService === 'deep' && (
-                  <DeepCleaningStep
-                    date={date}
-                    setDate={setDate}
-                    hours={hours}
-                    setHours={setHours}
-                  />
-                )}
-                {currentStep === 3 && <FinalStep />}
+                    </motion.div>
+                  )}
+                  {currentStep === 2 && selectedService === 'deep' && (
+                    <DeepCleaningStep
+                      date={date}
+                      setDate={(date) => setValue('date', date)}
+                      hours={hours}
+                      setHours={(val) => setValue('hours', val)}
+                    />
+                  )}
+                  {currentStep === 3 && <FinalStep />}
+                </div>
+                <div className="w-full md:w-[30%]">
+                  <div className="md:sticky md:top-8">
+                    <BookingSummary 
+                      selectedService={selectedService}
+                      frequency={frequency}
+                      hours={hours}
+                      currentPrice={currentPrice}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="w-[30%]">
-                <BookingSummary 
-                  selectedService={selectedService}
-                  frequency={frequency}
-                  hours={hours}
-                  currentPrice={currentPrice}
-                />
-              </div>
-            </div>
 
-            <div className="flex justify-between mt-8">
-              <Button 
-                onClick={handleBackStep}
-                variant="outline"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
-              </Button>
-              {currentStep < 3 && (
+              <div className="flex justify-between mt-8">
                 <Button 
-                  onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90 text-white"
+                  onClick={handleBackStep}
+                  variant="outline"
                 >
-                  Next <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
-              )}
+                {currentStep < 3 && (
+                  <Button 
+                    onClick={handleNextStep}
+                    className="bg-primary hover:bg-primary/90 text-white"
+                  >
+                    Next <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Footer />
     </div>
   );
