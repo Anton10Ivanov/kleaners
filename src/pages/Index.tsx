@@ -52,6 +52,7 @@ const Index = () => {
             <Services />
             <WhyChooseUs />
             <Testimonials />
+            <Footer />
           </motion.div>
         ) : (
           <motion.div
@@ -64,7 +65,7 @@ const Index = () => {
             <div className="max-w-7xl mx-auto">
               <ProgressBar currentStep={currentStep} />
               
-              <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex flex-col md:flex-row gap-8 relative">
                 <BookingContent 
                   currentStep={currentStep}
                   selectedService={selectedService || ''}
@@ -76,15 +77,13 @@ const Index = () => {
                   selectedExtras={selectedExtras}
                   setValue={setValue}
                 />
-                <div className="w-full md:w-[30%]">
-                  <div className="md:sticky md:top-8">
-                    <BookingSummary 
-                      selectedService={selectedService || ''}
-                      frequency={frequency || ''}
-                      hours={hours}
-                      currentPrice={currentPrice}
-                    />
-                  </div>
+                <div className="w-full md:w-[30%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
+                  <BookingSummary 
+                    selectedService={selectedService || ''}
+                    frequency={frequency || ''}
+                    hours={hours}
+                    currentPrice={currentPrice}
+                  />
                 </div>
               </div>
 
@@ -108,7 +107,6 @@ const Index = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <Footer />
     </div>
   );
 };
