@@ -6,13 +6,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface HeroProps {
   selectedService: string;
-  setSelectedService: (value: string) => void;
+  setSelectedService: (value: "regular" | "deep" | "moving") => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
 
 const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, handleNextStep }: HeroProps) => {
+  const handleServiceChange = (value: string) => {
+    setSelectedService(value as "regular" | "deep" | "moving");
+  };
+
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4 py-32">
       <div className="absolute inset-0 z-0">
@@ -30,7 +34,7 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
               Professional Cleaning Services for Your Home
             </h1>
             <div className="space-y-6">
-              <Select value={selectedService} onValueChange={setSelectedService}>
+              <Select value={selectedService} onValueChange={handleServiceChange}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select service type" />
                 </SelectTrigger>
@@ -41,7 +45,7 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
                 </SelectContent>
               </Select>
               
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Input
                   type="text"
                   placeholder="Enter postal code or city"
@@ -51,7 +55,7 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
                 />
                 <Button 
                   onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90 text-white"
+                  className="bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
                   disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
