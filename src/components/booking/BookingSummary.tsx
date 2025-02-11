@@ -1,4 +1,6 @@
 
+import { Check, Clock } from 'lucide-react';
+
 interface BookingSummaryProps {
   selectedService: string;
   frequency: string;
