@@ -825,12 +825,125 @@ const Index = () => {
     }
   };
 
+  const renderServices = () => (
+    <section id="services" className="py-20 bg-white dark:bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Cleaning Services</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">Professional cleaning solutions for every need</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              title: "Regular Cleaning",
+              description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
+              price: "From €29/hour"
+            },
+            {
+              title: "Deep Cleaning",
+              description: "Thorough cleaning for those special occasions or seasonal needs",
+              price: "From €35/hour"
+            },
+            {
+              title: "Move In/Out Cleaning",
+              description: "Comprehensive cleaning service for moving transitions",
+              price: "Custom quote"
+            }
+          ].map((service) => (
+            <div key={service.title} className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{service.title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
+              <p className="text-primary font-semibold">{service.price}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderWhyChooseUs = () => (
+    <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Choose Kleaners.de</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">Experience the difference with our professional cleaning service</p>
+        </div>
+        <div className="grid md:grid-cols-4 gap-8">
+          {[
+            {
+              title: "Experienced Staff",
+              description: "Our cleaners are professionally trained and background checked"
+            },
+            {
+              title: "Eco-Friendly",
+              description: "We use environmentally safe cleaning products"
+            },
+            {
+              title: "Flexible Scheduling",
+              description: "Book our services at your convenience"
+            },
+            {
+              title: "Satisfaction Guaranteed",
+              description: "100% satisfaction guarantee on all our services"
+            }
+          ].map((feature) => (
+            <div key={feature.title} className="text-center">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{feature.title}</h3>
+              <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderTestimonials = () => (
+    <section className="py-20 bg-white dark:bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Clients Say</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">Read testimonials from our satisfied customers</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              name: "Sarah M.",
+              text: "The best cleaning service I've ever used. Professional, thorough, and friendly staff.",
+              location: "Berlin"
+            },
+            {
+              name: "Michael K.",
+              text: "Reliable and consistent quality. I've been using their services for over a year now.",
+              location: "Munich"
+            },
+            {
+              name: "Anna L.",
+              text: "Excellent deep cleaning service. They transformed my apartment before I moved in.",
+              location: "Hamburg"
+            }
+          ].map((testimonial) => (
+            <div key={testimonial.name} className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">"{testimonial.text}"</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
+              <p className="text-gray-500 dark:text-gray-400">{testimonial.location}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
       {currentStep === 1 ? (
-        renderHeroSection()
+        <>
+          {renderHeroSection()}
+          {renderServices()}
+          {renderWhyChooseUs()}
+          {renderTestimonials()}
+        </>
       ) : (
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
