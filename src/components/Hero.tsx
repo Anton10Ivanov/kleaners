@@ -24,15 +24,11 @@ const Hero = ({ selectedService, setSelectedService, postalCode, setPostalCode, 
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-white space-y-6">
-            <h1 className="text-6xl font-bold leading-tight">
+        <div className="grid place-items-center">
+          <div className="w-full max-w-2xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 md:p-12 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-center">
               Professional Cleaning Services for Your Home
             </h1>
-          </div>
-
-          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-semibold mb-6 dark:text-white">Book Your Cleaning Service</h3>
             <div className="space-y-6">
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger className="w-full">
