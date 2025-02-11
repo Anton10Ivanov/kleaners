@@ -1,7 +1,6 @@
 
 import { motion } from 'framer-motion';
 import ServiceOptions from './ServiceOptions';
-import TimeCalculator from './TimeCalculator';
 import HoursSelection from './HoursSelection';
 import Calendar from './Calendar';
 import Extras from './Extras';
@@ -44,16 +43,14 @@ const BookingContent = ({
             frequency={frequency} 
             setFrequency={(freq) => setValue('frequency', freq as "onetime" | "weekly" | "biweekly")} 
           />
-          <TimeCalculator 
-            bedrooms={bedrooms}
-            setBedrooms={(val) => setValue('bedrooms', val)}
-            bathrooms={bathrooms}
-            setBathrooms={(val) => setValue('bathrooms', val)}
-          />
           <HoursSelection 
             hours={hours}
             setHours={(val) => setValue('hours', val)}
             recommendedTime={calculateRecommendedTime(bedrooms, bathrooms)}
+            bedrooms={bedrooms}
+            setBedrooms={(val) => setValue('bedrooms', val)}
+            bathrooms={bathrooms}
+            setBathrooms={(val) => setValue('bathrooms', val)}
           />
           <Calendar 
             date={date}
