@@ -10,6 +10,7 @@ export const bookingSchema = z.object({
   bedrooms: z.number().min(1, "At least 1 bedroom required").optional(),
   bathrooms: z.number().min(1, "At least 1 bathroom required").optional(),
   extras: z.array(z.string()).default([]),
+  additionalNotes: z.string().optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;

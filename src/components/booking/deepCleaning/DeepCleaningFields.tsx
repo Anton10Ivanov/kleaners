@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Plus, Minus, Users } from 'lucide-react';
+import { Textarea } from "@/components/ui/textarea";
+import { Plus, Minus } from 'lucide-react';
 
 interface DeepCleaningFieldsProps {
   squareMeters: number;
@@ -22,6 +23,8 @@ interface DeepCleaningFieldsProps {
   setCleaningPersonnel: (value: 'normal' | 'experienced') => void;
   specialConditions: string[];
   setSpecialConditions: (value: string[]) => void;
+  additionalNotes?: string;
+  setAdditionalNotes?: (value: string) => void;
 }
 
 const DeepCleaningFields = ({
@@ -38,14 +41,16 @@ const DeepCleaningFields = ({
   cleaningPersonnel,
   setCleaningPersonnel,
   specialConditions,
-  setSpecialConditions
+  setSpecialConditions,
+  additionalNotes = '',
+  setAdditionalNotes = () => {}
 }: DeepCleaningFieldsProps) => {
   const specialOptions = [
-    { id: 'mold', label: 'Mold present' },
-    { id: 'animals', label: 'Animals' },
-    { id: 'drains', label: 'Clogged drains' },
-    { id: 'feces', label: 'Feces' },
-    { id: 'messy', label: 'Messy' }
+    { id: 'mold', label: 'Mold present (visible mold in bathrooms, walls, etc.)' },
+    { id: 'pets', label: 'Pets in the home (cats, dogs, etc.)' },
+    { id: 'drains', label: 'Clogged drains (sinks, showers, etc.)' },
+    { id: 'feces', label: 'Feces or biohazard waste (e.g., pet accidents, human waste)' },
+    { id: 'messy', label: 'Extremely messy (hoarding, excessive clutter)' }
   ];
 
   const handleSquareMeters = (increment: boolean) => {
@@ -140,7 +145,7 @@ const DeepCleaningFields = ({
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label>Level of Dirtiness</Label>
+          <Label>How would you describe the current condition of your property?</Label>
           <Slider
             value={[dirtinessLevel]}
             onValueChange={(value) => setDirtinessLevel(value[0])}
@@ -149,15 +154,15 @@ const DeepCleaningFields = ({
             className="w-full"
           />
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Very Clean</span>
-            <span>Slightly Dirty</span>
-            <span>Dirty</span>
-            <span>Very Dirty</span>
+            <span>Very Clean (light dusting, no major mess)</span>
+            <span>Slightly Dirty (some clutter, light stains)</span>
+            <span>Dirty (visible dirt, stains, and clutter)</span>
+            <span>Very Dirty (heavy dirt, grime, and disorganization)</span>
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label>Last Time Cleaned</Label>
+          <Label>When was the last time your property was professionally cleaned?</Label>
           <Slider
             value={[lastCleaned]}
             onValueChange={(value) => setLastCleaned(value[0])}
@@ -166,17 +171,17 @@ const DeepCleaningFields = ({
             className="w-full"
           />
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Recent</span>
-            <span>1 Month</span>
-            <span>3 Months</span>
-            <span>6 Months</span>
-            <span>1 Year+</span>
+            <span>Recent (within the last month)</span>
+            <span>1 Month Ago</span>
+            <span>3 Months Ago</span>
+            <span>6 Months Ago</span>
+            <span>1 Year or More</span>
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        <Label>Cleaning Personnel</Label>
+        <Label>What level of expertise do you prefer for the cleaning team?</Label>
         <RadioGroup
           value={cleaningPersonnel}
           onValueChange={(value: 'normal' | 'experienced') => setCleaningPersonnel(value)}
@@ -184,18 +189,18 @@ const DeepCleaningFields = ({
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="normal" id="normal" />
-            <Label htmlFor="normal">Normal</Label>
+            <Label htmlFor="normal">Normal (standard cleaning team)</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="experienced" id="experienced" />
-            <Label htmlFor="experienced">Experienced</Label>
+            <Label htmlFor="experienced">Experienced (advanced cleaning team for tougher jobs)</Label>
           </div>
         </RadioGroup>
       </div>
 
       <div className="space-y-4">
-        <Label>Special Conditions</Label>
-        <div className="grid grid-cols-2 gap-4">
+        <Label>Does your property have any of the following conditions?</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {specialOptions.map((option) => (
             <div key={option.id} className="flex items-center space-x-2">
               <Checkbox
@@ -220,6 +225,16 @@ const DeepCleaningFields = ({
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Additional Notes</Label>
+        <Textarea
+          placeholder="Is there anything else we should know about your property?"
+          value={additionalNotes}
+          onChange={(e) => setAdditionalNotes(e.target.value)}
+          className="min-h-[100px]"
+        />
       </div>
     </div>
   );

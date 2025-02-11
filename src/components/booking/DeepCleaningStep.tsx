@@ -16,6 +16,7 @@ const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
   const [lastCleaned, setLastCleaned] = useState(0);
   const [cleaningPersonnel, setCleaningPersonnel] = useState<'normal' | 'experienced'>('normal');
   const [specialConditions, setSpecialConditions] = useState<string[]>([]);
+  const [additionalNotes, setAdditionalNotes] = useState('');
 
   return (
     <div className="space-y-8">
@@ -36,6 +37,8 @@ const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
           setCleaningPersonnel={setCleaningPersonnel}
           specialConditions={specialConditions}
           setSpecialConditions={setSpecialConditions}
+          additionalNotes={additionalNotes}
+          setAdditionalNotes={setAdditionalNotes}
         />
       </div>
 
