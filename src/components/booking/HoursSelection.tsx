@@ -10,9 +10,21 @@ interface HoursSelectionProps {
   hours: number;
   setHours: (hours: number) => void;
   recommendedTime: number;
+  bedrooms: number;
+  setBedrooms: (value: number) => void;
+  bathrooms: number;
+  setBathrooms: (value: number) => void;
 }
 
-const HoursSelection = ({ hours, setHours, recommendedTime }: HoursSelectionProps) => {
+const HoursSelection = ({ 
+  hours, 
+  setHours, 
+  recommendedTime,
+  bedrooms,
+  setBedrooms,
+  bathrooms,
+  setBathrooms 
+}: HoursSelectionProps) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 space-y-6">
       <div className="text-center space-y-2">
@@ -22,10 +34,46 @@ const HoursSelection = ({ hours, setHours, recommendedTime }: HoursSelectionProp
             Calculate cleaning time
           </PopoverTrigger>
           <PopoverContent className="w-[300px] bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">Bedrooms</label>
+                <div className="flex items-center gap-4">
+                  <button 
+                    className="p-2 border rounded hover:bg-gray-50"
+                    onClick={() => setBedrooms(Math.max(1, bedrooms - 1))}
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center">{bedrooms}</span>
+                  <button 
+                    className="p-2 border rounded hover:bg-gray-50"
+                    onClick={() => setBedrooms(bedrooms + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Bathrooms</label>
+                <div className="flex items-center gap-4">
+                  <button 
+                    className="p-2 border rounded hover:bg-gray-50"
+                    onClick={() => setBathrooms(Math.max(1, bathrooms - 1))}
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center">{bathrooms}</span>
+                  <button 
+                    className="p-2 border rounded hover:bg-gray-50"
+                    onClick={() => setBathrooms(bathrooms + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600">
-                Based on your home size:
-              </p>
+              <p className="text-sm text-gray-600">Based on your home size:</p>
               <ul className="text-sm text-gray-600 list-disc pl-4">
                 <li>Each bedroom: 30 minutes</li>
                 <li>Each bathroom: 30 minutes</li>
