@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
@@ -13,6 +12,9 @@ import Testimonials from '../components/Testimonials';
 import ServiceOptions from '../components/booking/ServiceOptions';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
+import HoursSelection from '../components/booking/HoursSelection';
+import TimeCalculator from '../components/booking/TimeCalculator';
+import FinalStep from '../components/booking/FinalStep';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -29,17 +31,6 @@ const Index = () => {
     const bedroomTime = bedrooms * 0.5; // 30 mins per bedroom
     const bathroomTime = bathrooms * 0.5; // 30 mins per bathroom
     return Math.max(2, Math.ceil(baseTime + bedroomTime + bathroomTime));
-  };
-
-  const renderFinalStep = () => {
-    return (
-      <div className="space-y-6">
-        <h3 className="text-2xl font-semibold">Almost done!</h3>
-        <p className="text-gray-600">
-          Please review your booking details and confirm.
-        </p>
-      </div>
-    );
   };
 
   const handleNextStep = () => {
@@ -99,25 +90,23 @@ const Index = () => {
                 {currentStep === 2 && selectedService === 'regular' && (
                   <>
                     <ServiceOptions frequency={frequency} setFrequency={setFrequency} />
-                    <div className="pt-4 text-center">
-                      <p className="text-muted-foreground">
-                        We recommend you {calculateRecommendedTime()} hours of cleaning
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Living room, kitchen & all commons areas are included!
-                      </p>
+                    <div className="space-y-6 mt-8">
+                      <TimeCalculator 
+                        bedrooms={bedrooms}
+                        setBedrooms={setBedrooms}
+                        bathrooms={bathrooms}
+                        setBathrooms={setBathrooms}
+                      />
+                      <HoursSelection 
+                        hours={hours}
+                        setHours={setHours}
+                        recommendedTime={calculateRecommendedTime()}
+                      />
                     </div>
-                    <Button 
-                      onClick={() => {
-                        setHours(calculateRecommendedTime());
-                      }}
-                    >
-                      Apply Recommendation
-                    </Button>
                   </>
                 )}
-                {currentStep === 2 && selectedService === 'deep' && renderFinalStep()}
-                {currentStep === 3 && renderFinalStep()}
+                {currentStep === 2 && selectedService === 'deep' && <FinalStep />}
+                {currentStep === 3 && <FinalStep />}
               </div>
               <div className="w-[30%]">
                 <BookingSummary 
