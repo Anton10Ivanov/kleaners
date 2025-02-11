@@ -22,35 +22,47 @@ export const useBookingForm = () => {
     }
   });
 
-  const { handleSubmit, watch, setValue, formState: { errors } } = form;
+  const { handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
 
-  const handleNextStep = handleSubmit(() => {
+  const handleNextStep = () => {
+    const currentService = watch('service');
+    const currentPostalCode = watch('postalCode');
+
+    // For step 1, only validate service and postalCode
     if (currentStep === 1) {
-      const selectedService = watch('service');
-      if (!selectedService) {
+      if (!currentService) {
         toast.error("Please select a service type");
         return;
       }
-      if (selectedService !== 'regular' && selectedService !== 'deep') {
-        toast.error("This service is currently not available");
+      if (!currentPostalCode) {
+        toast.error("Please enter your postal code");
         return;
       }
-    }
-    
-    if (Object.keys(errors).length > 0) {
-      toast.error("Please fill in all required fields correctly");
+      if (currentService === 'moving') {
+        toast.error("Move In/Out cleaning is currently not available");
+        return;
+      }
+      // If validation passes, move to next step
+      setCurrentStep(2);
       return;
     }
-    
-    setCurrentStep(prev => prev + 1);
-  });
+
+    // For other steps, use the form's handleSubmit
+    handleSubmit(() => {
+      if (Object.keys(errors).length > 0) {
+        toast.error("Please fill in all required fields correctly");
+        return;
+      }
+      setCurrentStep(prev => prev + 1);
+    })();
+  };
 
   const handleBackStep = () => {
     setCurrentStep(prev => Math.max(1, prev - 1));
   };
 
   useEffect(() => {
-    const formData = form.getValues();
+    const formData = getValues();
     localStorage.setItem('bookingProgress', JSON.stringify({
       step: currentStep,
       formData: {
@@ -58,7 +70,7 @@ export const useBookingForm = () => {
         date: formData.date?.toISOString(),
       }
     }));
-  }, [currentStep, form.getValues()]);
+  }, [currentStep, getValues]);
 
   useEffect(() => {
     const savedProgress = localStorage.getItem('bookingProgress');
