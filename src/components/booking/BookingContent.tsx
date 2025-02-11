@@ -69,8 +69,6 @@ const BookingContent = ({
         <DeepCleaningStep
           date={date}
           setDate={(date) => setValue('date', date)}
-          hours={hours}
-          setHours={(val) => setValue('hours', val)}
         />
       )}
       {currentStep === 3 && <FinalStep />}
