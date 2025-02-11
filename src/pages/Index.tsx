@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -20,28 +21,26 @@ const Index = () => {
   const [frequency, setFrequency] = useState('');
   const [hours, setHours] = useState(2);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [instructions, setInstructions] = useState('');
-  const [hasPets, setHasPets] = useState(false);
-  const [promoCode, setPromoCode] = useState('');
-  const [cleanlinessLevel, setCleanlinessLevel] = useState(2);
-  const [lastCleaningLevel, setLastCleaningLevel] = useState(2);
-  const [deepCleaningIssues, setDeepCleaningIssues] = useState({
-    mold: false,
-    feces: false,
-    animalHair: false,
-    flood: false,
-    cloggedDrains: false,
-    cloggedToilets: false
-  });
+
+  const calculateRecommendedTime = () => {
+    const baseTime = 2; // Base cleaning time
+    const bedroomTime = bedrooms * 0.5; // 30 mins per bedroom
+    const bathroomTime = bathrooms * 0.5; // 30 mins per bathroom
+    return Math.max(2, Math.ceil(baseTime + bedroomTime + bathroomTime));
+  };
+
+  const renderFinalStep = () => {
+    return (
+      <div className="space-y-6">
+        <h3 className="text-2xl font-semibold">Almost done!</h3>
+        <p className="text-gray-600">
+          Please review your booking details and confirm.
+        </p>
+      </div>
+    );
+  };
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -111,7 +110,6 @@ const Index = () => {
                     <Button 
                       onClick={() => {
                         setHours(calculateRecommendedTime());
-                        setIsCalculatorOpen(false);
                       }}
                     >
                       Apply Recommendation
