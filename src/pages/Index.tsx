@@ -124,36 +124,67 @@ const Index = () => {
     </div>
   );
 
-  const renderInitialStep = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8 w-full">
-      <h3 className="text-xl font-semibold mb-6">Select Your Service</h3>
-      <div className="space-y-6">
-        <Select value={selectedService} onValueChange={setSelectedService}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select service type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="regular">Regular Cleaning</SelectItem>
-            <SelectItem value="deep">Deep Cleaning</SelectItem>
-            <SelectItem value="moving">Move In/Out Cleaning</SelectItem>
-          </SelectContent>
-        </Select>
-        
-        <div className="flex gap-4">
-          <Input
-            type="text"
-            placeholder="Enter postal code or city"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            className="flex-1"
-          />
-          <Button 
-            onClick={handleNextStep}
-            className="bg-primary hover:bg-primary/90"
-            disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
-          >
-            Next <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+  const renderHeroSection = () => (
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-32">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80"
+          alt="Clean home interior"
+          className="w-full h-full object-cover brightness-50"
+        />
+      </div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="text-white space-y-6">
+            <h1 className="text-5xl font-bold leading-tight">
+              Professional Cleaning Services for Your Home
+            </h1>
+            <p className="text-xl opacity-90">
+              Experience the difference with our expert cleaning services. Book your cleaning session today.
+            </p>
+            <div className="flex gap-4">
+              <Button className="bg-primary hover:bg-primary/90">
+                Learn More
+              </Button>
+              <Button variant="outline" className="text-white border-white hover:bg-white/10">
+                Our Services
+              </Button>
+            </div>
+          </div>
+
+          <div className="bg-white/95 backdrop-blur-sm p-8 rounded-xl shadow-lg">
+            <h3 className="text-xl font-semibold mb-6">Book Your Cleaning Service</h3>
+            <div className="space-y-6">
+              <Select value={selectedService} onValueChange={setSelectedService}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select service type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="regular">Regular Cleaning</SelectItem>
+                  <SelectItem value="deep">Deep Cleaning</SelectItem>
+                  <SelectItem value="moving">Move In/Out Cleaning</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <div className="flex gap-4">
+                <Input
+                  type="text"
+                  placeholder="Enter postal code or city"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                  className="flex-1"
+                />
+                <Button 
+                  onClick={handleNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                  disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
+                >
+                  Next <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -237,8 +268,8 @@ const Index = () => {
     <div className="space-y-8">
       <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
         <h3 className="text-xl font-semibold mb-6">Property Details</h3>
-        <div className="space-y-6">
-          <div>
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="space-y-4">
             <label className="text-sm font-medium mb-2 block">Square Meters</label>
             <div className="flex items-center gap-4">
               <Button 
@@ -260,7 +291,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div>
+          <div className="space-y-4">
             <label className="text-sm font-medium mb-2 block">Number of Bathrooms</label>
             <div className="flex items-center gap-4">
               <Button 
@@ -283,7 +314,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div>
+          <div className="space-y-4">
             <label className="text-sm font-medium mb-2 block">Number of Rooms</label>
             <div className="flex items-center gap-4">
               <Button 
@@ -305,7 +336,9 @@ const Index = () => {
               </Button>
             </div>
           </div>
-          
+        </div>
+        
+        <div className="space-y-8">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium">Current Cleanliness Level</label>
@@ -321,6 +354,12 @@ const Index = () => {
               step={1}
               className="w-full"
             />
+            <div className="grid grid-cols-4 text-xs text-muted-foreground">
+              <span>Very Clean</span>
+              <span className="text-center">Clean</span>
+              <span className="text-center">Dirty</span>
+              <span className="text-right">Very Dirty</span>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -338,112 +377,118 @@ const Index = () => {
               step={1}
               className="w-full"
             />
-          </div>
-          
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium">Choose the cleaning team</label>
-              <HoverCard>
-                <HoverCardTrigger>
-                  <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80">
-                  <div className="space-y-2">
-                    <h4 className="font-semibold">Cleaning Team Types</h4>
-                    <p className="text-sm">Normal: Standard cleaning team for regular tasks</p>
-                    <p className="text-sm">Experienced: Skilled team with 3+ years experience</p>
-                    <p className="text-sm">Expert: Master cleaners with specialized training</p>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div 
-                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'normal' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-                onClick={() => setTeamType('normal')}
-              >
-                <h4 className="font-semibold">Normal</h4>
-                <p className="text-sm text-gray-500 mt-2">Standard cleaning service</p>
-              </div>
-              <div 
-                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'experienced' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-                onClick={() => setTeamType('experienced')}
-              >
-                <h4 className="font-semibold">Experienced</h4>
-                <p className="text-sm text-gray-500 mt-2">3+ years experience</p>
-              </div>
-              <div 
-                className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'expert' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-                onClick={() => setTeamType('expert')}
-              >
-                <h4 className="font-semibold">Expert</h4>
-                <p className="text-sm text-gray-500 mt-2">Specialized training</p>
-              </div>
+            <div className="grid grid-cols-4 text-xs text-muted-foreground">
+              <span>Last Week</span>
+              <span className="text-center">Last Month</span>
+              <span className="text-center">Several Months</span>
+              <span className="text-right">6+ Months</span>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium">Special Conditions</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="mold"
-                  checked={deepCleaningIssues.mold}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, mold: checked as boolean}))}
-                />
-                <label htmlFor="mold" className="text-sm">Mold Present</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="feces"
-                  checked={deepCleaningIssues.feces}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, feces: checked as boolean}))}
-                />
-                <label htmlFor="feces" className="text-sm">Feces Present</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="animalHair"
-                  checked={deepCleaningIssues.animalHair}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, animalHair: checked as boolean}))}
-                />
-                <label htmlFor="animalHair" className="text-sm">Animal Hair</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="flood"
-                  checked={deepCleaningIssues.flood}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, flood: checked as boolean}))}
-                />
-                <label htmlFor="flood" className="text-sm">Flood Damage</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="cloggedDrains"
-                  checked={deepCleaningIssues.cloggedDrains}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, cloggedDrains: checked as boolean}))}
-                />
-                <label htmlFor="cloggedDrains" className="text-sm">Clogged Shower Drains</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="cloggedToilets"
-                  checked={deepCleaningIssues.cloggedToilets}
-                  onCheckedChange={(checked) => 
-                    setDeepCleaningIssues(prev => ({...prev, cloggedToilets: checked as boolean}))}
-                />
-                <label htmlFor="cloggedToilets" className="text-sm">Clogged Toilets</label>
-              </div>
-            </div>
-          </div>
-
-          {renderExtras()}
         </div>
+        
+        <div className="space-y-4 mt-8">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Choose the cleaning team</label>
+            <HoverCard>
+              <HoverCardTrigger>
+                <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Cleaning Team Types</h4>
+                  <p className="text-sm">Normal: Standard cleaning team for regular tasks</p>
+                  <p className="text-sm">Experienced: Skilled team with 3+ years experience</p>
+                  <p className="text-sm">Expert: Master cleaners with specialized training</p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div 
+              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'normal' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+              onClick={() => setTeamType('normal')}
+            >
+              <h4 className="font-semibold">Normal</h4>
+              <p className="text-sm text-gray-500 mt-2">Standard cleaning service</p>
+            </div>
+            <div 
+              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'experienced' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+              onClick={() => setTeamType('experienced')}
+            >
+              <h4 className="font-semibold">Experienced</h4>
+              <p className="text-sm text-gray-500 mt-2">3+ years experience</p>
+            </div>
+            <div 
+              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'expert' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
+              onClick={() => setTeamType('expert')}
+            >
+              <h4 className="font-semibold">Expert</h4>
+              <p className="text-sm text-gray-500 mt-2">Specialized training</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4 mt-8">
+          <h4 className="text-sm font-medium">Special Conditions</h4>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="mold"
+                checked={deepCleaningIssues.mold}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, mold: checked as boolean}))}
+              />
+              <label htmlFor="mold" className="text-sm">Mold Present</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="feces"
+                checked={deepCleaningIssues.feces}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, feces: checked as boolean}))}
+              />
+              <label htmlFor="feces" className="text-sm">Feces Present</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="animalHair"
+                checked={deepCleaningIssues.animalHair}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, animalHair: checked as boolean}))}
+              />
+              <label htmlFor="animalHair" className="text-sm">Animal Hair</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="flood"
+                checked={deepCleaningIssues.flood}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, flood: checked as boolean}))}
+              />
+              <label htmlFor="flood" className="text-sm">Flood Damage</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="cloggedDrains"
+                checked={deepCleaningIssues.cloggedDrains}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, cloggedDrains: checked as boolean}))}
+              />
+              <label htmlFor="cloggedDrains" className="text-sm">Clogged Shower Drains</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="cloggedToilets"
+                checked={deepCleaningIssues.cloggedToilets}
+                onCheckedChange={(checked) => 
+                  setDeepCleaningIssues(prev => ({...prev, cloggedToilets: checked as boolean}))}
+              />
+              <label htmlFor="cloggedToilets" className="text-sm">Clogged Toilets</label>
+            </div>
+          </div>
+        </div>
+
+        {renderExtras()}
       </div>
     </div>
   );
@@ -788,65 +833,51 @@ const Index = () => {
     <div className="min-h-screen font-raleway bg-gray-50">
       <Navbar />
       
-      <div className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          {renderProgressBar()}
-          
-          <div className={`flex ${currentStep === 1 ? 'block' : 'gap-8'}`}>
-            <div className={currentStep === 1 ? 'w-full' : 'w-[70%]'}>
-              {currentStep === 1 && renderInitialStep()}
-              {currentStep === 2 && selectedService === 'regular' && (
-                <>
-                  {renderServiceOptions()}
-                  {renderHoursSelection()}
-                  {renderTimeCalculator()}
-                  {renderExtras()}
-                  {renderCalendar()}
-                </>
-              )}
-              {currentStep === 2 && selectedService === 'deep' && renderDeepCleaningStep()}
-              {currentStep === 3 && renderFinalStep()}
-            </div>
-            {currentStep > 1 && (
+      {currentStep === 1 ? (
+        renderHeroSection()
+      ) : (
+        <div className="pt-32 pb-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            {renderProgressBar()}
+            
+            <div className="flex gap-8">
+              <div className="w-[70%]">
+                {currentStep === 2 && selectedService === 'regular' && (
+                  <>
+                    {renderServiceOptions()}
+                    {renderHoursSelection()}
+                    {renderTimeCalculator()}
+                    {renderExtras()}
+                    {renderCalendar()}
+                  </>
+                )}
+                {currentStep === 2 && selectedService === 'deep' && renderDeepCleaningStep()}
+                {currentStep === 3 && renderFinalStep()}
+              </div>
               <div className="w-[30%]">
                 {renderSummary()}
               </div>
-            )}
-          </div>
+            </div>
 
-          <div className="flex justify-between mt-8">
-            {currentStep > 1 && (
+            <div className="flex justify-between mt-8">
               <Button 
                 onClick={handleBackStep}
                 variant="outline"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back
               </Button>
-            )}
-            {currentStep === 1 && (
-              <div className="ml-auto">
-                <Button 
-                  onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90"
-                  disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
-                >
-                  Next <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            )}
-            {currentStep < 3 && currentStep !== 1 && (
-              <div className="ml-auto">
+              {currentStep < 3 && (
                 <Button 
                   onClick={handleNextStep}
                   className="bg-primary hover:bg-primary/90"
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
