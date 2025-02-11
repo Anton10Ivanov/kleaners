@@ -21,11 +21,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#ff9500",
+          DEFAULT: "#F97316", // Bright Orange for logo consistency
           foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "#ffc778",
+          DEFAULT: "#FEF7CD", // Soft Yellow
           foreground: "#221F26",
         },
         destructive: {
@@ -33,12 +33,12 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#F1F1F1",
+          DEFAULT: "#F1F1F1", // Light Gray
           foreground: "#666666",
         },
         accent: {
-          DEFAULT: "#ff9500",
-          foreground: "#FFFFFF",
+          DEFAULT: "#F2FCE2", // Soft Green
+          foreground: "#221F26",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",

@@ -23,19 +23,15 @@ const Index = () => {
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
-  
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [accessMethod, setAccessMethod] = useState<string[]>([]);
-  
   const [instructions, setInstructions] = useState('');
   const [hasPets, setHasPets] = useState(false);
-  
   const [promoCode, setPromoCode] = useState('');
   const [cleanlinessLevel, setCleanlinessLevel] = useState(2);
   const [teamType, setTeamType] = useState('normal');
@@ -128,9 +124,9 @@ const Index = () => {
     <div className="relative min-h-screen flex items-center justify-center px-4 py-32">
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3"
           alt="Clean home interior"
-          className="w-full h-full object-cover brightness-50"
+          className="w-full h-full object-cover brightness-75"
         />
       </div>
       
@@ -144,7 +140,7 @@ const Index = () => {
               Experience the difference with our expert cleaning services. Book your cleaning session today.
             </p>
             <div className="flex gap-4">
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button className="bg-primary hover:bg-primary/90 text-white">
                 Learn More
               </Button>
               <Button variant="outline" className="text-white border-white hover:bg-white/10">
@@ -153,8 +149,8 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm p-8 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-6">Book Your Cleaning Service</h3>
+          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 rounded-xl shadow-lg">
+            <h3 className="text-xl font-semibold mb-6 dark:text-white">Book Your Cleaning Service</h3>
             <div className="space-y-6">
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger className="w-full">
@@ -177,7 +173,7 @@ const Index = () => {
                 />
                 <Button 
                   onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-primary hover:bg-primary/90 text-white"
                   disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
@@ -830,7 +826,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-raleway bg-gray-50">
+    <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
       {currentStep === 1 ? (
@@ -869,7 +865,7 @@ const Index = () => {
               {currentStep < 3 && (
                 <Button 
                   onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-primary hover:bg-primary/90 text-white"
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
