@@ -29,17 +29,18 @@ const Index = () => {
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      service: '',
+      service: undefined,
       postalCode: '',
-      frequency: '',
+      frequency: 'onetime',
       hours: 2,
       bedrooms: 1,
       bathrooms: 1,
       extras: [],
+      date: undefined,
     }
   });
 
-  const { handleSubmit, watch, setValue } = form;
+  const { handleSubmit, watch, setValue, formState: { errors } } = form;
   const selectedService = watch('service');
   const frequency = watch('frequency');
   const hours = watch('hours');
@@ -66,6 +67,12 @@ const Index = () => {
         return;
       }
     }
+    
+    if (Object.keys(errors).length > 0) {
+      toast.error("Please fill in all required fields correctly");
+      return;
+    }
+    
     setCurrentStep(prev => prev + 1);
   });
 
@@ -90,7 +97,10 @@ const Index = () => {
     const formData = form.getValues();
     localStorage.setItem('bookingProgress', JSON.stringify({
       step: currentStep,
-      formData
+      formData: {
+        ...formData,
+        date: formData.date?.toISOString(),
+      }
     }));
   }, [currentStep, form.getValues()]);
 
@@ -101,16 +111,14 @@ const Index = () => {
       try {
         const parsed = JSON.parse(savedProgress) as {
           step: number;
-          formData: Partial<BookingFormData>;
+          formData: Partial<BookingFormData> & { date?: string };
         };
         
-        // Only set values if they match expected types
         if (parsed.formData) {
           Object.entries(parsed.formData).forEach(([key, value]) => {
-            // Convert date string back to Date object if it exists
             if (key === 'date' && typeof value === 'string') {
               setValue(key as keyof BookingFormData, new Date(value));
-            } else {
+            } else if (value !== undefined) {
               setValue(key as keyof BookingFormData, value as any);
             }
           });
@@ -139,7 +147,7 @@ const Index = () => {
             transition={{ duration: 0.3 }}
           >
             <Hero 
-              selectedService={selectedService}
+              selectedService={selectedService || ''}
               setSelectedService={(service) => setValue('service', service)}
               postalCode={watch('postalCode')}
               setPostalCode={(code) => setValue('postalCode', code)}
