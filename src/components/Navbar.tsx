@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,27 +34,29 @@ const Navbar = () => {
             <NavLink href="#services">Services</NavLink>
             <NavLink href="#about">About</NavLink>
             <NavLink href="#contact">Contact</NavLink>
-            <Button 
-              variant="outline"
-              size="icon"
-              className="mr-2"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">🌞</span>
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                className="mr-2"
+              />
+              <span className="text-sm">🌚</span>
+            </div>
             <button className="bg-primary text-white px-6 py-2 rounded-md font-raleway font-medium hover:bg-primary/90 transition-colors">
               Get Quote
             </button>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
-            <Button 
-              variant="outline"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">🌞</span>
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+              />
+              <span className="text-sm">🌚</span>
+            </div>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
