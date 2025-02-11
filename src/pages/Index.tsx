@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowRight, ArrowLeft, Feather, Shield, Clock, Phone, Check, Minus, Plus, Info, Calendar, HelpCircle } from 'lucide-react';
+import Footer from '../components/Footer';
+import Hero from '../components/Hero';
+import Services from '../components/Services';
+import WhyChooseUs from '../components/WhyChooseUs';
+import Testimonials from '../components/Testimonials';
+import ServiceOptions from '../components/booking/ServiceOptions';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { toast } from "sonner";
 import { Slider } from "@/components/ui/slider";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Check, Minus, Plus, Info, Clock } from 'lucide-react';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -18,7 +24,6 @@ const Index = () => {
   const [postalCode, setPostalCode] = useState('');
   const [frequency, setFrequency] = useState('');
   const [hours, setHours] = useState(2);
-  const [extras, setExtras] = useState<string[]>([]);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [bedrooms, setBedrooms] = useState(1);
@@ -29,13 +34,10 @@ const Index = () => {
   const [phone, setPhone] = useState('');
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
-  const [accessMethod, setAccessMethod] = useState<string[]>([]);
   const [instructions, setInstructions] = useState('');
   const [hasPets, setHasPets] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [cleanlinessLevel, setCleanlinessLevel] = useState(2);
-  const [teamType, setTeamType] = useState('normal');
-  const [squareMeters, setSquareMeters] = useState(50);
   const [lastCleaningLevel, setLastCleaningLevel] = useState(2);
   const [deepCleaningIssues, setDeepCleaningIssues] = useState({
     mold: false,
@@ -76,21 +78,6 @@ const Index = () => {
 
   const currentPrice = calculatePrice(frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34);
 
-  const extraServices = [
-    { id: 'windows', name: 'Windows', icon: <Shield className="w-6 h-6" />, price: 15 },
-    { id: 'dishes', name: 'Dishes', icon: <Feather className="w-6 h-6" />, price: 10 },
-    { id: 'laundry', name: 'Laundry', icon: <Clock className="w-6 h-6" />, price: 12 },
-    { id: 'fridge', name: 'Fridge', icon: <Phone className="w-6 h-6" />, price: 20 },
-  ];
-
-  const toggleExtra = (extraId: string) => {
-    setExtras(current =>
-      current.includes(extraId)
-        ? current.filter(id => id !== extraId)
-        : [...current, extraId]
-    );
-  };
-
   const renderProgressBar = () => (
     <div className="flex items-center justify-between mb-12 max-w-2xl mx-auto">
       <div className="flex items-center">
@@ -116,72 +103,6 @@ const Index = () => {
           3
         </div>
         <div className="ml-2">Schedule</div>
-      </div>
-    </div>
-  );
-
-  const renderHeroSection = () => (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-32">
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3"
-          alt="Clean home interior"
-          className="w-full h-full object-cover brightness-75"
-        />
-      </div>
-      
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-white space-y-6">
-            <h1 className="text-5xl font-bold leading-tight">
-              Professional Cleaning Services for Your Home
-            </h1>
-            <p className="text-xl opacity-90">
-              Experience the difference with our expert cleaning services. Book your cleaning session today.
-            </p>
-            <div className="flex gap-4">
-              <Button className="bg-primary hover:bg-primary/90 text-white">
-                Learn More
-              </Button>
-              <Button variant="outline" className="text-white border-white hover:bg-white/10">
-                Our Services
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-8 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 dark:text-white">Book Your Cleaning Service</h3>
-            <div className="space-y-6">
-              <Select value={selectedService} onValueChange={setSelectedService}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select service type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="regular">Regular Cleaning</SelectItem>
-                  <SelectItem value="deep">Deep Cleaning</SelectItem>
-                  <SelectItem value="moving">Move In/Out Cleaning</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <div className="flex gap-4">
-                <Input
-                  type="text"
-                  placeholder="Enter postal code or city"
-                  value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
-                  className="flex-1"
-                />
-                <Button 
-                  onClick={handleNextStep}
-                  className="bg-primary hover:bg-primary/90 text-white"
-                  disabled={!selectedService || !postalCode || (selectedService !== 'regular' && selectedService !== 'deep')}
-                >
-                  Next <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -260,355 +181,9 @@ const Index = () => {
     </Dialog>
   );
 
-  const renderDeepCleaningStep = () => (
-    <div className="space-y-8">
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6">Property Details</h3>
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="space-y-4">
-            <label className="text-sm font-medium mb-2 block">Square Meters</label>
-            <div className="flex items-center gap-4">
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setSquareMeters(prev => Math.max(50, prev - 5))}
-                disabled={squareMeters <= 50}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="text-xl font-semibold min-w-[60px] text-center">{squareMeters}</span>
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setSquareMeters(prev => prev + 5)}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <label className="text-sm font-medium mb-2 block">Number of Bathrooms</label>
-            <div className="flex items-center gap-4">
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setBathrooms(prev => Math.max(1, prev - 1))}
-                disabled={bathrooms <= 1}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="text-xl font-semibold min-w-[40px] text-center">{bathrooms}</span>
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setBathrooms(prev => Math.min(10, prev + 1))}
-                disabled={bathrooms >= 10}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <label className="text-sm font-medium mb-2 block">Number of Rooms</label>
-            <div className="flex items-center gap-4">
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setBedrooms(prev => Math.max(1, prev - 1))}
-                disabled={bedrooms <= 1}
-              >
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="text-xl font-semibold min-w-[40px] text-center">{bedrooms}</span>
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setBedrooms(prev => Math.min(10, prev + 1))}
-                disabled={bedrooms >= 10}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Current Cleanliness Level</label>
-              <span className="text-sm text-muted-foreground">
-                {getCleanlinessDescription(cleanlinessLevel)}
-              </span>
-            </div>
-            <Slider
-              value={[cleanlinessLevel]}
-              onValueChange={(value) => setCleanlinessLevel(value[0])}
-              max={4}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-            <div className="grid grid-cols-4 text-xs text-muted-foreground">
-              <span>Very Clean</span>
-              <span className="text-center">Clean</span>
-              <span className="text-center">Dirty</span>
-              <span className="text-right">Very Dirty</span>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Last Time Cleaned</label>
-              <span className="text-sm text-muted-foreground">
-                {getLastCleaningDescription(lastCleaningLevel)}
-              </span>
-            </div>
-            <Slider
-              value={[lastCleaningLevel]}
-              onValueChange={(value) => setLastCleaningLevel(value[0])}
-              max={4}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-            <div className="grid grid-cols-4 text-xs text-muted-foreground">
-              <span>Last Week</span>
-              <span className="text-center">Last Month</span>
-              <span className="text-center">Several Months</span>
-              <span className="text-right">6+ Months</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="space-y-4 mt-8">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">Choose the cleaning team</label>
-            <HoverCard>
-              <HoverCardTrigger>
-                <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Cleaning Team Types</h4>
-                  <p className="text-sm">Normal: Standard cleaning team for regular tasks</p>
-                  <p className="text-sm">Experienced: Skilled team with 3+ years experience</p>
-                  <p className="text-sm">Expert: Master cleaners with specialized training</p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div 
-              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'normal' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-              onClick={() => setTeamType('normal')}
-            >
-              <h4 className="font-semibold">Normal</h4>
-              <p className="text-sm text-gray-500 mt-2">Standard cleaning service</p>
-            </div>
-            <div 
-              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'experienced' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-              onClick={() => setTeamType('experienced')}
-            >
-              <h4 className="font-semibold">Experienced</h4>
-              <p className="text-sm text-gray-500 mt-2">3+ years experience</p>
-            </div>
-            <div 
-              className={`p-4 rounded-lg border cursor-pointer transition-all ${teamType === 'expert' ? 'border-primary bg-primary/10' : 'border-gray-200'}`}
-              onClick={() => setTeamType('expert')}
-            >
-              <h4 className="font-semibold">Expert</h4>
-              <p className="text-sm text-gray-500 mt-2">Specialized training</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4 mt-8">
-          <h4 className="text-sm font-medium">Special Conditions</h4>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="mold"
-                checked={deepCleaningIssues.mold}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, mold: checked as boolean}))}
-              />
-              <label htmlFor="mold" className="text-sm">Mold Present</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="feces"
-                checked={deepCleaningIssues.feces}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, feces: checked as boolean}))}
-              />
-              <label htmlFor="feces" className="text-sm">Feces Present</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="animalHair"
-                checked={deepCleaningIssues.animalHair}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, animalHair: checked as boolean}))}
-              />
-              <label htmlFor="animalHair" className="text-sm">Animal Hair</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="flood"
-                checked={deepCleaningIssues.flood}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, flood: checked as boolean}))}
-              />
-              <label htmlFor="flood" className="text-sm">Flood Damage</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="cloggedDrains"
-                checked={deepCleaningIssues.cloggedDrains}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, cloggedDrains: checked as boolean}))}
-              />
-              <label htmlFor="cloggedDrains" className="text-sm">Clogged Shower Drains</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="cloggedToilets"
-                checked={deepCleaningIssues.cloggedToilets}
-                onCheckedChange={(checked) => 
-                  setDeepCleaningIssues(prev => ({...prev, cloggedToilets: checked as boolean}))}
-              />
-              <label htmlFor="cloggedToilets" className="text-sm">Clogged Toilets</label>
-            </div>
-          </div>
-        </div>
-
-        {renderExtras()}
-      </div>
-    </div>
-  );
-
-  const renderServiceOptions = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">How often should we clean?</h3>
-      <div className="grid grid-cols-3 gap-6">
-        <div 
-          className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'onetime' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('onetime')}
-        >
-          <h4 className="font-semibold mb-2">One Time</h4>
-          <p className="text-gray-600">{34.00} €/hour</p>
-        </div>
-        <div 
-          className={`p-6 rounded-lg border cursor-pointer transition-all relative ${frequency === 'weekly' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('weekly')}
-        >
-          {frequency === 'weekly' && (
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-sm">
-              Most Popular
-            </div>
-          )}
-          <h4 className="font-semibold mb-2">Weekly</h4>
-          <p className="text-gray-600">{29.00} €/hour</p>
-          <p className="text-sm text-gray-500 mt-2">You get the same cleaning professional</p>
-        </div>
-        <div 
-          className={`p-6 rounded-lg border cursor-pointer transition-all ${frequency === 'biweekly' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('biweekly')}
-        >
-          <h4 className="font-semibold mb-2">Every 2 Weeks</h4>
-          <p className="text-gray-600">{32.00} €/hour</p>
-          <p className="text-sm text-gray-500 mt-2">You get the same cleaning professional</p>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderExtras = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Which extras would you be interested in?</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {extraServices.map((service) => (
-          <div
-            key={service.id}
-            onClick={() => toggleExtra(service.id)}
-            className={`flex flex-col items-center text-center space-y-2 cursor-pointer`}
-          >
-            <div className={`p-4 border rounded-lg transition-all ${extras.includes(service.id) ? 'border-primary bg-primary/10' : 'border-gray-200'}`}>
-              {service.icon}
-            </div>
-            <span className="font-medium">{service.name}</span>
-            <span className="text-sm text-gray-500">+{service.price}€</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderHoursSelection = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold">How much time would you need?</h3>
-        <Button variant="link" className="text-primary" onClick={() => setIsCalculatorOpen(true)}>
-          Calculate Time
-        </Button>
-      </div>
-      <div className="flex items-center justify-center gap-4">
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={() => setHours(prev => Math.max(2, prev - 0.5))}
-          disabled={hours <= 2}
-        >
-          <Minus className="h-4 w-4" />
-        </Button>
-        <span className="text-xl font-semibold min-w-[100px] text-center">{hours} hours</span>
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={() => setHours(prev => prev + 0.5)}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
-      </div>
-      <div className="flex items-center justify-center mt-4 text-sm text-gray-500">
-        <Info className="w-4 h-4 mr-2" />
-        Minimum booking: 2 hours
-      </div>
-    </div>
-  );
-
-  const renderCalendar = () => (
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <h3 className="text-xl font-semibold mb-6">Choose your preferred date</h3>
-      <div className="flex flex-col md:flex-row gap-8">
-        <div>
-          <CalendarComponent
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border"
-            disabled={(date) => date < new Date()}
-          />
-        </div>
-        <div className="flex-1">
-          <h4 className="font-semibold mb-4">Available Times</h4>
-          <div className="grid grid-cols-3 gap-2">
-            {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'].map((time) => (
-              <Button
-                key={time}
-                variant="outline"
-                className="w-full"
-              >
-                {time}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const calculateRecommendedTime = () => {
+    return Math.min(Math.max(bathrooms * 0.5 + bedrooms * 0.5 + 1, 2), 8);
+  };
 
   const renderFinalStep = () => (
     <div className="space-y-8">
@@ -745,42 +320,12 @@ const Index = () => {
               <span>{hours} Cleaning Hours</span>
             </div>
           )}
-          {extras.length > 0 && (
-            <div className="space-y-2">
-              <div className="font-medium">Extra Services:</div>
-              {extras.map(extraId => {
-                const service = extraServices.find(s => s.id === extraId);
-                return service ? (
-                  <div key={extraId} className="flex items-center gap-3 pl-4">
-                    <Check className="w-4 h-4 text-gray-400" />
-                    <span>{service.name}</span>
-                    <span className="ml-auto">+{service.price}€</span>
-                  </div>
-                ) : null;
-              })}
-            </div>
-          )}
-          {date && (
-            <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5 text-gray-400" />
-              <span>{date.toLocaleDateString('en-US', { 
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}</span>
-            </div>
-          )}
           <div className="border-t pt-4 mt-6">
             <div className="flex justify-between font-semibold">
               <span>TOTAL</span>
               <span>
                 {(
-                  currentPrice * hours +
-                  extras.reduce((acc, extraId) => {
-                    const service = extraServices.find(s => s.id === extraId);
-                    return acc + (service?.price || 0);
-                  }, 0)
+                  currentPrice * hours
                 ).toFixed(2)} €
               </span>
             </div>
@@ -791,158 +336,22 @@ const Index = () => {
     );
   };
 
-  const calculateRecommendedTime = () => {
-    return Math.min(Math.max(bathrooms * 0.5 + bedrooms * 0.5 + 1, 2), 8);
-  };
-
-  const getCleanlinessDescription = (level: number) => {
-    switch(level) {
-      case 1:
-        return "Very Clean - Regular maintenance, minimal dirt";
-      case 2:
-        return "Clean - Light dust and dirt, needs refresh";
-      case 3:
-        return "Dirty - Visible dirt, stains, and dust buildup";
-      case 4:
-        return "Very Dirty - Heavy dirt, tough stains, neglected areas";
-      default:
-        return "";
-    }
-  };
-
-  const getLastCleaningDescription = (level: number) => {
-    switch(level) {
-      case 1:
-        return "Recently (within last week)";
-      case 2:
-        return "Within last month";
-      case 3:
-        return "Several months ago";
-      case 4:
-        return "Over 6 months ago or never";
-      default:
-        return "";
-    }
-  };
-
-  const renderServices = () => (
-    <section id="services" className="py-20 bg-white dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Cleaning Services</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Professional cleaning solutions for every need</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Regular Cleaning",
-              description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
-              price: "From €29/hour"
-            },
-            {
-              title: "Deep Cleaning",
-              description: "Thorough cleaning for those special occasions or seasonal needs",
-              price: "From €35/hour"
-            },
-            {
-              title: "Move In/Out Cleaning",
-              description: "Comprehensive cleaning service for moving transitions",
-              price: "Custom quote"
-            }
-          ].map((service) => (
-            <div key={service.title} className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{service.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
-              <p className="text-primary font-semibold">{service.price}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-
-  const renderWhyChooseUs = () => (
-    <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Choose Kleaners.de</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Experience the difference with our professional cleaning service</p>
-        </div>
-        <div className="grid md:grid-cols-4 gap-8">
-          {[
-            {
-              title: "Experienced Staff",
-              description: "Our cleaners are professionally trained and background checked"
-            },
-            {
-              title: "Eco-Friendly",
-              description: "We use environmentally safe cleaning products"
-            },
-            {
-              title: "Flexible Scheduling",
-              description: "Book our services at your convenience"
-            },
-            {
-              title: "Satisfaction Guaranteed",
-              description: "100% satisfaction guarantee on all our services"
-            }
-          ].map((feature) => (
-            <div key={feature.title} className="text-center">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{feature.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-
-  const renderTestimonials = () => (
-    <section className="py-20 bg-white dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Clients Say</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Read testimonials from our satisfied customers</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              name: "Sarah M.",
-              text: "The best cleaning service I've ever used. Professional, thorough, and friendly staff.",
-              location: "Berlin"
-            },
-            {
-              name: "Michael K.",
-              text: "Reliable and consistent quality. I've been using their services for over a year now.",
-              location: "Munich"
-            },
-            {
-              name: "Anna L.",
-              text: "Excellent deep cleaning service. They transformed my apartment before I moved in.",
-              location: "Hamburg"
-            }
-          ].map((testimonial) => (
-            <div key={testimonial.name} className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm">
-              <p className="text-gray-600 dark:text-gray-400 mb-4">"{testimonial.text}"</p>
-              <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
-              <p className="text-gray-500 dark:text-gray-400">{testimonial.location}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
       {currentStep === 1 ? (
         <>
-          {renderHeroSection()}
-          {renderServices()}
-          {renderWhyChooseUs()}
-          {renderTestimonials()}
+          <Hero 
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            handleNextStep={handleNextStep}
+          />
+          <Services />
+          <WhyChooseUs />
+          <Testimonials />
         </>
       ) : (
         <div className="pt-32 pb-20 px-4">
@@ -953,14 +362,11 @@ const Index = () => {
               <div className="w-[70%]">
                 {currentStep === 2 && selectedService === 'regular' && (
                   <>
-                    {renderServiceOptions()}
-                    {renderHoursSelection()}
+                    <ServiceOptions frequency={frequency} setFrequency={setFrequency} />
                     {renderTimeCalculator()}
-                    {renderExtras()}
-                    {renderCalendar()}
                   </>
                 )}
-                {currentStep === 2 && selectedService === 'deep' && renderDeepCleaningStep()}
+                {currentStep === 2 && selectedService === 'deep' && renderFinalStep()}
                 {currentStep === 3 && renderFinalStep()}
               </div>
               <div className="w-[30%]">
@@ -987,6 +393,7 @@ const Index = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
