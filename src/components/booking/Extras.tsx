@@ -69,11 +69,11 @@ const AVAILABLE_EXTRAS: Extra[] = [
 const getHourlyRate = (frequency: string) => {
   switch (frequency) {
     case 'weekly':
-      return 29;
+      return 27;
     case 'biweekly':
-      return 32;
+      return 30;
     default: // onetime
-      return 34;
+      return 35;
   }
 };
 
@@ -115,11 +115,6 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
     setOpenDialog(null);
   };
 
-  const formatPrice = (minutes: number) => {
-    const price = calculateTimePrice(minutes, hourlyRate);
-    return `${price.toFixed(2)}€`;
-  };
-
   return (
     <div className="space-y-6">
       <h3 className="text-xl font-semibold text-center mb-6">Additional Services</h3>
@@ -145,9 +140,7 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
                   <span className="font-medium text-sm">{extra.title}</span>
                 </div>
                 {extra.time && (
-                  <div className="text-secondary-text text-sm">
-                    {extra.time} ({formatPrice(parseInt(extra.time))})
-                  </div>
+                  <div className="text-secondary-text text-sm">{extra.time}</div>
                 )}
               </div>
             </Button>
@@ -202,9 +195,7 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
               >
                 -
               </Button>
-              <span className="w-16 text-center font-medium">
-                {ironingTime} min ({formatPrice(ironingTime)})
-              </span>
+              <span className="w-16 text-center font-medium">{ironingTime} min</span>
               <Button
                 variant="outline"
                 onClick={() => setIroningTime(Math.min(240, ironingTime + 30))}
