@@ -95,9 +95,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
         )}
 
         <div className="bg-white dark:bg-dark-background p-6 shadow-lg border-t md:border md:rounded-xl md:border-gray-100 dark:border-gray-700">
-          <div className="w-full h-px bg-gray-200 dark:bg-gray-700 mb-4" />
-          
-          <CollapsibleContent className="space-y-4 mb-4">
+          <CollapsibleContent className="space-y-4">
             {selectedService && (
               <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
                 <Check className="w-4 h-4 text-gray-400" />
@@ -156,6 +154,8 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
               );
             })}
           </CollapsibleContent>
+
+          <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Total</h3>
