@@ -59,6 +59,7 @@ const BookingContent = ({
           <Extras
             selectedExtras={selectedExtras}
             setSelectedExtras={(extras) => setValue('extras', extras)}
+            frequency={frequency}
           />
         </motion.div>
       )}
