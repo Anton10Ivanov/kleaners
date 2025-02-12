@@ -77,10 +77,17 @@ const getHourlyRate = (frequency: string) => {
   }
 };
 
+const calculateTimePrice = (minutes: number, hourlyRate: number) => {
+  const hours = minutes / 60;
+  return hours * hourlyRate;
+};
+
 const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [windowCount, setWindowCount] = useState(1);
   const [ironingTime, setIroningTime] = useState(30);
+
+  const hourlyRate = getHourlyRate(frequency);
 
   const toggleExtra = (extraId: string, hasPopup: boolean = false) => {
     if (hasPopup) {
@@ -108,7 +115,10 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
     setOpenDialog(null);
   };
 
-  const hourlyRate = getHourlyRate(frequency);
+  const formatPrice = (minutes: number) => {
+    const price = calculateTimePrice(minutes, hourlyRate);
+    return `${price.toFixed(2)}€`;
+  };
 
   return (
     <div className="space-y-6">
@@ -135,7 +145,9 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
                   <span className="font-medium text-sm">{extra.title}</span>
                 </div>
                 {extra.time && (
-                  <div className="text-secondary-text text-sm">{extra.time}</div>
+                  <div className="text-secondary-text text-sm">
+                    {extra.time} ({formatPrice(parseInt(extra.time))})
+                  </div>
                 )}
               </div>
             </Button>
@@ -190,10 +202,13 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
               >
                 -
               </Button>
-              <span className="w-16 text-center font-medium">{ironingTime} min</span>
+              <span className="w-16 text-center font-medium">
+                {ironingTime} min ({formatPrice(ironingTime)})
+              </span>
               <Button
                 variant="outline"
-                onClick={() => setIroningTime(ironingTime + 30)}
+                onClick={() => setIroningTime(Math.min(240, ironingTime + 30))}
+                disabled={ironingTime >= 240}
               >
                 +
               </Button>
