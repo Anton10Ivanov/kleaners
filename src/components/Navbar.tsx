@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +42,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <span className="font-raleway font-bold text-2xl text-primary dark:text-primary">Kleaners.de</span>
+            <Link to="/" className="font-raleway font-bold text-2xl text-primary dark:text-primary">
+              Kleaners.de
+            </Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
