@@ -42,6 +42,7 @@ const BookingContent = ({
     // Here you would typically send the data to your backend
   };
 
+  // Use motion.div for smooth transitions between steps
   return (
     <div className="w-full md:w-[70%]">
       {currentStep === 2 && selectedService === 'regular' && (
@@ -75,16 +76,27 @@ const BookingContent = ({
         </motion.div>
       )}
       {currentStep === 2 && selectedService === 'deep' && (
-        <DeepCleaningStep
-          date={date}
-          setDate={(date) => setValue('date', date)}
-        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <DeepCleaningStep
+            date={date}
+            setDate={(date) => setValue('date', date)}
+          />
+        </motion.div>
       )}
       {currentStep === 3 && (
-        <FinalStep 
-          postalCode={postalCode}
-          onSubmit={handleSubmit}
-        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <FinalStep 
+            postalCode={postalCode}
+            onSubmit={handleSubmit}
+          />
+        </motion.div>
       )}
     </div>
   );
