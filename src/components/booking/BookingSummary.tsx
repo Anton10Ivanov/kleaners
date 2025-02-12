@@ -1,4 +1,5 @@
-import { Info, ChevronUp, Check, Clock, RotateCw, Calendar } from 'lucide-react';
+
+import { Info, ChevronUp, Check, Clock } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -93,48 +94,77 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
           </CollapsibleTrigger>
         )}
 
-        <div className="bg-white dark:bg-dark-background p-6 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
-          <h3 className="text-xl font-semibold mb-6">Summary</h3>
-          
+        <div className="bg-white dark:bg-dark-background p-6 shadow-lg border-t md:border md:rounded-xl md:border-gray-100 dark:border-gray-700">
           <CollapsibleContent className="space-y-4">
-            {frequency && (
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <RotateCw className="w-4 h-4 text-gray-400" />
-                <span className="flex-grow">{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
-                <span>{currentPrice.toFixed(2)}€/h</span>
+            {selectedService && (
+              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                <Check className="w-4 h-4 text-gray-400" />
+                <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
               </div>
             )}
-            {selectedService && (
+            {frequency && (
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <Check className="w-4 h-4 text-gray-400" />
-                <span>Home cleaning</span>
+                <Clock className="w-4 h-4 text-gray-400" />
+                <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
+                <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
               </div>
             )}
             {hours > 0 && (
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <Clock className="w-4 h-4 text-gray-400" />
-                <span>{hours} hours of cleaning</span>
+                <span>{hours} Cleaning Hours</span>
+                <span className="ml-auto">{(currentPrice * hours).toFixed(2)} €</span>
               </div>
             )}
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <Calendar className="w-4 h-4 text-gray-400" />
-              <span>Wednesday 19 February at 10:00</span>
-            </div>
+            {selectedExtras.length > 0 && selectedExtras.map(extra => {
+              const hourlyRate = getHourlyRate(frequency);
+              let extraCost = 0;
+              let extraLabel = '';
+
+              switch (extra) {
+                case 'cabinets':
+                  extraCost = 0.5 * hourlyRate;
+                  extraLabel = 'Inside Cabinets (30 min)';
+                  break;
+                case 'fridge':
+                  extraCost = 0.5 * hourlyRate;
+                  extraLabel = 'Inside Fridge (30 min)';
+                  break;
+                case 'oven':
+                  extraCost = hourlyRate;
+                  extraLabel = 'Inside Oven (60 min)';
+                  break;
+                case 'ironing':
+                  const ironingTime = localStorage.getItem('ironingTime') ? 
+                    parseInt(localStorage.getItem('ironingTime') || '30') : 
+                    30;
+                  extraCost = (ironingTime / 60) * hourlyRate;
+                  extraLabel = `Ironing (${ironingTime} min)`;
+                  break;
+                default:
+                  extraLabel = extra;
+              }
+
+              return (
+                <div key={extra} className="flex items-center gap-3 text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-gray-400" />
+                  <span>{extraLabel}</span>
+                  <span className="ml-auto">{extraCost.toFixed(2)} €</span>
+                </div>
+              );
+            })}
           </CollapsibleContent>
 
           <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
           <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold">Total</h3>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-lg">TOTAL</span>
-              <span className="text-xs text-gray-500">(per cleaning)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold">€ {totalCost.toFixed(2)}</span>
+              <span className="text-xl font-semibold">{totalCost.toFixed(2)} €</span>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Info className="h-4 w-4 text-primary hover:text-primary/90 transition-colors" />
+                    <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Price per cleaning session</p>
