@@ -70,7 +70,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           onClick={() => setFrequency('onetime')}
         >
           <h4 className="font-semibold mb-1">One Time</h4>
-          <p className="text-gray-600">34.00 €/hour</p>
+          <p className="text-gray-600">35.00 €/hour</p>
         </div>
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === 'weekly' ? 'border-primary' : 'border-gray-200'}`}
@@ -82,7 +82,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
             </div>
           )}
           <h4 className="font-semibold mb-1">Weekly</h4>
-          <p className="text-gray-600">29.00 €/hour</p>
+          <p className="text-gray-600">27.00 €/hour</p>
           <p className="text-xs text-gray-500 mt-1">Same Kleaner every time</p>
         </div>
         <div 
@@ -90,7 +90,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           onClick={() => setFrequency('biweekly')}
         >
           <h4 className="font-semibold mb-1">Every 2 Weeks</h4>
-          <p className="text-gray-600">32.00 €/hour</p>
+          <p className="text-gray-600">30.00 €/hour</p>
           <p className="text-xs text-gray-500 mt-1">Same Kleaner every time</p>
         </div>
       </div>
