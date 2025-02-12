@@ -47,20 +47,35 @@ const Index = () => {
           toast.error("Please select valid hours");
           return;
         }
-      }
-
-      // For deep cleaning - minimal validation
-      if (selectedService === 'deep') {
-        // Add any specific deep cleaning validations if needed
+        // Validate bedrooms and bathrooms for price calculation
         if (!bedrooms || !bathrooms) {
           toast.error("Please specify the number of rooms");
           return;
         }
       }
+
+      // For deep cleaning
+      if (selectedService === 'deep') {
+        if (!bedrooms || !bathrooms) {
+          toast.error("Please specify the number of rooms");
+          return;
+        }
+      }
+
+      // Common validation for both services
+      if (!postalCode) {
+        toast.error("Please enter your postal code");
+        return;
+      }
     }
 
     // If validations pass, proceed to next step
     handleNextStep();
+    
+    // Show success toast when moving to step 3
+    if (currentStep === 2) {
+      toast.success("Great! Let's complete your booking details.");
+    }
   };
 
   return (
