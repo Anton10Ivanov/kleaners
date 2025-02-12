@@ -31,7 +31,7 @@ const Index = () => {
 
   const handleNext = () => {
     if (currentStep === 2) {
-      // Basic validation for both service types
+      // Basic validation for service selection
       if (!selectedService) {
         toast.error("Please select a service type");
         return;
@@ -47,16 +47,15 @@ const Index = () => {
           toast.error("Please select valid hours");
           return;
         }
-        if (!date) {
-          toast.error("Please select a date");
-          return;
-        }
       }
 
-      // For deep cleaning
-      if (selectedService === 'deep' && !date) {
-        toast.error("Please select a date");
-        return;
+      // For deep cleaning - minimal validation
+      if (selectedService === 'deep') {
+        // Add any specific deep cleaning validations if needed
+        if (!bedrooms || !bathrooms) {
+          toast.error("Please specify the number of rooms");
+          return;
+        }
       }
     }
 
