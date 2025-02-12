@@ -25,41 +25,21 @@ export const useBookingForm = () => {
   const { handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
 
   const handleNextStep = () => {
-    const currentService = watch('service');
-    const currentPostalCode = watch('postalCode');
-
-    // For step 1, only validate service and postalCode
-    if (currentStep === 1) {
-      if (!currentService) {
-        toast.error("Please select a service type");
-        return;
-      }
-      if (!currentPostalCode) {
-        toast.error("Please enter your postal code");
-        return;
-      }
-      if (currentService === 'moving') {
-        toast.error("Move In/Out cleaning is currently not available");
-        return;
-      }
-      // If validation passes, move to next step
-      setCurrentStep(2);
-      return;
-    }
-
-    // For other steps, use the form's handleSubmit
-    handleSubmit(() => {
-      if (Object.keys(errors).length > 0) {
-        toast.error("Please fill in all required fields correctly");
-        return;
-      }
-      setCurrentStep(prev => prev + 1);
-    })();
+    console.log('Incrementing step from:', currentStep);
+    setCurrentStep(prevStep => {
+      const nextStep = prevStep + 1;
+      console.log('New step will be:', nextStep);
+      return nextStep;
+    });
   };
 
   const handleBackStep = () => {
     setCurrentStep(prev => Math.max(1, prev - 1));
   };
+
+  useEffect(() => {
+    console.log('Current step updated to:', currentStep);
+  }, [currentStep]);
 
   useEffect(() => {
     const formData = getValues();
