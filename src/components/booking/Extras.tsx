@@ -1,12 +1,15 @@
 
-import { Check, Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
+import { Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from 'react';
 
 interface Extra {
   id: string;
   title: string;
-  price: number;
+  time?: string;
   icon: React.ElementType;
+  hasPopup?: boolean;
 }
 
 interface ExtrasProps {
@@ -18,55 +21,61 @@ const AVAILABLE_EXTRAS: Extra[] = [
   {
     id: 'windows',
     title: 'Window Cleaning',
-    price: 15,
+    hasPopup: true,
     icon: WashingMachine
   },
   {
     id: 'ironing',
     title: 'Ironing',
-    price: 12,
+    hasPopup: true,
     icon: Shirt
   },
   {
     id: 'carpet',
     title: 'Carpet Washing',
-    price: 20,
     icon: WashingMachine
   },
   {
     id: 'mattress',
     title: 'Mattress Washing',
-    price: 18,
     icon: Bed
   },
   {
     id: 'repair',
     title: 'Small Repair',
-    price: 25,
     icon: Wrench
   },
   {
     id: 'cabinets',
     title: 'Inside Cabinets',
-    price: 15,
+    time: '30 min',
     icon: Archive
   },
   {
     id: 'fridge',
     title: 'Inside Fridge',
-    price: 10,
+    time: '30 min',
     icon: Archive
   },
   {
     id: 'oven',
     title: 'Inside Oven',
-    price: 12,
+    time: '60 min',
     icon: Wrench
   }
 ];
 
 const Extras = ({ selectedExtras, setSelectedExtras }: ExtrasProps) => {
-  const toggleExtra = (extraId: string) => {
+  const [openDialog, setOpenDialog] = useState<string | null>(null);
+  const [windowCount, setWindowCount] = useState(1);
+  const [ironingTime, setIroningTime] = useState(30);
+
+  const toggleExtra = (extraId: string, hasPopup: boolean = false) => {
+    if (hasPopup) {
+      setOpenDialog(extraId);
+      return;
+    }
+
     if (selectedExtras.includes(extraId)) {
       setSelectedExtras(selectedExtras.filter(id => id !== extraId));
     } else {
@@ -74,35 +83,109 @@ const Extras = ({ selectedExtras, setSelectedExtras }: ExtrasProps) => {
     }
   };
 
+  const handleConfirmPopup = (extraId: string) => {
+    if (!selectedExtras.includes(extraId)) {
+      setSelectedExtras([...selectedExtras, extraId]);
+    }
+    setOpenDialog(null);
+  };
+
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold">Additional Services</h3>
+      <h3 className="text-xl font-semibold text-center mb-6">Additional Services</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {AVAILABLE_EXTRAS.map((extra) => {
           const Icon = extra.icon;
+          const isSelected = selectedExtras.includes(extra.id);
+          
           return (
             <Button
               key={extra.id}
               variant="outline"
-              className={`h-auto p-4 ${
-                selectedExtras.includes(extra.id) ? 'border-primary' : ''
-              }`}
-              onClick={() => toggleExtra(extra.id)}
+              className={`
+                h-auto p-4 transition-all hover:shadow-md
+                ${isSelected ? 'border-primary border-2' : 'hover:border-primary/50'}
+                ${extra.hasPopup ? 'cursor-pointer' : ''}
+              `}
+              onClick={() => toggleExtra(extra.id, extra.hasPopup)}
             >
-              <div className="text-left space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <Icon className="h-4 w-4" />
-                  <span className="font-semibold flex-grow">{extra.title}</span>
-                  {selectedExtras.includes(extra.id) && (
-                    <Check className="h-4 w-4 text-primary" />
-                  )}
+              <div className="text-center space-y-2 w-full">
+                <div className="flex flex-col items-center gap-2">
+                  <Icon className="h-5 w-5 text-primary" />
+                  <span className="font-medium text-sm">{extra.title}</span>
                 </div>
-                <div className="text-primary font-semibold">+{extra.price}€</div>
+                {extra.time && (
+                  <div className="text-secondary-text text-sm">{extra.time}</div>
+                )}
               </div>
             </Button>
-          )}
-        )}
+          );
+        })}
       </div>
+
+      {/* Window Cleaning Dialog */}
+      <Dialog open={openDialog === 'windows'} onOpenChange={() => setOpenDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Number of Windows</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="flex items-center justify-center gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setWindowCount(Math.max(1, windowCount - 1))}
+                disabled={windowCount <= 1}
+              >
+                -
+              </Button>
+              <span className="w-16 text-center font-medium">{windowCount}</span>
+              <Button
+                variant="outline"
+                onClick={() => setWindowCount(windowCount + 1)}
+              >
+                +
+              </Button>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button onClick={() => handleConfirmPopup('windows')}>
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ironing Dialog */}
+      <Dialog open={openDialog === 'ironing'} onOpenChange={() => setOpenDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Time Needed</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="flex items-center justify-center gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setIroningTime(Math.max(30, ironingTime - 30))}
+                disabled={ironingTime <= 30}
+              >
+                -
+              </Button>
+              <span className="w-16 text-center font-medium">{ironingTime} min</span>
+              <Button
+                variant="outline"
+                onClick={() => setIroningTime(ironingTime + 30)}
+              >
+                +
+              </Button>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button onClick={() => handleConfirmPopup('ironing')}>
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
