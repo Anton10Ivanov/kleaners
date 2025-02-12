@@ -35,75 +35,87 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="floor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Floor & Door (optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="E.g., 3rd floor, Door 12" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="entryCode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entry code (optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter entry code if any" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="postalCode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>City</FormLabel>
-              <FormControl>
-                <Input {...field} disabled className="bg-gray-100" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="accessMethod"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>How will we get in?</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="floor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Floor & Door (optional)</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select access method" />
-                  </SelectTrigger>
+                  <Input placeholder="E.g., 3rd floor, Door 12" {...field} />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value="home">Someone will be at home</SelectItem>
-                  <SelectItem value="concierge">Concierge or Portier</SelectItem>
-                  <SelectItem value="key">I will hide a key</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="entryCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Entry code (optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter entry code if any" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="postalCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled className="bg-gray-100" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="accessMethod"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>How will we get in?</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select access method" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="home">Someone will be at home</SelectItem>
+                    <SelectItem value="concierge">Concierge or Portier</SelectItem>
+                    <SelectItem value="key">I will hide a key</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Button 
+            variant="ghost" 
+            type="button" 
+            className="p-0 h-auto"
+            onClick={() => setIsAdditionalInfoOpen(!isAdditionalInfoOpen)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add additional info
+          </Button>
+        </div>
 
         <Collapsible open={isAdditionalInfoOpen} onOpenChange={setIsAdditionalInfoOpen}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" type="button" className="p-0 h-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              Add additional info
-            </Button>
-          </CollapsibleTrigger>
           <CollapsibleContent className="mt-4">
             <FormField
               control={form.control}
