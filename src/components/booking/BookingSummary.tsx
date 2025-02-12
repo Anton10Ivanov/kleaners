@@ -1,12 +1,7 @@
 
 import { Info, ChevronUp, Check, Clock } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useState } from 'react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState, useEffect, useRef } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface BookingSummaryProps {
@@ -56,21 +51,55 @@ const calculateExtrasCost = (selectedExtras: string[], frequency: string) => {
 };
 
 const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selectedExtras }: BookingSummaryProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
   const extrasCost = calculateExtrasCost(selectedExtras, frequency);
   const totalCost = (currentPrice * hours) + extrasCost;
 
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="relative">
-        <CollapsibleTrigger className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-7 h-7 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-center group hover:border-gray-300 transition-colors">
-          <ChevronUp className={`h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-        </CollapsibleTrigger>
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
-        <div className="bg-white p-4 shadow-lg border-t md:border md:rounded-xl md:border-gray-100">
+  useEffect(() => {
+    if (isMobile) {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
+          setIsOpen(false);
+        }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isMobile]);
+
+  return (
+    <Collapsible 
+      open={isOpen} 
+      onOpenChange={setIsOpen}
+      className={`${isMobile ? 'fixed bottom-0 left-0 w-full' : 'sticky top-24'}`}
+    >
+      <div className="relative" ref={contentRef}>
+        {isMobile && (
+          <CollapsibleTrigger className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-7 h-7 bg-white dark:bg-dark-background rounded-full border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center group hover:border-gray-300 transition-colors z-10">
+            <ChevronUp className={`h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+        )}
+
+        <div className="bg-white dark:bg-dark-background p-6 shadow-lg border-t md:border md:rounded-xl md:border-gray-100 dark:border-gray-700">
+          <div className="w-full h-px bg-gray-200 dark:bg-gray-700 mb-4" />
+          
           <CollapsibleContent className="space-y-4 mb-4">
             {selectedService && (
-              <div className="flex items-center gap-3 text-sm text-gray-600">
+              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
                 <Check className="w-4 h-4 text-gray-400" />
                 <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
               </div>
