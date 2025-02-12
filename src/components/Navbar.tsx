@@ -23,9 +23,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Don't render theme switch until mounted to avoid hydration mismatch
   if (!mounted) {
     return null;
   }
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <nav
@@ -36,7 +41,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <span className="font-raleway font-bold text-2xl text-primary">Kleaners.de</span>
+            <span className="font-raleway font-bold text-2xl text-primary dark:text-primary">Kleaners.de</span>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
@@ -48,7 +53,7 @@ const Navbar = () => {
               <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
-                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                onCheckedChange={toggleTheme}
                 className="data-[state=checked]:bg-primary"
               />
               <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -63,7 +68,7 @@ const Navbar = () => {
               <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
-                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                onCheckedChange={toggleTheme}
                 className="data-[state=checked]:bg-primary"
               />
               <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
