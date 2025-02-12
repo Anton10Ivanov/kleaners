@@ -32,7 +32,7 @@ export const calculateRecommendedTime = (bedrooms: number, bathrooms: number): n
   // Case 4: >6 & <= 10 rooms
   else if (Math.max(bedrooms, bathrooms) <= 10) {
     totalTime = Math.max(
-      6, // minimum 6 hours for large properties
+      7, // minimum 6 hours for large properties
       BASE_TIME + (extraBedrooms * 0.3) + (extraBathrooms * 0.5)
     );
   }
