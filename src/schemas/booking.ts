@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const bookingSchema = z.object({
@@ -11,6 +10,25 @@ export const bookingSchema = z.object({
   bathrooms: z.number().min(1, "At least 1 bathroom required").optional(),
   extras: z.array(z.string()).default([]),
   additionalNotes: z.string().optional(),
+  
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  phone: z.string().min(1, "Phone number is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string(),
+  
+  address: z.string().min(1, "Address is required"),
+  floor: z.string().optional(),
+  entryCode: z.string().optional(),
+  accessMethod: z.enum(["home", "concierge", "key"]),
+  accessInstructions: z.string().optional(),
+  
+  specialInstructions: z.string().optional(),
+  promoCode: z.string().optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
