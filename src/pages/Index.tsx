@@ -1,4 +1,3 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Navbar from '../components/Navbar';
@@ -67,14 +66,13 @@ const Index = () => {
         toast.error("Please enter your postal code");
         return;
       }
-    }
 
-    // If validations pass, proceed to next step
-    handleNextStep();
-    
-    // Show success toast when moving to step 3
-    if (currentStep === 2) {
+      // If all validations pass, proceed to step 3
+      handleNextStep();
       toast.success("Great! Let's complete your booking details.");
+    } else {
+      // For other steps, just proceed
+      handleNextStep();
     }
   };
 
