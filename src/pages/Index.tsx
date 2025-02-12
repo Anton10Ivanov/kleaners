@@ -24,6 +24,7 @@ const Index = () => {
   const bedrooms = watch('bedrooms');
   const bathrooms = watch('bathrooms');
   const selectedExtras = watch('extras') || [];
+  const postalCode = watch('postalCode') || '';
 
   // Use the base prices directly without any calculation
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
@@ -43,7 +44,7 @@ const Index = () => {
             <Hero 
               selectedService={selectedService || ''}
               setSelectedService={(service) => setValue('service', service)}
-              postalCode={watch('postalCode')}
+              postalCode={postalCode}
               setPostalCode={(code) => setValue('postalCode', code)}
               handleNextStep={handleNextStep}
             />
@@ -74,6 +75,7 @@ const Index = () => {
                   bathrooms={bathrooms}
                   selectedExtras={selectedExtras}
                   setValue={setValue}
+                  postalCode={postalCode}
                 />
                 <div className="w-full md:w-[30%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
                   <BookingSummary 
