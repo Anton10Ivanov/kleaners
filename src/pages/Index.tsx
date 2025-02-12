@@ -27,7 +27,7 @@ const Index = () => {
 
   const currentPrice = calculatePrice(
     frequency || 'onetime',
-    frequency === 'weekly' ? 29 : frequency === 'biweekly' ? 32 : 34
+    frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35
   );
 
   return (
@@ -83,6 +83,7 @@ const Index = () => {
                     frequency={frequency || ''}
                     hours={hours}
                     currentPrice={currentPrice}
+                    selectedExtras={selectedExtras}
                   />
                 </div>
               </div>
