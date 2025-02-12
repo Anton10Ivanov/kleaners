@@ -111,6 +111,11 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
   const handleConfirmPopup = (extraId: string) => {
     if (!selectedExtras.includes(extraId)) {
       setSelectedExtras([...selectedExtras, extraId]);
+      
+      // Store ironing time in localStorage when confirmed
+      if (extraId === 'ironing') {
+        localStorage.setItem('ironingTime', ironingTime.toString());
+      }
     }
     setOpenDialog(null);
   };
