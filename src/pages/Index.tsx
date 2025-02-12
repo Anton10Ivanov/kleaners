@@ -32,7 +32,13 @@ const Index = () => {
 
   const handleNext = () => {
     if (currentStep === 2) {
-      // For regular cleaning service
+      // Basic validation for both service types
+      if (!selectedService) {
+        toast.error("Please select a service type");
+        return;
+      }
+
+      // For regular cleaning, only validate frequency and hours
       if (selectedService === 'regular') {
         if (!frequency) {
           toast.error("Please select a frequency");
@@ -43,15 +49,8 @@ const Index = () => {
           return;
         }
       }
-      // For deep cleaning service
-      else if (selectedService === 'deep') {
-        if (!bedrooms || !bathrooms) {
-          toast.error("Please fill in all required fields");
-          return;
-        }
-      }
     }
-    // If all validations pass, proceed to next step
+    // If validations pass, proceed to next step (FinalStep)
     handleNextStep();
   };
 
