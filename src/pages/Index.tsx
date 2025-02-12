@@ -27,7 +27,6 @@ const Index = () => {
   const selectedExtras = watch('extras') || [];
   const postalCode = watch('postalCode') || '';
 
-  // Use the base prices directly without any calculation
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   const handleNext = () => {
@@ -38,7 +37,7 @@ const Index = () => {
         return;
       }
 
-      // For regular cleaning, only validate frequency and hours
+      // For regular cleaning
       if (selectedService === 'regular') {
         if (!frequency) {
           toast.error("Please select a frequency");
@@ -48,9 +47,20 @@ const Index = () => {
           toast.error("Please select valid hours");
           return;
         }
+        if (!date) {
+          toast.error("Please select a date");
+          return;
+        }
+      }
+
+      // For deep cleaning
+      if (selectedService === 'deep' && !date) {
+        toast.error("Please select a date");
+        return;
       }
     }
-    // If validations pass, proceed to next step (FinalStep)
+
+    // If validations pass, proceed to next step
     handleNextStep();
   };
 
