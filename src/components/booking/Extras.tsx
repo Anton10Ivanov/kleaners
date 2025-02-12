@@ -1,5 +1,5 @@
 
-import { Check, Iron, WashingMachine, Bed, Tools, Archive } from 'lucide-react';
+import { Check, Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface Extra {
@@ -25,7 +25,7 @@ const AVAILABLE_EXTRAS: Extra[] = [
     id: 'ironing',
     title: 'Ironing',
     price: 12,
-    icon: Iron
+    icon: Shirt
   },
   {
     id: 'carpet',
@@ -43,7 +43,7 @@ const AVAILABLE_EXTRAS: Extra[] = [
     id: 'repair',
     title: 'Small Repair',
     price: 25,
-    icon: Tools
+    icon: Wrench
   },
   {
     id: 'cabinets',
@@ -61,7 +61,7 @@ const AVAILABLE_EXTRAS: Extra[] = [
     id: 'oven',
     title: 'Inside Oven',
     price: 12,
-    icon: Tools
+    icon: Wrench
   }
 ];
 
