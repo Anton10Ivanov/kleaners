@@ -14,10 +14,44 @@ interface BookingSummaryProps {
   frequency: string;
   hours: number;
   currentPrice: number;
+  selectedExtras: string[];
 }
 
-const BookingSummary = ({ selectedService, frequency, hours, currentPrice }: BookingSummaryProps) => {
+const getHourlyRate = (frequency: string) => {
+  switch (frequency) {
+    case 'weekly':
+      return 27;
+    case 'biweekly':
+      return 30;
+    default: // onetime
+      return 35;
+  }
+};
+
+const calculateExtrasCost = (selectedExtras: string[], frequency: string) => {
+  const hourlyRate = getHourlyRate(frequency);
+  let totalCost = 0;
+
+  selectedExtras.forEach(extra => {
+    switch (extra) {
+      case 'cabinets':
+      case 'fridge':
+        totalCost += (0.5 * hourlyRate); // 30 min
+        break;
+      case 'oven':
+        totalCost += hourlyRate; // 60 min
+        break;
+      // Add other cases as needed
+    }
+  });
+
+  return totalCost;
+};
+
+const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selectedExtras }: BookingSummaryProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const extrasCost = calculateExtrasCost(selectedExtras, frequency);
+  const totalCost = (currentPrice * hours) + extrasCost;
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -45,6 +79,14 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice }: Boo
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <Clock className="w-4 h-4 text-gray-400" />
                 <span>{hours} Cleaning Hours</span>
+                <span className="ml-auto">{(currentPrice * hours).toFixed(2)} €</span>
+              </div>
+            )}
+            {selectedExtras.length > 0 && (
+              <div className="flex items-center gap-3 text-sm text-gray-600">
+                <Check className="w-4 h-4 text-gray-400" />
+                <span>Additional Services</span>
+                <span className="ml-auto">{extrasCost.toFixed(2)} €</span>
               </div>
             )}
           </CollapsibleContent>
@@ -52,7 +94,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice }: Boo
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Total</h3>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold">{(currentPrice * hours).toFixed(2)} €</span>
+              <span className="text-xl font-semibold">{totalCost.toFixed(2)} €</span>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -61,6 +103,9 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice }: Boo
                   <TooltipContent>
                     <p>Price per cleaning session</p>
                     <p className="text-sm text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
+                    {extrasCost > 0 && (
+                      <p className="text-sm text-gray-400">+ {extrasCost.toFixed(2)}€ additional services</p>
+                    )}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
