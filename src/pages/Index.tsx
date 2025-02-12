@@ -31,8 +31,8 @@ const Index = () => {
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   const handleNext = () => {
-    // Validate required fields for step 2
     if (currentStep === 2) {
+      // For regular cleaning service
       if (selectedService === 'regular') {
         if (!frequency) {
           toast.error("Please select a frequency");
@@ -43,7 +43,15 @@ const Index = () => {
           return;
         }
       }
+      // For deep cleaning service
+      else if (selectedService === 'deep') {
+        if (!bedrooms || !bathrooms) {
+          toast.error("Please fill in all required fields");
+          return;
+        }
+      }
     }
+    // If all validations pass, proceed to next step
     handleNextStep();
   };
 
