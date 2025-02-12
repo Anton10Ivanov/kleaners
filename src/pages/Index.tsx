@@ -30,7 +30,9 @@ const Index = () => {
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   const handleNext = () => {
+    console.log('Current step before:', currentStep);
     handleNextStep();
+    console.log('Current step after:', currentStep);
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
