@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Navbar from '../components/Navbar';
@@ -29,50 +30,9 @@ const Index = () => {
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   const handleNext = () => {
+    handleNextStep();
     if (currentStep === 2) {
-      // Basic validation for service selection
-      if (!selectedService) {
-        toast.error("Please select a service type");
-        return;
-      }
-
-      // For regular cleaning
-      if (selectedService === 'regular') {
-        if (!frequency) {
-          toast.error("Please select a frequency");
-          return;
-        }
-        if (!hours || hours < 2) {
-          toast.error("Please select valid hours");
-          return;
-        }
-        // Validate bedrooms and bathrooms for price calculation
-        if (!bedrooms || !bathrooms) {
-          toast.error("Please specify the number of rooms");
-          return;
-        }
-      }
-
-      // For deep cleaning
-      if (selectedService === 'deep') {
-        if (!bedrooms || !bathrooms) {
-          toast.error("Please specify the number of rooms");
-          return;
-        }
-      }
-
-      // Common validation for both services
-      if (!postalCode) {
-        toast.error("Please enter your postal code");
-        return;
-      }
-
-      // If all validations pass, proceed to step 3
-      handleNextStep();
       toast.success("Great! Let's complete your booking details.");
-    } else {
-      // For other steps, just proceed
-      handleNextStep();
     }
   };
 
