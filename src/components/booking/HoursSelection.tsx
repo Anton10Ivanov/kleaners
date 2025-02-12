@@ -69,14 +69,15 @@ const HoursSelection = ({
                     <span className="w-8 text-center font-medium">{bedrooms}</span>
                     <Button 
                       variant="outline"
-                      onClick={() => setBedrooms(bedrooms + 1)}
+                     onClick={() => setBedrooms(Math.min(10, bedrooms + 1))}
+                      disabled={bedrooms >= 10} // Disable the button when bedrooms = 10
                     >
                       +
                     </Button>
                   </div>
                 </div>
 
-                <div>
+                               <div>
                   <label className="block text-sm font-medium mb-2">Bathrooms</label>
                   <div className="flex items-center justify-center gap-4">
                     <Button 
@@ -89,8 +90,10 @@ const HoursSelection = ({
                     <span className="w-8 text-center font-medium">{bathrooms}</span>
                     <Button 
                       variant="outline"
-                      onClick={() => setBathrooms(bathrooms + 1)}
+                      onClick={() => setBathrooms(Math.min(10, bathrooms + 1))}
+                      disabled={bathrooms >= 10} // Disable the button when bathrooms = 10
                     >
+
                       +
                     </Button>
                   </div>
