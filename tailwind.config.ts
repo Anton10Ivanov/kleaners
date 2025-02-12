@@ -51,8 +51,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        success: {
-          DEFAULT: "hsl(var(--success))",
+        dark: {
+          background: "#1A1F2C",
+          neutral: "#8E9196",
+          primary: "#9b87f5",
+          secondary: "#7E69AB",
+          tertiary: "#6E59A5",
+          surface: "#F1F0FB",
         },
       },
       borderRadius: {

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 
@@ -8,6 +8,12 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,10 +23,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
+        isScrolled ? 'bg-white/95 dark:bg-dark-background/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,27 +45,28 @@ const Navbar = () => {
             <NavLink href="#about">About</NavLink>
             <NavLink href="#contact">Contact</NavLink>
             <div className="flex items-center space-x-2">
-              <span className="text-sm">🌞</span>
+              <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
                 onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-                className="mr-2"
+                className="data-[state=checked]:bg-primary"
               />
-              <span className="text-sm">🌚</span>
+              <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </div>
-            <button className="bg-primary text-white px-6 py-2 rounded-md font-raleway font-medium hover:bg-primary/90 transition-colors">
+            <button className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-medium transition-colors">
               Get Quote
             </button>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
             <div className="flex items-center space-x-2">
-              <span className="text-sm">🌞</span>
+              <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
                 onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                className="data-[state=checked]:bg-primary"
               />
-              <span className="text-sm">🌚</span>
+              <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </div>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -68,12 +79,12 @@ const Navbar = () => {
 
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg mt-2">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-dark-background rounded-lg shadow-lg mt-2">
               <MobileNavLink href="#home">Home</MobileNavLink>
               <MobileNavLink href="#services">Services</MobileNavLink>
               <MobileNavLink href="#about">About</MobileNavLink>
               <MobileNavLink href="#contact">Contact</MobileNavLink>
-              <button className="w-full bg-primary text-white px-6 py-2 rounded-md font-raleway font-medium hover:bg-primary/90 transition-colors mt-2">
+              <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-medium transition-colors mt-2">
                 Get Quote
               </button>
             </div>
@@ -96,7 +107,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 const MobileNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a
     href={href}
-    className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+    className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
   >
     {children}
   </a>
