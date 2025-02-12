@@ -41,7 +41,14 @@ const calculateExtrasCost = (selectedExtras: string[], frequency: string) => {
       case 'oven':
         totalCost += hourlyRate; // 60 min
         break;
-      // Add other cases as needed
+      case 'ironing':
+        // For ironing, we calculate based on the dialog selection
+        // Default to minimum time (30 min) if no specific time was selected
+        const ironingTime = localStorage.getItem('ironingTime') ? 
+          parseInt(localStorage.getItem('ironingTime') || '30') : 
+          30;
+        totalCost += (ironingTime / 60) * hourlyRate;
+        break;
     }
   });
 
@@ -82,13 +89,43 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
                 <span className="ml-auto">{(currentPrice * hours).toFixed(2)} €</span>
               </div>
             )}
-            {selectedExtras.length > 0 && (
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <Check className="w-4 h-4 text-gray-400" />
-                <span>Additional Services</span>
-                <span className="ml-auto">{extrasCost.toFixed(2)} €</span>
-              </div>
-            )}
+            {selectedExtras.length > 0 && selectedExtras.map(extra => {
+              const hourlyRate = getHourlyRate(frequency);
+              let extraCost = 0;
+              let extraLabel = '';
+
+              switch (extra) {
+                case 'cabinets':
+                  extraCost = 0.5 * hourlyRate;
+                  extraLabel = 'Inside Cabinets (30 min)';
+                  break;
+                case 'fridge':
+                  extraCost = 0.5 * hourlyRate;
+                  extraLabel = 'Inside Fridge (30 min)';
+                  break;
+                case 'oven':
+                  extraCost = hourlyRate;
+                  extraLabel = 'Inside Oven (60 min)';
+                  break;
+                case 'ironing':
+                  const ironingTime = localStorage.getItem('ironingTime') ? 
+                    parseInt(localStorage.getItem('ironingTime') || '30') : 
+                    30;
+                  extraCost = (ironingTime / 60) * hourlyRate;
+                  extraLabel = `Ironing (${ironingTime} min)`;
+                  break;
+                default:
+                  extraLabel = extra;
+              }
+
+              return (
+                <div key={extra} className="flex items-center gap-3 text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-gray-400" />
+                  <span>{extraLabel}</span>
+                  <span className="ml-auto">{extraCost.toFixed(2)} €</span>
+                </div>
+              );
+            })}
           </CollapsibleContent>
 
           <div className="flex items-center justify-between">
