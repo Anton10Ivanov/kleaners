@@ -33,10 +33,6 @@ const Index = () => {
   const handleNext = () => {
     // Validate required fields for step 2
     if (currentStep === 2) {
-      if (!date) {
-        toast.error("Please select a date");
-        return;
-      }
       if (selectedService === 'regular') {
         if (!frequency) {
           toast.error("Please select a frequency");
