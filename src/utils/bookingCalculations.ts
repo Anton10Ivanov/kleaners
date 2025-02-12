@@ -46,11 +46,6 @@ export const calculateRecommendedTime = (bedrooms: number, bathrooms: number): n
 };
 
 export const calculatePrice = (frequency: string, basePrice: number) => {
-  let price = basePrice;
-  if (frequency === 'weekly') {
-    price *= 0.8;
-  } else if (frequency === 'biweekly') {
-    price *= 0.9;
-  }
-  return price;
+  // Return the base price directly without any discounts
+  return basePrice;
 };

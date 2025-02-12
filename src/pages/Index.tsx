@@ -25,10 +25,8 @@ const Index = () => {
   const bathrooms = watch('bathrooms');
   const selectedExtras = watch('extras') || [];
 
-  const currentPrice = calculatePrice(
-    frequency || 'onetime',
-    frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35
-  );
+  // Use the base prices directly without any calculation
+  const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
