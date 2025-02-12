@@ -29,24 +29,6 @@ const HoursSelection = ({
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 space-y-6">
       <div className="text-center space-y-2">
         <h3 className="text-xl font-semibold">How many hours do you need?</h3>
-        <Popover>
-          <PopoverTrigger className="text-primary text-sm hover:underline">
-            Calculate cleaning time
-          </PopoverTrigger>
-          <PopoverContent className="w-[300px]">
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Based on your home size:</p>
-              <ul className="text-sm text-gray-600 list-disc pl-4">
-                <li>Each bedroom: 30 minutes</li>
-                <li>Each bathroom: 30 minutes</li>
-                <li>Base cleaning time: 2 hours</li>
-              </ul>
-              <p className="text-sm font-medium text-primary mt-4">
-                Recommended time: {recommendedTime} hours
-              </p>
-            </div>
-          </PopoverContent>
-        </Popover>
       </div>
 
       <div className="flex items-center justify-center gap-4">
@@ -64,6 +46,65 @@ const HoursSelection = ({
         >
           +
         </Button>
+      </div>
+
+      <div className="text-center">
+        <Popover>
+          <PopoverTrigger className="text-primary text-sm hover:underline">
+            Calculate cleaning time
+          </PopoverTrigger>
+          <PopoverContent className="w-[300px] p-4">
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Bedrooms</label>
+                  <div className="flex items-center justify-center gap-4">
+                    <Button 
+                      variant="outline"
+                      onClick={() => setBedrooms(Math.max(1, bedrooms - 1))}
+                      disabled={bedrooms <= 1}
+                    >
+                      -
+                    </Button>
+                    <span className="w-8 text-center font-medium">{bedrooms}</span>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setBedrooms(bedrooms + 1)}
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Bathrooms</label>
+                  <div className="flex items-center justify-center gap-4">
+                    <Button 
+                      variant="outline"
+                      onClick={() => setBathrooms(Math.max(1, bathrooms - 1))}
+                      disabled={bathrooms <= 1}
+                    >
+                      -
+                    </Button>
+                    <span className="w-8 text-center font-medium">{bathrooms}</span>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setBathrooms(bathrooms + 1)}
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t">
+                <p className="text-sm font-medium text-center text-primary">
+                  We recommend {recommendedTime} hours
+                </p>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
