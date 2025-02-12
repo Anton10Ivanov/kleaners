@@ -7,6 +7,8 @@ import Extras from './Extras';
 import DeepCleaningStep from './DeepCleaningStep';
 import FinalStep from './FinalStep';
 import { calculateRecommendedTime } from '@/utils/bookingCalculations';
+import { BookingFormData } from '@/schemas/booking';
+import { toast } from 'sonner';
 
 interface BookingContentProps {
   currentStep: number;
@@ -31,6 +33,13 @@ const BookingContent = ({
   selectedExtras,
   setValue
 }: BookingContentProps) => {
+  const handleSubmit = (data: BookingFormData) => {
+    // Handle form submission
+    console.log('Form submitted:', data);
+    toast.success('Booking submitted successfully!');
+    // Here you would typically send the data to your backend
+  };
+
   return (
     <div className="w-full md:w-[70%]">
       {currentStep === 2 && selectedService === 'regular' && (
@@ -69,7 +78,12 @@ const BookingContent = ({
           setDate={(date) => setValue('date', date)}
         />
       )}
-      {currentStep === 3 && <FinalStep />}
+      {currentStep === 3 && (
+        <FinalStep 
+          postalCode={setValue('postalCode', '')} // Get the postal code from your form state
+          onSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 };
