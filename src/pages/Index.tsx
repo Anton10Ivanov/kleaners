@@ -13,6 +13,7 @@ import BookingContent from '../components/booking/BookingContent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
 import { calculatePrice } from '../utils/bookingCalculations';
+import { toast } from 'sonner';
 
 const Index = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
@@ -28,6 +29,27 @@ const Index = () => {
 
   // Use the base prices directly without any calculation
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
+
+  const handleNext = () => {
+    // Validate required fields for step 2
+    if (currentStep === 2) {
+      if (!date) {
+        toast.error("Please select a date");
+        return;
+      }
+      if (selectedService === 'regular') {
+        if (!frequency) {
+          toast.error("Please select a frequency");
+          return;
+        }
+        if (!hours || hours < 2) {
+          toast.error("Please select valid hours");
+          return;
+        }
+      }
+    }
+    handleNextStep();
+  };
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
@@ -97,7 +119,7 @@ const Index = () => {
                 </Button>
                 {currentStep < 3 && (
                   <Button 
-                    onClick={handleNextStep}
+                    onClick={handleNext}
                     className="bg-primary hover:bg-primary/90 text-white"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
