@@ -22,56 +22,51 @@ const ProgressBar = ({ currentStep }: ProgressBarProps) => {
   if (isMobile) {
     return (
       <div className="flex items-center justify-between mb-8 max-w-sm mx-auto px-4">
-        <div className="flex items-center">
+        <div className="flex flex-col items-center gap-2">
           <div className={`w-8 h-8 rounded-full ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
             1
           </div>
+          <span className="text-xs text-gray-500">Your postal code</span>
         </div>
-        <div className="h-0.5 flex-1 mx-2 bg-gray-200">
-          <div className="h-full bg-primary transition-all duration-300" style={{ width: `${(currentStep - 1) * 50}%` }} />
-        </div>
-        <div className="flex items-center">
+        <div className="h-[1px] flex-1 mx-2 bg-gray-200" />
+        <div className="flex flex-col items-center gap-2">
           <div className={`w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
             2
           </div>
+          <span className="text-xs text-gray-500">Details</span>
         </div>
-        <div className="h-0.5 flex-1 mx-2 bg-gray-200">
-          <div className="h-full bg-primary transition-all duration-300" style={{ width: `${Math.max(0, (currentStep - 2) * 50)}%` }} />
-        </div>
-        <div className="flex items-center">
+        <div className="h-[1px] flex-1 mx-2 bg-gray-200" />
+        <div className="flex flex-col items-center gap-2">
           <div className={`w-8 h-8 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
             3
           </div>
+          <span className="text-xs text-gray-500">Check out</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-between mb-12 max-w-2xl mx-auto">
-      <div className="flex items-center">
-        <div className={`w-10 h-10 rounded-full ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
-          <span className="text-sm">1</span>
+    <div className="flex items-center justify-between mb-12 max-w-sm mx-auto">
+      <div className="flex flex-col items-center gap-2">
+        <div className={`w-8 h-8 rounded-full ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
+          1
         </div>
-        <div className="ml-3 font-medium">Your postal code</div>
+        <span className="text-xs text-gray-500">Your postal code</span>
       </div>
-      <div className="h-1 w-24 bg-gray-200">
-        <div className="h-full bg-primary transition-all duration-300" style={{ width: `${(currentStep - 1) * 50}%` }} />
-      </div>
-      <div className="flex items-center">
-        <div className={`w-10 h-10 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
-          <span className="text-sm">2</span>
+      <div className="h-[1px] flex-1 mx-2 bg-gray-200" />
+      <div className="flex flex-col items-center gap-2">
+        <div className={`w-8 h-8 rounded-full ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
+          2
         </div>
-        <div className="ml-3 font-medium">Details</div>
+        <span className="text-xs text-gray-500">Details</span>
       </div>
-      <div className="h-1 w-24 bg-gray-200">
-        <div className="h-full bg-primary transition-all duration-300" style={{ width: `${Math.max(0, (currentStep - 2) * 50)}%` }} />
-      </div>
-      <div className="flex items-center">
-        <div className={`w-10 h-10 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center`}>
-          <span className="text-sm">3</span>
+      <div className="h-[1px] flex-1 mx-2 bg-gray-200" />
+      <div className="flex flex-col items-center gap-2">
+        <div className={`w-8 h-8 rounded-full ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-200'} flex items-center justify-center text-sm`}>
+          3
         </div>
-        <div className="ml-3 font-medium">Check out</div>
+        <span className="text-xs text-gray-500">Check out</span>
       </div>
     </div>
   );
