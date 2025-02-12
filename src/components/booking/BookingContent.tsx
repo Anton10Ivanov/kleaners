@@ -20,6 +20,7 @@ interface BookingContentProps {
   bathrooms: number;
   selectedExtras: string[];
   setValue: (name: any, value: any) => void;
+  postalCode: string;
 }
 
 const BookingContent = ({
@@ -31,7 +32,8 @@ const BookingContent = ({
   bedrooms,
   bathrooms,
   selectedExtras,
-  setValue
+  setValue,
+  postalCode
 }: BookingContentProps) => {
   const handleSubmit = (data: BookingFormData) => {
     // Handle form submission
@@ -80,7 +82,7 @@ const BookingContent = ({
       )}
       {currentStep === 3 && (
         <FinalStep 
-          postalCode={setValue('postalCode', '')} // Get the postal code from your form state
+          postalCode={postalCode}
           onSubmit={handleSubmit}
         />
       )}
