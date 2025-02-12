@@ -9,7 +9,11 @@ const roundToNearestHalf = (num: number): number => {
 export const calculateRecommendedTime = (bedrooms: number, bathrooms: number): number => {
   const BASE_TIME = 2;
   let totalTime = BASE_TIME;
-  
+ 
+  // Limit Bedrooms and Bathrooms to a maximum of 10
+  bedrooms = Math.min(bedrooms, 10);
+  bathrooms = Math.min(bathrooms, 10);
+
   // Case 1: Both bedrooms and bathrooms = 1
   if (bedrooms === 1 && bathrooms === 1) {
     return BASE_TIME;
