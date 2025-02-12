@@ -15,6 +15,7 @@ interface Extra {
 interface ExtrasProps {
   selectedExtras: string[];
   setSelectedExtras: (extras: string[]) => void;
+  frequency: string;
 }
 
 const AVAILABLE_EXTRAS: Extra[] = [
@@ -65,14 +66,31 @@ const AVAILABLE_EXTRAS: Extra[] = [
   }
 ];
 
-const Extras = ({ selectedExtras, setSelectedExtras }: ExtrasProps) => {
+const getHourlyRate = (frequency: string) => {
+  switch (frequency) {
+    case 'weekly':
+      return 29;
+    case 'biweekly':
+      return 32;
+    default: // onetime
+      return 34;
+  }
+};
+
+const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [windowCount, setWindowCount] = useState(1);
   const [ironingTime, setIroningTime] = useState(30);
 
   const toggleExtra = (extraId: string, hasPopup: boolean = false) => {
     if (hasPopup) {
-      setOpenDialog(extraId);
+      if (selectedExtras.includes(extraId)) {
+        // If already selected, unselect it
+        setSelectedExtras(selectedExtras.filter(id => id !== extraId));
+      } else {
+        // If not selected, open dialog
+        setOpenDialog(extraId);
+      }
       return;
     }
 
@@ -89,6 +107,8 @@ const Extras = ({ selectedExtras, setSelectedExtras }: ExtrasProps) => {
     }
     setOpenDialog(null);
   };
+
+  const hourlyRate = getHourlyRate(frequency);
 
   return (
     <div className="space-y-6">
