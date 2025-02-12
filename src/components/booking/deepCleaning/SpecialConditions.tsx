@@ -20,16 +20,18 @@ const SpecialConditions = ({
   setSpecialConditions,
 }: SpecialConditionsProps) => {
   return (
-    <div className="space-y-4 animate-fadeIn">
-      <Label className="text-secondary-text">Does your property have any of the following conditions?</Label>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="space-y-6 animate-fadeIn">
+      <Label className="text-secondary-text text-lg block mb-4">
+        Does your property have any of the following conditions?
+      </Label>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {specialOptions.map((option) => (
           <div 
             key={option.id} 
-            className={`flex items-center space-x-2 p-4 rounded-lg border transition-all duration-200 ${
+            className={`flex items-start space-x-4 p-5 rounded-xl transition-all duration-200 hover:shadow-md ${
               specialConditions.includes(option.id) 
-                ? 'border-primary/50 bg-primary/5' 
-                : 'border-gray-200 hover:border-primary/30'
+                ? 'bg-primary/5 border-2 border-primary/30 shadow-sm' 
+                : 'bg-white border border-gray-100 hover:border-primary/20'
             }`}
           >
             <Checkbox
@@ -44,11 +46,11 @@ const SpecialConditions = ({
                   );
                 }
               }}
-              className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              className="mt-1 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
             />
             <label
               htmlFor={option.id}
-              className="text-sm font-medium leading-none cursor-pointer select-none"
+              className="text-sm font-medium leading-relaxed cursor-pointer select-none text-gray-700"
             >
               {option.label}
             </label>
