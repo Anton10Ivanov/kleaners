@@ -11,7 +11,6 @@ const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -24,7 +23,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Don't render theme switch until mounted to avoid hydration mismatch
   if (!mounted) {
     return null;
   }
@@ -48,8 +46,12 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink href="#home">Home</NavLink>
-            <NavLink href="#services">Services</NavLink>
+            <Link to="/" className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+              Home
+            </Link>
+            <Link to="/services" className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+              Services
+            </Link>
             <NavLink href="#about">About</NavLink>
             <NavLink href="#contact">Contact</NavLink>
             <div className="flex items-center space-x-2">
@@ -88,8 +90,12 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-dark-background rounded-lg shadow-lg mt-2">
-              <MobileNavLink href="#home">Home</MobileNavLink>
-              <MobileNavLink href="#services">Services</MobileNavLink>
+              <Link to="/" className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors">
+                Home
+              </Link>
+              <Link to="/services" className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors">
+                Services
+              </Link>
               <MobileNavLink href="#about">About</MobileNavLink>
               <MobileNavLink href="#contact">Contact</MobileNavLink>
               <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-medium transition-colors mt-2">
