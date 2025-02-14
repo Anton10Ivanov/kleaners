@@ -4,7 +4,7 @@ import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
 import Calendar from './Calendar';
 import Extras from './Extras';
-import DeepCleaningStep from './DeepCleaningStep';
+import MoveInOutStep from './MoveInOutStep';
 import FinalStep from './FinalStep';
 import { calculateRecommendedTime } from '@/utils/bookingCalculations';
 import { BookingFormData } from '@/schemas/booking';
@@ -36,13 +36,10 @@ const BookingContent = ({
   postalCode
 }: BookingContentProps) => {
   const handleSubmit = (data: BookingFormData) => {
-    // Handle form submission
     console.log('Form submitted:', data);
     toast.success('Booking submitted successfully!');
-    // Here you would typically send the data to your backend
   };
 
-  // Use motion.div for smooth transitions between steps
   return (
     <div className="w-full md:w-[70%]">
       {currentStep === 2 && selectedService === 'regular' && (
@@ -75,12 +72,12 @@ const BookingContent = ({
           />
         </motion.div>
       )}
-      {currentStep === 2 && selectedService === 'deep' && (
+      {currentStep === 2 && selectedService === 'moveinout' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <DeepCleaningStep
+          <MoveInOutStep
             date={date}
             setDate={(date) => setValue('date', date)}
           />
