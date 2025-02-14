@@ -7,6 +7,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
+import RegularCleaning from "./pages/services/RegularCleaning";
+import DeepCleaning from "./pages/services/DeepCleaning";
+import MoveInOut from "./pages/services/MoveInOut";
+import BusinessCleaning from "./pages/services/BusinessCleaning";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +25,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+            <Route path="/services/deep-cleaning" element={<DeepCleaning />} />
+            <Route path="/services/move-in-out" element={<MoveInOut />} />
+            <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
