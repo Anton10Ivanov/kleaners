@@ -1,9 +1,6 @@
-
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-50 dark:bg-gray-900 pt-16 pb-8">
+  return <footer className="pt-16 pb-8 bg-sky-200 hover:bg-sky-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
@@ -63,8 +60,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
