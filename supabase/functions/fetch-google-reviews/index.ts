@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const PLACE_ID = 'YOUR_PLACE_ID' // Replace with your actual Google Maps Place ID
+    const PLACE_ID = 'ChIJp_6-drMLvUcRlnrqGBTAnzU'
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY')
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
