@@ -64,13 +64,14 @@
     @apply border-border selection:bg-primary/10 selection:text-primary;
   }
   
-  body {
-    @apply bg-background text-foreground antialiased transition-colors duration-300;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-  }
-
+  /* Hide scrollbar for the entire document */
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth scrollbar-none;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300 scrollbar-none;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
 }
 
