@@ -1,4 +1,6 @@
+
 import { MapPin, Euro, Settings, Calendar, X, Star } from "lucide-react";
+
 const WhyChooseUs = () => {
   const advantages = [{
     icon: MapPin,
@@ -25,6 +27,7 @@ const WhyChooseUs = () => {
     title: "95% Success Rate",
     description: "Exceptional results"
   }];
+
   return <section id="about" className="py-[60px] bg-transparent rounded-none my-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -51,4 +54,5 @@ const WhyChooseUs = () => {
       </div>
     </section>;
 };
+
 export default WhyChooseUs;

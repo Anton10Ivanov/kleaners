@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -39,7 +38,6 @@ const Navbar = () => {
 
   const serviceLinks = [
     { path: '/services/regular-cleaning', label: 'Regular Cleaning' },
-    { path: '/services/deep-cleaning', label: 'Deep Cleaning' },
     { path: '/services/move-in-out', label: 'Move In/Out' },
     { path: '/services/business-cleaning', label: 'Business Cleaning' },
   ];

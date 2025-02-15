@@ -3,11 +3,15 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  return <footer className="pt-16 pb-8 bg-sky-200 hover:bg-sky-100">
+  return <footer className="pt-16 pb-8 bg-sky-200/80 backdrop-blur-sm hover:bg-sky-100 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="font-bold text-2xl text-primary mb-4">Kleaners.de</h3>
+            <Link to="/" className="inline-block">
+              <h3 className="font-bold text-2xl text-primary mb-4 hover:text-primary/80 transition-colors">
+                Kleaners.de
+              </h3>
+            </Link>
             <p className="text-gray-600 dark:text-gray-400">
               Professional cleaning services for homes and businesses. Quality service guaranteed.
             </p>
@@ -64,4 +68,5 @@ const Footer = () => {
       </div>
     </footer>;
 };
+
 export default Footer;
