@@ -1,30 +1,98 @@
+
+import { useQuery } from '@tanstack/react-query'
+import { supabase } from "@/integrations/supabase/client"
+import { Star } from 'lucide-react'
+
+interface Review {
+  id: string
+  author_name: string
+  author_photo_url: string | null
+  rating: number
+  text_content: string | null
+  time_created: string
+}
+
 const Testimonials = () => {
-  return <section className="bg-white dark:bg-gray-800 py-0">
+  const { data: reviews, isLoading, error } = useQuery({
+    queryKey: ['reviews'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('google_reviews')
+        .select('*')
+        .order('time_created', { ascending: false })
+        .limit(3)
+
+      if (error) throw error
+      return data as Review[]
+    }
+  })
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <Star
+        key={index}
+        className={`h-4 w-4 ${
+          index < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'
+        }`}
+      />
+    ))
+  }
+
+  if (isLoading) {
+    return <div className="text-center py-8">Loading reviews...</div>
+  }
+
+  if (error) {
+    console.error('Error loading reviews:', error)
+    return null
+  }
+
+  return (
+    <section className="bg-white dark:bg-gray-800 py-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-[10px]">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Clients Say</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Read testimonials from our satisfied customers</p>
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            What Our Clients Say
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Read reviews from our satisfied customers
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          {[{
-          name: "Sarah M.",
-          text: "The best cleaning service I've ever used. Professional, thorough, and friendly staff.",
-          location: "Berlin"
-        }, {
-          name: "Michael K.",
-          text: "Reliable and consistent quality. I've been using their services for over a year now.",
-          location: "Munich"
-        }, {
-          name: "Anna L.",
-          text: "Excellent deep cleaning service. They transformed my apartment before I moved in.",
-          location: "Hamburg"
-        }].map(testimonial => <div key={testimonial.name} className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm">
-              <p className="text-gray-600 dark:text-gray-400 mb-4">"{testimonial.text}"</p>
-              <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
-              <p className="text-gray-500 dark:text-gray-400">{testimonial.location}</p>
-            </div>)}
+          {(reviews || []).map((review) => (
+            <div
+              key={review.id}
+              className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm"
+            >
+              <div className="flex items-center mb-4">
+                {review.author_photo_url && (
+                  <img
+                    src={review.author_photo_url}
+                    alt={review.author_name}
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
+                )}
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {review.author_name}
+                  </p>
+                  <div className="flex mt-1">
+                    {renderStars(review.rating)}
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                "{review.text_content}"
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {new Date(review.time_created).toLocaleDateString()}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
-    </section>;
-};
-export default Testimonials;
+    </section>
+  )
+}
+
+export default Testimonials

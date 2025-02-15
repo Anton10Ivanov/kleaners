@@ -9,7 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      google_reviews: {
+        Row: {
+          author_name: string
+          author_photo_url: string | null
+          created_at: string | null
+          id: string
+          place_id: string
+          rating: number
+          review_id: string
+          text_content: string | null
+          time_created: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_name: string
+          author_photo_url?: string | null
+          created_at?: string | null
+          id?: string
+          place_id: string
+          rating: number
+          review_id: string
+          text_content?: string | null
+          time_created: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_name?: string
+          author_photo_url?: string | null
+          created_at?: string | null
+          id?: string
+          place_id?: string
+          rating?: number
+          review_id?: string
+          text_content?: string | null
+          time_created?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
