@@ -9,6 +9,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const location = useLocation();
@@ -19,11 +21,24 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 20);
+      
+      if (currentScrollY < lastScrollY) {
+        // Scrolling up
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        // Scrolling down and past threshold
+        setIsVisible(false);
+        setIsServicesOpen(false);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   useEffect(() => {
     setIsServicesOpen(false);
@@ -45,7 +60,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] ${
+      className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${
         isScrolled ? 'bg-white/95 dark:bg-dark-background/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
       }`}
     >
