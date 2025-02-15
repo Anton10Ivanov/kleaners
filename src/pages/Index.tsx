@@ -57,8 +57,8 @@ const Index = () => {
               setPostalCode={(code) => setValue('postalCode', code)}
               handleNextStep={handleNextStep}
             />
-            <Services />
             <WhyChooseUs />
+            <Services />
             <Testimonials />
             <Footer />
           </motion.div>
