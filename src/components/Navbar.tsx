@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -44,7 +45,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] ${
         isScrolled ? 'bg-white/95 dark:bg-dark-background/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
       }`}
     >
@@ -60,7 +61,7 @@ const Navbar = () => {
             <Link to="/" className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
               Home
             </Link>
-            <div className="relative">
+            <div className="relative group">
               <button
                 onClick={() => setIsServicesOpen(!isServicesOpen)}
                 className="flex items-center space-x-1 font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
@@ -69,7 +70,7 @@ const Navbar = () => {
                 <ChevronDown className={`h-4 w-4 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
               </button>
               {isServicesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                <div className="absolute top-full left-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     {serviceLinks.map((service) => (
                       <Link
@@ -87,7 +88,7 @@ const Navbar = () => {
             </div>
             <NavLink href="#about">About</NavLink>
             <NavLink href="#contact">Contact</NavLink>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 h-16">
               <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
@@ -102,7 +103,7 @@ const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center gap-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 h-16">
               <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
                 checked={theme === "dark"}
@@ -121,8 +122,8 @@ const Navbar = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-dark-background rounded-lg shadow-lg mt-2">
+          <div className="md:hidden absolute left-0 right-0 top-16 bg-white dark:bg-dark-background shadow-lg">
+            <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/" className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors">
                 Home
               </Link>
