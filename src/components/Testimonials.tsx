@@ -16,14 +16,16 @@ const Testimonials = () => {
   const { data: reviews, isLoading, error } = useQuery({
     queryKey: ['reviews'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('google_reviews')
-        .select('*')
-        .order('time_created', { ascending: false })
-        .limit(3)
-
-      if (error) throw error
-      return data as Review[]
+      const response = await supabase.functions.invoke('fetch-google-reviews', {
+        method: 'GET',
+      })
+      
+      if (response.error) {
+        console.error('Error fetching reviews:', response.error)
+        throw response.error
+      }
+      
+      return response.data as Review[]
     }
   })
 

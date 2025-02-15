@@ -18,9 +18,16 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 
     if (!apiKey || !supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing environment variables:', {
+        hasApiKey: !!apiKey,
+        hasSupabaseUrl: !!supabaseUrl,
+        hasServiceKey: !!supabaseServiceKey
+      })
       throw new Error('Missing environment variables')
     }
 
+    console.log('Fetching reviews for Place ID:', PLACE_ID)
+    
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     // Fetch reviews from Google Maps API
@@ -29,8 +36,15 @@ Deno.serve(async (req) => {
     )
     const data = await response.json()
 
+    console.log('Google API Response:', {
+      status: data.status,
+      hasResult: !!data.result,
+      hasReviews: !!data.result?.reviews,
+      reviewCount: data.result?.reviews?.length
+    })
+
     if (!data.result?.reviews) {
-      throw new Error('No reviews found')
+      throw new Error('No reviews found in Google API response')
     }
 
     // Process and store each review
@@ -64,14 +78,19 @@ Deno.serve(async (req) => {
       .limit(3)
 
     if (fetchError) {
+      console.error('Error fetching reviews from database:', fetchError)
       throw fetchError
     }
+
+    console.log('Successfully retrieved reviews from database:', {
+      count: reviews?.length
+    })
 
     return new Response(JSON.stringify(reviews), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in edge function:', error)
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
