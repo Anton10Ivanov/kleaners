@@ -1,4 +1,7 @@
+
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return <footer className="pt-16 pb-8 bg-sky-200 hover:bg-sky-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,10 +16,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4 text-gray-900 dark:text-white">Services</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">Regular Cleaning</a></li>
-              <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">Deep Cleaning</a></li>
-              <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">Move In/Out</a></li>
-              <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">Commercial Cleaning</a></li>
+              <li><Link to="/services/regular-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">Regular Cleaning</Link></li>
+              <li><Link to="/services/move-in-out" className="text-gray-600 dark:text-gray-400 hover:text-primary">Move In/Out</Link></li>
+              <li><Link to="/services/business-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">Business Cleaning</Link></li>
             </ul>
           </div>
           
