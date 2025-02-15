@@ -41,24 +41,26 @@ const Hero = ({
   };
 
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center py-32 bg-gradient-to-b from-primary/10 to-transparent mx-0 my-0 px-[16px]">
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="grid place-items-center mx-0 rounded-none">
-          <div className="w-full max-w-2xl bg-white dark:bg-surface p-8 md:p-12 shadow-lg py-[15px] px-[10px] my-0 mx-0 rounded-2xl">
+    <div className="relative min-h-[80vh] flex items-center justify-center py-32 bg-gradient-to-b from-primary/10 to-transparent">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
+        <div className="grid place-items-center">
+          <div className="w-full max-w-2xl bg-white dark:bg-surface p-8 md:p-12 shadow-lg rounded-2xl">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-center">
               Professional Cleaning Services for Your Home
             </h1>
             <div className="space-y-6">
-              <Select value={selectedService} onValueChange={handleServiceChange}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select service type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="regular">Regular Cleaning</SelectItem>
-                  <SelectItem value="moveinout">Move In/Out Cleaning</SelectItem>
-                  <SelectItem value="moving">Coming Soon: Business Cleaning</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <Select value={selectedService} onValueChange={handleServiceChange}>
+                  <SelectTrigger className="w-full bg-white dark:bg-gray-800">
+                    <SelectValue placeholder="Select service type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50">
+                    <SelectItem value="regular">Regular Cleaning</SelectItem>
+                    <SelectItem value="moveinout">Move In/Out Cleaning</SelectItem>
+                    <SelectItem value="moving">Coming Soon: Business Cleaning</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Input 
@@ -66,7 +68,7 @@ const Hero = ({
                   placeholder="Enter postal code or city" 
                   value={postalCode} 
                   onChange={e => setPostalCode(e.target.value)} 
-                  className="flex-1" 
+                  className="flex-1 bg-white dark:bg-gray-800" 
                 />
                 <Button 
                   onClick={handleNext} 
