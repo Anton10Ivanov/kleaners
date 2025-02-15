@@ -1,3 +1,4 @@
+
 const Services = () => {
   return <section id="services" className="bg-white dark:bg-gray-800 py-[5px]">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-[10px] my-0">
@@ -11,12 +12,12 @@ const Services = () => {
           description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
           price: "From €29/hour"
         }, {
-          title: "Deep Cleaning",
-          description: "Thorough cleaning for those special occasions or seasonal needs",
-          price: "From €35/hour"
-        }, {
           title: "Move In/Out Cleaning",
           description: "Comprehensive cleaning service for moving transitions",
+          price: "Custom quote"
+        }, {
+          title: "Business Cleaning",
+          description: "Professional cleaning solutions for offices and commercial spaces",
           price: "Custom quote"
         }].map(service => <div key={service.title} className="bg-gray-50 dark:bg-gray-700 p-8 shadow-sm px-[22px] my-0 mx-0 rounded-2xl py-[5px]">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{service.title}</h3>
