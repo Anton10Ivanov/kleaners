@@ -50,17 +50,17 @@ const Testimonials = () => {
   }
 
   return (
-    <section className="bg-white dark:bg-gray-800 py-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-[10px]">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <section className="bg-white dark:bg-gray-800 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
             What Our Clients Say
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             Read reviews from our satisfied customers
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {(reviews || []).map((review) => (
             <div
               key={review.id}
@@ -94,7 +94,7 @@ const Testimonials = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Testimonials
+export default Testimonials;
