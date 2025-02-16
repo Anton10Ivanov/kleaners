@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const location = useLocation();
 
   useEffect(() => {
@@ -24,10 +26,8 @@ const Navbar = () => {
       setIsScrolled(currentScrollY > 20);
       
       if (currentScrollY < lastScrollY) {
-        // Scrolling up
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
-        // Scrolling down and past threshold
         setIsVisible(false);
         setIsServicesOpen(false);
       }
@@ -57,6 +57,10 @@ const Navbar = () => {
     { path: '/services/business-cleaning', label: 'Business Cleaning' },
   ];
 
+  const toggleLanguage = () => {
+    setCurrentLanguage(currentLanguage === 'en' ? 'de' : 'en');
+  };
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${
@@ -67,7 +71,13 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center gap-2">
+            <img
+              src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
+              alt="Kleaners.de Logo"
+              className="h-8 w-8 object-contain"
+              style={{ filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(346deg) brightness(100%) contrast(100%)' }}
+            />
             <Link to="/" className="font-raleway font-bold text-2xl text-primary dark:text-primary">
               Kleaners.de
             </Link>
@@ -101,21 +111,64 @@ const Navbar = () => {
             </div>
             <NavLink href="#about">About</NavLink>
             <NavLink href="#contact">Contact</NavLink>
-            <div className="flex items-center space-x-2 h-16">
-              <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <Switch
-                checked={theme === "dark"}
-                onCheckedChange={toggleTheme}
-                className="data-[state=checked]:bg-primary"
-              />
-              <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 h-16">
+                <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <Switch
+                  checked={theme === "dark"}
+                  onCheckedChange={toggleTheme}
+                  className="data-[state=checked]:bg-primary"
+                />
+                <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              </div>
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={toggleLanguage}
+                  className={`w-8 h-6 rounded overflow-hidden transition-opacity ${currentLanguage === 'de' ? 'opacity-50' : ''}`}
+                >
+                  <img
+                    src="https://flagcdn.com/w40/de.png"
+                    alt="German"
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+                <button 
+                  onClick={toggleLanguage}
+                  className={`w-8 h-6 rounded overflow-hidden transition-opacity ${currentLanguage === 'en' ? 'opacity-50' : ''}`}
+                >
+                  <img
+                    src="https://flagcdn.com/w40/gb.png"
+                    alt="English"
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              </div>
             </div>
-            <button className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-semibold transition-colors">
-              Get Quote
-            </button>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={toggleLanguage}
+                className={`w-6 h-4 rounded overflow-hidden transition-opacity ${currentLanguage === 'de' ? 'opacity-50' : ''}`}
+              >
+                <img
+                  src="https://flagcdn.com/w40/de.png"
+                  alt="German"
+                  className="w-full h-full object-cover"
+                />
+              </button>
+              <button 
+                onClick={toggleLanguage}
+                className={`w-6 h-4 rounded overflow-hidden transition-opacity ${currentLanguage === 'en' ? 'opacity-50' : ''}`}
+              >
+                <img
+                  src="https://flagcdn.com/w40/gb.png"
+                  alt="English"
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            </div>
             <div className="flex items-center space-x-2 h-16">
               <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Switch
@@ -148,9 +201,6 @@ const Navbar = () => {
               ))}
               <MobileNavLink href="#about">About</MobileNavLink>
               <MobileNavLink href="#contact">Contact</MobileNavLink>
-              <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-semibold transition-colors mt-2">
-                Get Quote
-              </button>
             </div>
           </div>
         )}
