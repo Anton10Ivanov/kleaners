@@ -41,24 +41,24 @@ const Hero = ({
   };
 
   return (
-    <div className="relative min-h-[70vh] flex items-center justify-center py-20 bg-gradient-to-b from-[#FEF7CD] to-transparent">
+    <div className="relative min-h-[70vh] flex items-center justify-center py-20 bg-gradient-to-b from-[#FEF7CD] to-white dark:to-transparent">
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div className="text-left space-y-6">
-            <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white">
               Professional Cleaning Services for Your Home
             </h1>
-            <p className="text-lg text-secondary-text max-w-xl">
+            <p className="text-xl font-medium text-gray-700 dark:text-gray-300 max-w-xl">
               Experience the highest standard of cleaning services tailored to your needs. Book your cleaning service today and enjoy a spotless home tomorrow.
             </p>
           </div>
           
           <div className="w-full">
-            <div className="bg-white dark:bg-surface p-8 md:p-10 shadow-lg rounded-2xl max-w-xl mx-auto">
+            <div className="bg-white dark:bg-surface p-8 md:p-10 shadow-lg rounded-2xl max-w-xl mx-auto border border-gray-100 dark:border-gray-800">
               <div className="space-y-6">
                 <div className="relative">
                   <Select value={selectedService} onValueChange={handleServiceChange}>
-                    <SelectTrigger className="w-full bg-white dark:bg-gray-800">
+                    <SelectTrigger className="w-full bg-white dark:bg-gray-800 font-medium">
                       <SelectValue placeholder="Select service type" />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50">
@@ -75,11 +75,11 @@ const Hero = ({
                     placeholder="Enter postal code or city" 
                     value={postalCode} 
                     onChange={e => setPostalCode(e.target.value)} 
-                    className="flex-1 bg-white dark:bg-gray-800" 
+                    className="flex-1 bg-white dark:bg-gray-800 font-medium" 
                   />
                   <Button 
                     onClick={handleNext} 
-                    className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
+                    className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all font-semibold"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

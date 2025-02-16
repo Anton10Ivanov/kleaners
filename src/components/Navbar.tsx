@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -75,9 +74,6 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
-              Home
-            </Link>
             <div className="relative group">
               <button
                 onClick={() => setIsServicesOpen(!isServicesOpen)}
@@ -93,7 +89,7 @@ const Navbar = () => {
                       <Link
                         key={service.path}
                         to={service.path}
-                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                         role="menuitem"
                       >
                         {service.label}
@@ -114,7 +110,7 @@ const Navbar = () => {
               />
               <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </div>
-            <button className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-medium transition-colors">
+            <button className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-semibold transition-colors">
               Get Quote
             </button>
           </div>
@@ -141,9 +137,6 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute left-0 right-0 top-16 bg-white dark:bg-dark-background shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/" className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors">
-                Home
-              </Link>
               {serviceLinks.map((service) => (
                 <Link
                   key={service.path}
@@ -155,7 +148,7 @@ const Navbar = () => {
               ))}
               <MobileNavLink href="#about">About</MobileNavLink>
               <MobileNavLink href="#contact">Contact</MobileNavLink>
-              <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-medium transition-colors mt-2">
+              <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-md font-raleway font-semibold transition-colors mt-2">
                 Get Quote
               </button>
             </div>
