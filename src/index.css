@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Light mode - Updated with vibrant colors */
+    /* Light mode - Updated with better contrast */
     --background: 0 0% 100%; /* #FFFFFF */
     --foreground: 0 0% 20%; /* #333333 */
     --secondary-text: 35 35% 35%; /* Warmer text color */
@@ -63,7 +63,6 @@
     @apply border-border selection:bg-primary/10 selection:text-primary;
   }
   
-  /* Hide scrollbar for the entire document */
   html {
     @apply scroll-smooth scrollbar-none;
   }
@@ -71,6 +70,14 @@
   body {
     @apply bg-background text-foreground antialiased transition-colors duration-300 scrollbar-none;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+
+  p {
+    @apply font-medium text-gray-700 dark:text-gray-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-gray-900 dark:text-white;
   }
 }
 
