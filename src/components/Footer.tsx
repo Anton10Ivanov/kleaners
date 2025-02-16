@@ -3,7 +3,8 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  return <footer className="pt-16 pb-8 bg-sky-200/80 backdrop-blur-sm hover:bg-sky-100 transition-all duration-300">
+  return (
+    <footer className="pt-16 pb-8 bg-[#FEF7CD] dark:bg-gray-800 hover:bg-[#FEC6A1]/20 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
@@ -20,9 +21,21 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4 text-gray-900 dark:text-white">Services</h4>
             <ul className="space-y-2">
-              <li><Link to="/services/regular-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">Regular Cleaning</Link></li>
-              <li><Link to="/services/move-in-out" className="text-gray-600 dark:text-gray-400 hover:text-primary">Move In/Out</Link></li>
-              <li><Link to="/services/business-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">Business Cleaning</Link></li>
+              <li>
+                <Link to="/services/regular-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                  Regular Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/move-in-out" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                  Move In/Out
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/business-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                  Business Cleaning
+                </Link>
+              </li>
             </ul>
           </div>
           
@@ -47,13 +60,13 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4 text-gray-900 dark:text-white">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
                 <Facebook size={24} />
               </a>
-              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
                 <Instagram size={24} />
               </a>
-              <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
                 <Twitter size={24} />
               </a>
             </div>
@@ -66,7 +79,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
 
 export default Footer;
