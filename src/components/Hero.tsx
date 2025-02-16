@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +40,7 @@ const Hero = ({
   };
 
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center py-32 bg-gradient-to-b from-primary/10 to-transparent">
+    <div className="relative min-h-[70vh] flex items-center justify-center py-20 bg-gradient-to-b from-primary/10 to-transparent">
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
         <div className="grid place-items-center">
           <div className="w-full max-w-2xl bg-white dark:bg-surface p-8 md:p-12 shadow-lg rounded-2xl">

@@ -1,31 +1,51 @@
 
 const Services = () => {
-  return <section id="services" className="bg-white dark:bg-gray-800 py-[5px]">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-[10px] my-0">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Cleaning Services</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">Professional cleaning solutions for every need</p>
+  return (
+    <section id="services" className="bg-white dark:bg-gray-800 py-12">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-6">
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+            Our Cleaning Services
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Professional cleaning solutions for every need
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          {[{
-          title: "Regular Cleaning",
-          description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
-          price: "From €29/hour"
-        }, {
-          title: "Move In/Out Cleaning",
-          description: "Comprehensive cleaning service for moving transitions",
-          price: "Custom quote"
-        }, {
-          title: "Business Cleaning",
-          description: "Professional cleaning solutions for offices and commercial spaces",
-          price: "Custom quote"
-        }].map(service => <div key={service.title} className="bg-gray-50 dark:bg-gray-700 p-8 shadow-sm px-[22px] my-0 mx-0 rounded-2xl py-[5px]">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{service.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">{service.description}</p>
+          {[
+            {
+              title: "Regular Cleaning",
+              description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
+              price: "From €29/hour"
+            },
+            {
+              title: "Move In/Out Cleaning",
+              description: "Comprehensive cleaning service for moving transitions",
+              price: "Custom quote"
+            },
+            {
+              title: "Business Cleaning",
+              description: "Professional cleaning solutions for offices and commercial spaces",
+              price: "Custom quote"
+            }
+          ].map(service => (
+            <div
+              key={service.title}
+              className="bg-gray-50 dark:bg-gray-700 p-6 rounded-2xl shadow-sm"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                {service.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-3">
+                {service.description}
+              </p>
               <p className="text-primary font-semibold">{service.price}</p>
-            </div>)}
+            </div>
+          ))}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Services;
