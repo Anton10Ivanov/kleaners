@@ -1,34 +1,33 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Light mode */
+    /* Light mode - Updated with vibrant colors */
     --background: 0 0% 100%; /* #FFFFFF */
     --foreground: 0 0% 20%; /* #333333 */
-    --secondary-text: 0 0% 40%; /* #666666 */
-    --surface: 0 0% 96%; /* #F5F5F5 */
+    --secondary-text: 35 35% 35%; /* Warmer text color */
+    --surface: 45 100% 96%; /* Soft yellow surface */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 20%;
-    --primary: 210 100% 50%; /* #007BFF */
-    --primary-hover: 210 100% 35%; /* #0056b3 */
+    --primary: 25 95% 53%; /* Vibrant orange #F97316 */
+    --primary-hover: 25 95% 45%; /* Darker orange */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 210 100% 50%;
+    --secondary: 45 93% 85%; /* Soft yellow #FEF7CD */
+    --secondary-foreground: 30 25% 25%;
+    --muted: 45 33% 96%;
+    --muted-foreground: 35 35% 35%;
+    --accent: 25 95% 53%;
     --accent-foreground: 0 0% 100%;
     --destructive: 350 90% 55%; /* #DC3545 */
     --destructive-foreground: 0 0% 100%;
     --success: 135 70% 40%; /* #28A745 */
-    --border: 0 0% 88%; /* #E0E0E0 */
-    --input: 0 0% 88%;
-    --ring: 210 100% 50%;
+    --border: 45 10% 88%;
+    --input: 45 10% 88%;
+    --ring: 25 95% 53%;
     --radius: 0.75rem;
   }
 

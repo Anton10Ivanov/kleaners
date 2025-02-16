@@ -40,7 +40,7 @@ const Hero = ({
   };
 
   return (
-    <div className="relative min-h-[70vh] flex items-center justify-center py-20 bg-gradient-to-b from-primary/10 to-transparent">
+    <div className="relative min-h-[70vh] flex items-center justify-center py-20 bg-gradient-to-b from-[#FEF7CD] to-transparent">
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
         <div className="grid place-items-center">
           <div className="w-full max-w-2xl bg-white dark:bg-surface p-8 md:p-12 shadow-lg rounded-2xl">
@@ -71,7 +71,7 @@ const Hero = ({
                 />
                 <Button 
                   onClick={handleNext} 
-                  className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto"
+                  className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
                 >
                   Next <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
