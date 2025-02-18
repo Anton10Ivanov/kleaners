@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RootLayout from "./components/RootLayout";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import RegularCleaning from "./pages/services/RegularCleaning";
@@ -25,13 +26,15 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-            <Route path="/services/move-in-out" element={<MoveInOut />} />
-            <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
+            <Route element={<RootLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+              <Route path="/services/move-in-out" element={<MoveInOut />} />
+              <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
