@@ -1,6 +1,3 @@
-
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +64,6 @@ const BusinessCleaning = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <main className="pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
@@ -164,7 +160,6 @@ const BusinessCleaning = () => {
           </section>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };
