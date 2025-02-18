@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { isBefore } from "date-fns";
 import { useState, useEffect } from "react";
@@ -32,6 +31,14 @@ export const TimeSlots = ({
       setError(null);
 
       try {
+        const { data: credentials, error: credentialsError } = await supabase
+          .from('calendar_credentials')
+          .select('access_token')
+          .single();
+
+        if (credentialsError) throw credentialsError;
+        if (!credentials?.access_token) throw new Error('No access token available');
+
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
 
@@ -42,6 +49,9 @@ export const TimeSlots = ({
           body: {
             startDate: startDate.toISOString(),
             endDate: endDate.toISOString(),
+          },
+          headers: {
+            Authorization: `Bearer ${credentials.access_token}`,
           },
         });
 

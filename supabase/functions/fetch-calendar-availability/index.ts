@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { calendar_v3, auth } from "https://esm.sh/@googleapis/calendar@9.6.0";
+import { calendar_v3 } from "https://esm.sh/@googleapis/calendar@9.6.0";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const CALENDAR_ID = 'ai@kleaners.de';
@@ -12,14 +12,15 @@ serve(async (req) => {
   }
 
   try {
-    const client = new auth.OAuth2Client({
-      clientId: Deno.env.get("GOOGLE_CLIENT_ID"),
-      clientEmail: Deno.env.get("GOOGLE_CLIENT_EMAIL"),
-    });
+    // Get the authorization header from the request
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header provided');
+    }
 
-    // Initialize the Calendar API client
+    // Initialize the Calendar API client with the access token
     const calendar = new calendar_v3.Calendar({
-      auth: client,
+      auth: authHeader.replace('Bearer ', ''),
     });
 
     // Parse request body for date range
