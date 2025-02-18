@@ -10,6 +10,7 @@ import Services from "./pages/Services";
 import RegularCleaning from "./pages/services/RegularCleaning";
 import MoveInOut from "./pages/services/MoveInOut";
 import BusinessCleaning from "./pages/services/BusinessCleaning";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
             <Route path="/services/move-in-out" element={<MoveInOut />} />
             <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
