@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import { Calendar } from "@/components/ui/calendar";
+import { motion } from 'framer-motion';
+import Calendar from './Calendar';
 import DeepCleaningFields from './deepCleaning/DeepCleaningFields';
 
 interface DeepCleaningStepProps {
@@ -20,8 +21,13 @@ const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
 
   return (
     <div className="space-y-8">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6">Deep Cleaning Service</h3>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white dark:bg-dark-background p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800"
+      >
+        <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Deep Cleaning Service</h3>
         <DeepCleaningFields
           squareMeters={squareMeters}
           setSquareMeters={setSquareMeters}
@@ -40,18 +46,18 @@ const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
           additionalNotes={additionalNotes}
           setAdditionalNotes={setAdditionalNotes}
         />
-      </div>
+      </motion.div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-xl font-semibold mb-6">Select a Date</h3>
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-md border"
-          disabled={(date) => date < new Date() || date.getDay() === 0}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <Calendar 
+          date={date}
+          setDate={setDate}
         />
-      </div>
+      </motion.div>
     </div>
   );
 };
