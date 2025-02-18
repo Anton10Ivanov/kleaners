@@ -3,7 +3,7 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  console.log('Footer component rendered'); // Adding a debug log
+  console.log('Footer component rendered with timestamp:', new Date().toISOString()); // Enhanced debug log
 
   return (
     <footer className="pt-16 pb-8 bg-[#FEF7CD] dark:bg-gray-800 hover:bg-[#FEC6A1]/20 transition-all duration-300">
