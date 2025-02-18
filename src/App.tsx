@@ -27,7 +27,7 @@ const App = () => (
           <ScrollToTop />
           <Routes>
             <Route element={<RootLayout />}>
-              <Route path="/" element={<Index />} />
+              <Route index element={<Index />} />
               <Route path="/services" element={<Services />} />
               <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
               <Route path="/services/move-in-out" element={<MoveInOut />} />
