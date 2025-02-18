@@ -1,8 +1,6 @@
 
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import WhyChooseUs from '../components/WhyChooseUs';
@@ -12,7 +10,6 @@ import BookingSummary from '../components/booking/BookingSummary';
 import BookingContent from '../components/booking/BookingContent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
-import { calculatePrice } from '../utils/bookingCalculations';
 import { toast } from 'sonner';
 
 const Index = () => {
@@ -40,8 +37,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
-      <Navbar />
-      
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
@@ -60,7 +55,6 @@ const Index = () => {
             <WhyChooseUs />
             <Services />
             <Testimonials />
-            <Footer />
           </motion.div>
         ) : (
           <motion.div
