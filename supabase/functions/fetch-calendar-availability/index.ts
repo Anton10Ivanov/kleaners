@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { calendar_v3 } from "https://esm.sh/@googleapis/calendar@9.6.0";
+import { google } from "https://esm.sh/@googleapis/calendar@9.6.0";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const CALENDAR_ID = 'ai@kleaners.de';
@@ -12,39 +12,49 @@ serve(async (req) => {
   }
 
   try {
-    // Get the authorization header from the request
+    // Get the access token from the request
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       throw new Error('No authorization header provided');
     }
+    const accessToken = authHeader.replace('Bearer ', '');
 
-    // Initialize the Calendar API client with the access token
-    const calendar = new calendar_v3.Calendar({
-      auth: authHeader.replace('Bearer ', ''),
-    });
-
+    // Create Google Calendar API client
+    const calendar = google.calendar('v3');
+    
     // Parse request body for date range
     const { startDate, endDate } = await req.json();
     
-    // Convert dates to RFC3339 format
-    const timeMin = new Date(startDate).toISOString();
-    const timeMax = new Date(endDate).toISOString();
+    console.log('Requesting freebusy for time range:', { startDate, endDate });
 
-    console.log(`Fetching calendar availability from ${timeMin} to ${timeMax}`);
+    // Make the freebusy query
+    const freeBusyRequest = await fetch(
+      `https://www.googleapis.com/calendar/v3/freeBusy`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timeMin: startDate,
+          timeMax: endDate,
+          items: [{ id: CALENDAR_ID }],
+        }),
+      }
+    );
 
-    // Fetch busy time slots
-    const freeBusyResponse = await calendar.freebusy.query({
-      requestBody: {
-        timeMin,
-        timeMax,
-        items: [{ id: CALENDAR_ID }],
-      },
-    });
+    if (!freeBusyRequest.ok) {
+      const errorData = await freeBusyRequest.json();
+      console.error('FreeBusy API error:', errorData);
+      throw new Error(`FreeBusy API error: ${errorData.error?.message || 'Unknown error'}`);
+    }
 
-    // Get the busy periods for the calendar
-    const busyPeriods = freeBusyResponse.data.calendars?.[CALENDAR_ID]?.busy || [];
+    const freeBusyResponse = await freeBusyRequest.json();
+    console.log('FreeBusy response:', freeBusyResponse);
 
-    console.log('Busy periods found:', busyPeriods.length);
+    const busyPeriods = freeBusyResponse.calendars?.[CALENDAR_ID]?.busy || [];
+    console.log('Extracted busy periods:', busyPeriods);
 
     return new Response(
       JSON.stringify({
@@ -56,7 +66,7 @@ serve(async (req) => {
           ...corsHeaders,
           'Content-Type': 'application/json',
         },
-      },
+      }
     );
   } catch (error) {
     console.error('Error fetching calendar availability:', error);
@@ -71,7 +81,7 @@ serve(async (req) => {
           ...corsHeaders,
           'Content-Type': 'application/json',
         },
-      },
+      }
     );
   }
 });
