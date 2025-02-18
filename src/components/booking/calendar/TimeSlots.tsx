@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import { isBefore } from "date-fns";
 import { useState, useEffect } from "react";
@@ -31,19 +32,32 @@ export const TimeSlots = ({
       setError(null);
 
       try {
+        // Get the access token from calendar_credentials
         const { data: credentials, error: credentialsError } = await supabase
           .from('calendar_credentials')
           .select('access_token')
           .single();
 
-        if (credentialsError) throw credentialsError;
-        if (!credentials?.access_token) throw new Error('No access token available');
+        if (credentialsError) {
+          console.error('Error fetching credentials:', credentialsError);
+          throw new Error('Failed to fetch calendar credentials');
+        }
+        
+        if (!credentials?.access_token) {
+          throw new Error('No access token available');
+        }
 
+        // Set up the date range for the current day
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
 
         const endDate = new Date(date);
         endDate.setHours(23, 59, 59, 999);
+
+        console.log('Fetching availability for:', {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString()
+        });
 
         const { data, error } = await supabase.functions.invoke('fetch-calendar-availability', {
           body: {
@@ -55,12 +69,15 @@ export const TimeSlots = ({
           },
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error from edge function:', error);
+          throw error;
+        }
 
         console.log('Calendar availability response:', data);
         setBusyPeriods(data.busyPeriods || []);
       } catch (err) {
-        console.error('Error fetching calendar availability:', err);
+        console.error('Error fetching availability:', err);
         setError('Failed to fetch availability. Please try again.');
       } finally {
         setIsLoading(false);
