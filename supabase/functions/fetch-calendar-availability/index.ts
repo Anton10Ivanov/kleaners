@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { google } from "https://esm.sh/@googleapis/calendar@9.6.0";
+import { calendar_v3, auth } from "https://esm.sh/@googleapis/calendar@9.6.0";
 import { corsHeaders } from "../_shared/cors.ts";
 
 const CALENDAR_ID = 'ai@kleaners.de';
@@ -12,16 +12,15 @@ serve(async (req) => {
   }
 
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: Deno.env.get("GOOGLE_CLIENT_EMAIL"),
-        private_key: Deno.env.get("GOOGLE_PRIVATE_KEY")?.replace(/\\n/g, '\n'),
-        client_id: Deno.env.get("GOOGLE_CLIENT_ID"),
-      },
-      scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+    const client = new auth.OAuth2Client({
+      clientId: Deno.env.get("GOOGLE_CLIENT_ID"),
+      clientEmail: Deno.env.get("GOOGLE_CLIENT_EMAIL"),
     });
 
-    const calendar = google.calendar({ version: 'v3', auth });
+    // Initialize the Calendar API client
+    const calendar = new calendar_v3.Calendar({
+      auth: client,
+    });
 
     // Parse request body for date range
     const { startDate, endDate } = await req.json();
@@ -33,7 +32,7 @@ serve(async (req) => {
     console.log(`Fetching calendar availability from ${timeMin} to ${timeMax}`);
 
     // Fetch busy time slots
-    const { data: freeBusyResponse } = await calendar.freebusy.query({
+    const freeBusyResponse = await calendar.freebusy.query({
       requestBody: {
         timeMin,
         timeMax,
@@ -42,7 +41,7 @@ serve(async (req) => {
     });
 
     // Get the busy periods for the calendar
-    const busyPeriods = freeBusyResponse.calendars?.[CALENDAR_ID]?.busy || [];
+    const busyPeriods = freeBusyResponse.data.calendars?.[CALENDAR_ID]?.busy || [];
 
     console.log('Busy periods found:', busyPeriods.length);
 
