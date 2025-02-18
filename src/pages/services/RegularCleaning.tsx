@@ -1,13 +1,9 @@
-
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, Clock, Euro, MapPin, Calendar, Star, X } from "lucide-react";
 
 const RegularCleaning = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
       <main className="pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-12">
@@ -137,7 +133,6 @@ const RegularCleaning = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };
