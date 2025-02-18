@@ -1,4 +1,3 @@
-
 import { DayPicker } from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { addToGoogleCalendar } from "@/utils/googleCalendar";
@@ -14,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Link } from "react-router-dom";
 
 interface CalendarProps {
   date: Date | undefined;
@@ -194,25 +194,12 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
       {!selectedTimeSlot && (
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
           If there are no preferred time slots available, please select another date or{" "}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="text-primary hover:underline">
-                contact us
-              </TooltipTrigger>
-              <TooltipContent 
-                className="bg-white dark:bg-gray-800 px-4 py-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
-                sideOffset={5}
-              >
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Contact Information</p>
-                  <div className="space-y-1">
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Email: info@kleaners.de</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">Phone: +49 123 456 789</p>
-                  </div>
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Link
+            to="/contact"
+            className="text-primary hover:underline"
+          >
+            contact us
+          </Link>
         </p>
       )}
     </div>

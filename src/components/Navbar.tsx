@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -110,7 +109,12 @@ const Navbar = () => {
               )}
             </div>
             <NavLink href="#about">About</NavLink>
-            <NavLink href="#contact">Contact</NavLink>
+            <Link
+              to="/contact"
+              className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+            >
+              Contact
+            </Link>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 h-16">
                 <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -199,8 +203,12 @@ const Navbar = () => {
                   {service.label}
                 </Link>
               ))}
-              <MobileNavLink href="#about">About</MobileNavLink>
-              <MobileNavLink href="#contact">Contact</MobileNavLink>
+              <Link
+                to="/contact"
+                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
+              >
+                Contact
+              </Link>
             </div>
           </div>
         )}
