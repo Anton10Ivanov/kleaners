@@ -1,4 +1,3 @@
-
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -21,8 +20,8 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-7xl">
-      <h1 className="text-4xl font-bold text-center mb-8">Contact Us</h1>
+    <div className="container mx-auto px-4 py-16">
+      <h1 className="text-3xl font-bold mb-8">Contact Us</h1>
       
       <div className="grid md:grid-cols-2 gap-12 items-start">
         {/* Contact Information */}
