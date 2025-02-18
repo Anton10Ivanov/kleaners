@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
-import { useTheme } from "next-themes";
-import { Switch } from "@/components/ui/switch";
+import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { Logo } from './navbar/Logo';
+import { ThemeToggle } from './navbar/ThemeToggle';
+import { LanguageSelector } from './navbar/LanguageSelector';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +12,6 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const location = useLocation();
@@ -46,10 +47,6 @@ const Navbar = () => {
     return null;
   }
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
   const serviceLinks = [
     { path: '/services/regular-cleaning', label: 'Regular Cleaning' },
     { path: '/services/move-in-out', label: 'Move In/Out' },
@@ -70,17 +67,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <img
-              src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
-              alt="Kleaners.de Logo"
-              className="h-8 w-8 object-contain"
-              style={{ filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(346deg) brightness(100%) contrast(100%)' }}
-            />
-            <Link to="/" className="font-raleway font-bold text-2xl text-primary dark:text-primary">
-              Kleaners.de
-            </Link>
-          </div>
+          <Logo />
           
           <div className="hidden md:flex items-center space-x-8">
             <div className="relative group">
@@ -89,7 +76,6 @@ const Navbar = () => {
                 className="flex items-center space-x-1 font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
               >
                 <span>Services</span>
-                <ChevronDown className={`h-4 w-4 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
               </button>
               {isServicesOpen && (
                 <div className="absolute top-full left-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
@@ -116,72 +102,20 @@ const Navbar = () => {
               Contact
             </Link>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 h-16">
-                <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <Switch
-                  checked={theme === "dark"}
-                  onCheckedChange={toggleTheme}
-                  className="data-[state=checked]:bg-primary"
-                />
-                <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <button 
-                  onClick={toggleLanguage}
-                  className={`w-8 h-6 rounded overflow-hidden transition-opacity ${currentLanguage === 'de' ? 'opacity-50' : ''}`}
-                >
-                  <img
-                    src="https://flagcdn.com/w40/de.png"
-                    alt="German"
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-                <button 
-                  onClick={toggleLanguage}
-                  className={`w-8 h-6 rounded overflow-hidden transition-opacity ${currentLanguage === 'en' ? 'opacity-50' : ''}`}
-                >
-                  <img
-                    src="https://flagcdn.com/w40/gb.png"
-                    alt="English"
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              </div>
+              <ThemeToggle />
+              <LanguageSelector
+                currentLanguage={currentLanguage}
+                onLanguageChange={toggleLanguage}
+              />
             </div>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <button 
-                onClick={toggleLanguage}
-                className={`w-6 h-4 rounded overflow-hidden transition-opacity ${currentLanguage === 'de' ? 'opacity-50' : ''}`}
-              >
-                <img
-                  src="https://flagcdn.com/w40/de.png"
-                  alt="German"
-                  className="w-full h-full object-cover"
-                />
-              </button>
-              <button 
-                onClick={toggleLanguage}
-                className={`w-6 h-4 rounded overflow-hidden transition-opacity ${currentLanguage === 'en' ? 'opacity-50' : ''}`}
-              >
-                <img
-                  src="https://flagcdn.com/w40/gb.png"
-                  alt="English"
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            </div>
-            <div className="flex items-center space-x-2 h-16">
-              <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <Switch
-                checked={theme === "dark"}
-                onCheckedChange={toggleTheme}
-                className="data-[state=checked]:bg-primary"
-              />
-              <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-            </div>
+            <LanguageSelector
+              currentLanguage={currentLanguage}
+              onLanguageChange={toggleLanguage}
+            />
+            <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
@@ -221,15 +155,6 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   <a
     href={href}
     className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
-  >
-    {children}
-  </a>
-);
-
-const MobileNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a
-    href={href}
-    className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
   >
     {children}
   </a>
