@@ -83,6 +83,24 @@ const BookingContent = ({
           />
         </motion.div>
       )}
+      {currentStep === 2 && selectedService === 'moving' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="space-y-6"
+        >
+          <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+            <h3 className="text-xl font-semibold text-amber-800 mb-2">Coming Soon: Business Cleaning</h3>
+            <p className="text-amber-700">
+              We're currently working on making our business cleaning service available. You can still explore dates and times:
+            </p>
+          </div>
+          <Calendar 
+            date={date}
+            setDate={(date) => setValue('date', date)}
+          />
+        </motion.div>
+      )}
       {currentStep === 3 && (
         <motion.div
           initial={{ opacity: 0 }}
