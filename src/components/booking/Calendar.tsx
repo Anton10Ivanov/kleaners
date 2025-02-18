@@ -1,19 +1,12 @@
-import { DayPicker } from "react-day-picker";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { useState } from "react";
+import { startOfWeek, addDays, eachDayOfInterval } from "date-fns";
+import { toZonedTime } from 'date-fns-tz';
+import { Link } from "react-router-dom";
 import { addToGoogleCalendar } from "@/utils/googleCalendar";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { useState } from "react";
-import { format, addDays, startOfWeek, eachDayOfInterval, isBefore, isAfter } from "date-fns";
-import { toZonedTime } from 'date-fns-tz';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Link } from "react-router-dom";
+import { DatePicker } from "./calendar/DatePicker";
+import { TimeSlots } from "./calendar/TimeSlots";
 
 interface CalendarProps {
   date: Date | undefined;
@@ -24,27 +17,21 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>();
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
 
-  // Get current time in Berlin timezone
   const nowInBerlin = toZonedTime(new Date(), 'Europe/Berlin');
   const futureLimit = addDays(nowInBerlin, 31);
 
-  // Generate an array of dates for the current week view
   const weekDates = eachDayOfInterval({
     start: weekStart,
     end: addDays(weekStart, 6)
   });
 
-  // Generate time slots from 7:00 to 20:00 in 30-minute intervals
   const timeSlots = Array.from({ length: 27 }, (_, i) => {
     const hour = Math.floor(i / 2) + 7;
     const minutes = (i % 2) * 30;
     return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   });
 
-  const handleDateSelect = async (selectedDate: Date | undefined) => {
-    if (!selectedDate || isBefore(selectedDate, nowInBerlin) || isAfter(selectedDate, futureLimit)) {
-      return;
-    }
+  const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     setSelectedTimeSlot(undefined);
   };
@@ -55,12 +42,6 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
     const [hours, minutes] = timeSlot.split(':').map(Number);
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hours, minutes);
-    
-    // Check if the selected time is in the past
-    if (isBefore(selectedDateTime, nowInBerlin)) {
-      toast.error("This time slot is in the past. Please select a future time.");
-      return;
-    }
 
     setSelectedTimeSlot(timeSlot);
     
@@ -79,32 +60,11 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
   };
 
   const handlePreviousWeek = () => {
-    const newWeekStart = addDays(weekStart, -7);
-    if (!isBefore(newWeekStart, nowInBerlin)) {
-      setWeekStart(newWeekStart);
-    }
+    setWeekStart(prevWeek => addDays(prevWeek, -7));
   };
 
   const handleNextWeek = () => {
-    const newWeekStart = addDays(weekStart, 7);
-    if (!isAfter(newWeekStart, futureLimit)) {
-      setWeekStart(newWeekStart);
-    }
-  };
-
-  // Get the month(s) to display
-  const startMonth = format(weekDates[0], 'MMMM');
-  const endMonth = format(weekDates[6], 'MMMM');
-  const monthDisplay = startMonth === endMonth ? startMonth : `${startMonth}/${endMonth}`;
-
-  const isTimeSlotAvailable = (timeSlot: string) => {
-    if (!date) return false;
-    
-    const [hours, minutes] = timeSlot.split(':').map(Number);
-    const slotDateTime = new Date(date);
-    slotDateTime.setHours(hours, minutes);
-    
-    return !isBefore(slotDateTime, nowInBerlin) && Math.random() > 0.5; // Keep the random availability
+    setWeekStart(prevWeek => addDays(prevWeek, 7));
   };
 
   return (
@@ -114,81 +74,24 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
       </h3>
 
       <div className="space-y-6">
-        {/* Horizontal Date Picker */}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={handlePreviousWeek}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <span className="text-sm font-medium">
-              {monthDisplay}
-            </span>
-            <button
-              onClick={handleNextWeek}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
+        <DatePicker
+          weekDates={weekDates}
+          date={date}
+          nowInBerlin={nowInBerlin}
+          futureLimit={futureLimit}
+          weekStart={weekStart}
+          onDateSelect={handleDateSelect}
+          onPreviousWeek={handlePreviousWeek}
+          onNextWeek={handleNextWeek}
+        />
 
-          <div className="grid grid-cols-7 gap-1 text-center mb-6">
-            {weekDates.map((day, index) => (
-              <button
-                key={day.toISOString()}
-                onClick={() => handleDateSelect(day)}
-                disabled={
-                  day.getDay() === 0 || 
-                  isBefore(day, nowInBerlin) || 
-                  isAfter(day, futureLimit)
-                }
-                className={cn(
-                  "flex flex-col items-center p-2 rounded-lg transition-colors",
-                  date && day.toDateString() === date.toDateString()
-                    ? "bg-primary text-white"
-                    : day.getDay() === 0 || isBefore(day, nowInBerlin)
-                    ? "text-gray-400 cursor-not-allowed"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800",
-                  "disabled:opacity-50 disabled:cursor-not-allowed"
-                )}
-              >
-                <span className="text-xs font-medium">
-                  {format(day, 'EEE')}
-                </span>
-                <span className="text-lg font-semibold">
-                  {format(day, 'd')}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Time Slots Grid */}
-        <div className="grid grid-cols-7 gap-2">
-          {timeSlots.map((timeSlot) => {
-            const isAvailable = isTimeSlotAvailable(timeSlot);
-            return (
-              <button
-                key={timeSlot}
-                onClick={() => isAvailable && handleTimeSlotSelect(timeSlot)}
-                disabled={!isAvailable}
-                className={cn(
-                  "py-2 px-3 text-sm font-medium rounded-lg transition-colors",
-                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-                  selectedTimeSlot === timeSlot
-                    ? "bg-primary text-white"
-                    : isAvailable
-                    ? "bg-white hover:bg-gray-50 text-gray-900 dark:bg-dark-background dark:hover:bg-gray-800 dark:text-white"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600"
-                )}
-              >
-                {timeSlot}
-              </button>
-            );
-          })}
-        </div>
+        <TimeSlots
+          timeSlots={timeSlots}
+          selectedTimeSlot={selectedTimeSlot}
+          date={date}
+          nowInBerlin={nowInBerlin}
+          onTimeSlotSelect={handleTimeSlotSelect}
+        />
       </div>
       
       {!selectedTimeSlot && (
