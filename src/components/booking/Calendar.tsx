@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { useState } from "react";
-import { format, addDays, startOfWeek, eachDayOfInterval } from "date-fns";
+import { format, addDays, startOfWeek, eachDayOfInterval, isBefore, isAfter } from "date-fns";
+import { toZonedTime } from 'date-fns-tz';
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +24,10 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>();
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
 
+  // Get current time in Berlin timezone
+  const nowInBerlin = toZonedTime(new Date(), 'Europe/Berlin');
+  const futureLimit = addDays(nowInBerlin, 31);
+
   // Generate an array of dates for the current week view
   const weekDates = eachDayOfInterval({
     start: weekStart,
@@ -37,45 +42,70 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
   });
 
   const handleDateSelect = async (selectedDate: Date | undefined) => {
+    if (!selectedDate || isBefore(selectedDate, nowInBerlin) || isAfter(selectedDate, futureLimit)) {
+      return;
+    }
     setDate(selectedDate);
     setSelectedTimeSlot(undefined);
   };
 
   const handleTimeSlotSelect = async (timeSlot: string) => {
+    if (!date) return;
+
+    const [hours, minutes] = timeSlot.split(':').map(Number);
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hours, minutes);
+    
+    // Check if the selected time is in the past
+    if (isBefore(selectedDateTime, nowInBerlin)) {
+      toast.error("This time slot is in the past. Please select a future time.");
+      return;
+    }
+
     setSelectedTimeSlot(timeSlot);
     
-    if (date) {
-      const [hours, minutes] = timeSlot.split(':').map(Number);
-      const dateWithTime = new Date(date);
-      dateWithTime.setHours(hours, minutes);
-      
-      try {
-        await addToGoogleCalendar(
-          dateWithTime,
-          "Regular Cleaning",
-          2,
-          "Address will be provided"
-        );
-        toast.success("Event added to Google Calendar!");
-      } catch (error) {
-        console.error("Failed to add event to Google Calendar:", error);
-        toast.error("Failed to add event to Google Calendar. Please try again.");
-      }
+    try {
+      await addToGoogleCalendar(
+        selectedDateTime,
+        "Regular Cleaning",
+        2,
+        "Address will be provided"
+      );
+      toast.success("Event added to Google Calendar!");
+    } catch (error) {
+      console.error("Failed to add event to Google Calendar:", error);
+      toast.error("Failed to add event to Google Calendar. Please try again.");
     }
   };
 
   const handlePreviousWeek = () => {
-    setWeekStart(prevWeek => addDays(prevWeek, -7));
+    const newWeekStart = addDays(weekStart, -7);
+    if (!isBefore(newWeekStart, nowInBerlin)) {
+      setWeekStart(newWeekStart);
+    }
   };
 
   const handleNextWeek = () => {
-    setWeekStart(prevWeek => addDays(prevWeek, 7));
+    const newWeekStart = addDays(weekStart, 7);
+    if (!isAfter(newWeekStart, futureLimit)) {
+      setWeekStart(newWeekStart);
+    }
   };
 
   // Get the month(s) to display
   const startMonth = format(weekDates[0], 'MMMM');
   const endMonth = format(weekDates[6], 'MMMM');
   const monthDisplay = startMonth === endMonth ? startMonth : `${startMonth}/${endMonth}`;
+
+  const isTimeSlotAvailable = (timeSlot: string) => {
+    if (!date) return false;
+    
+    const [hours, minutes] = timeSlot.split(':').map(Number);
+    const slotDateTime = new Date(date);
+    slotDateTime.setHours(hours, minutes);
+    
+    return !isBefore(slotDateTime, nowInBerlin) && Math.random() > 0.5; // Keep the random availability
+  };
 
   return (
     <div className="bg-white dark:bg-dark-background p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors duration-200">
@@ -109,12 +139,16 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
               <button
                 key={day.toISOString()}
                 onClick={() => handleDateSelect(day)}
-                disabled={day.getDay() === 0 || day < new Date()}
+                disabled={
+                  day.getDay() === 0 || 
+                  isBefore(day, nowInBerlin) || 
+                  isAfter(day, futureLimit)
+                }
                 className={cn(
                   "flex flex-col items-center p-2 rounded-lg transition-colors",
                   date && day.toDateString() === date.toDateString()
                     ? "bg-primary text-white"
-                    : day.getDay() === 0
+                    : day.getDay() === 0 || isBefore(day, nowInBerlin)
                     ? "text-gray-400 cursor-not-allowed"
                     : "hover:bg-gray-100 dark:hover:bg-gray-800",
                   "disabled:opacity-50 disabled:cursor-not-allowed"
@@ -134,7 +168,7 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
         {/* Time Slots Grid */}
         <div className="grid grid-cols-7 gap-2">
           {timeSlots.map((timeSlot) => {
-            const isAvailable = Math.random() > 0.5; // Simulate availability
+            const isAvailable = isTimeSlotAvailable(timeSlot);
             return (
               <button
                 key={timeSlot}
@@ -165,10 +199,16 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
               <TooltipTrigger className="text-primary hover:underline">
                 contact us
               </TooltipTrigger>
-              <TooltipContent>
-                <div className="space-y-1">
-                  <p>Email: info@kleaners.de</p>
-                  <p>Phone: +49 123 456 789</p>
+              <TooltipContent 
+                className="bg-white dark:bg-gray-800 px-4 py-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
+                sideOffset={5}
+              >
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Contact Information</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Email: info@kleaners.de</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Phone: +49 123 456 789</p>
+                  </div>
                 </div>
               </TooltipContent>
             </Tooltip>
