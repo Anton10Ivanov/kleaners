@@ -3,6 +3,8 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  console.log('Footer component rendered'); // Adding a debug log
+
   return (
     <footer className="pt-16 pb-8 bg-[#FEF7CD] dark:bg-gray-800 hover:bg-[#FEC6A1]/20 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
