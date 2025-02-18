@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Plus, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface PropertyDetailsProps {
   squareMeters: number;
@@ -34,8 +35,13 @@ const PropertyDetails = ({
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <h3 className="text-lg font-semibold text-foreground">Property Details</h3>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-6"
+    >
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Property Details</h3>
       
       <div className="space-y-4">
         <Label className="text-secondary-text">Square Meters ({squareMeters}m²)</Label>
@@ -63,7 +69,12 @@ const PropertyDetails = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-4">
+        <motion.div 
+          className="space-y-4"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
           <Label className="text-secondary-text">Bathrooms</Label>
           <div className="flex items-center gap-4">
             <Button 
@@ -86,9 +97,14 @@ const PropertyDetails = ({
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="space-y-4">
+        <motion.div 
+          className="space-y-4"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <Label className="text-secondary-text">Bedrooms</Label>
           <div className="flex items-center gap-4">
             <Button 
@@ -111,9 +127,9 @@ const PropertyDetails = ({
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
