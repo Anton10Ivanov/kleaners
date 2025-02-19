@@ -5,26 +5,34 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useState, useEffect } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface HoursSelectionProps {
-  hours: number;
-  setHours: (hours: number) => void;
-  recommendedTime: number;
-  bedrooms: number;
-  setBedrooms: (value: number) => void;
-  bathrooms: number;
-  setBathrooms: (value: number) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-const HoursSelection = ({ 
-  hours, 
-  setHours, 
-  recommendedTime,
-  bedrooms,
-  setBedrooms,
-  bathrooms,
-  setBathrooms 
-}: HoursSelectionProps) => {
+const HoursSelection = ({ form }: HoursSelectionProps) => {
+  const [hours, setHours] = useState(2);
+  const [bedrooms, setBedrooms] = useState(1);
+  const [bathrooms, setBathrooms] = useState(1);
+  const [recommendedTime, setRecommendedTime] = useState(2);
+
+  useEffect(() => {
+    // Calculate recommended time based on rooms
+    const baseTime = 2;
+    const bedroomTime = 0.5 * bedrooms;
+    const bathroomTime = 0.5 * bathrooms;
+    const calculated = baseTime + bedroomTime + bathroomTime;
+    setRecommendedTime(calculated);
+  }, [bedrooms, bathrooms]);
+
+  useEffect(() => {
+    // Update form when hours change
+    form.setValue('hours', hours);
+  }, [hours, form]);
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 space-y-6">
       <div className="text-center space-y-2">
@@ -69,15 +77,15 @@ const HoursSelection = ({
                     <span className="w-8 text-center font-medium">{bedrooms}</span>
                     <Button 
                       variant="outline"
-                     onClick={() => setBedrooms(Math.min(10, bedrooms + 1))}
-                      disabled={bedrooms >= 10} // Disable the button when bedrooms = 10
+                      onClick={() => setBedrooms(Math.min(10, bedrooms + 1))}
+                      disabled={bedrooms >= 10}
                     >
                       +
                     </Button>
                   </div>
                 </div>
 
-                               <div>
+                <div>
                   <label className="block text-sm font-medium mb-2">Bathrooms</label>
                   <div className="flex items-center justify-center gap-4">
                     <Button 
@@ -91,9 +99,8 @@ const HoursSelection = ({
                     <Button 
                       variant="outline"
                       onClick={() => setBathrooms(Math.min(10, bathrooms + 1))}
-                      disabled={bathrooms >= 10} // Disable the button when bathrooms = 10
+                      disabled={bathrooms >= 10}
                     >
-
                       +
                     </Button>
                   </div>

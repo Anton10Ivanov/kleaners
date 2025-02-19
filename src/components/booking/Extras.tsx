@@ -1,21 +1,12 @@
-
 import { Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from 'react';
-
-interface Extra {
-  id: string;
-  title: string;
-  time?: string;
-  icon: React.ElementType;
-  hasPopup?: boolean;
-}
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface ExtrasProps {
-  selectedExtras: string[];
-  setSelectedExtras: (extras: string[]) => void;
-  frequency: string;
+  form: UseFormReturn<BookingFormData>;
 }
 
 const AVAILABLE_EXTRAS: Extra[] = [
@@ -82,20 +73,22 @@ const calculateTimePrice = (minutes: number, hourlyRate: number) => {
   return hours * hourlyRate;
 };
 
-const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) => {
+const Extras = ({ form }: ExtrasProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [windowCount, setWindowCount] = useState(1);
   const [ironingTime, setIroningTime] = useState(30);
+  const selectedExtras = form.watch('extras') || [];
+  const frequency = form.watch('frequency') || 'onetime';
 
-  const hourlyRate = getHourlyRate(frequency);
+  const setSelectedExtras = (extras: string[]) => {
+    form.setValue('extras', extras);
+  };
 
   const toggleExtra = (extraId: string, hasPopup: boolean = false) => {
     if (hasPopup) {
       if (selectedExtras.includes(extraId)) {
-        // If already selected, unselect it
         setSelectedExtras(selectedExtras.filter(id => id !== extraId));
       } else {
-        // If not selected, open dialog
         setOpenDialog(extraId);
       }
       return;
@@ -112,7 +105,6 @@ const Extras = ({ selectedExtras, setSelectedExtras, frequency }: ExtrasProps) =
     if (!selectedExtras.includes(extraId)) {
       setSelectedExtras([...selectedExtras, extraId]);
       
-      // Store ironing time in localStorage when confirmed
       if (extraId === 'ironing') {
         localStorage.setItem('ironingTime', ironingTime.toString());
       }

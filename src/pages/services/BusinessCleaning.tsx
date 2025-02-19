@@ -120,7 +120,7 @@ const BusinessCleaning = () => {
           </section>
         )}
         
-        <ProgressBar currentStep={currentStep} totalSteps={3} />
+        <ProgressBar currentStep={currentStep} />
         
         <div className="mt-8">
           {renderStepContent()}
