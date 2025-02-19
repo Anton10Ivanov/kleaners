@@ -110,12 +110,12 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSelector
               currentLanguage={currentLanguage}
               onLanguageChange={toggleLanguage}
             />
-            <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
