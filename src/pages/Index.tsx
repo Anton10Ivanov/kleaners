@@ -75,14 +75,7 @@ const Index = () => {
                 <BookingContent 
                   currentStep={currentStep}
                   selectedService={selectedService || ''}
-                  frequency={frequency || ''}
-                  hours={hours}
-                  date={date}
-                  bedrooms={bedrooms}
-                  bathrooms={bathrooms}
-                  selectedExtras={selectedExtras}
-                  setValue={setValue}
-                  postalCode={postalCode}
+                  form={form}
                 />
                 <div className="w-full md:w-[30%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
                   <BookingSummary 
