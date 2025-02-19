@@ -1,3 +1,4 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +8,7 @@ import { toast } from "sonner";
 
 interface HeroProps {
   selectedService: string;
-  setSelectedService: (value: "regular" | "moveinout" | "moving") => void;
+  setSelectedService: (value: "regular" | "moveinout" | "business") => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
@@ -23,7 +24,7 @@ const Hero = ({
   const navigate = useNavigate();
 
   const handleServiceChange = (value: string) => {
-    setSelectedService(value as "regular" | "moveinout" | "moving");
+    setSelectedService(value as "regular" | "moveinout" | "business");
   };
 
   const handleNext = () => {
@@ -33,10 +34,6 @@ const Hero = ({
     }
     if (!postalCode) {
       toast.error("Please enter your postal code");
-      return;
-    }
-    if (selectedService === 'moving') {
-      navigate('/services/business-cleaning');
       return;
     }
     handleNextStep();
@@ -66,7 +63,7 @@ const Hero = ({
                     <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50">
                       <SelectItem value="regular">Regular Cleaning</SelectItem>
                       <SelectItem value="moveinout">Move In/Out Cleaning</SelectItem>
-                      <SelectItem value="moving">Business Cleaning</SelectItem>
+                      <SelectItem value="business">Business Cleaning</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
