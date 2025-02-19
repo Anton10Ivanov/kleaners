@@ -60,14 +60,14 @@ const BookingContent = ({
           <MoveInOutStep form={form} />
         </motion.div>
       )}
-      {currentStep === 2 && selectedService === 'moving' && (
+      {currentStep === 2 && selectedService === 'business' && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={(frequency as FrequencyType) || 'onetime'} 
+            frequency={(frequency as FrequencyType) || 'weekly'} 
             setFrequency={handleFrequencyChange} 
           />
           <HoursSelection form={form} />

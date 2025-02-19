@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 export const bookingSchema = z.object({
-  service: z.enum(["regular", "moveinout", "moving"]),
+  service: z.enum(["regular", "moveinout", "business"]),
   postalCode: z.string().min(1, "Postal code is required"),
   frequency: z.enum(["onetime", "weekly", "biweekly"]).optional(),
   hours: z.number().min(2, "Minimum 2 hours required").optional(),
