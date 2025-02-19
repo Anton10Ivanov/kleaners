@@ -27,12 +27,16 @@ const Index = () => {
   const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
 
   const handleNext = () => {
-    console.log('Current step before:', currentStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     handleNextStep();
-    console.log('Current step after:', currentStep);
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
+  };
+
+  const handleBack = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    handleBackStep();
   };
 
   return (
@@ -93,7 +97,7 @@ const Index = () => {
 
               <div className="flex justify-between mt-8">
                 <Button 
-                  onClick={handleBackStep}
+                  onClick={handleBack}
                   variant="outline"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
