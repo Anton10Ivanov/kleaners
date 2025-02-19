@@ -10,20 +10,16 @@ export const Logo = () => {
   };
 
   return (
-    <div className="flex-shrink-0 flex items-center gap-2">
+    <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
       <img
         src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
         alt="Kleaners.de Logo"
-        className="h-8 w-8 object-contain cursor-pointer"
-        onClick={handleLogoClick}
+        className="h-8 w-8 object-contain"
         style={{ filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(346deg) brightness(100%) contrast(100%)' }}
       />
-      <button 
-        onClick={handleLogoClick}
-        className="font-raleway font-bold text-2xl text-primary dark:text-primary hover:opacity-90 transition-opacity"
-      >
+      <span className="font-raleway font-bold text-2xl text-primary dark:text-primary hover:opacity-90 transition-opacity">
         Kleaners.de
-      </button>
+      </span>
     </div>
   );
 };
