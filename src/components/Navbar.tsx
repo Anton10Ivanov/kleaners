@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
@@ -15,10 +14,16 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsServicesOpen(false);
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,10 +43,6 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
-
-  useEffect(() => {
-    setIsServicesOpen(false);
-  }, [location]);
 
   if (!mounted) {
     return null;

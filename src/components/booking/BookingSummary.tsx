@@ -97,23 +97,23 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
         <div className="bg-white dark:bg-dark-background p-6 shadow-lg border-t md:border md:rounded-xl md:border-gray-100 dark:border-gray-700">
           <CollapsibleContent className="space-y-4">
             {selectedService && (
-              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
-                <Check className="w-4 h-4 text-gray-400" />
-                <span>{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <Check className="w-4 h-4 text-primary" />
+                <span className="font-medium">{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
               </div>
             )}
             {frequency && (
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
-                <span className="ml-auto">{currentPrice.toFixed(2)} €/h</span>
+              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <Clock className="w-4 h-4 text-primary" />
+                <span className="font-medium">{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
+                <span className="ml-auto font-semibold">{currentPrice.toFixed(2)} €/h</span>
               </div>
             )}
             {hours > 0 && (
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <span>{hours} Cleaning Hours</span>
-                <span className="ml-auto">{(currentPrice * hours).toFixed(2)} €</span>
+              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <Clock className="w-4 h-4 text-primary" />
+                <span className="font-medium">{hours} Cleaning Hours</span>
+                <span className="ml-auto font-semibold">{(currentPrice * hours).toFixed(2)} €</span>
               </div>
             )}
             {selectedExtras.length > 0 && selectedExtras.map(extra => {
@@ -146,10 +146,10 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
               }
 
               return (
-                <div key={extra} className="flex items-center gap-3 text-sm text-gray-600">
-                  <Check className="w-4 h-4 text-gray-400" />
-                  <span>{extraLabel}</span>
-                  <span className="ml-auto">{extraCost.toFixed(2)} €</span>
+                <div key={extra} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                  <Check className="w-4 h-4 text-primary" />
+                  <span className="font-medium">{extraLabel}</span>
+                  <span className="ml-auto font-semibold">{extraCost.toFixed(2)} €</span>
                 </div>
               );
             })}
@@ -157,24 +157,26 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
 
           <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold">Total</h3>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold">{totalCost.toFixed(2)} €</span>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Price per cleaning session</p>
-                    <p className="text-sm text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
-                    {extrasCost > 0 && (
-                      <p className="text-sm text-gray-400">+ {extrasCost.toFixed(2)}€ additional services</p>
-                    )}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+          <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Total</h3>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+                      <p className="font-medium">Price per cleaning session</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
+                      {extrasCost > 0 && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400">+ {extrasCost.toFixed(2)}€ additional services</p>
+                      )}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <span className="text-2xl font-bold text-primary">{totalCost.toFixed(2)} €</span>
             </div>
           </div>
         </div>
