@@ -16,6 +16,8 @@ interface BookingContentProps {
   form: ReturnType<typeof useForm<BookingFormData>>;
 }
 
+type FrequencyType = 'onetime' | 'weekly' | 'biweekly';
+
 const BookingContent = ({
   currentStep,
   selectedService,
@@ -29,6 +31,10 @@ const BookingContent = ({
   const postalCode = form.watch('postalCode') || '';
   const frequency = form.watch('frequency');
 
+  const handleFrequencyChange = (freq: FrequencyType) => {
+    form.setValue('frequency', freq);
+  };
+
   return (
     <div className="w-full md:w-[70%]">
       {currentStep === 2 && selectedService === 'regular' && (
@@ -38,8 +44,8 @@ const BookingContent = ({
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={frequency || 'onetime'} 
-            setFrequency={(freq) => form.setValue('frequency', freq)} 
+            frequency={(frequency as FrequencyType) || 'onetime'} 
+            setFrequency={handleFrequencyChange} 
           />
           <HoursSelection form={form} />
           <Calendar form={form} />
