@@ -41,6 +41,14 @@ export const useBookingForm = () => {
     console.log('Current step updated to:', currentStep);
   }, [currentStep]);
 
+  // Set default frequency to weekly for business cleaning
+  useEffect(() => {
+    const service = watch('service');
+    if (service === 'business') {
+      setValue('frequency', 'weekly');
+    }
+  }, [watch('service'), setValue]);
+
   useEffect(() => {
     const formData = getValues();
     localStorage.setItem('bookingProgress', JSON.stringify({

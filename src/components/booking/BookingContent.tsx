@@ -35,23 +35,25 @@ const BookingContent = ({
     form.setValue('frequency', freq);
   };
 
+  const getRegularOrBusinessContent = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="space-y-6"
+    >
+      <ServiceOptions 
+        frequency={(frequency as FrequencyType) || (selectedService === 'business' ? 'weekly' : 'onetime')} 
+        setFrequency={handleFrequencyChange} 
+      />
+      <HoursSelection form={form} />
+      <Calendar form={form} />
+      <Extras form={form} />
+    </motion.div>
+  );
+
   return (
     <div className="w-full md:w-[70%]">
-      {currentStep === 2 && selectedService === 'regular' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-6"
-        >
-          <ServiceOptions 
-            frequency={(frequency as FrequencyType) || 'onetime'} 
-            setFrequency={handleFrequencyChange} 
-          />
-          <HoursSelection form={form} />
-          <Calendar form={form} />
-          <Extras form={form} />
-        </motion.div>
-      )}
+      {currentStep === 2 && selectedService === 'regular' && getRegularOrBusinessContent()}
       {currentStep === 2 && selectedService === 'moveinout' && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -60,21 +62,7 @@ const BookingContent = ({
           <MoveInOutStep form={form} />
         </motion.div>
       )}
-      {currentStep === 2 && selectedService === 'business' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-6"
-        >
-          <ServiceOptions 
-            frequency={(frequency as FrequencyType) || 'weekly'} 
-            setFrequency={handleFrequencyChange} 
-          />
-          <HoursSelection form={form} />
-          <Calendar form={form} />
-          <Extras form={form} />
-        </motion.div>
-      )}
+      {currentStep === 2 && selectedService === 'business' && getRegularOrBusinessContent()}
       {currentStep === 3 && (
         <motion.div
           initial={{ opacity: 0 }}
