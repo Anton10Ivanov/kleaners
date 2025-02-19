@@ -1,8 +1,8 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface HeroProps {
@@ -20,6 +20,8 @@ const Hero = ({
   setPostalCode,
   handleNextStep
 }: HeroProps) => {
+  const navigate = useNavigate();
+
   const handleServiceChange = (value: string) => {
     setSelectedService(value as "regular" | "moveinout" | "moving");
   };
@@ -34,7 +36,7 @@ const Hero = ({
       return;
     }
     if (selectedService === 'moving') {
-      toast.error("This service is currently not available");
+      navigate('/services/business-cleaning');
       return;
     }
     handleNextStep();
@@ -64,7 +66,7 @@ const Hero = ({
                     <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50">
                       <SelectItem value="regular">Regular Cleaning</SelectItem>
                       <SelectItem value="moveinout">Move In/Out Cleaning</SelectItem>
-                      <SelectItem value="moving">Coming Soon: Business Cleaning</SelectItem>
+                      <SelectItem value="moving">Business Cleaning</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -79,7 +81,7 @@ const Hero = ({
                   />
                   <Button 
                     onClick={handleNext} 
-                    className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all font-semibold"
+                    className="bg-primary hover:bg-primary/90 text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all font-semibold"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
