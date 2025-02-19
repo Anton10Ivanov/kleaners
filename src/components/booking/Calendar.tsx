@@ -7,15 +7,17 @@ import { addToGoogleCalendar } from "@/utils/googleCalendar";
 import { toast } from "sonner";
 import { DatePicker } from "./calendar/DatePicker";
 import { TimeSlots } from "./calendar/TimeSlots";
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface CalendarProps {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-const Calendar = ({ date, setDate }: CalendarProps) => {
+const Calendar = ({ form }: CalendarProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>();
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const date = form.watch('date');
 
   const nowInBerlin = toZonedTime(new Date(), 'Europe/Berlin');
   const futureLimit = addDays(nowInBerlin, 31);
@@ -32,7 +34,7 @@ const Calendar = ({ date, setDate }: CalendarProps) => {
   });
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate);
+    form.setValue('date', selectedDate);
     setSelectedTimeSlot(undefined);
   };
 
