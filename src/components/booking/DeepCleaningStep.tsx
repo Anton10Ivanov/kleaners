@@ -1,15 +1,15 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Calendar from './Calendar';
 import DeepCleaningFields from './deepCleaning/DeepCleaningFields';
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface DeepCleaningStepProps {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
+const DeepCleaningStep = ({ form }: DeepCleaningStepProps) => {
   const [squareMeters, setSquareMeters] = useState(50);
   const [bathrooms, setBathrooms] = useState(1);
   const [bedrooms, setBedrooms] = useState(1);
@@ -54,8 +54,7 @@ const DeepCleaningStep = ({ date, setDate }: DeepCleaningStepProps) => {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Calendar 
-          date={date}
-          setDate={setDate}
+          form={form}
         />
       </motion.div>
     </div>

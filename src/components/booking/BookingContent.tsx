@@ -6,39 +6,27 @@ import Calendar from './Calendar';
 import Extras from './Extras';
 import MoveInOutStep from './MoveInOutStep';
 import FinalStep from './FinalStep';
-import { calculateRecommendedTime } from '@/utils/bookingCalculations';
 import { BookingFormData } from '@/schemas/booking';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
 
 interface BookingContentProps {
   currentStep: number;
   selectedService: string;
-  frequency: string;
-  hours: number;
-  date: Date | undefined;
-  bedrooms: number;
-  bathrooms: number;
-  selectedExtras: string[];
-  setValue: (name: any, value: any) => void;
-  postalCode: string;
+  form: ReturnType<typeof useForm<BookingFormData>>;
 }
 
 const BookingContent = ({
   currentStep,
   selectedService,
-  frequency,
-  hours,
-  date,
-  bedrooms,
-  bathrooms,
-  selectedExtras,
-  setValue,
-  postalCode
+  form
 }: BookingContentProps) => {
   const handleSubmit = (data: BookingFormData) => {
     console.log('Form submitted:', data);
     toast.success('Booking submitted successfully!');
   };
+
+  const postalCode = form.watch('postalCode') || '';
 
   return (
     <div className="w-full md:w-[70%]">
@@ -49,27 +37,12 @@ const BookingContent = ({
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={frequency} 
-            setFrequency={(freq) => setValue('frequency', freq as "onetime" | "weekly" | "biweekly")} 
+            frequency={form.watch('frequency') || 'onetime'} 
+            setFrequency={(freq) => form.setValue('frequency', freq)} 
           />
-          <HoursSelection 
-            hours={hours}
-            setHours={(val) => setValue('hours', val)}
-            recommendedTime={calculateRecommendedTime(bedrooms, bathrooms)}
-            bedrooms={bedrooms}
-            setBedrooms={(val) => setValue('bedrooms', val)}
-            bathrooms={bathrooms}
-            setBathrooms={(val) => setValue('bathrooms', val)}
-          />
-          <Calendar 
-            date={date}
-            setDate={(date) => setValue('date', date)}
-          />
-          <Extras
-            selectedExtras={selectedExtras}
-            setSelectedExtras={(extras) => setValue('extras', extras)}
-            frequency={frequency}
-          />
+          <HoursSelection form={form} />
+          <Calendar form={form} />
+          <Extras form={form} />
         </motion.div>
       )}
       {currentStep === 2 && selectedService === 'moveinout' && (
@@ -77,10 +50,7 @@ const BookingContent = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <MoveInOutStep
-            date={date}
-            setDate={(date) => setValue('date', date)}
-          />
+          <MoveInOutStep form={form} />
         </motion.div>
       )}
       {currentStep === 2 && selectedService === 'moving' && (
@@ -95,10 +65,7 @@ const BookingContent = ({
               We're currently working on making our business cleaning service available. You can still explore dates and times:
             </p>
           </div>
-          <Calendar 
-            date={date}
-            setDate={(date) => setValue('date', date)}
-          />
+          <Calendar form={form} />
         </motion.div>
       )}
       {currentStep === 3 && (

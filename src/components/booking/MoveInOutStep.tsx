@@ -1,15 +1,15 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Calendar from './Calendar'; // Updated import to use the enhanced Calendar component
+import Calendar from './Calendar';
 import MoveInOutFields from './moveInOut/MoveInOutFields';
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface MoveInOutStepProps {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-const MoveInOutStep = ({ date, setDate }: MoveInOutStepProps) => {
+const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
   const [squareMeters, setSquareMeters] = useState(50);
   const [bathrooms, setBathrooms] = useState(1);
   const [bedrooms, setBedrooms] = useState(1);
@@ -54,8 +54,7 @@ const MoveInOutStep = ({ date, setDate }: MoveInOutStepProps) => {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Calendar 
-          date={date}
-          setDate={setDate}
+          form={form}
         />
       </motion.div>
     </div>

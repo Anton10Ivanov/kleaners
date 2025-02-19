@@ -4,12 +4,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useState } from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
+import { LucideIcon } from 'lucide-react';
+
+interface ExtraService {
+  id: string;
+  title: string;
+  hasPopup?: boolean;
+  icon: LucideIcon;
+  time?: string;
+}
 
 interface ExtrasProps {
   form: UseFormReturn<BookingFormData>;
 }
 
-const AVAILABLE_EXTRAS: Extra[] = [
+const AVAILABLE_EXTRAS: ExtraService[] = [
   {
     id: 'windows',
     title: 'Window Cleaning',
