@@ -41,7 +41,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>Same Kleaner</TableCell>
+                  <TableCell>Same Cleaner</TableCell>
                   <TableCell>-</TableCell>
                   <TableCell><Check className="h-4 w-4 text-primary" /></TableCell>
                   <TableCell><Check className="h-4 w-4 text-primary" /></TableCell>
@@ -78,20 +78,18 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
         >
           <h4 className="font-semibold mb-1">Weekly</h4>
           <p className="text-gray-600">27.00 €/hour</p>
-          <p className="text-xs text-gray-500 mt-1">Same Kleaner every time</p>
+          <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
         </div>
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === 'biweekly' ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency('biweekly')}
         >
-          {(frequency === 'biweekly' || (!frequency && !['weekly', 'onetime'].includes(frequency))) && (
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-xs">
-              Most Popular
-            </div>
-          )}
+          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-xs">
+            Most Popular
+          </div>
           <h4 className="font-semibold mb-1">Every 2 Weeks</h4>
           <p className="text-gray-600">30.00 €/hour</p>
-          <p className="text-xs text-gray-500 mt-1">Same Kleaner every time</p>
+          <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
         </div>
       </div>
     </div>
