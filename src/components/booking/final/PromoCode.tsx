@@ -12,8 +12,8 @@ interface PromoCodeProps {
 
 const PromoCode = ({ form }: PromoCodeProps) => {
   return (
-    <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm">
-      <h3 className="text-lg font-semibold">Promo code</h3>
+    <div className="space-y-4 p-4 bg-white rounded-lg shadow-sm">
+      <h3 className="text-lg font-semibold mb-2">Promo code</h3>
       <FormField
         control={form.control}
         name="promoCode"
@@ -21,7 +21,7 @@ const PromoCode = ({ form }: PromoCodeProps) => {
           <FormItem>
             <div className="flex gap-2">
               <FormControl>
-                <Input placeholder="Enter promo code" {...field} />
+                <Input {...field} />
               </FormControl>
               <Button type="button" variant="outline" onClick={() => {
                 if (field.value) {

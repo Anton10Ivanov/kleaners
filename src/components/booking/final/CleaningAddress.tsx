@@ -19,9 +19,9 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
   const [isAdditionalInfoOpen, setIsAdditionalInfoOpen] = useState(false);
 
   return (
-    <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm">
-      <h3 className="text-lg font-semibold">Cleaning address</h3>
-      <div className="space-y-4">
+    <div className="space-y-4 p-4 bg-white rounded-lg shadow-sm">
+      <h3 className="text-lg font-semibold mb-2">Cleaning address</h3>
+      <div className="space-y-3">
         <FormField
           control={form.control}
           name="address"
@@ -29,14 +29,14 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
             <FormItem>
               <FormLabel>Address & House number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your address" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <FormField
             control={form.control}
             name="floor"
@@ -44,7 +44,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               <FormItem>
                 <FormLabel>Floor & Door (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="E.g., 3rd floor, Door 12" {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -57,7 +57,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               <FormItem>
                 <FormLabel>Entry code (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter entry code if any" {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -65,7 +65,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <FormField
             control={form.control}
             name="postalCode"
@@ -116,7 +116,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
         </div>
 
         <Collapsible open={isAdditionalInfoOpen} onOpenChange={setIsAdditionalInfoOpen}>
-          <CollapsibleContent className="mt-4">
+          <CollapsibleContent className="mt-3">
             <FormField
               control={form.control}
               name="accessInstructions"
@@ -125,7 +125,6 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
                   <FormLabel>Additional access information</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Here you can give us more information on how to access your place. Should we follow some specific guidelines?"
                       className="min-h-[100px]"
                       {...field}
                     />
