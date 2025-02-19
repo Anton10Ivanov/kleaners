@@ -10,9 +10,9 @@ interface PersonalInformationProps {
 
 const PersonalInformation = ({ form }: PersonalInformationProps) => {
   return (
-    <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm">
-      <h3 className="text-lg font-semibold">Your personal information</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-4 p-4 bg-white rounded-lg shadow-sm">
+      <h3 className="text-lg font-semibold mb-2">Your personal information</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <FormField
           control={form.control}
           name="firstName"
@@ -20,7 +20,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your first name" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -33,7 +33,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>Last Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your last name" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -46,7 +46,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="Enter your phone number" {...field} />
+                <Input type="tel" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -59,7 +59,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
+                <Input type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +72,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>Choose a password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password" {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,7 +85,7 @@ const PersonalInformation = ({ form }: PersonalInformationProps) => {
             <FormItem>
               <FormLabel>Confirm password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Confirm your password" {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
