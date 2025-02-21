@@ -23,6 +23,8 @@ const businessTypes = [
 ];
 
 const BusinessStep = ({ form }: BusinessStepProps) => {
+  const businessType = form.watch("businessType");
+
   return (
     <div className="space-y-6">
       <FormField
@@ -73,7 +75,7 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>How Often Do You Need Cleaning?</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select onValueChange={(value: "weekly" | "biweekly" | "monthly") => field.onChange(value)} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select frequency" />
@@ -109,7 +111,7 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         )}
       />
 
-      {field.value !== "other" && (
+      {businessType !== "other" && (
         <FormField
           control={form.control}
           name="specialRequirements"
