@@ -34,7 +34,7 @@ const BookingContent = ({
   return (
     <div className="w-full md:w-[70%]">
       <Form {...form}>
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -54,6 +54,9 @@ const BookingContent = ({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              key="moveinout-step"
+              className="space-y-6"
             >
               <MoveInOutStep form={form} />
             </motion.div>
@@ -62,6 +65,7 @@ const BookingContent = ({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              key="business-step"
             >
               <BusinessStep form={form} />
             </motion.div>
@@ -71,6 +75,7 @@ const BookingContent = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              key="final-step"
             >
               <FinalStep 
                 postalCode={postalCode}
@@ -86,3 +91,4 @@ const BookingContent = ({
 };
 
 export default BookingContent;
+
