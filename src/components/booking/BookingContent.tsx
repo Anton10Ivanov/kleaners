@@ -7,7 +7,7 @@ import Extras from './Extras';
 import MoveInOutStep from './MoveInOutStep';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
-import { BookingFormData } from '@/schemas/booking';
+import { BookingFormData, Frequency } from '@/schemas/booking';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
@@ -29,7 +29,7 @@ const BookingContent = ({
   };
 
   const postalCode = form.watch('postalCode') || '';
-  const frequency = form.watch('frequency') as "weekly" | "biweekly" | "onetime" | "monthly" | undefined;
+  const frequency = form.watch('frequency') as Frequency | undefined;
 
   return (
     <div className="w-full md:w-[70%]">

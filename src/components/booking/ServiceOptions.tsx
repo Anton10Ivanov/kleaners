@@ -14,10 +14,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Check } from "lucide-react";
+import { Frequency } from "@/schemas/booking";
 
 interface ServiceOptionsProps {
-  frequency: string;
-  setFrequency: (value: string) => void;
+  frequency: Frequency | undefined;
+  setFrequency: (value: Frequency) => void;
 }
 
 const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
@@ -66,23 +67,23 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === 'onetime' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('onetime')}
+          className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Onetime ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency(Frequency.Onetime)}
         >
           <h4 className="font-semibold mb-1">One Time</h4>
           <p className="text-gray-600">35.00 €/hour</p>
         </div>
         <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === 'weekly' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('weekly')}
+          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Weekly ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency(Frequency.Weekly)}
         >
           <h4 className="font-semibold mb-1">Weekly</h4>
           <p className="text-gray-600">27.00 €/hour</p>
           <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
         </div>
         <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === 'biweekly' ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency('biweekly')}
+          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Biweekly ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency(Frequency.Biweekly)}
         >
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-xs">
             Most Popular
