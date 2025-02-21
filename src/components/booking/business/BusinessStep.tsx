@@ -5,10 +5,22 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Building2, Store, UtensilsCrossed, Building, School, Warehouse, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface BusinessStepProps {
   form: UseFormReturn<BookingFormData>;
 }
+
+const businessTypes = [
+  { value: "office", label: "Office", icon: Building2 },
+  { value: "retail", label: "Retail Store", icon: Store },
+  { value: "restaurant", label: "Restaurant/Café", icon: UtensilsCrossed },
+  { value: "medical", label: "Medical Facility", icon: Building },
+  { value: "school", label: "School/Educational", icon: School },
+  { value: "warehouse", label: "Warehouse/Industrial", icon: Warehouse },
+  { value: "other", label: "Other", icon: HelpCircle },
+];
 
 const BusinessStep = ({ form }: BusinessStepProps) => {
   return (
@@ -17,22 +29,39 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         control={form.control}
         name="businessType"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Type of Business Property</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select business type" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectItem value="office">Office Space</SelectItem>
-                <SelectItem value="retail">Retail Store</SelectItem>
-                <SelectItem value="restaurant">Restaurant</SelectItem>
-                <SelectItem value="warehouse">Warehouse</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
+          <FormItem className="space-y-4">
+            <FormLabel className="text-lg font-medium">Type of Business Property</FormLabel>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {businessTypes.map((type) => {
+                const Icon = type.icon;
+                return (
+                  <div
+                    key={type.value}
+                    className={cn(
+                      "relative flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
+                      "hover:border-primary hover:bg-primary/5",
+                      field.value === type.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                    )}
+                    onClick={() => field.onChange(type.value)}
+                  >
+                    <Icon className="w-8 h-8 mb-2" />
+                    <span className="text-sm text-center">{type.label}</span>
+                    {type.value === "other" && field.value === "other" && (
+                      <Input
+                        placeholder="Please specify"
+                        className="mt-2 w-full text-sm"
+                        onChange={(e) => {
+                          field.onChange("other");
+                          form.setValue("specialRequirements", e.target.value);
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
             <FormMessage />
           </FormItem>
         )}
@@ -80,23 +109,25 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         )}
       />
 
-      <FormField
-        control={form.control}
-        name="specialRequirements"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Special Requirements</FormLabel>
-            <FormControl>
-              <Textarea 
-                placeholder="Please specify any special requirements or instructions"
-                className="min-h-[100px]"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      {field.value !== "other" && (
+        <FormField
+          control={form.control}
+          name="specialRequirements"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Special Requirements</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder="Please specify any special requirements or instructions"
+                  className="min-h-[100px]"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
     </div>
   );
 };
