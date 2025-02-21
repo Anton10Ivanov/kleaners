@@ -39,7 +39,7 @@ const BookingContent = ({
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={(frequency || 'onetime') as 'onetime' | 'weekly' | 'biweekly' | 'monthly'}
+            frequency={frequency as 'onetime' | 'weekly' | 'biweekly' | 'monthly'} 
             setFrequency={(freq) => form.setValue('frequency', freq)} 
           />
           <HoursSelection form={form} />
@@ -72,6 +72,7 @@ const BookingContent = ({
           <FinalStep 
             postalCode={postalCode}
             onSubmit={handleSubmit}
+            form={form}
           />
         </motion.div>
       )}
@@ -80,4 +81,3 @@ const BookingContent = ({
 };
 
 export default BookingContent;
-
