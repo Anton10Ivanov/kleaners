@@ -4,13 +4,18 @@ import { z } from "zod";
 export const bookingSchema = z.object({
   service: z.enum(["regular", "moveinout", "business"]),
   postalCode: z.string().min(1, "Postal code is required"),
-  frequency: z.enum(["onetime", "weekly", "biweekly"]).optional(),
+  frequency: z.enum(["onetime", "weekly", "biweekly", "monthly"]).optional(),
   hours: z.number().min(2, "Minimum 2 hours required").optional(),
   date: z.date().optional(),
   bedrooms: z.number().min(1, "At least 1 bedroom required").optional(),
   bathrooms: z.number().min(1, "At least 1 bathroom required").optional(),
   extras: z.array(z.string()).default([]),
   additionalNotes: z.string().optional(),
+  
+  // Business cleaning specific fields
+  businessType: z.enum(["office", "retail", "restaurant", "warehouse", "other"]).optional(),
+  propertySize: z.number().min(1, "Property size is required").optional(),
+  specialRequirements: z.string().optional(),
   
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
