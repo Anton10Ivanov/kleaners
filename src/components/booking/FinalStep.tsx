@@ -1,26 +1,20 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { BookingFormData, bookingSchema } from "@/schemas/booking";
+import { BookingFormData } from "@/schemas/booking";
 import PersonalInformation from "./final/PersonalInformation";
 import CleaningAddress from "./final/CleaningAddress";
 import SpecialInstructions from "./final/SpecialInstructions";
 import PromoCode from "./final/PromoCode";
+import { UseFormReturn } from "react-hook-form";
 
 interface FinalStepProps {
   postalCode: string;
   onSubmit: (data: BookingFormData) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-const FinalStep = ({ postalCode, onSubmit }: FinalStepProps) => {
-  const form = useForm<BookingFormData>({
-    resolver: zodResolver(bookingSchema),
-    defaultValues: {
-      postalCode,
-    }
-  });
-
+const FinalStep = ({ postalCode, onSubmit, form }: FinalStepProps) => {
   const handleSubmit = (data: BookingFormData) => {
     onSubmit(data);
   };
