@@ -5,6 +5,7 @@ import HoursSelection from './HoursSelection';
 import Calendar from './Calendar';
 import Extras from './Extras';
 import MoveInOutStep from './MoveInOutStep';
+import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { BookingFormData } from '@/schemas/booking';
 import { toast } from 'sonner';
@@ -15,8 +16,6 @@ interface BookingContentProps {
   selectedService: string;
   form: ReturnType<typeof useForm<BookingFormData>>;
 }
-
-type FrequencyType = 'onetime' | 'weekly' | 'biweekly';
 
 const BookingContent = ({
   currentStep,
@@ -29,31 +28,24 @@ const BookingContent = ({
   };
 
   const postalCode = form.watch('postalCode') || '';
-  const frequency = form.watch('frequency');
-
-  const handleFrequencyChange = (freq: FrequencyType) => {
-    form.setValue('frequency', freq);
-  };
-
-  const getRegularOrBusinessContent = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-6"
-    >
-      <ServiceOptions 
-        frequency={(frequency as FrequencyType) || (selectedService === 'business' ? 'weekly' : 'onetime')} 
-        setFrequency={handleFrequencyChange} 
-      />
-      <HoursSelection form={form} />
-      <Calendar form={form} />
-      <Extras form={form} />
-    </motion.div>
-  );
 
   return (
     <div className="w-full md:w-[70%]">
-      {currentStep === 2 && selectedService === 'regular' && getRegularOrBusinessContent()}
+      {currentStep === 2 && selectedService === 'regular' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="space-y-6"
+        >
+          <ServiceOptions 
+            frequency={form.watch('frequency') || 'onetime'} 
+            setFrequency={(freq) => form.setValue('frequency', freq)} 
+          />
+          <HoursSelection form={form} />
+          <Calendar form={form} />
+          <Extras form={form} />
+        </motion.div>
+      )}
       {currentStep === 2 && selectedService === 'moveinout' && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -62,7 +54,14 @@ const BookingContent = ({
           <MoveInOutStep form={form} />
         </motion.div>
       )}
-      {currentStep === 2 && selectedService === 'business' && getRegularOrBusinessContent()}
+      {currentStep === 2 && selectedService === 'business' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <BusinessStep form={form} />
+        </motion.div>
+      )}
       {currentStep === 3 && (
         <motion.div
           initial={{ opacity: 0 }}

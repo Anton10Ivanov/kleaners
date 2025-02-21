@@ -19,6 +19,9 @@ export const useBookingForm = () => {
       bathrooms: 1,
       extras: [],
       date: undefined,
+      businessType: undefined,
+      propertySize: undefined,
+      specialRequirements: '',
     }
   });
 
