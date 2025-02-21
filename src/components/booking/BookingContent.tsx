@@ -39,7 +39,7 @@ const BookingContent = ({
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={frequency as 'onetime' | 'weekly' | 'biweekly' | 'monthly'} 
+            frequency={frequency || undefined}
             setFrequency={(freq) => form.setValue('frequency', freq)} 
           />
           <HoursSelection form={form} />
