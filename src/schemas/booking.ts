@@ -13,7 +13,7 @@ export const bookingSchema = z.object({
   additionalNotes: z.string().optional(),
   
   // Business cleaning specific fields
-  businessType: z.enum(["office", "retail", "restaurant", "warehouse", "other"]).optional(),
+  businessType: z.enum(["office", "retail", "restaurant", "medical", "school", "warehouse", "other"]).optional(),
   propertySize: z.number().min(1, "Property size is required").optional(),
   specialRequirements: z.string().optional(),
   
