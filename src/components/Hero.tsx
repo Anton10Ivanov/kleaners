@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 interface HeroProps {
   selectedService: string;
-  setSelectedService: (value: "regular" | "moveinout" | "business") => void;
+  setSelectedService: (value: "regular" | "moveinout" | "business" | "construction") => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
@@ -24,7 +24,7 @@ const Hero = ({
   const navigate = useNavigate();
 
   const handleServiceChange = (value: string) => {
-    setSelectedService(value as "regular" | "moveinout" | "business");
+    setSelectedService(value as "regular" | "moveinout" | "business" | "construction");
   };
 
   const handleNext = () => {
@@ -64,6 +64,7 @@ const Hero = ({
                       <SelectItem value="regular">Regular Cleaning</SelectItem>
                       <SelectItem value="moveinout">Move In/Out Cleaning</SelectItem>
                       <SelectItem value="business">Business Cleaning</SelectItem>
+                      <SelectItem value="construction">Post-Construction Cleaning (Coming Soon)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
