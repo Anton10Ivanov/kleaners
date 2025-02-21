@@ -28,6 +28,7 @@ const BookingContent = ({
   };
 
   const postalCode = form.watch('postalCode') || '';
+  const frequency = form.watch('frequency');
 
   return (
     <div className="w-full md:w-[70%]">
@@ -38,7 +39,7 @@ const BookingContent = ({
           className="space-y-6"
         >
           <ServiceOptions 
-            frequency={form.watch('frequency') || 'onetime'} 
+            frequency={(frequency || 'onetime') as 'onetime' | 'weekly' | 'biweekly' | 'monthly'}
             setFrequency={(freq) => form.setValue('frequency', freq)} 
           />
           <HoursSelection form={form} />
@@ -79,3 +80,4 @@ const BookingContent = ({
 };
 
 export default BookingContent;
+
