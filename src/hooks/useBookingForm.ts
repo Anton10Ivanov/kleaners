@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
-import { bookingSchema, type BookingFormData } from '../schemas/booking';
+import { bookingSchema, type BookingFormData, Frequency } from '../schemas/booking';
 import { toast } from "sonner";
 
 export const useBookingForm = () => {
@@ -13,7 +13,7 @@ export const useBookingForm = () => {
     defaultValues: {
       service: undefined,
       postalCode: '',
-      frequency: 'onetime',
+      frequency: Frequency.Onetime,
       hours: 2,
       bedrooms: 1,
       bathrooms: 1,
@@ -48,7 +48,7 @@ export const useBookingForm = () => {
   useEffect(() => {
     const service = watch('service');
     if (service === 'business') {
-      setValue('frequency', 'weekly');
+      setValue('frequency', Frequency.Weekly);
     }
   }, [watch('service'), setValue]);
 
@@ -101,3 +101,4 @@ export const useBookingForm = () => {
     setValue
   };
 };
+
