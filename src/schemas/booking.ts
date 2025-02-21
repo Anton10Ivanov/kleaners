@@ -1,10 +1,17 @@
 
 import { z } from "zod";
 
+export enum Frequency {
+  Onetime = "onetime",
+  Weekly = "weekly",
+  Biweekly = "biweekly",
+  Monthly = "monthly"
+}
+
 export const bookingSchema = z.object({
   service: z.enum(["regular", "moveinout", "business"]),
   postalCode: z.string().min(1, "Postal code is required"),
-  frequency: z.enum(["onetime", "weekly", "biweekly", "monthly"]).optional(),
+  frequency: z.nativeEnum(Frequency).optional(),
   hours: z.number().min(2, "Minimum 2 hours required").optional(),
   date: z.date().optional(),
   bedrooms: z.number().min(1, "At least 1 bedroom required").optional(),
