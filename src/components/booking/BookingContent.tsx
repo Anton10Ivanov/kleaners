@@ -10,6 +10,7 @@ import FinalStep from './FinalStep';
 import { BookingFormData } from '@/schemas/booking';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 
 interface BookingContentProps {
   currentStep: number;
@@ -32,50 +33,54 @@ const BookingContent = ({
 
   return (
     <div className="w-full md:w-[70%]">
-      {currentStep === 2 && selectedService === 'regular' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-6"
-        >
-          <ServiceOptions 
-            frequency={frequency || undefined}
-            setFrequency={(freq) => form.setValue('frequency', freq)} 
-          />
-          <HoursSelection form={form} />
-          <Calendar form={form} />
-          <Extras form={form} />
-        </motion.div>
-      )}
-      {currentStep === 2 && selectedService === 'moveinout' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <MoveInOutStep form={form} />
-        </motion.div>
-      )}
-      {currentStep === 2 && selectedService === 'business' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <BusinessStep form={form} />
-        </motion.div>
-      )}
-      {currentStep === 3 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <FinalStep 
-            postalCode={postalCode}
-            onSubmit={handleSubmit}
-            form={form}
-          />
-        </motion.div>
-      )}
+      <Form {...form}>
+        <form>
+          {currentStep === 2 && selectedService === 'regular' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="space-y-6"
+            >
+              <ServiceOptions 
+                frequency={frequency as 'onetime' | 'weekly' | 'biweekly' | 'monthly' | undefined}
+                setFrequency={(freq) => form.setValue('frequency', freq)} 
+              />
+              <HoursSelection form={form} />
+              <Calendar form={form} />
+              <Extras form={form} />
+            </motion.div>
+          )}
+          {currentStep === 2 && selectedService === 'moveinout' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <MoveInOutStep form={form} />
+            </motion.div>
+          )}
+          {currentStep === 2 && selectedService === 'business' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <BusinessStep form={form} />
+            </motion.div>
+          )}
+          {currentStep === 3 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <FinalStep 
+                postalCode={postalCode}
+                onSubmit={handleSubmit}
+                form={form}
+              />
+            </motion.div>
+          )}
+        </form>
+      </Form>
     </div>
   );
 };
