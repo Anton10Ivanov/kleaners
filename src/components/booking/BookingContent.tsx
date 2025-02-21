@@ -34,7 +34,7 @@ const BookingContent = ({
   return (
     <div className="w-full md:w-[70%]">
       <Form {...form}>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onClick={(e) => e.stopPropagation()}>
           {currentStep === 2 && selectedService === 'regular' && (
             <motion.div
               initial={{ opacity: 0 }}
