@@ -1,11 +1,10 @@
-
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Building2, Store, UtensilsCrossed, Building, School, Warehouse, HelpCircle } from "lucide-react";
+import { Building2, Store, UtensilsCrossed, Building, School, Warehouse, HelpCircle, Home, PartyPopper, Stethoscope } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +20,9 @@ const businessTypes = [
   { value: "medical", label: "Medical Facility", icon: Building },
   { value: "school", label: "School/Educational", icon: School },
   { value: "warehouse", label: "Warehouse/Industrial", icon: Warehouse },
+  { value: "airbnb", label: "Airbnb Cleaning", icon: Home },
+  { value: "event", label: "Event Cleaning", icon: PartyPopper },
+  { value: "praxen", label: "Praxen", icon: Stethoscope },
   { value: "other", label: "Other", icon: HelpCircle },
 ];
 
@@ -119,6 +121,57 @@ const cleaningOptions = {
     special: [
       "Hazardous Material Cleanup",
       "Loading Dock Cleaning"
+    ]
+  },
+  airbnb: {
+    preparation: [
+      "Linens and Towels Washing",
+      "Surface Disinfection",
+      "Restocking Supplies"
+    ],
+    maintenance: [
+      "Floor Cleaning",
+      "Trash Removal",
+      "Bathroom Deep Clean"
+    ],
+    special: [
+      "Kitchen Deep Clean",
+      "Welcome Kit Preparation",
+      "Check-out Inspection"
+    ]
+  },
+  event: {
+    setup: [
+      "Pre-event Setup Cleaning",
+      "Equipment Sanitization",
+      "Floor Preparation"
+    ],
+    cleaning: [
+      "Trash and Recycling Collection",
+      "Surface Cleaning and Sanitization",
+      "Spill Cleanup"
+    ],
+    special: [
+      "Restroom Maintenance",
+      "Emergency Cleanup Service",
+      "Post-event Deep Clean"
+    ]
+  },
+  praxen: {
+    medical: [
+      "Medical Equipment Sterilization",
+      "Treatment Room Sanitization",
+      "Medical Waste Disposal"
+    ],
+    general: [
+      "Reception Area Cleaning",
+      "Waiting Room Sanitization",
+      "Staff Area Cleaning"
+    ],
+    special: [
+      "Air Purification",
+      "HVAC Sanitization",
+      "Specialized Surface Disinfection"
     ]
   }
 };
