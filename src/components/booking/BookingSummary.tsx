@@ -85,35 +85,35 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
     <Collapsible 
       open={isOpen} 
       onOpenChange={setIsOpen}
-      className={`${isMobile ? 'fixed bottom-0 left-0 w-full' : 'sticky top-24'}`}
+      className={`${isMobile ? 'fixed bottom-0 left-0 w-full z-50' : 'sticky top-20'}`}
     >
       <div className="relative" ref={contentRef}>
         {isMobile && (
-          <CollapsibleTrigger className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-7 h-7 bg-white dark:bg-dark-background rounded-full border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center group hover:border-gray-300 transition-colors z-10">
-            <ChevronUp className={`h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          <CollapsibleTrigger className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center group hover:border-gray-300 transition-colors z-10">
+            <ChevronUp className={`h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </CollapsibleTrigger>
         )}
 
-        <div className="bg-white dark:bg-dark-background p-6 shadow-lg border-t md:border md:rounded-xl md:border-gray-100 dark:border-gray-700">
-          <CollapsibleContent className="space-y-4">
+        <div className="bg-gray-50 dark:bg-gray-900 p-4 shadow-md border border-gray-100 dark:border-gray-800 md:rounded-lg">
+          <CollapsibleContent className="space-y-3">
             {selectedService && (
-              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                <Check className="w-4 h-4 text-primary" />
-                <span className="font-medium">{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+                <Check className="w-4 h-4 text-primary shrink-0" />
+                <span className="font-medium truncate">{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
               </div>
             )}
             {frequency && (
-              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                <Clock className="w-4 h-4 text-primary" />
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+                <Clock className="w-4 h-4 text-primary shrink-0" />
                 <span className="font-medium">{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
-                <span className="ml-auto font-semibold">{currentPrice.toFixed(2)} €/h</span>
+                <span className="ml-auto font-semibold tabular-nums">{currentPrice.toFixed(2)} €/h</span>
               </div>
             )}
             {hours > 0 && (
-              <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                <Clock className="w-4 h-4 text-primary" />
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+                <Clock className="w-4 h-4 text-primary shrink-0" />
                 <span className="font-medium">{hours} Cleaning Hours</span>
-                <span className="ml-auto font-semibold">{(currentPrice * hours).toFixed(2)} €</span>
+                <span className="ml-auto font-semibold tabular-nums">{(currentPrice * hours).toFixed(2)} €</span>
               </div>
             )}
             {selectedExtras.length > 0 && selectedExtras.map(extra => {
@@ -146,27 +146,27 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
               }
 
               return (
-                <div key={extra} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                  <Check className="w-4 h-4 text-primary" />
-                  <span className="font-medium">{extraLabel}</span>
-                  <span className="ml-auto font-semibold">{extraCost.toFixed(2)} €</span>
+                <div key={extra} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+                  <Check className="w-4 h-4 text-primary shrink-0" />
+                  <span className="font-medium truncate">{extraLabel}</span>
+                  <span className="ml-auto font-semibold tabular-nums">{extraCost.toFixed(2)} €</span>
                 </div>
               );
             })}
           </CollapsibleContent>
 
-          <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+          <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-3" />
 
-          <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-4">
+          <div className="bg-primary/5 dark:bg-primary/10 rounded-md p-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Total</h3>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Total</h3>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
                     </TooltipTrigger>
-                    <TooltipContent className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+                    <TooltipContent side="left" className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
                       <p className="font-medium">Price per cleaning session</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
                       {extrasCost > 0 && (
@@ -176,7 +176,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <span className="text-2xl font-bold text-primary">{totalCost.toFixed(2)} €</span>
+              <span className="text-xl font-bold text-primary tabular-nums">{totalCost.toFixed(2)} €</span>
             </div>
           </div>
         </div>
@@ -186,3 +186,4 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
 };
 
 export default BookingSummary;
+
