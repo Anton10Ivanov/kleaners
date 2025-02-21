@@ -44,7 +44,7 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>How Often Do You Need Cleaning?</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value || 'weekly'}>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select frequency" />
@@ -68,7 +68,12 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
           <FormItem>
             <FormLabel>Property Size (in square meters)</FormLabel>
             <FormControl>
-              <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+              <Input 
+                type="number" 
+                placeholder="Enter property size" 
+                {...field} 
+                onChange={(e) => field.onChange(Number(e.target.value))} 
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
