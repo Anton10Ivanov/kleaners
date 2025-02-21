@@ -16,6 +16,7 @@ export const bookingSchema = z.object({
   businessType: z.enum(["office", "retail", "restaurant", "medical", "school", "warehouse", "other"]).optional(),
   propertySize: z.number().min(1, "Property size is required").optional(),
   specialRequirements: z.string().optional(),
+  cleaningOptions: z.array(z.string()).default([]),
   
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),

@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Building2, Store, UtensilsCrossed, Building, School, Warehouse, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BusinessStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -22,8 +24,165 @@ const businessTypes = [
   { value: "other", label: "Other", icon: HelpCircle },
 ];
 
+const cleaningOptions = {
+  office: {
+    workstation: [
+      "Desk and Keyboard Sanitization",
+      "Monitor and Screen Cleaning",
+      "Chair and Furniture Cleaning"
+    ],
+    commonAreas: [
+      "Lobby and Reception Area Cleaning",
+      "Conference Room Cleaning",
+      "Breakroom/Kitchen Cleaning"
+    ],
+    special: [
+      "Whiteboard Cleaning",
+      "Plant Care"
+    ]
+  },
+  restaurant: {
+    kitchen: [
+      "Grease Trap Cleaning",
+      "Oven and Stovetop Cleaning",
+      "Hood and Exhaust Fan Cleaning"
+    ],
+    diningArea: [
+      "Table and Chair Sanitization",
+      "Floor Scrubbing and Degreasing",
+      "Window Cleaning"
+    ],
+    special: [
+      "Outdoor Patio Cleaning",
+      "Menu and Condiment Holder Cleaning"
+    ]
+  },
+  retail: {
+    display: [
+      "Glass Display Case Cleaning",
+      "Shelf and Product Dusting",
+      "Mannequin Cleaning"
+    ],
+    customerArea: [
+      "Fitting Room Sanitization",
+      "Checkout Counter Cleaning",
+      "Floor Cleaning"
+    ],
+    special: [
+      "Signage Cleaning",
+      "Shopping Cart/Basket Sanitization"
+    ]
+  },
+  medical: {
+    sterilization: [
+      "Operating Room Cleaning",
+      "Medical Equipment Sanitization",
+      "Biohazard Waste Disposal"
+    ],
+    patientArea: [
+      "Bed and Furniture Sanitization",
+      "Restroom Disinfection",
+      "Waiting Area Cleaning"
+    ],
+    special: [
+      "Air Quality Control",
+      "Laundry Services"
+    ]
+  },
+  school: {
+    classroom: [
+      "Desk and Chair Sanitization",
+      "Whiteboard/Corkboard Cleaning",
+      "Floor Cleaning"
+    ],
+    commonAreas: [
+      "Gymnasium Cleaning",
+      "Cafeteria Cleaning",
+      "Restroom Disinfection"
+    ],
+    special: [
+      "Playground Equipment Cleaning",
+      "Locker Room Cleaning"
+    ]
+  },
+  warehouse: {
+    floor: [
+      "Concrete Floor Scrubbing",
+      "Oil and Grease Removal",
+      "High-Pressure Washing"
+    ],
+    equipment: [
+      "Machinery Cleaning",
+      "Conveyor Belt Cleaning",
+      "Storage Rack Cleaning"
+    ],
+    special: [
+      "Hazardous Material Cleanup",
+      "Loading Dock Cleaning"
+    ]
+  }
+};
+
 const BusinessStep = ({ form }: BusinessStepProps) => {
   const businessType = form.watch("businessType");
+  const selectedOptions = form.watch("cleaningOptions") || [];
+
+  const renderCleaningOptions = () => {
+    if (!businessType || businessType === "other") return null;
+
+    const options = cleaningOptions[businessType as keyof typeof cleaningOptions];
+    if (!options) return null;
+
+    return (
+      <div className="space-y-6 mt-6">
+        <FormField
+          control={form.control}
+          name="cleaningOptions"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-lg">Select Cleaning Services</FormLabel>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Object.entries(options).map(([category, items]) => (
+                  <Card key={category} className="shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-base capitalize">
+                        {category.replace(/([A-Z])/g, " $1").trim()}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      {items.map((item) => (
+                        <FormField
+                          key={item}
+                          control={form.control}
+                          name="cleaningOptions"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                              <Checkbox
+                                checked={field.value?.includes(item)}
+                                onCheckedChange={(checked) => {
+                                  const updatedValue = checked
+                                    ? [...(field.value || []), item]
+                                    : field.value?.filter((val) => val !== item) || [];
+                                  field.onChange(updatedValue);
+                                }}
+                              />
+                              <FormLabel className="text-sm font-normal cursor-pointer">
+                                {item}
+                              </FormLabel>
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </FormItem>
+          )}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -69,13 +228,15 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         )}
       />
 
+      {renderCleaningOptions()}
+
       <FormField
         control={form.control}
         name="frequency"
         render={({ field }) => (
           <FormItem>
             <FormLabel>How Often Do You Need Cleaning?</FormLabel>
-            <Select onValueChange={(value: "weekly" | "biweekly" | "monthly") => field.onChange(value)} defaultValue={field.value}>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select frequency" />
