@@ -11,7 +11,7 @@ const Services = () => {
             Professional cleaning solutions for every need
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             {
               title: "Regular Cleaning",
@@ -27,6 +27,11 @@ const Services = () => {
               title: "Business Cleaning",
               description: "Professional cleaning solutions for offices and commercial spaces",
               price: "Custom quote"
+            },
+            {
+              title: "Post-Construction Cleaning",
+              description: "Specialized cleaning for newly constructed or renovated spaces",
+              price: "Coming Soon"
             }
           ].map(service => (
             <div
