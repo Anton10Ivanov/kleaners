@@ -1,4 +1,3 @@
-
 import { Info, ChevronUp, Check, Clock } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from 'react';
@@ -51,7 +50,7 @@ const calculateExtrasCost = (selectedExtras: string[], frequency: string) => {
 };
 
 const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selectedExtras }: BookingSummaryProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const extrasCost = calculateExtrasCost(selectedExtras, frequency);
@@ -88,12 +87,6 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
       className={`${isMobile ? 'fixed bottom-0 left-0 w-full z-50' : 'sticky top-20'}`}
     >
       <div className="relative" ref={contentRef}>
-        {isMobile && (
-          <CollapsibleTrigger className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center group hover:border-gray-300 transition-colors z-10">
-            <ChevronUp className={`h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-        )}
-
         <div className="bg-gray-50 dark:bg-gray-900 p-4 shadow-md border border-gray-100 dark:border-gray-800 md:rounded-lg">
           <CollapsibleContent className="space-y-3">
             {selectedService && (
@@ -157,28 +150,33 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
 
           <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-3" />
 
-          <div className="bg-primary/5 dark:bg-primary/10 rounded-md p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Total</h3>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
-                    </TooltipTrigger>
-                    <TooltipContent side="left" className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
-                      <p className="font-medium">Price per cleaning session</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
-                      {extrasCost > 0 && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">+ {extrasCost.toFixed(2)}€ additional services</p>
-                      )}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+          <CollapsibleTrigger className="w-full">
+            <div className="bg-primary/5 dark:bg-primary/10 rounded-md p-3">
+              <div className="flex items-center justify-between group">
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Total</h3>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
+                      </TooltipTrigger>
+                      <TooltipContent side="left" className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+                        <p className="font-medium">Price per cleaning session</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
+                        {extrasCost > 0 && (
+                          <p className="text-sm text-gray-500 dark:text-gray-400">+ {extrasCost.toFixed(2)}€ additional services</p>
+                        )}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <ChevronUp 
+                    className={`ml-1 h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+                  />
+                </div>
+                <span className="text-xl font-bold text-primary tabular-nums">{totalCost.toFixed(2)} €</span>
               </div>
-              <span className="text-xl font-bold text-primary tabular-nums">{totalCost.toFixed(2)} €</span>
             </div>
-          </div>
+          </CollapsibleTrigger>
         </div>
       </div>
     </Collapsible>
@@ -186,4 +184,3 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
 };
 
 export default BookingSummary;
-
