@@ -30,6 +30,12 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
     }
   }, []);
 
+  const handleOptionClick = (e: React.MouseEvent, freq: Frequency) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFrequency(freq);
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="flex justify-between items-center mb-6">
@@ -76,14 +82,14 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
       <div className="grid grid-cols-2 gap-4">
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Onetime ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency(Frequency.Onetime)}
+          onClick={(e) => handleOptionClick(e, Frequency.Onetime)}
         >
           <h4 className="font-semibold mb-1">One Time</h4>
           <p className="text-gray-600">35.00 €/hour</p>
         </div>
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Weekly ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency(Frequency.Weekly)}
+          onClick={(e) => handleOptionClick(e, Frequency.Weekly)}
         >
           <h4 className="font-semibold mb-1">Weekly</h4>
           <p className="text-gray-600">27.00 €/hour</p>
@@ -91,7 +97,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
         </div>
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Biweekly ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency(Frequency.Biweekly)}
+          onClick={(e) => handleOptionClick(e, Frequency.Biweekly)}
         >
           <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white px-2 py-0.5 rounded-full text-[10px] whitespace-nowrap">
             Most Popular
@@ -102,7 +108,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
         </div>
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
-          onClick={() => setFrequency(Frequency.Custom)}
+          onClick={(e) => handleOptionClick(e, Frequency.Custom)}
         >
           <h4 className="font-semibold mb-1">Custom Schedule</h4>
           <p className="text-gray-600">Contact us for pricing</p>

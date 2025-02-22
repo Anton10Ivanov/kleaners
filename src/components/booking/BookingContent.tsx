@@ -31,10 +31,15 @@ const BookingContent = ({
   const postalCode = form.watch('postalCode') || '';
   const frequency = form.watch('frequency') as Frequency | undefined;
 
+  const handleFormClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
-    <div className="w-full md:w-[70%]">
+    <div className="w-full md:w-[70%]" onClick={handleFormClick}>
       <Form {...form}>
-        <form onClick={(e) => e.stopPropagation()}>
+        <form onSubmit={(e) => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
             <motion.div
               initial={{ opacity: 0 }}
