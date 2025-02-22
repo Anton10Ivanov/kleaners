@@ -22,7 +22,7 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
             "grid gap-4",
             field.value 
               ? "grid-cols-1" // Show only one column when an option is selected
-              : "grid-cols-2 md:grid-cols-3" // Show multiple columns when no option is selected
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3" // Show multiple columns when no option is selected
           )}>
             {businessTypes.map((type) => {
               const Icon = type.icon;
@@ -37,12 +37,12 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                 <div
                   key={type.value}
                   className={cn(
-                    "relative flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
+                    "group relative flex items-center p-6 rounded-lg border-2 cursor-pointer transition-all",
                     "hover:border-primary hover:bg-primary/5",
                     isSelected
-                      ? "border-primary bg-primary/5 w-full"
+                      ? "border-primary bg-primary/5 shadow-sm"
                       : "border-border",
-                    field.value ? "col-span-full" : "" // Make selected option full width
+                    field.value ? "w-full" : "" // Make selected option full width
                   )}
                   onClick={() => {
                     // If clicking the same option again, deselect it
@@ -56,12 +56,19 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                     }
                   }}
                 >
-                  <Icon className="w-8 h-8 mb-2" />
-                  <span className="text-sm text-center">{type.label}</span>
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className={cn(
+                      "p-3 rounded-md transition-colors",
+                      isSelected ? "bg-primary/10" : "bg-secondary/50 group-hover:bg-primary/5"
+                    )}>
+                      <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <span className="text-base font-medium">{type.label}</span>
+                  </div>
                   {type.value === "other" && isSelected && (
                     <Input
                       placeholder="Please specify"
-                      className="mt-2 w-full text-sm"
+                      className="mt-4 w-full text-sm"
                       value={form.watch("specialRequirements") || ""}
                       onChange={(e) => {
                         form.setValue("specialRequirements", e.target.value);
@@ -79,3 +86,4 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
     />
   );
 };
+
