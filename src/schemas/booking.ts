@@ -5,50 +5,25 @@ export enum Frequency {
   Onetime = "onetime",
   Weekly = "weekly",
   Biweekly = "biweekly",
-  Monthly = "monthly",
   Custom = "custom"
 }
 
 export const bookingSchema = z.object({
-  service: z.enum(["regular", "moveinout", "business", "construction"]),
+  service: z.enum(["regular", "business", "moveInOut"]),
   postalCode: z.string().min(1, "Postal code is required"),
-  frequency: z.nativeEnum(Frequency).optional(),
-  hours: z.number().min(2, "Minimum 2 hours required").optional(),
+  frequency: z.nativeEnum(Frequency),
+  hours: z.number().min(1),
+  bedrooms: z.number().min(1),
+  bathrooms: z.number().min(1),
+  extras: z.array(z.string()),
   date: z.date().optional(),
-  bedrooms: z.number().min(1, "At least 1 bedroom required").optional(),
-  bathrooms: z.number().min(1, "At least 1 bathroom required").optional(),
-  extras: z.array(z.string()).default([]),
-  additionalNotes: z.string().optional(),
-  
-  // Business cleaning specific fields
-  businessType: z.enum(["office", "retail", "restaurant", "medical", "school", "warehouse", "airbnb", "event", "praxen", "other"]).optional(),
-  propertySize: z.number().min(1, "Property size is required").optional(),
+  businessType: z.string().optional(),
+  propertySize: z.string().optional(),
   specialRequirements: z.string().optional(),
-  cleaningOptions: z.array(z.string()).default([]),
-  selectedDays: z.array(z.string()).default([]),
+  selectedDays: z.array(z.string()).optional(),
   timeSlots: z.record(z.string()).optional(),
-  exactTimes: z.record(z.string()).optional(),
-  preferredTime: z.string().optional(),
-  
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  phone: z.string().min(1, "Phone number is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-  
-  address: z.string().min(1, "Address is required"),
-  floor: z.string().optional(),
-  entryCode: z.string().optional(),
-  accessMethod: z.enum(["home", "concierge", "key"]),
-  accessInstructions: z.string().optional(),
-  
-  specialInstructions: z.string().optional(),
-  promoCode: z.string().optional(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  provideKey: z.boolean().optional(),
+  contactForSchedule: z.boolean().optional()
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
-
