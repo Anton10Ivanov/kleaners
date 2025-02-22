@@ -50,7 +50,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     const currentDays = form.getValues('selectedDays') || [];
     
     if (isWeekly) {
-      form.setValue('selectedDays', [day]);
+      form.setValue('selectedDays', [day], { shouldDirty: true });
       return;
     }
 
@@ -61,15 +61,14 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       newDays = [...currentDays, day];
     }
     
-    form.setValue('selectedDays', orderDaysChronologically(newDays));
+    form.setValue('selectedDays', orderDaysChronologically(newDays), { shouldDirty: true });
   };
 
   const handleTimeSelect = (day: string, time: string) => {
     const timeSlots = { ...form.getValues('timeSlots') };
     timeSlots[day] = time;
-    form.setValue('timeSlots', timeSlots);
+    form.setValue('timeSlots', timeSlots, { shouldDirty: true });
 
-    // If this is the first time selection, ask user if they want to apply it to all days
     const selectedTimeSlots = Object.values(timeSlots).filter(Boolean);
     if (selectedTimeSlots.length === 1) {
       const confirmed = window.confirm(`Would you like to apply ${TIME_SLOTS.find(slot => slot.value === time)?.label} to all selected days?`);
@@ -77,7 +76,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
         selectedDays.forEach(selectedDay => {
           timeSlots[selectedDay] = time;
         });
-        form.setValue('timeSlots', timeSlots);
+        form.setValue('timeSlots', timeSlots, { shouldDirty: true });
         toast.success("Time applied to all selected days");
       }
     }
@@ -136,7 +135,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                     onValueChange={() => handleDaySelect(day)}
                   >
                     <SelectTrigger
-                      className={`w-full ${selectedDays.includes(day) ? 'border-primary' : ''}`}
+                      className={`w-full transform-gpu ${selectedDays.includes(day) ? 'border-primary' : ''}`}
                     >
                       <SelectValue placeholder={day} />
                     </SelectTrigger>
@@ -170,7 +169,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                                 variant={timeSlots[day] === slot.value ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => handleTimeSelect(day, slot.value)}
-                                className={`flex flex-col items-center justify-center h-auto py-2 ${
+                                className={`transform-gpu flex flex-col items-center justify-center h-auto py-2 ${
                                   timeSlots[day] === slot.value 
                                     ? 'bg-primary text-white hover:bg-primary/90'
                                     : 'hover:bg-gray-100'
