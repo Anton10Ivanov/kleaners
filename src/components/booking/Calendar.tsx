@@ -5,8 +5,8 @@ import { toZonedTime } from 'date-fns-tz';
 import { Link } from "react-router-dom";
 import { addToGoogleCalendar } from "@/utils/googleCalendar";
 import { toast } from "sonner";
-import { DatePicker } from "./calendar/DatePicker";
-import { TimeSlots } from "./calendar/TimeSlots";
+import { DatePicker } from "@/components/booking/calendar/DatePicker";
+import { TimeSlots } from "@/components/booking/calendar/TimeSlots";
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
 

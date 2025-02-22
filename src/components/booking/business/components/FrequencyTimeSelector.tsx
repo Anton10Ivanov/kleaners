@@ -1,4 +1,3 @@
-
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
 import { toast } from "sonner";
@@ -24,7 +23,7 @@ interface FrequencyTimeSelectorProps {
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
   const selectedDays = useMemo(() => 
-    orderDaysChronologically([...(form.watch('selectedDays') || [])], [...DAYS]),
+    orderDaysChronologically([...(form.watch('selectedDays') || [])], Array.from(DAYS)),
     [form.watch('selectedDays')]
   );
   const timeSlots = form.watch('timeSlots') || {};
@@ -47,7 +46,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     }
     
     requestAnimationFrame(() => {
-      form.setValue('selectedDays', orderDaysChronologically(newDays, [...DAYS]), { shouldDirty: true });
+      form.setValue('selectedDays', orderDaysChronologically(newDays, Array.from(DAYS)), { shouldDirty: true });
     });
   };
 
@@ -61,7 +60,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
     const selectedTimeSlots = Object.values(currentTimeSlots).filter(Boolean);
     if (selectedTimeSlots.length === 1) {
-      const confirmed = window.confirm(`Would you like to apply ${TIME_SLOTS.find(slot => slot.value === time)?.label} to all selected days?`);
+      const confirmed = window.confirm(`Would you like to apply ${Array.from(TIME_SLOTS).find(slot => slot.value === time)?.label} to all selected days?`);
       if (confirmed) {
         const updatedTimeSlots = { ...currentTimeSlots };
         selectedDays.forEach(selectedDay => {
