@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -57,6 +58,15 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     }
     
     form.setValue('selectedDays', newDays);
+  };
+
+  const applyTimeToAllDays = (time: string) => {
+    const timeSlots = { ...form.getValues('timeSlots') };
+    selectedDays.forEach(day => {
+      timeSlots[day] = time;
+    });
+    form.setValue('timeSlots', timeSlots);
+    toast.success("Time applied to all selected days");
   };
 
   return (
@@ -126,15 +136,39 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
         {selectedDays.length > 0 && (
           <div className="space-y-4">
-            {isCustom ? (
-              selectedDays.map((day) => (
-                <div key={day} className="p-4 border rounded-lg">
+            {selectedDays.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => applyTimeToAllDays('anytime')}
+                >
+                  Apply "Anytime" to all days
+                </Button>
+                {TIME_SLOTS.slice(1).map((slot) => (
+                  <Button
+                    key={slot.value}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => applyTimeToAllDays(slot.value)}
+                  >
+                    Apply {slot.label.split(' ')[0]} to all days
+                  </Button>
+                ))}
+              </div>
+            )}
+
+            <div className={`grid ${selectedDays.length > 3 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
+              {selectedDays.map((day) => (
+                <div key={day} className="p-4 border rounded-lg bg-gray-50">
                   <FormField
                     control={form.control}
                     name={`timeSlots.${day}`}
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>{day} Time Preference</FormLabel>
+                        <FormLabel>{day}</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -153,32 +187,8 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                     )}
                   />
                 </div>
-              ))
-            ) : (
-              <FormField
-                control={form.control}
-                name="preferredTime"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>Preferred Time</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        {TIME_SLOTS.map((slot) => (
-                          <div key={slot.value} className="flex items-center space-x-3">
-                            <RadioGroupItem value={slot.value} id={slot.value} />
-                            <Label htmlFor={slot.value}>{slot.label}</Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            )}
+              ))}
+            </div>
           </div>
         )}
       </div>
