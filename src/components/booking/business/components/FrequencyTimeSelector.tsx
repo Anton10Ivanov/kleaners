@@ -2,10 +2,17 @@
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface FrequencyTimeSelectorProps {
   form: UseFormReturn<BookingFormData>;
@@ -29,35 +36,53 @@ const TIME_SLOTS = [
 
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
+  const selectedDays = form.watch('selectedDays') || [];
   const isCustom = frequency === Frequency.Custom;
+  const isWeekly = frequency === Frequency.Weekly;
+
+  const handleDaySelect = (day: string) => {
+    const currentDays = form.getValues('selectedDays') || [];
+    
+    if (isWeekly && currentDays.length >= 1 && !currentDays.includes(day)) {
+      toast.error("Weekly cleaning allows only one day selection");
+      return;
+    }
+
+    let newDays: string[];
+    if (currentDays.includes(day)) {
+      newDays = currentDays.filter(d => d !== day);
+    } else {
+      newDays = isWeekly ? [day] : [...currentDays, day];
+    }
+    
+    form.setValue('selectedDays', newDays);
+  };
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
       <h3 className="text-lg font-semibold mb-4">Preferred Days & Times</h3>
       
       <div className="space-y-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {DAYS.map((day) => (
             <FormField
               key={day}
               control={form.control}
-              name={`selectedDays`}
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value?.includes(day)}
-                      onCheckedChange={(checked) => {
-                        const currentValue = field.value || [];
-                        const newValue = checked
-                          ? [...currentValue, day]
-                          : currentValue.filter((val) => val !== day);
-                        field.onChange(newValue);
-                      }}
-                    />
-                  </FormControl>
-                  <Label>{day}</Label>
-                </FormItem>
+              name="selectedDays"
+              render={() => (
+                <Select
+                  value={selectedDays.includes(day) ? day : undefined}
+                  onValueChange={() => handleDaySelect(day)}
+                >
+                  <SelectTrigger
+                    className={`w-full ${selectedDays.includes(day) ? 'border-primary' : ''}`}
+                  >
+                    <SelectValue placeholder={day} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={day}>{day}</SelectItem>
+                  </SelectContent>
+                </Select>
               )}
             />
           ))}
@@ -65,7 +90,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
         {isCustom ? (
           <div className="space-y-4">
-            {form.watch('selectedDays')?.map((day) => (
+            {selectedDays.map((day) => (
               <div key={day} className="p-4 border rounded-lg">
                 <FormField
                   control={form.control}
@@ -131,3 +156,4 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     </div>
   );
 };
+
