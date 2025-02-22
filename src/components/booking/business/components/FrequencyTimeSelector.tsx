@@ -5,6 +5,7 @@ import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/for
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -43,8 +44,8 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const handleDaySelect = (day: string) => {
     const currentDays = form.getValues('selectedDays') || [];
     
-    if (isWeekly && currentDays.length >= 1 && !currentDays.includes(day)) {
-      toast.error("Weekly cleaning allows only one day selection");
+    if (isWeekly) {
+      form.setValue('selectedDays', [day]);
       return;
     }
 
@@ -52,7 +53,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     if (currentDays.includes(day)) {
       newDays = currentDays.filter(d => d !== day);
     } else {
-      newDays = isWeekly ? [day] : [...currentDays, day];
+      newDays = [...currentDays, day];
     }
     
     form.setValue('selectedDays', newDays);
@@ -63,94 +64,122 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       <h3 className="text-lg font-semibold mb-4">Preferred Days & Times</h3>
       
       <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
-          {DAYS.map((day) => (
-            <FormField
-              key={day}
-              control={form.control}
-              name="selectedDays"
-              render={() => (
-                <Select
-                  value={selectedDays.includes(day) ? day : undefined}
-                  onValueChange={() => handleDaySelect(day)}
-                >
-                  <SelectTrigger
-                    className={`w-full ${selectedDays.includes(day) ? 'border-primary' : ''}`}
-                  >
-                    <SelectValue placeholder={day} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={day}>{day}</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          ))}
-        </div>
-
-        {isCustom ? (
-          <div className="space-y-4">
-            {selectedDays.map((day) => (
-              <div key={day} className="p-4 border rounded-lg">
-                <FormField
-                  control={form.control}
-                  name={`timeSlots.${day}`}
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>{day} Time Preference</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-1"
-                        >
-                          {TIME_SLOTS.map((slot) => (
-                            <div key={slot.value} className="flex items-center space-x-3">
-                              <RadioGroupItem value={slot.value} id={`${day}-${slot.value}`} />
-                              <Label htmlFor={`${day}-${slot.value}`}>{slot.label}</Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      {field.value === 'exact' && (
-                        <Input
-                          type="time"
-                          min="07:00"
-                          max="20:00"
-                          onChange={(e) => form.setValue(`exactTimes.${day}`, e.target.value)}
-                          className="mt-2 w-full sm:w-auto"
-                        />
-                      )}
-                    </FormItem>
-                  )}
+        {isWeekly ? (
+          <FormField
+            control={form.control}
+            name="selectedDays"
+            render={() => (
+              <Select
+                value={selectedDays[0]}
+                onValueChange={(day) => handleDaySelect(day)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a day" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DAYS.map((day) => (
+                    <SelectItem key={day} value={day}>{day}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+        ) : isCustom ? (
+          <div className="grid grid-cols-2 gap-4">
+            {DAYS.map((day) => (
+              <div key={day} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`day-${day}`}
+                  checked={selectedDays.includes(day)}
+                  onCheckedChange={() => handleDaySelect(day)}
                 />
+                <Label htmlFor={`day-${day}`}>{day}</Label>
               </div>
             ))}
           </div>
         ) : (
-          <FormField
-            control={form.control}
-            name="preferredTime"
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>Preferred Time</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col space-y-1"
+          <div className="grid grid-cols-2 gap-4">
+            {DAYS.map((day) => (
+              <FormField
+                key={day}
+                control={form.control}
+                name="selectedDays"
+                render={() => (
+                  <Select
+                    value={selectedDays.includes(day) ? day : undefined}
+                    onValueChange={() => handleDaySelect(day)}
                   >
-                    {TIME_SLOTS.map((slot) => (
-                      <div key={slot.value} className="flex items-center space-x-3">
-                        <RadioGroupItem value={slot.value} id={slot.value} />
-                        <Label htmlFor={slot.value}>{slot.label}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </FormItem>
+                    <SelectTrigger
+                      className={`w-full ${selectedDays.includes(day) ? 'border-primary' : ''}`}
+                    >
+                      <SelectValue placeholder={day} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={day}>{day}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            ))}
+          </div>
+        )}
+
+        {selectedDays.length > 0 && (
+          <div className="space-y-4">
+            {isCustom ? (
+              selectedDays.map((day) => (
+                <div key={day} className="p-4 border rounded-lg">
+                  <FormField
+                    control={form.control}
+                    name={`timeSlots.${day}`}
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>{day} Time Preference</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+                            {TIME_SLOTS.map((slot) => (
+                              <div key={slot.value} className="flex items-center space-x-3">
+                                <RadioGroupItem value={slot.value} id={`${day}-${slot.value}`} />
+                                <Label htmlFor={`${day}-${slot.value}`}>{slot.label}</Label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ))
+            ) : (
+              <FormField
+                control={form.control}
+                name="preferredTime"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Preferred Time</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-1"
+                      >
+                        {TIME_SLOTS.map((slot) => (
+                          <div key={slot.value} className="flex items-center space-x-3">
+                            <RadioGroupItem value={slot.value} id={slot.value} />
+                            <Label htmlFor={slot.value}>{slot.label}</Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             )}
-          />
+          </div>
         )}
       </div>
     </div>
