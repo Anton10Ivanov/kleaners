@@ -47,16 +47,29 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       newDays = [...currentDays, day];
     }
     
-    // Validate minimum two days for custom schedule
-    if (frequency === Frequency.Custom && newDays.length < 2) {
-      toast.error("Please select at least 2 days for custom schedule");
-      return;
-    }
-    
     requestAnimationFrame(() => {
       form.setValue('selectedDays', orderDaysChronologically(newDays, Array.from(DAYS)), { shouldDirty: true });
     });
   };
+
+  // Add validation for minimum days when attempting to proceed
+  const validateDaysSelected = () => {
+    if (frequency === Frequency.Custom && (form.getValues('selectedDays')?.length || 0) < 2) {
+      toast.error("Please select at least 2 days for custom schedule before proceeding");
+      return false;
+    }
+    return true;
+  };
+
+  // Add effect to trigger validation when form is submitted
+  form.register('selectedDays', {
+    validate: () => {
+      if (frequency === Frequency.Custom && (form.getValues('selectedDays')?.length || 0) < 2) {
+        return "Please select at least 2 days for custom schedule";
+      }
+      return true;
+    }
+  });
 
   const handleTimeSelect = (day: string, time: string) => {
     const currentTimeSlots = { ...form.getValues('timeSlots') };
@@ -168,3 +181,4 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     </div>
   );
 };
+

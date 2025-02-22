@@ -28,6 +28,15 @@ export const useBookingForm = () => {
   const { handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
 
   const handleNextStep = () => {
+    // Add validation for custom schedule when proceeding to step 3
+    if (currentStep === 2 && 
+        watch('service') === 'business' && 
+        watch('frequency') === Frequency.Custom && 
+        (watch('selectedDays')?.length || 0) < 2) {
+      toast.error("Please select at least 2 days for custom schedule before proceeding");
+      return;
+    }
+    
     console.log('Incrementing step from:', currentStep);
     setCurrentStep(prevStep => {
       const nextStep = prevStep + 1;
@@ -101,4 +110,3 @@ export const useBookingForm = () => {
     setValue
   };
 };
-
