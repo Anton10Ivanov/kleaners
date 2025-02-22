@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export enum Frequency {
@@ -53,3 +52,10 @@ export const bookingSchema = z.object({
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
+
+// Type for the time slots
+export interface TimeSlot {
+  label: string;
+  value: string;
+  description?: string;
+}

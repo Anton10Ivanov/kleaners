@@ -1,11 +1,10 @@
-
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
 import { toast } from "sonner";
 import { DaySelector } from "./days/DaySelector";
 import { TimeSlotSelector } from "./time/TimeSlotSelector";
 import { useMemo } from "react";
-import { DAYS } from "../constants/timeConstants";
+import { DAYS, TIME_SLOTS } from "../constants/timeConstants";
 import { orderDaysChronologically } from "../utils/timeUtils";
 import {
   Tooltip,
@@ -16,7 +15,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { InfoIcon } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface FrequencyTimeSelectorProps {
   form: UseFormReturn<BookingFormData>;
@@ -25,7 +23,7 @@ interface FrequencyTimeSelectorProps {
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
   const selectedDays = useMemo(() => 
-    orderDaysChronologically([...(form.watch('selectedDays') || [])], DAYS),
+    orderDaysChronologically([...(form.watch('selectedDays') || [])], Array.from(DAYS)),
     [form.watch('selectedDays')]
   );
   const timeSlots = form.watch('timeSlots') || {};
@@ -48,7 +46,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     }
     
     requestAnimationFrame(() => {
-      form.setValue('selectedDays', orderDaysChronologically(newDays, DAYS), { shouldDirty: true });
+      form.setValue('selectedDays', orderDaysChronologically(newDays, Array.from(DAYS)), { shouldDirty: true });
     });
   };
 
@@ -59,6 +57,21 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     requestAnimationFrame(() => {
       form.setValue('timeSlots', currentTimeSlots, { shouldDirty: true });
     });
+
+    const selectedTimeSlots = Object.values(currentTimeSlots).filter(Boolean);
+    if (selectedTimeSlots.length === 1) {
+      const confirmed = window.confirm(`Would you like to apply ${Array.from(TIME_SLOTS).find(slot => slot.value === time)?.label} to all selected days?`);
+      if (confirmed) {
+        const updatedTimeSlots = { ...currentTimeSlots };
+        selectedDays.forEach(selectedDay => {
+          updatedTimeSlots[selectedDay] = time;
+        });
+        requestAnimationFrame(() => {
+          form.setValue('timeSlots', updatedTimeSlots, { shouldDirty: true });
+          toast.success("Time applied to all selected days");
+        });
+      }
+    }
   };
 
   return (
@@ -93,25 +106,6 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
             />
           </div>
 
-          <div className="space-y-4">
-            <Label>Start anytime after</Label>
-            <Select
-              value={form.watch('preferredTime') || ''}
-              onValueChange={(value) => form.setValue('preferredTime', value)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select start time" />
-              </SelectTrigger>
-              <SelectContent>
-                {generateTimeOptions().map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
           <div className="flex items-center justify-between">
             <Label htmlFor="contact-toggle">Contact for schedule specification</Label>
             <Switch
@@ -141,6 +135,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                   form={form}
                   day={day}
                   timeSlots={timeSlots}
+                  availableTimeSlots={TIME_SLOTS}
                   onTimeSelect={handleTimeSelect}
                 />
               ))}
