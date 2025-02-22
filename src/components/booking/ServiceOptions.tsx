@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { Check } from "lucide-react";
 import { Frequency } from "@/schemas/booking";
+import { useEffect } from "react";
 
 interface ServiceOptionsProps {
   frequency: Frequency | undefined;
@@ -22,6 +23,13 @@ interface ServiceOptionsProps {
 }
 
 const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
+  // Set default frequency to Biweekly when component mounts
+  useEffect(() => {
+    if (!frequency) {
+      setFrequency(Frequency.Biweekly);
+    }
+  }, []);
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="flex justify-between items-center mb-6">
@@ -65,7 +73,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
         </Popover>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Onetime ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency(Frequency.Onetime)}
@@ -85,7 +93,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Biweekly ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency(Frequency.Biweekly)}
         >
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-xs">
+          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white px-2 py-0.5 rounded-full text-[10px] whitespace-nowrap">
             Most Popular
           </div>
           <h4 className="font-semibold mb-1">Every 2 Weeks</h4>
@@ -93,12 +101,12 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
         </div>
         <div 
-          className={`sm:col-span-2 md:col-span-3 p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
+          className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency(Frequency.Custom)}
         >
           <h4 className="font-semibold mb-1">Custom Schedule</h4>
-          <p className="text-gray-600">Contact us for custom scheduling and pricing</p>
-          <p className="text-xs text-gray-500 mt-1">Perfect for special requirements or varying schedules</p>
+          <p className="text-gray-600">Contact us for pricing</p>
+          <p className="text-xs text-gray-500 mt-1">For special requirements</p>
         </div>
       </div>
     </div>
