@@ -16,10 +16,8 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
   const businessType = form.watch("businessType");
   const frequency = form.watch("frequency") as Frequency | undefined;
 
-  const showCalendar = frequency === Frequency.Onetime || frequency === Frequency.Biweekly;
-  const showFrequencyTimeSelector = frequency === Frequency.Weekly || 
-    frequency === Frequency.Biweekly || 
-    frequency === Frequency.Custom;
+  const showFrequencyTimeSelector = frequency === Frequency.Custom;
+  const showCalendar = frequency && frequency !== Frequency.Custom;
 
   return (
     <div className="space-y-6">
@@ -37,3 +35,4 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
 };
 
 export default BusinessStep;
+
