@@ -5,37 +5,26 @@ import { toast } from "sonner";
 import { DaySelector } from "./days/DaySelector";
 import { TimeSlotSelector } from "./time/TimeSlotSelector";
 import { useMemo } from "react";
+import { DAYS, TIME_SLOTS } from "../constants/timeConstants";
+import { orderDaysChronologically } from "../utils/timeUtils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { InfoIcon } from "lucide-react";
 
 interface FrequencyTimeSelectorProps {
   form: UseFormReturn<BookingFormData>;
 }
 
-const DAYS = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-];
-
-const TIME_SLOTS = [
-  { label: 'Anytime', value: 'anytime' },
-  { label: 'Morning', value: 'morning', description: '7:00–12:00' },
-  { label: 'Afternoon', value: 'afternoon', description: '12:00–17:00' },
-  { label: 'Evening', value: 'evening', description: '17:00–20:00' }
-];
-
-const orderDaysChronologically = (days: string[]) => {
-  return [...days].sort((a, b) => {
-    return DAYS.indexOf(a) - DAYS.indexOf(b);
-  });
-};
-
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
   const selectedDays = useMemo(() => 
-    orderDaysChronologically(form.watch('selectedDays') || []),
+    orderDaysChronologically(form.watch('selectedDays') || [], DAYS),
     [form.watch('selectedDays')]
   );
   const timeSlots = form.watch('timeSlots') || {};
@@ -58,7 +47,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     }
     
     requestAnimationFrame(() => {
-      form.setValue('selectedDays', orderDaysChronologically(newDays), { shouldDirty: true });
+      form.setValue('selectedDays', orderDaysChronologically(newDays, DAYS), { shouldDirty: true });
     });
   };
 
@@ -91,6 +80,45 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       <h3 className="text-lg font-semibold mb-4">Preferred Days & Times</h3>
       
       <div className="space-y-6">
+        <div className="space-y-4 border-b pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="key-toggle">Provide key for faster service</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <InfoIcon className="h-4 w-4 text-[#F97316] cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent 
+                    className="bg-[#F97316] text-white border-none"
+                    sideOffset={5}
+                  >
+                    <p>Providing a key allows our cleaners to start immediately without waiting for someone to let them in.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <Switch
+              id="key-toggle"
+              onCheckedChange={(checked) => {
+                form.setValue('provideKey', checked);
+              }}
+              checked={form.watch('provideKey') || false}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Label htmlFor="contact-toggle">Contact for schedule specification</Label>
+            <Switch
+              id="contact-toggle"
+              onCheckedChange={(checked) => {
+                form.setValue('contactForSchedule', checked);
+              }}
+              checked={form.watch('contactForSchedule') || false}
+            />
+          </div>
+        </div>
+
         <DaySelector
           form={form}
           days={DAYS}
