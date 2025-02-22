@@ -18,31 +18,55 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
       render={({ field }) => (
         <FormItem className="space-y-4">
           <FormLabel className="text-lg font-medium">Type of Business Property</FormLabel>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className={cn(
+            "grid gap-4",
+            field.value 
+              ? "grid-cols-1" // Show only one column when an option is selected
+              : "grid-cols-2 md:grid-cols-3" // Show multiple columns when no option is selected
+          )}>
             {businessTypes.map((type) => {
               const Icon = type.icon;
+              const isSelected = field.value === type.value;
+              
+              // Hide unselected options when one is selected
+              if (field.value && !isSelected) {
+                return null;
+              }
+
               return (
                 <div
                   key={type.value}
                   className={cn(
                     "relative flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all",
                     "hover:border-primary hover:bg-primary/5",
-                    field.value === type.value
-                      ? "border-primary bg-primary/5"
-                      : "border-border"
+                    isSelected
+                      ? "border-primary bg-primary/5 w-full"
+                      : "border-border",
+                    field.value ? "col-span-full" : "" // Make selected option full width
                   )}
-                  onClick={() => field.onChange(type.value)}
+                  onClick={() => {
+                    // If clicking the same option again, deselect it
+                    if (isSelected) {
+                      field.onChange("");
+                      if (type.value === "other") {
+                        form.setValue("specialRequirements", "");
+                      }
+                    } else {
+                      field.onChange(type.value);
+                    }
+                  }}
                 >
                   <Icon className="w-8 h-8 mb-2" />
                   <span className="text-sm text-center">{type.label}</span>
-                  {type.value === "other" && field.value === "other" && (
+                  {type.value === "other" && isSelected && (
                     <Input
                       placeholder="Please specify"
                       className="mt-2 w-full text-sm"
+                      value={form.watch("specialRequirements") || ""}
                       onChange={(e) => {
-                        field.onChange("other");
                         form.setValue("specialRequirements", e.target.value);
                       }}
+                      onClick={(e) => e.stopPropagation()} // Prevent the parent div's onClick from firing
                     />
                   )}
                 </div>
