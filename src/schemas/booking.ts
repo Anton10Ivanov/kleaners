@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export enum Frequency {
@@ -10,7 +9,7 @@ export enum Frequency {
 
 export const bookingSchema = z.object({
   // Basic booking info
-  service: z.enum(["regular", "business", "moveInOut"]),
+  service: z.enum(["regular", "business", "moveInOut", "construction"]),
   postalCode: z.string().min(1, "Postal code is required"),
   frequency: z.nativeEnum(Frequency),
   hours: z.number().min(1),
@@ -60,4 +59,3 @@ export interface TimeSlot {
   value: string;
   description?: string;
 }
-
