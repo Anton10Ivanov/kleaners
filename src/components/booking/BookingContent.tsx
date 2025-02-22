@@ -45,9 +45,20 @@ const BookingContent = ({
                 frequency={frequency}
                 setFrequency={(freq) => form.setValue('frequency', freq)} 
               />
-              <HoursSelection form={form} />
-              <Calendar form={form} />
-              <Extras form={form} />
+              {frequency !== Frequency.Custom && (
+                <>
+                  <HoursSelection form={form} />
+                  <Calendar form={form} />
+                  <Extras form={form} />
+                </>
+              )}
+              {frequency === Frequency.Custom && (
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                  <p className="text-gray-600">
+                    Our team will contact you shortly to discuss your custom cleaning schedule and requirements.
+                  </p>
+                </div>
+              )}
             </motion.div>
           )}
           {currentStep === 2 && selectedService === 'moveinout' && (
@@ -91,4 +102,3 @@ const BookingContent = ({
 };
 
 export default BookingContent;
-

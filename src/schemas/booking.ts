@@ -5,7 +5,8 @@ export enum Frequency {
   Onetime = "onetime",
   Weekly = "weekly",
   Biweekly = "biweekly",
-  Monthly = "monthly"
+  Monthly = "monthly",
+  Custom = "custom"
 }
 
 export const bookingSchema = z.object({
