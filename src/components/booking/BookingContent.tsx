@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
@@ -31,11 +30,8 @@ const BookingContent = ({
 
   const postalCode = form.watch('postalCode') || '';
   const frequency = form.watch('frequency') as Frequency | undefined;
-  const showFrequencyTimeSelector = frequency === Frequency.Weekly || 
-    frequency === Frequency.Biweekly || 
-    frequency === Frequency.Custom;
-  const showCalendar = frequency === Frequency.Onetime || frequency === Frequency.Biweekly;
-
+  const showCalendar = frequency && frequency !== Frequency.Custom;
+  
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -59,16 +55,18 @@ const BookingContent = ({
                 <>
                   <HoursSelection form={form} />
                   {showCalendar && <Calendar form={form} />}
-                  {showFrequencyTimeSelector && <FrequencyTimeSelector form={form} />}
                   <Extras form={form} />
                 </>
               )}
               {frequency === Frequency.Custom && (
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                  <p className="text-gray-600">
-                    Our team will contact you shortly to discuss your custom cleaning schedule and requirements.
-                  </p>
-                </div>
+                <>
+                  <FrequencyTimeSelector form={form} />
+                  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <p className="text-gray-600">
+                      Our team will contact you shortly to discuss your custom cleaning schedule and requirements.
+                    </p>
+                  </div>
+                </>
               )}
             </motion.div>
           )}
@@ -113,4 +111,3 @@ const BookingContent = ({
 };
 
 export default BookingContent;
-

@@ -37,16 +37,12 @@ const Calendar = ({ form }: CalendarProps) => {
     if (!date) return;
 
     const [startTime] = timeSlot.split('-');
-    const [hours, minutes] = startTime.split(':').map(Number);
-    const selectedDateTime = new Date(date);
-    selectedDateTime.setHours(hours, minutes);
-
     setSelectedTimeSlot(timeSlot);
-    form.setValue('startTime', startTime);
+    form.setValue('preferredTime', timeSlot);
     
     try {
       await addToGoogleCalendar(
-        selectedDateTime,
+        date,
         form.watch('service') || "Regular Cleaning",
         form.watch('hours') || 2,
         form.watch('address') || "Address will be provided"
@@ -109,3 +105,4 @@ const Calendar = ({ form }: CalendarProps) => {
 };
 
 export default Calendar;
+
