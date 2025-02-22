@@ -1,4 +1,3 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/Hero';
@@ -50,7 +49,7 @@ const Index = () => {
             transition={{ duration: 0.3 }}
           >
             <Hero 
-              selectedService={selectedService || ''}
+              selectedService={selectedService}
               setSelectedService={(service) => setValue('service', service)}
               postalCode={postalCode}
               setPostalCode={(code) => setValue('postalCode', code)}
@@ -74,12 +73,12 @@ const Index = () => {
               <div className="flex flex-col md:flex-row gap-8 relative">
                 <BookingContent 
                   currentStep={currentStep}
-                  selectedService={selectedService || ''}
+                  selectedService={selectedService}
                   form={form}
                 />
                 <div className="w-full md:w-[20%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
                   <BookingSummary 
-                    selectedService={selectedService || ''}
+                    selectedService={selectedService}
                     frequency={frequency || ''}
                     hours={hours}
                     currentPrice={currentPrice}
@@ -113,4 +112,3 @@ const Index = () => {
 };
 
 export default Index;
-
