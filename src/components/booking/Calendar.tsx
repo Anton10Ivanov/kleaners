@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { startOfWeek, addDays, eachDayOfInterval } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
@@ -27,12 +26,6 @@ const Calendar = ({ form }: CalendarProps) => {
     end: addDays(weekStart, 6)
   });
 
-  const timeSlots = Array.from({ length: 27 }, (_, i) => {
-    const hour = Math.floor(i / 2) + 7;
-    const minutes = (i % 2) * 30;
-    return `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  });
-
   const handleDateSelect = (selectedDate: Date | undefined) => {
     form.setValue('date', selectedDate);
     setSelectedTimeSlot(undefined);
@@ -41,18 +34,20 @@ const Calendar = ({ form }: CalendarProps) => {
   const handleTimeSlotSelect = async (timeSlot: string) => {
     if (!date) return;
 
-    const [hours, minutes] = timeSlot.split(':').map(Number);
+    const [startTime] = timeSlot.split('-');
+    const [hours, minutes] = startTime.split(':').map(Number);
     const selectedDateTime = new Date(date);
     selectedDateTime.setHours(hours, minutes);
 
     setSelectedTimeSlot(timeSlot);
+    form.setValue('timeSlot', timeSlot);
     
     try {
       await addToGoogleCalendar(
         selectedDateTime,
-        "Regular Cleaning",
+        form.watch('service') || "Regular Cleaning",
         2,
-        "Address will be provided"
+        form.watch('address') || "Address will be provided"
       );
       toast.success("Event added to Google Calendar!");
     } catch (error) {
@@ -72,7 +67,7 @@ const Calendar = ({ form }: CalendarProps) => {
   return (
     <div className="bg-white dark:bg-dark-background p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors duration-200">
       <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
-        Select a date and time for first cleaning
+        Select a date and time for cleaning
       </h3>
 
       <div className="space-y-6">
@@ -88,7 +83,7 @@ const Calendar = ({ form }: CalendarProps) => {
         />
 
         <TimeSlots
-          timeSlots={timeSlots}
+          timeSlots={[]}
           selectedTimeSlot={selectedTimeSlot}
           date={date}
           nowInBerlin={nowInBerlin}
