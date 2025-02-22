@@ -65,7 +65,7 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
         </Popover>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div 
           className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Onetime ? 'border-primary' : 'border-gray-200'}`}
           onClick={() => setFrequency(Frequency.Onetime)}
@@ -91,6 +91,14 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           <h4 className="font-semibold mb-1">Every 2 Weeks</h4>
           <p className="text-gray-600">30.00 €/hour</p>
           <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
+        </div>
+        <div 
+          className={`sm:col-span-2 md:col-span-3 p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
+          onClick={() => setFrequency(Frequency.Custom)}
+        >
+          <h4 className="font-semibold mb-1">Custom Schedule</h4>
+          <p className="text-gray-600">Contact us for custom scheduling and pricing</p>
+          <p className="text-xs text-gray-500 mt-1">Perfect for special requirements or varying schedules</p>
         </div>
       </div>
     </div>
