@@ -1,10 +1,11 @@
+
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
 import { toast } from "sonner";
 import { DaySelector } from "./days/DaySelector";
 import { TimeSlotSelector } from "./time/TimeSlotSelector";
 import { useMemo } from "react";
-import { DAYS, TIME_SLOTS } from "../constants/timeConstants";
+import { DAYS } from "../constants/timeConstants";
 import { orderDaysChronologically } from "../utils/timeUtils";
 import {
   Tooltip,
@@ -60,7 +61,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
     const selectedTimeSlots = Object.values(currentTimeSlots).filter(Boolean);
     if (selectedTimeSlots.length === 1) {
-      const confirmed = window.confirm(`Would you like to apply ${Array.from(TIME_SLOTS).find(slot => slot.value === time)?.label} to all selected days?`);
+      const confirmed = window.confirm(`Would you like to apply ${time} to all selected days?`);
       if (confirmed) {
         const updatedTimeSlots = { ...currentTimeSlots };
         selectedDays.forEach(selectedDay => {
@@ -120,7 +121,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
         <DaySelector
           form={form}
-          days={DAYS}
+          days={Array.from(DAYS)}
           selectedDays={selectedDays}
           frequency={frequency}
           onDaySelect={handleDaySelect}
@@ -135,7 +136,6 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                   form={form}
                   day={day}
                   timeSlots={timeSlots}
-                  availableTimeSlots={TIME_SLOTS}
                   onTimeSelect={handleTimeSelect}
                 />
               ))}
