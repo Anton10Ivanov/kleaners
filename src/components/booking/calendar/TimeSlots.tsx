@@ -2,13 +2,14 @@
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
 
 interface TimeSlotsProps {
-  timeSlots: string[];
   selectedTimeSlot: string | undefined;
   date: Date | undefined;
   nowInBerlin: Date;
   onTimeSlotSelect: (timeSlot: string) => void;
+  selectedHours: number;
 }
 
 export const TimeSlots = ({
@@ -16,7 +17,56 @@ export const TimeSlots = ({
   date,
   nowInBerlin,
   onTimeSlotSelect,
+  selectedHours,
 }: TimeSlotsProps) => {
+  const [availableSlots, setAvailableSlots] = useState<{[key: string]: boolean}>({});
+  
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      if (!date) return;
+      
+      const { data: availability } = await supabase
+        .from('calendar_events')
+        .select('start_time, end_time')
+        .gte('start_time', format(date, 'yyyy-MM-dd'))
+        .lt('start_time', format(new Date(date.getTime() + 24 * 60 * 60 * 1000), 'yyyy-MM-dd'));
+
+      const slots = generateTimeSlots().reduce((acc, slot) => {
+        const [startTime] = slot.split('-');
+        acc[startTime] = true; // Initially set all slots as available
+        return acc;
+      }, {} as {[key: string]: boolean});
+
+      // Mark slots as unavailable if they overlap with existing bookings
+      if (availability) {
+        availability.forEach(booking => {
+          const bookingStart = new Date(booking.start_time);
+          const bookingEnd = new Date(booking.end_time);
+          
+          Object.keys(slots).forEach(slotTime => {
+            const [hours, minutes] = slotTime.split(':').map(Number);
+            const slotDate = new Date(date);
+            slotDate.setHours(hours, minutes);
+            
+            const slotEndDate = new Date(slotDate.getTime() + selectedHours * 60 * 60 * 1000);
+            
+            if (
+              (slotDate >= bookingStart && slotDate < bookingEnd) ||
+              (slotEndDate > bookingStart && slotEndDate <= bookingEnd) ||
+              (slotDate <= bookingStart && slotEndDate >= bookingEnd)
+            ) {
+              slots[slotTime] = false;
+            }
+          });
+        });
+      }
+      
+      setAvailableSlots(slots);
+    };
+
+    fetchAvailability();
+  }, [date, selectedHours]);
+
   if (!date) {
     return null;
   }
@@ -26,39 +76,24 @@ export const TimeSlots = ({
 
   const generateTimeSlots = () => {
     const slots = [];
-    for (let hour = 7; hour <= 19; hour++) {
+    for (let hour = 7; hour < 20; hour++) {
       for (let minute = 0; minute <= 30; minute += 30) {
-        if (hour === 19 && minute === 30) continue; // Skip 19:30 as we want to end at 20:00
         const formattedHour = hour.toString().padStart(2, '0');
         const formattedMinute = minute.toString().padStart(2, '0');
-        const startTime = `${formattedHour}:${formattedMinute}`;
-        
-        // Calculate end time
-        let endHour = minute === 30 ? hour + 1 : hour;
-        let endMinute = minute === 30 ? '00' : '30';
-        if (hour === 19 && minute === 0) {
-          endHour = 20;
-          endMinute = '00';
-        }
-        const formattedEndHour = endHour.toString().padStart(2, '0');
-        slots.push(`${startTime}-${formattedEndHour}:${endMinute}`);
+        const timeSlot = `${formattedHour}:${formattedMinute}`;
+        slots.push(`${timeSlot}-${calculateEndTime(timeSlot)}`);
       }
     }
     return slots;
   };
 
-  const checkAvailability = async (timeSlot: string) => {
-    const { data: availability } = await supabase
-      .from('calendar_availability')
-      .select('is_available')
-      .eq('date', format(date, 'yyyy-MM-dd'))
-      .eq('time_slot', timeSlot)
-      .maybeSingle();
-
-    return availability?.is_available ?? true;
+  const calculateEndTime = (startTime: string) => {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const endDate = new Date();
+    endDate.setHours(hours, minutes);
+    endDate.setTime(endDate.getTime() + selectedHours * 60 * 60 * 1000);
+    return `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
   };
-
-  const timeSlots = generateTimeSlots();
 
   return (
     <div className="mt-6">
@@ -68,20 +103,27 @@ export const TimeSlots = ({
       </h4>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {timeSlots.map((slot) => (
-          <button
-            key={slot}
-            onClick={() => onTimeSlotSelect(slot)}
-            disabled={isPastDate}
-            className={`p-3 rounded-lg border text-sm transition-colors ${
-              selectedTimeSlot === slot
-                ? "border-primary bg-primary/5"
-                : "border-gray-200 hover:border-primary/50"
-            } ${isPastDate ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-          >
-            {slot}
-          </button>
-        ))}
+        {generateTimeSlots().map((slot) => {
+          const [startTime] = slot.split('-');
+          const isAvailable = availableSlots[startTime];
+          
+          return (
+            <button
+              key={slot}
+              onClick={() => isAvailable && onTimeSlotSelect(slot)}
+              disabled={isPastDate || !isAvailable}
+              className={`p-3 rounded-lg border text-sm transition-colors ${
+                selectedTimeSlot === slot
+                  ? "border-primary bg-primary/5"
+                  : isAvailable 
+                    ? "border-gray-200 hover:border-primary/50"
+                    : "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
+              }`}
+            >
+              {slot}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

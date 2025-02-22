@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { startOfWeek, addDays, eachDayOfInterval } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
@@ -17,6 +18,7 @@ const Calendar = ({ form }: CalendarProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>();
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const date = form.watch('date');
+  const hours = form.watch('hours') || 2;
 
   const nowInBerlin = toZonedTime(new Date(), 'Europe/Berlin');
   const futureLimit = addDays(nowInBerlin, 31);
@@ -40,13 +42,13 @@ const Calendar = ({ form }: CalendarProps) => {
     selectedDateTime.setHours(hours, minutes);
 
     setSelectedTimeSlot(timeSlot);
-    form.setValue('timeSlot', timeSlot);
+    form.setValue('startTime', startTime);
     
     try {
       await addToGoogleCalendar(
         selectedDateTime,
         form.watch('service') || "Regular Cleaning",
-        2,
+        form.watch('hours') || 2,
         form.watch('address') || "Address will be provided"
       );
       toast.success("Event added to Google Calendar!");
@@ -83,11 +85,11 @@ const Calendar = ({ form }: CalendarProps) => {
         />
 
         <TimeSlots
-          timeSlots={[]}
           selectedTimeSlot={selectedTimeSlot}
           date={date}
           nowInBerlin={nowInBerlin}
           onTimeSlotSelect={handleTimeSlotSelect}
+          selectedHours={hours}
         />
       </div>
       
