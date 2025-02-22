@@ -21,7 +21,7 @@ export const CleaningOptionsSelector = ({ form, businessType }: CleaningOptionsS
     <FormField
       control={form.control}
       name="cleaningOptions"
-      render={() => (
+      render={({ field }) => (
         <FormItem>
           <FormLabel className="text-lg">Select Cleaning Services</FormLabel>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -38,22 +38,25 @@ export const CleaningOptionsSelector = ({ form, businessType }: CleaningOptionsS
                       key={item}
                       control={form.control}
                       name="cleaningOptions"
-                      render={({ field }) => (
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <Checkbox
-                            checked={field.value?.includes(item)}
-                            onCheckedChange={(checked) => {
-                              const updatedValue = checked
-                                ? [...(field.value || []), item]
-                                : field.value?.filter((val) => val !== item) || [];
-                              field.onChange(updatedValue);
-                            }}
-                          />
-                          <FormLabel className="text-sm font-normal cursor-pointer">
-                            {item}
-                          </FormLabel>
-                        </FormItem>
-                      )}
+                      render={({ field: innerField }) => {
+                        const currentValue = (innerField.value || []) as string[];
+                        return (
+                          <FormItem className="flex items-center space-x-2 space-y-0">
+                            <Checkbox
+                              checked={currentValue.includes(item)}
+                              onCheckedChange={(checked) => {
+                                const updatedValue = checked
+                                  ? [...currentValue, item]
+                                  : currentValue.filter((val) => val !== item);
+                                innerField.onChange(updatedValue);
+                              }}
+                            />
+                            <FormLabel className="text-sm font-normal cursor-pointer">
+                              {item}
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
                     />
                   ))}
                 </CardContent>

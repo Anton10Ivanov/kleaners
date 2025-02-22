@@ -24,7 +24,7 @@ interface FrequencyTimeSelectorProps {
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
   const selectedDays = useMemo(() => 
-    orderDaysChronologically(form.watch('selectedDays') || [], DAYS),
+    orderDaysChronologically([...(form.watch('selectedDays') || [])], [...DAYS]),
     [form.watch('selectedDays')]
   );
   const timeSlots = form.watch('timeSlots') || {};
@@ -47,7 +47,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     }
     
     requestAnimationFrame(() => {
-      form.setValue('selectedDays', orderDaysChronologically(newDays, DAYS), { shouldDirty: true });
+      form.setValue('selectedDays', orderDaysChronologically(newDays, [...DAYS]), { shouldDirty: true });
     });
   };
 
