@@ -33,9 +33,15 @@ const TIME_SLOTS = [
   { label: 'Evening', value: 'evening', description: '17:00–20:00' }
 ];
 
+const orderDaysChronologically = (days: string[]) => {
+  return [...days].sort((a, b) => {
+    return DAYS.indexOf(a) - DAYS.indexOf(b);
+  });
+};
+
 export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   const frequency = form.watch('frequency');
-  const selectedDays = form.watch('selectedDays') || [];
+  const selectedDays = orderDaysChronologically(form.watch('selectedDays') || []);
   const timeSlots = form.watch('timeSlots') || {};
   const isCustom = frequency === Frequency.Custom;
   const isWeekly = frequency === Frequency.Weekly;
@@ -55,7 +61,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       newDays = [...currentDays, day];
     }
     
-    form.setValue('selectedDays', newDays);
+    form.setValue('selectedDays', orderDaysChronologically(newDays));
   };
 
   const handleTimeSelect = (day: string, time: string) => {
@@ -192,3 +198,4 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     </div>
   );
 };
+
