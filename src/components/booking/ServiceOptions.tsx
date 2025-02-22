@@ -20,9 +20,10 @@ import { useEffect } from "react";
 interface ServiceOptionsProps {
   frequency: Frequency | undefined;
   setFrequency: (value: Frequency) => void;
+  isRegularCleaning?: boolean;
 }
 
-const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
+const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: ServiceOptionsProps) => {
   // Set default frequency to Biweekly when component mounts
   useEffect(() => {
     if (!frequency) {
@@ -106,17 +107,20 @@ const ServiceOptions = ({ frequency, setFrequency }: ServiceOptionsProps) => {
           <p className="text-gray-600">30.00 €/hour</p>
           <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
         </div>
-        <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
-          onClick={(e) => handleOptionClick(e, Frequency.Custom)}
-        >
-          <h4 className="font-semibold mb-1">Custom Schedule</h4>
-          <p className="text-gray-600">Contact us for pricing</p>
-          <p className="text-xs text-gray-500 mt-1">For special requirements</p>
-        </div>
+        {!isRegularCleaning && (
+          <div 
+            className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
+            onClick={(e) => handleOptionClick(e, Frequency.Custom)}
+          >
+            <h4 className="font-semibold mb-1">Custom Schedule</h4>
+            <p className="text-gray-600">Contact us for pricing</p>
+            <p className="text-xs text-gray-500 mt-1">For special requirements</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default ServiceOptions;
+

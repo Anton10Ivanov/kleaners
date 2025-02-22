@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
@@ -38,7 +39,7 @@ const BookingContent = ({
   };
 
   return (
-    <div className="w-full md:w-[70%]" onClick={handleFormClick}>
+    <div className="w-full md:w-[80%]" onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={(e) => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
@@ -49,23 +50,14 @@ const BookingContent = ({
             >
               <ServiceOptions 
                 frequency={frequency}
-                setFrequency={(freq) => form.setValue('frequency', freq)} 
+                setFrequency={(freq) => form.setValue('frequency', freq)}
+                isRegularCleaning={true}
               />
               {frequency !== Frequency.Custom && (
                 <>
                   <HoursSelection form={form} />
                   {showCalendar && <Calendar form={form} />}
                   <Extras form={form} />
-                </>
-              )}
-              {frequency === Frequency.Custom && (
-                <>
-                  <FrequencyTimeSelector form={form} />
-                  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p className="text-gray-600">
-                      Our team will contact you shortly to discuss your custom cleaning schedule and requirements.
-                    </p>
-                  </div>
                 </>
               )}
             </motion.div>
@@ -111,3 +103,4 @@ const BookingContent = ({
 };
 
 export default BookingContent;
+

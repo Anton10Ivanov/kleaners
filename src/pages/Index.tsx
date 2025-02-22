@@ -77,7 +77,7 @@ const Index = () => {
                   selectedService={selectedService || ''}
                   form={form}
                 />
-                <div className="w-full md:w-[30%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
+                <div className="w-full md:w-[20%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
                   <BookingSummary 
                     selectedService={selectedService || ''}
                     frequency={frequency || ''}
@@ -113,3 +113,4 @@ const Index = () => {
 };
 
 export default Index;
+
