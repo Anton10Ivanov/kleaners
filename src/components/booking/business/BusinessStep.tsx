@@ -6,6 +6,7 @@ import { CleaningOptionsSelector } from "./components/CleaningOptionsSelector";
 import { AdditionalFields } from "./components/AdditionalFields";
 import ServiceOptions from "../ServiceOptions";
 import { FrequencyTimeSelector } from "./components/FrequencyTimeSelector";
+import Calendar from "../Calendar";
 
 interface BusinessStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -15,17 +16,19 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
   const businessType = form.watch("businessType");
   const frequency = form.watch("frequency") as Frequency | undefined;
 
+  const showCalendar = frequency === Frequency.Onetime || frequency === Frequency.Biweekly;
+  const showFrequencyTimeSelector = frequency === Frequency.Weekly || 
+    frequency === Frequency.Biweekly || 
+    frequency === Frequency.Custom;
+
   return (
     <div className="space-y-6">
       <ServiceOptions 
         frequency={frequency}
         setFrequency={(freq) => form.setValue('frequency', freq)} 
       />
-      {(frequency === Frequency.Weekly || 
-        frequency === Frequency.Biweekly || 
-        frequency === Frequency.Custom) && (
-        <FrequencyTimeSelector form={form} />
-      )}
+      {showCalendar && <Calendar form={form} />}
+      {showFrequencyTimeSelector && <FrequencyTimeSelector form={form} />}
       <BusinessTypeSelector form={form} />
       <CleaningOptionsSelector form={form} businessType={businessType} />
       <AdditionalFields form={form} businessType={businessType} />
@@ -34,4 +37,3 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
 };
 
 export default BusinessStep;
-

@@ -1,9 +1,6 @@
 
-import { cn } from "@/lib/utils";
-import { isBefore } from "date-fns";
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Calendar } from "lucide-react";
+import { format } from "date-fns";
 
 interface TimeSlotsProps {
   timeSlots: string[];
@@ -14,141 +11,55 @@ interface TimeSlotsProps {
 }
 
 export const TimeSlots = ({
-  timeSlots,
   selectedTimeSlot,
   date,
   nowInBerlin,
-  onTimeSlotSelect
+  onTimeSlotSelect,
 }: TimeSlotsProps) => {
-  const [busyPeriods, setBusyPeriods] = useState<Array<{ start: string; end: string }>>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const morningSlot = "07:00-13:00";
+  const afternoonSlot = "14:00-20:00";
 
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      if (!date) return;
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        // Get the access token from calendar_credentials
-        const { data: credentials, error: credentialsError } = await supabase
-          .from('calendar_credentials')
-          .select('access_token')
-          .single();
-
-        if (credentialsError) {
-          console.error('Error fetching credentials:', credentialsError);
-          throw new Error('Failed to fetch calendar credentials');
-        }
-        
-        if (!credentials?.access_token) {
-          throw new Error('No access token available');
-        }
-
-        // Set up the date range for the current day
-        const startDate = new Date(date);
-        startDate.setHours(0, 0, 0, 0);
-
-        const endDate = new Date(date);
-        endDate.setHours(23, 59, 59, 999);
-
-        console.log('Fetching availability for:', {
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString()
-        });
-
-        const { data, error } = await supabase.functions.invoke('fetch-calendar-availability', {
-          body: {
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
-          },
-          headers: {
-            Authorization: `Bearer ${credentials.access_token}`,
-          },
-        });
-
-        if (error) {
-          console.error('Error from edge function:', error);
-          throw error;
-        }
-
-        console.log('Calendar availability response:', data);
-        setBusyPeriods(data.busyPeriods || []);
-      } catch (err) {
-        console.error('Error fetching availability:', err);
-        setError('Failed to fetch availability. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAvailability();
-  }, [date]);
-
-  const isTimeSlotAvailable = (timeSlot: string) => {
-    if (!date) return false;
-    
-    const [hours, minutes] = timeSlot.split(':').map(Number);
-    const slotDateTime = new Date(date);
-    slotDateTime.setHours(hours, minutes, 0, 0);
-    
-    // Check if slot is in the past
-    if (isBefore(slotDateTime, nowInBerlin)) return false;
-
-    // Check if slot overlaps with any busy period
-    return !busyPeriods.some(period => {
-      const start = new Date(period.start);
-      const end = new Date(period.end);
-      return slotDateTime >= start && slotDateTime < end;
-    });
-  };
-
-  if (error) {
-    return (
-      <div className="text-red-500 text-center p-4">
-        {error}
-      </div>
-    );
+  if (!date) {
+    return null;
   }
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-7 gap-2">
-        {Array.from({ length: 27 }).map((_, index) => (
-          <Skeleton 
-            key={index}
-            className="h-10 w-full rounded-lg"
-          />
-        ))}
-      </div>
-    );
-  }
+  const isPastDate = date < nowInBerlin;
+  const formattedDate = format(date, "EEEE, MMMM d");
 
   return (
-    <div className="grid grid-cols-7 gap-2">
-      {timeSlots.map((timeSlot) => {
-        const isAvailable = isTimeSlotAvailable(timeSlot);
-        return (
-          <button
-            key={timeSlot}
-            onClick={() => isAvailable && onTimeSlotSelect(timeSlot)}
-            disabled={!isAvailable}
-            className={cn(
-              "py-2 px-3 text-sm font-medium rounded-lg transition-colors",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-              selectedTimeSlot === timeSlot
-                ? "bg-primary text-white"
-                : isAvailable
-                ? "bg-white hover:bg-gray-50 text-gray-900 dark:bg-dark-background dark:hover:bg-gray-800 dark:text-white"
-                : "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600"
-            )}
-          >
-            {timeSlot}
-          </button>
-        );
-      })}
+    <div className="mt-6">
+      <h4 className="text-lg font-medium mb-4 flex items-center gap-2">
+        <Calendar className="h-5 w-5 text-primary" />
+        Available time slots for {formattedDate}
+      </h4>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <button
+          onClick={() => onTimeSlotSelect(morningSlot)}
+          disabled={isPastDate}
+          className={`p-4 rounded-lg border transition-colors ${
+            selectedTimeSlot === morningSlot
+              ? "border-primary bg-primary/5"
+              : "border-gray-200 hover:border-primary/50"
+          } ${isPastDate ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <span className="font-medium">Morning</span>
+          <p className="text-sm text-gray-600">{morningSlot}</p>
+        </button>
+
+        <button
+          onClick={() => onTimeSlotSelect(afternoonSlot)}
+          disabled={isPastDate}
+          className={`p-4 rounded-lg border transition-colors ${
+            selectedTimeSlot === afternoonSlot
+              ? "border-primary bg-primary/5"
+              : "border-gray-200 hover:border-primary/50"
+          } ${isPastDate ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <span className="font-medium">Afternoon</span>
+          <p className="text-sm text-gray-600">{afternoonSlot}</p>
+        </button>
+      </div>
     </div>
   );
 };
