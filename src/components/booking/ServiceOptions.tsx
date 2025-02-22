@@ -6,6 +6,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -31,21 +38,31 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
     }
   }, []);
 
-  const handleOptionClick = (e: React.MouseEvent, freq: Frequency) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFrequency(freq);
-  };
-
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
-      <div className="flex justify-between items-center mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-6">
         <h3 className="text-xl font-semibold">How often should we clean?</h3>
+        <Select value={frequency} onValueChange={(value: Frequency) => setFrequency(value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select frequency" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={Frequency.Onetime}>One Time</SelectItem>
+            <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
+            <SelectItem value={Frequency.Biweekly}>Every 2 Weeks</SelectItem>
+            {!isRegularCleaning && (
+              <SelectItem value={Frequency.Custom}>Custom Schedule</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex justify-center">
         <Popover>
           <PopoverTrigger className="text-primary text-sm hover:underline">
             What is included?
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] sm:w-[450px]" align="end">
+          <PopoverContent className="w-[300px] sm:w-[450px]" align="center">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -78,45 +95,6 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
             </Table>
           </PopoverContent>
         </Popover>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Onetime ? 'border-primary' : 'border-gray-200'}`}
-          onClick={(e) => handleOptionClick(e, Frequency.Onetime)}
-        >
-          <h4 className="font-semibold mb-1">One Time</h4>
-          <p className="text-gray-600">35.00 €/hour</p>
-        </div>
-        <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Weekly ? 'border-primary' : 'border-gray-200'}`}
-          onClick={(e) => handleOptionClick(e, Frequency.Weekly)}
-        >
-          <h4 className="font-semibold mb-1">Weekly</h4>
-          <p className="text-gray-600">27.00 €/hour</p>
-          <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
-        </div>
-        <div 
-          className={`p-4 rounded-lg border cursor-pointer transition-all relative ${frequency === Frequency.Biweekly ? 'border-primary' : 'border-gray-200'}`}
-          onClick={(e) => handleOptionClick(e, Frequency.Biweekly)}
-        >
-          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white px-2 py-0.5 rounded-full text-[10px] whitespace-nowrap">
-            Most Popular
-          </div>
-          <h4 className="font-semibold mb-1">Every 2 Weeks</h4>
-          <p className="text-gray-600">30.00 €/hour</p>
-          <p className="text-xs text-gray-500 mt-1">Same Cleaner every time</p>
-        </div>
-        {!isRegularCleaning && (
-          <div 
-            className={`p-4 rounded-lg border cursor-pointer transition-all ${frequency === Frequency.Custom ? 'border-primary' : 'border-gray-200'}`}
-            onClick={(e) => handleOptionClick(e, Frequency.Custom)}
-          >
-            <h4 className="font-semibold mb-1">Custom Schedule</h4>
-            <p className="text-gray-600">Contact us for pricing</p>
-            <p className="text-xs text-gray-500 mt-1">For special requirements</p>
-          </div>
-        )}
       </div>
     </div>
   );
