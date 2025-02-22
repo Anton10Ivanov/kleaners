@@ -28,6 +28,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     [form.watch('selectedDays')]
   );
   const timeSlots = form.watch('timeSlots') || {};
+  const dynamicScheduling = form.watch('contactForSchedule');
 
   const handleDaySelect = (day: string) => {
     const currentDays = form.getValues('selectedDays') || [];
@@ -44,6 +45,12 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
       newDays = currentDays.filter(d => d !== day);
     } else {
       newDays = [...currentDays, day];
+    }
+    
+    // Validate minimum two days for custom schedule
+    if (frequency === Frequency.Custom && newDays.length < 2) {
+      toast.error("Please select at least 2 days for custom schedule");
+      return;
     }
     
     requestAnimationFrame(() => {
@@ -93,7 +100,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
                     className="bg-[#F97316] text-white border-none"
                     sideOffset={5}
                   >
-                    <p>Providing a key allows our cleaners to start immediately without waiting for someone to let them in.</p>
+                    <p>Rest assured, your key is protected under our key insurance policy, and we follow strict security protocols!</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -108,7 +115,22 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
           </div>
 
           <div className="flex items-center justify-between">
-            <Label htmlFor="contact-toggle">Contact for schedule specification</Label>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="contact-toggle">Dynamic scheduling needed</Label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <InfoIcon className="h-4 w-4 text-[#F97316] cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent 
+                    className="bg-[#F97316] text-white border-none"
+                    sideOffset={5}
+                  >
+                    <p>Scheduling should be done week-to-week or for the whole month in advance</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <Switch
               id="contact-toggle"
               onCheckedChange={(checked) => {
@@ -127,7 +149,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
           onDaySelect={handleDaySelect}
         />
 
-        {selectedDays.length > 0 && (
+        {selectedDays.length > 0 && !dynamicScheduling && (
           <div className="space-y-4">
             <div className={`grid ${selectedDays.length > 3 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
               {selectedDays.map((day) => (
