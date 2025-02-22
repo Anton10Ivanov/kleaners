@@ -25,6 +25,10 @@ export const bookingSchema = z.object({
   propertySize: z.number().min(1, "Property size is required").optional(),
   specialRequirements: z.string().optional(),
   cleaningOptions: z.array(z.string()).default([]),
+  selectedDays: z.array(z.string()).default([]),
+  timeSlots: z.record(z.string()).optional(),
+  exactTimes: z.record(z.string()).optional(),
+  preferredTime: z.string().optional(),
   
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -47,3 +51,4 @@ export const bookingSchema = z.object({
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
+
