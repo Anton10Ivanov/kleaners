@@ -11,6 +11,7 @@ import { BookingFormData, Frequency } from '@/schemas/booking';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
+import { FrequencyTimeSelector } from './business/components/FrequencyTimeSelector';
 
 interface BookingContentProps {
   currentStep: number;
@@ -30,6 +31,10 @@ const BookingContent = ({
 
   const postalCode = form.watch('postalCode') || '';
   const frequency = form.watch('frequency') as Frequency | undefined;
+  const showFrequencyTimeSelector = frequency === Frequency.Weekly || 
+    frequency === Frequency.Biweekly || 
+    frequency === Frequency.Custom;
+  const showCalendar = frequency === Frequency.Onetime || frequency === Frequency.Biweekly;
 
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,7 +58,8 @@ const BookingContent = ({
               {frequency !== Frequency.Custom && (
                 <>
                   <HoursSelection form={form} />
-                  <Calendar form={form} />
+                  {showCalendar && <Calendar form={form} />}
+                  {showFrequencyTimeSelector && <FrequencyTimeSelector form={form} />}
                   <Extras form={form} />
                 </>
               )}
@@ -107,3 +113,4 @@ const BookingContent = ({
 };
 
 export default BookingContent;
+
