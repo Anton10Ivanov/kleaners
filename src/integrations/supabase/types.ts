@@ -9,6 +9,108 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          access_instructions: string | null
+          access_method: string | null
+          address: string | null
+          bathrooms: number
+          bedrooms: number
+          created_at: string | null
+          date: string | null
+          email: string | null
+          entry_code: string | null
+          extras: string[] | null
+          first_name: string | null
+          floor: string | null
+          frequency: string
+          hours: number
+          id: string
+          last_name: string | null
+          phone: string | null
+          postal_code: string
+          service_type: string
+          special_instructions: string | null
+          status: Database["public"]["Enums"]["booking_status"] | null
+          total_price: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_instructions?: string | null
+          access_method?: string | null
+          address?: string | null
+          bathrooms: number
+          bedrooms: number
+          created_at?: string | null
+          date?: string | null
+          email?: string | null
+          entry_code?: string | null
+          extras?: string[] | null
+          first_name?: string | null
+          floor?: string | null
+          frequency: string
+          hours: number
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          postal_code: string
+          service_type: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+          total_price?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_instructions?: string | null
+          access_method?: string | null
+          address?: string | null
+          bathrooms?: number
+          bedrooms?: number
+          created_at?: string | null
+          date?: string | null
+          email?: string | null
+          entry_code?: string | null
+          extras?: string[] | null
+          first_name?: string | null
+          floor?: string | null
+          frequency?: string
+          hours?: number
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          postal_code?: string
+          service_type?: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+          total_price?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       calendar_credentials: {
         Row: {
           access_token: string
@@ -119,10 +221,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      booking_status: "pending" | "confirmed" | "completed" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never

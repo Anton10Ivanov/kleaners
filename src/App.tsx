@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
+import AdminLayout from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
 import RegularCleaning from "./pages/services/RegularCleaning";
 import MoveInOut from "./pages/services/MoveInOut";
@@ -14,6 +15,7 @@ import PostConstructionCleaning from "./pages/services/PostConstructionCleaning"
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import Dashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,9 @@ const App = () => (
               <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
             </Route>
           </Routes>
         </BrowserRouter>
