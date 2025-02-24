@@ -139,7 +139,7 @@ const Navbar = () => {
               />
               <Button
                 variant="outline"
-                onClick={() => navigate('/auth/login')}
+                onClick={() => navigate('/login')}
                 className="font-raleway"
               >
                 Sign in
@@ -150,7 +150,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={() => navigate('/auth/login')}
+              onClick={() => navigate('/login')}
               className="mr-2 font-raleway"
             >
               Sign in
