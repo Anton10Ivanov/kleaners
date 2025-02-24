@@ -8,21 +8,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 interface DeleteBookingDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
 }
 
 export const DeleteBookingDialog = ({
-  open,
-  onOpenChange,
   onConfirm,
 }: DeleteBookingDialogProps) => {
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
