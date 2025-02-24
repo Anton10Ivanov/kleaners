@@ -1,0 +1,113 @@
+
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+import { Database } from "@/integrations/supabase/types";
+
+type Customer = Database["public"]["Tables"]["customers"]["Row"];
+
+export const useCustomers = () => {
+  const queryClient = useQueryClient();
+
+  const { data: customers = [], isLoading } = useQuery({
+    queryKey: ["customers"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("customers")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error fetching customers",
+          description: error.message,
+        });
+        throw error;
+      }
+
+      return data;
+    },
+  });
+
+  const createCustomer = async (customerData: Omit<Customer, "id" | "created_at" | "updated_at">) => {
+    const { data, error } = await supabase
+      .from("customers")
+      .insert(customerData)
+      .select()
+      .single();
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error creating customer",
+        description: error.message,
+      });
+      throw error;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["customers"] });
+    toast({
+      title: "Success",
+      description: "Customer created successfully",
+    });
+
+    return data;
+  };
+
+  const updateCustomer = async ({ id, ...customerData }: Partial<Customer> & { id: string }) => {
+    const { data, error } = await supabase
+      .from("customers")
+      .update(customerData)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error updating customer",
+        description: error.message,
+      });
+      throw error;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["customers"] });
+    toast({
+      title: "Success",
+      description: "Customer updated successfully",
+    });
+
+    return data;
+  };
+
+  const deleteCustomer = async (id: string) => {
+    const { error } = await supabase
+      .from("customers")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error deleting customer",
+        description: error.message,
+      });
+      throw error;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["customers"] });
+    toast({
+      title: "Success",
+      description: "Customer deleted successfully",
+    });
+  };
+
+  return {
+    customers,
+    isLoading,
+    createCustomer,
+    updateCustomer,
+    deleteCustomer,
+  };
+};
