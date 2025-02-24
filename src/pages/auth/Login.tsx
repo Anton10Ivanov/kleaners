@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,46 +21,18 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Step 1: Sign in
-      console.log("Attempting login with email:", email);
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (authError) throw authError;
+      if (error) throw error;
 
-      if (!authData.user) {
-        throw new Error('No user data returned from authentication');
-      }
-
-      console.log("Authentication successful, user ID:", authData.user.id);
-
-      // Step 2: Check admin status using RPC
-      const { data: isAdmin, error: adminCheckError } = await supabase
-        .rpc('check_is_admin', {
-          user_id: authData.user.id
-        });
-
-      if (adminCheckError) throw adminCheckError;
-
-      console.log("Admin check result:", isAdmin);
-
-      if (isAdmin) {
-        toast({
-          title: "Welcome back!",
-          description: "Successfully logged in as admin.",
-        });
-        navigate('/admin');
-      } else {
-        console.log("Access denied - not an admin");
-        await supabase.auth.signOut();
-        toast({
-          variant: "destructive",
-          title: "Access Denied",
-          description: "You don't have permission to access the admin area.",
-        });
-      }
+      toast({
+        title: "Welcome back!",
+        description: "Successfully logged in.",
+      });
+      navigate('/');
     } catch (error) {
       console.error('Login error:', error);
       toast({
@@ -72,50 +45,93 @@ const Login = () => {
     }
   };
 
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "Please check your email to confirm your account.",
+      });
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to sign up",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const AuthForm = ({ mode }: { mode: 'login' | 'signup' }) => (
+    <form onSubmit={mode === 'login' ? handleLogin : handleSignUp} className="space-y-4">
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+        >
+          {isLoading ? "Processing..." : mode === 'login' ? "Sign in" : "Sign up"}
+        </Button>
+      </CardFooter>
+    </form>
+  );
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
+          <CardTitle>Welcome</CardTitle>
           <CardDescription>
-            Please sign in with your admin credentials
+            Sign in to your account or create a new one
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing in..." : "Sign in"}
-            </Button>
-          </CardFooter>
-        </form>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          </TabsList>
+          <TabsContent value="login">
+            <AuthForm mode="login" />
+          </TabsContent>
+          <TabsContent value="signup">
+            <AuthForm mode="signup" />
+          </TabsContent>
+        </Tabs>
       </Card>
     </div>
   );

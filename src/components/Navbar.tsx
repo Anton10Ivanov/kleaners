@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -109,6 +111,13 @@ const Navbar = () => {
                 currentLanguage={currentLanguage}
                 onLanguageChange={toggleLanguage}
               />
+              <Button
+                variant="outline"
+                onClick={() => navigate('/login')}
+                className="font-raleway"
+              >
+                Sign in
+              </Button>
             </div>
           </div>
 
@@ -118,6 +127,13 @@ const Navbar = () => {
               currentLanguage={currentLanguage}
               onLanguageChange={toggleLanguage}
             />
+            <Button
+              variant="outline"
+              onClick={() => navigate('/login')}
+              className="mr-2 font-raleway"
+            >
+              Sign in
+            </Button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
@@ -163,3 +179,4 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 );
 
 export default Navbar;
+
