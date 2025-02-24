@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -11,13 +11,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { format, isWithinInterval, parseISO } from "date-fns";
 import { Database } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Search, SortAsc, SortDesc } from "lucide-react";
+import { Search, SortAsc, SortDesc, Calendar, Trash2 } from "lucide-react";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+import { DateRange } from "react-day-picker";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 
 type BookingStatus = Database["public"]["Enums"]["booking_status"];
 
@@ -36,9 +45,12 @@ export const BookingsSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: bookings, isLoading } = useQuery({
-    queryKey: ['admin-bookings', selectedStatus, searchTerm, sortField, sortOrder],
+    queryKey: ['admin-bookings', selectedStatus, searchTerm, sortField, sortOrder, dateRange],
     queryFn: async () => {
       let query = supabase
         .from('bookings')
@@ -59,7 +71,69 @@ export const BookingsSection = () => {
 
       const { data, error } = await query;
       if (error) throw error;
+
+      // Filter by date range if set
+      if (dateRange?.from && dateRange?.to) {
+        return data.filter(booking => 
+          booking.date && 
+          isWithinInterval(parseISO(booking.date), {
+            start: dateRange.from,
+            end: dateRange.to
+          })
+        );
+      }
+
       return data;
+    },
+  });
+
+  const updateBookingStatus = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: BookingStatus }) => {
+      const { error } = await supabase
+        .from('bookings')
+        .update({ status })
+        .eq('id', id);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
+      toast({
+        title: "Success",
+        description: "Booking status updated successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update booking status: " + error.message,
+      });
+    },
+  });
+
+  const deleteBooking = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('bookings')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
+      toast({
+        title: "Success",
+        description: "Booking deleted successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete booking: " + error.message,
+      });
     },
   });
 
@@ -84,14 +158,17 @@ export const BookingsSection = () => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search bookings..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search bookings..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          <DatePickerWithRange date={dateRange} setDate={setDateRange} />
         </div>
         <RadioGroup
           defaultValue={selectedStatus || "all"}
@@ -136,6 +213,7 @@ export const BookingsSection = () => {
                   Total <SortIcon field="total_price" />
                 </Button>
               </TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -153,11 +231,45 @@ export const BookingsSection = () => {
                   <div className="text-sm text-gray-500">{booking.hours} hours</div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={statusColors[booking.status as keyof typeof statusColors]}>
-                    {booking.status}
-                  </Badge>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-full justify-start p-2">
+                        <Badge variant="outline" className={statusColors[booking.status as keyof typeof statusColors]}>
+                          {booking.status}
+                        </Badge>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {Object.keys(statusColors).map((status) => (
+                        <DropdownMenuItem
+                          key={status}
+                          onClick={() => updateBookingStatus.mutate({ 
+                            id: booking.id, 
+                            status: status as BookingStatus 
+                          })}
+                        >
+                          <Badge variant="outline" className={statusColors[status as keyof typeof statusColors]}>
+                            {status}
+                          </Badge>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
                 <TableCell>€{booking.total_price}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this booking?')) {
+                        deleteBooking.mutate(booking.id);
+                      }
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -166,3 +278,4 @@ export const BookingsSection = () => {
     </div>
   );
 };
+
