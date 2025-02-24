@@ -13,23 +13,43 @@ export const useProviders = () => {
   const providersQuery = useQuery({
     queryKey: ["providers"],
     queryFn: async () => {
+      console.log("Fetching providers...");
       const { data, error } = await supabase
         .from("service_providers")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching providers:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch providers: " + error.message,
+        });
+        throw error;
+      }
+      
+      console.log("Providers fetched successfully:", data);
       return data;
     },
   });
 
   const createProvider = useMutation({
     mutationFn: async (provider: Omit<ServiceProvider, "id" | "created_at" | "updated_at">) => {
-      const { error } = await supabase
+      console.log("Creating provider:", provider);
+      const { data, error } = await supabase
         .from("service_providers")
-        .insert(provider);
+        .insert(provider)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating provider:", error);
+        throw error;
+      }
+
+      console.log("Provider created successfully:", data);
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["providers"] });
@@ -38,7 +58,8 @@ export const useProviders = () => {
         description: "Provider added successfully",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
+      console.error("Create provider error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -52,12 +73,21 @@ export const useProviders = () => {
       id,
       ...data
     }: Partial<ServiceProvider> & { id: string }) => {
-      const { error } = await supabase
+      console.log("Updating provider:", { id, ...data });
+      const { data: updatedData, error } = await supabase
         .from("service_providers")
         .update(data)
-        .eq("id", id);
+        .eq("id", id)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating provider:", error);
+        throw error;
+      }
+
+      console.log("Provider updated successfully:", updatedData);
+      return updatedData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["providers"] });
@@ -66,7 +96,8 @@ export const useProviders = () => {
         description: "Provider updated successfully",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
+      console.error("Update provider error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -77,12 +108,18 @@ export const useProviders = () => {
 
   const deleteProvider = useMutation({
     mutationFn: async (id: string) => {
+      console.log("Deleting provider:", id);
       const { error } = await supabase
         .from("service_providers")
         .delete()
         .eq("id", id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error deleting provider:", error);
+        throw error;
+      }
+
+      console.log("Provider deleted successfully");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["providers"] });
@@ -91,7 +128,8 @@ export const useProviders = () => {
         description: "Provider deleted successfully",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
+      console.error("Delete provider error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -101,10 +139,12 @@ export const useProviders = () => {
   });
 
   return {
-    providers: providersQuery.data,
+    providers: providersQuery.data ?? [],
     isLoading: providersQuery.isLoading,
+    error: providersQuery.error,
     createProvider: createProvider.mutate,
     updateProvider: updateProvider.mutate,
     deleteProvider: deleteProvider.mutate,
   };
 };
+
