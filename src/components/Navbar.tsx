@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { AlignJustify, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -6,6 +5,12 @@ import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
 import { Button } from './ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -108,6 +113,24 @@ const Navbar = () => {
             >
               Contact
             </Link>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center space-x-1">
+                  <span>Legal</span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to="/legal/terms">Terms of Service</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/legal/privacy">Privacy Policy</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <LanguageSelector
@@ -116,7 +139,7 @@ const Navbar = () => {
               />
               <Button
                 variant="outline"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/auth/login')}
                 className="font-raleway"
               >
                 Sign in
@@ -127,7 +150,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/auth/login')}
               className="mr-2 font-raleway"
             >
               Sign in
@@ -167,8 +190,22 @@ const Navbar = () => {
               )}
               
               <Link
-                to="/contact"
+                to="/legal/terms"
                 className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
+              >
+                Terms of Service
+              </Link>
+              
+              <Link
+                to="/legal/privacy"
+                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+
+              <Link
+                to="/contact"
+                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium"
               >
                 Contact
               </Link>
@@ -198,4 +235,3 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 );
 
 export default Navbar;
-
