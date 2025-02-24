@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
@@ -10,6 +10,7 @@ import { Button } from './ui/button';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -25,6 +26,7 @@ const Navbar = () => {
   useEffect(() => {
     setIsMenuOpen(false);
     setIsServicesOpen(false);
+    setIsMobileServicesOpen(false);
   }, [location]);
 
   useEffect(() => {
@@ -80,6 +82,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
               >
                 <span>Services</span>
+                {isServicesOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               {isServicesOpen && (
                 <div className="absolute top-full left-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
@@ -146,15 +149,28 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute left-0 right-0 top-16 bg-white dark:bg-dark-background shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {serviceLinks.map((service) => (
-                <Link
-                  key={service.path}
-                  to={service.path}
-                  className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-                >
-                  {service.label}
-                </Link>
-              ))}
+              <button
+                onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                className="flex items-center justify-between w-full px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
+              >
+                <span>Services</span>
+                {isMobileServicesOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+              
+              {isMobileServicesOpen && (
+                <div className="pl-6 space-y-1">
+                  {serviceLinks.map((service) => (
+                    <Link
+                      key={service.path}
+                      to={service.path}
+                      className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
+                    >
+                      {service.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              
               <Link
                 to="/contact"
                 className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
@@ -179,4 +195,3 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 );
 
 export default Navbar;
-

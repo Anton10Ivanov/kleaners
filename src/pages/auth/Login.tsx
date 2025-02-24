@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -13,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetMode, setIsResetMode] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -73,6 +74,34 @@ const Login = () => {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Please check your email for the password reset link.",
+      });
+      setIsResetMode(false);
+    } catch (error) {
+      console.error('Password reset error:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to send password reset email",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const AuthForm = ({ mode }: { mode: 'login' | 'signup' }) => (
     <form onSubmit={mode === 'login' ? handleLogin : handleSignUp} className="space-y-4">
       <CardContent className="space-y-4">
@@ -85,6 +114,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="w-full"
           />
         </div>
         <div className="space-y-2">
@@ -96,20 +126,78 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="w-full"
           />
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col space-y-4">
         <Button
           type="submit"
-          className="w-full"
+          className={`w-full ${mode === 'signup' ? 'bg-primary hover:bg-primary/90' : ''}`}
           disabled={isLoading}
         >
           {isLoading ? "Processing..." : mode === 'login' ? "Sign in" : "Sign up"}
         </Button>
+        {mode === 'login' && (
+          <Button
+            type="button"
+            variant="link"
+            onClick={() => setIsResetMode(true)}
+            className="text-sm text-primary hover:text-primary/90"
+          >
+            Forgot password?
+          </Button>
+        )}
       </CardFooter>
     </form>
   );
+
+  if (isResetMode) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Reset Password</CardTitle>
+            <CardDescription>
+              Enter your email address and we'll send you a password reset link
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handlePasswordReset}>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Button
+                type="submit"
+                className="w-full bg-primary hover:bg-primary/90"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processing..." : "Send Reset Link"}
+              </Button>
+              <Button
+                type="button"
+                variant="link"
+                onClick={() => setIsResetMode(false)}
+                className="text-sm"
+              >
+                Back to login
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
@@ -122,8 +210,18 @@ const Login = () => {
         </CardHeader>
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger 
+              value="login"
+              className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
+            >
+              Login
+            </TabsTrigger>
+            <TabsTrigger 
+              value="signup"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Sign Up
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="login">
             <AuthForm mode="login" />
