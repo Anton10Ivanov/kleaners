@@ -177,6 +177,33 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_profiles: {
+        Row: {
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       google_reviews: {
         Row: {
           author_name: string
@@ -212,6 +239,71 @@ export type Database = {
           review_id?: string
           text_content?: string | null
           time_created?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      provider_availability: {
+        Row: {
+          created_at: string | null
+          end_time: string
+          id: string
+          provider_id: string | null
+          start_time: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_time: string
+          id?: string
+          provider_id?: string | null
+          start_time: string
+        }
+        Update: {
+          created_at?: string | null
+          end_time?: string
+          id?: string
+          provider_id?: string | null
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_availability_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_providers: {
+        Row: {
+          created_at: string | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          phone: string | null
+          services: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          phone?: string | null
+          services?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          phone?: string | null
+          services?: string[] | null
           updated_at?: string | null
         }
         Relationships: []
