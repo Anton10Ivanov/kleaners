@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlignJustify, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
@@ -125,11 +125,6 @@ const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSelector
-              currentLanguage={currentLanguage}
-              onLanguageChange={toggleLanguage}
-            />
             <Button
               variant="outline"
               onClick={() => navigate('/login')}
@@ -139,16 +134,16 @@ const Navbar = () => {
             </Button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+              className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors p-1"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={28} /> : <AlignJustify size={28} />}
             </button>
           </div>
         </div>
 
         {isMenuOpen && (
           <div className="md:hidden absolute left-0 right-0 top-16 bg-white dark:bg-dark-background shadow-lg">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-4 py-3 space-y-4">
               <button
                 onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
                 className="flex items-center justify-between w-full px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
@@ -158,7 +153,7 @@ const Navbar = () => {
               </button>
               
               {isMobileServicesOpen && (
-                <div className="pl-6 space-y-1">
+                <div className="pl-6 space-y-2">
                   {serviceLinks.map((service) => (
                     <Link
                       key={service.path}
@@ -177,6 +172,14 @@ const Navbar = () => {
               >
                 Contact
               </Link>
+
+              <div className="flex items-center justify-between px-3 py-2">
+                <ThemeToggle />
+                <LanguageSelector
+                  currentLanguage={currentLanguage}
+                  onLanguageChange={toggleLanguage}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -195,3 +198,4 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 );
 
 export default Navbar;
+
