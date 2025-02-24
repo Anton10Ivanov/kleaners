@@ -20,39 +20,54 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      console.log("Attempting to sign in with:", email);
+      console.log("Starting login process...");
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (authError) {
-        console.error('Authentication error:', authError);
+        console.error('Authentication error details:', {
+          message: authError.message,
+          status: authError.status,
+          name: authError.name
+        });
         throw authError;
       }
 
       if (!authData.user) {
-        console.error('No user data returned');
+        console.error('No user data returned from authentication');
         throw new Error('No user data returned');
       }
 
-      console.log("User authenticated:", authData.user.id);
+      console.log("Authentication successful for user:", {
+        id: authData.user.id,
+        email: authData.user.email,
+        lastSignIn: authData.user.last_sign_in_at
+      });
 
       // Check if user has admin role
+      console.log("Checking admin role for user ID:", authData.user.id);
       const { data: adminRole, error: roleError } = await supabase
         .from('admin_roles')
-        .select('role')
+        .select('*')  // Select all columns to see full role data
         .eq('user_id', authData.user.id)
         .single();
 
       if (roleError) {
-        console.error('Role check error:', roleError);
+        console.error('Role check error details:', {
+          message: roleError.message,
+          code: roleError.code,
+          details: roleError.details,
+          hint: roleError.hint
+        });
         throw roleError;
       }
 
       console.log("Admin role check result:", adminRole);
 
       if (adminRole) {
+        console.log("Admin role found:", adminRole);
         toast({
           title: "Welcome back!",
           description: "Successfully logged in as admin.",
@@ -69,11 +84,20 @@ const Login = () => {
         await supabase.auth.signOut();
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login process error:', error);
+      let errorMessage = "Failed to log in";
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+        errorMessage = error.message;
+      }
       toast({
         variant: "destructive",
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to log in",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
