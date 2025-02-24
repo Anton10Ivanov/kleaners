@@ -18,31 +18,20 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
       render={({ field }) => (
         <FormItem className="space-y-4">
           <FormLabel className="text-lg font-medium">Type of Business Property</FormLabel>
-          <div className={cn(
-            "grid gap-4",
-            field.value 
-              ? "grid-cols-1" // Show only one column when an option is selected
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3" // Show multiple columns when no option is selected
-          )}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {businessTypes.map((type) => {
               const Icon = type.icon;
               const isSelected = field.value === type.value;
-              
-              // Hide unselected options when one is selected
-              if (field.value && !isSelected) {
-                return null;
-              }
 
               return (
                 <div
                   key={type.value}
                   className={cn(
-                    "group relative flex items-center p-6 rounded-lg border-2 cursor-pointer transition-all",
-                    "hover:border-primary hover:bg-primary/5",
+                    "group relative flex items-center p-6 rounded-lg border-2 cursor-pointer transition-all duration-200",
+                    "hover:border-primary/50 hover:bg-primary/5",
                     isSelected
-                      ? "border-primary bg-primary/5 shadow-sm"
+                      ? "border-primary bg-primary/5 shadow-sm scale-[1.02]"
                       : "border-border",
-                    field.value ? "w-full" : "" // Make selected option full width
                   )}
                   onClick={() => {
                     // If clicking the same option again, deselect it
@@ -59,11 +48,19 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                   <div className="flex items-center gap-4 flex-1">
                     <div className={cn(
                       "p-3 rounded-md transition-colors",
-                      isSelected ? "bg-primary/10" : "bg-secondary/50 group-hover:bg-primary/5"
+                      isSelected ? "bg-primary text-white" : "bg-secondary/50 group-hover:bg-primary/5"
                     )}>
-                      <Icon className="w-6 h-6 text-primary" />
+                      <Icon className={cn(
+                        "w-6 h-6",
+                        isSelected ? "text-white" : "text-primary"
+                      )} />
                     </div>
-                    <span className="text-base font-medium">{type.label}</span>
+                    <span className={cn(
+                      "text-base font-medium transition-colors",
+                      isSelected ? "text-primary" : "text-foreground"
+                    )}>
+                      {type.label}
+                    </span>
                   </div>
                   {type.value === "other" && isSelected && (
                     <Input
@@ -73,7 +70,7 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                       onChange={(e) => {
                         form.setValue("specialRequirements", e.target.value);
                       }}
-                      onClick={(e) => e.stopPropagation()} // Prevent the parent div's onClick from firing
+                      onClick={(e) => e.stopPropagation()}
                     />
                   )}
                 </div>
