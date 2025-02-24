@@ -1,124 +1,125 @@
 
-import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from "@/hooks/use-toast";
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the form submission
-    toast.success("Message sent successfully! We'll get back to you soon.");
-    setFormData({ name: "", email: "", message: "" });
+    // Handle form submission here
+    toast({
+      title: "Message Sent",
+      description: "We'll get back to you soon!",
+    });
+    setName('');
+    setEmail('');
+    setMessage('');
   };
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold mb-8">Contact Us</h1>
-      
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-        {/* Contact Information */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
-          
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <Phone className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium">Phone</p>
-                <a href="tel:+491234567890" className="text-gray-600 dark:text-gray-300">
-                  +49 123 456 789
-                </a>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <Mail className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium">Email</p>
-                <a href="mailto:info@kleaners.de" className="text-gray-600 dark:text-gray-300">
-                  info@kleaners.de
-                </a>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <MapPin className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium">Address</p>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Hauptstraße 123<br />
-                  10115 Berlin, Germany
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Contact Us
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
+            Get in touch with us for any queries or concerns
+          </p>
         </div>
 
-        {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2">
-                Name
-              </label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Your name"
-                required
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="your.email@example.com"
-                required
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium mb-2">
-                Message
-              </label>
-              <Textarea
-                id="message"
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                placeholder="How can we help you?"
-                className="min-h-[150px]"
-                required
-              />
-            </div>
-          </div>
-          
-          <Button type="submit" className="w-full">
-            <Send className="mr-2 h-4 w-4" />
-            Send Message
-          </Button>
-        </form>
+        <div className="grid md:grid-cols-2 gap-8">
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle>Get in Touch</CardTitle>
+              <CardDescription>Fill out the form and we'll get back to you</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Your message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                    className="min-h-[120px]"
+                  />
+                </div>
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+                  Send Message
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle>Contact Information</CardTitle>
+              <CardDescription>Other ways to reach us</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Address</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  123 Cleaning Street<br />
+                  Berlin, Germany 12345
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  contact@cleaningservice.com
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Phone</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  +49 123 456 789
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Hours</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Monday - Friday: 9:00 AM - 6:00 PM<br />
+                  Saturday: 10:00 AM - 4:00 PM<br />
+                  Sunday: Closed
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
