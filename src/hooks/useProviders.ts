@@ -1,11 +1,16 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Database } from "@/integrations/supabase/types";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
+/**
+ * Custom hook for managing service providers data and operations.
+ * Provides functionality for fetching, creating, updating, and deleting providers.
+ * @returns Object containing providers data and CRUD operations
+ */
 export const useProviders = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -147,4 +152,3 @@ export const useProviders = () => {
     deleteProvider: deleteProvider.mutate,
   };
 };
-
