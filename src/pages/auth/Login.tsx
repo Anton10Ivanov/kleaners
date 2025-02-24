@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Logo } from "@/components/navbar/Logo";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -105,21 +106,20 @@ const Login = () => {
 
   const AuthForm = ({ mode }: { mode: 'login' | 'signup' }) => (
     <form onSubmit={mode === 'login' ? handleLogin : handleSignUp} className="space-y-4">
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
+      <CardContent className="grid gap-4">
+        <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="w-full"
           />
         </div>
-        <div className="space-y-2">
+        <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
@@ -128,15 +128,15 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autoComplete="current-password"
-            className="w-full"
+            autoComplete={mode === 'login' ? "current-password" : "new-password"}
           />
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         <Button
           type="submit"
-          className={`w-full ${mode === 'signup' ? 'bg-primary hover:bg-primary/90' : ''}`}
+          className="w-full"
+          variant={mode === 'signup' ? 'default' : 'default'}
           disabled={isLoading}
         >
           {isLoading ? "Processing..." : mode === 'login' ? "Sign in" : "Sign up"}
@@ -155,28 +155,10 @@ const Login = () => {
     </form>
   );
 
-  const Header = () => (
-    <div className="w-full bg-white dark:bg-gray-900 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="cursor-pointer" onClick={() => navigate('/')}>
-          <Logo />
-        </div>
-      </div>
-    </div>
-  );
-
-  const Footer = () => (
-    <footer className="w-full py-6 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>&copy; {new Date().getFullYear()} Kleaners.de. All rights reserved.</p>
-      </div>
-    </footer>
-  );
-
   if (isResetMode) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <Navbar />
         <div className="flex-grow flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
@@ -192,7 +174,7 @@ const Login = () => {
                   <Input
                     id="reset-email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -203,7 +185,7 @@ const Login = () => {
               <CardFooter className="flex flex-col space-y-4">
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90"
+                  className="w-full"
                   disabled={isLoading}
                 >
                   {isLoading ? "Processing..." : "Send Reset Link"}
@@ -227,26 +209,26 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Navbar />
       <div className="flex-grow flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Welcome</CardTitle>
+        <Card className="w-full max-w-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
             <CardDescription>
-              Sign in to your account or create a new one
+              Choose your preferred way to sign in
             </CardDescription>
           </CardHeader>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger 
                 value="login"
-                className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800"
               >
-                Login
+                Sign In
               </TabsTrigger>
               <TabsTrigger 
                 value="signup"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800"
               >
                 Sign Up
               </TabsTrigger>
