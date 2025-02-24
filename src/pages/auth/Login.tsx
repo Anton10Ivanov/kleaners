@@ -20,37 +20,53 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      console.log("Attempting to sign in with:", email);
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (authError) {
+        console.error('Authentication error:', authError);
+        throw authError;
+      }
 
-      if (data.user) {
-        // Check if user has admin role
-        const { data: adminRole, error: roleError } = await supabase
-          .from('admin_roles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .maybeSingle();
+      if (!authData.user) {
+        console.error('No user data returned');
+        throw new Error('No user data returned');
+      }
 
-        if (roleError) throw roleError;
+      console.log("User authenticated:", authData.user.id);
 
-        if (adminRole) {
-          toast({
-            title: "Welcome back!",
-            description: "Successfully logged in as admin.",
-          });
-          navigate('/admin');
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "You don't have permission to access the admin area.",
-          });
-          await supabase.auth.signOut();
-        }
+      // Check if user has admin role
+      const { data: adminRole, error: roleError } = await supabase
+        .from('admin_roles')
+        .select('role')
+        .eq('user_id', authData.user.id)
+        .single();
+
+      if (roleError) {
+        console.error('Role check error:', roleError);
+        throw roleError;
+      }
+
+      console.log("Admin role check result:", adminRole);
+
+      if (adminRole) {
+        toast({
+          title: "Welcome back!",
+          description: "Successfully logged in as admin.",
+        });
+        console.log("Navigating to admin dashboard");
+        navigate('/admin');
+      } else {
+        console.log("No admin role found - signing out");
+        toast({
+          variant: "destructive",
+          title: "Access Denied",
+          description: "You don't have permission to access the admin area.",
+        });
+        await supabase.auth.signOut();
       }
     } catch (error) {
       console.error('Login error:', error);
