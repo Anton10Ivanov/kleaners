@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const AdminLayout = () => {
             title: "Access Denied",
             description: "You don't have permission to access this area.",
           });
-          navigate('/login');
+          navigate('/');
           return;
         }
 
@@ -51,6 +52,11 @@ const AdminLayout = () => {
         setIsLoading(false);
       } catch (error) {
         console.error('Error in admin check:', error);
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please log in again to continue.",
+        });
         navigate('/login');
       }
     };
@@ -72,7 +78,12 @@ const AdminLayout = () => {
   }, [navigate, toast]);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Verifying access...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <span className="ml-2">Verifying access...</span>
+      </div>
+    );
   }
 
   return (
