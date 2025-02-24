@@ -1,7 +1,6 @@
 
 import { format, parseISO } from "date-fns";
-import { SortAsc, SortDesc, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { SortAsc, SortDesc } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -41,8 +40,6 @@ export const BookingsTable = ({
   updateBookingStatus,
   deleteBooking,
 }: BookingsTableProps) => {
-  const [bookingToDelete, setBookingToDelete] = useState<string | null>(null);
-
   const SortIcon = ({ field }: { field: SortField }) => {
     if (sortField !== field) return null;
     return sortOrder === 'asc' ? (
@@ -52,107 +49,88 @@ export const BookingsTable = ({
     );
   };
 
-  const handleDelete = () => {
-    if (bookingToDelete) {
-      deleteBooking(bookingToDelete);
-      setBookingToDelete(null);
-    }
-  };
-
   return (
-    <>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                <Button
-                  variant="ghost"
-                  onClick={() => toggleSort('date')}
-                  className="flex items-center gap-2"
-                >
-                  Date <SortIcon field="date" />
-                </Button>
-              </TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Service</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>
-                <Button
-                  variant="ghost"
-                  onClick={() => toggleSort('total_price')}
-                  className="flex items-center gap-2"
-                >
-                  Total <SortIcon field="total_price" />
-                </Button>
-              </TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings?.map((booking) => (
-              <TableRow key={booking.id}>
-                <TableCell>
-                  {booking.date ? format(parseISO(booking.date), 'PPp') : 'Not scheduled'}
-                </TableCell>
-                <TableCell>
-                  {booking.first_name} {booking.last_name}
-                  <div className="text-sm text-gray-500">{booking.email}</div>
-                </TableCell>
-                <TableCell>
-                  {booking.service_type}
-                  <div className="text-sm text-gray-500">{booking.hours} hours</div>
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-full justify-start p-2">
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <Button
+                variant="ghost"
+                onClick={() => toggleSort('date')}
+                className="flex items-center gap-2"
+              >
+                Date <SortIcon field="date" />
+              </Button>
+            </TableHead>
+            <TableHead>Customer</TableHead>
+            <TableHead>Service</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>
+              <Button
+                variant="ghost"
+                onClick={() => toggleSort('total_price')}
+                className="flex items-center gap-2"
+              >
+                Total <SortIcon field="total_price" />
+              </Button>
+            </TableHead>
+            <TableHead className="w-[100px]">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {bookings?.map((booking) => (
+            <TableRow key={booking.id}>
+              <TableCell>
+                {booking.date ? format(parseISO(booking.date), 'PPp') : 'Not scheduled'}
+              </TableCell>
+              <TableCell>
+                {booking.first_name} {booking.last_name}
+                <div className="text-sm text-gray-500">{booking.email}</div>
+              </TableCell>
+              <TableCell>
+                {booking.service_type}
+                <div className="text-sm text-gray-500">{booking.hours} hours</div>
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-full justify-start p-2">
+                      <Badge
+                        variant="outline"
+                        className={statusColors[booking.status as keyof typeof statusColors]}
+                      >
+                        {booking.status}
+                      </Badge>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {Object.keys(statusColors).map((status) => (
+                      <DropdownMenuItem
+                        key={status}
+                        onClick={() => updateBookingStatus(booking.id, status as BookingStatus)}
+                      >
                         <Badge
                           variant="outline"
-                          className={statusColors[booking.status as keyof typeof statusColors]}
+                          className={statusColors[status as keyof typeof statusColors]}
                         >
-                          {booking.status}
+                          {status}
                         </Badge>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {Object.keys(statusColors).map((status) => (
-                        <DropdownMenuItem
-                          key={status}
-                          onClick={() => updateBookingStatus(booking.id, status as BookingStatus)}
-                        >
-                          <Badge
-                            variant="outline"
-                            className={statusColors[status as keyof typeof statusColors]}
-                          >
-                            {status}
-                          </Badge>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-                <TableCell>€{booking.total_price}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setBookingToDelete(booking.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <DeleteBookingDialog
-        open={!!bookingToDelete}
-        onOpenChange={(open) => !open && setBookingToDelete(null)}
-        onConfirm={handleDelete}
-      />
-    </>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+              <TableCell>€{booking.total_price}</TableCell>
+              <TableCell>
+                <DeleteBookingDialog
+                  onConfirm={() => deleteBooking(booking.id)}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
