@@ -20,84 +20,52 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      console.log("Starting login process...");
+      // Step 1: Sign in
+      console.log("Attempting login with email:", email);
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (authError) {
-        console.error('Authentication error details:', {
-          message: authError.message,
-          status: authError.status,
-          name: authError.name
-        });
-        throw authError;
-      }
+      if (authError) throw authError;
 
       if (!authData.user) {
-        console.error('No user data returned from authentication');
-        throw new Error('No user data returned');
+        throw new Error('No user data returned from authentication');
       }
 
-      console.log("Authentication successful for user:", {
-        id: authData.user.id,
-        email: authData.user.email,
-        lastSignIn: authData.user.last_sign_in_at
-      });
+      console.log("Authentication successful, user ID:", authData.user.id);
 
-      // Check if user has admin role
-      console.log("Checking admin role for user ID:", authData.user.id);
-      const { data: adminRole, error: roleError } = await supabase
-        .from('admin_roles')
-        .select('*')  // Select all columns to see full role data
-        .eq('user_id', authData.user.id)
-        .single();
-
-      if (roleError) {
-        console.error('Role check error details:', {
-          message: roleError.message,
-          code: roleError.code,
-          details: roleError.details,
-          hint: roleError.hint
+      // Step 2: Check admin status using RPC
+      const { data: isAdmin, error: adminCheckError } = await supabase
+        .rpc('check_is_admin', {
+          user_id: authData.user.id
         });
-        throw roleError;
-      }
 
-      console.log("Admin role check result:", adminRole);
+      if (adminCheckError) throw adminCheckError;
 
-      if (adminRole) {
-        console.log("Admin role found:", adminRole);
+      console.log("Admin check result:", isAdmin);
+
+      if (isAdmin) {
         toast({
           title: "Welcome back!",
           description: "Successfully logged in as admin.",
         });
-        console.log("Navigating to admin dashboard");
         navigate('/admin');
       } else {
-        console.log("No admin role found - signing out");
+        console.log("Access denied - not an admin");
+        await supabase.auth.signOut();
         toast({
           variant: "destructive",
           title: "Access Denied",
           description: "You don't have permission to access the admin area.",
         });
-        await supabase.auth.signOut();
       }
     } catch (error) {
-      console.error('Login process error:', error);
-      let errorMessage = "Failed to log in";
-      if (error instanceof Error) {
-        console.error('Error details:', {
-          name: error.name,
-          message: error.message,
-          stack: error.stack
-        });
-        errorMessage = error.message;
-      }
+      console.error('Login error:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: errorMessage,
+        description: error instanceof Error ? error.message : "Failed to log in",
       });
     } finally {
       setIsLoading(false);

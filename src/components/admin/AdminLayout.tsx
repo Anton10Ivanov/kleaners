@@ -26,25 +26,18 @@ const AdminLayout = () => {
         }
 
         console.log('Checking admin role for user:', user.id);
-        const { data: adminRole, error: roleError } = await supabase
-          .from('admin_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .single();
-
-        if (roleError) {
-          console.error('Error checking admin status:', roleError);
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to verify admin access. Please try again.",
+        const { data: isAdmin, error: adminCheckError } = await supabase
+          .rpc('check_is_admin', {
+            user_id: user.id
           });
-          navigate('/login');
-          return;
+
+        if (adminCheckError) {
+          console.error('Error checking admin status:', adminCheckError);
+          throw adminCheckError;
         }
 
-        if (!adminRole) {
-          console.log('No admin role found');
+        if (!isAdmin) {
+          console.log('Not an admin user');
           toast({
             variant: "destructive",
             title: "Access Denied",
@@ -66,6 +59,8 @@ const AdminLayout = () => {
       console.log('Auth state changed:', event);
       if (event === 'SIGNED_OUT' || !session) {
         navigate('/login');
+      } else {
+        checkAdminStatus();
       }
     });
 
