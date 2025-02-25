@@ -37,6 +37,9 @@ const BookingContent = ({
     e.stopPropagation();
   };
 
+  console.log('Current step:', currentStep);
+  console.log('Selected service:', selectedService);
+
   return (
     <div className="w-full md:w-[80%]" onClick={handleFormClick}>
       <Form {...form}>
