@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Calendar from './Calendar';
@@ -27,7 +28,7 @@ const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
         transition={{ duration: 0.3 }}
         className="bg-white dark:bg-dark-background p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800"
       >
-        <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Move In/Out Cleaning Service</h3>
+        <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Move In/Out Cleaning Details</h3>
         <MoveInOutFields
           squareMeters={squareMeters}
           setSquareMeters={setSquareMeters}
@@ -52,10 +53,12 @@ const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
+        className="bg-white dark:bg-dark-background rounded-xl shadow-sm border border-gray-100 dark:border-gray-800"
       >
-        <Calendar 
-          form={form}
-        />
+        <div className="p-6">
+          <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Schedule Your Move In/Out Cleaning</h3>
+          <Calendar form={form} />
+        </div>
       </motion.div>
     </div>
   );
