@@ -39,14 +39,12 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
       if (currentScrollY < lastScrollY) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
         setIsVisible(false);
         setIsServicesOpen(false);
       }
-      
       setLastScrollY(currentScrollY);
     };
 
@@ -70,13 +68,22 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <Logo />
           
-          <NavigationMenu 
-            isServicesOpen={isServicesOpen}
-            setIsServicesOpen={setIsServicesOpen}
-          />
+          <div className="hidden md:flex items-center space-x-8">
+            <NavigationMenu 
+              isServicesOpen={isServicesOpen}
+              setIsServicesOpen={setIsServicesOpen}
+            />
+            <NavLink href="#about">About</NavLink>
+            <Link
+              to="/contact"
+              className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+            >
+              Contact
+            </Link>
+            <LegalDropdown />
+          </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <LegalDropdown />
             <ThemeToggle />
             <LanguageSelector
               currentLanguage={currentLanguage}
@@ -108,15 +115,24 @@ const Navbar = () => {
   );
 };
 
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a
+    href={href}
+    className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+  >
+    {children}
+  </a>
+);
+
 const LegalDropdown = () => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="flex items-center space-x-1">
+      <Button variant="ghost" className="flex items-center space-x-1 font-raleway">
         <span>Legal</span>
         <ChevronDown className="w-4 h-4" />
       </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
+    <DropdownMenuContent align="end" className="w-56">
       <DropdownMenuItem asChild>
         <Link to="/legal/terms">Terms of Service</Link>
       </DropdownMenuItem>
