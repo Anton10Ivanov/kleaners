@@ -9,7 +9,7 @@ export const AuthButtons = () => {
     <>
       <Button
         variant="outline"
-        onClick={() => navigate('/login')}
+        onClick={() => navigate('/auth/login')}
         className="font-raleway"
       >
         Sign in
