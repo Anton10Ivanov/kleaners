@@ -42,6 +42,8 @@ const MoveInOutFields = ({
   additionalNotes = '',
   setAdditionalNotes = () => {},
 }: MoveInOutFieldsProps) => {
+  console.log('Rendering MoveInOutFields with squareMeters:', squareMeters);
+  
   return (
     <div className="space-y-12">
       <PropertyDetails

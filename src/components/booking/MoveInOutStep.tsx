@@ -20,6 +20,8 @@ const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
   const [specialConditions, setSpecialConditions] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState('');
 
+  console.log('Rendering MoveInOutStep');
+
   return (
     <div className="space-y-8">
       <motion.div 
