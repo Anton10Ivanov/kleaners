@@ -1,20 +1,20 @@
 
 import { useState, useEffect } from 'react';
 import { AlignJustify, X, ChevronDown } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
-import { Button } from './ui/button';
 import { NavigationMenu } from './navbar/NavigationMenu';
 import { MobileMenu } from './navbar/MobileMenu';
+import { AuthButtons } from './navbar/AuthButtons';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from 'react-router-dom';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +25,6 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
@@ -77,45 +76,17 @@ const Navbar = () => {
           />
 
           <div className="hidden md:flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-1">
-                  <span>Legal</span>
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/legal/terms">Terms of Service</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/legal/privacy">Privacy Policy</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
+            <LegalDropdown />
             <ThemeToggle />
             <LanguageSelector
               currentLanguage={currentLanguage}
               onLanguageChange={toggleLanguage}
             />
-            <Button
-              variant="outline"
-              onClick={() => navigate('/login')}
-              className="font-raleway"
-            >
-              Sign in
-            </Button>
+            <AuthButtons />
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={() => navigate('/login')}
-              className="mr-2 font-raleway"
-            >
-              Sign in
-            </Button>
+            <AuthButtons />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors p-1"
@@ -136,5 +107,24 @@ const Navbar = () => {
     </nav>
   );
 };
+
+const LegalDropdown = () => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" className="flex items-center space-x-1">
+        <span>Legal</span>
+        <ChevronDown className="w-4 h-4" />
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem asChild>
+        <Link to="/legal/terms">Terms of Service</Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link to="/legal/privacy">Privacy Policy</Link>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export default Navbar;
