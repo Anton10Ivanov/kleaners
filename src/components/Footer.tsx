@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="pt-16 pb-8 bg-[#FEF7CD] dark:bg-gray-800 hover:bg-[#FEC6A1]/20 transition-all duration-300">
+    <footer className="pt-16 pb-8 bg-[#FEF7CD] dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          <div className="col-span-2">
             <Link to="/" className="inline-block">
-              <h3 className="font-bold text-2xl text-primary mb-4 hover:text-primary/80 transition-colors">
+              <h3 className="font-bold text-2xl text-primary mb-4">
                 Kleaners.de
               </h3>
             </Link>
@@ -22,18 +22,34 @@ const Footer = () => {
             <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Services</h4>
             <ul className="space-y-2 text-sm md:text-base">
               <li>
-                <Link to="/services/regular-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                <Link to="/services/regular-cleaning" className="text-gray-600 dark:text-gray-400">
                   Regular Cleaning
                 </Link>
               </li>
               <li>
-                <Link to="/services/move-in-out" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                <Link to="/services/move-in-out" className="text-gray-600 dark:text-gray-400">
                   Move In/Out
                 </Link>
               </li>
               <li>
-                <Link to="/services/business-cleaning" className="text-gray-600 dark:text-gray-400 hover:text-primary">
+                <Link to="/services/business-cleaning" className="text-gray-600 dark:text-gray-400">
                   Business Cleaning
+                </Link>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Legal</h4>
+            <ul className="space-y-2 text-sm md:text-base">
+              <li>
+                <Link to="/legal/terms" className="text-gray-600 dark:text-gray-400">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal/privacy" className="text-gray-600 dark:text-gray-400">
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
@@ -55,20 +71,20 @@ const Footer = () => {
                 <span>Berlin, Germany</span>
               </li>
             </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Follow Us</h4>
-            <div className="flex space-x-3">
-              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
-                <Twitter size={20} />
-              </a>
+
+            <div className="mt-4">
+              <h5 className="font-semibold text-sm mb-2 text-gray-900 dark:text-white">Follow Us</h5>
+              <div className="flex space-x-3">
+                <a href="#" className="text-gray-600 dark:text-gray-400">
+                  <Facebook size={20} />
+                </a>
+                <a href="#" className="text-gray-600 dark:text-gray-400">
+                  <Instagram size={20} />
+                </a>
+                <a href="#" className="text-gray-600 dark:text-gray-400">
+                  <Twitter size={20} />
+                </a>
+              </div>
             </div>
           </div>
         </div>
