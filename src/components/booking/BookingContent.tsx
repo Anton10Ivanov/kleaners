@@ -11,7 +11,6 @@ import { BookingFormData, Frequency } from '@/schemas/booking';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { FrequencyTimeSelector } from './business/components/FrequencyTimeSelector';
 
 interface BookingContentProps {
   currentStep: number;
@@ -103,4 +102,3 @@ const BookingContent = ({
 };
 
 export default BookingContent;
-
