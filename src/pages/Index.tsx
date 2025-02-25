@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/Hero';
@@ -10,6 +11,13 @@ import BookingContent from '../components/booking/BookingContent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
+import { ErrorBoundary } from 'react-error-boundary';
+
+const ErrorFallback = () => (
+  <div className="text-center py-8">
+    <p>Something went wrong loading this section.</p>
+  </div>
+);
 
 const Index = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
@@ -57,7 +65,9 @@ const Index = () => {
             />
             <WhyChooseUs />
             <Services />
-            <Testimonials />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Testimonials />
+            </ErrorBoundary>
           </motion.div>
         ) : (
           <motion.div
