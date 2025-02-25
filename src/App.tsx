@@ -1,54 +1,39 @@
-
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
-import AdminLayout from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
 import RegularCleaning from "./pages/services/RegularCleaning";
-import MoveInOut from "./pages/services/MoveInOut";
 import BusinessCleaning from "./pages/services/BusinessCleaning";
+import MoveInOut from "./pages/services/MoveInOut";
 import PostConstructionCleaning from "./pages/services/PostConstructionCleaning";
 import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
-import ScrollToTop from "./components/ScrollToTop";
-import Dashboard from "./pages/admin/Dashboard";
+import TermsOfService from "./pages/legal/TermsOfService";
+import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
+import NotFound from "./pages/NotFound";
+import FAQ from "./pages/about/FAQ";
+import CompanyValues from "./pages/about/CompanyValues";
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route element={<RootLayout />}>
-              <Route index element={<Index />} />
-              <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-              <Route path="/services/move-in-out" element={<MoveInOut />} />
-              <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-              <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ThemeProvider>
-);
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<Index />} />
+        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+        <Route path="/services/move-in-out" element={<MoveInOut />} />
+        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+        <Route path="/about/faq" element={<FAQ />} />
+        <Route path="/about/values" element={<CompanyValues />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/legal/terms" element={<TermsOfService />} />
+        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+}
 
 export default App;

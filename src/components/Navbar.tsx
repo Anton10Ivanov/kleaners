@@ -49,7 +49,25 @@ const navItems = [
   {
     id: 2,
     label: "About",
-    link: "#about"
+    subMenus: [
+      {
+        title: "About Us",
+        items: [
+          {
+            label: "Company's Values",
+            description: "Our principles and what we stand for",
+            icon: Icons.regular,
+            path: "/about/values"
+          },
+          {
+            label: "FAQ",
+            description: "Frequently asked questions",
+            icon: Icons.regular,
+            path: "/about/faq"
+          }
+        ]
+      }
+    ]
   },
   {
     id: 3,
