@@ -1,24 +1,88 @@
 
 import { useState, useEffect } from 'react';
-import { AlignJustify, X, ChevronDown } from 'lucide-react';
-import { useLocation, Link } from 'react-router-dom';
+import { AlignJustify, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
-import { NavigationMenu } from './navbar/NavigationMenu';
 import { MobileMenu } from './navbar/MobileMenu';
 import { AuthButtons } from './navbar/AuthButtons';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from './ui/button';
+import { DropdownNavigation } from './navbar/DropdownNavigation';
+import { Icons } from './navbar/icons';
+
+const navItems = [
+  {
+    id: 1,
+    label: "Services",
+    subMenus: [
+      {
+        title: "Cleaning Services",
+        items: [
+          {
+            label: "Regular Cleaning",
+            description: "Professional home cleaning service",
+            icon: Icons.regular,
+            path: "/services/regular-cleaning"
+          },
+          {
+            label: "Business Cleaning",
+            description: "Commercial cleaning solutions",
+            icon: Icons.business,
+            path: "/services/business-cleaning"
+          },
+          {
+            label: "Move In/Out",
+            description: "Thorough cleaning for transitions",
+            icon: Icons.moveInOut,
+            path: "/services/move-in-out"
+          },
+          {
+            label: "Post Construction",
+            description: "Clean-up after construction work",
+            icon: Icons.postConstruction,
+            path: "/services/post-construction-cleaning"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    label: "About",
+    link: "#about"
+  },
+  {
+    id: 3,
+    label: "Contact",
+    link: "/contact"
+  },
+  {
+    id: 4,
+    label: "Legal",
+    subMenus: [
+      {
+        title: "Legal Information",
+        items: [
+          {
+            label: "Terms of Service",
+            description: "Our terms and conditions",
+            icon: Icons.regular,
+            path: "/legal/terms"
+          },
+          {
+            label: "Privacy Policy",
+            description: "How we handle your data",
+            icon: Icons.regular,
+            path: "/legal/privacy"
+          }
+        ]
+      }
+    ]
+  }
+];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -32,7 +96,6 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsMenuOpen(false);
-    setIsServicesOpen(false);
     setIsMobileServicesOpen(false);
   }, [location]);
 
@@ -43,7 +106,6 @@ const Navbar = () => {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
         setIsVisible(false);
-        setIsServicesOpen(false);
       }
       setLastScrollY(currentScrollY);
     };
@@ -68,20 +130,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <Logo />
           
-          <div className="hidden md:flex items-center space-x-8">
-            <NavigationMenu 
-              isServicesOpen={isServicesOpen}
-              setIsServicesOpen={setIsServicesOpen}
-            />
-            <NavLink href="#about">About</NavLink>
-            <Link
-              to="/contact"
-              className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
-            >
-              Contact
-            </Link>
-            <LegalDropdown />
-          </div>
+          <DropdownNavigation navItems={navItems} />
 
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
@@ -115,32 +164,5 @@ const Navbar = () => {
   );
 };
 
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a
-    href={href}
-    className="font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
-  >
-    {children}
-  </a>
-);
-
-const LegalDropdown = () => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="flex items-center space-x-1 font-raleway">
-        <span>Legal</span>
-        <ChevronDown className="w-4 h-4" />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="w-56">
-      <DropdownMenuItem asChild>
-        <Link to="/legal/terms">Terms of Service</Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem asChild>
-        <Link to="/legal/privacy">Privacy Policy</Link>
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
-
 export default Navbar;
+
