@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
             </Route>
