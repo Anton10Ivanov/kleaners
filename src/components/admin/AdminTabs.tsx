@@ -6,10 +6,6 @@ import { ProvidersSection } from "./sections/ProvidersSection";
 import { CalendarSection } from "./sections/CalendarSection";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-/**
- * AdminTabs component handles the main navigation and content display for the admin dashboard.
- * It provides a tabbed interface for different administrative sections.
- */
 export const AdminTabs = () => {
   return (
     <Tabs defaultValue="bookings" className="w-full">

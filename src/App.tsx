@@ -1,40 +1,96 @@
-
-import { Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
-import Index from "./pages/Index";
-import RegularCleaning from "./pages/services/RegularCleaning";
-import BusinessCleaning from "./pages/services/BusinessCleaning";
-import MoveInOut from "./pages/services/MoveInOut";
-import PostConstructionCleaning from "./pages/services/PostConstructionCleaning";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
 import Contact from "./pages/Contact";
-import TermsOfService from "./pages/legal/TermsOfService";
-import PrivacyPolicy from "./pages/legal/PrivacyPolicy";
-import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/Signup";
-import NotFound from "./pages/NotFound";
-import FAQ from "./pages/about/FAQ";
-import CompanyValues from "./pages/about/CompanyValues";
+import About from "./pages/About";
+import Book from "./pages/Book";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import BusinessRegister from "./pages/BusinessRegister";
+import BusinessDashboard from "./pages/business/BusinessDashboard";
+import BusinessLayout from "./components/business/BusinessLayout";
+import NewBooking from "./pages/business/NewBooking";
+import ViewBookings from "./pages/business/ViewBookings";
+import EditBooking from "./pages/business/EditBooking";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/services",
+        element: <Services />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/book",
+        element: <Book />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/business/register",
+        element: <BusinessRegister />,
+      },
+    ],
+  },
+  {
+    path: "/business",
+    element: <BusinessLayout />,
+    children: [
+      {
+        path: "dashboard",
+        element: <BusinessDashboard />,
+      },
+      {
+        path: "bookings/new",
+        element: <NewBooking />,
+      },
+      {
+        path: "bookings/view",
+        element: <ViewBookings />,
+      },
+      {
+        path: "bookings/edit/:bookingId",
+        element: <EditBooking />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<RootLayout />}>
-        <Route index element={<Index />} />
-        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-        <Route path="/services/move-in-out" element={<MoveInOut />} />
-        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-        <Route path="/about/faq" element={<FAQ />} />
-        <Route path="/about/values" element={<CompanyValues />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/legal/terms" element={<TermsOfService />} />
-        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
