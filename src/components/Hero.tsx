@@ -62,7 +62,7 @@ const Hero = ({
           <div className="w-full">
             <div className="bg-white dark:bg-surface p-8 md:p-10 shadow-xl rounded-2xl max-w-xl mx-auto border border-gray-100 dark:border-gray-800">
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Start Your Booking</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6"></h2>
                 <div className="relative">
                   <Select value={selectedService} onValueChange={handleServiceChange}>
                     <SelectTrigger className="w-full bg-white dark:bg-gray-800 font-medium h-12">
