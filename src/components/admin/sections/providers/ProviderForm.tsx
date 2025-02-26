@@ -36,6 +36,8 @@ export const ProviderForm = ({
       email: "",
       phone: "",
       services: [],
+      username: "",
+      password: "",
     }
   );
   const [newService, setNewService] = useState("");
@@ -114,6 +116,29 @@ export const ProviderForm = ({
                 onChange={handleInputChange}
                 required
               />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  value={formData.username || ""}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password || ""}
+                  onChange={handleInputChange}
+                  required={!initialData}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
