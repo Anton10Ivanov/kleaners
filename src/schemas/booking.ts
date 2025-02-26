@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export enum Frequency {
@@ -23,9 +22,7 @@ export const bookingSchema = z.object({
   // Business specific
   businessType: z.string().optional(),
   propertySize: z.string().optional(),
-  securityClearance: z.boolean().optional(),
-  operatingHours: z.string().optional(),
-  equipmentProvided: z.boolean().optional(),
+  specialRequirements: z.string().optional(),
   selectedDays: z.array(z.string()).optional(),
   timeSlots: z.record(z.string()).optional(),
   cleaningOptions: z.array(z.string()).optional(),

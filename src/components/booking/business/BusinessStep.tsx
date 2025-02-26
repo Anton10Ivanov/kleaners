@@ -4,6 +4,7 @@ import { BookingFormData, Frequency } from "@/schemas/booking";
 import { BusinessTypeSelector } from "./components/BusinessTypeSelector";
 import { CleaningOptionsSelector } from "./components/CleaningOptionsSelector";
 import { AdditionalFields } from "./components/AdditionalFields";
+import ServiceOptions from "../ServiceOptions";
 import { FrequencyTimeSelector } from "./components/FrequencyTimeSelector";
 import Calendar from "../Calendar";
 
@@ -20,6 +21,10 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
 
   return (
     <div className="space-y-6">
+      <ServiceOptions 
+        frequency={frequency}
+        setFrequency={(freq) => form.setValue('frequency', freq)} 
+      />
       {showCalendar && <Calendar form={form} />}
       {showFrequencyTimeSelector && <FrequencyTimeSelector form={form} />}
       <BusinessTypeSelector form={form} />
