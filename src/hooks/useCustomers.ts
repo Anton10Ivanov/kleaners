@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { Database } from "@/integrations/supabase/types";
+import { useEffect } from "react";
 
 type Customer = Database["public"]["Tables"]["customers"]["Row"];
 
@@ -30,6 +31,29 @@ export const useCustomers = () => {
     },
   });
 
+  // Set up real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel("customers-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "customers",
+        },
+        () => {
+          // Invalidate and refetch
+          queryClient.invalidateQueries({ queryKey: ["customers"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   const createCustomer = async (customerData: Omit<Customer, "id" | "created_at" | "updated_at">) => {
     const { data, error } = await supabase
       .from("customers")
@@ -46,7 +70,6 @@ export const useCustomers = () => {
       throw error;
     }
 
-    queryClient.invalidateQueries({ queryKey: ["customers"] });
     toast({
       title: "Success",
       description: "Customer created successfully",
@@ -72,7 +95,6 @@ export const useCustomers = () => {
       throw error;
     }
 
-    queryClient.invalidateQueries({ queryKey: ["customers"] });
     toast({
       title: "Success",
       description: "Customer updated successfully",
@@ -96,7 +118,6 @@ export const useCustomers = () => {
       throw error;
     }
 
-    queryClient.invalidateQueries({ queryKey: ["customers"] });
     toast({
       title: "Success",
       description: "Customer deleted successfully",

@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -21,10 +20,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
@@ -44,21 +40,23 @@ export const ProvidersTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead>First Name</TableHead>
+            <TableHead>Last Name</TableHead>
+            <TableHead>Username</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Phone</TableHead>
             <TableHead>Services</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {providers?.map((provider) => (
             <TableRow key={provider.id}>
-              <TableCell>
-                {provider.first_name} {provider.last_name}
-              </TableCell>
+              <TableCell>{provider.first_name}</TableCell>
+              <TableCell>{provider.last_name}</TableCell>
+              <TableCell>{provider.username || "-"}</TableCell>
               <TableCell>{provider.email}</TableCell>
-              <TableCell>{provider.phone || "N/A"}</TableCell>
+              <TableCell>{provider.phone || "-"}</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
                   {provider.services?.map((service) => (
@@ -68,8 +66,8 @@ export const ProvidersTable = ({
                   ))}
                 </div>
               </TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
+              <TableCell className="text-right">
+                <div className="flex justify-end space-x-2">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -78,11 +76,16 @@ export const ProvidersTable = ({
                     <Pencil className="h-4 w-4" />
                   </Button>
                   <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="icon">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive"
+                      asChild
+                    >
+                      <AlertDialogTitle>
                         <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
+                      </AlertDialogTitle>
+                    </Button>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete Provider</AlertDialogTitle>
@@ -103,6 +106,16 @@ export const ProvidersTable = ({
               </TableCell>
             </TableRow>
           ))}
+          {(!providers || providers.length === 0) && (
+            <TableRow>
+              <TableCell
+                colSpan={7}
+                className="text-center text-muted-foreground"
+              >
+                No providers found
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>
