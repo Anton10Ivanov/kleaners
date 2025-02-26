@@ -1,6 +1,8 @@
 
 import { Routes, Route } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
 import Index from "./pages/Index";
 import RegularCleaning from "./pages/services/RegularCleaning";
 import BusinessCleaning from "./pages/services/BusinessCleaning";
@@ -32,6 +34,9 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="*" element={<NotFound />} />
+      </Route>
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   );
