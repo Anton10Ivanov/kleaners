@@ -18,17 +18,17 @@ export const useBookingForm = () => {
       bedrooms: 1,
       bathrooms: 1,
       extras: [],
-      date: undefined,
       businessType: undefined,
       propertySize: undefined,
       specialRequirements: '',
+      selectedDays: [],
+      timeSlots: {},
     }
   });
 
   const { handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
 
   const handleNextStep = () => {
-    // Add validation for custom schedule when proceeding to step 3
     if (currentStep === 2 && 
         watch('service') === 'business' && 
         watch('frequency') === Frequency.Custom && 
@@ -37,23 +37,13 @@ export const useBookingForm = () => {
       return;
     }
     
-    console.log('Incrementing step from:', currentStep);
-    setCurrentStep(prevStep => {
-      const nextStep = prevStep + 1;
-      console.log('New step will be:', nextStep);
-      return nextStep;
-    });
+    setCurrentStep(prevStep => prevStep + 1);
   };
 
   const handleBackStep = () => {
     setCurrentStep(prev => Math.max(1, prev - 1));
   };
 
-  useEffect(() => {
-    console.log('Current step updated to:', currentStep);
-  }, [currentStep]);
-
-  // Set default frequency to weekly for business cleaning
   useEffect(() => {
     const service = watch('service');
     if (service === 'business') {

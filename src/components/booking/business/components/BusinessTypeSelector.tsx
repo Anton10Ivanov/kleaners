@@ -11,6 +11,9 @@ interface BusinessTypeSelectorProps {
 }
 
 export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
+  const selectedType = form.watch("businessType");
+  const specialRequirements = form.watch("specialRequirements");
+
   return (
     <FormField
       control={form.control}
@@ -23,6 +26,11 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
               const Icon = type.icon;
               const isSelected = field.value === type.value;
 
+              // Only show the selected type or all types if none selected
+              if (selectedType && !isSelected) {
+                return null;
+              }
+
               return (
                 <div
                   key={type.value}
@@ -34,12 +42,9 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                       : "border-border",
                   )}
                   onClick={() => {
-                    // If clicking the same option again, deselect it
                     if (isSelected) {
                       field.onChange("");
-                      if (type.value === "other") {
-                        form.setValue("specialRequirements", "");
-                      }
+                      form.setValue("specialRequirements", "");
                     } else {
                       field.onChange(type.value);
                     }
@@ -66,10 +71,8 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
                     <Input
                       placeholder="Please specify"
                       className="mt-4 w-full text-sm"
-                      value={form.watch("specialRequirements") || ""}
-                      onChange={(e) => {
-                        form.setValue("specialRequirements", e.target.value);
-                      }}
+                      value={specialRequirements || ""}
+                      onChange={(e) => form.setValue("specialRequirements", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                     />
                   )}
@@ -83,4 +86,3 @@ export const BusinessTypeSelector = ({ form }: BusinessTypeSelectorProps) => {
     />
   );
 };
-
