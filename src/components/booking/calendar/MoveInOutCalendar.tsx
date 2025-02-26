@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { startOfWeek, addDays, eachDayOfInterval, format, isBefore, isAfter, isSameDay } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -27,6 +27,11 @@ const MoveInOutCalendar = ({ form }: MoveInOutCalendarProps) => {
     return dayA - dayB;
   });
 
+  // Update form whenever selectedDates changes
+  useEffect(() => {
+    form.setValue('selectedDates', selectedDates);
+  }, [selectedDates, form]);
+
   const handleDateSelect = (date: Date) => {
     setSelectedDates(prev => {
       const isSelected = prev.some(d => isSameDay(d, date));
@@ -36,7 +41,6 @@ const MoveInOutCalendar = ({ form }: MoveInOutCalendarProps) => {
         return [...prev, date];
       }
     });
-    form.setValue('selectedDates', selectedDates);
   };
 
   const handlePreviousWeek = () => {
