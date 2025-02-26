@@ -96,12 +96,6 @@ const navItems = [
         ]
       }
     ]
-  },
-  {
-    id: 5,
-    label: "Admin",
-    link: "/admin/dashboard",
-    adminOnly: true
   }
 ];
 
