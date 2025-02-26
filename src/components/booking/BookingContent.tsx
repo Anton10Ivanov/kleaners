@@ -39,6 +39,7 @@ const BookingContent = ({
 
   console.log('Current step:', currentStep);
   console.log('Selected service:', selectedService);
+  console.log('Should show MoveInOut:', currentStep === 2 && selectedService === 'moveInOut');
 
   return (
     <div className="w-full md:w-[80%]" onClick={handleFormClick}>
@@ -64,7 +65,7 @@ const BookingContent = ({
               )}
             </motion.div>
           )}
-          {currentStep === 2 && selectedService === 'moveinout' && (
+          {currentStep === 2 && selectedService === 'moveInOut' && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
