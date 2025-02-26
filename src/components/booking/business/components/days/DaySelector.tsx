@@ -96,7 +96,7 @@ export const DaySelector = ({ form, days, selectedDays, frequency, onDaySelect }
             </Select>
           )}
         />
-      )}
+      ))}
     </div>
   );
 };
