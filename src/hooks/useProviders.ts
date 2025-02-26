@@ -3,14 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Database } from "@/integrations/supabase/types";
+import { useEffect } from "react";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
-/**
- * Custom hook for managing service providers data and operations.
- * Provides functionality for fetching, creating, updating, and deleting providers.
- * @returns Object containing providers data and CRUD operations
- */
 export const useProviders = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -39,6 +35,29 @@ export const useProviders = () => {
     },
   });
 
+  // Set up real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel("providers-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "service_providers",
+        },
+        () => {
+          // Invalidate and refetch
+          queryClient.invalidateQueries({ queryKey: ["providers"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   const createProvider = useMutation({
     mutationFn: async (provider: Omit<ServiceProvider, "id" | "created_at" | "updated_at">) => {
       console.log("Creating provider:", provider);
@@ -57,7 +76,6 @@ export const useProviders = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["providers"] });
       toast({
         title: "Success",
         description: "Provider added successfully",
@@ -95,7 +113,6 @@ export const useProviders = () => {
       return updatedData;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["providers"] });
       toast({
         title: "Success",
         description: "Provider updated successfully",
@@ -127,7 +144,6 @@ export const useProviders = () => {
       console.log("Provider deleted successfully");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["providers"] });
       toast({
         title: "Success",
         description: "Provider deleted successfully",
