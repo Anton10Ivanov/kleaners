@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Calendar from './Calendar';
+import MoveInOutCalendar from './calendar/MoveInOutCalendar';
 import MoveInOutFields from './moveInOut/MoveInOutFields';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
@@ -55,12 +55,8 @@ const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
-        className="bg-white dark:bg-dark-background rounded-xl shadow-sm border border-gray-100 dark:border-gray-800"
       >
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Schedule Your Move In/Out Cleaning</h3>
-          <Calendar form={form} />
-        </div>
+        <MoveInOutCalendar form={form} />
       </motion.div>
     </div>
   );
