@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Clock } from "lucide-react";
 
 interface TimeSlotSelectorProps {
   form: UseFormReturn<BookingFormData>;
@@ -45,19 +46,22 @@ export const TimeSlotSelector = ({
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800/50">
+    <div className="p-2 border rounded-lg bg-gray-50 dark:bg-gray-800/50">
       <FormField
         control={form.control}
         name={`timeSlots.${day}`}
         render={() => (
-          <FormItem className="space-y-3">
-            <FormLabel>{day}</FormLabel>
+          <FormItem className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <FormLabel className="text-sm font-medium">{day}</FormLabel>
+            </div>
             <FormControl>
               <div className="relative">
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full justify-start font-normal"
+                  className="w-full justify-start text-sm py-2 h-auto font-normal"
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   {timeSlots[day] || 'Select time'}
@@ -72,7 +76,7 @@ export const TimeSlotSelector = ({
                             type="button"
                             variant="ghost"
                             className={cn(
-                              "w-full justify-start font-normal mb-1",
+                              "w-full justify-start text-sm py-2 h-auto font-normal mb-1",
                               timeSlots[day] === time && "bg-primary text-primary-foreground hover:bg-primary/90"
                             )}
                             onClick={() => handleTimeClick(time)}
@@ -92,3 +96,4 @@ export const TimeSlotSelector = ({
     </div>
   );
 };
+

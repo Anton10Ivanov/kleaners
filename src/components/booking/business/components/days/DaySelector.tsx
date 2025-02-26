@@ -50,19 +50,10 @@ export const DaySelector = ({ form, days, selectedDays, frequency, onDaySelect }
   }
 
   if (isCustom) {
-    const hasOneSelection = selectedDays.length === 1;
-    const selectedDay = selectedDays[0];
-
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {days.map((day) => {
           const isSelected = selectedDays.includes(day);
-          
-          // Hide unselected buttons when one day is selected
-          if (hasOneSelection && !isSelected) {
-            return null;
-          }
-
           return (
             <Button
               key={day}
@@ -70,7 +61,7 @@ export const DaySelector = ({ form, days, selectedDays, frequency, onDaySelect }
               variant={isSelected ? "default" : "outline"}
               className={`h-12 flex items-center justify-between gap-2 transition-all ${
                 isSelected ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"
-              } ${hasOneSelection ? "col-span-full w-full" : "w-full"}`}
+              }`}
               onClick={() => onDaySelect(day)}
             >
               <span>{day}</span>
@@ -105,7 +96,7 @@ export const DaySelector = ({ form, days, selectedDays, frequency, onDaySelect }
             </Select>
           )}
         />
-      ))}
+      )}
     </div>
   );
 };
