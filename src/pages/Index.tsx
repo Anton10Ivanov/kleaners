@@ -47,14 +47,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
           >
             <Hero 
               selectedService={selectedService}
@@ -71,11 +71,11 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-32 pb-20 px-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="pt-24 pb-32 px-4 md:pt-32"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
           >
             <div className="max-w-7xl mx-auto">
               <ProgressBar currentStep={currentStep} />
@@ -86,7 +86,12 @@ const Index = () => {
                   selectedService={selectedService}
                   form={form}
                 />
-                <div className="w-full md:w-[20%] fixed bottom-0 left-0 md:relative md:bottom-auto md:left-auto">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="w-full md:w-[20%] fixed bottom-0 left-0 right-0 z-20 md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto"
+                >
                   <BookingSummary 
                     selectedService={selectedService}
                     frequency={frequency || ''}
@@ -94,20 +99,21 @@ const Index = () => {
                     currentPrice={currentPrice}
                     selectedExtras={selectedExtras}
                   />
-                </div>
+                </motion.div>
               </div>
 
-              <div className="flex justify-between mt-8">
+              <div className="flex justify-between mt-8 pb-20 md:pb-0">
                 <Button 
                   onClick={handleBack}
                   variant="outline"
+                  className="rounded-xl h-12"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < 3 && (
                   <Button 
                     onClick={handleNext}
-                    className="bg-primary hover:bg-primary/90 text-white"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
