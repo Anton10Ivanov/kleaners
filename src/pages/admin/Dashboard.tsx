@@ -2,12 +2,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
+import { RefreshCw, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleAddUser = () => {
     try {
@@ -27,6 +29,29 @@ const Dashboard = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+      // Invalidate and refetch all relevant queries
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["customers"] }),
+        queryClient.invalidateQueries({ queryKey: ["bookings"] }),
+        queryClient.invalidateQueries({ queryKey: ["providers"] })
+      ]);
+
+      toast({
+        title: "Success",
+        description: "Dashboard data refreshed successfully",
+      });
+    } catch (error) {
+      console.error("Refresh error:", error);
+      toast({
+        variant: "destructive",
+        title: "Refresh failed",
+        description: "Failed to refresh dashboard data",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto py-4 px-2 md:py-8 md:px-4">
       <Card className="shadow-lg dark:glass-morphism">
@@ -41,6 +66,15 @@ const Dashboard = () => {
                 title="Add New User"
               >
                 <UserPlus className="w-5 h-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleRefresh}
+                className="hover:text-primary hover:border-primary transition-colors"
+                title="Refresh Data"
+              >
+                <RefreshCw className="w-5 h-5" />
               </Button>
               <CardTitle className="text-xl md:text-2xl">Admin Dashboard</CardTitle>
             </div>

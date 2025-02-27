@@ -41,6 +41,10 @@ export const ProvidersSection = () => {
     setIsFormOpen(true);
   };
 
+  const handleDelete = (id: string) => {
+    deleteProvider(id);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -58,13 +62,11 @@ export const ProvidersSection = () => {
           <p className="text-muted-foreground">Loading providers...</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <ProvidersTable
-            providers={providers}
-            onEdit={handleEdit}
-            onDelete={deleteProvider}
-          />
-        </div>
+        <ProvidersTable
+          providers={providers}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       )}
 
       <ProviderForm
