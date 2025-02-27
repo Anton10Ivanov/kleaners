@@ -20,21 +20,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, UserCircle } from "lucide-react";
+import { Loader2, UserCircle, Save, Phone, Mail, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface UserContextType {
   user: User;
 }
 
-interface ProfileFormValues {
-  first_name: string;
-  last_name: string;
-  phone: string;
-  address: string;
-  email: string;
-}
+const profileFormSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  email: z.string().email("Invalid email format").optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 const UserProfile = () => {
   const { user } = useOutletContext<UserContextType>();
@@ -43,6 +47,7 @@ const UserProfile = () => {
   const { toast } = useToast();
 
   const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
@@ -50,11 +55,13 @@ const UserProfile = () => {
       address: "",
       email: user?.email || "",
     },
+    mode: "onBlur",
   });
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoading(true);
         const { data, error } = await supabase
           .from('customers')
           .select('*')
@@ -74,8 +81,8 @@ const UserProfile = () => {
         console.error('Error fetching profile:', error);
         toast({
           variant: "destructive",
-          title: "Error",
-          description: "Failed to load profile data."
+          title: "Error loading profile",
+          description: "We couldn't load your profile. Please try again later."
         });
       } finally {
         setLoading(false);
@@ -111,8 +118,8 @@ const UserProfile = () => {
       console.error('Error updating profile:', error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to update profile."
+        title: "Error updating profile",
+        description: "We couldn't update your profile. Please try again later."
       });
     } finally {
       setSaving(false);
@@ -135,7 +142,7 @@ const UserProfile = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 border-t-4 border-t-primary">
           <CardHeader>
             <CardTitle>Personal Information</CardTitle>
             <CardDescription>Update your profile details</CardDescription>
@@ -178,14 +185,18 @@ const UserProfile = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="email" 
-                          placeholder="Email" 
-                          {...field} 
-                          disabled 
-                        />
-                      </FormControl>
+                      <div className="flex items-center gap-2">
+                        <FormControl>
+                          <Input 
+                            type="email" 
+                            placeholder="Email" 
+                            {...field} 
+                            disabled 
+                            className="flex-1"
+                          />
+                        </FormControl>
+                        <Mail className="h-5 w-5 text-muted-foreground" />
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -197,13 +208,17 @@ const UserProfile = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="tel" 
-                          placeholder="Phone number" 
-                          {...field} 
-                        />
-                      </FormControl>
+                      <div className="flex items-center gap-2">
+                        <FormControl>
+                          <Input 
+                            type="tel" 
+                            placeholder="Phone number" 
+                            {...field} 
+                            className="flex-1"
+                          />
+                        </FormControl>
+                        <Phone className="h-5 w-5 text-muted-foreground" />
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -215,35 +230,54 @@ const UserProfile = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Your address" 
-                          {...field} 
-                        />
-                      </FormControl>
+                      <div className="flex items-center gap-2">
+                        <FormControl>
+                          <Input 
+                            placeholder="Your address" 
+                            {...field} 
+                            className="flex-1"
+                          />
+                        </FormControl>
+                        <MapPin className="h-5 w-5 text-muted-foreground" />
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button 
-                  type="submit" 
-                  className="w-full md:w-auto"
-                  disabled={saving}
-                >
-                  {saving ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : "Save Changes"}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 justify-end">
+                  <Button 
+                    type="button" 
+                    variant="outline"
+                    disabled={saving}
+                    onClick={() => form.reset()}
+                  >
+                    Reset
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={saving || !form.formState.isDirty}
+                    className="flex gap-2 items-center"
+                  >
+                    {saving ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4" />
+                        Save Changes
+                      </>
+                    )}
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-t-4 border-t-secondary">
           <CardHeader>
             <CardTitle>Account Information</CardTitle>
             <CardDescription>Your account details</CardDescription>
@@ -255,15 +289,21 @@ const UserProfile = () => {
             <h3 className="text-lg font-medium">{form.watch('first_name')} {form.watch('last_name')}</h3>
             <p className="text-sm text-muted-foreground mb-6">{user?.email}</p>
             
-            <div className="w-full space-y-2">
-              <div className="flex justify-between text-sm">
+            <div className="w-full space-y-4">
+              <div className="flex justify-between text-sm px-4 py-3 bg-muted rounded-md">
                 <span className="text-muted-foreground">Member since:</span>
-                <span>{new Date(user?.created_at || Date.now()).toLocaleDateString()}</span>
+                <span className="font-medium">{new Date(user?.created_at || Date.now()).toLocaleDateString()}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-sm px-4 py-3 bg-muted rounded-md">
                 <span className="text-muted-foreground">Last login:</span>
-                <span>{new Date(user?.last_sign_in_at || Date.now()).toLocaleDateString()}</span>
+                <span className="font-medium">{new Date(user?.last_sign_in_at || Date.now()).toLocaleDateString()}</span>
               </div>
+            </div>
+            
+            <div className="w-full mt-6">
+              <Button variant="outline" className="w-full" disabled>
+                Change Password
+              </Button>
             </div>
           </CardContent>
         </Card>
