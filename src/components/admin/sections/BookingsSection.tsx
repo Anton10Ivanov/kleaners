@@ -44,14 +44,20 @@ export const BookingsSection = () => {
         dateRange={dateRange}
         setDateRange={setDateRange}
       />
-      <BookingsTable
-        bookings={bookings}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        toggleSort={toggleSort}
-        updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
-        deleteBooking={deleteBooking}
-      />
+      {bookings && bookings.length > 0 ? (
+        <BookingsTable
+          bookings={bookings}
+          sortField={sortField}
+          sortOrder={sortOrder}
+          toggleSort={toggleSort}
+          updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
+          deleteBooking={deleteBooking}
+        />
+      ) : (
+        <div className="text-center py-8 bg-white dark:bg-gray-800 rounded-md border shadow-sm">
+          <p className="text-gray-500 dark:text-gray-400">No bookings found matching your filters</p>
+        </div>
+      )}
     </div>
   );
 };
