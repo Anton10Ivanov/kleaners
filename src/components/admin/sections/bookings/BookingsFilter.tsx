@@ -1,19 +1,26 @@
 
+import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
-import { BookingStatus, statusColors } from "./types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { BookingStatus } from "./types";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface BookingsFilterProps {
   searchTerm: string;
-  setSearchTerm: (term: string) => void;
+  setSearchTerm: (value: string) => void;
   selectedStatus: BookingStatus | null;
   setSelectedStatus: (status: BookingStatus | null) => void;
   dateRange: DateRange | undefined;
-  setDateRange: (range: DateRange | undefined) => void;
+  setDateRange: (dateRange: DateRange | undefined) => void;
 }
 
 export const BookingsFilter = ({
@@ -25,36 +32,52 @@ export const BookingsFilter = ({
   setDateRange,
 }: BookingsFilterProps) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+    <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex-1">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
           <Input
-            placeholder="Search bookings..."
+            type="search"
+            placeholder="Search by name or email..."
+            className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
           />
         </div>
+      </div>
+      <Select
+        value={selectedStatus || ""}
+        onValueChange={(value) =>
+          setSelectedStatus(value ? (value as BookingStatus) : null)
+        }
+      >
+        <SelectTrigger className="w-full md:w-[180px]">
+          <SelectValue placeholder="Filter by status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="">All Statuses</SelectItem>
+          <SelectItem value="pending">Pending</SelectItem>
+          <SelectItem value="confirmed">Confirmed</SelectItem>
+          <SelectItem value="completed">Completed</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
+        </SelectContent>
+      </Select>
+      <div className="w-full md:w-auto">
         <DatePickerWithRange date={dateRange} setDate={setDateRange} />
       </div>
-      <RadioGroup
-        defaultValue={selectedStatus || "all"}
-        onValueChange={(value) => setSelectedStatus(value === "all" ? null : value as BookingStatus)}
-        className="flex flex-wrap gap-2"
-      >
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="all" id="all" />
-          <Label htmlFor="all">All</Label>
-        </div>
-        {Object.keys(statusColors).map((status) => (
-          <div key={status} className="flex items-center space-x-2">
-            <RadioGroupItem value={status} id={status} />
-            <Label htmlFor={status} className="capitalize">{status}</Label>
-          </div>
-        ))}
-      </RadioGroup>
+      {(searchTerm || selectedStatus || dateRange) && (
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setSearchTerm("");
+            setSelectedStatus(null);
+            setDateRange(undefined);
+          }}
+          className="w-full md:w-auto"
+        >
+          Reset Filters
+        </Button>
+      )}
     </div>
   );
 };
-
