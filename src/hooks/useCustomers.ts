@@ -13,12 +13,14 @@ export const useCustomers = () => {
   const { data: customers = [], isLoading } = useQuery({
     queryKey: ["customers"],
     queryFn: async () => {
+      console.log("Fetching customers...");
       const { data, error } = await supabase
         .from("customers")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) {
+        console.error("Error fetching customers:", error);
         toast({
           variant: "destructive",
           title: "Error fetching customers",
@@ -27,12 +29,14 @@ export const useCustomers = () => {
         throw error;
       }
 
+      console.log("Fetched customers:", data);
       return data;
     },
   });
 
   // Set up real-time subscription
   useEffect(() => {
+    console.log("Setting up real-time subscription for customers...");
     const channel = supabase
       .channel("customers-changes")
       .on(
@@ -42,14 +46,18 @@ export const useCustomers = () => {
           schema: "public",
           table: "customers",
         },
-        () => {
+        (payload) => {
+          console.log("Real-time customer update received:", payload);
           // Invalidate and refetch
           queryClient.invalidateQueries({ queryKey: ["customers"] });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Subscription status:", status);
+      });
 
     return () => {
+      console.log("Cleaning up customers subscription");
       supabase.removeChannel(channel);
     };
   }, [queryClient]);
@@ -62,6 +70,7 @@ export const useCustomers = () => {
       .single();
 
     if (error) {
+      console.error("Error creating customer:", error);
       toast({
         variant: "destructive",
         title: "Error creating customer",
@@ -87,6 +96,7 @@ export const useCustomers = () => {
       .single();
 
     if (error) {
+      console.error("Error updating customer:", error);
       toast({
         variant: "destructive",
         title: "Error updating customer",
@@ -110,6 +120,7 @@ export const useCustomers = () => {
       .eq("id", id);
 
     if (error) {
+      console.error("Error deleting customer:", error);
       toast({
         variant: "destructive",
         title: "Error deleting customer",
