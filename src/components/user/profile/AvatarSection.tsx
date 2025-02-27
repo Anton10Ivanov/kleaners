@@ -1,10 +1,10 @@
 
 import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Loader2, UserCircle, Camera, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import type { User } from "@/types/supabase";
 
 interface AvatarSectionProps {
   user: User;

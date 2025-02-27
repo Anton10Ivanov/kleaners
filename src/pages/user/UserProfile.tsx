@@ -1,8 +1,8 @@
 
 import { useOutletContext } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import { Loader2 } from "lucide-react";
 import { FormProvider } from "react-hook-form";
+import type { User } from "@/types/supabase";
 
 import PersonalInfoForm from "@/components/user/profile/PersonalInfoForm";
 import AccountInfoCard from "@/components/user/profile/AccountInfoCard";

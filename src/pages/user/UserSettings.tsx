@@ -1,15 +1,13 @@
 
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Card, 
   CardContent, 
   CardDescription, 
   CardHeader, 
-  CardTitle, 
-  CardFooter
+  CardTitle 
 } from "@/components/ui/card";
 import {
   AlertDialog,
@@ -28,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Lock, Bell, Shield, UserX } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import type { User } from "@/types/supabase";
 
 interface UserContextType {
   user: User;
