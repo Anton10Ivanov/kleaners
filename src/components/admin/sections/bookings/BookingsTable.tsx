@@ -1,6 +1,6 @@
 
 import { format, parseISO } from "date-fns";
-import { SortAsc, SortDesc } from "lucide-react";
+import { SortAsc, SortDesc, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -50,87 +50,105 @@ export const BookingsTable = ({
   };
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Button
-                variant="ghost"
-                onClick={() => toggleSort('date')}
-                className="flex items-center gap-2"
-              >
-                Date <SortIcon field="date" />
-              </Button>
-            </TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead>Service</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>
-              <Button
-                variant="ghost"
-                onClick={() => toggleSort('total_price')}
-                className="flex items-center gap-2"
-              >
-                Total <SortIcon field="total_price" />
-              </Button>
-            </TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {bookings?.map((booking) => (
-            <TableRow key={booking.id}>
-              <TableCell>
-                {booking.date ? format(parseISO(booking.date), 'PPp') : 'Not scheduled'}
-              </TableCell>
-              <TableCell>
-                {booking.first_name} {booking.last_name}
-                <div className="text-sm text-gray-500">{booking.email}</div>
-              </TableCell>
-              <TableCell>
-                {booking.service_type}
-                <div className="text-sm text-gray-500">{booking.hours} hours</div>
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-full justify-start p-2">
-                      <Badge
-                        variant="outline"
-                        className={statusColors[booking.status as keyof typeof statusColors]}
-                      >
-                        {booking.status}
-                      </Badge>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {Object.keys(statusColors).map((status) => (
-                      <DropdownMenuItem
-                        key={status}
-                        onClick={() => updateBookingStatus(booking.id, status as BookingStatus)}
-                      >
+    <div className="rounded-md border overflow-hidden">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <Button
+                  variant="ghost"
+                  onClick={() => toggleSort('date')}
+                  className="flex items-center gap-2"
+                >
+                  Date <SortIcon field="date" />
+                </Button>
+              </TableHead>
+              <TableHead className="hidden md:table-cell">Customer</TableHead>
+              <TableHead className="hidden sm:table-cell">Service</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="hidden sm:table-cell">
+                <Button
+                  variant="ghost"
+                  onClick={() => toggleSort('total_price')}
+                  className="flex items-center gap-2"
+                >
+                  Total <SortIcon field="total_price" />
+                </Button>
+              </TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {bookings?.map((booking) => (
+              <TableRow key={booking.id}>
+                <TableCell className="font-medium">
+                  {booking.date ? format(parseISO(booking.date), 'MMM dd') : 'Not scheduled'}
+                  <div className="text-xs text-gray-500 md:hidden">
+                    {booking.first_name} {booking.last_name}
+                  </div>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {booking.first_name} {booking.last_name}
+                  <div className="text-sm text-gray-500">{booking.email}</div>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  {booking.service_type}
+                  <div className="text-sm text-gray-500">{booking.hours} hours</div>
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-full justify-start p-2">
                         <Badge
                           variant="outline"
-                          className={statusColors[status as keyof typeof statusColors]}
+                          className={statusColors[booking.status as keyof typeof statusColors]}
                         >
-                          {status}
+                          {booking.status}
                         </Badge>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {Object.keys(statusColors).map((status) => (
+                        <DropdownMenuItem
+                          key={status}
+                          onClick={() => updateBookingStatus(booking.id, status as BookingStatus)}
+                        >
+                          <Badge
+                            variant="outline"
+                            className={statusColors[status as keyof typeof statusColors]}
+                          >
+                            {status}
+                          </Badge>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">€{booking.total_price}</TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        className="text-destructive"
+                        onClick={() => deleteBooking(booking.id)}
+                      >
+                        Delete
                       </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-              <TableCell>€{booking.total_price}</TableCell>
-              <TableCell>
-                <DeleteBookingDialog
-                  onConfirm={() => deleteBooking(booking.id)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
