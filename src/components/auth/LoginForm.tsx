@@ -108,7 +108,7 @@ const LoginForm = ({ onResetMode }: LoginFormProps) => {
           <Button
             type="button"
             variant="link"
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate('/auth/signup')}
             className="px-0 text-sm text-gray-600 hover:text-gray-900"
           >
             Sign up
