@@ -1,6 +1,5 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@supabase/supabase-js";
 import { BookingStatus, SortField, SortOrder } from "@/components/admin/sections/bookings/types";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
