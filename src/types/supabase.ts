@@ -1,4 +1,5 @@
 
-import type { User } from '@supabase/supabase-js';
+import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 
-export type SupabaseUser = User;
+export type User = SupabaseAuthUser;
+export type SupabaseUser = SupabaseAuthUser;
