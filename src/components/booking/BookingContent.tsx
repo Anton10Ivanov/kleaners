@@ -18,6 +18,11 @@ interface BookingContentProps {
   form: ReturnType<typeof useForm<BookingFormData>>;
 }
 
+const fadeVariant = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
+
 const BookingContent = ({
   currentStep,
   selectedService,
@@ -37,20 +42,20 @@ const BookingContent = ({
     e.stopPropagation();
   };
 
-  console.log('Current step:', currentStep);
-  console.log('Selected service:', selectedService);
-  console.log('Should show MoveInOut:', currentStep === 2 && selectedService === 'moveInOut');
-
   return (
     <div className="w-full md:w-[80%]" onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={(e) => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-6"
+              initial="hidden"
+              animate="visible"
+              variants={fadeVariant}
+              className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
             >
+              <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
+                Regular Cleaning Details
+              </h3>
               <ServiceOptions 
                 frequency={frequency}
                 setFrequency={(freq) => form.setValue('frequency', freq)}
@@ -67,9 +72,9 @@ const BookingContent = ({
           )}
           {currentStep === 2 && selectedService === 'moveInOut' && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
+              initial="hidden"
+              animate="visible"
+              variants={fadeVariant}
               key="moveinout-step"
               className="space-y-6"
             >
@@ -78,8 +83,9 @@ const BookingContent = ({
           )}
           {currentStep === 2 && selectedService === 'business' && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial="hidden"
+              animate="visible"
+              variants={fadeVariant}
               key="business-step"
             >
               <BusinessStep form={form} />
@@ -87,9 +93,9 @@ const BookingContent = ({
           )}
           {currentStep === 3 && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial="hidden"
+              animate="visible"
+              variants={fadeVariant}
               key="final-step"
             >
               <FinalStep 

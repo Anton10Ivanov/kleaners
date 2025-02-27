@@ -1,7 +1,9 @@
+
 import { Info, ChevronUp, Check, Clock } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { motion } from 'framer-motion';
 
 interface BookingSummaryProps {
   selectedService: string;
@@ -80,6 +82,16 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
     }
   }, [isMobile]);
 
+  const translateServiceName = (service: string) => {
+    switch (service) {
+      case 'regular': return 'Regular Cleaning';
+      case 'moveInOut': return 'Move In/Out Cleaning';
+      case 'business': return 'Business Cleaning';
+      case 'construction': return 'Post-Construction Cleaning';
+      default: return service;
+    }
+  };
+
   return (
     <Collapsible 
       open={isOpen} 
@@ -87,23 +99,28 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
       className={`${isMobile ? 'fixed bottom-0 left-0 w-full z-50' : 'sticky top-20'}`}
     >
       <div className="relative" ref={contentRef}>
-        <div className="bg-gray-50 dark:bg-gray-900 p-4 shadow-md border border-gray-100 dark:border-gray-800 md:rounded-lg">
+        <motion.div 
+          initial={{ y: isMobile ? 20 : 0, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white dark:bg-gray-800 p-4 shadow-md border border-gray-100 dark:border-gray-700 md:rounded-lg"
+        >
           <CollapsibleContent className="space-y-3">
             {selectedService && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
                 <Check className="w-4 h-4 text-primary shrink-0" />
-                <span className="font-medium truncate">{selectedService === 'regular' ? 'Regular Cleaning' : selectedService === 'deep' ? 'Deep Cleaning' : 'Move In/Out Cleaning'}</span>
+                <span className="font-medium truncate">{translateServiceName(selectedService)}</span>
               </div>
             )}
             {frequency && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
                 <Clock className="w-4 h-4 text-primary shrink-0" />
                 <span className="font-medium">{frequency === 'weekly' ? 'Weekly' : frequency === 'biweekly' ? 'Every 2 Weeks' : 'One Time'}</span>
                 <span className="ml-auto font-semibold tabular-nums">{currentPrice.toFixed(2)} €/h</span>
               </div>
             )}
             {hours > 0 && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
                 <Clock className="w-4 h-4 text-primary shrink-0" />
                 <span className="font-medium">{hours} Cleaning Hours</span>
                 <span className="ml-auto font-semibold tabular-nums">{(currentPrice * hours).toFixed(2)} €</span>
@@ -139,7 +156,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
               }
 
               return (
-                <div key={extra} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
+                <div key={extra} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2.5 rounded-md bg-white/50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-700">
                   <Check className="w-4 h-4 text-primary shrink-0" />
                   <span className="font-medium truncate">{extraLabel}</span>
                   <span className="ml-auto font-semibold tabular-nums">{extraCost.toFixed(2)} €</span>
@@ -151,7 +168,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
           <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-3" />
 
           <CollapsibleTrigger className="w-full">
-            <div className="bg-primary/5 dark:bg-primary/10 rounded-md p-3">
+            <div className="bg-primary/10 dark:bg-primary/20 rounded-md p-3">
               <div className="flex items-center justify-between group">
                 <div className="flex items-center gap-1.5">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white">Total</h3>
@@ -160,7 +177,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
                       <TooltipTrigger>
                         <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
                       </TooltipTrigger>
-                      <TooltipContent side="left" className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
+                      <TooltipContent side={isMobile ? "top" : "left"} className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700">
                         <p className="font-medium">Price per cleaning session</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{currentPrice}€ per hour × {hours} hours</p>
                         {extrasCost > 0 && (
@@ -177,7 +194,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
               </div>
             </div>
           </CollapsibleTrigger>
-        </div>
+        </motion.div>
       </div>
     </Collapsible>
   );
