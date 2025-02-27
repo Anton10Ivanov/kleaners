@@ -16,6 +16,11 @@ import Signup from "./pages/auth/Signup";
 import NotFound from "./pages/NotFound";
 import FAQ from "./pages/about/FAQ";
 import CompanyValues from "./pages/about/CompanyValues";
+import UserLayout from "./components/user/UserLayout";
+import UserDashboard from "./pages/user/UserDashboard";
+import UserBookings from "./pages/user/UserBookings";
+import UserProfile from "./pages/user/UserProfile";
+import UserSettings from "./pages/user/UserSettings";
 
 function App() {
   return (
@@ -37,6 +42,12 @@ function App() {
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
+      </Route>
+      <Route path="/user" element={<UserLayout />}>
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="bookings" element={<UserBookings />} />
+        <Route path="profile" element={<UserProfile />} />
+        <Route path="settings" element={<UserSettings />} />
       </Route>
     </Routes>
   );
