@@ -132,7 +132,11 @@ const WhyChooseUs = () => {
         <div className={`w-full h-full rounded-2xl transition-all duration-500 overflow-hidden ${content[activeSection].color}`}>
           <div className="w-full h-full flex items-center justify-center text-white p-10">
             <div className="text-center">
-              <content[activeSection].icon className="w-24 h-24 mx-auto mb-6" />
+              {/* This is the line that had syntax errors */}
+              {(() => {
+                const IconComponent = content[activeSection].icon;
+                return <IconComponent className="w-24 h-24 mx-auto mb-6" />;
+              })()}
               <h3 className="text-3xl font-bold mb-2">{content[activeSection].title}</h3>
               <p className="text-xl max-w-md">{content[activeSection].description}</p>
             </div>
