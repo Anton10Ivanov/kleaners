@@ -168,7 +168,7 @@ const SignupForm = () => {
         <Button
           type="button"
           variant="link"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/auth/login')}
           className="w-full text-sm text-gray-600 hover:text-gray-900"
         >
           Already have an account? Log in
