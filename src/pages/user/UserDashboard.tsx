@@ -1,12 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, Clock, Package, AlertCircle, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import type { User } from "@/types/supabase";
 
 interface UserContextType {
   user: User;

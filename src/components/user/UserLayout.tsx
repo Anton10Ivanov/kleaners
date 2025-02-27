@@ -2,9 +2,9 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
 import UserSidebar from "./UserSidebar";
 import { Loader2 } from "lucide-react";
+import type { User } from "@/types/supabase";
 
 const UserLayout = () => {
   const [user, setUser] = useState<User | null>(null);

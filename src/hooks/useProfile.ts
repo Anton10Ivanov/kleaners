@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
+import type { User } from "@/types/supabase";
 
 export const profileFormSchema = z.object({
   first_name: z.string().min(1, "First name is required"),

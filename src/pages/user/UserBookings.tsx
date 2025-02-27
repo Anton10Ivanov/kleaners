@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Card, 
@@ -22,6 +21,7 @@ import {
   Loader2
 } from "lucide-react";
 import { BookingStatus } from "@/components/admin/sections/bookings/types";
+import type { User } from "@/types/supabase";
 
 interface UserContextType {
   user: User;

@@ -1,9 +1,9 @@
 
-import { User } from "@supabase/supabase-js";
 import { useFormContext } from "react-hook-form";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AvatarSection from "./AvatarSection";
+import type { User } from "@/types/supabase";
 
 interface AccountInfoCardProps {
   user: User;
