@@ -109,8 +109,45 @@ export const useProfile = (user: User) => {
     }
   };
 
-  const handleAvatarChange = (url: string | null) => {
-    form.setValue('avatar_url', url || '');
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!event.target.files || event.target.files.length === 0) {
+        throw new Error('You must select an image to upload.');
+      }
+
+      const file = event.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+
+      // Upload image to storage
+      const { error: uploadError } = await supabase.storage
+        .from('profiles')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data } = supabase.storage
+        .from('profiles')
+        .getPublicUrl(filePath);
+
+      if (data?.publicUrl) {
+        // Update user profile with avatar URL
+        const { error: updateError } = await supabase
+          .from('customers')
+          .update({ avatar_url: data.publicUrl })
+          .eq('id', user.id);
+
+        if (updateError) throw updateError;
+
+        setAvatarUrl(data.publicUrl);
+        form.setValue('avatar_url', data.publicUrl);
+      }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      throw error;
+    }
   };
 
   return {
