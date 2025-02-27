@@ -1,13 +1,14 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
 import { BookingStatus, SortField, SortOrder } from "./bookings/types";
 import { BookingsFilter } from "./bookings/BookingsFilter";
 import { BookingsTable } from "./bookings/BookingsTable";
 import { useBookings } from "@/hooks/useBookings";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const BookingsSection = () => {
   const { toast } = useToast();
@@ -17,7 +18,10 @@ export const BookingsSection = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [refreshKey, setRefreshKey] = useState(0); // Used to trigger a refresh
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  const itemsPerPage = isMobile ? 5 : 10;
 
   const { 
     bookings, 
@@ -33,14 +37,21 @@ export const BookingsSection = () => {
     dateRange,
   });
 
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStatus, searchTerm, dateRange]);
+
   // Show error toast when there's an error fetching bookings
-  if (error) {
-    toast({
-      variant: "destructive",
-      title: "Error loading bookings",
-      description: error.message || "Failed to load bookings. Please try again.",
-    });
-  }
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error loading bookings",
+        description: error.message || "Failed to load bookings. Please try again.",
+      });
+    }
+  }, [error, toast]);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -51,6 +62,10 @@ export const BookingsSection = () => {
     }
     // Reset to first page when sorting changes
     setCurrentPage(1);
+  };
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
   };
 
   // Calculate pagination
@@ -98,9 +113,10 @@ export const BookingsSection = () => {
             <Button 
               variant="outline" 
               className="mt-4"
-              onClick={() => window.location.reload()}
+              onClick={handleRefresh}
             >
-              Refresh Page
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Refresh Data
             </Button>
           </div>
         </div>
@@ -123,39 +139,72 @@ export const BookingsSection = () => {
                 )}
               </div>
               
-              <BookingsTable
-                bookings={currentBookings}
-                sortField={sortField}
-                sortOrder={sortOrder}
-                toggleSort={toggleSort}
-                updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
-                deleteBooking={deleteBooking}
-              />
+              <div className="bg-white dark:bg-gray-800 rounded-md border shadow-sm overflow-hidden">
+                <BookingsTable
+                  bookings={currentBookings}
+                  sortField={sortField}
+                  sortOrder={sortOrder}
+                  toggleSort={toggleSort}
+                  updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
+                  deleteBooking={deleteBooking}
+                />
+              </div>
               
               {/* Pagination controls */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center justify-between mt-4 flex-wrap gap-y-4">
                   <div className="text-sm text-muted-foreground">
                     Page {currentPage} of {totalPages}
                   </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={goToPreviousPage}
-                      disabled={currentPage === 1}
-                    >
-                      <ChevronLeft className="h-4 w-4 mr-1" /> Previous
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={goToNextPage}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </div>
+                  
+                  {isMobile ? (
+                    <div className="flex space-x-2 w-full justify-center">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={goToPreviousPage}
+                        disabled={currentPage === 1}
+                        className="h-8 w-8"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      
+                      <div className="flex items-center px-2">
+                        <span className="text-sm font-medium">
+                          {currentPage} / {totalPages}
+                        </span>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={goToNextPage}
+                        disabled={currentPage === totalPages}
+                        className="h-8 w-8"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={goToPreviousPage}
+                        disabled={currentPage === 1}
+                      >
+                        <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={goToNextPage}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </>
