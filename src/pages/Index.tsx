@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import WhyChooseUs from '../components/WhyChooseUs';
-import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import Testimonials from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
@@ -65,7 +64,6 @@ const Index = () => {
               handleNextStep={handleNextStep}
             />
             <WhyChooseUs />
-            <SlickWhyChooseUs />
             <Services />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Testimonials />
