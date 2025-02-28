@@ -48,62 +48,65 @@ const Hero = ({
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <motion.div 
+        <div className="flex flex-col space-y-8 items-center">
+          {/* Full-width h1 heading */}
+          <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-left space-y-8"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-center w-full"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white">
-              <span className="text-gradient-primary block">Expert Cleaning</span> Services
-            </h1>
-            <div className="space-y-6">
-              <p className="text-lg sm:text-xl font-medium text-gray-700 dark:text-gray-300">
-                Book your professional cleaning service in 2 minutes:
-              </p>
-              <ul className="space-y-4">
-                <motion.li 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                >
-                  <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>100% Satisfaction Guarantee</span>
-                </motion.li>
-                <motion.li 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                >
-                  <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>Trusted & Background-Checked Cleaners</span>
-                </motion.li>
-                <motion.li 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                  className="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                >
-                  <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>Flexible Scheduling Options</span>
-                </motion.li>
-              </ul>
-            </div>
-          </motion.div>
+            <span className="text-gradient-primary block">Expert Cleaning</span> Services
+          </motion.h1>
           
+          {/* Three-column list */}
+          <div className="w-full">
+            <p className="text-lg sm:text-xl font-medium text-gray-700 dark:text-gray-300 text-center mb-6">
+              Book your professional cleaning service in 2 minutes:
+            </p>
+            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300"
+              >
+                <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+                <span>100% Satisfaction Guarantee</span>
+              </motion.li>
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300"
+              >
+                <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+                <span>Trusted & Background-Checked Cleaners</span>
+              </motion.li>
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300"
+              >
+                <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+                <span>Flexible Scheduling Options</span>
+              </motion.li>
+            </ul>
+          </div>
+          
+          {/* Full-width booking form with specified proportions */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="w-full"
+            className="w-full max-w-4xl mx-auto mt-8"
           >
-            <div className="bg-white dark:bg-gray-800 p-8 md:p-10 shadow-2xl rounded-2xl max-w-xl mx-auto border border-gray-100 dark:border-gray-700 transition-all hover:shadow-primary/10 duration-300">
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Get Started</h2>
-                <div className="relative">
+            <div className="bg-white dark:bg-gray-800 p-6 md:p-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-700 transition-all hover:shadow-primary/10 duration-300">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Get Started</h2>
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                {/* Service type - 50% */}
+                <div className="w-full sm:w-1/2">
                   <Select value={selectedService} onValueChange={handleServiceChange}>
                     <SelectTrigger className="w-full bg-white dark:bg-gray-800 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary">
                       <SelectValue placeholder="Select service type" />
@@ -117,17 +120,22 @@ const Hero = ({
                   </Select>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row gap-4">
+                {/* Postal code - 20% */}
+                <div className="w-full sm:w-1/5">
                   <Input 
                     type="text" 
                     placeholder="Enter postal code" 
                     value={postalCode} 
                     onChange={e => setPostalCode(e.target.value)} 
-                    className="flex-1 bg-white dark:bg-gray-800 font-medium h-14 rounded-xl border border-gray-200 dark:border-gray-700 ring-offset-0 focus:ring-primary" 
+                    className="bg-white dark:bg-gray-800 font-medium h-14 rounded-xl border border-gray-200 dark:border-gray-700 ring-offset-0 focus:ring-primary" 
                   />
+                </div>
+                
+                {/* Next button - 30% */}
+                <div className="w-full sm:w-3/10">
                   <Button 
                     onClick={handleNext} 
-                    className="bg-primary hover:bg-primary-hover text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all font-semibold h-14 px-8 rounded-xl"
+                    className="bg-primary hover:bg-primary-hover text-white w-full shadow-lg hover:shadow-xl transition-all font-semibold h-14 px-8 rounded-xl"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
