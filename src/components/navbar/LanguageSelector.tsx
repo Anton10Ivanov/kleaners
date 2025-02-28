@@ -4,7 +4,10 @@ interface LanguageSelectorProps {
   onLanguageChange: () => void;
 }
 
-export const LanguageSelector = ({ currentLanguage, onLanguageChange }: LanguageSelectorProps) => {
+export const LanguageSelector = ({ 
+  currentLanguage = 'en', 
+  onLanguageChange = () => {} 
+}: LanguageSelectorProps) => {
   return (
     <button 
       onClick={onLanguageChange}
