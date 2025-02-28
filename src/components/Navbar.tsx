@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { AlignJustify, X } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { AlignJustify, X, Shield } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { LanguageSelector } from './navbar/LanguageSelector';
@@ -9,6 +9,9 @@ import { MobileMenu } from './navbar/MobileMenu';
 import { AuthButtons } from './navbar/AuthButtons';
 import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { Icons } from './navbar/icons';
+import { supabase, hasAdminAccess } from "@/integrations/supabase/client";
+import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
 
 const navItems = [
   {
@@ -107,10 +110,42 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const [scrolled, setScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check if user is admin
+    const checkAdminStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const adminAccess = await hasAdminAccess(user.id);
+          setIsAdmin(adminAccess);
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+      }
+    };
+    
+    checkAdminStatus();
+    
+    // Setup auth state listener
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        const adminAccess = await hasAdminAccess(session.user.id);
+        setIsAdmin(adminAccess);
+      } else if (event === 'SIGNED_OUT') {
+        setIsAdmin(false);
+      }
+    });
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -146,6 +181,10 @@ const Navbar = () => {
   const toggleLanguage = () => {
     setCurrentLanguage(currentLanguage === 'en' ? 'de' : 'en');
   };
+  
+  const handleAdminClick = () => {
+    navigate('/admin/dashboard');
+  };
 
   return (
     <nav
@@ -162,6 +201,17 @@ const Navbar = () => {
           <DropdownNavigation navItems={navItems} />
 
           <div className="hidden md:flex items-center space-x-4">
+            {isAdmin && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleAdminClick}
+                className="flex items-center gap-1"
+              >
+                <Shield className="h-4 w-4" />
+                <span>Admin</span>
+              </Button>
+            )}
             <ThemeToggle />
             <LanguageSelector
               currentLanguage={currentLanguage}
@@ -171,6 +221,16 @@ const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center gap-2">
+            {isAdmin && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleAdminClick}
+                className="flex items-center p-1"
+              >
+                <Shield className="h-4 w-4" />
+              </Button>
+            )}
             <AuthButtons />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -187,6 +247,7 @@ const Navbar = () => {
           setIsMobileServicesOpen={setIsMobileServicesOpen}
           currentLanguage={currentLanguage}
           onLanguageChange={toggleLanguage}
+          isAdmin={isAdmin}
         />
       </div>
     </nav>
