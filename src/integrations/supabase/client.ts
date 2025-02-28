@@ -29,6 +29,107 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   }
 });
 
+// User role types 
+export enum UserRole {
+  ADMIN = 'admin',
+  PROVIDER = 'provider',
+  CLIENT = 'client',
+  SUPER_ADMIN = 'super_admin'
+}
+
+// Helper function to check user role
+export async function getUserRoles(userId?: string): Promise<UserRole[]> {
+  try {
+    // If no userId is provided, get the current user
+    if (!userId) {
+      const { data: { user } } = await supabase.auth.getUser();
+      userId = user?.id;
+      
+      if (!userId) {
+        return [];
+      }
+    }
+    
+    // First check if user is an admin
+    const { data: adminRoleData, error: adminError } = await supabase
+      .rpc('check_is_admin', { user_id: userId });
+      
+    if (adminError) {
+      handleError(adminError, 'Failed to check admin role', false);
+    }
+    
+    const roles: UserRole[] = [];
+    
+    if (adminRoleData) {
+      // Check if the user is a super admin (we'll need a DB function for this)
+      const { data: isSuperAdmin, error: superAdminError } = await supabase
+        .from('admin_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'super_admin')
+        .single();
+        
+      if (!superAdminError && isSuperAdmin) {
+        roles.push(UserRole.SUPER_ADMIN);
+      }
+      
+      roles.push(UserRole.ADMIN);
+    }
+    
+    // Check if the user is a service provider
+    const { data: providerData, error: providerError } = await supabase
+      .from('service_providers')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+      
+    if (providerError) {
+      handleError(providerError, 'Failed to check provider role', false);
+    }
+    
+    if (providerData) {
+      roles.push(UserRole.PROVIDER);
+    }
+    
+    // Check if the user is a client
+    const { data: clientData, error: clientError } = await supabase
+      .from('customers')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+      
+    if (clientError) {
+      handleError(clientError, 'Failed to check client role', false);
+    }
+    
+    if (clientData) {
+      roles.push(UserRole.CLIENT);
+    }
+    
+    // If no roles assigned yet, default to CLIENT
+    if (roles.length === 0) {
+      roles.push(UserRole.CLIENT);
+    }
+    
+    return roles;
+  } catch (error) {
+    handleError(error, 'Failed to get user roles', false);
+    return [];
+  }
+}
+
+// Check if user has a specific role
+export async function hasRole(role: UserRole, userId?: string): Promise<boolean> {
+  const roles = await getUserRoles(userId);
+  return roles.includes(role);
+}
+
+// Check if user has admin access (either admin or super_admin)
+export async function hasAdminAccess(userId?: string): Promise<boolean> {
+  const roles = await getUserRoles(userId);
+  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN);
+}
+
 // Helper functions with improved error handling
 export async function fetchData<T>(
   tableName: string, 

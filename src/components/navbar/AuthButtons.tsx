@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, UserRole, getUserRoles } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -12,14 +12,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar } from 'lucide-react';
+import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar, ClipboardList, ShieldCheck } from 'lucide-react';
 
 export const AuthButtons = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [customerData, setCustomerData] = useState<any>(null);
+  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const fetchUserData = async (userId: string) => {
+    try {
+      // Check if user is in customers table
+      const { data: customerData } = await supabase
+        .from('customers')
+        .select('first_name, last_name')
+        .eq('id', userId)
+        .single();
+        
+      setCustomerData(customerData);
+      
+      // Get user roles
+      const roles = await getUserRoles(userId);
+      setUserRoles(roles);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -28,14 +48,7 @@ export const AuthButtons = () => {
         setUser(user);
 
         if (user) {
-          // Check if user is in customers table
-          const { data: customerData } = await supabase
-            .from('customers')
-            .select('first_name, last_name')
-            .eq('id', user.id)
-            .single();
-            
-          setCustomerData(customerData);
+          await fetchUserData(user.id);
         }
       } catch (error) {
         console.error('Error fetching user:', error);
@@ -47,9 +60,14 @@ export const AuthButtons = () => {
     getUser();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setUser(session?.user ?? null);
-        getUser();
+        if (session?.user) {
+          await fetchUserData(session.user.id);
+        } else {
+          setUserRoles([]);
+          setCustomerData(null);
+        }
       }
     );
 
@@ -76,6 +94,10 @@ export const AuthButtons = () => {
     }
   };
 
+  const isAdmin = userRoles.includes(UserRole.ADMIN) || userRoles.includes(UserRole.SUPER_ADMIN);
+  const isProvider = userRoles.includes(UserRole.PROVIDER);
+  const isSuperAdmin = userRoles.includes(UserRole.SUPER_ADMIN);
+
   if (loading) {
     return (
       <Button variant="ghost" size="sm" disabled>
@@ -91,21 +113,45 @@ export const AuthButtons = () => {
           <Button variant="ghost" size="sm" className="flex items-center gap-2">
             <UserCircle className="h-5 w-5" />
             <span className="hidden md:inline">
-              {customerData?.first_name || 'My Account'}
+              {customerData?.first_name || user.email || 'My Account'}
             </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          
+          {/* Show for all users */}
           <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/user/bookings')}>
-            <Calendar className="mr-2 h-4 w-4" />
-            <span>My Bookings</span>
-          </DropdownMenuItem>
+          
+          {/* Client only options */}
+          {!isProvider && (
+            <DropdownMenuItem onClick={() => navigate('/user/bookings')}>
+              <Calendar className="mr-2 h-4 w-4" />
+              <span>My Bookings</span>
+            </DropdownMenuItem>
+          )}
+          
+          {/* Provider only options */}
+          {isProvider && (
+            <DropdownMenuItem onClick={() => navigate('/provider/assignments')}>
+              <ClipboardList className="mr-2 h-4 w-4" />
+              <span>My Assignments</span>
+            </DropdownMenuItem>
+          )}
+          
+          {/* Admin only options */}
+          {isAdmin && (
+            <DropdownMenuItem onClick={() => navigate('/admin/dashboard')}>
+              <ShieldCheck className="mr-2 h-4 w-4" />
+              <span>{isSuperAdmin ? 'Admin Dashboard (Super)' : 'Admin Dashboard'}</span>
+            </DropdownMenuItem>
+          )}
+          
+          {/* Show for all users */}
           <DropdownMenuItem onClick={() => navigate('/user/profile')}>
             <UserCircle className="mr-2 h-4 w-4" />
             <span>Profile</span>

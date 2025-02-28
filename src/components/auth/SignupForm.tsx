@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, UserRole } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "./SocialLogin";
@@ -17,6 +18,7 @@ const SignupForm = () => {
     confirmPassword: "",
     firstName: "",
     lastName: "",
+    userType: "client" as "client" | "provider",
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -25,6 +27,10 @@ const SignupForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({ ...prev, userType: value as "client" | "provider" }));
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -58,11 +64,33 @@ const SignupForm = () => {
           data: {
             first_name: formData.firstName,
             last_name: formData.lastName,
+            user_type: formData.userType,
           },
         },
       });
 
       if (authError) throw authError;
+
+      // If we have a user, create additional records based on user type
+      if (authData.user) {
+        if (formData.userType === "provider") {
+          // Create a provider record
+          const { error: providerError } = await supabase
+            .from('service_providers')
+            .insert({
+              id: authData.user.id,
+              email: formData.email,
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+            });
+            
+          if (providerError) {
+            console.error('Error creating provider record:', providerError);
+          }
+        }
+        
+        // Customer record is created automatically by DB trigger
+      }
 
       toast({
         title: "Welcome!",
@@ -134,6 +162,23 @@ const SignupForm = () => {
               onChange={handleChange}
               required
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="userType">Account Type</Label>
+            <Select value={formData.userType} onValueChange={handleSelectChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select account type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="client">Client</SelectItem>
+                <SelectItem value="provider">Service Provider</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {formData.userType === "client" 
+                ? "As a client, you can book cleaning services." 
+                : "As a service provider, you can offer cleaning services."}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>

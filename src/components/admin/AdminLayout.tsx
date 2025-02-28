@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, hasAdminAccess, UserRole } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
@@ -22,20 +22,12 @@ const AdminLayout = () => {
 
         if (!user) {
           console.log('No user session found - redirecting to login');
-          navigate('/login');
+          navigate('/auth/login');
           return;
         }
 
         console.log('Checking admin role for user:', user.id);
-        const { data: isAdmin, error: adminCheckError } = await supabase
-          .rpc('check_is_admin', {
-            user_id: user.id
-          });
-
-        if (adminCheckError) {
-          console.error('Error checking admin status:', adminCheckError);
-          throw adminCheckError;
-        }
+        const isAdmin = await hasAdminAccess(user.id);
 
         if (!isAdmin) {
           console.log('Not an admin user');
@@ -57,14 +49,14 @@ const AdminLayout = () => {
           title: "Authentication Error",
           description: "Please log in again to continue.",
         });
-        navigate('/login');
+        navigate('/auth/login');
       }
     };
 
     const authListener = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
       if (event === 'SIGNED_OUT' || !session) {
-        navigate('/login');
+        navigate('/auth/login');
       } else {
         checkAdminStatus();
       }
@@ -81,7 +73,7 @@ const AdminLayout = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Verifying access...</span>
+        <span className="ml-2">Verifying admin access...</span>
       </div>
     );
   }
