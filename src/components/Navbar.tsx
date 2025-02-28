@@ -117,7 +117,6 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
     
-    // Check if user is admin
     const checkAdminStatus = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -132,7 +131,6 @@ const Navbar = () => {
     
     checkAdminStatus();
     
-    // Setup auth state listener
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
         const adminAccess = await hasAdminAccess(session.user.id);
@@ -156,7 +154,6 @@ const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Check if page is scrolled
       if (currentScrollY > 20) {
         setScrolled(true);
       } else {
