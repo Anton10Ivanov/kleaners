@@ -11,7 +11,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { AuthButtons } from './AuthButtons';
 import { useState, useEffect } from 'react';
 import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
-import { serviceLinks } from './navigationData';
+import { serviceLinks, navigationData } from './navigationData';
 
 // Updated to include all required props
 interface MobileMenuProps {
@@ -23,42 +23,12 @@ interface MobileMenuProps {
   isAdmin?: boolean;
 }
 
-// Define the navigation data directly in this file
-const navigationData = [
-  {
-    title: "Services",
-    href: "/services",
-    children: [
-      { title: "Regular Cleaning", href: "/services/regular-cleaning" },
-      { title: "Business Cleaning", href: "/services/business-cleaning" },
-      { title: "Move In/Out", href: "/services/move-in-out" },
-      { title: "Post Construction Cleaning", href: "/services/post-construction-cleaning" }
-    ]
-  },
-  {
-    title: "About",
-    href: "/about",
-    children: [
-      { title: "Company Values", href: "/about/values" },
-      { title: "FAQ", href: "/about/faq" }
-    ]
-  },
-  {
-    title: "Contact",
-    href: "/contact"
-  },
-  {
-    title: "Legal",
-    href: "/legal",
-    children: [
-      { title: "Terms of Service", href: "/legal/terms" },
-      { title: "Privacy Policy", href: "/legal/privacy" }
-    ]
-  }
-];
-
 export const MobileMenu: React.FC<MobileMenuProps> = ({
   isOpen: externalIsOpen,
+  isMobileServicesOpen,
+  setIsMobileServicesOpen,
+  currentLanguage = 'en',
+  onLanguageChange = () => {},
   isAdmin = false
 }) => {
   const [isOpen, setIsOpen] = useState(externalIsOpen || false);
@@ -111,7 +81,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           <div className="flex justify-between items-center mb-2">
             <div className="flex gap-2">
               <ThemeToggle />
-              <LanguageSelector currentLanguage="en" onLanguageChange={() => {}} />
+              <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={onLanguageChange} />
             </div>
             <AuthButtons />
           </div>
