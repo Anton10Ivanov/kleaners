@@ -3,6 +3,15 @@
 
 All notable changes to the Kleaners application will be documented in this file.
 
+## [0.3.0] - 2024-10-22
+
+### Added
+- Enhanced logging system with component-specific loggers
+- Session and user tracking in logs
+- Advanced error handling with error codes and HTTP status mapping
+- Support for retry logic with exponential backoff
+- Timeout handling for API requests
+
 ## [0.2.0] - 2024-10-20
 
 ### Added
