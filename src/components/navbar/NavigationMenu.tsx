@@ -1,88 +1,23 @@
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import { serviceLinks } from './navigationData';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu"
-import { navigationData } from "./navigationData"
-import { cn } from "@/lib/utils"
-import { Link } from "react-router-dom"
-import { ShieldCheck } from "lucide-react"
-import { useEffect, useState } from "react"
-import { supabase, hasAdminAccess } from "@/integrations/supabase/client"
-
-export const MainNavigationMenu = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const adminStatus = await hasAdminAccess(user.id);
-          setIsAdmin(adminStatus);
-        }
-      } catch (error) {
-        console.error("Error checking admin status:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAdminStatus();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      checkAdminStatus();
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  return (
-    <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
-        {navigationData.map((item) => (
-          <NavigationMenuItem key={item.title}>
-            {item.children ? (
-              <>
-                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {item.children.map((child) => (
-                      <ListItem
-                        key={child.title}
-                        title={child.title}
-                        href={child.href}
-                      >
-                        {child.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </>
-            ) : (
-              <Link to={item.href || "#"} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                {item.title}
-              </Link>
-            )}
-          </NavigationMenuItem>
-        ))}
-        
-        {/* Admin Dashboard Link - Only visible to admins */}
-        {!isLoading && isAdmin && (
-          <NavigationMenuItem>
-            <Link 
-              to="/admin/dashboard" 
-              className="group flex items-center select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-            >
-              <ShieldCheck className="mr-2 h-4 w-4 text-primary group-hover:text-primary/80" />
-              Admin
-            </Link>
-          </NavigationMenuItem>
-        )}
-      </NavigationMenuList>
-    </NavigationMenu>
-  )
+interface NavItem {
+  title: string;
+  href: string;
+  description?: string;
+  children?: NavItem[];
 }
 
 const ListItem = React.forwardRef<
@@ -107,6 +42,61 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";
+
+export const NavigationMenuComponent = () => {
+  return (
+    <NavigationMenu className="hidden md:flex">
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+              {serviceLinks.map((service) => (
+                <ListItem
+                  key={service.path}
+                  title={service.label}
+                  href={service.path}
+                >
+                  Professional cleaning services tailored to your needs
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        
+        <NavigationMenuItem>
+          <Link to="/about">
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              About
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        
+        <NavigationMenuItem>
+          <Link to="/contact">
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Contact
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Legal</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[200px] gap-3 p-4">
+              <ListItem title="Terms of Service" href="/legal/terms">
+                Our terms and conditions
+              </ListItem>
+              <ListItem title="Privacy Policy" href="/legal/privacy">
+                How we handle your data
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+};

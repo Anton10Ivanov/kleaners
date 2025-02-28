@@ -4,7 +4,6 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import { Menu, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
-import { navigationData } from './navigationData';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
@@ -12,10 +11,58 @@ import { LanguageSelector } from './LanguageSelector';
 import { AuthButtons } from './AuthButtons';
 import { useState, useEffect } from 'react';
 import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
+import { serviceLinks } from './navigationData';
 
-export const MobileMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+// Updated to include all required props
+interface MobileMenuProps {
+  isOpen?: boolean;
+  isMobileServicesOpen?: boolean;
+  setIsMobileServicesOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  currentLanguage?: 'en' | 'de';
+  onLanguageChange?: () => void;
+  isAdmin?: boolean;
+}
+
+// Define the navigation data directly in this file
+const navigationData = [
+  {
+    title: "Services",
+    href: "/services",
+    children: [
+      { title: "Regular Cleaning", href: "/services/regular-cleaning" },
+      { title: "Business Cleaning", href: "/services/business-cleaning" },
+      { title: "Move In/Out", href: "/services/move-in-out" },
+      { title: "Post Construction Cleaning", href: "/services/post-construction-cleaning" }
+    ]
+  },
+  {
+    title: "About",
+    href: "/about",
+    children: [
+      { title: "Company Values", href: "/about/values" },
+      { title: "FAQ", href: "/about/faq" }
+    ]
+  },
+  {
+    title: "Contact",
+    href: "/contact"
+  },
+  {
+    title: "Legal",
+    href: "/legal",
+    children: [
+      { title: "Terms of Service", href: "/legal/terms" },
+      { title: "Privacy Policy", href: "/legal/privacy" }
+    ]
+  }
+];
+
+export const MobileMenu: React.FC<MobileMenuProps> = ({
+  isOpen: externalIsOpen,
+  isAdmin = false
+}) => {
+  const [isOpen, setIsOpen] = useState(externalIsOpen || false);
+  const [adminStatus, setAdminStatus] = useState(isAdmin);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -23,7 +70,7 @@ export const MobileMenu = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const adminStatus = await hasAdminAccess(user.id);
-          setIsAdmin(adminStatus);
+          setAdminStatus(adminStatus);
         }
       } catch (error) {
         console.error("Error checking admin status:", error);
@@ -63,8 +110,8 @@ export const MobileMenu = () => {
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center mb-2">
             <div className="flex gap-2">
-              <LanguageSelector />
               <ThemeToggle />
+              <LanguageSelector currentLanguage="en" onLanguageChange={() => {}} />
             </div>
             <AuthButtons />
           </div>
@@ -104,7 +151,7 @@ export const MobileMenu = () => {
             ))}
             
             {/* Admin Dashboard Link - Only visible to admins */}
-            {isAdmin && (
+            {adminStatus && (
               <SheetClose asChild>
                 <Link
                   to="/admin/dashboard"
