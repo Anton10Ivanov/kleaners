@@ -113,7 +113,7 @@ const Hero = ({
           delay: 0.2
         }} className="w-full max-w-4xl mx-auto mt-8">
             <div className="bg-white dark:bg-gray-800 p-6 md:p-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-700 transition-all hover:shadow-primary/10 duration-300">
-              <h2 className="mb-6 text-2xl text-orange-600 font-extralight">Book your professional cleaning service easily</h2>
+              <h2 className="mb-6 text-2xl text-orange-600 font-extralight text-center">Book a professional cleaning service easily</h2>
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 {/* Service type - 50% */}
                 <div className="w-full sm:w-1/2">
