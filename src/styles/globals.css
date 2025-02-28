@@ -1,0 +1,106 @@
+
+/* Global styles for Kleaners application */
+
+/* Common background gradients */
+.bg-gradient-light {
+  @apply bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)];
+}
+
+.bg-gradient-light-reverse {
+  @apply bg-gradient-to-b from-[rgba(244,248,252,1)] to-[rgba(223,234,247,1)];
+}
+
+.bg-gradient-light-footer {
+  @apply bg-gradient-to-b from-[rgba(223,234,247,0.7)] to-[rgba(223,234,247,1)]; 
+}
+
+.bg-gradient-dark {
+  @apply dark:from-gray-800 dark:to-gray-900;
+}
+
+.bg-gradient-dark-reverse {
+  @apply dark:from-gray-900 dark:to-gray-800;
+}
+
+/* Text styles */
+.text-gradient-primary {
+  @apply bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent;
+}
+
+.text-secondary-color {
+  @apply text-[#8E9196] dark:text-gray-400;
+}
+
+/* Card styles */
+.card-base {
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700;
+}
+
+.card-hover {
+  @apply hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+}
+
+/* Icon containers */
+.icon-container {
+  @apply p-3 rounded-xl w-12 h-12 flex items-center justify-center;
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Glass effect */
+.glass-effect {
+  @apply backdrop-blur-sm bg-white/10 border border-white/20;
+}
+
+/* Button styles */
+.button-primary {
+  @apply bg-primary hover:bg-primary-hover text-white rounded-xl shadow-[0_8px_15px_rgb(249,115,22,0.2)] hover:shadow-[0_8px_15px_rgb(249,115,22,0.4)];
+}
+
+.button-outline {
+  @apply border border-gray-200 hover:border-primary/50 hover:bg-white/50 hover:text-primary rounded-xl transition-colors;
+}
+
+/* Section styles */
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+.section-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-heading {
+  @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4;
+}
+
+.section-subheading {
+  @apply text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto;
+}

@@ -53,7 +53,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="bg-white dark:bg-gray-800 transition-colors duration-300 py-16 md:py-24">
+    <section id="services" className="bg-gradient-to-b from-[rgba(244,248,252,1)] to-[rgba(223,234,247,1)] dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ const Services = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Our Cleaning Services
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto">
             Professional cleaning solutions tailored for every need
           </p>
         </motion.div>
