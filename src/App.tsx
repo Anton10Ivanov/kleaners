@@ -46,10 +46,9 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
       
-      {/* Admin routes with improved structure */}
+      {/* Admin routes with simplified structure */}
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPanel />} />
-        <Route path="panel" element={<AdminPanel />} />
+        <Route index element={<AdminPanel />} /> {/* Single entry point for admin */}
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />

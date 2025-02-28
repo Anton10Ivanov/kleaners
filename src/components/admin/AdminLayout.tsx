@@ -20,6 +20,21 @@ import { handleError, ErrorSeverity } from "@/utils/errorHandling";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ErrorBoundary } from "react-error-boundary";
+
+// Error fallback component for the error boundary
+const ErrorFallback = ({ error, resetErrorBoundary }) => (
+  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <Alert variant="destructive" className="mb-6">
+      <AlertTriangle className="h-4 w-4" />
+      <AlertTitle>Something went wrong</AlertTitle>
+      <AlertDescription>
+        {error.message || "An unexpected error occurred in the admin panel."}
+      </AlertDescription>
+    </Alert>
+    <Button onClick={resetErrorBoundary}>Try again</Button>
+  </div>
+);
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -31,6 +46,13 @@ const AdminLayout = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Save the current admin route for post-login redirect
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin')) {
+      sessionStorage.setItem('authReturnUrl', location.pathname);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -54,12 +76,20 @@ const AdminLayout = () => {
           );
           setHasError(true);
           setErrorMessage("Authentication error. Please log in again.");
+          
+          // Store current path for redirect after login
+          sessionStorage.setItem('authReturnUrl', location.pathname);
+          
           navigate('/auth/login');
           return;
         }
 
         if (!user) {
           console.log('No user session found - redirecting to login');
+          
+          // Store current path for redirect after login
+          sessionStorage.setItem('authReturnUrl', location.pathname);
+          
           navigate('/auth/login');
           return;
         }
@@ -67,6 +97,17 @@ const AdminLayout = () => {
         console.log('Checking admin role for user:', user.id);
         const isAdmin = await hasAdminAccess(user.id);
         console.log("Admin access check result:", isAdmin);
+        
+        if (!isAdmin) {
+          console.log('Not an admin user');
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "You don't have permission to access this area.",
+          });
+          navigate('/');
+          return;
+        }
         
         // Get user display name and check if super admin
         const { data: profileData } = await supabase
@@ -96,17 +137,6 @@ const AdminLayout = () => {
           setUserRole(UserRole.ADMIN);
         }
 
-        if (!isAdmin) {
-          console.log('Not an admin user');
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "You don't have permission to access this area.",
-          });
-          navigate('/');
-          return;
-        }
-
         console.log('Admin access verified successfully');
         setIsLoading(false);
       } catch (error) {
@@ -133,7 +163,7 @@ const AdminLayout = () => {
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event);
+      console.log('Auth state changed in AdminLayout:', event);
       if (event === 'SIGNED_OUT' || !session) {
         navigate('/auth/login');
       }
@@ -142,12 +172,16 @@ const AdminLayout = () => {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, location.pathname]);
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
       navigate('/auth/login');
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your admin account."
+      });
     } catch (error) {
       handleError(
         error, 
@@ -159,6 +193,12 @@ const AdminLayout = () => {
         }
       );
     }
+  };
+
+  const handleErrorReset = () => {
+    setHasError(false);
+    setErrorMessage("");
+    window.location.reload();
   };
 
   if (isLoading) {
@@ -188,7 +228,7 @@ const AdminLayout = () => {
           </Alert>
           
           <div className="flex flex-col space-y-3">
-            <Button onClick={() => window.location.reload()} className="w-full">
+            <Button onClick={handleErrorReset} className="w-full">
               Try Again
             </Button>
             <Button variant="outline" onClick={() => navigate('/auth/login')} className="w-full">
@@ -211,7 +251,7 @@ const AdminLayout = () => {
       <li className="w-full md:w-auto">
         <Link 
           to="/admin" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin') || isActive('/admin/panel')}`}
+          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin')}`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <Home className="h-4 w-4 mr-2" />
@@ -352,9 +392,14 @@ const AdminLayout = () => {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content with Error Boundary */}
       <main className="flex-1 p-4 sm:p-6 overflow-auto">
-        <Outlet />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => window.location.reload()}
+        >
+          <Outlet />
+        </ErrorBoundary>
       </main>
       
       {/* Footer */}
