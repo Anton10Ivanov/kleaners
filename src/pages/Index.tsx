@@ -3,7 +3,6 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/Hero';
 import Services from '../components/Services';
-import WhyChooseUs from '../components/WhyChooseUs';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import Testimonials from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
@@ -64,7 +63,6 @@ const Index = () => {
               setPostalCode={(code) => setValue('postalCode', code)}
               handleNextStep={handleNextStep}
             />
-            <WhyChooseUs />
             <SlickWhyChooseUs />
             <Services />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
