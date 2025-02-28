@@ -1,102 +1,123 @@
 
-import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Shield } from 'lucide-react';
-import { serviceLinks } from './navigationData';
+import React from 'react';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Menu, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Logo } from './Logo';
+import { navigationData } from './navigationData';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSelector } from './LanguageSelector';
-import { Button } from '../ui/button';
+import { AuthButtons } from './AuthButtons';
+import { useState, useEffect } from 'react';
+import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
 
-interface MobileMenuProps {
-  isOpen: boolean;
-  isMobileServicesOpen: boolean;
-  setIsMobileServicesOpen: (value: boolean) => void;
-  currentLanguage: 'en' | 'de';
-  onLanguageChange: () => void;
-  isAdmin?: boolean;
-}
+export const MobileMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-export const MobileMenu = ({
-  isOpen,
-  isMobileServicesOpen,
-  setIsMobileServicesOpen,
-  currentLanguage,
-  onLanguageChange,
-  isAdmin = false,
-}: MobileMenuProps) => {
-  const navigate = useNavigate();
-  
-  if (!isOpen) return null;
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const adminStatus = await hasAdminAccess(user.id);
+          setIsAdmin(adminStatus);
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+      }
+    };
 
-  const handleAdminClick = () => {
-    navigate('/admin/dashboard');
-  };
+    checkAdminStatus();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAdminStatus();
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
-    <div className="md:hidden absolute left-0 right-0 top-16 bg-white dark:bg-dark-background shadow-lg">
-      <div className="px-4 py-3 space-y-4">
-        {isAdmin && (
-          <Button
-            variant="outline" 
-            size="sm" 
-            onClick={handleAdminClick}
-            className="flex items-center justify-start w-full gap-2"
-          >
-            <Shield className="h-4 w-4" />
-            <span>Admin Dashboard</span>
-          </Button>
-        )}
-        
-        <button
-          onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-          className="flex items-center justify-between w-full px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-        >
-          <span>Services</span>
-          {isMobileServicesOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
-        
-        {isMobileServicesOpen && (
-          <div className="pl-6 space-y-2">
-            {serviceLinks.map((service) => (
-              <Link
-                key={service.path}
-                to={service.path}
-                className="block px-3 py-2 rounded-md text-gray-600 dark:text-gray-300 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-              >
-                {service.label}
-              </Link>
-            ))}
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[300px] sm:w-[350px] overflow-y-auto">
+        <SheetHeader className="mb-4">
+          <SheetTitle className="text-left">
+            <Logo />
+          </SheetTitle>
+          <SheetDescription className="text-left">
+            Expert Cleaning Services
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex gap-2">
+              <LanguageSelector />
+              <ThemeToggle />
+            </div>
+            <AuthButtons />
           </div>
-        )}
-        
-        <Link
-          to="/legal/terms"
-          className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-        >
-          Terms of Service
-        </Link>
-        
-        <Link
-          to="/legal/privacy"
-          className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-        >
-          Privacy Policy
-        </Link>
 
-        <Link
-          to="/contact"
-          className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 font-raleway font-medium hover:text-primary hover:bg-gray-50 dark:hover:bg-dark-background/50 transition-colors"
-        >
-          Contact
-        </Link>
-
-        <div className="flex items-center justify-between px-3 py-2">
-          <ThemeToggle />
-          <LanguageSelector
-            currentLanguage={currentLanguage}
-            onLanguageChange={onLanguageChange}
-          />
+          <div className="space-y-2">
+            {navigationData.map((item, index) => (
+              item.children ? (
+                <Accordion type="single" collapsible key={index}>
+                  <AccordionItem value={item.title}>
+                    <AccordionTrigger className="py-2">{item.title}</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex flex-col space-y-1 pl-2">
+                        {item.children.map((child, childIndex) => (
+                          <SheetClose asChild key={childIndex}>
+                            <Link
+                              to={child.href}
+                              className="py-2 px-3 text-sm rounded-md hover:bg-accent"
+                            >
+                              {child.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ) : (
+                <SheetClose asChild key={index}>
+                  <Link
+                    to={item.href}
+                    className="block py-2 px-3 rounded-md hover:bg-accent"
+                  >
+                    {item.title}
+                  </Link>
+                </SheetClose>
+              )
+            ))}
+            
+            {/* Admin Dashboard Link - Only visible to admins */}
+            {isAdmin && (
+              <SheetClose asChild>
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center py-2 px-3 rounded-md hover:bg-accent text-primary"
+                >
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Admin Dashboard
+                </Link>
+              </SheetClose>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 };

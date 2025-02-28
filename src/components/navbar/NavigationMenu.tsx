@@ -1,39 +1,112 @@
 
-import { Link } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { serviceLinks } from './navigationData';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu"
+import { navigationData } from "./navigationData"
+import { cn } from "@/lib/utils"
+import { Link } from "react-router-dom"
+import { ShieldCheck } from "lucide-react"
+import { useEffect, useState } from "react"
+import { supabase, hasAdminAccess } from "@/integrations/supabase/client"
 
-interface NavigationMenuProps {
-  isServicesOpen: boolean;
-  setIsServicesOpen: (value: boolean) => void;
+export const MainNavigationMenu = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const adminStatus = await hasAdminAccess(user.id);
+          setIsAdmin(adminStatus);
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAdminStatus();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAdminStatus();
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  return (
+    <NavigationMenu className="hidden md:flex">
+      <NavigationMenuList>
+        {navigationData.map((item) => (
+          <NavigationMenuItem key={item.title}>
+            {item.children ? (
+              <>
+                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {item.children.map((child) => (
+                      <ListItem
+                        key={child.title}
+                        title={child.title}
+                        href={child.href}
+                      >
+                        {child.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </>
+            ) : (
+              <Link to={item.href || "#"} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                {item.title}
+              </Link>
+            )}
+          </NavigationMenuItem>
+        ))}
+        
+        {/* Admin Dashboard Link - Only visible to admins */}
+        {!isLoading && isAdmin && (
+          <NavigationMenuItem>
+            <Link 
+              to="/admin/dashboard" 
+              className="group flex items-center select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+            >
+              <ShieldCheck className="mr-2 h-4 w-4 text-primary group-hover:text-primary/80" />
+              Admin
+            </Link>
+          </NavigationMenuItem>
+        )}
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
 }
 
-export const NavigationMenu = ({ isServicesOpen, setIsServicesOpen }: NavigationMenuProps) => {
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
   return (
-    <div className="relative group">
-      <button
-        onClick={() => setIsServicesOpen(!isServicesOpen)}
-        className="flex items-center space-x-1 font-raleway font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
-      >
-        <span>Services</span>
-        {isServicesOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-      </button>
-      {isServicesOpen && (
-        <div className="absolute top-full left-0 mt-1 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical">
-            {serviceLinks.map((service) => (
-              <Link
-                key={service.path}
-                to={service.path}
-                className="block px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                role="menuitem"
-              >
-                {service.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"
