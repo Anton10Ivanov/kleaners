@@ -7,7 +7,10 @@ import {
   UserPlus, 
   LayoutDashboard, 
   LogOut,
-  AlertTriangle
+  AlertTriangle,
+  Calendar,
+  Users,
+  UserCog
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,7 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -61,22 +64,12 @@ const Dashboard = () => {
     fetchUserProfile();
   }, []);
 
-  const handleAddUser = () => {
-    try {
-      navigate('/auth/signup');
-      
-      toast({
-        title: "Add New User",
-        description: "Redirected to signup page",
-      });
-    } catch (error) {
-      console.error("Navigation error:", error);
-      toast({
-        variant: "destructive",
-        title: "Navigation failed",
-        description: "Failed to navigate to signup page",
-      });
-    }
+  const handleQuickNavigation = (path: string, title: string) => {
+    navigate(path);
+    toast({
+      title: title,
+      description: `Navigating to ${title.toLowerCase()}`,
+    });
   };
 
   const handleRefresh = async () => {
@@ -145,76 +138,78 @@ const Dashboard = () => {
       <Card className="shadow-lg dark:glass-morphism border-0 dark:border dark:border-gray-800">
         <CardHeader className="space-y-0 pb-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleAddUser}
-                  className="hover:text-primary hover:border-primary transition-colors"
-                  title="Add New User"
-                >
-                  <UserPlus className="w-5 h-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleRefresh}
-                  className={`hover:text-primary hover:border-primary transition-colors ${isLoading ? 'animate-spin' : ''}`}
-                  title="Refresh Data"
-                  disabled={isLoading}
-                >
-                  <RefreshCw className="w-5 h-5" />
-                </Button>
-              </div>
-              <div className="flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2 text-primary" />
-                <CardTitle className="text-xl md:text-2xl">Admin Dashboard</CardTitle>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
+              <LayoutDashboard className="w-5 h-5 mr-2 text-primary" />
+              <CardTitle className="text-xl md:text-2xl">Admin Dashboard</CardTitle>
               {userName && (
-                <span className="text-sm font-medium hidden md:inline-block">
+                <span className="ml-4 text-sm font-medium hidden md:inline-block">
                   Welcome, {userName}
                 </span>
               )}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size={isMobile ? "sm" : "default"}
+                onClick={handleRefresh}
+                className={`transition-colors ${isLoading ? 'animate-spin' : ''}`}
+                disabled={isLoading}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
+              </Button>
               <Button
                 variant="outline"
                 size={isMobile ? "sm" : "default"}
                 onClick={handleSignOut}
                 className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-colors"
               >
-                <LogOut className="w-4 h-4 mr-1" />
-                {isMobile ? "Logout" : "Sign Out"}
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
               </Button>
             </div>
           </div>
-          
-          {isMobile && (
-            <div className="flex items-center justify-between mt-4 space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleAddUser}
-                className="flex-1 hover:text-primary hover:border-primary transition-colors"
-              >
-                <UserPlus className="w-4 h-4 mr-1" />
-                Add User
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                className={`flex-1 hover:text-primary hover:border-primary transition-colors ${isLoading ? 'animate-spin' : ''}`}
-                disabled={isLoading}
-              >
-                <RefreshCw className="w-4 h-4 mr-1" />
-                Refresh
-              </Button>
-            </div>
-          )}
         </CardHeader>
+        
+        {/* Quick Navigation Cards (Mobile Optimized) */}
+        {isMobile && (
+          <div className="px-4 pb-4 grid grid-cols-2 gap-2">
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-20"
+              onClick={() => handleQuickNavigation('/admin/bookings', 'Bookings')}
+            >
+              <Calendar className="h-5 w-5 mb-1" />
+              <span>Bookings</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-20"
+              onClick={() => handleQuickNavigation('/admin/customers', 'Customers')}
+            >
+              <Users className="h-5 w-5 mb-1" />
+              <span>Customers</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-20"
+              onClick={() => handleQuickNavigation('/admin/providers', 'Providers')}
+            >
+              <UserCog className="h-5 w-5 mb-1" />
+              <span>Providers</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-20"
+              onClick={() => handleQuickNavigation('/admin/settings', 'Settings')}
+            >
+              <UserPlus className="h-5 w-5 mb-1" />
+              <span>Settings</span>
+            </Button>
+          </div>
+        )}
+
         <CardContent className="p-0 sm:p-2 md:p-6">
           <div className="rounded-lg overflow-hidden bg-background/50 backdrop-blur-sm">
             <AdminTabs />
@@ -225,4 +220,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

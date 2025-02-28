@@ -7,6 +7,7 @@ import { CalendarSection } from "./sections/CalendarSection";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useNavigate } from "react-router-dom";
 
 /**
  * AdminTabs component handles the main navigation and content display for the admin dashboard.
@@ -15,10 +16,30 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 export const AdminTabs = () => {
   const [activeTab, setActiveTab] = useState("bookings");
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const navigate = useNavigate();
 
   // Smooth transition when switching tabs
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    
+    // Optionally navigate to the corresponding admin page
+    // This lets both the tabs and the direct URLs work
+    if (!isMobile) {
+      switch (value) {
+        case "bookings":
+          navigate("/admin/bookings", { replace: true });
+          break;
+        case "customers":
+          navigate("/admin/customers", { replace: true });
+          break;
+        case "providers":
+          navigate("/admin/providers", { replace: true });
+          break;
+        case "calendar":
+          navigate("/admin/settings", { replace: true });
+          break;
+      }
+    }
   };
 
   return (
