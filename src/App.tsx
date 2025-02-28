@@ -25,6 +25,7 @@ import { AdminBookings } from "./pages/admin/AdminBookings";
 import { AdminCustomers } from "./pages/admin/AdminCustomers";
 import { AdminProviders } from "./pages/admin/AdminProviders";
 import { AdminSettings } from "./pages/admin/AdminSettings";
+import { AdminPanel } from "./pages/admin/AdminPanel";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/legal/privacy" element={<PrivacyPolicy />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
+        <Route path="/admin/panel" element={<AdminPanel />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       

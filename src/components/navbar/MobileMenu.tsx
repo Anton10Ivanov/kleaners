@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, ShieldCheck } from 'lucide-react';
@@ -13,7 +12,6 @@ import { useState, useEffect } from 'react';
 import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 
-// Define the navigation data structure
 const navigationData = [
   {
     title: "Services",
@@ -47,13 +45,11 @@ const navigationData = [
   }
 ];
 
-// Define the Language Selector Props interface
 interface LanguageSelectorProps {
   currentLanguage: 'en' | 'de';
   onLanguageChange: () => void;
 }
 
-// Updated to include all required props
 interface MobileMenuProps {
   isOpen?: boolean;
   isMobileServicesOpen?: boolean;
@@ -92,7 +88,6 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
     checkAdminStatus();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
       checkAdminStatus();
     });
@@ -104,10 +99,10 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   const handleAdminClick = () => {
     setIsOpen(false);
-    navigate('/admin/dashboard');
+    navigate('/admin/panel');
     toast({
-      title: "Admin Dashboard",
-      description: "Navigating to the admin dashboard",
+      title: "Admin Panel",
+      description: "Navigating to the admin panel",
     });
   };
 
@@ -172,7 +167,6 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
               )
             ))}
             
-            {/* Admin Dashboard Link - Only visible to admins */}
             {adminStatus && (
               <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <h3 className="text-sm font-medium text-muted-foreground mb-2 px-2">Admin Access</h3>
@@ -183,7 +177,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                   className="w-full flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Admin Dashboard
+                  Admin Panel
                 </Button>
               </div>
             )}

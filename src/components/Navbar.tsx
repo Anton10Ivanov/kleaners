@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { AlignJustify, X, Shield } from 'lucide-react';
+import { AlignJustify, X } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
@@ -187,12 +186,12 @@ const Navbar = () => {
   };
   
   const handleAdminClick = () => {
-    console.log("Admin button clicked, navigating to dashboard");
-    navigate('/admin/dashboard');
+    console.log("Admin button clicked, navigating to panel");
+    navigate('/admin/panel');
     
     toast({
-      title: "Admin Dashboard",
-      description: "Navigating to the admin dashboard",
+      title: "Admin Panel",
+      description: "Navigating to the admin panel",
     });
   };
 
@@ -218,8 +217,7 @@ const Navbar = () => {
                 onClick={handleAdminClick}
                 className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10"
               >
-                <Shield className="h-4 w-4" />
-                <span>Admin</span>
+                <span>Admin Panel</span>
               </Button>
             )}
             <ThemeToggle />
@@ -238,7 +236,7 @@ const Navbar = () => {
                 onClick={handleAdminClick}
                 className="flex items-center p-1 text-primary border-primary"
               >
-                <Shield className="h-4 w-4" />
+                <span className="text-xs">Admin</span>
               </Button>
             )}
             <AuthButtons />
