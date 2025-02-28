@@ -70,12 +70,14 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(externalIsOpen || false);
   const [adminStatus, setAdminStatus] = useState(isAdmin);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        setIsLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const adminStatus = await hasAdminAccess(user.id);
@@ -84,6 +86,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         }
       } catch (error) {
         console.error("Error checking admin status:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -168,18 +172,55 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
               )
             ))}
             
-            {adminStatus && (
+            {adminStatus && !isLoading && (
               <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <h3 className="text-sm font-medium text-muted-foreground mb-2 px-2">Admin Access</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleAdminClick}
-                  className="w-full flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
-                >
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  Admin Panel
-                </Button>
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAdminClick}
+                    className="w-full flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
+                  >
+                    <ShieldCheck className="mr-2 h-4 w-4" />
+                    Admin Panel
+                  </Button>
+                  
+                  <SheetClose asChild>
+                    <Link
+                      to="/admin/dashboard"
+                      className="block w-full text-left py-2 px-3 text-sm rounded-md hover:bg-accent"
+                    >
+                      Dashboard
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link
+                      to="/admin/bookings"
+                      className="block w-full text-left py-2 px-3 text-sm rounded-md hover:bg-accent"
+                    >
+                      Bookings
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link
+                      to="/admin/customers"
+                      className="block w-full text-left py-2 px-3 text-sm rounded-md hover:bg-accent"
+                    >
+                      Customers
+                    </Link>
+                  </SheetClose>
+                </div>
+              </div>
+            )}
+            
+            {isLoading && adminStatus === undefined && (
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
+                </div>
               </div>
             )}
           </div>
