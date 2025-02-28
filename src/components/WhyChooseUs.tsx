@@ -1,11 +1,11 @@
 
-import { MapPin, Euro, Settings, Calendar, X, Star, Clock, Shield, Sparkles } from "lucide-react";
+import { MapPin, Euro, Settings, Calendar, X, Star } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 const WhyChooseUs = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionsContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeSection, setActiveSection] = useState(0);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -93,57 +93,56 @@ const WhyChooseUs = () => {
     </div>
   );
 
-  // Improved sticky scroll effect for desktop
+  // Setup IntersectionObserver for desktop view
   useEffect(() => {
-    if (isMobile || !sectionsContainerRef.current) return;
+    if (isMobile) return;
 
-    const handleScroll = () => {
-      const container = sectionsContainerRef.current;
-      if (!container) return;
-      
-      const containerRect = container.getBoundingClientRect();
-      const containerTop = containerRect.top;
-      const containerHeight = containerRect.height;
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate which section should be active based on scroll position
-      const sectionHeight = containerHeight / content.length;
-      const scrollProgress = -containerTop / (containerHeight - viewportHeight);
-      const rawActiveIndex = Math.floor(scrollProgress * content.length);
-      
-      // Clamp the index to valid range
-      const newActiveSection = Math.max(0, Math.min(content.length - 1, rawActiveIndex));
-      
-      if (newActiveSection !== activeSection) {
-        setActiveSection(newActiveSection);
-      }
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.6, // Higher threshold means more of the element needs to be visible
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Call once to set initial state
-    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = sectionRefs.current.findIndex(ref => ref === entry.target);
+          if (index !== -1) {
+            setActiveSection(index);
+          }
+        }
+      });
+    }, options);
+
+    // Observe all section elements
+    sectionRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      sectionRefs.current.forEach((ref) => {
+        if (ref) observer.unobserve(ref);
+      });
     };
-  }, [isMobile, activeSection, content.length]);
+  }, [isMobile]);
 
-  // Desktop sticky scroll view with improved behavior
+  // Desktop sticky scroll view with IntersectionObserver
   const DesktopView = () => (
     <div className="flex gap-8 md:gap-16 relative">
       {/* Left scrollable content */}
       <div className="w-1/2 sticky top-24 h-[80vh] flex items-center">
         <div 
-          ref={sectionsContainerRef}
-          className="space-y-[50vh]"
+          className="space-y-[70vh]"
           style={{
-            paddingTop: '35vh',
-            paddingBottom: '35vh'
+            paddingTop: '30vh',
+            paddingBottom: '50vh'
           }}
         >
           {content.map((item, index) => (
             <div 
               key={index} 
               className="h-[30vh] flex items-center"
+              ref={el => sectionRefs.current[index] = el}
             >
               <div 
                 className={`transition-all duration-500 transform p-6 rounded-xl border border-gray-100 dark:border-gray-800 ${
