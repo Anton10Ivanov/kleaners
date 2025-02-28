@@ -398,6 +398,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      check_admin_role_directly: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       check_is_admin:
         | {
             Args: Record<PropertyKey, never>

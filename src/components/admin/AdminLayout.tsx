@@ -12,17 +12,22 @@ import {
   LogOut, 
   Settings,
   Menu,
-  X 
+  X,
+  AlertTriangle
 } from "lucide-react";
 import { handleError, ErrorSeverity } from "@/utils/errorHandling";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const [userName, setUserName] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,9 +35,14 @@ const AdminLayout = () => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        setIsLoading(true);
+        setHasError(false);
+        
+        console.log("Checking admin status...");
         const { data: { user }, error: sessionError } = await supabase.auth.getUser();
         
         if (sessionError) {
+          console.error("Session error:", sessionError);
           handleError(
             sessionError, 
             'Session error', 
@@ -42,7 +52,10 @@ const AdminLayout = () => {
               component: 'AdminLayout' 
             }
           );
-          throw sessionError;
+          setHasError(true);
+          setErrorMessage("Authentication error. Please log in again.");
+          navigate('/auth/login');
+          return;
         }
 
         if (!user) {
@@ -53,6 +66,7 @@ const AdminLayout = () => {
 
         console.log('Checking admin role for user:', user.id);
         const isAdmin = await hasAdminAccess(user.id);
+        console.log("Admin access check result:", isAdmin);
         
         // Get user display name and check if super admin
         const { data: profileData } = await supabase
@@ -72,10 +86,11 @@ const AdminLayout = () => {
         const { data: roleData } = await supabase
           .from('admin_roles')
           .select('role')
-          .eq('user_id', user.id)
-          .maybeSingle();
+          .eq('user_id', user.id);
 
-        if (roleData?.role === 'super_admin') {
+        const isSuperAdmin = roleData?.some(role => role.role === 'super_admin');
+
+        if (isSuperAdmin) {
           setUserRole(UserRole.SUPER_ADMIN);
         } else if (isAdmin) {
           setUserRole(UserRole.ADMIN);
@@ -92,9 +107,13 @@ const AdminLayout = () => {
           return;
         }
 
-        console.log('Admin access verified');
+        console.log('Admin access verified successfully');
         setIsLoading(false);
       } catch (error) {
+        console.error("Error in admin authentication check:", error);
+        setHasError(true);
+        setErrorMessage("Failed to verify admin access. Please try again.");
+        
         handleError(
           error, 
           'Error in admin authentication check', 
@@ -102,11 +121,17 @@ const AdminLayout = () => {
           { 
             severity: ErrorSeverity.HIGH, 
             component: 'AdminLayout',
-            shouldRetry: true,
+            shouldRetry: retryCount < 2,
             maxRetries: 2
           }
         );
-        navigate('/auth/login');
+        
+        if (retryCount < 2) {
+          setRetryCount(prev => prev + 1);
+          setTimeout(() => checkAdminStatus(), 1500);
+        } else {
+          navigate('/auth/login');
+        }
       }
     };
 
@@ -124,7 +149,7 @@ const AdminLayout = () => {
     return () => {
       authListener.data.subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, retryCount]);
 
   const handleLogout = async () => {
     try {
@@ -143,15 +168,49 @@ const AdminLayout = () => {
     }
   };
 
+  const handleRetry = () => {
+    setRetryCount(0);
+    setIsLoading(true);
+    setHasError(false);
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="p-8 rounded-lg bg-white dark:bg-gray-800 shadow-lg max-w-md w-full flex flex-col items-center">
           <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
           <h1 className="text-xl font-semibold mb-2">Verifying Admin Access</h1>
-          <p className="text-muted-foreground text-center">
+          <p className="text-muted-foreground text-center mb-4">
             Please wait while we verify your credentials...
           </p>
+          <p className="text-xs text-muted-foreground text-center">
+            Attempt {retryCount + 1} of 3
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="p-8 rounded-lg bg-white dark:bg-gray-800 shadow-lg max-w-md w-full">
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Authentication Error</AlertTitle>
+            <AlertDescription>
+              {errorMessage || "Failed to verify admin access."}
+            </AlertDescription>
+          </Alert>
+          
+          <div className="flex flex-col space-y-3">
+            <Button onClick={handleRetry} className="w-full">
+              Try Again
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/auth/login')} className="w-full">
+              Back to Login
+            </Button>
+          </div>
         </div>
       </div>
     );

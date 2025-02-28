@@ -37,7 +37,7 @@ export enum UserRole {
   SUPER_ADMIN = 'super_admin'
 }
 
-// Helper function to check user role
+// Helper function to check user role using optimized approach to prevent RLS recursion
 export async function getUserRoles(userId?: string): Promise<UserRole[]> {
   try {
     // If no userId is provided, get the current user
@@ -50,26 +50,24 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
       }
     }
     
-    // First check if user is an admin
-    const { data: adminRoleData, error: adminError } = await supabase
-      .rpc('check_is_admin', { user_id: userId });
+    // First check if user is an admin - using a direct query to admin_roles
+    const { data: adminRolesData, error: adminRolesError } = await supabase
+      .from('admin_roles')
+      .select('role')
+      .eq('user_id', userId);
       
-    if (adminError) {
-      handleError(adminError, 'Failed to check admin role', false);
+    if (adminRolesError) {
+      console.error("Error checking admin roles:", adminRolesError);
+      handleError(adminRolesError, 'Failed to check admin role', false);
     }
     
     const roles: UserRole[] = [];
     
-    if (adminRoleData) {
-      // Check if the user is a super admin (we'll need a DB function for this)
-      const { data: isSuperAdmin, error: superAdminError } = await supabase
-        .from('admin_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .eq('role', 'super_admin')
-        .single();
-        
-      if (!superAdminError && isSuperAdmin) {
+    // Check admin roles directly
+    if (adminRolesData && adminRolesData.length > 0) {
+      const isSuperAdmin = adminRolesData.some(role => role.role === 'super_admin');
+      
+      if (isSuperAdmin) {
         roles.push(UserRole.SUPER_ADMIN);
       }
       
@@ -113,6 +111,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
     
     return roles;
   } catch (error) {
+    console.error("Error in getUserRoles:", error);
     handleError(error, 'Failed to get user roles', false);
     return [];
   }
@@ -126,8 +125,32 @@ export async function hasRole(role: UserRole, userId?: string): Promise<boolean>
 
 // Check if user has admin access (either admin or super_admin)
 export async function hasAdminAccess(userId?: string): Promise<boolean> {
-  const roles = await getUserRoles(userId);
-  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN);
+  try {
+    if (!userId) {
+      const { data: { user } } = await supabase.auth.getUser();
+      userId = user?.id;
+      
+      if (!userId) {
+        return false;
+      }
+    }
+    
+    // Direct query to check admin roles
+    const { data: adminRoles, error } = await supabase
+      .from('admin_roles')
+      .select('role')
+      .eq('user_id', userId);
+    
+    if (error) {
+      console.error("Error checking admin access:", error);
+      return false;
+    }
+    
+    return adminRoles && adminRoles.length > 0;
+  } catch (error) {
+    console.error("Error in hasAdminAccess:", error);
+    return false;
+  }
 }
 
 // Helper functions with improved error handling
