@@ -3,6 +3,14 @@
 
 All notable changes to the Kleaners application will be documented in this file.
 
+## [0.2.0] - 2024-10-20
+
+### Added
+- Comprehensive error handling system with typed errors
+- Centralized logging utility with different log levels
+- Enhanced Supabase client with error handling and helper methods
+- Expanded TypeScript database type definitions
+
 ## [0.1.0] - 2024-10-15
 
 ### Added
@@ -49,3 +57,4 @@ All notable changes to the Kleaners application will be documented in this file.
 - TypeScript interface definitions for database tables
 - React Router setup for navigation
 - Responsive layouts for mobile and desktop devices
+
