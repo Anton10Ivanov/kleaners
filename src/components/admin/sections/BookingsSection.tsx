@@ -147,6 +147,7 @@ export const BookingsSection = () => {
                   toggleSort={toggleSort}
                   updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
                   deleteBooking={deleteBooking}
+                  refreshData={handleRefresh}
                 />
               </div>
               
