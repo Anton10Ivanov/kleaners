@@ -43,12 +43,13 @@ function App() {
         <Route path="/legal/privacy" element={<PrivacyPolicy />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/admin/panel" element={<AdminPanel />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       
-      {/* Admin routes with improved naming */}
+      {/* Admin routes with improved structure */}
       <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminPanel />} />
+        <Route path="panel" element={<AdminPanel />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />

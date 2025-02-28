@@ -100,7 +100,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   const handleAdminClick = () => {
     setIsOpen(false);
-    navigate('/admin/panel');
+    navigate('/admin');
     toast({
       title: "Admin Panel",
       description: "Navigating to the admin panel",
