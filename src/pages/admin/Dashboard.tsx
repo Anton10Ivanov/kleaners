@@ -26,6 +26,8 @@ const Dashboard = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
+    console.log("Admin Dashboard component mounted");
+    
     const fetchUserProfile = async () => {
       try {
         console.log("Fetching user profile on dashboard component...");
