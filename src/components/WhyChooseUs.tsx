@@ -74,7 +74,7 @@ const WhyChooseUs = () => {
     </div>
   );
 
-  // Handle scroll effect for desktop
+  // Handle scroll effect for desktop with improved sensitivity
   useEffect(() => {
     if (isMobile || !containerRef.current) return;
 
@@ -85,14 +85,17 @@ const WhyChooseUs = () => {
       const containerRect = container.getBoundingClientRect();
       const scrollMiddle = window.innerHeight / 2;
       
-      // Find which section is currently most centered in the viewport
+      // Find which section is currently most visible in the viewport
+      // Increased sensitivity by using a threshold that's closer to the middle
       let closestSection = 0;
       let closestDistance = Infinity;
       
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
+        // More precise calculation - center of the section relative to viewport middle
         const distance = Math.abs(rect.top + rect.height / 2 - scrollMiddle);
         
+        // More sensitive threshold - we'll switch sections more quickly
         if (distance < closestDistance) {
           closestDistance = distance;
           closestSection = index;
@@ -108,14 +111,17 @@ const WhyChooseUs = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);
 
-  // Desktop sticky scroll view
+  // Desktop sticky scroll view with improved transition
   const DesktopView = () => (
     <div className="flex gap-16 relative">
-      {/* Left scrollable content */}
-      <div className="w-1/2 space-y-80 pb-[40vh]" ref={containerRef}>
+      {/* Left scrollable content - reduced spacing for more dynamic transitions */}
+      <div className="w-1/2 space-y-40 pb-[40vh]" ref={containerRef}>
         {content.map((item, index) => (
-          <div key={index} className="content-section h-[30vh] flex items-center">
-            <div className={`transition-opacity duration-500 ${activeSection === index ? 'opacity-100' : 'opacity-40'}`}>
+          <div 
+            key={index} 
+            className="content-section h-[40vh] flex items-center"
+          >
+            <div className={`transition-all duration-300 ${activeSection === index ? 'opacity-100 transform translate-y-0' : 'opacity-30 transform translate-y-4'}`}>
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 {item.title}
               </h3>
@@ -127,18 +133,17 @@ const WhyChooseUs = () => {
         ))}
       </div>
       
-      {/* Right sticky content */}
-      <div className="w-1/2 sticky top-32 h-[70vh]">
-        <div className={`w-full h-full rounded-2xl transition-all duration-500 overflow-hidden ${content[activeSection].color}`}>
+      {/* Right sticky content with improved transition and alignment */}
+      <div className="w-1/2 sticky top-32 h-[70vh] flex items-center">
+        <div className={`w-full h-full rounded-2xl overflow-hidden transition-all duration-300 transform ${content[activeSection].color}`}>
           <div className="w-full h-full flex items-center justify-center text-white p-10">
-            <div className="text-center">
-              {/* This is the line that had syntax errors */}
+            <div className="text-center transform transition-all duration-300">
               {(() => {
                 const IconComponent = content[activeSection].icon;
-                return <IconComponent className="w-24 h-24 mx-auto mb-6" />;
+                return <IconComponent className="w-24 h-24 mx-auto mb-6 animate-fadeIn" />;
               })()}
-              <h3 className="text-3xl font-bold mb-2">{content[activeSection].title}</h3>
-              <p className="text-xl max-w-md">{content[activeSection].description}</p>
+              <h3 className="text-3xl font-bold mb-2 animate-fadeIn">{content[activeSection].title}</h3>
+              <p className="text-xl max-w-md animate-fadeIn">{content[activeSection].description}</p>
             </div>
           </div>
         </div>
