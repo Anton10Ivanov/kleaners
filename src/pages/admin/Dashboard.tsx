@@ -6,7 +6,8 @@ import {
   RefreshCw, 
   UserPlus, 
   LayoutDashboard, 
-  LogOut 
+  LogOut,
+  AlertTriangle
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,25 +15,34 @@ import { toast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        console.log("Fetching user profile on dashboard component...");
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
+          console.log("User found:", user.id);
           // Get user profile data
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('first_name, last_name')
             .eq('id', user.id)
             .single();
+          
+          if (profileError) {
+            console.error("Error fetching profile:", profileError);
+            return;
+          }
           
           if (profile?.first_name || profile?.last_name) {
             setUserName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim());
@@ -42,6 +52,7 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
+        setError("Failed to load user data. Please try refreshing the page.");
       }
     };
 
@@ -109,6 +120,23 @@ const Dashboard = () => {
       });
     }
   };
+
+  if (error) {
+    return (
+      <div className="container mx-auto py-4 px-2 md:py-8 md:px-4">
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+        <div className="mt-4 flex justify-center">
+          <Button onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-4 px-2 md:py-8 md:px-4">
