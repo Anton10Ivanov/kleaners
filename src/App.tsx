@@ -2,7 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
 import AdminLayout from "./components/admin/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
 import Index from "./pages/Index";
 import RegularCleaning from "./pages/services/RegularCleaning";
 import BusinessCleaning from "./pages/services/BusinessCleaning";
@@ -21,6 +21,10 @@ import UserDashboard from "./pages/user/UserDashboard";
 import UserBookings from "./pages/user/UserBookings";
 import UserProfile from "./pages/user/UserProfile";
 import UserSettings from "./pages/user/UserSettings";
+import { AdminBookings } from "./pages/admin/AdminBookings";
+import { AdminCustomers } from "./pages/admin/AdminCustomers";
+import { AdminProviders } from "./pages/admin/AdminProviders";
+import { AdminSettings } from "./pages/admin/AdminSettings";
 
 function App() {
   return (
@@ -40,9 +44,17 @@ function App() {
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="*" element={<NotFound />} />
       </Route>
+      
+      {/* Admin routes with improved naming */}
       <Route path="/admin" element={<AdminLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="providers" element={<AdminProviders />} />
+        <Route path="settings" element={<AdminSettings />} />
       </Route>
+      
+      {/* User routes */}
       <Route path="/user" element={<UserLayout />}>
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="bookings" element={<UserBookings />} />
