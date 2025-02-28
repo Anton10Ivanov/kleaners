@@ -5,13 +5,53 @@ import { Menu, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSelector } from './LanguageSelector';
 import { AuthButtons } from './AuthButtons';
 import { useState, useEffect } from 'react';
 import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
-import { serviceLinks, navigationData } from './navigationData';
+import { useToast } from '@/components/ui/use-toast';
+
+// Define the navigation data structure
+const navigationData = [
+  {
+    title: "Services",
+    href: "/services",
+    children: [
+      { title: "Regular Cleaning", href: "/services/regular-cleaning" },
+      { title: "Business Cleaning", href: "/services/business-cleaning" },
+      { title: "Move In/Out", href: "/services/move-in-out" },
+      { title: "Post Construction Cleaning", href: "/services/post-construction-cleaning" }
+    ]
+  },
+  {
+    title: "About",
+    href: "/about",
+    children: [
+      { title: "Company Values", href: "/about/values" },
+      { title: "FAQ", href: "/about/faq" }
+    ]
+  },
+  {
+    title: "Contact",
+    href: "/contact"
+  },
+  {
+    title: "Legal",
+    href: "/legal",
+    children: [
+      { title: "Terms of Service", href: "/legal/terms" },
+      { title: "Privacy Policy", href: "/legal/privacy" }
+    ]
+  }
+];
+
+// Define the Language Selector Props interface
+interface LanguageSelectorProps {
+  currentLanguage: 'en' | 'de';
+  onLanguageChange: () => void;
+}
 
 // Updated to include all required props
 interface MobileMenuProps {
@@ -33,6 +73,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(externalIsOpen || false);
   const [adminStatus, setAdminStatus] = useState(isAdmin);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -40,6 +82,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const adminStatus = await hasAdminAccess(user.id);
+          console.log("Mobile menu - Admin status:", adminStatus);
           setAdminStatus(adminStatus);
         }
       } catch (error) {
@@ -57,7 +100,16 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [isAdmin]);
+
+  const handleAdminClick = () => {
+    setIsOpen(false);
+    navigate('/admin/dashboard');
+    toast({
+      title: "Admin Dashboard",
+      description: "Navigating to the admin dashboard",
+    });
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -122,15 +174,15 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             
             {/* Admin Dashboard Link - Only visible to admins */}
             {adminStatus && (
-              <SheetClose asChild>
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center py-2 px-3 rounded-md hover:bg-accent text-primary"
-                >
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  Admin Dashboard
-                </Link>
-              </SheetClose>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAdminClick}
+                className="w-full mt-2 flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
+              >
+                <ShieldCheck className="mr-2 h-4 w-4" />
+                Admin Dashboard
+              </Button>
             )}
           </div>
         </div>

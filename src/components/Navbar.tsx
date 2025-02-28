@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { AlignJustify, X, Shield } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -110,6 +111,7 @@ const Navbar = () => {
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -119,19 +121,25 @@ const Navbar = () => {
     
     const checkAdminStatus = async () => {
       try {
+        setIsLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
+          console.log("Checking admin status for user:", user.id);
           const adminAccess = await hasAdminAccess(user.id);
+          console.log("Admin access:", adminAccess);
           setIsAdmin(adminAccess);
         }
       } catch (error) {
         console.error("Error checking admin status:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     
     checkAdminStatus();
     
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event);
       if (event === 'SIGNED_IN' && session?.user) {
         const adminAccess = await hasAdminAccess(session.user.id);
         setIsAdmin(adminAccess);
@@ -179,7 +187,13 @@ const Navbar = () => {
   };
   
   const handleAdminClick = () => {
+    console.log("Admin button clicked, navigating to dashboard");
     navigate('/admin/dashboard');
+    
+    toast({
+      title: "Admin Dashboard",
+      description: "Navigating to the admin dashboard",
+    });
   };
 
   return (
@@ -197,12 +211,12 @@ const Navbar = () => {
           <DropdownNavigation navItems={navItems} />
 
           <div className="hidden md:flex items-center space-x-4">
-            {isAdmin && (
+            {isAdmin && !isLoading && (
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={handleAdminClick}
-                className="flex items-center gap-1"
+                className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10"
               >
                 <Shield className="h-4 w-4" />
                 <span>Admin</span>
@@ -217,12 +231,12 @@ const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-            {isAdmin && (
+            {isAdmin && !isLoading && (
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={handleAdminClick}
-                className="flex items-center p-1"
+                className="flex items-center p-1 text-primary border-primary"
               >
                 <Shield className="h-4 w-4" />
               </Button>

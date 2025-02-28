@@ -1,19 +1,29 @@
 
-interface LanguageSelectorProps {
+import { Button } from '@/components/ui/button';
+import { LanguagesIcon } from 'lucide-react';
+
+export interface LanguageSelectorProps {
   currentLanguage: 'en' | 'de';
   onLanguageChange: () => void;
 }
 
-export const LanguageSelector = ({ 
-  currentLanguage = 'en', 
-  onLanguageChange = () => {} 
-}: LanguageSelectorProps) => {
+export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
+  currentLanguage = 'en',
+  onLanguageChange = () => {},
+}) => {
   return (
-    <button 
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={onLanguageChange}
-      className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+      className="hover:text-primary transition-colors"
+      title={`Current Language: ${currentLanguage.toUpperCase()}`}
     >
-      {currentLanguage.toUpperCase()}
-    </button>
+      <span className="sr-only">Toggle Language</span>
+      <LanguagesIcon className="h-5 w-5" />
+      <span className="ml-1 text-xs font-medium hidden md:inline">
+        {currentLanguage.toUpperCase()}
+      </span>
+    </Button>
   );
 };

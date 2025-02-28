@@ -1,12 +1,46 @@
 
+import { ShoppingBag, HomeIcon, Building2, ArrowRightLeft, HardHat, User, BookOpen, Phone, Shield, FileText, Mail } from 'lucide-react';
+
+export const Icons = {
+  regular: ShoppingBag,
+  business: Building2,
+  moveInOut: ArrowRightLeft,
+  postConstruction: HardHat,
+  user: User,
+  about: BookOpen,
+  contact: Phone,
+  admin: Shield,
+  legal: FileText,
+  email: Mail,
+};
+
 export const serviceLinks = [
-  { path: '/services/regular-cleaning', label: 'Regular Cleaning' },
-  { path: '/services/move-in-out', label: 'Move In/Out' },
-  { path: '/services/business-cleaning', label: 'Business Cleaning' },
-  { path: '/services/post-construction-cleaning', label: 'Post-Construction Cleaning' },
+  {
+    title: "Regular Cleaning",
+    href: "/services/regular-cleaning",
+    description: "Professional home cleaning service",
+    icon: Icons.regular,
+  },
+  {
+    title: "Business Cleaning",
+    href: "/services/business-cleaning",
+    description: "Commercial cleaning solutions",
+    icon: Icons.business,
+  },
+  {
+    title: "Move In/Out",
+    href: "/services/move-in-out",
+    description: "Thorough cleaning for transitions",
+    icon: Icons.moveInOut,
+  },
+  {
+    title: "Post Construction",
+    href: "/services/post-construction-cleaning",
+    description: "Clean-up after construction work",
+    icon: Icons.postConstruction,
+  },
 ];
 
-// Adding navigationData export
 export const navigationData = [
   {
     title: "Services",
