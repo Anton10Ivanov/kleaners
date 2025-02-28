@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { serviceLinks } from './navigationData';
@@ -56,11 +57,11 @@ export const NavigationMenuComponent = () => {
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
               {serviceLinks.map((service) => (
                 <ListItem
-                  key={service.path}
-                  title={service.label}
-                  href={service.path}
+                  key={service.href}
+                  title={service.title}
+                  href={service.href}
                 >
-                  Professional cleaning services tailored to your needs
+                  {service.description}
                 </ListItem>
               ))}
             </ul>
