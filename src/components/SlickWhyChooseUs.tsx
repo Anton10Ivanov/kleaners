@@ -43,7 +43,7 @@ const SlickWhyChooseUs = () => {
   };
   
   return (
-    <section id="why-choose-us-slider" className="py-16 md:py-24 bg-white dark:bg-gray-900">
+    <section id="why-choose-us-slider" className="py-16 md:py-24 bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)] dark:from-gray-800 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 drop-shadow-sm">
