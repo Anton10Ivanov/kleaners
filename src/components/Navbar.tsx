@@ -187,7 +187,7 @@ const Navbar = () => {
   
   const handleAdminClick = () => {
     console.log("Admin button clicked, navigating to panel");
-    navigate('/admin/panel');
+    navigate('/admin');
     
     toast({
       title: "Admin Panel",

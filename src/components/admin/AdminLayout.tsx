@@ -13,7 +13,8 @@ import {
   Settings,
   Menu,
   X,
-  AlertTriangle
+  AlertTriangle,
+  LayoutDashboard
 } from "lucide-react";
 import { handleError, ErrorSeverity } from "@/utils/errorHandling";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,6 @@ const AdminLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [retryCount, setRetryCount] = useState(0);
   const [userName, setUserName] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -120,36 +120,29 @@ const AdminLayout = () => {
           true, 
           { 
             severity: ErrorSeverity.HIGH, 
-            component: 'AdminLayout',
-            shouldRetry: retryCount < 2,
-            maxRetries: 2
+            component: 'AdminLayout'
           }
         );
         
-        if (retryCount < 2) {
-          setRetryCount(prev => prev + 1);
-          setTimeout(() => checkAdminStatus(), 1500);
-        } else {
-          navigate('/auth/login');
-        }
+        navigate('/auth/login');
       }
     };
 
-    const authListener = supabase.auth.onAuthStateChange((event, session) => {
+    // Only perform admin check once when component mounts
+    checkAdminStatus();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
       if (event === 'SIGNED_OUT' || !session) {
         navigate('/auth/login');
-      } else {
-        checkAdminStatus();
       }
     });
 
-    checkAdminStatus();
-
     return () => {
-      authListener.data.subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
-  }, [navigate, toast, retryCount]);
+  }, [navigate, toast]);
 
   const handleLogout = async () => {
     try {
@@ -168,12 +161,6 @@ const AdminLayout = () => {
     }
   };
 
-  const handleRetry = () => {
-    setRetryCount(0);
-    setIsLoading(true);
-    setHasError(false);
-  };
-
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -182,9 +169,6 @@ const AdminLayout = () => {
           <h1 className="text-xl font-semibold mb-2">Verifying Admin Access</h1>
           <p className="text-muted-foreground text-center mb-4">
             Please wait while we verify your credentials...
-          </p>
-          <p className="text-xs text-muted-foreground text-center">
-            Attempt {retryCount + 1} of 3
           </p>
         </div>
       </div>
@@ -204,7 +188,7 @@ const AdminLayout = () => {
           </Alert>
           
           <div className="flex flex-col space-y-3">
-            <Button onClick={handleRetry} className="w-full">
+            <Button onClick={() => window.location.reload()} className="w-full">
               Try Again
             </Button>
             <Button variant="outline" onClick={() => navigate('/auth/login')} className="w-full">
@@ -226,11 +210,21 @@ const AdminLayout = () => {
     <ul className="flex flex-col md:flex-row space-y-1 md:space-y-0 space-x-0 md:space-x-1">
       <li className="w-full md:w-auto">
         <Link 
+          to="/admin" 
+          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin') || isActive('/admin/panel')}`}
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <Home className="h-4 w-4 mr-2" />
+          <span>Admin Panel</span>
+        </Link>
+      </li>
+      <li className="w-full md:w-auto">
+        <Link 
           to="/admin/dashboard" 
           className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/dashboard')}`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
-          <Home className="h-4 w-4 mr-2" />
+          <LayoutDashboard className="h-4 w-4 mr-2" />
           <span>Dashboard</span>
         </Link>
       </li>
