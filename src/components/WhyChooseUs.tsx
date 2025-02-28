@@ -5,7 +5,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 
 const WhyChooseUs = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionsRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState(0);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -93,56 +93,57 @@ const WhyChooseUs = () => {
     </div>
   );
 
-  // Setup IntersectionObserver for desktop view
+  // Handle scroll for desktop view
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || !sectionsRef.current) return;
 
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.6, // Higher threshold means more of the element needs to be visible
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = sectionRefs.current.findIndex(ref => ref === entry.target);
-          if (index !== -1) {
-            setActiveSection(index);
-          }
+    const handleScroll = () => {
+      const container = sectionsRef.current;
+      if (!container) return;
+      
+      const sections = Array.from(container.children);
+      let newActiveSection = 0;
+      
+      // Determine which section is currently most visible in the viewport
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+        
+        // If the section is significantly visible and near the center of the viewport
+        if (visibleHeight > 0 && rect.top < viewportHeight * 0.6) {
+          newActiveSection = index;
         }
       });
-    }, options);
+      
+      setActiveSection(newActiveSection);
+    };
 
-    // Observe all section elements
-    sectionRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Set initial active section
+    
     return () => {
-      sectionRefs.current.forEach((ref) => {
-        if (ref) observer.unobserve(ref);
-      });
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [isMobile]);
 
-  // Desktop sticky scroll view with IntersectionObserver
+  // Desktop sticky scroll view
   const DesktopView = () => (
     <div className="flex gap-8 md:gap-16 relative">
       {/* Left scrollable content */}
       <div className="w-1/2 sticky top-24 h-[80vh] flex items-center">
         <div 
-          className="space-y-[70vh]"
+          ref={sectionsRef}
+          className="space-y-48" // Generous spacing between sections
           style={{
             paddingTop: '30vh',
-            paddingBottom: '50vh'
+            paddingBottom: '40vh'
           }}
         >
           {content.map((item, index) => (
             <div 
               key={index} 
-              className="h-[30vh] flex items-center"
-              ref={el => sectionRefs.current[index] = el}
+              className="min-h-[20vh] flex items-center"
             >
               <div 
                 className={`transition-all duration-500 transform p-6 rounded-xl border border-gray-100 dark:border-gray-800 ${
