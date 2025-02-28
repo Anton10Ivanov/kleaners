@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ExclamationTriangleIcon, CheckCircledIcon } from '@radix-ui/react-icons';
+import { ExclamationTriangleIcon, CheckIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 
 interface ValidationMessageProps {
@@ -53,7 +53,7 @@ export const ValidationMessage: React.FC<ValidationMessageProps> = ({
         <ExclamationTriangleIcon className="h-4 w-4 mr-1" />
       )}
       {isSuccess && (
-        <CheckCircledIcon className="h-4 w-4 mr-1" />
+        <CheckIcon className="h-4 w-4 mr-1" />
       )}
       <span>{message}</span>
     </div>
