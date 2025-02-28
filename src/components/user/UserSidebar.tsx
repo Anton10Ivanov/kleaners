@@ -5,7 +5,12 @@ import { LayoutDashboard, Settings, User, CalendarDays, ShieldAlert } from "luci
 import { useToast } from "@/components/ui/use-toast";
 import { supabase, hasAdminAccess } from "@/integrations/supabase/client";
 
-export default function UserSidebar() {
+interface UserSidebarProps {
+  isOpen?: boolean;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
   const location = useLocation();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -52,8 +57,11 @@ export default function UserSidebar() {
     });
   };
 
+  // Use the isOpen prop to determine sidebar width
+  const sidebarClass = isOpen !== false ? "w-full md:w-64 lg:w-72" : "w-full md:w-20";
+
   return (
-    <aside className="w-full md:w-64 lg:w-72 h-auto md:h-screen bg-background border-r md:fixed left-0 top-0 p-4">
+    <aside className={`${sidebarClass} h-auto md:h-screen bg-background border-r md:fixed left-0 top-0 p-4 transition-all duration-300`}>
       <div className="space-y-2 py-4">
         <h2 className="text-lg font-semibold px-4 py-2">User Dashboard</h2>
         <nav className="space-y-1">
@@ -62,7 +70,7 @@ export default function UserSidebar() {
             className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm ${isActive('/user/dashboard')}`}
           >
             <LayoutDashboard className="w-5 h-5" />
-            <span>Dashboard</span>
+            <span className={isOpen === false ? "md:hidden" : ""}>Dashboard</span>
           </Link>
           
           <Link
@@ -70,7 +78,7 @@ export default function UserSidebar() {
             className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm ${isActive('/user/bookings')}`}
           >
             <CalendarDays className="w-5 h-5" />
-            <span>My Bookings</span>
+            <span className={isOpen === false ? "md:hidden" : ""}>My Bookings</span>
           </Link>
           
           <Link
@@ -78,7 +86,7 @@ export default function UserSidebar() {
             className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm ${isActive('/user/profile')}`}
           >
             <User className="w-5 h-5" />
-            <span>Profile</span>
+            <span className={isOpen === false ? "md:hidden" : ""}>Profile</span>
           </Link>
           
           <Link
@@ -86,7 +94,7 @@ export default function UserSidebar() {
             className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm ${isActive('/user/settings')}`}
           >
             <Settings className="w-5 h-5" />
-            <span>Settings</span>
+            <span className={isOpen === false ? "md:hidden" : ""}>Settings</span>
           </Link>
           
           {isAdmin && (
@@ -96,7 +104,7 @@ export default function UserSidebar() {
               onClick={handleAdminClick}
             >
               <ShieldAlert className="w-5 h-5" />
-              <span>Cockpit</span>
+              <span className={isOpen === false ? "md:hidden" : ""}>Cockpit</span>
             </Link>
           )}
         </nav>
