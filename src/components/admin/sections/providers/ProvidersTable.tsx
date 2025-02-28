@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Pencil, Trash2, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
 import {
   AlertDialog,
@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import { ProviderDetails } from "./ProviderDetails";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
@@ -39,6 +40,8 @@ export const ProvidersTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [providersPerPage] = useState(5);
   const [providerToDelete, setProviderToDelete] = useState<string | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   // Handle pagination
   const indexOfLastProvider = currentPage * providersPerPage;
@@ -69,6 +72,11 @@ export const ProvidersTable = ({
     }
   };
 
+  const handleViewProvider = (provider: ServiceProvider) => {
+    setSelectedProvider(provider);
+    setDetailsOpen(true);
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -76,10 +84,10 @@ export const ProvidersTable = ({
           <TableRow>
             <TableHead>First Name</TableHead>
             <TableHead>Last Name</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Services</TableHead>
+            <TableHead className="hidden md:table-cell">Username</TableHead>
+            <TableHead className="hidden md:table-cell">Email</TableHead>
+            <TableHead className="hidden sm:table-cell">Phone</TableHead>
+            <TableHead className="hidden lg:table-cell">Services</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -88,10 +96,10 @@ export const ProvidersTable = ({
             <TableRow key={provider.id}>
               <TableCell>{provider.first_name}</TableCell>
               <TableCell>{provider.last_name}</TableCell>
-              <TableCell>{provider.username || "-"}</TableCell>
-              <TableCell>{provider.email}</TableCell>
-              <TableCell>{provider.phone || "-"}</TableCell>
-              <TableCell>
+              <TableCell className="hidden md:table-cell">{provider.username || "-"}</TableCell>
+              <TableCell className="hidden md:table-cell">{provider.email}</TableCell>
+              <TableCell className="hidden sm:table-cell">{provider.phone || "-"}</TableCell>
+              <TableCell className="hidden lg:table-cell">
                 <div className="flex flex-wrap gap-1">
                   {provider.services?.map((service) => (
                     <Badge key={service} variant="secondary">
@@ -105,7 +113,16 @@ export const ProvidersTable = ({
                   <Button
                     variant="ghost"
                     size="icon"
+                    onClick={() => handleViewProvider(provider)}
+                    title="View details"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onEdit(provider)}
+                    title="Edit provider"
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -114,6 +131,7 @@ export const ProvidersTable = ({
                     size="icon"
                     className="text-destructive"
                     onClick={() => handleDeleteConfirm(provider.id)}
+                    title="Delete provider"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -185,6 +203,12 @@ export const ProvidersTable = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ProviderDetails 
+        open={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        provider={selectedProvider}
+      />
     </div>
   );
 };
