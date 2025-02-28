@@ -48,23 +48,23 @@ const WhyChooseUs = () => {
     }
   ];
 
-  // Create stacked card list for mobile
+  // Create stacked card list for mobile with improved visual design
   const MobileView = () => (
     <div className="space-y-6 pt-4">
       {content.map((item, index) => (
         <div 
           key={index}
-          className={`p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 transition-all duration-300 ${item.color} bg-opacity-10 dark:bg-opacity-20`}
+          className={`p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-102 ${item.color} bg-opacity-10 dark:bg-opacity-20`}
         >
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-lg bg-white/20 dark:bg-black/20 backdrop-blur-sm">
-              <item.icon className="w-6 h-6 text-white" />
+            <div className={`p-3 rounded-lg ${item.color} bg-opacity-90 text-white shadow-lg`}>
+              <item.icon className="w-6 h-6" />
             </div>
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 {item.title}
               </h3>
-              <p className="text-gray-800 dark:text-gray-200">
+              <p className="text-gray-700 dark:text-gray-300 font-medium">
                 {item.description}
               </p>
             </div>
@@ -74,7 +74,7 @@ const WhyChooseUs = () => {
     </div>
   );
 
-  // Handle scroll effect for desktop with improved sensitivity
+  // Enhanced scroll effect for desktop with better sensitivity
   useEffect(() => {
     if (isMobile || !containerRef.current) return;
 
@@ -86,46 +86,67 @@ const WhyChooseUs = () => {
       const scrollMiddle = window.innerHeight / 2;
       
       // Find which section is currently most visible in the viewport
-      // Increased sensitivity by using a threshold that's closer to the middle
       let closestSection = 0;
       let closestDistance = Infinity;
       
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
-        // More precise calculation - center of the section relative to viewport middle
-        const distance = Math.abs(rect.top + rect.height / 2 - scrollMiddle);
+        // Improved calculation for more accurate section detection
+        const sectionMiddle = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionMiddle - scrollMiddle);
         
-        // More sensitive threshold - we'll switch sections more quickly
         if (distance < closestDistance) {
           closestDistance = distance;
           closestSection = index;
         }
       });
       
-      setActiveSection(closestSection);
+      // Add a threshold to avoid too frequent updates
+      // This ensures smoother transitions when scrolling quickly
+      if (closestSection !== activeSection) {
+        setActiveSection(closestSection);
+      }
     };
     
-    window.addEventListener('scroll', handleScroll);
+    // Throttle scroll event for better performance
+    let ticking = false;
+    const scrollListener = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener('scroll', scrollListener);
     handleScroll(); // Initial check
     
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
+    return () => window.removeEventListener('scroll', scrollListener);
+  }, [isMobile, activeSection]);
 
-  // Desktop sticky scroll view with improved transition
+  // Desktop sticky scroll view with enhanced transitions
   const DesktopView = () => (
-    <div className="flex gap-16 relative">
-      {/* Left scrollable content - reduced spacing for more dynamic transitions */}
-      <div className="w-1/2 space-y-40 pb-[40vh]" ref={containerRef}>
+    <div className="flex gap-10 lg:gap-16 relative">
+      {/* Left scrollable content - optimized spacing for smooth transitions */}
+      <div className="w-1/2 space-y-32 pb-[30vh]" ref={containerRef}>
         {content.map((item, index) => (
           <div 
             key={index} 
-            className="content-section h-[40vh] flex items-center"
+            className="content-section h-[50vh] flex items-center"
           >
-            <div className={`transition-all duration-300 ${activeSection === index ? 'opacity-100 transform translate-y-0' : 'opacity-30 transform translate-y-4'}`}>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <div 
+              className={`transition-all duration-500 ease-in-out px-4 py-6 rounded-xl 
+                ${activeSection === index 
+                  ? 'opacity-100 transform translate-y-0 scale-105 shadow-lg' 
+                  : 'opacity-40 transform translate-y-4'}`
+              }
+            >
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 text-shadow">
                 {item.title}
               </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+              <p className="text-lg text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
                 {item.description}
               </p>
             </div>
@@ -133,18 +154,51 @@ const WhyChooseUs = () => {
         ))}
       </div>
       
-      {/* Right sticky content with improved transition and alignment */}
-      <div className="w-1/2 sticky top-32 h-[70vh] flex items-center">
-        <div className={`w-full h-full rounded-2xl overflow-hidden transition-all duration-300 transform ${content[activeSection].color}`}>
-          <div className="w-full h-full flex items-center justify-center text-white p-10">
-            <div className="text-center transform transition-all duration-300">
+      {/* Right sticky content with enhanced visual appeal */}
+      <div className="w-1/2 sticky top-24 h-[75vh] flex items-center">
+        <div 
+          className={`w-full h-full rounded-2xl overflow-hidden transition-all duration-500 transform ${
+            activeSection !== undefined ? content[activeSection].color : content[0].color
+          } shadow-xl`}
+        >
+          <div className="relative w-full h-full flex items-center justify-center text-white p-10 overflow-hidden">
+            {/* Background pattern for visual interest */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"></div>
+              <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"></div>
+            </div>
+            
+            <div className="text-center transform transition-all duration-500 z-10">
               {(() => {
                 const IconComponent = content[activeSection].icon;
-                return <IconComponent className="w-24 h-24 mx-auto mb-6 animate-fadeIn" />;
+                return (
+                  <div className="mb-8 p-6 rounded-full bg-white/20 inline-block backdrop-blur-sm animate-fadeIn shadow-inner">
+                    <IconComponent className="w-20 h-20" />
+                  </div>
+                );
               })()}
-              <h3 className="text-3xl font-bold mb-2 animate-fadeIn">{content[activeSection].title}</h3>
-              <p className="text-xl max-w-md animate-fadeIn">{content[activeSection].description}</p>
+              <h3 className="text-4xl font-bold mb-4 animate-fadeIn text-shadow">
+                {content[activeSection].title}
+              </h3>
+              <p className="text-xl max-w-md mx-auto animate-fadeIn font-medium text-white/90">
+                {content[activeSection].description}
+              </p>
             </div>
+          </div>
+          
+          {/* Progress indicator */}
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
+            {content.map((_, index) => (
+              <div 
+                key={index}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === activeSection 
+                    ? 'bg-white w-6' 
+                    : 'bg-white/40'
+                }`}
+                aria-label={`Section ${index + 1} of ${content.length}`}
+              ></div>
+            ))}
           </div>
         </div>
       </div>
@@ -152,19 +206,25 @@ const WhyChooseUs = () => {
   );
 
   return (
-    <section id="about" className="py-20 bg-transparent">
+    <section id="about" className="py-16 md:py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 text-shadow">
             Why Choose Kleaners.de
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto font-medium">
             Experience the difference with our professional cleaning service. We combine quality, reliability, and flexibility to give you the best possible cleaning experience.
           </p>
         </div>
         
         {isMobile ? <MobileView /> : <DesktopView />}
       </div>
+      
+      <style jsx global>{`
+        .text-shadow {
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+      `}</style>
     </section>
   );
 };
