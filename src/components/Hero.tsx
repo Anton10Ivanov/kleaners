@@ -1,3 +1,4 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+
 interface HeroProps {
   selectedService: string;
   setSelectedService: (value: "regular" | "moveInOut" | "business" | "construction") => void;
@@ -12,6 +14,7 @@ interface HeroProps {
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
+
 const Hero = ({
   selectedService,
   setSelectedService,
@@ -20,9 +23,11 @@ const Hero = ({
   handleNextStep
 }: HeroProps) => {
   const navigate = useNavigate();
+  
   const handleServiceChange = (value: string) => {
     setSelectedService(value as "regular" | "moveInOut" | "business" | "construction");
   };
+  
   const handleNext = () => {
     if (!selectedService) {
       toast.error("Please select a service type");
@@ -34,67 +39,56 @@ const Hero = ({
     }
     handleNextStep();
   };
-  return <div className="relative min-h-[90vh] flex items-center justify-center py-12 bg-gradient-to-b from-[#FEF7CD] to-white dark:from-gray-800 dark:to-gray-900 transition-colors duration-300">
+  
+  return (
+    <div className="relative min-h-[90vh] flex items-center justify-center py-12 bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)] dark:from-gray-800 dark:to-gray-900 transition-colors duration-300">
+      {/* Grain texture overlay */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
+
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl transform rotate-45"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#33C3F0]/5 rounded-full blur-3xl transform rotate-45"></div>
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
         <div className="flex flex-col space-y-8 items-center">
           {/* Full-width h1 heading */}
-          <motion.h1 initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.5
-        }} className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-center w-full">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }} 
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-center w-full"
+          >
             <span className="text-gradient-primary block">Expert Cleaning</span> Services
           </motion.h1>
           
           {/* Three-column list */}
           <div className="w-full">
-            
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-              <motion.li initial={{
-              opacity: 0,
-              y: 10
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.3,
-              delay: 0.1
-            }} className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300">
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.3, delay: 0.1 }} 
+                className="flex items-center justify-center md:justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium"
+              >
                 <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
                 <span>100% Satisfaction Guarantee</span>
               </motion.li>
-              <motion.li initial={{
-              opacity: 0,
-              y: 10
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.3,
-              delay: 0.2
-            }} className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300">
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.3, delay: 0.2 }} 
+                className="flex items-center justify-center md:justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium"
+              >
                 <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
                 <span>Trusted & Background-Checked Cleaners</span>
               </motion.li>
-              <motion.li initial={{
-              opacity: 0,
-              y: 10
-            }} animate={{
-              opacity: 1,
-              y: 0
-            }} transition={{
-              duration: 0.3,
-              delay: 0.3
-            }} className="flex items-center justify-center md:justify-start gap-3 text-gray-700 dark:text-gray-300">
+              <motion.li 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.3, delay: 0.3 }} 
+                className="flex items-center justify-center md:justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium"
+              >
                 <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
                 <span>Flexible Scheduling Options</span>
               </motion.li>
@@ -102,23 +96,19 @@ const Hero = ({
           </div>
           
           {/* Full-width booking form with specified proportions */}
-          <motion.div initial={{
-          opacity: 0,
-          scale: 0.95
-        }} animate={{
-          opacity: 1,
-          scale: 1
-        }} transition={{
-          duration: 0.5,
-          delay: 0.2
-        }} className="w-full max-w-4xl mx-auto mt-8">
-            <div className="bg-white dark:bg-gray-800 p-6 md:p-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-700 transition-all hover:shadow-primary/10 duration-300">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ duration: 0.5, delay: 0.2 }} 
+            className="w-full max-w-4xl mx-auto mt-8"
+          >
+            <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 md:p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] rounded-2xl border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(249,115,22,0.2)] duration-300">
               <h2 className="mb-6 text-2xl text-orange-600 font-extralight text-center">Book a professional cleaning service easily</h2>
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 {/* Service type - 50% */}
                 <div className="w-full sm:w-1/2">
                   <Select value={selectedService} onValueChange={handleServiceChange}>
-                    <SelectTrigger className="w-full bg-white dark:bg-gray-800 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary">
+                    <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary border border-white/30 dark:border-gray-700 shadow-sm">
                       <SelectValue placeholder="Select service type" />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
@@ -132,12 +122,21 @@ const Hero = ({
                 
                 {/* Postal code - 20% */}
                 <div className="w-full sm:w-1/5">
-                  <Input type="text" placeholder="Enter postal code" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white dark:bg-gray-800 font-medium h-14 rounded-xl border border-gray-200 dark:border-gray-700 ring-offset-0 focus:ring-primary" />
+                  <Input 
+                    type="text" 
+                    placeholder="Enter postal code" 
+                    value={postalCode} 
+                    onChange={e => setPostalCode(e.target.value)} 
+                    className="bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl border border-white/30 dark:border-gray-700 ring-offset-0 focus:ring-primary shadow-sm" 
+                  />
                 </div>
                 
                 {/* Next button - 30% */}
                 <div className="w-full sm:w-3/10">
-                  <Button onClick={handleNext} className="bg-primary hover:bg-primary-hover text-white w-full shadow-lg hover:shadow-xl transition-all font-semibold h-14 px-8 rounded-xl">
+                  <Button 
+                    onClick={handleNext} 
+                    className="bg-primary hover:bg-[#E66700] text-white w-full shadow-[0_8px_30px_rgb(249,115,22,0.3)] hover:shadow-[0_8px_30px_rgb(249,115,22,0.5)] transition-all font-semibold h-14 px-8 rounded-xl"
+                  >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
@@ -146,6 +145,8 @@ const Hero = ({
           </motion.div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Hero;

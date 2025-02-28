@@ -47,7 +47,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-raleway bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen font-raleway bg-white dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
@@ -71,7 +71,7 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-24 pb-32 px-4 md:pt-32"
+            className="pt-24 pb-32 px-4 md:pt-32 bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)] dark:from-gray-800 dark:to-gray-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
@@ -106,14 +106,14 @@ const Index = () => {
                 <Button 
                   onClick={handleBack}
                   variant="outline"
-                  className="rounded-xl h-12"
+                  className="rounded-xl h-12 hover:bg-white/50 hover:text-primary"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < 3 && (
                   <Button 
                     onClick={handleNext}
-                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12"
+                    className="bg-primary hover:bg-[#E66700] text-white rounded-xl h-12 shadow-[0_8px_15px_rgb(249,115,22,0.2)] hover:shadow-[0_8px_15px_rgb(249,115,22,0.4)]"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
