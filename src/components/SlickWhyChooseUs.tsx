@@ -52,6 +52,23 @@ const SlickWhyChooseUs = () => {
           </p>
         </div>
 
+        {/* Advantages Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-12">
+          {whyChooseUsContent.map((item, index) => (
+            <div 
+              key={`box-${index}`} 
+              className={`p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 ${item.color} hover:shadow-lg`}
+            >
+              <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm mb-3">
+                <item.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              </div>
+              <h3 className="text-sm md:text-base font-bold text-white mb-1 drop-shadow-md">
+                {item.title}
+              </h3>
+            </div>
+          ))}
+        </div>
+
         <div className="slick-container max-w-5xl mx-auto">
           <Slider {...settings}>
             {whyChooseUsContent.map((item, index) => (
