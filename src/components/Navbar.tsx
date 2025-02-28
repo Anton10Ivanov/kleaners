@@ -106,6 +106,7 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -120,6 +121,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      
+      // Check if page is scrolled
+      if (currentScrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+      
       if (currentScrollY < lastScrollY) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
@@ -142,7 +151,9 @@ const Navbar = () => {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
-      } backdrop-blur-sm bg-white/95 dark:bg-dark-background/95 shadow-sm`}
+      } ${
+        scrolled ? 'backdrop-blur-md bg-white/80 dark:bg-dark-background/80 shadow-lg' : 'bg-transparent'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -183,4 +194,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
