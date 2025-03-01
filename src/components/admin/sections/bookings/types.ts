@@ -13,3 +13,8 @@ export const statusColors = {
 
 export type SortField = "date" | "total_price" | "created_at";
 export type SortOrder = "asc" | "desc";
+
+// Define the Booking type to include provider_id
+export type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+  provider_id?: string;
+};

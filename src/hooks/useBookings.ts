@@ -1,6 +1,6 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { BookingStatus, SortField, SortOrder } from "@/components/admin/sections/bookings/types";
+import { BookingStatus, SortField, SortOrder, Booking } from "@/components/admin/sections/bookings/types";
 import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -58,10 +58,10 @@ export const useBookings = ({
               start: dateRange.from,
               end: dateRange.to
             })
-          );
+          ) as Booking[];
         }
 
-        return data;
+        return data as Booking[];
       } catch (error) {
         console.error("Error fetching bookings:", error);
         throw error;
