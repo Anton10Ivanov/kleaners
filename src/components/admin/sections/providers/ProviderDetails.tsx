@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Check, ChevronsUpDown, Copy, Mail, Phone, User } from "lucide-react";
 
@@ -59,6 +59,13 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
     "Office Cleaning",
   ];
 
+  // Fetch bookings when selectedDate changes
+  useEffect(() => {
+    if (selectedDate) {
+      fetchBookings(selectedDate);
+    }
+  }, [selectedDate, provider.id]);
+
   const fetchBookings = async (date: Date) => {
     try {
       const formattedDate = format(date, "yyyy-MM-dd");
@@ -88,13 +95,6 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
       });
     }
   };
-
-  // Fix error: Expected 0-1 arguments, but got 2
-  useState(() => {
-    if (selectedDate) {
-      fetchBookings(selectedDate);
-    }
-  });
 
   const handleServiceToggle = (service: string) => {
     setServices((prevServices) =>
@@ -187,7 +187,6 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
               size="sm"
               onClick={handleSaveClick}
               disabled={isSaving}
-              // Fix the isLoading prop error by removing it, since it doesn't exist on Button
             >
               {isSaving ? "Saving..." : "Save"}
             </Button>
@@ -334,7 +333,6 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
                 <div className="text-sm text-muted-foreground">
                   {booking.date && format(new Date(booking.date), "PPP")}
                 </div>
-                {/* Fix the type comparison error with appropriate type checking */}
                 {(booking.status === "pending" || 
                   booking.status === "cancelled" || 
                   booking.status === "assigned") && (
