@@ -35,9 +35,9 @@ export const ProviderDetails = ({ provider, onClose }: { provider: any; onClose:
     return "bg-gray-500";
   };
 
-  // Correct booking status comparison
+  // Fix the booking status comparison
   const isAvailableForBooking = (status: string) => {
-    return (status === 'confirmed' || status === 'completed');
+    return (status === 'active');
   };
 
   return (
