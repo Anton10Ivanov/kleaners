@@ -23,6 +23,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ProviderDetails } from "./ProviderDetails";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 
@@ -75,6 +81,11 @@ export const ProvidersTable = ({
   const handleViewProvider = (provider: ServiceProvider) => {
     setSelectedProvider(provider);
     setDetailsOpen(true);
+  };
+
+  const handleUpdateProvider = () => {
+    // Refresh the data if needed
+    // This could trigger a refetch from the parent component
   };
 
   return (
@@ -204,11 +215,20 @@ export const ProvidersTable = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <ProviderDetails 
-        open={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-        provider={selectedProvider}
-      />
+      {/* Use a Dialog to display provider details instead */}
+      {selectedProvider && (
+        <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Provider Details</DialogTitle>
+            </DialogHeader>
+            <ProviderDetails 
+              provider={selectedProvider}
+              onUpdate={handleUpdateProvider}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
