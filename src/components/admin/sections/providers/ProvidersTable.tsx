@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -49,7 +48,6 @@ export const ProvidersTable = ({
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
-  // Handle pagination
   const indexOfLastProvider = currentPage * providersPerPage;
   const indexOfFirstProvider = indexOfLastProvider - providersPerPage;
   const currentProviders = providers?.slice(indexOfFirstProvider, indexOfLastProvider) || [];
@@ -83,9 +81,9 @@ export const ProvidersTable = ({
     setDetailsOpen(true);
   };
 
-  const handleUpdateProvider = () => {
-    // Refresh the data if needed
-    // This could trigger a refetch from the parent component
+  const handleCloseDetails = () => {
+    setDetailsOpen(false);
+    setSelectedProvider(null);
   };
 
   return (
@@ -215,7 +213,6 @@ export const ProvidersTable = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Use a Dialog to display provider details instead */}
       {selectedProvider && (
         <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -224,7 +221,7 @@ export const ProvidersTable = ({
             </DialogHeader>
             <ProviderDetails 
               provider={selectedProvider}
-              onUpdate={handleUpdateProvider}
+              onClose={handleCloseDetails}
             />
           </DialogContent>
         </Dialog>
