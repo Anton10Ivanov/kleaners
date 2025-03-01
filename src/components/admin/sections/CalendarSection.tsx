@@ -57,7 +57,7 @@ export const CalendarSection = () => {
                   const dateBookings = getBookingsForDate(props.date);
                   return (
                     <div className="relative h-9 w-9 p-0 flex items-center justify-center">
-                      {props.day}
+                      {props.date.getDate()} {/* Changed from props.day to props.date.getDate() */}
                       {dateBookings.length > 0 && (
                         <Badge 
                           className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]"
