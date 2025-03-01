@@ -17,14 +17,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Database } from "@/integrations/supabase/types";
-import { BookingStatus, SortField, SortOrder, statusColors } from "./types";
+import { BookingStatus, SortField, SortOrder, statusColors, Booking } from "./types";
 import { DeleteBookingDialog } from "./DeleteBookingDialog";
 import { useState } from "react";
 import { AssignProviderDialog } from "./AssignProviderDialog";
 import { MessageClientDialog } from "./MessageClientDialog";
-
-type Booking = Database["public"]["Tables"]["bookings"]["Row"];
 
 interface BookingsTableProps {
   bookings: Booking[] | null;

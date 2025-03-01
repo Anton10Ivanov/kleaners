@@ -13,11 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Database } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
-
-type Booking = Database["public"]["Tables"]["bookings"]["Row"];
+import { Booking } from "./types";
 
 interface MessageClientDialogProps {
   open: boolean;
