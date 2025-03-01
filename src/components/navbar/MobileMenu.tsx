@@ -7,7 +7,7 @@ import { Logo } from './Logo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
-import { LanguageSelector } from './LanguageSelector';
+import LanguageSelector from './LanguageSelector';
 import { AuthButtons } from './AuthButtons';
 import { useState, useEffect } from 'react';
 import { supabase, hasAdminAccess } from '@/integrations/supabase/client';
