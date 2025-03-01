@@ -7,7 +7,7 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
 const Login = () => {
   const [isResetMode, setIsResetMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Changed to false for faster initial load
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,78 +26,36 @@ const Login = () => {
   }, [location]);
 
   useEffect(() => {
+    // Simplified auth check without waiting for verification
     const checkAuth = async () => {
       try {
-        setIsLoading(true);
-        
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-          console.log('User already logged in:', user.id);
+          console.log('User logged in:', user.id);
           
-          // Check if user is admin
-          const { data: isAdmin, error } = await supabase
-            .rpc('check_is_admin', {
-              user_id: user.id
-            });
-
-          if (error) {
-            console.error('Error checking admin status:', error);
-            setIsLoading(false);
-            return;
-          }
-
-          // Get the stored return URL (or default)
-          const returnUrl = sessionStorage.getItem('authReturnUrl') || 
-                           (isAdmin ? '/admin' : '/');
-          
+          // Simplified redirect - no role verification for development
+          const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
           console.log('Redirecting to:', returnUrl);
-          
-          // Clear the stored URL after use
           sessionStorage.removeItem('authReturnUrl');
-          
-          // Redirect user based on role and stored return URL
           navigate(returnUrl);
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Auth check error:", error);
-        setIsLoading(false);
       }
     };
 
     checkAuth();
 
+    // Simplified auth state listener
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event);
       
       if (event === 'SIGNED_IN' && session?.user) {
-        try {
-          // Check if user is admin
-          const { data: isAdmin, error } = await supabase
-            .rpc('check_is_admin', {
-              user_id: session.user.id
-            });
-
-          if (error) {
-            console.error('Error checking admin status:', error);
-            return;
-          }
-
-          // Get the stored return URL (or default)
-          const returnUrl = sessionStorage.getItem('authReturnUrl') || 
-                           (isAdmin ? '/admin' : '/');
-          
-          console.log('Signed in, redirecting to:', returnUrl);
-          
-          // Clear the stored URL after use
-          sessionStorage.removeItem('authReturnUrl');
-          
-          // Redirect user based on role and stored return URL
-          navigate(returnUrl);
-        } catch (error) {
-          console.error("Auth redirect error:", error);
-        }
+        // Immediate redirect without role check for faster experience
+        const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
+        console.log('Signed in, redirecting to:', returnUrl);
+        sessionStorage.removeItem('authReturnUrl');
+        navigate(returnUrl);
       }
     });
 
@@ -106,6 +64,7 @@ const Login = () => {
     };
   }, [navigate]);
 
+  // Only show loading if explicitly set to true elsewhere
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -113,7 +72,7 @@ const Login = () => {
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
             <div className="flex flex-col items-center justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-              <h2 className="text-xl font-semibold mb-4">Checking authentication...</h2>
+              <h2 className="text-xl font-semibold mb-4">Loading...</h2>
             </div>
           </div>
         </div>

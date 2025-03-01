@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlignJustify, X } from 'lucide-react';
+import { AlignJustify, X, Shield } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
@@ -8,9 +8,8 @@ import { MobileMenu } from './navbar/MobileMenu';
 import { AuthButtons } from './navbar/AuthButtons';
 import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { Icons } from './navbar/icons';
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
+import { useToast } from '@/hooks/use-toast';
 
 const navItems = [
   {
@@ -181,8 +180,10 @@ const Navbar = () => {
               onClick={handleAdminClick}
               className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10"
             >
+              <Shield className="h-4 w-4" />
               <span>Panel</span>
             </Button>
+            
             <ThemeToggle />
             <LanguageSelector
               currentLanguage={currentLanguage}
@@ -196,10 +197,12 @@ const Navbar = () => {
               variant="outline" 
               size="sm" 
               onClick={handleAdminClick}
-              className="flex items-center p-1 text-primary border-primary"
+              className="flex items-center gap-1 text-primary border-primary p-1"
             >
+              <Shield className="h-3 w-3" />
               <span className="text-xs">Panel</span>
             </Button>
+            
             <AuthButtons />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
