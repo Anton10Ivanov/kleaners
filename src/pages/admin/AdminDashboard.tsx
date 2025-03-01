@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -70,7 +69,7 @@ export const AdminDashboard = () => {
           },
           {
             title: "Customers",
-            value: customersCount || A,
+            value: customersCount || 0,
             icon: <Users className="h-5 w-5 text-green-600" />,
             description: "Registered clients",
           },
