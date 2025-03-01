@@ -79,13 +79,53 @@
   @apply backdrop-blur-sm bg-white/10 border border-white/20;
 }
 
-/* Button styles */
+/* Button styles with updated colors */
 .button-primary {
-  @apply bg-primary hover:bg-primary-hover text-white rounded-xl shadow-[0_8px_15px_rgb(249,115,22,0.2)] hover:shadow-[0_8px_15px_rgb(249,115,22,0.4)];
+  @apply bg-primary hover:bg-primary-hover text-white rounded-xl shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)];
+}
+
+.button-secondary {
+  @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-xl shadow-[0_8px_15px_rgba(191,237,193,0.2)] hover:shadow-[0_8px_15px_rgba(191,237,193,0.4)];
 }
 
 .button-outline {
   @apply border border-gray-200 hover:border-primary/50 hover:bg-white/50 hover:text-primary rounded-xl transition-colors;
+}
+
+/* Typography utility classes */
+.text-heading-1 {
+  font-size: 1.125rem;
+  line-height: 1.4em;
+  font-family: var(--ff);
+  @apply font-bold;
+}
+
+.text-heading-2 {
+  font-size: 1rem;
+  line-height: 1.4em;
+  font-family: var(--ff);
+  @apply font-bold;
+}
+
+.text-heading-3 {
+  font-size: 0.9375rem;
+  line-height: 1.4em;
+  font-family: var(--ff);
+  @apply font-bold;
+}
+
+.text-body {
+  font-size: 0.875rem;
+  line-height: 1.4em;
+  font-family: var(--ff);
+  @apply font-normal;
+}
+
+.text-small {
+  font-size: 0.75rem;
+  line-height: 1.4em;
+  font-family: var(--ff);
+  @apply font-normal;
 }
 
 /* Section styles */
@@ -98,9 +138,9 @@
 }
 
 .section-heading {
-  @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4;
+  @apply text-heading-1 text-gray-900 dark:text-white mb-4;
 }
 
 .section-subheading {
-  @apply text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto;
+  @apply text-body text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto;
 }
