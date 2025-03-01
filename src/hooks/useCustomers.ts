@@ -62,84 +62,99 @@ export const useCustomers = () => {
     };
   }, [queryClient]);
 
-  const createCustomer = async (customerData: Omit<Customer, "id" | "created_at" | "updated_at">) => {
-    const { data, error } = await supabase
-      .from("customers")
-      .insert(customerData)
-      .select()
-      .single();
+  const createCustomer = useMutation({
+    mutationFn: async (customerData: Omit<Customer, "id" | "created_at" | "updated_at">) => {
+      const { data, error } = await supabase
+        .from("customers")
+        .insert(customerData)
+        .select()
+        .single();
 
-    if (error) {
-      console.error("Error creating customer:", error);
+      if (error) {
+        console.error("Error creating customer:", error);
+        toast({
+          variant: "destructive",
+          title: "Error creating customer",
+          description: error.message,
+        });
+        throw error;
+      }
+
       toast({
-        variant: "destructive",
-        title: "Error creating customer",
-        description: error.message,
+        title: "Success",
+        description: "Customer created successfully",
       });
-      throw error;
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
     }
+  });
 
-    toast({
-      title: "Success",
-      description: "Customer created successfully",
-    });
+  const updateCustomer = useMutation({
+    mutationFn: async ({ id, ...customerData }: Partial<Customer> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("customers")
+        .update(customerData)
+        .eq("id", id)
+        .select()
+        .single();
 
-    return data;
-  };
+      if (error) {
+        console.error("Error updating customer:", error);
+        toast({
+          variant: "destructive",
+          title: "Error updating customer",
+          description: error.message,
+        });
+        throw error;
+      }
 
-  const updateCustomer = async ({ id, ...customerData }: Partial<Customer> & { id: string }) => {
-    const { data, error } = await supabase
-      .from("customers")
-      .update(customerData)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Error updating customer:", error);
       toast({
-        variant: "destructive",
-        title: "Error updating customer",
-        description: error.message,
+        title: "Success",
+        description: "Customer updated successfully",
       });
-      throw error;
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
     }
+  });
 
-    toast({
-      title: "Success",
-      description: "Customer updated successfully",
-    });
+  const deleteCustomer = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("customers")
+        .delete()
+        .eq("id", id);
 
-    return data;
-  };
+      if (error) {
+        console.error("Error deleting customer:", error);
+        toast({
+          variant: "destructive",
+          title: "Error deleting customer",
+          description: error.message,
+        });
+        throw error;
+      }
 
-  const deleteCustomer = async (id: string) => {
-    const { error } = await supabase
-      .from("customers")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      console.error("Error deleting customer:", error);
       toast({
-        variant: "destructive",
-        title: "Error deleting customer",
-        description: error.message,
+        title: "Success",
+        description: "Customer deleted successfully",
       });
-      throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
     }
-
-    toast({
-      title: "Success",
-      description: "Customer deleted successfully",
-    });
-  };
+  });
 
   return {
     customers,
     isLoading,
-    createCustomer,
-    updateCustomer,
-    deleteCustomer,
+    createCustomer: createCustomer.mutate,
+    updateCustomer: updateCustomer.mutate,
+    deleteCustomer: deleteCustomer.mutate,
   };
 };
