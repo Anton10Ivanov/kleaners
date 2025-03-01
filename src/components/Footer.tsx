@@ -4,12 +4,18 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="pt-16 pb-8 bg-gradient-to-b from-[rgba(223,234,247,0.7)] to-[rgba(223,234,247,1)] dark:bg-gray-800">
+    <footer className="pt-16 pb-8 bg-white dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
-            <Link to="/" className="inline-block">
-              <h3 className="font-bold text-2xl text-primary mb-4">
+            <Link to="/" className="inline-flex items-center gap-2 mb-4">
+              <img
+                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
+                alt="Kleaners.de Logo"
+                className="h-8 w-8 object-contain"
+                style={{ filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(200deg) brightness(100%) contrast(100%)' }}
+              />
+              <h3 className="font-bold text-2xl text-primary">
                 Kleaners.de
               </h3>
             </Link>

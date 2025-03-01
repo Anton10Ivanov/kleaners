@@ -71,7 +71,7 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-24 pb-32 px-4 md:pt-32 bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)] dark:from-gray-800 dark:to-gray-900"
+            className="pt-24 pb-32 px-4 md:pt-32 bg-white dark:from-gray-800 dark:to-gray-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
@@ -113,7 +113,7 @@ const Index = () => {
                 {currentStep < 3 && (
                   <Button 
                     onClick={handleNext}
-                    className="bg-primary hover:bg-[#E66700] text-white rounded-xl h-12 shadow-[0_8px_15px_rgb(249,115,22,0.2)] hover:shadow-[0_8px_15px_rgb(249,115,22,0.4)]"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)]"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

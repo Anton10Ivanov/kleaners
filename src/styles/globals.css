@@ -3,15 +3,15 @@
 
 /* Common background gradients */
 .bg-gradient-light {
-  @apply bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)];
+  @apply bg-white;
 }
 
 .bg-gradient-light-reverse {
-  @apply bg-gradient-to-b from-[rgba(244,248,252,1)] to-[rgba(223,234,247,1)];
+  @apply bg-white;
 }
 
 .bg-gradient-light-footer {
-  @apply bg-gradient-to-b from-[rgba(223,234,247,0.7)] to-[rgba(223,234,247,1)]; 
+  @apply bg-white;
 }
 
 .bg-gradient-dark {
@@ -81,7 +81,7 @@
 
 /* Button styles with updated colors */
 .button-primary {
-  @apply bg-primary hover:bg-primary-hover text-white rounded-xl shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)];
+  @apply bg-primary hover:bg-primary/90 text-white rounded-xl shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)];
 }
 
 .button-secondary {
