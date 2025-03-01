@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,30 +5,33 @@
 
 @layer base {
   :root {
-    /* Light mode - Updated with better contrast */
-    --background: 0 0% 100%; /* #FFFFFF */
+    /* Font family variable */
+    --ff: 'Raleway', sans-serif;
+    
+    /* Light mode - Updated with specified colors */
+    --background: 0 0% 100%; /* White #FFFFFF */
     --foreground: 0 0% 20%; /* #333333 */
     --secondary-text: 35 35% 35%; /* Warmer text color */
-    --surface: 45 100% 96%; /* Soft yellow surface */
+    --surface: 122 65% 84%; /* Light green #bfedc1 */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 20%;
-    --primary: 25 95% 53%; /* Vibrant orange #F97316 */
-    --primary-hover: 25 95% 45%; /* Darker orange */
+    --primary: 206 65% 70%; /* Light blue #7ebce6 */
+    --primary-hover: 206 65% 60%; /* Darker blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 45 93% 85%; /* Soft yellow #FEF7CD */
+    --secondary: 122 65% 84%; /* Light green #bfedc1 */
     --secondary-foreground: 30 25% 25%;
-    --muted: 45 33% 96%;
+    --muted: 206 25% 90%;
     --muted-foreground: 35 35% 35%;
-    --accent: 25 95% 53%;
+    --accent: 206 65% 70%;
     --accent-foreground: 0 0% 100%;
     --destructive: 350 90% 55%; /* #DC3545 */
     --destructive-foreground: 0 0% 100%;
     --success: 135 70% 40%; /* #28A745 */
-    --border: 45 10% 88%;
-    --input: 45 10% 88%;
-    --ring: 25 95% 53%;
+    --border: 206 20% 88%;
+    --input: 206 20% 88%;
+    --ring: 206 65% 70%;
     --radius: 0.75rem;
   }
 
@@ -72,14 +74,53 @@
   body {
     @apply bg-background text-foreground antialiased transition-colors duration-300 scrollbar-none;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    font-family: var(--ff);
+    line-height: 1.4em;
+  }
+
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.4em;
+    font-family: var(--ff);
+    @apply font-bold text-gray-900 dark:text-white;
+  }
+
+  h2 {
+    font-size: 1rem;
+    line-height: 1.4em;
+    font-family: var(--ff);
+    @apply font-bold text-gray-900 dark:text-white;
+  }
+
+  h3 {
+    font-size: 0.9375rem;
+    line-height: 1.4em;
+    font-family: var(--ff);
+    @apply font-bold text-gray-900 dark:text-white;
+  }
+
+  h4, h5, h6 {
+    font-size: 0.875rem;
+    line-height: 1.4em;
+    font-family: var(--ff);
+    @apply font-bold text-gray-900 dark:text-white;
   }
 
   p {
+    font-size: 0.875rem;
+    line-height: 1.4em;
+    font-family: var(--ff);
     @apply font-medium text-gray-700 dark:text-gray-300;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-gray-900 dark:text-white;
+  a {
+    font-family: var(--ff);
+  }
+
+  button, input, select, textarea {
+    font-family: var(--ff);
+    font-size: 0.875rem;
+    line-height: 1.4em;
   }
 }
 
