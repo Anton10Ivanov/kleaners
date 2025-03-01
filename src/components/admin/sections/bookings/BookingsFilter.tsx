@@ -4,7 +4,7 @@ import { BookingStatus } from "./types";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import {
   Select,
   SelectContent,
@@ -64,11 +64,10 @@ export const BookingsFilter = ({
         </SelectContent>
       </Select>
       
-      <DateRangePicker
-        value={dateRange}
-        onChange={setDateRange}
-        calendarClassName="min-w-[300px]"
-        align="start"
+      <DatePickerWithRange
+        date={dateRange}
+        setDate={setDateRange}
+        className="min-w-[300px]"
       />
     </div>
   );
