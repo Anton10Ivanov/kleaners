@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Check, ChevronsUpDown, Copy, Mail, Phone, User } from "lucide-react";
@@ -332,9 +333,10 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
                 <div className="text-sm text-muted-foreground">
                   {booking.date && format(new Date(booking.date), "PPP")}
                 </div>
-                {booking.status === "pending" || 
+                {/* Fixed the condition with proper parentheses */}
+                {(booking.status === "pending" || 
                   booking.status === "cancelled" || 
-                  booking.status === "assigned" && (
+                  booking.status === "assigned") && (
                   <div className="text-sm text-red-500">
                     This booking needs attention.
                   </div>
