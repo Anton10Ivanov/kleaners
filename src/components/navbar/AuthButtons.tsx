@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar, ClipboardList, ShieldCheck } from 'lucide-react';
+import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar, ClipboardList, ShieldCheck, User, Home } from 'lucide-react';
 
 export const AuthButtons = () => {
   const [loading, setLoading] = useState(true);
@@ -96,6 +96,7 @@ export const AuthButtons = () => {
 
   const isAdmin = userRoles.includes(UserRole.ADMIN) || userRoles.includes(UserRole.SUPER_ADMIN);
   const isProvider = userRoles.includes(UserRole.PROVIDER);
+  const isCustomer = userRoles.includes(UserRole.CLIENT);
   const isSuperAdmin = userRoles.includes(UserRole.SUPER_ADMIN);
 
   if (loading) {
@@ -121,14 +122,29 @@ export const AuthButtons = () => {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           
-          {/* Show for all users */}
-          <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
+          {/* Home Link for everyone */}
+          <DropdownMenuItem onClick={() => navigate('/')}>
+            <Home className="mr-2 h-4 w-4" />
+            <span>Homepage</span>
           </DropdownMenuItem>
           
+          {/* Dashboard based on role */}
+          {isCustomer && (
+            <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>Customer Dashboard</span>
+            </DropdownMenuItem>
+          )}
+          
+          {isProvider && (
+            <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>Provider Dashboard</span>
+            </DropdownMenuItem>
+          )}
+          
           {/* Client only options */}
-          {!isProvider && (
+          {isCustomer && !isProvider && (
             <DropdownMenuItem onClick={() => navigate('/user/bookings')}>
               <Calendar className="mr-2 h-4 w-4" />
               <span>My Bookings</span>
@@ -143,23 +159,25 @@ export const AuthButtons = () => {
             </DropdownMenuItem>
           )}
           
-          {/* Admin only options */}
+          {/* Admin panel access */}
           {isAdmin && (
-            <DropdownMenuItem onClick={() => navigate('/admin/dashboard')}>
+            <DropdownMenuItem onClick={() => navigate('/admin')}>
               <ShieldCheck className="mr-2 h-4 w-4" />
-              <span>{isSuperAdmin ? 'Admin Dashboard (Super)' : 'Admin Dashboard'}</span>
+              <span>{isSuperAdmin ? 'Admin Panel (Super)' : 'Admin Panel'}</span>
             </DropdownMenuItem>
           )}
           
           {/* Show for all users */}
           <DropdownMenuItem onClick={() => navigate('/user/profile')}>
-            <UserCircle className="mr-2 h-4 w-4" />
+            <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </DropdownMenuItem>
+          
           <DropdownMenuItem onClick={() => navigate('/user/settings')}>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
+          
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />

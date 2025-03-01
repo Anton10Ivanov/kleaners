@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { AlignJustify, X } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
-import { LanguageSelector } from './navbar/LanguageSelector';
+import LanguageSelector from './navbar/LanguageSelector';
 import { MobileMenu } from './navbar/MobileMenu';
 import { AuthButtons } from './navbar/AuthButtons';
 import { DropdownNavigation } from './navbar/DropdownNavigation';

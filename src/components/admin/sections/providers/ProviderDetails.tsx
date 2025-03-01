@@ -334,12 +334,14 @@ export const ProviderDetails = ({ provider, onUpdate }: ProviderDetailsProps) =>
                 <div className="text-sm text-muted-foreground">
                   {booking.date && format(new Date(booking.date), "PPP")}
                 </div>
-                {/* Fix the type comparison error by checking booking status individually */}
-                {booking.status === "pending" || booking.status === "cancelled" || booking.status === "assigned" ? (
+                {/* Fix the type comparison error by using separate conditions */}
+                {(booking.status === "pending" || 
+                  booking.status === "cancelled" || 
+                  booking.status === "assigned") && (
                   <div className="text-sm text-red-500">
                     This booking needs attention.
                   </div>
-                ) : null}
+                )}
               </div>
             ))}
           </div>
