@@ -18,7 +18,6 @@ export const AuthButtons = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [customerData, setCustomerData] = useState<any>(null);
-  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -26,16 +25,18 @@ export const AuthButtons = () => {
     const getUser = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
+        
+        // Immediately set user without waiting for profile data
         setUser(user);
-
-        // For development, let's assume the user has all roles
+        
         if (user) {
-          setUserRoles([UserRole.ADMIN, UserRole.CLIENT, UserRole.PROVIDER]);
-          setCustomerData({ first_name: "Dev", last_name: "User" });
+          // Simplified - just set a display name
+          setCustomerData({ first_name: user.email?.split('@')[0] || "User" });
         }
+        
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching user:', error);
-      } finally {
         setLoading(false);
       }
     };
@@ -44,13 +45,13 @@ export const AuthButtons = () => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        // Immediately update user state for faster UI response
         setUser(session?.user ?? null);
+        
         if (session?.user) {
-          // For development, let's assume the user has all roles
-          setUserRoles([UserRole.ADMIN, UserRole.CLIENT, UserRole.PROVIDER]);
-          setCustomerData({ first_name: "Dev", last_name: "User" });
+          // Simplified - just set a display name
+          setCustomerData({ first_name: session.user.email?.split('@')[0] || "User" });
         } else {
-          setUserRoles([]);
           setCustomerData(null);
         }
       }
@@ -63,6 +64,7 @@ export const AuthButtons = () => {
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       await supabase.auth.signOut();
       navigate('/');
       toast({
@@ -76,14 +78,10 @@ export const AuthButtons = () => {
         title: 'Error',
         description: 'Failed to log out. Please try again.',
       });
+    } finally {
+      setLoading(false);
     }
   };
-
-  // For development, we'll consider all users to have all roles
-  const isAdmin = true;
-  const isProvider = true;
-  const isCustomer = true;
-  const isSuperAdmin = true;
 
   if (loading) {
     return (
@@ -114,7 +112,7 @@ export const AuthButtons = () => {
             <span>Homepage</span>
           </DropdownMenuItem>
           
-          {/* Dashboard based on role - show all for development */}
+          {/* Show all dashboard options for all users for easy development */}
           <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Customer Dashboard</span>
