@@ -67,12 +67,12 @@ const Services = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-left mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Our Cleaning Services
           </h2>
-          <p className="text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl">
             Professional cleaning solutions tailored for every need
           </p>
         </motion.div>

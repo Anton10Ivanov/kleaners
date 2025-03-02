@@ -1,6 +1,6 @@
 
+import { Outlet } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 interface ServiceLayoutProps {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ const ServiceLayout = ({ children, title, description }: ServiceLayoutProps) => 
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-left mb-16">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               {title}
             </h1>
@@ -27,7 +27,7 @@ const ServiceLayout = ({ children, title, description }: ServiceLayoutProps) => 
           {children}
         </div>
       </main>
-      <Footer />
+      {/* Footer removed from here - it's already included in the RootLayout */}
     </div>
   );
 };
