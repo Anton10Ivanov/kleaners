@@ -1,27 +1,19 @@
-
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const Footer = () => {
-  return (
-    <footer className="pt-16 pb-8 bg-white dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  return <footer className="pt-16 pb-8 bg-white dark:bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <img
-                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
-                alt="Kleaners.de Logo"
-                className="h-8 w-8 object-contain"
-                style={{ filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(200deg) brightness(100%) contrast(100%)' }}
-              />
+              <img src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" alt="Kleaners.de Logo" className="h-8 w-8 object-contain" style={{
+              filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(200deg) brightness(100%) contrast(100%)'
+            }} />
               <h3 className="font-bold text-2xl text-primary">
                 Kleaners.de
               </h3>
             </Link>
-            <p className="text-sm md:text-base text-[#8E9196] dark:text-gray-400">
-              Professional cleaning services for homes and businesses. Quality service guaranteed.
-            </p>
+            <p className="text-sm text-[#8E9196] dark:text-gray-400 md:text-xs font-medium text-left">Cleanliness creates trust.</p>
           </div>
           
           <div>
@@ -101,8 +93,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

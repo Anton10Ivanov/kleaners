@@ -45,7 +45,7 @@ const Hero = ({
       <div className="relative z-10 max-w-7xl w-full mx-auto px-0">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 py-0 my-[20px]">
           {/* Left content with heading and form */}
-          <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1">
+          <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
             <motion.h1 initial={{
             opacity: 0,
             y: 20
@@ -55,7 +55,7 @@ const Hero = ({
           }} transition={{
             duration: 0.5
           }} className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-left w-full">
-              <span className="text-primary block, ">We provide transparent prices.</span> Services
+              <span className="text-primary block, mx-[38px] my-[26px]">We provide transparent prices.</span> Services
             </motion.h1>
             
             {/* Three-column list */}
