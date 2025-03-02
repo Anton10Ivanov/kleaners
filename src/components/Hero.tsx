@@ -43,7 +43,7 @@ const Hero = ({
       </div>
       
       <div className="relative z-10 max-w-7xl w-full mx-auto px-0">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 py-0 my-[20px]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 py-0 my-[20px] bg-theme-green">
           {/* Left content with heading and form */}
           <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
             <motion.h1 initial={{
@@ -114,7 +114,7 @@ const Hero = ({
             duration: 0.5,
             delay: 0.2
           }} className="w-full">
-              <div className="backdrop-blur-xl p-6 md:p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] rounded-2xl border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-theme-green px-0 py-[22px]">
+              <div className="backdrop-blur-xl p-6 md:p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] rounded-2xl border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 px-0 py-[22px] bg-white">
                 <h2 className="mb-6 text-2xl font-semibold text-zinc-900 text-left"></h2>
                 <div className="flex flex-col sm:flex-row gap-4 items-center rounded-none">
                   {/* Service type - 50% */}
