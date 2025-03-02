@@ -145,7 +145,7 @@ const Hero = ({
             </motion.div>
           </div>
           
-          {/* Right side image */}
+          {/* Right side image - Modified to remove framing */}
           <div className="w-full md:w-1/2 order-1 md:order-2 mb-8 md:mb-0">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -153,21 +153,11 @@ const Hero = ({
               transition={{ duration: 0.5, delay: 0.3 }}
               className="relative"
             >
-              <div className="rounded-2xl overflow-hidden bg-white shadow-xl w-full max-w-lg mx-auto">
-                <img
-                  src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" 
-                  alt="Professional Cleaning Service"
-                  className="w-full object-cover"
-                  style={{ 
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)', 
-                    backgroundColor: 'white'
-                  }}
-                />
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-primary/10 rounded-full -z-10"></div>
-              <div className="absolute -top-4 -right-4 w-32 h-32 bg-primary/10 rounded-full -z-10"></div>
+              <img
+                src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" 
+                alt="Professional Cleaning Service"
+                className="w-full h-auto object-contain md:object-cover max-w-lg mx-auto"
+              />
             </motion.div>
           </div>
         </div>
