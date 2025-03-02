@@ -31,12 +31,8 @@ const SlickWhyChooseUs = () => {
   return <section id="why-choose-us-slider" className="py-16 bg-white md:py-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-left mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 drop-shadow-sm">
-            Why Choose Kleaners.de
-          </h2>
-          <p className="text-lg text-[#8E9196] dark:text-gray-300 max-w-2xl font-medium leading-relaxed">
-            Experience the difference with us. We combine quality, reliability, and flexibility to give you the best possible cleaning experience.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-sm my-[12px] text-zinc-950">Our advantages </h2>
+          
         </div>
 
         {/* Advantages Grid */}
