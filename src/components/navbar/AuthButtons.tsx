@@ -1,67 +1,62 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, UserRole } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar, ClipboardList, ShieldCheck, User, Home } from 'lucide-react';
-
 export const AuthButtons = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [customerData, setCustomerData] = useState<any>(null);
   const navigate = useNavigate();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     const getUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
+        const {
+          data: {
+            user
+          }
+        } = await supabase.auth.getUser();
+
         // Immediately set user without waiting for profile data
         setUser(user);
-        
         if (user) {
           // Simplified - just set a display name
-          setCustomerData({ first_name: user.email?.split('@')[0] || "User" });
+          setCustomerData({
+            first_name: user.email?.split('@')[0] || "User"
+          });
         }
-        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user:', error);
         setLoading(false);
       }
     };
-
     getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        // Immediately update user state for faster UI response
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Simplified - just set a display name
-          setCustomerData({ first_name: session.user.email?.split('@')[0] || "User" });
-        } else {
-          setCustomerData(null);
-        }
+    const {
+      data: {
+        subscription
       }
-    );
-
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // Immediately update user state for faster UI response
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        // Simplified - just set a display name
+        setCustomerData({
+          first_name: session.user.email?.split('@')[0] || "User"
+        });
+      } else {
+        setCustomerData(null);
+      }
+    });
     return () => {
       subscription.unsubscribe();
     };
   }, []);
-
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -69,31 +64,26 @@ export const AuthButtons = () => {
       navigate('/');
       toast({
         title: 'Logged out successfully',
-        description: 'You have been logged out of your account.',
+        description: 'You have been logged out of your account.'
       });
     } catch (error) {
       console.error('Error logging out:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to log out. Please try again.',
+        description: 'Failed to log out. Please try again.'
       });
     } finally {
       setLoading(false);
     }
   };
-
   if (loading) {
-    return (
-      <Button variant="ghost" size="sm" disabled>
+    return <Button variant="ghost" size="sm" disabled>
         <Loader2 className="h-4 w-4 animate-spin" />
-      </Button>
-    );
+      </Button>;
   }
-
   if (user) {
-    return (
-      <DropdownMenu>
+    return <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="flex items-center gap-2">
             <UserCircle className="h-5 w-5" />
@@ -102,7 +92,7 @@ export const AuthButtons = () => {
             </span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-50">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           
@@ -158,26 +148,14 @@ export const AuthButtons = () => {
             <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    );
+      </DropdownMenu>;
   }
-
-  return (
-    <div className="flex items-center gap-2">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => navigate('/auth/login')}
-      >
+  return <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" onClick={() => navigate('/auth/login')}>
         Login
       </Button>
-      <Button
-        variant="default"
-        size="sm"
-        onClick={() => navigate('/auth/signup')}
-      >
+      <Button variant="default" size="sm" onClick={() => navigate('/auth/signup')}>
         Sign up
       </Button>
-    </div>
-  );
+    </div>;
 };
