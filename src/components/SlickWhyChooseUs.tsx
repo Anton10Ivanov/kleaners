@@ -53,7 +53,7 @@ const SlickWhyChooseUs = () => {
 
         <div className="slick-container max-w-5xl mx-auto">
           <Slider {...settings}>
-            {whyChooseUsContent.map((item, index) => <div key={index} className="px-4 py-6 focus:outline-none">
+            {whyChooseUsContent.map((item, index) => <div key={index} className="focus:outline-none py-0 px-0">
                 <div className="rounded-2xl overflow-hidden shadow-xl transition-all duration-700 transform bg-white border border-gray-100">
                   <div className="relative w-full min-h-[300px] md:min-h-[400px] flex items-center justify-center text-gray-900 p-8 md:p-10 overflow-hidden">
                     {/* Background pattern */}
