@@ -23,37 +23,37 @@ const Services = () => {
       description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
       price: "From €29/hour",
       icon: Sparkles,
-      color: "bg-orange-50 dark:bg-orange-900/20",
-      iconColor: "text-primary"
+      color: "bg-[#D3E4FD]",
+      iconColor: "text-[#0FA0CE]"
     },
     {
       title: "Move In/Out Cleaning",
       description: "Comprehensive cleaning service for moving transitions",
       price: "Custom quote",
       icon: Building2,
-      color: "bg-blue-50 dark:bg-blue-900/20",
-      iconColor: "text-blue-500"
+      color: "bg-[#D3E4FD]",
+      iconColor: "text-[#0FA0CE]"
     },
     {
       title: "Business Cleaning",
       description: "Professional cleaning solutions for offices and commercial spaces",
       price: "Custom quote",
       icon: Briefcase,
-      color: "bg-purple-50 dark:bg-purple-900/20",
-      iconColor: "text-purple-500"
+      color: "bg-[#D3E4FD]",
+      iconColor: "text-[#0FA0CE]"
     },
     {
       title: "Post-Construction",
       description: "Specialized cleaning for newly constructed or renovated spaces",
       price: "Coming Soon",
       icon: HardHat,
-      color: "bg-green-50 dark:bg-green-900/20",
-      iconColor: "text-green-500"
+      color: "bg-[#D3E4FD]",
+      iconColor: "text-[#0FA0CE]"
     }
   ];
 
   return (
-    <section id="services" className="bg-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 py-16 md:py-24">
+    <section id="services" className="bg-white transition-colors duration-300 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -113,4 +113,3 @@ const Services = () => {
 };
 
 export default Services;
-
