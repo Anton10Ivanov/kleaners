@@ -53,7 +53,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="bg-gradient-to-b from-[rgba(244,248,252,1)] to-[rgba(223,234,247,1)] dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 py-16 md:py-24">
+    <section id="services" className="bg-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -113,3 +113,4 @@ const Services = () => {
 };
 
 export default Services;
+
