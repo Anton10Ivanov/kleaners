@@ -57,7 +57,7 @@ const Services = () => {
     route: "/services/post-construction-cleaning"
   }];
   return <section id="services" className="bg-white transition-colors duration-300 py-16 md:py-[12px]">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <motion.div initial={{
         opacity: 0,
         y: 20
@@ -69,12 +69,8 @@ const Services = () => {
       }} transition={{
         duration: 0.5
       }} className="text-left mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Our Cleaning Services
-          </h2>
-          <p className="text-lg text-[#8E9196] dark:text-gray-400 max-w-2xl">
-            Professional cleaning solutions tailored for every need
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-zinc-950 my-[36px]">Cleaning Services with online pricing</h2>
+          
         </motion.div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
@@ -90,18 +86,18 @@ const Services = () => {
                 <div className={`${service.color} p-3 rounded-xl w-10 h-10 flex items-center justify-center mr-3`}>
                   <service.icon className={`h-5 w-5 ${service.iconColor}`} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold text-center text-zinc-800">
                   {service.title}
                 </h3>
               </div>
               
-              <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
+              <p className="mb-4 flex-grow text-zinc-600">
                 {service.description}
               </p>
               
               <div className="flex justify-between items-center mt-auto">
-                <span className="text-primary font-bold">{service.price}</span>
-                <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-transparent p-0" onClick={() => navigate(service.route)}>
+                <span className="px-[12px] font-semibold text-theme-blue">{service.price}</span>
+                <Button variant="ghost" size="sm" onClick={() => navigate(service.route)} className="hover:bg-transparent p-0 text-zinc-800 font-semibold">
                   Learn more <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
