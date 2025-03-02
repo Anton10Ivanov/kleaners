@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Slider from "react-slick";
@@ -60,8 +61,8 @@ const SlickWhyChooseUs = () => {
               key={`box-${index}`} 
               className="p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
             >
-              <div className="p-3 bg-gray-50 rounded-full mb-3">
-                <item.icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+              <div className="p-3 bg-[#E3F4FF] rounded-full mb-3">
+                <item.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
               </div>
               <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
                 {item.title}
@@ -83,8 +84,8 @@ const SlickWhyChooseUs = () => {
                     </div>
                     
                     <div className="text-center transform transition-all duration-700 z-10 animate-fadeIn">
-                      <div className="mb-8 p-6 rounded-full bg-gray-50 inline-block shadow-inner">
-                        <item.icon className="w-16 h-16 md:w-20 md:h-20 text-primary" />
+                      <div className="mb-8 p-6 rounded-full bg-[#E3F4FF] inline-block shadow-inner">
+                        <item.icon className="w-14 h-14 md:w-18 md:h-18 text-[#0FA0CE]" />
                       </div>
                       <h3 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-md text-gray-900">
                         {item.title}
