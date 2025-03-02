@@ -43,7 +43,7 @@ const SlickWhyChooseUs = () => {
   };
   
   return (
-    <section id="why-choose-us-slider" className="py-16 md:py-24 bg-gradient-to-b from-[rgba(223,234,247,1)] to-[rgba(244,248,252,1)] dark:from-gray-800 dark:to-gray-900">
+    <section id="why-choose-us-slider" className="py-16 md:py-24 bg-white dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 drop-shadow-sm">
@@ -59,12 +59,12 @@ const SlickWhyChooseUs = () => {
           {whyChooseUsContent.map((item, index) => (
             <div 
               key={`box-${index}`} 
-              className={`p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 ${item.color} hover:shadow-lg`}
+              className="p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
             >
-              <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm mb-3">
-                <item.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <div className="p-3 bg-gray-50 rounded-full mb-3">
+                <item.icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
               </div>
-              <h3 className="text-sm md:text-base font-bold text-white mb-1 drop-shadow-md">
+              <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
                 {item.title}
               </h3>
             </div>
@@ -75,22 +75,22 @@ const SlickWhyChooseUs = () => {
           <Slider {...settings}>
             {whyChooseUsContent.map((item, index) => (
               <div key={index} className="px-4 py-6 focus:outline-none">
-                <div className={`rounded-2xl overflow-hidden shadow-xl transition-all duration-700 transform ${item.color}`}>
-                  <div className="relative w-full min-h-[300px] md:min-h-[400px] flex items-center justify-center text-white p-8 md:p-10 overflow-hidden">
+                <div className="rounded-2xl overflow-hidden shadow-xl transition-all duration-700 transform bg-white border border-gray-100">
+                  <div className="relative w-full min-h-[300px] md:min-h-[400px] flex items-center justify-center text-gray-900 p-8 md:p-10 overflow-hidden">
                     {/* Background pattern */}
                     <div className="absolute inset-0 opacity-20">
-                      <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"></div>
-                      <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"></div>
+                      <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-gray-100 blur-3xl"></div>
+                      <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-gray-100 blur-3xl"></div>
                     </div>
                     
                     <div className="text-center transform transition-all duration-700 z-10 animate-fadeIn">
-                      <div className="mb-8 p-6 rounded-full bg-white/20 inline-block backdrop-blur-sm animate-pulse shadow-inner">
-                        <item.icon className="w-16 h-16 md:w-20 md:h-20" />
+                      <div className="mb-8 p-6 rounded-full bg-gray-50 inline-block shadow-inner">
+                        <item.icon className="w-16 h-16 md:w-20 md:h-20 text-primary" />
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-md">
+                      <h3 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-md text-gray-900">
                         {item.title}
                       </h3>
-                      <p className="text-lg md:text-xl max-w-md mx-auto font-medium text-white/90 leading-relaxed">
+                      <p className="text-lg md:text-xl max-w-md mx-auto font-medium text-gray-700 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -119,64 +119,65 @@ const SlickWhyChooseUs = () => {
 
         {/* Custom styles for slider */}
         <style>
-          {`
-            .slick-dots {
-              bottom: -40px;
-            }
-            .slick-dots li {
-              margin: 0 5px;
-            }
-            .slick-dots li button:before {
-              display: none;
-            }
-            .slick-prev, .slick-next {
-              width: 40px;
-              height: 40px;
-              z-index: 10;
-            }
-            .slick-prev {
-              left: -10px;
-            }
-            .slick-next {
-              right: -10px;
-            }
-            .slick-prev:before, .slick-next:before {
-              font-size: 40px;
-              color: #f97316;
-              opacity: 0.75;
-            }
-            .slick-prev:hover:before, .slick-next:hover:before {
-              opacity: 1;
-            }
-            .animate-fadeIn {
-              animation: fadeIn 0.8s ease-out forwards;
-            }
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-                transform: translateY(20px);
+            {`
+              .slick-dots {
+                bottom: -40px;
               }
-              to {
-                opacity: 1;
-                transform: translateY(0);
+              .slick-dots li {
+                margin: 0 5px;
               }
-            }
-            .animate-pulse {
-              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            }
-            @keyframes pulse {
-              0%, 100% {
+              .slick-dots li button:before {
+                display: none;
+              }
+              .slick-prev, .slick-next {
+                width: 40px;
+                height: 40px;
+                z-index: 10;
+              }
+              .slick-prev {
+                left: -10px;
+              }
+              .slick-next {
+                right: -10px;
+              }
+              .slick-prev:before, .slick-next:before {
+                font-size: 40px;
+                color: #7ebce6;
+                opacity: 0.75;
+              }
+              .slick-prev:hover:before, .slick-next:hover:before {
                 opacity: 1;
               }
-              50% {
-                opacity: 0.8;
+              .animate-fadeIn {
+                animation: fadeIn 0.8s ease-out forwards;
               }
-            }
-          `}
-        </style>
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              .animate-pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              }
+              @keyframes pulse {
+                0%, 100% {
+                  opacity: 1;
+                }
+                50% {
+                  opacity: 0.8;
+                }
+              }
+            `}
+          </style>
       </div>
     </section>
   );
 };
 
 export default SlickWhyChooseUs;
+
