@@ -41,7 +41,7 @@ const Hero = ({
   };
   
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center py-12 bg-white transition-colors duration-300">
+    <div className="relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center py-12 bg-white transition-colors duration-300">
       {/* Grain texture overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
 
@@ -49,10 +49,10 @@ const Hero = ({
         {/* Ensuring pure white background */}
       </div>
       
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between">
+      <div className="relative z-10 max-w-7xl w-full px-4 mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Left content with heading and form */}
-          <div className="flex flex-col space-y-8 w-full md:w-1/2">
+          <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
@@ -112,9 +112,9 @@ const Hero = ({
                         <SelectValue placeholder="Select service type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
-                        <SelectItem value="regular" className="py-3">Regular Cleaning</SelectItem>
-                        <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning</SelectItem>
-                        <SelectItem value="business" className="py-3">Business Cleaning</SelectItem>
+                        <SelectItem value="regular" className="py-3">Regular Cleaning (RC)</SelectItem>
+                        <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning (MC)</SelectItem>
+                        <SelectItem value="business" className="py-3">Business Cleaning (BC)</SelectItem>
                         <SelectItem value="construction" className="py-3">Post-Construction Cleaning</SelectItem>
                       </SelectContent>
                     </Select>
@@ -146,19 +146,28 @@ const Hero = ({
           </div>
           
           {/* Right side image */}
-          <div className="hidden md:block w-full md:w-1/2 pl-8">
+          <div className="w-full md:w-1/2 order-1 md:order-2 mb-8 md:mb-0">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="relative"
             >
-              <img
-                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
-                alt="Professional Cleaning Service"
-                className="rounded-2xl w-full max-w-md mx-auto object-cover shadow-2xl"
-              />
-              <div className="absolute inset-0 rounded-2xl shadow-inner"></div>
+              <div className="rounded-2xl overflow-hidden bg-white shadow-xl w-full max-w-lg mx-auto">
+                <img
+                  src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" 
+                  alt="Professional Cleaning Service"
+                  className="w-full object-cover"
+                  style={{ 
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)', 
+                    backgroundColor: 'white'
+                  }}
+                />
+              </div>
+              
+              {/* Decorative elements */}
+              <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-primary/10 rounded-full -z-10"></div>
+              <div className="absolute -top-4 -right-4 w-32 h-32 bg-primary/10 rounded-full -z-10"></div>
             </motion.div>
           </div>
         </div>
