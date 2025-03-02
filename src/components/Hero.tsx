@@ -55,12 +55,12 @@ const Hero = ({
           }} transition={{
             duration: 0.5
           }} className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-left w-full">
-              <span className="text-primary block">We provide transparent prices.</span> Services
+              <span className="text-primary block, ">We provide transparent prices.</span> Services
             </motion.h1>
             
             {/* Three-column list */}
             <div className="w-full">
-              <ul className="grid grid-cols-1 gap-4 w-full">
+              <ul className="grid grid-cols-1 gap-4 w-full mx-[24px]">
                 <motion.li initial={{
                 opacity: 0,
                 y: 10
@@ -72,7 +72,7 @@ const Hero = ({
                 delay: 0.1
               }} className="flex items-center justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium">
                   <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>All relevant to the industry insurances</span>
+                  <span className="text-zinc-800">All relevant to the industry insurances</span>
                 </motion.li>
                 <motion.li initial={{
                 opacity: 0,
@@ -85,7 +85,7 @@ const Hero = ({
                 delay: 0.2
               }} className="flex items-center justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium">
                   <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>24/6 Support</span>
+                  <span className="text-zinc-800">24/6 Support</span>
                 </motion.li>
                 <motion.li initial={{
                 opacity: 0,
@@ -98,7 +98,7 @@ const Hero = ({
                 delay: 0.3
               }} className="flex items-center justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium">
                   <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-                  <span>Betriebshaftpflichtversicherung bis zu 5 Mio.€</span>
+                  <span className="text-zinc-800">Betriebshaftpflichtversicherung bis zu 5 Mio.€</span>
                 </motion.li>
               </ul>
             </div>
@@ -115,7 +115,7 @@ const Hero = ({
             delay: 0.2
           }} className="w-full">
               <div className="backdrop-blur-xl p-6 md:p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] rounded-2xl border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-theme-green px-0 py-[22px]">
-                <h2 className="mb-6 text-2xl text-black font-normal text-left">Discover our options and book in under 10 min.</h2>
+                <h2 className="mb-6 text-2xl font-semibold text-zinc-900 text-left"></h2>
                 <div className="flex flex-col sm:flex-row gap-4 items-center rounded-none">
                   {/* Service type - 50% */}
                   <div className="w-full sm:w-1/2">
