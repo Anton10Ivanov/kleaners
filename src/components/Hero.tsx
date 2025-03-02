@@ -55,7 +55,7 @@ const Hero = ({
           }} transition={{
             duration: 0.5
           }} className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white text-left w-full">
-              <span className="text-primary block, mx-[38px] my-[26px]">We provide transparent prices.</span> Services
+              <span className="block, my-[26px] px-[62px] mx-[20px] text-4xl font-medium text-zinc-950">We provide transparent prices.</span> Services
             </motion.h1>
             
             {/* Three-column list */}
@@ -114,7 +114,7 @@ const Hero = ({
             duration: 0.5,
             delay: 0.2
           }} className="w-full">
-              <div className="backdrop-blur-xl p-6 md:p-8 border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white px-[5px] rounded-none mx-[23px] py-[3px] my-[23px]">
+              <div className="backdrop-blur-xl p-6 md:p-8 border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white px-[5px] mx-[23px] py-[3px] my-[23px] rounded-xl">
                 <h2 className="mb-6 text-2xl font-semibold text-zinc-900 text-left"></h2>
                 <div className="flex flex-col sm:flex-row gap-4 items-center rounded-none">
                   {/* Service type - 50% */}
@@ -139,7 +139,7 @@ const Hero = ({
                   
                   {/* Next button - 25% - Match postal code width */}
                   <div className="w-full sm:w-1/4">
-                    <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 text-white w-full shadow-[0_8px_30px_rgba(126,188,230,0.3)] hover:shadow-[0_8px_30px_rgba(126,188,230,0.5)] transition-all font-semibold h-14 px-8 rounded-xl">
+                    <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 w-full shadow-[0_8px_30px_rgba(126,188,230,0.3)] hover:shadow-[0_8px_30px_rgba(126,188,230,0.5)] transition-all font-semibold h-14 px-8 rounded-xl text-zinc-950">
                       Next <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
