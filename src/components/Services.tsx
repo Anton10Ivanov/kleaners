@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Building2, Briefcase, HardHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -17,38 +18,44 @@ const fadeInUp = {
 };
 
 const Services = () => {
+  const navigate = useNavigate();
+  
   const services = [
     {
       title: "Regular Cleaning",
       description: "Weekly or bi-weekly cleaning services to maintain a spotless home",
       price: "From €29/hour",
       icon: Sparkles,
-      color: "bg-[#D3E4FD]",
-      iconColor: "text-[#0FA0CE]"
+      color: "bg-[#E3F4FF]", // Lighter blue background
+      iconColor: "text-[#0FA0CE]",
+      route: "/services/regular-cleaning"
     },
     {
       title: "Move In/Out Cleaning",
       description: "Comprehensive cleaning service for moving transitions",
       price: "Custom quote",
       icon: Building2,
-      color: "bg-[#D3E4FD]",
-      iconColor: "text-[#0FA0CE]"
+      color: "bg-[#E3F4FF]", // Lighter blue background
+      iconColor: "text-[#0FA0CE]",
+      route: "/services/move-in-out"
     },
     {
       title: "Business Cleaning",
       description: "Professional cleaning solutions for offices and commercial spaces",
       price: "Custom quote",
       icon: Briefcase,
-      color: "bg-[#D3E4FD]",
-      iconColor: "text-[#0FA0CE]"
+      color: "bg-[#E3F4FF]", // Lighter blue background
+      iconColor: "text-[#0FA0CE]",
+      route: "/services/business-cleaning"
     },
     {
       title: "Post-Construction",
       description: "Specialized cleaning for newly constructed or renovated spaces",
       price: "Coming Soon",
       icon: HardHat,
-      color: "bg-[#D3E4FD]",
-      iconColor: "text-[#0FA0CE]"
+      color: "bg-[#E3F4FF]", // Lighter blue background
+      iconColor: "text-[#0FA0CE]",
+      route: "/services/post-construction-cleaning"
     }
   ];
 
@@ -82,13 +89,14 @@ const Services = () => {
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
               className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full"
             >
-              <div className={`${service.color} p-3 rounded-xl w-12 h-12 flex items-center justify-center mb-4`}>
-                <service.icon className={`h-6 w-6 ${service.iconColor}`} />
+              <div className="flex items-center mb-4">
+                <div className={`${service.color} p-3 rounded-xl w-10 h-10 flex items-center justify-center mr-3`}>
+                  <service.icon className={`h-5 w-5 ${service.iconColor}`} />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  {service.title}
+                </h3>
               </div>
-              
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                {service.title}
-              </h3>
               
               <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
                 {service.description}
@@ -100,6 +108,7 @@ const Services = () => {
                   variant="ghost" 
                   size="sm" 
                   className="text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-transparent p-0"
+                  onClick={() => navigate(service.route)}
                 >
                   Learn more <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
