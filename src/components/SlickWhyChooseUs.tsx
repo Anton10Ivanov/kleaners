@@ -1,15 +1,12 @@
-
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Slider from "react-slick";
 import { whyChooseUsContent } from "./why-choose-us/WhyChooseUsContent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 const SlickWhyChooseUs = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  
   const settings = {
     dots: true,
     infinite: true,
@@ -22,28 +19,16 @@ const SlickWhyChooseUs = () => {
     autoplaySpeed: 5000,
     pauseOnHover: true,
     adaptiveHeight: true,
-    customPaging: (i: number) => (
-      <div 
-        className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
-          i === activeSlide 
-            ? "bg-primary scale-125" 
-            : "bg-gray-300 dark:bg-gray-700"
-        }`} 
-      />
-    ),
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-          adaptiveHeight: true
-        }
+    customPaging: (i: number) => <div className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${i === activeSlide ? "bg-primary scale-125" : "bg-gray-300 dark:bg-gray-700"}`} />,
+    responsive: [{
+      breakpoint: 768,
+      settings: {
+        arrows: false,
+        adaptiveHeight: true
       }
-    ]
+    }]
   };
-  
-  return (
-    <section id="why-choose-us-slider" className="py-16 md:py-24 bg-white">
+  return <section id="why-choose-us-slider" className="py-16 bg-white md:py-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-left mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 drop-shadow-sm">
@@ -56,25 +41,19 @@ const SlickWhyChooseUs = () => {
 
         {/* Advantages Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-12">
-          {whyChooseUsContent.map((item, index) => (
-            <div 
-              key={`box-${index}`} 
-              className="p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
-            >
+          {whyChooseUsContent.map((item, index) => <div key={`box-${index}`} className="p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100">
               <div className="p-3 bg-[#E3F4FF] rounded-full mb-3">
                 <item.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
               </div>
               <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
                 {item.title}
               </h3>
-            </div>
-          ))}
+            </div>)}
         </div>
 
         <div className="slick-container max-w-5xl mx-auto">
           <Slider {...settings}>
-            {whyChooseUsContent.map((item, index) => (
-              <div key={index} className="px-4 py-6 focus:outline-none">
+            {whyChooseUsContent.map((item, index) => <div key={index} className="px-4 py-6 focus:outline-none">
                 <div className="rounded-2xl overflow-hidden shadow-xl transition-all duration-700 transform bg-white border border-gray-100">
                   <div className="relative w-full min-h-[300px] md:min-h-[400px] flex items-center justify-center text-gray-900 p-8 md:p-10 overflow-hidden">
                     {/* Background pattern */}
@@ -96,14 +75,12 @@ const SlickWhyChooseUs = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </Slider>
         </div>
 
         {/* Mobile cards view (as fallback if slider doesn't work) */}
-        {isMobile && (
-          <style>
+        {isMobile && <style>
             {`
               .slick-container {
                 visibility: visible !important;
@@ -114,8 +91,7 @@ const SlickWhyChooseUs = () => {
                 }
               }
             `}
-          </style>
-        )}
+          </style>}
 
         {/* Custom styles for slider */}
         <style>
@@ -175,8 +151,6 @@ const SlickWhyChooseUs = () => {
             `}
           </style>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default SlickWhyChooseUs;
