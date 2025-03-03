@@ -133,7 +133,7 @@ const Hero = ({
                   
                   {/* Postal code - 25% */}
                   <div className="w-full sm:w-1/4">
-                    <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl border border-white/30 dark:border-gray-700 ring-offset-0 focus:ring-primary shadow-sm" />
+                    <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-white-800/90 font-regular h-14 border border-white/30 dark:border-blue-300 ring-offset-0 focus:ring-primary shadow-sm rounded-xl" />
                   </div>
                   
                   {/* Next button - 25% - Match postal code width */}
