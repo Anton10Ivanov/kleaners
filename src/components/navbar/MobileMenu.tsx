@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -79,9 +79,18 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
     });
   };
 
+  const handleBookingsClick = () => {
+    setIsOpen(false);
+    navigate('/user/bookings');
+    toast({
+      title: "My Bookings",
+      description: "Navigating to your bookings",
+    });
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="left" className="w-[300px] sm:w-[350px] overflow-y-auto p-4">
+      <SheetContent side="right" className="w-[300px] sm:w-[350px] overflow-y-auto p-4">
         <SheetHeader className="mb-6 text-left">
           <SheetTitle>
             <Logo />
@@ -95,10 +104,6 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
               <ThemeToggle />
-              <LanguageSelector 
-                currentLanguage={currentLanguage} 
-                onLanguageChange={onLanguageChange} 
-              />
             </div>
           </div>
 
@@ -107,8 +112,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
               item.children ? (
                 <Accordion type="single" collapsible key={index}>
                   <AccordionItem value={item.title} className="border-b-0">
-                    <AccordionTrigger className="py-2 px-1 hover:no-underline">
-                      <span className="text-base font-medium">{item.title}</span>
+                    <AccordionTrigger className="py-2 px-1 hover:no-underline font-medium text-base">
+                      <span>{item.title}</span>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="flex flex-col space-y-2 pl-2">
@@ -130,13 +135,28 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                 <SheetClose asChild key={index}>
                   <Link
                     to={item.href}
-                    className="block py-2 px-3 rounded-md hover:bg-accent"
+                    className="block py-2 px-3 rounded-md hover:bg-accent text-base font-medium"
                   >
                     {item.title}
                   </Link>
                 </SheetClose>
               )
             ))}
+            
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <h3 className="text-sm font-medium text-muted-foreground mb-2 px-1">User Access</h3>
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBookingsClick}
+                  className="w-full flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
+                >
+                  <CalendarDays className="mr-2 h-4 w-4" />
+                  <span className="text-base">My Bookings</span>
+                </Button>
+              </div>
+            </div>
             
             <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <h3 className="text-sm font-medium text-muted-foreground mb-2 px-1">Admin Access</h3>
@@ -148,7 +168,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                   className="w-full flex items-center justify-start py-2 px-3 rounded-md text-primary border-primary hover:bg-primary/10"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Admin Panel
+                  <span className="text-base">Admin Panel</span>
                 </Button>
                 
                 <SheetClose asChild>

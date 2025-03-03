@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // Supported languages with their codes and names
 const languages = [
@@ -28,31 +29,23 @@ export default function LanguageSelector({ currentLanguage = "en", onLanguageCha
   };
 
   return (
-    <div className="relative">
-      <button
-        className="hover:text-primary transition-colors"
-        onClick={() => document.getElementById("langMenu")?.classList.toggle("hidden")}
-      >
-        <Globe className="w-5 h-5" />
-      </button>
-      <div
-        id="langMenu"
-        className="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10"
-      >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+          <Globe className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
         {languages.map((lang) => (
-          <button
+          <DropdownMenuItem
             key={lang.code}
             onClick={() => handleLanguageChange(lang.code)}
-            className={`block px-4 py-2 text-sm w-full text-left ${
-              currentLang === lang.code
-                ? "bg-gray-100 dark:bg-gray-700 text-primary"
-                : "hover:bg-gray-50 dark:hover:bg-gray-700"
-            }`}
+            className={currentLang === lang.code ? "bg-muted" : ""}
           >
             {lang.name}
-          </button>
+          </DropdownMenuItem>
         ))}
-      </div>
-    </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
