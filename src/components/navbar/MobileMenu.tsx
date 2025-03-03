@@ -1,13 +1,13 @@
+
 import React from 'react';
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ShieldCheck } from 'lucide-react';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
-import { AuthButtons } from './AuthButtons';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -35,7 +35,7 @@ const navigationData = [
     href: "/contact",
     children: [
       { title: "Get in Touch", href: "/contact" },
-      { title: "Request a Quote", href: "/contact?form=quote" }
+      { title: "Join Our Team", href: "/join-team" }
     ]
   },
   {
@@ -50,6 +50,7 @@ const navigationData = [
 
 interface MobileMenuProps {
   isOpen?: boolean;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   isMobileServicesOpen?: boolean;
   setIsMobileServicesOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   currentLanguage?: 'en' | 'de';
@@ -58,14 +59,14 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({
-  isOpen: externalIsOpen,
+  isOpen = false,
+  setIsOpen = () => {},
   isMobileServicesOpen,
   setIsMobileServicesOpen,
   currentLanguage = 'en',
   onLanguageChange = () => {},
   isAdmin = false
 }) => {
-  const [isOpen, setIsOpen] = useState(externalIsOpen || false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -80,15 +81,9 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[350px] overflow-y-auto">
-        <SheetHeader className="mb-4">
-          <SheetTitle className="text-left">
+      <SheetContent side="left" className="w-[300px] sm:w-[350px] overflow-y-auto p-4">
+        <SheetHeader className="mb-6 text-left">
+          <SheetTitle>
             <Logo />
           </SheetTitle>
           <SheetDescription className="text-left">
@@ -96,8 +91,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center mb-2">
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-between items-center">
             <div className="flex gap-2">
               <ThemeToggle />
               <LanguageSelector 
@@ -105,17 +100,18 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                 onLanguageChange={onLanguageChange} 
               />
             </div>
-            <AuthButtons />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             {navigationData.map((item, index) => (
               item.children ? (
                 <Accordion type="single" collapsible key={index}>
-                  <AccordionItem value={item.title}>
-                    <AccordionTrigger className="py-2">{item.title}</AccordionTrigger>
+                  <AccordionItem value={item.title} className="border-b-0">
+                    <AccordionTrigger className="py-2 px-1 hover:no-underline">
+                      <span className="text-base font-medium">{item.title}</span>
+                    </AccordionTrigger>
                     <AccordionContent>
-                      <div className="flex flex-col space-y-1 pl-2">
+                      <div className="flex flex-col space-y-2 pl-2">
                         {item.children.map((child, childIndex) => (
                           <SheetClose asChild key={childIndex}>
                             <Link
@@ -142,8 +138,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
               )
             ))}
             
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <h3 className="text-sm font-medium text-muted-foreground mb-2 px-2">Admin Access</h3>
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <h3 className="text-sm font-medium text-muted-foreground mb-2 px-1">Admin Access</h3>
               <div className="space-y-2">
                 <Button
                   variant="outline"
