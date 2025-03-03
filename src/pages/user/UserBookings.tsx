@@ -133,11 +133,10 @@ const UserBookings = () => {
 
       <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
         <div className="flex justify-center w-full mb-6">
-          <TabsList className="w-full md:w-auto grid grid-cols-4 md:inline-flex">
+          <TabsList className="w-full md:w-auto grid grid-cols-3 md:inline-flex">
             <TabsTrigger value="upcoming" className="px-4">Upcoming</TabsTrigger>
             <TabsTrigger value="completed" className="px-4">Completed</TabsTrigger>
             <TabsTrigger value="cancelled" className="px-4">Cancelled</TabsTrigger>
-            <TabsTrigger value="all" className="px-4">All Bookings</TabsTrigger>
           </TabsList>
         </div>
 

@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { AlignJustify, X, Shield, CalendarDays } from 'lucide-react';
+import { AlignJustify, X, Shield, CalendarDays, LogOut } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
@@ -10,6 +11,8 @@ import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { Icons } from './navbar/icons';
 import { Button } from "./ui/button";
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const navItems = [
   {
@@ -101,12 +104,30 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check if user is logged in
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    
+    checkUser();
+    
+    // Set up auth state listener
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -158,6 +179,24 @@ const Navbar = () => {
       description: "Navigating to your bookings"
     });
   };
+  
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully logged out"
+      });
+      // Redirection is handled by auth state change
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return <nav className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'backdrop-blur-md bg-white/80 dark:bg-dark-background/80 shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[6px]">
@@ -166,28 +205,39 @@ const Navbar = () => {
           
           <DropdownNavigation navItems={navItems} />
 
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" onClick={handleAdminClick} className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10">
-              <Shield className="h-4 w-4" />
-              <span>Panel</span>
-            </Button>
-            
-            <Button variant="outline" size="sm" onClick={handleBookingsClick} className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10">
-              <CalendarDays className="h-4 w-4" />
-              <span>My Bookings</span>
-            </Button>
+          <div className="hidden md:flex items-center space-x-3">
+            {user && (
+              <>
+                <Button variant="outline" size="sm" onClick={handleAdminClick} className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10">
+                  <Shield className="h-4 w-4" />
+                  <span>Panel</span>
+                </Button>
+                
+                <Button variant="outline" size="sm" onClick={handleBookingsClick} className="flex items-center gap-1 text-primary border-primary hover:bg-primary/10">
+                  <CalendarDays className="h-4 w-4" />
+                  <span>My Bookings</span>
+                </Button>
+                
+                <Button variant="outline" size="sm" onClick={handleLogout} className="flex items-center gap-1 text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20">
+                  <LogOut className="h-4 w-4" />
+                  <span>Log Out</span>
+                </Button>
+              </>
+            )}
             
             <ThemeToggle />
             <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
-            <AuthButtons />
+            {!user && <AuthButtons />}
           </div>
 
           <div className="md:hidden flex items-center gap-2">
-            <Button variant="outline" size="icon" onClick={handleBookingsClick} className="text-primary border-primary p-1 h-8 w-8">
-              <CalendarDays className="h-4 w-4" />
-            </Button>
-            
             <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
+            
+            {user && (
+              <Button variant="outline" size="icon" onClick={handleBookingsClick} className="text-primary border-primary p-1 h-8 w-8">
+                <CalendarDays className="h-4 w-4" />
+              </Button>
+            )}
             
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors p-1">
               <AlignJustify size={28} />
