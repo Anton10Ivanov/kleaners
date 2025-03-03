@@ -1,100 +1,66 @@
 
-import { useQuery } from '@tanstack/react-query'
-import { supabase } from "@/integrations/supabase/client"
-import { Star } from 'lucide-react'
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
-interface Review {
-  id: string
-  author_name: string
-  author_photo_url: string | null
-  rating: number
-  text_content: string | null
-  time_created: string
-}
-
-const Testimonials = () => {
-  const { data: reviews, isLoading, error } = useQuery({
-    queryKey: ['reviews'],
-    queryFn: async () => {
-      const response = await supabase.functions.invoke('fetch-google-reviews', {
-        method: 'GET',
-      })
-      
-      if (response.error) {
-        console.error('Error fetching reviews:', response.error)
-        throw response.error
-      }
-      
-      return response.data as Review[]
+export const Testimonials = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  const testimonials = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      text: "I've tried several cleaning services before, but this one truly stands out. Their attention to detail is remarkable, and my home has never looked better!",
+      rating: 5,
+      position: "Homeowner"
+    },
+    {
+      id: 2,
+      name: "Michael Chen",
+      text: "Excellent service from start to finish. The booking process was easy, and the cleaning team was professional, thorough, and efficient.",
+      rating: 5,
+      position: "Business Owner"
+    },
+    {
+      id: 3,
+      name: "Emily Rodriguez",
+      text: "I'm amazed at how they transformed my place. They got to areas I didn't even think about cleaning. Will definitely use them again!",
+      rating: 5,
+      position: "Apartment Resident"
     }
-  })
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, index) => (
-      <Star
-        key={index}
-        className={`h-4 w-4 ${
-          index < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'
-        }`}
-      />
-    ))
-  }
-
-  if (isLoading) {
-    return <div className="text-center py-8">Loading reviews...</div>
-  }
-
-  if (error) {
-    console.error('Error loading reviews:', error)
-    return null
-  }
+  ];
 
   return (
-    <section className="bg-white dark:bg-gray-800 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
-            What Our Clients Say
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Read reviews from our satisfied customers
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {(reviews || []).map((review) => (
-            <div
-              key={review.id}
-              className="bg-gray-50 dark:bg-gray-700 p-8 rounded-xl shadow-sm"
-            >
-              <div className="flex items-center mb-4">
-                {review.author_photo_url && (
-                  <img
-                    src={review.author_photo_url}
-                    alt={review.author_name}
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
-                )}
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">
-                    {review.author_name}
-                  </p>
-                  <div className="flex mt-1">
-                    {renderStars(review.rating)}
-                  </div>
+    <section className={`py-10 ${isMobile ? 'px-4' : 'px-8'} bg-slate-50 dark:bg-gray-900`}>
+      <div className="container mx-auto">
+        <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-center mb-4`}>
+          What Our Customers Say
+        </h2>
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+          Don't just take our word for it. Here's what our satisfied customers have to say about our services.
+        </p>
+        
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'md:grid-cols-2 lg:grid-cols-3 gap-8'}`}>
+          {testimonials.map((testimonial) => (
+            <Card key={testimonial.id} className="h-full">
+              <CardContent className="p-6 flex flex-col h-full">
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  ))}
                 </div>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                "{review.text_content}"
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {new Date(review.time_created).toLocaleDateString()}
-              </p>
-            </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-4 flex-grow">{testimonial.text}</p>
+                <div>
+                  <p className="font-semibold">{testimonial.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.position}</p>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
     </section>
   );
 };
-
-export default Testimonials;
