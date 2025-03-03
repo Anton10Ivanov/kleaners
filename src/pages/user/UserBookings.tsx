@@ -132,12 +132,14 @@ const UserBookings = () => {
       </div>
 
       <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-6">
-          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-          <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
-          <TabsTrigger value="all">All Bookings</TabsTrigger>
-        </TabsList>
+        <div className="flex justify-center w-full mb-6">
+          <TabsList className="w-full md:w-auto grid grid-cols-4 md:inline-flex">
+            <TabsTrigger value="upcoming" className="px-4">Upcoming</TabsTrigger>
+            <TabsTrigger value="completed" className="px-4">Completed</TabsTrigger>
+            <TabsTrigger value="cancelled" className="px-4">Cancelled</TabsTrigger>
+            <TabsTrigger value="all" className="px-4">All Bookings</TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value={activeTab} className="space-y-6">
           {filteredBookings.length === 0 ? (

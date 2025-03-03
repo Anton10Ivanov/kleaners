@@ -1,16 +1,19 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Camera, CheckCircle2 } from "lucide-react";
+import { Camera, CheckCircle2, Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import type { User } from "@/types/supabase";
 import { motion } from "framer-motion";
+
 interface AccountInfoCardProps {
   user: User;
   avatarUrl: string | null;
   setAvatarUrl: (url: string) => void;
   onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
+
 const AccountInfoCard = ({
   user,
   avatarUrl,
@@ -18,6 +21,7 @@ const AccountInfoCard = ({
   onAvatarChange
 }: AccountInfoCardProps) => {
   const [uploading, setUploading] = useState(false);
+  
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
@@ -30,6 +34,7 @@ const AccountInfoCard = ({
       setUploading(false);
     }
   };
+
   return <motion.div initial={{
     opacity: 0,
     y: 20
@@ -64,8 +69,40 @@ const AccountInfoCard = ({
           <div className="space-y-3 pt-4">
             <div className="flex flex-col space-y-1">
               <span className="text-sm font-medium text-muted-foreground">Email</span>
-              <span className="font-medium">{user.email}</span>
+              <div className="flex items-center">
+                <Mail className="h-4 w-4 text-muted-foreground mr-2" />
+                <span className="font-medium">{user.email}</span>
+              </div>
             </div>
+            
+            {user.user_metadata?.first_name && user.user_metadata?.last_name && (
+              <div className="flex flex-col space-y-1 border-t pt-3">
+                <span className="text-sm font-medium text-muted-foreground">Name</span>
+                <span className="font-medium">
+                  {user.user_metadata.first_name} {user.user_metadata.last_name}
+                </span>
+              </div>
+            )}
+            
+            {user.user_metadata?.phone && (
+              <div className="flex flex-col space-y-1 border-t pt-3">
+                <span className="text-sm font-medium text-muted-foreground">Phone</span>
+                <div className="flex items-center">
+                  <Phone className="h-4 w-4 text-muted-foreground mr-2" />
+                  <span className="font-medium">{user.user_metadata.phone}</span>
+                </div>
+              </div>
+            )}
+            
+            {user.user_metadata?.address && (
+              <div className="flex flex-col space-y-1 border-t pt-3">
+                <span className="text-sm font-medium text-muted-foreground">Address</span>
+                <div className="flex items-center">
+                  <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
+                  <span className="font-medium">{user.user_metadata.address}</span>
+                </div>
+              </div>
+            )}
             
             <div className="flex items-center justify-between border-t pt-3 mt-3">
               <div className="flex flex-col space-y-1">
@@ -95,4 +132,5 @@ const AccountInfoCard = ({
       </Card>
     </motion.div>;
 };
+
 export default AccountInfoCard;
