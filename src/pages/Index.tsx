@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -21,6 +22,7 @@ const ErrorFallback = () => (
 
 const Index = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const selectedService = watch('service');
   const frequency = watch('frequency');
@@ -71,7 +73,7 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-24 pb-32 px-4 md:pt-32 bg-white dark:from-gray-800 dark:to-gray-900"
+            className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-white dark:from-gray-800 dark:to-gray-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
@@ -80,7 +82,7 @@ const Index = () => {
             <div className="max-w-7xl mx-auto">
               <ProgressBar currentStep={currentStep} />
               
-              <div className="flex flex-col md:flex-row gap-8 relative">
+              <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
                 <BookingContent 
                   currentStep={currentStep}
                   selectedService={selectedService}
@@ -90,7 +92,7 @@ const Index = () => {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
-                  className="w-full md:w-[20%] fixed bottom-0 left-0 right-0 z-20 md:relative md:bottom-auto md:left-auto md:right-auto md:z-auto"
+                  className={`w-full md:w-[20%] ${isMobile ? 'fixed bottom-0 left-0 right-0 z-20' : 'relative'}`}
                 >
                   <BookingSummary 
                     selectedService={selectedService}
@@ -106,14 +108,14 @@ const Index = () => {
                 <Button 
                   onClick={handleBack}
                   variant="outline"
-                  className="rounded-xl h-12 hover:bg-white/50 hover:text-primary"
+                  className="rounded-xl h-10 md:h-12 hover:bg-white/50 hover:text-primary"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < 3 && (
                   <Button 
                     onClick={handleNext}
-                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)]"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-10 md:h-12 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)]"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

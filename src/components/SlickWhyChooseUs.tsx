@@ -1,12 +1,15 @@
+
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Slider from "react-slick";
 import { whyChooseUsContent } from "./why-choose-us/WhyChooseUsContent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
 const SlickWhyChooseUs = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  
   const settings = {
     dots: true,
     infinite: true,
@@ -19,39 +22,57 @@ const SlickWhyChooseUs = () => {
     autoplaySpeed: 5000,
     pauseOnHover: true,
     adaptiveHeight: true,
-    customPaging: (i: number) => <div className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${i === activeSlide ? "bg-primary scale-125" : "bg-gray-300 dark:bg-gray-700"}`} />,
-    responsive: [{
-      breakpoint: 768,
-      settings: {
-        arrows: false,
-        adaptiveHeight: true
+    customPaging: (i: number) => (
+      <div 
+        className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
+          i === activeSlide ? "bg-primary scale-125" : "bg-gray-300 dark:bg-gray-700"
+        }`} 
+      />
+    ),
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          adaptiveHeight: true
+        }
       }
-    }]
+    ]
   };
-  return <section id="why-choose-us-slider" className="py-16 bg-white md:py-0">
+
+  return (
+    <section id="why-choose-us-slider" className="py-8 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
-        <div className="text-left mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-sm my-[12px] text-zinc-950">Our advantages </h2>
-          
+        <div className="text-left mb-6 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 drop-shadow-sm my-[12px] text-zinc-950">
+            Our advantages 
+          </h2>
         </div>
 
-        {/* Advantages Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-12">
-          {whyChooseUsContent.map((item, index) => <div key={`box-${index}`} className="p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100">
-              <div className="p-3 bg-[#E3F4FF] rounded-full mb-3">
+        {/* Advantages Grid - 2 columns on mobile, 6 on desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 lg:gap-4 mb-8 md:mb-12">
+          {whyChooseUsContent.map((item, index) => (
+            <div 
+              key={`box-${index}`} 
+              className="p-3 md:p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
+            >
+              <div className="p-2 md:p-3 bg-[#E3F4FF] rounded-full mb-2 md:mb-3">
                 <item.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
               </div>
-              <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
+              <h3 className="text-xs md:text-sm lg:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
                 {item.title}
               </h3>
-            </div>)}
+            </div>
+          ))}
         </div>
 
+        {/* Slider - Optimized for mobile with larger touch targets */}
         <div className="slick-container max-w-5xl mx-auto">
           <Slider {...settings}>
-            {whyChooseUsContent.map((item, index) => <div key={index} className="focus:outline-none py-0 px-0">
+            {whyChooseUsContent.map((item, index) => (
+              <div key={index} className="focus:outline-none py-0 px-0">
                 <div className="rounded-2xl overflow-hidden shadow-xl transition-all duration-700 transform bg-white border border-gray-100">
-                  <div className="relative w-full min-h-[300px] md:min-h-[400px] flex items-center justify-center text-gray-900 p-8 md:p-10 overflow-hidden">
+                  <div className="relative w-full min-h-[250px] md:min-h-[300px] lg:min-h-[400px] flex items-center justify-center text-gray-900 p-6 md:p-8 lg:p-10 overflow-hidden">
                     {/* Background pattern */}
                     <div className="absolute inset-0 opacity-20">
                       <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-gray-100 blur-3xl"></div>
@@ -59,24 +80,26 @@ const SlickWhyChooseUs = () => {
                     </div>
                     
                     <div className="text-center transform transition-all duration-700 z-10 animate-fadeIn">
-                      <div className="mb-8 p-6 rounded-full bg-[#E3F4FF] inline-block shadow-inner">
-                        <item.icon className="w-14 h-14 md:w-18 md:h-18 text-[#0FA0CE]" />
+                      <div className="mb-6 md:mb-8 p-4 md:p-6 rounded-full bg-[#E3F4FF] inline-block shadow-inner">
+                        <item.icon className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-[#0FA0CE]" />
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-md text-gray-900">
+                      <h3 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 md:mb-4 drop-shadow-md text-gray-900">
                         {item.title}
                       </h3>
-                      <p className="text-lg md:text-xl max-w-md mx-auto font-medium text-gray-700 leading-relaxed">
+                      <p className="text-base md:text-lg lg:text-xl max-w-md mx-auto font-medium text-gray-700 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </Slider>
         </div>
 
         {/* Mobile cards view (as fallback if slider doesn't work) */}
-        {isMobile && <style>
+        {isMobile && (
+          <style>
             {`
               .slick-container {
                 visibility: visible !important;
@@ -87,66 +110,91 @@ const SlickWhyChooseUs = () => {
                 }
               }
             `}
-          </style>}
+          </style>
+        )}
 
-        {/* Custom styles for slider */}
+        {/* Custom styles for slider - Enhanced touch areas for mobile */}
         <style>
-            {`
-              .slick-dots {
-                bottom: -40px;
+          {`
+            .slick-dots {
+              bottom: -30px;
+              padding: 10px 0;
+            }
+            .slick-dots li {
+              margin: 0 5px;
+              width: 20px;
+              height: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .slick-dots li button:before {
+              display: none;
+            }
+            .slick-prev, .slick-next {
+              width: 40px;
+              height: 40px;
+              z-index: 10;
+            }
+            .slick-prev {
+              left: -10px;
+            }
+            .slick-next {
+              right: -10px;
+            }
+            .slick-prev:before, .slick-next:before {
+              font-size: 40px;
+              color: #7ebce6;
+              opacity: 0.75;
+            }
+            .slick-prev:hover:before, .slick-next:hover:before {
+              opacity: 1;
+            }
+            .animate-fadeIn {
+              animation: fadeIn 0.8s ease-out forwards;
+            }
+            @keyframes fadeIn {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
               }
-              .slick-dots li {
-                margin: 0 5px;
+              to {
+                opacity: 1;
+                transform: translateY(0);
               }
-              .slick-dots li button:before {
-                display: none;
-              }
-              .slick-prev, .slick-next {
-                width: 40px;
-                height: 40px;
-                z-index: 10;
-              }
-              .slick-prev {
-                left: -10px;
-              }
-              .slick-next {
-                right: -10px;
-              }
-              .slick-prev:before, .slick-next:before {
-                font-size: 40px;
-                color: #7ebce6;
-                opacity: 0.75;
-              }
-              .slick-prev:hover:before, .slick-next:hover:before {
+            }
+            .animate-pulse {
+              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            @keyframes pulse {
+              0%, 100% {
                 opacity: 1;
               }
-              .animate-fadeIn {
-                animation: fadeIn 0.8s ease-out forwards;
+              50% {
+                opacity: 0.8;
               }
-              @keyframes fadeIn {
-                from {
-                  opacity: 0;
-                  transform: translateY(20px);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
+            }
+            
+            /* Mobile touch optimizations */
+            @media (max-width: 768px) {
+              .slick-dots li {
+                width: 30px;
+                height: 30px;
               }
-              .animate-pulse {
-                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              .slick-slide {
+                touch-action: pan-y;
               }
-              @keyframes pulse {
-                0%, 100% {
-                  opacity: 1;
-                }
-                50% {
-                  opacity: 0.8;
-                }
+              /* Larger tap targets */
+              .slick-prev, .slick-next {
+                width: 50px;
+                height: 50px;
               }
-            `}
-          </style>
+            }
+          `}
+        </style>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default SlickWhyChooseUs;
