@@ -94,6 +94,7 @@ This document identifies areas where code optimization is needed to enhance perf
    - Created NotificationSettings component for notification preferences
    - Created AccountPreferences component for account customization options
 6. ✅ Fixed TypeScript type errors in UserSidebar, ProfileTabs, and PersonalInfoForm components
+7. ✅ Resolved duplicate admin dashboard pages by consolidating to a single Dashboard component
 
 ## Next Tasks
 
@@ -115,7 +116,7 @@ This document identifies areas where code optimization is needed to enhance perf
 ## 🚩 Potential Issues Identified
 
 1. **Duplicate/Similar Pages:**
-   - `src/pages/admin/AdminDashboard.tsx` and `src/pages/admin/Dashboard.tsx` appear to serve similar purposes
+   - ✅ `src/pages/admin/AdminDashboard.tsx` and `src/pages/admin/Dashboard.tsx` - FIXED by consolidating to a single Dashboard component
    - `src/pages/user/UserDashboard.tsx` has significant overlap with `src/pages/user/UserBookings.tsx`
 
 2. **Type Safety Issues:**
