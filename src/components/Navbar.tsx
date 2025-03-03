@@ -10,6 +10,7 @@ import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { Icons } from './navbar/icons';
 import { Button } from "./ui/button";
 import { useToast } from '@/hooks/use-toast';
+
 const navItems = [{
   id: 1,
   label: "Services",
@@ -57,7 +58,20 @@ const navItems = [{
 }, {
   id: 3,
   label: "Contact",
-  link: "/contact"
+  subMenus: [{
+    title: "Contact Us",
+    items: [{
+      label: "Get in Touch",
+      description: "Contact our customer service team",
+      icon: Icons.regular,
+      path: "/contact"
+    }, {
+      label: "Request a Quote",
+      description: "Get a custom quote for your needs",
+      icon: Icons.regular,
+      path: "/contact?form=quote"
+    }]
+  }]
 }, {
   id: 4,
   label: "Legal",
@@ -76,6 +90,7 @@ const navItems = [{
     }]
   }]
 }];
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
@@ -89,13 +104,16 @@ const Navbar = () => {
   const {
     toast
   } = useToast();
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
   useEffect(() => {
     setIsMenuOpen(false);
     setIsMobileServicesOpen(false);
   }, [location]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -116,10 +134,13 @@ const Navbar = () => {
     });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
   if (!mounted) return null;
+
   const toggleLanguage = () => {
     setCurrentLanguage(currentLanguage === 'en' ? 'de' : 'en');
   };
+
   const handleAdminClick = () => {
     console.log("Admin button clicked, navigating to panel");
     navigate('/admin');
@@ -128,6 +149,7 @@ const Navbar = () => {
       description: "Navigating to the admin panel"
     });
   };
+
   return <nav className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'backdrop-blur-md bg-white/80 dark:bg-dark-background/80 shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[6px]">
         <div className="flex justify-between items-center h-16 my-[3px] py-[8px] bg-transparent">
@@ -163,4 +185,5 @@ const Navbar = () => {
       </div>
     </nav>;
 };
+
 export default Navbar;

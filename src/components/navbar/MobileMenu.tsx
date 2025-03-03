@@ -32,7 +32,11 @@ const navigationData = [
   },
   {
     title: "Contact",
-    href: "/contact"
+    href: "/contact",
+    children: [
+      { title: "Get in Touch", href: "/contact" },
+      { title: "Request a Quote", href: "/contact?form=quote" }
+    ]
   },
   {
     title: "Legal",
