@@ -38,7 +38,7 @@ const Hero = ({
       {/* Grain texture overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
 
-      <div className="absolute inset-0 overflow-hidden bg-white">
+      <div className="absolute inset-0 overflow-hidden bg-theme-green">
         {/* Ensuring pure white background */}
       </div>
       
@@ -114,7 +114,7 @@ const Hero = ({
             duration: 0.5,
             delay: 0.2
           }} className="w-full">
-              <div className="backdrop-blur-xl p-6 md:p-8 border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white rounded-xl">
+              <div className="backdrop-blur-xl p-6 md:p-8 border border-white/20 dark:border-gray-700 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white rounded-xl mx-0 px-[16px]">
                 <div className="flex flex-col sm:flex-row gap-4 items-center">
                   {/* Service type - 50% */}
                   <div className="w-full sm:w-1/2">
@@ -148,7 +148,7 @@ const Hero = ({
           </div>
           
           {/* Right side image - Modified to remove framing and pushed more to the right */}
-          <div className="w-full md:w-1/2 order-1 md:order-2 mb-8 md:mb-0 flex justify-center md:justify-end">
+          <div className="w- md:w-1/2 order-1 md:order-2 mb-8 md:mb-0 flex justify-right md:justify-end">
             <motion.div initial={{
             opacity: 0,
             x: 20
