@@ -8,9 +8,10 @@ import { supabase, hasAdminAccess } from "@/integrations/supabase/client";
 interface UserSidebarProps {
   isOpen?: boolean;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose?: () => void; // Added onClose prop
 }
 
-export default function UserSidebar({ isOpen, setIsOpen }: UserSidebarProps) {
+export default function UserSidebar({ isOpen, setIsOpen, onClose }: UserSidebarProps) {
   const location = useLocation();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
