@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PersonalInfoForm } from './PersonalInfoForm';
+import PersonalInfoForm from './PersonalInfoForm';
 import { SecuritySettings } from './SecuritySettings';
 import { NotificationSettings } from './NotificationSettings';
 import { AccountPreferences } from './AccountPreferences';
@@ -64,3 +64,5 @@ export const ProfileTabs = ({
     </Tabs>
   );
 };
+
+export default ProfileTabs;

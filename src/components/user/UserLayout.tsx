@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { UserSidebar } from './UserSidebar';
+import UserSidebar from './UserSidebar';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Menu } from 'lucide-react';
@@ -37,3 +37,5 @@ export const UserLayout = () => {
     </div>
   );
 };
+
+export default UserLayout;

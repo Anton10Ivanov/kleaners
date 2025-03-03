@@ -16,9 +16,9 @@ import Signup from "./pages/auth/Signup";
 import NotFound from "./pages/NotFound";
 import FAQ from "./pages/about/FAQ";
 import CompanyValues from "./pages/about/CompanyValues";
-import UserLayout from "./components/user/UserLayout";
+import { UserLayout } from "./components/user/UserLayout";
 import UserBookings from "./pages/user/UserBookings";
-import UserProfile from "./pages/user/UserProfile";
+import { UserProfile } from "./pages/user/UserProfile";
 import UserSettings from "./pages/user/UserSettings";
 import { AdminBookings } from "./pages/admin/AdminBookings";
 import { AdminCustomers } from "./pages/admin/AdminCustomers";
@@ -26,7 +26,7 @@ import { AdminProviders } from "./pages/admin/AdminProviders";
 import { AdminSettings } from "./pages/admin/AdminSettings";
 import { AdminPanel } from "./pages/admin/AdminPanel";
 import JoinTeam from "./pages/JoinTeam";
-import UserInvoices from "./pages/user/UserInvoices";
+import { UserInvoices } from "./pages/user/UserInvoices";
 
 function App() {
   return (
