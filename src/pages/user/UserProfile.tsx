@@ -9,14 +9,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, User, Clock, Edit2, CheckCircle2 } from "lucide-react";
-import { useProfile } from "@/hooks/useProfile";
+import { useUserProfileData } from "@/hooks/useUserProfileData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
-  const { userData, isLoading, updateProfile } = useProfile();
+  const { userData, isLoading, updateProfile, setUserData } = useUserProfileData();
   const { toast } = useToast();
   const isMobile = useMediaQuery("(max-width: 768px)");
   
@@ -34,6 +34,15 @@ export default function UserProfile() {
         title: "Error",
         description: "Failed to update profile. Please try again.",
         variant: "destructive",
+      });
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    if (userData) {
+      setUserData({
+        ...userData,
+        [field]: value
       });
     }
   };
@@ -132,19 +141,36 @@ export default function UserProfile() {
                   <div className="space-y-4">
                     <div className="grid gap-3">
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" defaultValue={userData?.firstName || ""} />
+                      <Input 
+                        id="firstName" 
+                        value={userData?.firstName || ""} 
+                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" defaultValue={userData?.lastName || ""} />
+                      <Input 
+                        id="lastName" 
+                        value={userData?.lastName || ""}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="phone">Phone Number</Label>
-                      <Input id="phone" defaultValue={userData?.phone || ""} />
+                      <Input 
+                        id="phone" 
+                        value={userData?.phone || ""}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="address">Address</Label>
-                      <Textarea id="address" rows={3} defaultValue={userData?.address || ""} />
+                      <Textarea 
+                        id="address" 
+                        rows={3} 
+                        value={userData?.address || ""}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
+                      />
                     </div>
                     <Button onClick={handleSave} className="w-full">Save Changes</Button>
                   </div>
