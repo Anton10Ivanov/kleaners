@@ -1,177 +1,209 @@
 
 # Code Optimization Checklist
 
-This document identifies areas where code optimization is needed to enhance performance, maintainability, and reliability.
+## Overview
 
-## ✅ Components To Optimize
+This document outlines a comprehensive plan for optimizing and standardizing code across the entire application. When implementing these tasks:
+
+1. **Apply changes systematically** across the whole codebase, not just in isolated files
+2. **Test thoroughly** after each change to ensure functionality remains intact
+3. **Document changes** made to track progress and ensure consistency
+4. **Prioritize** tasks based on impact and dependency relationships
+
+## ✅ Component Optimization
 
 ### High Priority
 
-1. **Long Component Files (Split into smaller components)**
+1. **Long Component Files**
    - ✅ `src/pages/admin/AdminSettings.tsx` - Split into multiple tabs and settings sections
-   - ✅ `src/pages/user/UserProfile.tsx` - Broken down into smaller, focused components:
+   - ✅ `src/pages/user/UserProfile.tsx` - Broken down into smaller components:
      - AvatarUploader.tsx
      - ProfileTabs.tsx
      - SecuritySettings.tsx
      - NotificationSettings.tsx
      - AccountPreferences.tsx
-   - `src/pages/user/UserBookings.tsx` (223 lines) - Can be split into separate components for different sections
+   - `src/pages/user/UserBookings.tsx` (223 lines) - Needs splitting into:
+     - BookingCard.tsx
+     - BookingList.tsx
+     - BookingDetailsModal.tsx
+     - BookingFilters.tsx
    - ✅ `src/pages/user/UserSettings.tsx` (297 lines) - Broken down into:
      - NotificationPreferencesCard.tsx
      - PasswordManagementCard.tsx
      - PrivacySecurityCard.tsx
      - DangerZoneCard.tsx
-   - `src/pages/admin/AdminPanel.tsx` (234 lines) - Can be modularized further
+   - `src/pages/admin/AdminPanel.tsx` (234 lines) - Should be split into:
+     - AdminHeader.tsx
+     - AdminStatsSummary.tsx
+     - AdminQuickActions.tsx
 
-2. **Complex Logic (Extract to custom hooks)**
-   - `src/hooks/useUserBookings.ts` - Data transformation logic could be further optimized
-   - `src/hooks/useUserProfileData.ts` - Can optimize error handling and state management
-   - Create `useNotifications.ts` hook to manage notification preferences in UserSettings.tsx
+2. **Complex Logic Extraction**
+   - `src/hooks/useUserBookings.ts` - Refactor to use proper React Query patterns
+   - `src/hooks/useUserProfileData.ts` - Optimize error handling and implement consistent state management
+   - Create reusable hooks for:
+     - Form management (useForm)
+     - API error handling (useApiError)
+     - Authentication state (useAuthState)
+     - Toast notifications (useNotification)
 
 3. **Render Optimization**
-   - Add memo/useMemo for expensive calculations in booking components
-   - Implement virtualization for long lists in admin sections
-   - Use skeleton loaders more consistently for better loading states
+   - Implement React.memo for components that rarely change
+   - Add useMemo/useCallback for expensive calculations and event handlers
+   - Use virtualization for long lists in:
+     - BookingsTable.tsx
+     - CustomersTable.tsx
+     - ProvidersTable.tsx
 
 ### Medium Priority
 
 1. **Bundle Size Optimization**
-   - Icons: Use lucide-react icons more consistently, avoid mixing icon libraries
-   - Move to dynamic imports for large components like admin panels
+   - Implement dynamic imports for:
+     - AdminPanel and subcomponents
+     - Calendar and booking components
+     - Chart and statistics components
+   - Convert to lazy loading for routes
+   - Optimize image loading with proper sizing and formats
 
 2. **Network Optimization**
-   - Implement caching for API calls with Tanstack Query
-   - Optimize image loading with proper sizing and lazy loading
+   - Standardize React Query implementation across all data fetching
+   - Implement proper caching strategies for all API calls
+   - Add retry and fallback mechanisms for network failures
 
 3. **Form Management**
-   - Standardize form handling across all forms
-   - Extract repeating form logic to custom hooks
+   - Standardize form handling with react-hook-form across all forms
+   - Create reusable form components for common patterns
+   - Implement consistent validation using Zod schemas
 
-## 🛠️ Implementation Plan
+## 🛠️ Technical Debt
 
-### For Long Components
+### Architecture Issues
 
-1. Extract logical sections into their own components
-2. Apply single responsibility principle
-3. Implement code splitting where appropriate
+1. **Code Structure Improvements**
+   - ✅ Fix duplicate pages: `AdminDashboard.tsx` and `Dashboard.tsx` - FIXED
+   - Organize components by feature instead of type where appropriate
+   - Create proper separation between UI components and containers
+   - Standardize folder structure across the application
 
-### For Complex Logic
+2. **Type Safety Issues**
+   - Replace all `any` types with proper TypeScript interfaces
+   - Create consistent naming conventions for types and interfaces
+   - Add proper return types for all functions and hooks
 
-1. Create specialized hooks for specific functionality
-2. Implement proper error boundaries
-3. Optimize state management with context where appropriate
+3. **Error Handling Strategy**
+   - Implement consistent error boundary pattern
+   - Create standardized error handling for all async operations
+   - Add proper error states in all components
 
-### For Performance
+### Documentation Issues
 
-1. Add React.memo() for components that don't need frequent re-rendering
-2. Use proper key props in lists
-3. Implement throttling/debouncing for search inputs and scrolling events
+1. **Add JSDoc Comments** to:
+   - All hooks and custom functions
+   - Complex components
+   - Utility functions and helpers
+
+2. **Props Documentation**
+   - Document all component props with clear descriptions
+   - Add examples where appropriate
+   - Include validation requirements
+
+3. **API Interaction Documentation**
+   - Document all API calls
+   - Include request/response formats
+   - Document error handling procedures
+
+### Accessibility Improvements
+
+1. **ARIA Attributes**
+   - Add proper aria-labels to all interactive elements
+   - Implement aria-live regions for dynamic content
+   - Add aria-describedby for form controls
+
+2. **Keyboard Navigation**
+   - Ensure all interactive elements can be accessed with keyboard
+   - Implement proper focus management
+   - Add keyboard shortcuts for common actions
+
+3. **Visual Accessibility**
+   - Fix color contrast issues
+   - Ensure text is resizable
+   - Add focus indicators for keyboard navigation
 
 ## 📊 Performance Metrics to Monitor
 
-- Time to Interactive (TTI)
 - First Contentful Paint (FCP)
 - Largest Contentful Paint (LCP)
 - Total Bundle Size
-- Memory usage on mobile devices
+- API Response Times
+- Memory Usage
 
-## 🔄 Testing Strategy
+## ✅ Completed Tasks
 
-- Implement unit tests for critical business logic
-- Add performance tests to monitor regression
-- Test on various mobile devices and slower networks
+1. ✅ Optimized AdminSettings.tsx by breaking it down into tabs
+2. ✅ Implemented mobile-first approach across 5 components
+3. ✅ Added responsive layouts based on device size
+4. ✅ Refactored UserProfile.tsx into smaller, focused components
+5. ✅ Fixed TypeScript errors in user components
+6. ✅ Resolved duplicate admin dashboard pages
+7. ✅ Refactored UserSettings.tsx into smaller components:
+   - NotificationPreferencesCard
+   - PasswordManagementCard
+   - PrivacySecurityCard
+   - DangerZoneCard
+8. ✅ Improved documentation in user settings components
+9. ✅ Enhanced accessibility in user settings components:
+   - Added proper ARIA attributes
+   - Improved keyboard navigation
+   - Fixed focus management
 
-## Completed Tasks
+## 🔄 Current Tasks
 
-1. ✅ Optimized AdminSettings.tsx by breaking it down into tabs with focused content
-2. ✅ Implemented mobile-first approach across 5 components that were previously not optimized
-3. ✅ Added proper conditional rendering based on device size for improved performance
-4. ✅ Updated layout structures for all mobile views to ensure touch-friendly UI
-5. ✅ Refactored UserProfile.tsx into smaller components:
-   - Created AvatarUploader component for profile picture management
-   - Created ProfileTabs component to organize and manage tab navigation
-   - Created SecuritySettings component for password and 2FA settings
-   - Created NotificationSettings component for notification preferences
-   - Created AccountPreferences component for account customization options
-6. ✅ Fixed TypeScript type errors in UserSidebar, ProfileTabs, and PersonalInfoForm components
-7. ✅ Resolved duplicate admin dashboard pages by consolidating to a single Dashboard component
-8. ✅ Refactored UserSettings.tsx into smaller components:
-   - Created NotificationPreferencesCard component for notification settings
-   - Created PasswordManagementCard component for password management
-   - Created PrivacySecurityCard component for privacy and terms
-   - Created DangerZoneCard component for account deletion
+1. Refactoring UserBookings.tsx
+2. Standardizing React Query implementation
+3. Adding JSDoc comments to critical functions
+4. Improving accessibility across form components
 
-## Next Tasks
+## 📝 Next Tasks
 
-1. Refactor UserBookings.tsx:
-   - Create BookingCard component
-   - Extract BookingList component
-   - Implement BookingDetailsModal component
+1. Refactor AdminPanel.tsx into smaller components
+2. Implement consistent error handling pattern
+3. Standardize form validation with Zod schemas
+4. Add keyboard navigation support to complex components
 
-2. Optimize useUserBookings.ts hook:
-   - Implement proper caching with React Query
-   - Add error boundary handling
-   - Optimize data transformation logic
+## 🚩 Known Issues
 
-3. Refactor AdminPanel.tsx:
-   - Extract AdminHeader component
-   - Create StatsSummary component
-   - Create QuickActions component
+1. **User Experience Issues:**
+   - Inconsistent loading states across the application
+   - Form validation errors not clearly communicated
+   - Mobile navigation needs improvement
 
-## 🚩 Potential Issues Identified
+2. **Performance Concerns:**
+   - Large component trees causing re-render issues
+   - Unoptimized images increasing page load time
+   - Multiple API calls on page load
 
-1. **Duplicate/Similar Pages:**
-   - ✅ `src/pages/admin/AdminDashboard.tsx` and `src/pages/admin/Dashboard.tsx` - FIXED by consolidating to a single Dashboard component
-   - `src/pages/user/UserDashboard.tsx` has significant overlap with `src/pages/user/UserBookings.tsx`
+3. **Code Quality Issues:**
+   - Duplication of logic across similar components
+   - Inconsistent state management approaches
+   - Prop drilling in deeply nested components
 
-2. **Type Safety Issues:**
-   - Several components using `any` types instead of proper TypeScript interfaces
-   - Missing type definitions for form data in multiple components
-   - Inconsistent prop type naming conventions
+## 📋 Task Tracking Process
 
-3. **Error Handling Gaps:**
-   - `src/pages/user/UserSettings.tsx` has inadequate error handling for user deletion
-   - Many async operations across components lack proper error boundaries
-   - API error messages not consistently displayed to users
+1. **Selection:**
+   - Choose tasks based on impact and risk assessment
+   - Start with isolated components before system-wide changes
+   - Address critical bugs before enhancement tasks
 
-4. **Mobile Optimization Needed:**
-   - `src/components/booking/Calendar.tsx` needs better mobile view
-   - `src/components/admin/sections/bookings/BookingsTable.tsx` needs responsive design improvements
-   - Multiple forms need better mobile keyboard handling
+2. **Implementation:**
+   - Apply changes systematically
+   - Follow established patterns and best practices
+   - Update documentation alongside code changes
 
-5. **State Management Issues:**
-   - Excessive prop drilling in admin component hierarchy
-   - Inconsistent usage of React Query vs. local state management
-   - Multiple components managing overlapping state
+3. **Verification:**
+   - Test changes thoroughly
+   - Verify accessibility improvements
+   - Ensure backward compatibility
 
-6. **Performance Concerns:**
-   - Large rendering trees in admin views causing potential performance issues
-   - Unoptimized re-renders in list components
-   - Image loading not optimized in service pages
-
-7. **Code Structure Improvements:**
-   - Inconsistent folder structure (some features in `/pages`, others in `/components`)
-   - Utility functions duplicated across multiple files
-   - Lack of standardized error handling pattern
-
-8. **Authentication Flow:**
-   - Inconsistent handling of unauthenticated states
-   - Missing loader states during authentication checks
-   - Potential security issues with user role validation
-
-## 📋 Technical Debt Tracking
-
-1. **Refactoring Needed:**
-   - Convert class components to functional components with hooks
-   - Standardize form validation across the application
-   - Create consistent data fetching pattern with React Query
-
-2. **Documentation Gaps:**
-   - Missing JSDoc comments on critical functions
-   - Undocumented component props
-   - Incomplete API interaction documentation
-
-3. **Accessibility Issues:**
-   - Missing ARIA attributes on interactive elements
-   - Keyboard navigation gaps in complex components
-   - Color contrast issues in some UI elements
+4. **Documentation:**
+   - Update this checklist after completing tasks
+   - Document complex changes for future reference
+   - Add comments explaining non-obvious implementations
