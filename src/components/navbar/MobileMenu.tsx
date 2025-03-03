@@ -1,15 +1,15 @@
 
 import React from 'react';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ShieldCheck, CalendarDays } from 'lucide-react';
+import { ShieldCheck, CalendarDays, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from './Logo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
-import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const navigationData = [
   {
@@ -87,6 +87,25 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
       description: "Navigating to your bookings",
     });
   };
+  
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setIsOpen(false);
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully logged out",
+      });
+      // Redirect happens via auth state change
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -108,42 +127,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           </div>
 
           <div className="space-y-3">
-            {navigationData.map((item, index) => (
-              item.children ? (
-                <Accordion type="single" collapsible key={index}>
-                  <AccordionItem value={item.title} className="border-b-0">
-                    <AccordionTrigger className="py-2 px-1 hover:no-underline font-medium text-base">
-                      <span>{item.title}</span>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex flex-col space-y-2 pl-2">
-                        {item.children.map((child, childIndex) => (
-                          <SheetClose asChild key={childIndex}>
-                            <Link
-                              to={child.href}
-                              className="py-2 px-3 text-sm rounded-md hover:bg-accent"
-                            >
-                              {child.title}
-                            </Link>
-                          </SheetClose>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              ) : (
-                <SheetClose asChild key={index}>
-                  <Link
-                    to={item.href}
-                    className="block py-2 px-3 rounded-md hover:bg-accent text-base font-medium"
-                  >
-                    {item.title}
-                  </Link>
-                </SheetClose>
-              )
-            ))}
-            
-            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+            {/* User & Admin Access Sections at the top */}
+            <div className="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-sm font-medium text-muted-foreground mb-2 px-1">User Access</h3>
               <div className="space-y-2">
                 <Button
@@ -158,7 +143,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
               </div>
             </div>
             
-            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-sm font-medium text-muted-foreground mb-2 px-1">Admin Access</h3>
               <div className="space-y-2">
                 <Button
@@ -198,6 +183,55 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                   </Link>
                 </SheetClose>
               </div>
+            </div>
+            
+            {/* Navigation Items */}
+            {navigationData.map((item, index) => (
+              item.children ? (
+                <Accordion type="single" collapsible key={index}>
+                  <AccordionItem value={item.title} className="border-b-0">
+                    <AccordionTrigger className="py-2 px-1 hover:no-underline font-medium text-base">
+                      <span>{item.title}</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex flex-col space-y-2 pl-2">
+                        {item.children.map((child, childIndex) => (
+                          <SheetClose asChild key={childIndex}>
+                            <Link
+                              to={child.href}
+                              className="py-2 px-3 text-sm rounded-md hover:bg-accent"
+                            >
+                              {child.title}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ) : (
+                <SheetClose asChild key={index}>
+                  <Link
+                    to={item.href}
+                    className="block py-2 px-3 rounded-md hover:bg-accent text-base font-medium"
+                  >
+                    {item.title}
+                  </Link>
+                </SheetClose>
+              )
+            ))}
+            
+            {/* Logout Button */}
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="w-full flex items-center justify-start py-2 px-3 rounded-md text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span className="text-base">Log Out</span>
+              </Button>
             </div>
           </div>
         </div>

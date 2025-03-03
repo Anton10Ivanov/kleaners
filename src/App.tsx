@@ -17,7 +17,6 @@ import NotFound from "./pages/NotFound";
 import FAQ from "./pages/about/FAQ";
 import CompanyValues from "./pages/about/CompanyValues";
 import UserLayout from "./components/user/UserLayout";
-import UserDashboard from "./pages/user/UserDashboard";
 import UserBookings from "./pages/user/UserBookings";
 import UserProfile from "./pages/user/UserProfile";
 import UserSettings from "./pages/user/UserSettings";
@@ -26,6 +25,8 @@ import { AdminCustomers } from "./pages/admin/AdminCustomers";
 import { AdminProviders } from "./pages/admin/AdminProviders";
 import { AdminSettings } from "./pages/admin/AdminSettings";
 import { AdminPanel } from "./pages/admin/AdminPanel";
+import JoinTeam from "./pages/JoinTeam";
+import UserInvoices from "./pages/user/UserInvoices";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/about/faq" element={<FAQ />} />
         <Route path="/about/values" element={<CompanyValues />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/join-team" element={<JoinTeam />} />
         <Route path="/legal/terms" element={<TermsOfService />} />
         <Route path="/legal/privacy" element={<PrivacyPolicy />} />
         <Route path="/auth/login" element={<Login />} />
@@ -58,8 +60,9 @@ function App() {
       
       {/* User routes */}
       <Route path="/user" element={<UserLayout />}>
-        <Route path="dashboard" element={<UserDashboard />} />
+        <Route index element={<UserBookings />} />
         <Route path="bookings" element={<UserBookings />} />
+        <Route path="invoices" element={<UserInvoices />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="settings" element={<UserSettings />} />
       </Route>
