@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-
 interface HeroProps {
   selectedService: string;
   setSelectedService: (value: "regular" | "moveInOut" | "business" | "construction") => void;
@@ -14,7 +12,6 @@ interface HeroProps {
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
-
 const Hero = ({
   selectedService,
   setSelectedService,
@@ -23,11 +20,9 @@ const Hero = ({
   handleNextStep
 }: HeroProps) => {
   const navigate = useNavigate();
-
   const handleServiceChange = (value: string) => {
     setSelectedService(value as "regular" | "moveInOut" | "business" | "construction");
   };
-
   const handleNext = () => {
     if (!selectedService) {
       toast.error("Please select a service type");
@@ -39,7 +34,6 @@ const Hero = ({
     }
     handleNextStep();
   };
-
   return <div className="relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center py-12 bg-white transition-colors duration-300">
       {/* Grain texture overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
@@ -48,24 +42,19 @@ const Hero = ({
         {/* Ensuring pure white background */}
       </div>
       
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 bg-theme-green">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 py-4 md:py-8">
           {/* Left content with heading and form */}
           <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
-            <motion.h1 
-              initial={{
-                opacity: 0,
-                y: 20
-              }} 
-              animate={{
-                opacity: 1,
-                y: 0
-              }} 
-              transition={{
-                duration: 0.5
-              }} 
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-zinc-950 text-left mb-4"
-            >
+            <motion.h1 initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.5
+          }} className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-zinc-950 text-left mb-4">
               We provide transparent prices.
             </motion.h1>
             
@@ -170,16 +159,11 @@ const Hero = ({
             duration: 0.5,
             delay: 0.3
           }} className="relative w-full md:w-auto">
-              <img 
-                src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" 
-                alt="Professional Cleaning Service" 
-                className="w-full h-auto object-contain md:max-w-[500px] mx-auto" 
-              />
+              <img src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" alt="Professional Cleaning Service" className="w-full h-auto object-contain md:max-w-[500px] mx-auto" />
             </motion.div>
           </div>
         </div>
       </div>
     </div>;
 };
-
 export default Hero;
