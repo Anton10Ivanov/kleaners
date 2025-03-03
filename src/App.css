@@ -1,8 +1,15 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
 }
 
 .logo {
@@ -39,4 +46,63 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5em;
+  }
+  
+  /* Improved touch targets */
+  button, 
+  [role="button"],
+  input,
+  select,
+  .clickable {
+    min-height: 44px;
+  }
+  
+  /* Fix bottom padding when modals are present */
+  .has-bottom-sheet {
+    padding-bottom: 80px;
+  }
+  
+  /* Optimize tables for mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  /* Stack form controls on mobile */
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+/* Better scrolling on mobile */
+@media (max-width: 768px) {
+  :root {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent scrolling when modals are open */
+  body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
 }
