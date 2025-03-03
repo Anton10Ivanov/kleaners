@@ -66,10 +66,10 @@ const navItems = [{
       icon: Icons.regular,
       path: "/contact"
     }, {
-      label: "Request a Quote",
-      description: "Get a custom quote for your needs",
+      label: "Join Our Team",
+      description: "Apply to work with us",
       icon: Icons.regular,
-      path: "/contact?form=quote"
+      path: "/join-team"
     }]
   }]
 }, {
@@ -101,9 +101,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     setMounted(true);
@@ -174,14 +172,20 @@ const Navbar = () => {
               <span className="text-xs">Panel</span>
             </Button>
             
-            <AuthButtons />
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors p-1">
               {isMenuOpen ? <X size={28} /> : <AlignJustify size={28} />}
             </button>
           </div>
         </div>
 
-        <MobileMenu isOpen={isMenuOpen} isMobileServicesOpen={isMobileServicesOpen} setIsMobileServicesOpen={setIsMobileServicesOpen} currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
+        <MobileMenu 
+          isOpen={isMenuOpen} 
+          setIsOpen={setIsMenuOpen}
+          isMobileServicesOpen={isMobileServicesOpen} 
+          setIsMobileServicesOpen={setIsMobileServicesOpen} 
+          currentLanguage={currentLanguage} 
+          onLanguageChange={toggleLanguage} 
+        />
       </div>
     </nav>;
 };
