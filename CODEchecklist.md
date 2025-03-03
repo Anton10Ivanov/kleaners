@@ -16,7 +16,7 @@ This document identifies areas where code optimization is needed to enhance perf
      - NotificationSettings.tsx
      - AccountPreferences.tsx
    - `src/pages/user/UserBookings.tsx` (223 lines) - Can be split into separate components for different sections
-   - `src/pages/user/UserSettings.tsx` (297 lines) - Should be broken down into:
+   - ✅ `src/pages/user/UserSettings.tsx` (297 lines) - Broken down into:
      - NotificationPreferencesCard.tsx
      - PasswordManagementCard.tsx
      - PrivacySecurityCard.tsx
@@ -95,6 +95,11 @@ This document identifies areas where code optimization is needed to enhance perf
    - Created AccountPreferences component for account customization options
 6. ✅ Fixed TypeScript type errors in UserSidebar, ProfileTabs, and PersonalInfoForm components
 7. ✅ Resolved duplicate admin dashboard pages by consolidating to a single Dashboard component
+8. ✅ Refactored UserSettings.tsx into smaller components:
+   - Created NotificationPreferencesCard component for notification settings
+   - Created PasswordManagementCard component for password management
+   - Created PrivacySecurityCard component for privacy and terms
+   - Created DangerZoneCard component for account deletion
 
 ## Next Tasks
 
