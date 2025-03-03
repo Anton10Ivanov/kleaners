@@ -25,7 +25,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="container mx-auto py-4 px-2 md:py-8 md:px-4">
+    <div className="container mx-auto py-2 px-2 md:py-8 md:px-4">
       <Card className="shadow-lg dark:glass-morphism border-0 dark:border dark:border-gray-800">
         <DashboardHeader 
           userName={userName} 
@@ -34,7 +34,7 @@ const AdminDashboard = () => {
           isMobile={isMobile} 
         />
         
-        <CardContent className="p-4 md:p-6">
+        <CardContent className="p-3 md:p-6">
           {/* Stats Cards */}
           <StatCards isLoading={isLoading} stats={stats} />
           

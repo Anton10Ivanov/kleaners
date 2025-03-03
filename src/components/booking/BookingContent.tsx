@@ -11,6 +11,7 @@ import { BookingFormData, Frequency } from '@/schemas/booking';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface BookingContentProps {
   currentStep: number;
@@ -33,9 +34,10 @@ const BookingContent = ({
     toast.success('Booking submitted successfully!');
   };
 
-  const postalCode = form.watch('postalCode') || '';
   const frequency = form.watch('frequency') as Frequency | undefined;
+  const postalCode = form.watch('postalCode') || '';
   const showCalendar = frequency && frequency !== Frequency.Custom;
+  const isMobile = useMediaQuery("(max-width: 768px)");
   
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -43,7 +45,7 @@ const BookingContent = ({
   };
 
   return (
-    <div className="w-full md:w-[80%]" onClick={handleFormClick}>
+    <div className={`w-full ${isMobile ? 'px-2' : 'md:w-[80%]'}`} onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={(e) => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
@@ -51,9 +53,9 @@ const BookingContent = ({
               initial="hidden"
               animate="visible"
               variants={fadeVariant}
-              className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
+              className="space-y-6 bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
             >
-              <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold mb-4 md:mb-6 text-gray-900 dark:text-white">
                 Regular Cleaning Details
               </h3>
               <ServiceOptions 
@@ -62,11 +64,11 @@ const BookingContent = ({
                 isRegularCleaning={true}
               />
               {frequency !== Frequency.Custom && (
-                <>
+                <div className="space-y-4 md:space-y-6">
                   <HoursSelection form={form} />
                   {showCalendar && <Calendar form={form} />}
                   <Extras form={form} />
-                </>
+                </div>
               )}
             </motion.div>
           )}
@@ -76,7 +78,7 @@ const BookingContent = ({
               animate="visible"
               variants={fadeVariant}
               key="moveinout-step"
-              className="space-y-6"
+              className="space-y-4 md:space-y-6"
             >
               <MoveInOutStep form={form} />
             </motion.div>
