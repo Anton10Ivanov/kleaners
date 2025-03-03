@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, Clock, MapPin, ChevronRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useBookings } from "@/hooks/useBookings";
+import { useUserBookings } from "@/hooks/useUserBookings";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
@@ -22,12 +22,12 @@ export default function UserBookings() {
     bookings, 
     isLoading, 
     error 
-  } = useBookings();
+  } = useUserBookings();
   
   // Filter bookings based on status and search query
   const filteredBookings = bookings?.filter(booking => {
     const matchesTab = 
-      (activeTab === "upcoming" && booking.status === "scheduled") ||
+      (activeTab === "upcoming" && booking.status === "pending") ||
       (activeTab === "completed" && booking.status === "completed") ||
       (activeTab === "cancelled" && booking.status === "cancelled");
       
@@ -41,7 +41,7 @@ export default function UserBookings() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "scheduled":
+      case "pending":
         return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Upcoming</Badge>;
       case "completed":
         return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Completed</Badge>;
