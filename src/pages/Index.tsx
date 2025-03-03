@@ -2,9 +2,9 @@
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/Hero';
-import Services from '../components/Services';
+import { Services } from '../components/Services';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
-import Testimonials from '../components/Testimonials';
+import { Testimonials } from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
 import BookingContent from '../components/booking/BookingContent';
