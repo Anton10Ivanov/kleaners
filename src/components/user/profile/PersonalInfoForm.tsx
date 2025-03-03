@@ -10,12 +10,14 @@ interface PersonalInfoFormProps {
   form: UseFormReturn<any>;
   onSubmit: (values: any) => Promise<void>;
   saving: boolean;
+  profileData?: any; // Added profileData prop
 }
 
 const PersonalInfoForm = ({
   form,
   onSubmit,
-  saving
+  saving,
+  profileData
 }: PersonalInfoFormProps) => {
   return (
     <Card className="shadow-md hover:shadow-lg transition-all duration-300 border-gray-100 dark:border-gray-700">

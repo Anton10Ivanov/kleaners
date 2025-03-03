@@ -6,6 +6,7 @@ import { SecuritySettings } from './SecuritySettings';
 import { NotificationSettings } from './NotificationSettings';
 import { AccountPreferences } from './AccountPreferences';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useForm } from 'react-hook-form';
 
 interface ProfileTabsProps {
   profileData: any;
@@ -21,6 +22,28 @@ export const ProfileTabs = ({
   onSubmit 
 }: ProfileTabsProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  const form = useForm({
+    defaultValues: {
+      first_name: profileData?.firstName || '',
+      last_name: profileData?.lastName || '',
+      email: profileData?.email || '',
+      phone: profileData?.phone || '',
+      address: profileData?.address || '',
+    }
+  });
+  
+  React.useEffect(() => {
+    if (profileData) {
+      form.reset({
+        first_name: profileData.firstName || '',
+        last_name: profileData.lastName || '',
+        email: profileData.email || '',
+        phone: profileData.phone || '',
+        address: profileData.address || '',
+      });
+    }
+  }, [profileData, form]);
   
   return (
     <Tabs defaultValue="personal" className="w-full">
@@ -43,10 +66,10 @@ export const ProfileTabs = ({
       
       <TabsContent value="personal">
         <PersonalInfoForm 
-          profileData={profileData} 
-          isLoading={isLoading} 
-          isSaving={isSaving} 
-          onSubmit={onSubmit} 
+          form={form}
+          saving={isSaving}
+          onSubmit={onSubmit}
+          profileData={profileData}
         />
       </TabsContent>
       
