@@ -42,7 +42,7 @@ const Hero = ({
         {/* Ensuring pure white background */}
       </div>
       
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 bg-theme-green">
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 bg-theme-green lg:px-[10px]">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 py-4 md:py-8">
           {/* Left content with heading and form */}
           <div className="flex flex-col space-y-8 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
