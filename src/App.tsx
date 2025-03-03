@@ -2,7 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
 import AdminLayout from "./components/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/Dashboard";
+import Dashboard from "./pages/admin/Dashboard";
 import Index from "./pages/Index";
 import RegularCleaning from "./pages/services/RegularCleaning";
 import BusinessCleaning from "./pages/services/BusinessCleaning";
@@ -51,7 +51,7 @@ function App() {
       {/* Admin routes with simplified structure */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPanel />} /> {/* Single entry point for admin */}
-        <Route path="dashboard" element={<AdminDashboard />} /> {/* Statistics and overview */}
+        <Route path="dashboard" element={<Dashboard />} /> {/* Using only Dashboard.tsx */}
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="providers" element={<AdminProviders />} />

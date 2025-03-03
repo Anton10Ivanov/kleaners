@@ -78,7 +78,7 @@ export const AdminPanel = () => {
       title: "Dashboard",
       description: "Analytics and statistics overview",
       icon: <LineChart className="h-6 w-6 md:h-8 md:w-8 text-primary" />,
-      path: "/admin/dashboard",
+      path: "/admin/dashboard", // Make sure this points to the correct dashboard route
       count: null
     },
     {
