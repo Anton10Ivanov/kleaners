@@ -1,134 +1,129 @@
 
-import React, { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { TabsContent } from "@/components/ui/tabs";
-import { useUserProfileData } from "@/hooks/useUserProfileData";
-import AvatarSection from "@/components/user/profile/AvatarSection";
-import ProfileTabs from "@/components/user/profile/ProfileTabs";
-import AccountInfoCard from "@/components/user/profile/AccountInfoCard";
-import { NotificationSettings } from "@/components/user/profile/NotificationSettings";
-import { SecuritySettings } from "@/components/user/profile/SecuritySettings";
-import { AccountPreferences } from "@/components/user/profile/AccountPreferences";
+import React, { useState } from 'react';
+import { useTitle } from '@/hooks/useTitle';
+import { useUserProfileData } from '@/hooks/useUserProfileData';
+import { AvatarSection } from '@/components/user/profile/AvatarSection';
+import { ProfileTabs } from '@/components/user/profile/ProfileTabs';
+import { AccountInfoCard } from '@/components/user/profile/AccountInfoCard';
+import { SecuritySettings } from '@/components/user/profile/SecuritySettings';
+import { NotificationSettings } from '@/components/user/profile/NotificationSettings';
+import { AccountPreferences } from '@/components/user/profile/AccountPreferences';
+import { TabsContent } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AlertTriangle } from 'lucide-react';
 
 /**
- * UserProfile Page Component
+ * UserProfile Page
  * 
- * Displays and allows editing of user profile information, security settings,
- * notification preferences, and account settings
+ * Displays and manages user profile information
  * 
  * @returns {JSX.Element} User profile page component
  */
 export default function UserProfile(): JSX.Element {
-  const [activeTab, setActiveTab] = useState("account");
-  const { toast } = useToast();
-  const { 
-    userData, 
-    isLoading, 
-    error, 
-    updateUserProfile,
+  useTitle("Your Profile | Kleaners");
+  const [activeTab, setActiveTab] = useState('account');
+  
+  const {
+    profile,
+    isLoading,
+    error,
+    updateProfile,
+    updateAvatar,
     passwordStrength,
     checkPasswordStrength,
-    changePassword 
+    changePassword
   } = useUserProfileData();
-
-  /**
-   * Handle tab changes
-   * @param value - The tab value to change to
-   */
+  
+  // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
-
-  /**
-   * Show a confirmation toast after successful updates
-   */
-  const showSuccessToast = () => {
-    toast({
-      title: "Profile Updated",
-      description: "Your profile has been updated successfully.",
-    });
-  };
-
-  /**
-   * Update user profile information
-   * @param updates - Partial user data to update
-   */
-  const updateProfile = async (updates: Partial<typeof userData>) => {
-    try {
-      await updateUserProfile(updates);
-      showSuccessToast();
-    } catch (error) {
-      toast({
-        title: "Update Failed",
-        description: error instanceof Error ? error.message : "Failed to update profile",
-        variant: "destructive",
-      });
-    }
-  };
-
+  
+  // Loading state
   if (isLoading) {
-    return <div className="flex justify-center items-center p-8">Loading profile...</div>;
-  }
-
-  if (error) {
     return (
-      <div className="p-6 text-red-500">
-        Error loading profile: {error}
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col items-center mb-6">
+          <Skeleton className="h-24 w-24 rounded-full mb-4" />
+          <Skeleton className="h-8 w-48 mb-4" />
+        </div>
+        
+        <Card>
+          <CardContent className="mt-6">
+            <Skeleton className="h-10 w-full mb-4" />
+            <Skeleton className="h-32 w-full" />
+          </CardContent>
+        </Card>
       </div>
     );
   }
-
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-6 flex flex-col items-center text-center">
+        <AlertTriangle className="h-12 w-12 text-amber-500 mb-2" />
+        <h2 className="text-xl font-semibold">Error Loading Profile</h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">{error.message}</p>
+      </div>
+    );
+  }
+  
+  // No profile data
+  if (!profile) {
+    return (
+      <div className="container mx-auto px-4 py-6 text-center">
+        <h2>No profile data available</h2>
+      </div>
+    );
+  }
+  
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Your Profile</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile Sidebar with Avatar */}
-        <div>
-          <AvatarSection 
-            avatarUrl={userData.avatar}
-            fullName={userData.firstName + " " + userData.lastName} 
-            onUpdateAvatar={(url) => updateProfile({ avatar: url })}
-          />
-        </div>
-        
-        {/* Main Content Area */}
-        <div className="md:col-span-2">
-          <ProfileTabs 
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-          >
-            <TabsContent value="account">
-              <AccountInfoCard 
-                profile={userData}
-                onSave={updateProfile}
-              />
-            </TabsContent>
-            
-            <TabsContent value="security">
-              <SecuritySettings 
-                passwordStrength={passwordStrength}
-                onPasswordChange={changePassword}
-                onPasswordCheck={checkPasswordStrength}
-              />
-            </TabsContent>
-            
-            <TabsContent value="notifications">
-              <NotificationSettings 
-                preferences={userData.notificationPreferences}
-                onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
-              />
-            </TabsContent>
-            
-            <TabsContent value="preferences">
-              <AccountPreferences
-                preferences={userData.accountPreferences}
-                onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
-              />
-            </TabsContent>
-          </ProfileTabs>
-        </div>
+      {/* Avatar and name section */}
+      <div className="flex flex-col items-center mb-8">
+        <AvatarSection
+          avatarUrl={profile.avatarUrl}
+          fullName={profile.fullName}
+          onUpdateAvatar={updateAvatar}
+        />
       </div>
+      
+      {/* Tabs section */}
+      <ProfileTabs
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      >
+        <TabsContent value="account">
+          <AccountInfoCard
+            profile={profile}
+            onSave={updateProfile}
+          />
+        </TabsContent>
+        
+        <TabsContent value="security">
+          <SecuritySettings
+            passwordStrength={passwordStrength}
+            onPasswordCheck={checkPasswordStrength}
+            onPasswordChange={changePassword}
+          />
+        </TabsContent>
+        
+        <TabsContent value="notifications">
+          <NotificationSettings
+            preferences={profile.notificationPreferences}
+            onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
+          />
+        </TabsContent>
+        
+        <TabsContent value="preferences">
+          <AccountPreferences
+            preferences={profile.accountPreferences}
+            onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
+          />
+        </TabsContent>
+      </ProfileTabs>
     </div>
   );
 }

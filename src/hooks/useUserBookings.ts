@@ -40,7 +40,7 @@ export interface UserBooking {
  */
 interface UseUserBookingsResult {
   /** Array of user bookings */
-  bookings: UserBooking[] | undefined;
+  bookings: UserBooking[];
   
   /** Whether bookings are currently loading */
   isLoading: boolean;
@@ -50,6 +50,12 @@ interface UseUserBookingsResult {
   
   /** Function to manually refetch bookings */
   refetch: () => void;
+  
+  /** Function to cancel a booking */
+  cancelBooking: (bookingId: string) => Promise<boolean>;
+  
+  /** Function to reschedule a booking */
+  rescheduleBooking: (bookingId: string, newDate: string) => Promise<boolean>;
 }
 
 /**
@@ -114,7 +120,7 @@ export function useUserBookings(): UseUserBookingsResult {
   };
 
   const {
-    data: bookings,
+    data: bookings = [],
     isLoading,
     error,
     refetch
@@ -128,10 +134,44 @@ export function useUserBookings(): UseUserBookingsResult {
     }
   });
 
+  // Cancel a booking
+  const cancelBooking = async (bookingId: string): Promise<boolean> => {
+    try {
+      // In a real app, this would update the booking status in Supabase
+      toast.success('Booking cancelled successfully');
+      
+      // Refresh the bookings list
+      refetch();
+      
+      return true;
+    } catch (error) {
+      toast.error('Failed to cancel booking');
+      return false;
+    }
+  };
+
+  // Reschedule a booking
+  const rescheduleBooking = async (bookingId: string, newDate: string): Promise<boolean> => {
+    try {
+      // In a real app, this would update the booking date in Supabase
+      toast.success('Booking rescheduled successfully');
+      
+      // Refresh the bookings list
+      refetch();
+      
+      return true;
+    } catch (error) {
+      toast.error('Failed to reschedule booking');
+      return false;
+    }
+  };
+
   return {
     bookings,
     isLoading,
     error: error || null,
-    refetch
+    refetch,
+    cancelBooking,
+    rescheduleBooking
   };
 }

@@ -1,119 +1,66 @@
 
-import { Search } from "lucide-react";
+import React from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { Search } from "lucide-react";
 
-/**
- * BookingFiltersProps interface
- */
-interface BookingFiltersProps {
-  /**
-   * Currently active tab
-   */
-  activeTab: string;
+export interface BookingFiltersProps {
+  /** Current filter value for booking status */
+  statusFilter: string;
   
-  /**
-   * Current search query
-   */
+  /** Callback for when status filter changes */
+  onStatusChange: (value: string) => void;
+  
+  /** Current search query */
   searchQuery: string;
   
-  /**
-   * Handler for tab change
-   * @param value - New tab value
-   */
-  onTabChange: (value: string) => void;
-  
-  /**
-   * Handler for search query change
-   * @param query - New search query
-   */
-  onSearchChange: (query: string) => void;
-  
-  /**
-   * Content to render for each tab
-   */
-  children: React.ReactNode;
+  /** Callback for when search query changes */
+  onSearchChange: (value: string) => void;
 }
 
 /**
  * BookingFilters Component
  * 
- * Provides filtering and tab navigation for bookings
+ * Provides filtering options for bookings, including status filtering and search.
  * 
  * @param {BookingFiltersProps} props - Component props
- * @returns {JSX.Element} Booking filters UI component
+ * @returns {JSX.Element} Booking filters component
  */
-export const BookingFilters = ({
-  activeTab,
+export function BookingFilters({
+  statusFilter,
+  onStatusChange,
   searchQuery,
-  onTabChange,
-  onSearchChange,
-  children,
-}: BookingFiltersProps): JSX.Element => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  onSearchChange
+}: BookingFiltersProps): JSX.Element {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(e.target.value);
+  };
 
   return (
-    <>
-      {/* Search Bar - Optimized for mobile */}
-      <div className="relative w-full mb-6">
-        <Search 
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" 
-          aria-hidden="true"
-        />
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div className="relative w-full md:w-64">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
           type="text"
-          placeholder="Search bookings by address or service..."
+          placeholder="Search bookings..."
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10 py-2 w-full bg-white dark:bg-gray-800 rounded-xl"
+          onChange={handleSearchChange}
+          className="pl-10"
           aria-label="Search bookings"
         />
       </div>
-
-      {/* Tabs - Full width on mobile */}
-      <Tabs 
-        defaultValue="upcoming" 
-        value={activeTab} 
-        onValueChange={onTabChange} 
-        className="w-full"
-      >
-        <TabsList className="w-full justify-start md:justify-start rounded-xl p-1 mb-6 bg-muted/50">
-          <TabsTrigger
-            value="upcoming"
-            className={`flex-1 ${isMobile ? 'text-sm py-1.5' : ''} rounded-lg`}
-          >
-            Upcoming
-          </TabsTrigger>
-          <TabsTrigger
-            value="completed"
-            className={`flex-1 ${isMobile ? 'text-sm py-1.5' : ''} rounded-lg`}
-          >
-            Completed
-          </TabsTrigger>
-          <TabsTrigger
-            value="cancelled"
-            className={`flex-1 ${isMobile ? 'text-sm py-1.5' : ''} rounded-lg`}
-          >
-            Cancelled
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Tab Content */}
-        <TabsContent value="upcoming">
-          {children}
-        </TabsContent>
-        
-        <TabsContent value="completed">
-          {children}
-        </TabsContent>
-        
-        <TabsContent value="cancelled">
-          {children}
-        </TabsContent>
-      </Tabs>
-    </>
+      
+      <Select value={statusFilter} onValueChange={onStatusChange}>
+        <SelectTrigger className="w-full md:w-48">
+          <SelectValue placeholder="Filter by status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Bookings</SelectItem>
+          <SelectItem value="pending">Pending</SelectItem>
+          <SelectItem value="completed">Completed</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
   );
-};
-
-export default BookingFilters;
+}
