@@ -3,7 +3,8 @@ import { useToast } from '@/hooks/use-toast';
 import { 
   UseQueryOptions, 
   useQuery, 
-  UseQueryResult 
+  UseQueryResult,
+  QueryKey
 } from '@tanstack/react-query';
 
 /**
@@ -68,7 +69,7 @@ export function useApiQuery<TData>(
   } = options;
 
   // Create the query options for @tanstack/react-query
-  const queryOptions: UseQueryOptions<TData, Error, TData> = {
+  const queryOptions: UseQueryOptions<TData, Error, TData, QueryKey> = {
     queryKey,
     queryFn,
     initialData,
@@ -78,18 +79,19 @@ export function useApiQuery<TData>(
     enabled,
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection time
     
-    // Using proper error handling for the latest React Query version
-    onError: (error: Error) => {
-      // Show a toast notification
-      toast({
-        title: "Error",
-        description: error.message || "An error occurred fetching data",
-        variant: "destructive",
-      });
-      
-      // Call the custom error handler if provided
-      if (onErrorHandler) {
-        onErrorHandler(error);
+    meta: {
+      onError: (error: Error) => {
+        // Show a toast notification
+        toast({
+          title: "Error",
+          description: error.message || "An error occurred fetching data",
+          variant: "destructive",
+        });
+        
+        // Call the custom error handler if provided
+        if (onErrorHandler) {
+          onErrorHandler(error);
+        }
       }
     }
   };

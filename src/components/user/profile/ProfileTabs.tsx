@@ -1,91 +1,49 @@
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PersonalInfoForm from './PersonalInfoForm';
-import { SecuritySettings } from './SecuritySettings';
-import { NotificationSettings } from './NotificationSettings';
-import { AccountPreferences } from './AccountPreferences';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { useForm } from 'react-hook-form';
 
-interface ProfileTabsProps {
-  profileData: any;
-  isLoading: boolean;
-  isSaving: boolean;
-  onSubmit: (values: any) => Promise<void>;
+export interface ProfileTabsProps {
+  /** Active tab identifier */
+  activeTab: string;
+  
+  /** Callback for tab change */
+  onTabChange: (value: string) => void;
+  
+  /** Tab content elements */
+  children: ReactNode;
 }
 
-export const ProfileTabs = ({ 
-  profileData, 
-  isLoading, 
-  isSaving, 
-  onSubmit 
-}: ProfileTabsProps) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  
-  const form = useForm({
-    defaultValues: {
-      first_name: profileData?.firstName || '',
-      last_name: profileData?.lastName || '',
-      email: profileData?.email || '',
-      phone: profileData?.phone || '',
-      address: profileData?.address || '',
-    }
-  });
-  
-  React.useEffect(() => {
-    if (profileData) {
-      form.reset({
-        first_name: profileData.firstName || '',
-        last_name: profileData.lastName || '',
-        email: profileData.email || '',
-        phone: profileData.phone || '',
-        address: profileData.address || '',
-      });
-    }
-  }, [profileData, form]);
-  
+/**
+ * ProfileTabs Component
+ * 
+ * Displays tabbed interface for user profile sections
+ * 
+ * @param {ProfileTabsProps} props Component props
+ * @returns {JSX.Element} Profile tabs component
+ */
+export function ProfileTabs({
+  activeTab,
+  onTabChange,
+  children
+}: ProfileTabsProps): JSX.Element {
   return (
-    <Tabs defaultValue="personal" className="w-full">
-      <TabsList className={`${isMobile ? 'grid-cols-2' : 'grid-cols-4'} grid w-full`}>
-        <TabsTrigger value="personal">Personal Info</TabsTrigger>
-        <TabsTrigger value="security">Security</TabsTrigger>
-        {!isMobile && (
-          <>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
-          </>
-        )}
-        {isMobile && (
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        )}
-        {isMobile && (
-          <TabsTrigger value="preferences">Preferences</TabsTrigger>
-        )}
+    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
+      <TabsList className="grid grid-cols-4">
+        <TabsTrigger value="account" aria-label="Account Information">
+          Account
+        </TabsTrigger>
+        <TabsTrigger value="security" aria-label="Security Settings">
+          Security
+        </TabsTrigger>
+        <TabsTrigger value="notifications" aria-label="Notification Preferences">
+          Notifications
+        </TabsTrigger>
+        <TabsTrigger value="preferences" aria-label="Account Preferences">
+          Preferences
+        </TabsTrigger>
       </TabsList>
       
-      <TabsContent value="personal">
-        <PersonalInfoForm 
-          form={form}
-          saving={isSaving}
-          onSubmit={onSubmit}
-          profileData={profileData}
-        />
-      </TabsContent>
-      
-      <TabsContent value="security">
-        <SecuritySettings />
-      </TabsContent>
-      
-      <TabsContent value="notifications">
-        <NotificationSettings />
-      </TabsContent>
-      
-      <TabsContent value="preferences">
-        <AccountPreferences />
-      </TabsContent>
+      {children}
     </Tabs>
   );
-};
-
-export default ProfileTabs;
+}
