@@ -1,183 +1,224 @@
 
-import { formatDistanceToNow } from "date-fns";
-import { CalendarDays, Clock, MapPin, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React, { useState } from 'react';
+import { UserBooking } from '@/hooks/useUserBookings';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Calendar, Clock, MapPin, DollarSign, X, Calendar as CalendarIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 
-/**
- * Booking status type
- */
-export type BookingStatus = "pending" | "completed" | "cancelled";
-
-/**
- * BookingCardProps interface
- */
 export interface BookingCardProps {
-  /**
-   * Unique identifier for the booking
-   */
-  id: string;
+  /** Booking data with hours field */
+  booking: UserBooking & { hours: number };
   
-  /**
-   * Type of cleaning service
-   */
-  service: string;
+  /** Function to handle booking cancellation */
+  onCancel: () => Promise<boolean>;
   
-  /**
-   * Current status of the booking
-   */
-  status: BookingStatus;
-  
-  /**
-   * Date when the booking was created
-   */
-  bookingDate?: string;
-  
-  /**
-   * Scheduled date for the service
-   */
-  scheduledDate?: string;
-  
-  /**
-   * Scheduled time for the service
-   */
-  scheduledTime?: string;
-  
-  /**
-   * Number of hours booked for the service
-   */
-  hours: number;
-  
-  /**
-   * Frequency of the service (e.g., weekly, biweekly)
-   */
-  frequency?: string;
-  
-  /**
-   * Service location address
-   */
-  address?: string;
+  /** Function to handle booking rescheduling */
+  onReschedule: (newDate: string) => Promise<boolean>;
 }
 
 /**
  * BookingCard Component
  * 
- * Displays information about a single booking in a card format
+ * Displays a single booking with actions
  * 
- * @param {BookingCardProps} props - Component props
- * @returns {JSX.Element} A booking card component
+ * @param {BookingCardProps} props Component props
+ * @returns {JSX.Element} Booking card component
  */
-export const BookingCard = ({
-  id,
-  service,
-  status,
-  bookingDate,
-  scheduledDate,
-  scheduledTime,
-  hours,
-  frequency,
-  address,
-}: BookingCardProps): JSX.Element => {
-  const navigate = useNavigate();
-
-  /**
-   * Returns the appropriate status badge based on booking status
-   * @param {BookingStatus} status - The booking status
-   * @returns {JSX.Element} The status badge
-   */
-  const getStatusBadge = (status: BookingStatus) => {
-    switch (status) {
-      case "pending":
-        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Upcoming</Badge>;
-      case "completed":
-        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Completed</Badge>;
-      case "cancelled":
-        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">Cancelled</Badge>;
+export function BookingCard({
+  booking,
+  onCancel,
+  onReschedule
+}: BookingCardProps): JSX.Element {
+  const [isRescheduling, setIsRescheduling] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    booking.date ? new Date(booking.date) : undefined
+  );
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  
+  // Format date for display
+  const formattedDate = booking.date 
+    ? format(new Date(booking.date), 'PPP')
+    : 'Date not specified';
+  
+  // Format time for display
+  const formattedTime = booking.date
+    ? format(new Date(booking.date), 'p')
+    : 'Time not specified';
+  
+  // Get status badge color
+  const getStatusColor = () => {
+    switch (booking.status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+      case 'pending':
       default:
-        return <Badge variant="outline">Unknown</Badge>;
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
     }
   };
-
-  /**
-   * Formats the service name for display
-   * @param {string} serviceType - The raw service type
-   * @returns {string} The formatted service name
-   */
-  const getFormattedServiceName = (serviceType: string) => {
-    switch (serviceType) {
-      case "regular":
-        return "Regular Cleaning";
-      case "moveInOut":
-        return "Move In/Out";
-      case "business":
-        return "Business Cleaning";
-      case "construction":
-        return "Construction Cleaning";
-      default:
-        return serviceType;
+  
+  // Handle booking cancellation
+  const handleCancel = async () => {
+    setIsCancelling(true);
+    try {
+      await onCancel();
+    } finally {
+      setIsCancelling(false);
     }
   };
-
+  
+  // Handle booking rescheduling
+  const handleReschedule = async () => {
+    if (!selectedDate) return;
+    
+    setIsRescheduling(true);
+    try {
+      const formattedDate = selectedDate.toISOString();
+      await onReschedule(formattedDate);
+      setCalendarOpen(false);
+    } finally {
+      setIsRescheduling(false);
+    }
+  };
+  
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow duration-200">
-      <CardHeader className="pb-2 pt-3">
-        <div className="flex justify-between items-start mb-1">
-          <CardTitle className="text-base md:text-lg">
-            {getFormattedServiceName(service)}
-          </CardTitle>
-          {getStatusBadge(status)}
+    <Card>
+      <CardContent className="pt-6">
+        <div className="mb-4 flex justify-between items-start">
+          <h3 className="text-lg font-semibold">{booking.service}</h3>
+          <Badge className={cn("ml-2", getStatusColor())}>
+            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+          </Badge>
         </div>
-        <p className="text-xs text-muted-foreground">
-          {bookingDate
-            ? `Booked ${formatDistanceToNow(new Date(bookingDate), { addSuffix: true })}`
-            : "Recently booked"}
-        </p>
-      </CardHeader>
-
-      <CardContent className="space-y-3 pb-3">
-        <div className="flex items-start">
-          <CalendarDays className="h-4 w-4 mr-2 text-muted-foreground mt-0.5" aria-hidden="true" />
-          <div>
-            <p className="text-sm font-medium">{scheduledDate || "Schedule pending"}</p>
-            <p className="text-xs text-muted-foreground">{scheduledTime || "Time to be confirmed"}</p>
+        
+        <div className="space-y-2 text-sm">
+          <div className="flex items-center">
+            <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>{formattedDate}</span>
           </div>
-        </div>
-
-        <div className="flex items-start">
-          <Clock className="h-4 w-4 mr-2 text-muted-foreground mt-0.5" aria-hidden="true" />
-          <p className="text-sm">
-            {hours} {hours === 1 ? "hour" : "hours"}
-            {frequency && ` (${frequency === "weekly" ? "Weekly" : frequency === "biweekly" ? "Biweekly" : "One-time"})`}
-          </p>
-        </div>
-
-        <div className="flex items-start">
-          <MapPin className="h-4 w-4 mr-2 text-muted-foreground mt-0.5" aria-hidden="true" />
-          <p className="text-sm">{address || "Address not provided"}</p>
+          
+          <div className="flex items-center">
+            <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>{formattedTime} ({booking.hours} {booking.hours === 1 ? 'hour' : 'hours'})</span>
+          </div>
+          
+          <div className="flex items-center">
+            <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>{booking.address}</span>
+          </div>
+          
+          <div className="flex items-center">
+            <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
+            <span>${booking.price.toFixed(2)}</span>
+          </div>
+          
+          {booking.providerName && (
+            <div className="flex items-center">
+              <span className="font-medium mr-2">Provider:</span>
+              <span>{booking.providerName}</span>
+            </div>
+          )}
+          
+          {booking.notes && (
+            <div className="mt-2 p-2 bg-muted rounded-md">
+              <p className="text-xs italic">{booking.notes}</p>
+            </div>
+          )}
         </div>
       </CardContent>
-
-      <CardFooter className="pt-0 border-t border-border">
-        <Button
-          variant="ghost"
-          className="w-full justify-between hover:bg-primary/5 py-2.5 focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          onClick={() => navigate(`/user/bookings/${id}`)}
-          aria-label={`View details for ${getFormattedServiceName(service)} booking on ${scheduledDate || 'unscheduled date'}`}
-        >
-          <span>View Details</span>
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        </Button>
-      </CardFooter>
+      
+      {booking.status === 'pending' && (
+        <CardFooter className="flex justify-between pt-0 pb-4">
+          {/* Reschedule Dialog */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">Reschedule</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Reschedule Booking</DialogTitle>
+              </DialogHeader>
+              <div className="py-4">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Select a new date and time
+                    </label>
+                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDate ? format(selectedDate, 'PPP') : "Select a date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <CalendarComponent
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  
+                  <div className="flex justify-between">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button 
+                      onClick={handleReschedule}
+                      disabled={!selectedDate || isRescheduling}
+                    >
+                      {isRescheduling ? "Rescheduling..." : "Confirm"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
+          {/* Cancel Dialog */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="destructive" size="sm">Cancel Booking</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Cancel Booking</DialogTitle>
+              </DialogHeader>
+              <div className="py-4">
+                <p className="mb-4">
+                  Are you sure you want to cancel this booking? This action cannot be undone.
+                </p>
+                <div className="flex justify-between">
+                  <DialogClose asChild>
+                    <Button variant="outline">Keep Booking</Button>
+                  </DialogClose>
+                  <Button 
+                    variant="destructive"
+                    onClick={handleCancel}
+                    disabled={isCancelling}
+                  >
+                    {isCancelling ? "Cancelling..." : "Yes, Cancel"}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </CardFooter>
+      )}
     </Card>
   );
-};
-
-export default BookingCard;
+}
