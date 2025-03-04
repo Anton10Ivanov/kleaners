@@ -1,123 +1,110 @@
 
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { AvatarUploader } from '@/components/user/profile/AvatarUploader';
-import { ProfileTabs } from '@/components/user/profile/ProfileTabs';
-import { useUserProfileData } from '@/hooks/useUserProfileData';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { useForm } from 'react-hook-form';
+import { useState } from "react";
+import { useUserProfileData } from "@/hooks/useUserProfileData";
+import AvatarSection from "@/components/user/profile/AvatarSection";
+import ProfileTabs from "@/components/user/profile/ProfileTabs";
+import AccountInfoCard from "@/components/user/profile/AccountInfoCard";
+import NotificationSettings from "@/components/user/profile/NotificationSettings";
+import SecuritySettings from "@/components/user/profile/SecuritySettings";
+import AccountPreferences from "@/components/user/profile/AccountPreferences";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export const UserProfile = () => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const [saving, setSaving] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
+/**
+ * UserProfile Page
+ * 
+ * Displays and allows editing of user profile information
+ * 
+ * @returns {JSX.Element} The user profile page
+ */
+export default function UserProfile(): JSX.Element {
+  const [activeTab, setActiveTab] = useState("account");
   
-  const { userData, isLoading, setUserData, updateProfile } = useUserProfileData();
-  
-  const form = useForm({
-    defaultValues: {
-      first_name: userData?.firstName || '',
-      last_name: userData?.lastName || '',
-      email: userData?.email || '',
-      phone: userData?.phone || '',
-      address: userData?.address || '',
-      avatar_url: userData?.avatarUrl || '',
-    }
-  });
+  const {
+    userData,
+    isLoading,
+    error,
+    updateUserProfile
+  } = useUserProfileData();
 
-  React.useEffect(() => {
-    if (userData) {
-      form.reset({
-        first_name: userData.firstName || '',
-        last_name: userData.lastName || '',
-        email: userData.email || '',
-        phone: userData.phone || '',
-        address: userData.address || '',
-        avatar_url: userData.avatarUrl || '',
-      });
-      setAvatarUrl(userData.avatarUrl || '');
-    }
-  }, [userData, form]);
-
-  const onSubmit = async (values: any) => {
-    try {
-      setSaving(true);
-      // Update local state with form values
-      setUserData({
-        ...userData!,
-        firstName: values.first_name,
-        lastName: values.last_name,
-        phone: values.phone,
-        address: values.address,
-      });
-      
-      await updateProfile();
-      
-    } catch (error) {
-      console.error("Error saving profile:", error);
-    } finally {
-      setSaving(false);
-    }
+  /**
+   * Handle tab change
+   * @param value - The new tab value
+   */
+  const handleTabChange = (value: string): void => {
+    setActiveTab(value);
   };
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setAvatarUrl(result);
-        // You would typically upload this to a server/storage here
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  /**
+   * Render loading state
+   */
   if (isLoading) {
     return (
-      <div className="p-4 md:p-6">
-        <Card>
-          <CardContent className="p-6 flex flex-col items-center justify-center min-h-[300px]">
-            <div className="animate-pulse flex flex-col items-center w-full">
-              <div className="rounded-full bg-gray-200 dark:bg-gray-700 h-24 w-24 mb-6" />
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4" />
-              <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-full mb-6" />
-              <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded w-full" />
-            </div>
-          </CardContent>
-        </Card>
+      <div className="space-y-6">
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
+  /**
+   * Render error state
+   */
+  if (error) {
+    return (
+      <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 p-4 rounded-md">
+        <h2 className="text-red-800 dark:text-red-200 font-semibold">Failed to load profile</h2>
+        <p className="text-red-600 dark:text-red-300">{error.message}</p>
       </div>
     );
   }
 
   return (
-    <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
-      <Card>
-        <CardContent className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-6 p-6`}>
-          {/* Avatar Section */}
-          <div className={`${isMobile ? 'w-full mb-6' : 'w-1/4'} flex flex-col items-center`}>
-            <AvatarUploader 
-              avatarUrl={avatarUrl}
-              firstName={userData?.firstName}
-              lastName={userData?.lastName}
-              onAvatarChange={handleAvatarChange}
-              isLoading={isLoading || saving}
-            />
-          </div>
-          
-          {/* Profile Tab Sections */}
-          <div className={`${isMobile ? 'w-full' : 'w-3/4'}`}>
-            <ProfileTabs 
-              profileData={userData}
-              isLoading={isLoading}
-              isSaving={saving}
-              onSubmit={onSubmit}
-            />
-          </div>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <div className="flex flex-col space-y-2">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">My Profile</h1>
+        <p className="text-muted-foreground">Manage your account settings and preferences</p>
+      </div>
+
+      {userData && (
+        <>
+          <AvatarSection 
+            avatar={userData.avatar} 
+            name={`${userData.firstName} ${userData.lastName}`} 
+            updateProfile={updateUserProfile}
+          />
+
+          <ProfileTabs activeValue={activeTab} onValueChange={handleTabChange}>
+            <Tabs value={activeTab} className="w-full">
+              <TabsContent value="account" className="space-y-6">
+                <AccountInfoCard 
+                  userData={userData}
+                  updateUserProfile={updateUserProfile}
+                />
+                <AccountPreferences 
+                  userData={userData}
+                  updateUserProfile={updateUserProfile}
+                />
+              </TabsContent>
+              
+              <TabsContent value="notifications" className="space-y-6">
+                <NotificationSettings 
+                  preferences={userData.notificationPreferences}
+                  updateUserProfile={updateUserProfile}
+                />
+              </TabsContent>
+              
+              <TabsContent value="security" className="space-y-6">
+                <SecuritySettings />
+              </TabsContent>
+            </Tabs>
+          </ProfileTabs>
+        </>
+      )}
     </div>
   );
-};
-
-export default UserProfile;
+}
