@@ -1,68 +1,70 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { useTitle } from "@/hooks/useTitle";
+import { BookingList } from "@/components/user/bookings/BookingList";
+import { BookingFilters } from "@/components/user/bookings/BookingFilters";
 import { useUserBookings } from "@/hooks/useUserBookings";
-import BookingList from "@/components/user/bookings/BookingList";
-import BookingFilters from "@/components/user/bookings/BookingFilters";
-import { BookingCardProps } from "@/components/user/bookings/BookingCard";
 
 /**
  * UserBookings Page
  * 
- * Displays user's bookings with filtering and search capabilities
+ * Displays a user's booking history with filtering options
  * 
- * @returns {JSX.Element} The user bookings page
+ * @returns {JSX.Element} User bookings page component
  */
 export default function UserBookings(): JSX.Element {
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const [searchQuery, setSearchQuery] = useState("");
+  useTitle("Your Bookings | Kleaners");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   
   const { 
     bookings, 
     isLoading, 
-    error 
+    error, 
+    cancelBooking,
+    rescheduleBooking
   } = useUserBookings();
   
-  /**
-   * Filters bookings based on current tab and search query
-   * @returns {BookingCardProps[]} Filtered bookings
-   */
-  const getFilteredBookings = (): BookingCardProps[] => {
-    return bookings?.filter(booking => {
-      const matchesTab = 
-        (activeTab === "upcoming" && booking.status === "pending") ||
-        (activeTab === "completed" && booking.status === "completed") ||
-        (activeTab === "cancelled" && booking.status === "cancelled");
-        
-      const matchesSearch = 
-        !searchQuery || 
-        booking.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        booking.service?.toLowerCase().includes(searchQuery.toLowerCase());
+  // Process bookings based on filters
+  const filteredBookings = bookings
+    .filter(booking => {
+      // Filter by status
+      if (statusFilter !== "all" && booking.status !== statusFilter) {
+        return false;
+      }
       
-      return matchesTab && matchesSearch;
-    }) as BookingCardProps[];
-  };
-
+      // Filter by search
+      if (searchQuery && !booking.service.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !booking.address.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      
+      return true;
+    })
+    .map(booking => ({
+      ...booking,
+      // Add the hours property needed by BookingCard
+      hours: booking.duration || 2 // Fallback to a default value if duration is missing
+    }));
+  
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col space-y-2">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">My Bookings</h1>
-        <p className="text-muted-foreground">View and manage all your cleaning service bookings</p>
-      </div>
-
+    <div className="container mx-auto px-4 py-6">
+      <h1 className="text-2xl font-bold mb-6">Your Bookings</h1>
+      
       <BookingFilters
-        activeTab={activeTab}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
         searchQuery={searchQuery}
-        onTabChange={setActiveTab}
         onSearchChange={setSearchQuery}
-      >
-        <BookingList
-          bookings={getFilteredBookings()}
-          isLoading={isLoading}
-          error={error}
-          activeTab={activeTab}
-          searchQuery={searchQuery}
-        />
-      </BookingFilters>
+      />
+      
+      <BookingList 
+        bookings={filteredBookings}
+        isLoading={isLoading}
+        error={error}
+        onCancel={cancelBooking}
+        onReschedule={rescheduleBooking}
+      />
     </div>
   );
 }

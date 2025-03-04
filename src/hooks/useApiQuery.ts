@@ -68,7 +68,7 @@ export function useApiQuery<TData>(
   } = options;
 
   // Create the query options for @tanstack/react-query
-  const queryOptions: UseQueryOptions<TData, Error, TData, string[]> = {
+  const queryOptions: UseQueryOptions<TData, Error, TData> = {
     queryKey,
     queryFn,
     initialData,
@@ -76,19 +76,20 @@ export function useApiQuery<TData>(
     staleTime,
     retry,
     enabled,
-    meta: {
-      onError: (error: Error) => {
-        // Show a toast notification
-        toast({
-          title: "Error",
-          description: error.message || "An error occurred fetching data",
-          variant: "destructive",
-        });
-        
-        // Call the custom error handler if provided
-        if (onErrorHandler) {
-          onErrorHandler(error);
-        }
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection time
+    
+    // Using proper error handling for the latest React Query version
+    onError: (error: Error) => {
+      // Show a toast notification
+      toast({
+        title: "Error",
+        description: error.message || "An error occurred fetching data",
+        variant: "destructive",
+      });
+      
+      // Call the custom error handler if provided
+      if (onErrorHandler) {
+        onErrorHandler(error);
       }
     }
   };
