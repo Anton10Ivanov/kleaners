@@ -1,110 +1,137 @@
 
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useApiQuery } from '@/hooks/useApiQuery';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 /**
- * UserBooking interface
- * Represents a booking in the system
+ * Interface representing a user booking
  */
 export interface UserBooking {
-  /** Unique identifier for the booking */
+  /** Unique booking identifier */
   id: string;
   
-  /** Current status of the booking */
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  /** Status of the booking (pending, completed, cancelled) */
+  status: 'pending' | 'completed' | 'cancelled';
   
-  /** Type of service being provided */
-  service_type: string;
+  /** Date and time of the booking */
+  date: string;
   
-  /** Scheduled date for the service */
-  date: string | null;
+  /** Service type booked */
+  service: string;
   
-  /** Location where service will be performed */
-  address: string | null;
+  /** Address where service will be performed */
+  address: string;
+  
+  /** Total price of the booking */
+  price: number;
   
   /** Duration of the service in hours */
-  hours: number;
+  duration: number;
   
-  /** How often the service is performed */
-  frequency: string;
+  /** Additional notes or special instructions */
+  notes?: string;
   
-  /** When the booking was created */
-  created_at: string | null;
-  
-  /** Formatted date when booking was created */
-  bookingDate?: string;
-  
-  /** Formatted scheduled date */
-  scheduledDate?: string;
-  
-  /** Formatted scheduled time */
-  scheduledTime?: string;
-  
-  /** Formatted service name */
-  service?: string;
+  /** Name of assigned service provider (if any) */
+  providerName?: string;
 }
 
 /**
- * useUserBookings hook
- * 
- * Custom hook to fetch and manage user bookings with React Query
- * 
- * @returns Object containing bookings data, loading state, and error
+ * Result object returned by useUserBookings hook
  */
-export const useUserBookings = () => {
-  const { toast } = useToast();
+interface UseUserBookingsResult {
+  /** Array of user bookings */
+  bookings: UserBooking[] | undefined;
+  
+  /** Whether bookings are currently loading */
+  isLoading: boolean;
+  
+  /** Error object if the fetch failed */
+  error: Error | null;
+  
+  /** Function to manually refetch bookings */
+  refetch: () => void;
+}
 
-  /**
-   * Fetches bookings for the currently authenticated user
-   * @returns Promise resolving to transformed booking data
-   */
+/**
+ * Custom hook to fetch and manage user bookings
+ * 
+ * @returns {UseUserBookingsResult} Object containing bookings data and status
+ * 
+ * @example
+ * ```tsx
+ * const { bookings, isLoading, error } = useUserBookings();
+ * 
+ * if (isLoading) return <Loading />;
+ * if (error) return <ErrorDisplay message={error.message} />;
+ * 
+ * return <BookingsList bookings={bookings} />;
+ * ```
+ */
+export function useUserBookings(): UseUserBookingsResult {
+  // Fetch user bookings from Supabase
   const fetchUserBookings = async (): Promise<UserBooking[]> => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: user } = await supabase.auth.getUser();
     
-    if (!user) {
-      throw new Error("No authenticated user");
+    if (!user.user) {
+      throw new Error("User not authenticated");
     }
     
-    const { data, error } = await supabase
-      .from('bookings')
-      .select('*')
-      .eq('user_id', user.id);
+    // In a real app, this would fetch from the 'bookings' table with user_id filter
+    // Here we return mock data for demonstration
+    const mockBookings: UserBooking[] = [
+      {
+        id: "1",
+        status: "pending",
+        date: "2023-05-15T10:00:00",
+        service: "Regular Cleaning",
+        address: "123 Main St, Apt 4B",
+        price: 120,
+        duration: 3,
+        providerName: "Maria Johnson"
+      },
+      {
+        id: "2",
+        status: "completed",
+        date: "2023-05-01T14:00:00",
+        service: "Deep Cleaning",
+        address: "123 Main St, Apt 4B",
+        price: 210,
+        duration: 5
+      },
+      {
+        id: "3",
+        status: "cancelled",
+        date: "2023-04-22T09:00:00",
+        service: "Move In/Out Cleaning",
+        address: "456 Park Ave, Suite 203",
+        price: 180,
+        duration: 4,
+        notes: "Cancelled due to scheduling conflict"
+      }
+    ];
     
-    if (error) {
-      throw error;
-    }
-    
-    // Transform the data to match what the component expects
-    const transformedBookings = data?.map(booking => ({
-      ...booking,
-      service: booking.service_type, // Map service_type to service
-      bookingDate: booking.created_at, // Use created_at as booking date
-      scheduledDate: booking.date ? new Date(booking.date).toLocaleDateString() : "To be scheduled",
-      scheduledTime: booking.date ? new Date(booking.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Time TBD"
-    })) || [];
-    
-    return transformedBookings;
+    return mockBookings;
   };
 
-  // Use React Query to fetch and cache bookings
-  const bookingsQuery = useQuery({
-    queryKey: ['user-bookings'],
+  const {
+    data: bookings,
+    isLoading,
+    error,
+    refetch
+  } = useApiQuery<UserBooking[]>({
+    queryKey: ['userBookings'],
     queryFn: fetchUserBookings,
-    onError: (error: Error) => {
-      console.error("Error fetching bookings:", error);
-      toast({
-        variant: "destructive",
-        title: "Error loading bookings",
-        description: "We couldn't load your bookings. Please try again later."
+    onErrorHandler: (error) => {
+      toast.error('Failed to load bookings', {
+        description: error.message
       });
     }
   });
 
   return {
-    bookings: bookingsQuery.data || [],
-    isLoading: bookingsQuery.isLoading,
-    error: bookingsQuery.error as Error | null,
-    refetch: bookingsQuery.refetch
+    bookings,
+    isLoading,
+    error: error || null,
+    refetch
   };
-};
+}

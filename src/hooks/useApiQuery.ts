@@ -1,112 +1,97 @@
 
-import { useQuery, useMutation, useQueryClient, QueryKey } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
+import { 
+  UseQueryOptions, 
+  useQuery, 
+  UseQueryResult 
+} from '@tanstack/react-query';
 
 /**
- * Configuration for API query
+ * Configuration options for useApiQuery hook
+ * @template TData The type of data returned by the query
  */
-interface UseApiQueryConfig<TData, TVariables> {
-  /**
-   * Unique key for the query
-   */
-  queryKey: QueryKey;
+export interface UseApiQueryOptions<TData> {
+  /** Unique query key for caching */
+  queryKey: string[];
   
-  /**
-   * Function to fetch data
-   */
-  fetchFn: () => Promise<TData>;
+  /** Function that fetches the data */
+  queryFn: () => Promise<TData>;
   
-  /**
-   * Function to update data (optional)
-   */
-  updateFn?: (variables: TVariables) => Promise<TData>;
+  /** Initial data to use before the query resolves */
+  initialData?: TData;
   
-  /**
-   * Success message for updates
-   */
-  successMessage?: string;
+  /** Whether to automatically refetch on window focus */
+  refetchOnWindowFocus?: boolean;
   
-  /**
-   * Error message for fetch failures
-   */
-  fetchErrorMessage?: string;
+  /** How long the data should be considered fresh (in ms) */
+  staleTime?: number;
   
-  /**
-   * Error message for update failures
-   */
-  updateErrorMessage?: string;
+  /** Whether to retry failed queries */
+  retry?: boolean | number;
+  
+  /** Custom error handler */
+  onErrorHandler?: (error: Error) => void;
+  
+  /** Whether to enable the query */
+  enabled?: boolean;
 }
 
 /**
- * useApiQuery hook
+ * Custom hook for data fetching with standardized error handling and toast notifications
  * 
- * A reusable hook for implementing consistent data fetching and mutation patterns
- * with React Query across the application.
+ * @template TData The type of data returned by the query
+ * @param {UseApiQueryOptions<TData>} options Configuration options
+ * @returns {UseQueryResult<TData, Error>} Query result with data and status
  * 
- * @template TData - The type of data returned by the API
- * @template TVariables - The type of variables passed to the update function
- * @param {UseApiQueryConfig<TData, TVariables>} config - Configuration for the API query
- * @returns Object with data, loading states, and methods to interact with the API
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useApiQuery({
+ *   queryKey: ['users', userId],
+ *   queryFn: () => fetchUserById(userId),
+ *   onErrorHandler: (error) => console.error('Custom error handling:', error)
+ * });
+ * ```
  */
-export function useApiQuery<TData, TVariables = unknown>({
-  queryKey,
-  fetchFn,
-  updateFn,
-  successMessage = "Operation successful",
-  fetchErrorMessage = "Failed to load data",
-  updateErrorMessage = "Failed to update data"
-}: UseApiQueryConfig<TData, TVariables>) {
+export function useApiQuery<TData>(
+  options: UseApiQueryOptions<TData>
+): UseQueryResult<TData, Error> {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { 
+    queryKey, 
+    queryFn, 
+    initialData, 
+    refetchOnWindowFocus = false,
+    staleTime = 5 * 60 * 1000, // 5 minutes default
+    retry = 1,
+    onErrorHandler,
+    enabled = true
+  } = options;
 
-  // Query hook
-  const query = useQuery({
+  // Create the query options for @tanstack/react-query
+  const queryOptions: UseQueryOptions<TData, Error, TData, string[]> = {
     queryKey,
-    queryFn: fetchFn,
-    onError: (error: Error) => {
-      console.error(`Error fetching data for ${queryKey}:`, error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: fetchErrorMessage
-      });
+    queryFn,
+    initialData,
+    refetchOnWindowFocus,
+    staleTime,
+    retry,
+    enabled,
+    meta: {
+      onError: (error: Error) => {
+        // Show a toast notification
+        toast({
+          title: "Error",
+          description: error.message || "An error occurred fetching data",
+          variant: "destructive",
+        });
+        
+        // Call the custom error handler if provided
+        if (onErrorHandler) {
+          onErrorHandler(error);
+        }
+      }
     }
-  });
-
-  // Mutation hook (only if updateFn is provided)
-  const mutation = updateFn ? useMutation({
-    mutationFn: updateFn,
-    onSuccess: () => {
-      // Invalidate the query to refetch fresh data
-      queryClient.invalidateQueries({ queryKey });
-      toast({
-        title: "Success",
-        description: successMessage
-      });
-    },
-    onError: (error: Error) => {
-      console.error(`Error updating data for ${queryKey}:`, error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: updateErrorMessage
-      });
-    }
-  }) : null;
-
-  return {
-    // Query results
-    data: query.data,
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
-    
-    // Mutation results (if available)
-    update: mutation?.mutate,
-    isUpdating: mutation?.isPending,
-    
-    // Utility function to manually update the cached data
-    setData: (data: TData) => queryClient.setQueryData(queryKey, data)
   };
+
+  return useQuery(queryOptions);
 }
