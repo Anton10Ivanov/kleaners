@@ -2,6 +2,7 @@
 import { useApiQuery } from '@/hooks/useApiQuery';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 /**
  * Interface for notification preferences
@@ -85,7 +86,7 @@ export interface UseUserProfileDataResult {
   error: Error | null;
   
   /** Function to update profile */
-  updateProfile: (updates: Partial<UserData>) => Promise<boolean>;
+  updateProfile: (updates: Partial<UserData>) => Promise<void>;
   
   /** Function to update avatar */
   updateAvatar: (url: string) => Promise<void>;
@@ -97,7 +98,7 @@ export interface UseUserProfileDataResult {
   checkPasswordStrength: (password: string) => void;
   
   /** Function to change password */
-  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 /**
@@ -115,8 +116,8 @@ export interface UseUserProfileDataResult {
  * ```
  */
 export function useUserProfileData(): UseUserProfileDataResult {
-  // Mock password strength state
-  let passwordStrength: PasswordStrength = null;
+  // Password strength state
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>(null);
 
   // Fetch user profile
   const fetchUserProfile = async (): Promise<UserData> => {
@@ -167,15 +168,13 @@ export function useUserProfileData(): UseUserProfileDataResult {
   /**
    * Update user profile
    */
-  const updateProfile = async (updates: Partial<UserData>): Promise<boolean> => {
+  const updateProfile = async (updates: Partial<UserData>): Promise<void> => {
     try {
       // In a real app, this would update the user profile in Supabase
       toast.success('Profile updated successfully');
       await refetch();
-      return true;
     } catch (error) {
       toast.error('Failed to update profile');
-      return false;
     }
   };
 
@@ -197,30 +196,28 @@ export function useUserProfileData(): UseUserProfileDataResult {
    */
   const checkPasswordStrength = (password: string): void => {
     if (!password) {
-      passwordStrength = null;
+      setPasswordStrength(null);
       return;
     }
     
     if (password.length < 8) {
-      passwordStrength = 'weak';
+      setPasswordStrength('weak');
     } else if (password.length < 12 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      passwordStrength = 'medium';
+      setPasswordStrength('medium');
     } else {
-      passwordStrength = 'strong';
+      setPasswordStrength('strong');
     }
   };
 
   /**
    * Change user password
    */
-  const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
+  const changePassword = async (currentPassword: string, newPassword: string): Promise<void> => {
     try {
       // In a real app, this would update the password in Supabase Auth
       toast.success('Password changed successfully');
-      return true;
     } catch (error) {
       toast.error('Failed to change password');
-      return false;
     }
   };
 
