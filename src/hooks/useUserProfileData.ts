@@ -1,4 +1,3 @@
-
 import { useApiQuery } from '@/hooks/useApiQuery';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -97,8 +96,8 @@ export interface UseUserProfileDataResult {
   /** Function to check password strength */
   checkPasswordStrength: (password: string) => void;
   
-  /** Function to change password */
-  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  /** Function to change password - returns boolean indicating success */
+  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
 }
 
 /**
@@ -211,13 +210,16 @@ export function useUserProfileData(): UseUserProfileDataResult {
 
   /**
    * Change user password
+   * @returns {Promise<boolean>} Success indicator
    */
-  const changePassword = async (currentPassword: string, newPassword: string): Promise<void> => {
+  const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
     try {
       // In a real app, this would update the password in Supabase Auth
       toast.success('Password changed successfully');
+      return true;
     } catch (error) {
       toast.error('Failed to change password');
+      return false;
     }
   };
 
