@@ -93,6 +93,7 @@ export function SecuritySettings({
     
     try {
       const success = await onPasswordChange(formData.currentPassword, formData.newPassword);
+      
       if (success) {
         setIsChangingPassword(false);
         setFormData({
@@ -100,7 +101,11 @@ export function SecuritySettings({
           newPassword: '',
           confirmPassword: ''
         });
+      } else {
+        setFormError("Failed to change password. Please check your current password and try again.");
       }
+    } catch (error) {
+      setFormError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSaving(false);
     }
