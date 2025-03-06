@@ -78,7 +78,7 @@ const MoveInOutCalendar = ({
       </div>
 
       {selectedDates.length > 0 && <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <h4 className="text-sm font-medium mb-2">Selected Dates:</h4>
+          <h4 className="text-sm font-medium mb-2">Order dates from most to least wanted:</h4>
           <div className="flex flex-wrap gap-2">
             {selectedDates.map(date => <span key={date.toISOString()} className="text-sm bg-white dark:bg-gray-700 px-3 py-1 rounded-full">
                 {format(date, 'MMM d, yyyy')}
