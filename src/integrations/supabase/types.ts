@@ -204,6 +204,51 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_questions: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          ip_address: string | null
+          is_spam: boolean | null
+          last_submission_time: string | null
+          name: string | null
+          question: string
+          status: string | null
+          submission_count: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean | null
+          last_submission_time?: string | null
+          name?: string | null
+          question: string
+          status?: string | null
+          submission_count?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean | null
+          last_submission_time?: string | null
+          name?: string | null
+          question?: string
+          status?: string | null
+          submission_count?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           address: string | null
@@ -413,6 +458,13 @@ export type Database = {
             }
             Returns: boolean
           }
+      check_question_spam_protection: {
+        Args: {
+          p_email: string
+          p_ip_address: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           user_id: string
