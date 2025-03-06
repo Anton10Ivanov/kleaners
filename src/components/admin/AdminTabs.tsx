@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import BookingsSection from './sections/BookingsSection';
-import CalendarSection from './sections/CalendarSection';
-import CustomersSection from './sections/CustomersSection';
-import ProvidersSection from './sections/ProvidersSection';
+import { BookingsSection } from './sections/BookingsSection';
+import { CalendarSection } from './sections/CalendarSection';
+import { CustomersSection } from './sections/CustomersSection';
+import { ProvidersSection } from './sections/ProvidersSection';
 import CustomerQuestionsSection from './sections/CustomerQuestionsSection';
 
 export type AdminTab = "bookings" | "calendar" | "customers" | "providers" | "questions";

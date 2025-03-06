@@ -16,7 +16,15 @@ const AdminPanel = () => {
   return (
     <AdminLayout>
       <div className="space-y-6 p-6">
-        <AdminHeader title="Admin Panel" description="Manage bookings, customers, providers, and questions" />
+        <AdminHeader
+          userName="Admin User"
+          onSearch={() => {}}
+          onNotificationsClick={() => {}}
+        />
+        <div>
+          <h1 className="text-2xl font-bold mb-2">Admin Panel</h1>
+          <p className="text-muted-foreground">Manage bookings, customers, providers, and questions</p>
+        </div>
         <AdminTabs activeTab={activeTab} onTabChange={handleTabChange} />
       </div>
     </AdminLayout>

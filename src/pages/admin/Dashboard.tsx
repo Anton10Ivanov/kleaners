@@ -1,6 +1,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { AdminTabs } from "@/components/admin/AdminTabs";
+import AdminTabs from "@/components/admin/AdminTabs";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { StatCards } from "@/components/admin/dashboard/StatCards";
 import { BookingTrends } from "@/components/admin/dashboard/BookingTrends";
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
           {/* Quick Access Tabs */}
           <Card>
             <CardContent className="p-0">
-              <AdminTabs />
+              <AdminTabs activeTab="bookings" onTabChange={() => {}} />
             </CardContent>
           </Card>
         </CardContent>
