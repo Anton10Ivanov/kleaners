@@ -48,10 +48,10 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
       
-      {/* Admin routes with simplified structure */}
+      {/* Admin routes */}
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPanel />} /> {/* Single entry point for admin */}
-        <Route path="dashboard" element={<Dashboard />} /> {/* Using only Dashboard.tsx */}
+        <Route index element={<AdminPanel />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="providers" element={<AdminProviders />} />
