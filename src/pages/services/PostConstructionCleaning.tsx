@@ -1,8 +1,7 @@
-
 import ServiceLayout from "@/components/services/ServiceLayout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Tool, Shield, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Check, Wrench, Shield, Calendar, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const PostConstructionCleaning = () => {
@@ -54,7 +53,7 @@ const PostConstructionCleaning = () => {
                 </h2>
                 <div className="space-y-4">
                   {[
-                    { icon: Tool, text: "Specialized equipment for construction cleanup" },
+                    { icon: Wrench, text: "Specialized equipment for construction cleanup" },
                     { icon: Shield, text: "Trained professionals with safety protocols" },
                     { icon: Check, text: "Detailed cleaning checklist tailored for construction" },
                     { icon: Calendar, text: "Flexible scheduling around your project timeline" },
