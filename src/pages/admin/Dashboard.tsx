@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     <div className="container mx-auto py-2 px-2 md:py-8 md:px-4">
       <Card className="shadow-lg dark:glass-morphism border-0 dark:border dark:border-gray-800">
         <DashboardHeader 
-          userName={userName} 
+          userName={userName || "Admin User"} 
           isLoading={isLoading} 
           onRefresh={handleRefresh} 
           isMobile={isMobile} 
