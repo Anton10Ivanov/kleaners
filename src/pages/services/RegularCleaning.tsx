@@ -1,5 +1,7 @@
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, Clock, Euro, MapPin, Calendar, Star, X } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const RegularCleaning = () => {
   return (
@@ -15,6 +17,66 @@ const RegularCleaning = () => {
               <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
                 At Kleaners.de, we know your time is valuable. That's why our Regular Cleaning Service is designed for busy individuals and families who want a clean, comfortable home without the hassle.
               </p>
+            </section>
+
+            {/* Frequency Comparison Table */}
+            <section className="space-y-6">
+              <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">
+                Choose Your Cleaning Frequency
+              </h2>
+              <p className="text-lg text-gray-700 dark:text-gray-300">
+                Compare our cleaning options to find the perfect fit for your needs and schedule:
+              </p>
+              <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gray-50 dark:bg-gray-800">
+                      <TableHead className="font-semibold text-gray-900 dark:text-white">Features</TableHead>
+                      <TableHead className="font-semibold text-gray-900 dark:text-white">One-Time Cleaning</TableHead>
+                      <TableHead className="font-semibold text-gray-900 dark:text-white">Bi-Weekly Cleaning</TableHead>
+                      <TableHead className="font-semibold text-gray-900 dark:text-white">Weekly Cleaning</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-medium">Same Trusted Cleaner</TableCell>
+                      <TableCell><X className="h-5 w-5 text-gray-400 mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Discounted Rate</TableCell>
+                      <TableCell><X className="h-5 w-5 text-gray-400 mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Priority Scheduling</TableCell>
+                      <TableCell><X className="h-5 w-5 text-gray-400 mx-auto" /></TableCell>
+                      <TableCell><X className="h-5 w-5 text-gray-400 mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Free Rescheduling</TableCell>
+                      <TableCell><X className="h-5 w-5 text-gray-400 mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                      <TableCell><Check className="h-5 w-5 text-primary mx-auto" /></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Deep Clean Add-ons</TableCell>
+                      <TableCell className="text-center">Available</TableCell>
+                      <TableCell className="text-center">Discounted</TableCell>
+                      <TableCell className="text-center">Discounted</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Best For</TableCell>
+                      <TableCell className="text-sm">Special occasions or one-off cleaning needs</TableCell>
+                      <TableCell className="text-sm">Maintaining cleanliness with a balanced schedule</TableCell>
+                      <TableCell className="text-sm">High-traffic homes or premium clean experience</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
             </section>
 
             {/* Why Choose Us Section */}
