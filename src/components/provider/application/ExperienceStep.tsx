@@ -65,7 +65,7 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Employment Type <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
           {[
             { id: "vollzeit", label: "Vollzeit (Full-time)" },
             { id: "midijob", label: "Midijob (Part-time)" },
