@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
-import { bookingSchema, type BookingFormData, Frequency, type ProviderOption } from '../schemas/booking';
+import { bookingSchema, type BookingFormData, Frequency } from '../schemas/booking';
 import { toast } from "sonner";
 
 export const useBookingForm = () => {

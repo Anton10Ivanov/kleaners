@@ -24,6 +24,7 @@ import UserBookings from '@/pages/user/UserBookings';
 import UserProfile from '@/pages/user/UserProfile';
 import UserSettings from '@/pages/user/UserSettings';
 import UserInvoices from '@/pages/user/UserInvoices';
+import UserNotifications from '@/pages/user/UserNotifications';
 
 // Auth pages
 import Login from '@/pages/auth/Login';
@@ -95,6 +96,7 @@ function App() {
             <Route path="profile" element={<UserProfile />} />
             <Route path="settings" element={<UserSettings />} />
             <Route path="invoices" element={<UserInvoices />} />
+            <Route path="notifications" element={<UserNotifications />} />
           </Route>
           
           {/* Provider Routes */}
