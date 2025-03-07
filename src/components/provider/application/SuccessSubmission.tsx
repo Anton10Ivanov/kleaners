@@ -11,6 +11,14 @@ interface SuccessSubmissionProps {
 
 export const SuccessSubmission = ({ email, applicationId }: SuccessSubmissionProps) => {
   const navigate = useNavigate();
+  
+  const handleContinueToAccount = () => {
+    navigate(`/auth/signup?type=provider&email=${encodeURIComponent(email)}&applicationId=${applicationId}`);
+  };
+  
+  const handleReturnToHome = () => {
+    navigate('/');
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
@@ -41,14 +49,14 @@ export const SuccessSubmission = ({ email, applicationId }: SuccessSubmissionPro
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
             <Button 
-              onClick={() => navigate(`/auth/signup?type=provider&email=${encodeURIComponent(email)}&applicationId=${applicationId}`)}
+              onClick={handleContinueToAccount}
               className="w-full"
             >
               Continue to Account Setup
             </Button>
             <Button 
               variant="outline"
-              onClick={() => navigate('/')}
+              onClick={handleReturnToHome}
               className="w-full"
             >
               Return to Homepage

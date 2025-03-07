@@ -5,6 +5,7 @@ import MoveInOutCalendar from './calendar/MoveInOutCalendar';
 import MoveInOutFields from './moveInOut/MoveInOutFields';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
+import { useUpdateEffect } from '@/hooks/useUpdateEffect';
 
 interface MoveInOutStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -20,7 +21,35 @@ const MoveInOutStep = ({ form }: MoveInOutStepProps) => {
   const [specialConditions, setSpecialConditions] = useState<string[]>([]);
   const [additionalNotes, setAdditionalNotes] = useState('');
 
-  console.log('Rendering MoveInOutStep');
+  // Update the main form when our local state changes
+  useUpdateEffect(() => {
+    form.setValue('squareMeters', squareMeters);
+    form.setValue('bathrooms', bathrooms);
+    form.setValue('bedrooms', bedrooms);
+    form.setValue('dirtinessLevel', dirtinessLevel);
+    form.setValue('lastCleaned', lastCleaned);
+    form.setValue('cleaningPersonnel', cleaningPersonnel);
+    form.setValue('specialConditions', specialConditions);
+    form.setValue('additionalNotes', additionalNotes);
+    
+    // Calculate estimated price based on parameters
+    const basePrice = 120; // Base price for move in/out cleaning
+    const sizeMultiplier = squareMeters / 50; // Adjust for size
+    const dirtMultiplier = 1 + (dirtinessLevel * 0.1); // Adjust for dirtiness
+    const personnelMultiplier = cleaningPersonnel === 'experienced' ? 1.2 : 1; // Premium for experienced personnel
+    const estimatedPrice = basePrice * sizeMultiplier * dirtMultiplier * personnelMultiplier;
+    
+    form.setValue('totalAmount', Math.round(estimatedPrice * 100) / 100);
+  }, [
+    squareMeters, 
+    bathrooms, 
+    bedrooms, 
+    dirtinessLevel, 
+    lastCleaned, 
+    cleaningPersonnel, 
+    specialConditions, 
+    additionalNotes
+  ]);
 
   return (
     <div className="space-y-8">

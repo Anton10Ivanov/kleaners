@@ -1,62 +1,79 @@
 
-import { useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { UseFormReturn } from 'react-hook-form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
-interface PersonalInfoStepProps {
+interface PersonalInfoFormValues {
   name: string;
   email: string;
   phone: string;
-  setName: (value: string) => void;
-  setEmail: (value: string) => void;
-  setPhone: (value: string) => void;
 }
 
-export const PersonalInfoStep = ({
-  name,
-  email,
-  phone,
-  setName,
-  setEmail,
-  setPhone
-}: PersonalInfoStepProps) => {
+interface PersonalInfoStepProps {
+  form: UseFormReturn<PersonalInfoFormValues>;
+}
+
+export const PersonalInfoStep = ({ form }: PersonalInfoStepProps) => {
+  const { control } = form;
+
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
-        <Input
-          id="name"
-          placeholder="Your full name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
+      <FormField
+        control={control}
+        name="name"
+        render={({ field }) => (
+          <FormItem className="space-y-2">
+            <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
+            <FormControl>
+              <Input
+                {...field}
+                placeholder="Your full name"
+                required
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
-          <Input
-            id="phone"
-            type="tel"
-            placeholder="Your phone number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
+        <FormField
+          control={control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="space-y-2">
+              <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="Your email"
+                  required
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem className="space-y-2">
+              <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="tel"
+                  placeholder="Your phone number"
+                  required
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     </div>
   );
