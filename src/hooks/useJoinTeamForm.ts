@@ -27,6 +27,7 @@ const joinTeamSchema = z.object({
   hasOwnTransportation: z.boolean(),
   hasOwnEquipment: z.boolean(),
   hasCleaningCertificates: z.boolean(),
+  hasCriminalRecord: z.boolean().default(false),
   message: z.string().optional(),
   agreeToTerms: z.boolean().refine(val => val === true, {
     message: 'You must agree to the terms and conditions',
@@ -48,7 +49,6 @@ export const useJoinTeamForm = () => {
   const [availability, setAvailability] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [resume, setResume] = useState<File | null>(null);
-  const [identificationDoc, setIdentificationDoc] = useState<File | null>(null);
   const [backgroundCheckConsent, setBackgroundCheckConsent] = useState<File | null>(null);
   const [message, setMessage] = useState('');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
@@ -73,6 +73,7 @@ export const useJoinTeamForm = () => {
       hasOwnTransportation: false,
       hasOwnEquipment: false,
       hasCleaningCertificates: false,
+      hasCriminalRecord: false,
       message: '',
       agreeToTerms: false,
     },
@@ -129,6 +130,7 @@ export const useJoinTeamForm = () => {
         hasOwnTransportation: data.hasOwnTransportation ? 'Yes' : 'No',
         hasOwnEquipment: data.hasOwnEquipment ? 'Yes' : 'No',
         hasCleaningCertificates: data.hasCleaningCertificates ? 'Yes' : 'No',
+        hasCriminalRecord: !agreeToBackgroundCheck ? 'Yes' : 'No', // Inverse of "I have no criminal record"
       };
       
       console.log('Formatted form data:', formattedData);
@@ -166,6 +168,7 @@ export const useJoinTeamForm = () => {
         hasOwnTransportation: true,
         hasOwnEquipment: true,
         hasCleaningCertificates: false,
+        hasCriminalRecord: !agreeToBackgroundCheck, // Inverse of "I have no criminal record"
         message,
         agreeToTerms,
       });
@@ -191,7 +194,6 @@ export const useJoinTeamForm = () => {
     availability,
     skills,
     resume,
-    identificationDoc,
     backgroundCheckConsent,
     message,
     agreeToTerms,

@@ -7,14 +7,12 @@ import { Info } from 'lucide-react';
 interface DocumentsStepProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
   resume: File | null;
-  identificationDoc: File | null;
   backgroundCheckConsent: File | null;
 }
 
 export const DocumentsStep = ({
   handleFileChange,
   resume,
-  identificationDoc,
   backgroundCheckConsent
 }: DocumentsStepProps) => {
   return (
@@ -23,7 +21,7 @@ export const DocumentsStep = ({
         <Info className="h-4 w-4" />
         <AlertTitle>Verification Required</AlertTitle>
         <AlertDescription>
-          To ensure the safety of our clients, we require documentation and background checks for all service providers.
+          To ensure the safety of our clients, we require documentation for all service providers.
         </AlertDescription>
       </Alert>
       
@@ -40,19 +38,7 @@ export const DocumentsStep = ({
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="identification">ID Verification</Label>
-        <Input
-          id="identification"
-          type="file"
-          onChange={(e) => handleFileChange(e, (file) => {})}
-          className="cursor-pointer"
-          accept=".jpg,.jpeg,.png,.pdf"
-        />
-        <p className="text-xs text-muted-foreground">Please provide a government-issued ID (driver's license, passport, etc.)</p>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="background-check">Background Check Consent Form</Label>
+        <Label htmlFor="background-check">Background Check Acknowledgment Form</Label>
         <Input
           id="background-check"
           type="file"
@@ -60,7 +46,7 @@ export const DocumentsStep = ({
           className="cursor-pointer"
           accept=".pdf"
         />
-        <p className="text-xs text-muted-foreground">Download, fill and upload our <a href="#" className="text-primary hover:underline">Background Check Consent Form</a></p>
+        <p className="text-xs text-muted-foreground">Download, fill and upload our <a href="#" className="text-primary hover:underline">Background Check Acknowledgment Form</a></p>
       </div>
     </div>
   );
