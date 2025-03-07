@@ -22,7 +22,9 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
 
   useEffect(() => {
     // Show additional options only for recurring frequencies
-    if (frequency === Frequency.Weekly || frequency === Frequency.Biweekly || frequency === "Monthly") {
+    if (frequency === Frequency.Weekly || 
+        frequency === Frequency.Biweekly || 
+        frequency === Frequency.Monthly) {
       setShowAdditionalOptions(true);
     } else {
       setShowAdditionalOptions(false);
@@ -70,7 +72,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
             <SelectItem value={Frequency.OneTime}>One-time cleaning</SelectItem>
             <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
             <SelectItem value={Frequency.Biweekly}>Bi-weekly</SelectItem>
-            <SelectItem value="Monthly">Monthly</SelectItem>
+            <SelectItem value={Frequency.Monthly}>Monthly</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -80,7 +82,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
           <div className="space-y-2">
             <Label>Preferred day of the week</Label>
             <RadioGroup
-              value={weekdayPreference || undefined}
+              value={weekdayPreference}
               onValueChange={handleWeekdayChange}
               className="grid grid-cols-2 md:grid-cols-5 gap-2"
             >
@@ -108,7 +110,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
           <div className="space-y-2">
             <Label>Preferred time of day</Label>
             <RadioGroup
-              value={timePreference || undefined}
+              value={timePreference}
               onValueChange={handleTimeChange}
               className="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
