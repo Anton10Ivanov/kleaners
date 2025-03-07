@@ -35,7 +35,7 @@ const Index = () => {
   const postalCode = watch('postalCode') || '';
 
   const currentPrice = frequency === Frequency.Weekly ? 27 : 
-                      frequency === Frequency.BiWeekly ? 30 : 35;
+                      frequency === Frequency.Biweekly ? 30 : 35;
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
