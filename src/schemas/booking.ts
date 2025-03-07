@@ -37,6 +37,12 @@ export enum AccessMethod {
   Other = "other"
 }
 
+export interface ProviderOption {
+  id: string;
+  name: string;
+  rating?: number;
+}
+
 export interface BookingFormData {
   service?: string;
   frequency?: Frequency;
@@ -63,16 +69,11 @@ export interface BookingFormData {
   businessName?: string;
   businessSize?: string;
   businessDetails?: string;
-  // Add missing fields from the errors
   propertySize?: number;
   specialRequirements?: string;
   cleaningOptions?: string[];
   selectedDates?: Date[];
-  providerOptions?: Array<{
-    id: string;
-    name: string;
-    rating?: number;
-  }>;
+  providerOptions?: ProviderOption[];
   selectedProviderId?: string;
   // Additional fields for business custom scheduling
   selectedDays?: string[];
@@ -111,7 +112,6 @@ export const bookingSchema = z.object({
   businessName: z.string().optional(),
   businessSize: z.string().optional(),
   businessDetails: z.string().optional(),
-  // Add missing fields for the schema
   propertySize: z.number().optional(),
   specialRequirements: z.string().optional(),
   cleaningOptions: z.array(z.string()).optional(),
@@ -124,12 +124,10 @@ export const bookingSchema = z.object({
     })
   ).optional(),
   selectedProviderId: z.string().optional(),
-  // Additional fields for business scheduling
   selectedDays: z.array(z.string()).optional(),
   timeSlots: z.record(z.string()).optional(),
   contactForSchedule: z.boolean().optional(),
   provideKey: z.boolean().optional(),
-  // For security in booking form
   password: z.string().optional(),
   confirmPassword: z.string().optional(),
   entryCode: z.string().optional(),

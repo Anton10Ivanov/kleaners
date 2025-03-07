@@ -1,93 +1,182 @@
 
-import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
-import { NotificationPreferencesCard } from "@/components/user/settings/NotificationPreferencesCard";
-import { PasswordManagementCard } from "@/components/user/settings/PasswordManagementCard";
-import { PrivacySecurityCard } from "@/components/user/settings/PrivacySecurityCard";
-import { DangerZoneCard } from "@/components/user/settings/DangerZoneCard";
-import { useTitle } from "@/hooks/useTitle";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+const passwordSchema = z.object({
+  currentPassword: z.string().min(6, "Password must be at least 6 characters"),
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+  confirmNewPassword: z.string().min(6, "Password must be at least 6 characters"),
+}).refine(data => data.newPassword === data.confirmNewPassword, {
+  message: "Passwords don't match",
+  path: ["confirmNewPassword"]
+});
+
+type PasswordForm = z.infer<typeof passwordSchema>;
 
 const UserSettings = () => {
-  useTitle("Settings | Kleaners");
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [smsNotifications, setSmsNotifications] = useState(false);
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const [bookingReminders, setBookingReminders] = useState(true);
 
-  const handleNotificationChange = (type: 'email' | 'sms', value: boolean) => {
-    if (type === 'email') {
-      setEmailNotifications(value);
-    } else {
-      setSmsNotifications(value);
+  const form = useForm<PasswordForm>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: ""
     }
-    
-    // In a real app, you would save this to your backend
-    toast({
-      title: "Notification settings updated",
-      description: `${type === 'email' ? 'Email' : 'SMS'} notifications ${value ? 'enabled' : 'disabled'}.`
-    });
+  });
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        const { data } = await supabase.auth.getUser();
+        if (data.user) {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Error loading user:", error);
+      }
+    };
+
+    loadUserProfile();
+  }, []);
+
+  const updatePassword = async (newPassword: string): Promise<void> => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      
+      toast.success("Password updated successfully");
+      form.reset();
+    } catch (error) {
+      console.error("Error updating password:", error);
+      toast.error("Failed to update password");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handlePasswordChange = async (newPassword: string) => {
-    try {
-      // In a real app, this would call the Supabase auth API
-      toast({
-        title: "Password updated",
-        description: "Your password has been changed successfully."
-      });
-      return true;
-    } catch (error) {
-      console.error('Error changing password:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to change password."
-      });
-      return false;
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      // This is a simplified version - in a real app, you'd want to:
-      // 1. Delete the user's data from your database
-      // 2. Then delete the auth account
-      
-      toast({
-        title: "Account deleted",
-        description: "Your account has been deleted successfully."
-      });
-      
-      navigate("/");
-    } catch (error) {
-      console.error('Error deleting account:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to delete account."
-      });
-    }
+  const onSubmit = async (data: PasswordForm) => {
+    await updatePassword(data.newPassword);
   };
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl md:text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground">Manage your account settings and preferences</p>
+    <div className="container mx-auto p-4 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Password Management Card */}
+        <Card className="p-6 shadow-md">
+          <h3 className="text-xl font-semibold mb-4">Password Management</h3>
+          <Separator className="mb-4" />
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Enter current password" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Enter new password" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="confirmNewPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Confirm new password" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Updating..." : "Update Password"}
+              </Button>
+            </form>
+          </Form>
+        </Card>
+        
+        {/* Notification Settings Card */}
+        <Card className="p-6 shadow-md">
+          <h3 className="text-xl font-semibold mb-4">Notification Preferences</h3>
+          <Separator className="mb-4" />
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Email Notifications</p>
+                <p className="text-sm text-gray-500">Receive updates via email</p>
+              </div>
+              <Switch 
+                checked={emailNotifications} 
+                onCheckedChange={setEmailNotifications} 
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">SMS Notifications</p>
+                <p className="text-sm text-gray-500">Receive updates via text message</p>
+              </div>
+              <Switch 
+                checked={smsNotifications} 
+                onCheckedChange={setSmsNotifications} 
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Booking Reminders</p>
+                <p className="text-sm text-gray-500">Get reminded about upcoming bookings</p>
+              </div>
+              <Switch 
+                checked={bookingReminders} 
+                onCheckedChange={setBookingReminders} 
+              />
+            </div>
+            
+            <Button className="w-full mt-4">Save Preferences</Button>
+          </div>
+        </Card>
       </div>
-
-      <NotificationPreferencesCard 
-        defaultEmailNotifications={emailNotifications}
-        defaultSmsNotifications={smsNotifications}
-        onNotificationChange={handleNotificationChange}
-      />
-
-      <PasswordManagementCard onPasswordChange={handlePasswordChange} />
-
-      <PrivacySecurityCard />
-
-      <DangerZoneCard onDeleteAccount={handleDeleteAccount} />
     </div>
   );
 };

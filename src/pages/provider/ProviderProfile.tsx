@@ -1,376 +1,636 @@
 
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Loader2, UserCircle } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ErrorBoundary } from "react-error-boundary";
 
-const serviceTypes = [
-  { id: 'regular', label: 'Regular Cleaning' },
-  { id: 'deep', label: 'Deep Cleaning' },
-  { id: 'moveInOut', label: 'Move In/Out' },
-  { id: 'business', label: 'Business Cleaning' },
-  { id: 'postConstruction', label: 'Post Construction' },
-];
+// Define the profile schema
+const profileSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+  bio: z.string().optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
+
+// Service Areas
+const serviceAreaSchema = z.object({
+  postal_code: z.string().min(1, "Postal code is required"),
+  travel_distance: z.number().min(1, "Travel distance is required"),
+});
+
+type ServiceAreaFormValues = z.infer<typeof serviceAreaSchema>;
+
+// Skills
+const skillSchema = z.object({
+  skill: z.string().min(1, "Skill name is required"),
+  experience_years: z.number().min(0, "Experience must be 0 or greater"),
+  certification: z.string().optional(),
+});
+
+type SkillFormValues = z.infer<typeof skillSchema>;
+
+// Error fallback component
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => {
+  return (
+    <div className="p-6 bg-red-50 border border-red-200 rounded-md">
+      <h3 className="text-lg font-medium text-red-800">Something went wrong</h3>
+      <p className="text-red-600 mt-2">{error.message}</p>
+      <Button 
+        onClick={resetErrorBoundary}
+        variant="outline" 
+        className="mt-4"
+      >
+        Try again
+      </Button>
+    </div>
+  );
+};
 
 const ProviderProfile = () => {
-  const [profile, setProfile] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    bio: '',
-    services: [] as string[],
-    postalCodes: '',
-  });
+  const [loading, setLoading] = useState(false);
+  const [provider, setProvider] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [serviceAreas, setServiceAreas] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
   
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const profileForm = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      bio: "",
+    }
+  });
 
+  const serviceAreaForm = useForm<ServiceAreaFormValues>({
+    resolver: zodResolver(serviceAreaSchema),
+    defaultValues: {
+      postal_code: "",
+      travel_distance: 5,
+    }
+  });
+
+  const skillForm = useForm<SkillFormValues>({
+    resolver: zodResolver(skillSchema),
+    defaultValues: {
+      skill: "",
+      experience_years: 0,
+      certification: "",
+    }
+  });
+
+  // Fetch provider profile data
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) {
-          navigate('/auth/login');
-          return;
-        }
-        
-        // Fetch provider data
-        const { data, error } = await supabase
-          .from('service_providers')
-          .select(`
-            *,
-            provider_service_areas(postal_code)
-          `)
-          .eq('id', user.id)
-          .single();
-          
-        if (error) {
-          console.error('Error fetching provider profile:', error);
-          if (error.code === 'PGRST116') {
-            // Not found - redirect to client dashboard
-            navigate('/user/dashboard');
-          }
-          return;
-        }
-        
-        setProfile(data);
-        
-        // Initialize form data
-        setFormData({
-          firstName: data.first_name || '',
-          lastName: data.last_name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          bio: data.bio || '',
-          services: data.services || [],
-          postalCodes: data.provider_service_areas?.map((area: any) => area.postal_code).join(', ') || '',
-        });
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     fetchProfile();
-  }, [navigate]);
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const toggleService = (serviceId: string) => {
-    setFormData(prev => {
-      const services = prev.services.includes(serviceId)
-        ? prev.services.filter(id => id !== serviceId)
-        : [...prev.services, serviceId];
-        
-      return { ...prev, services };
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsUpdating(true);
-    
+  const fetchProfile = async () => {
     try {
+      setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'You must be logged in to update your profile',
-        });
+        toast.error("User not found, please login again");
         return;
       }
       
-      // Update provider profile
-      const { error: profileError } = await supabase
+      // Get provider profile
+      const { data: providerData, error: providerError } = await supabase
         .from('service_providers')
-        .update({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          phone: formData.phone,
-          bio: formData.bio,
-          services: formData.services,
-        })
-        .eq('id', user.id);
-        
-      if (profileError) {
-        throw profileError;
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      
+      if (providerError) {
+        console.error("Error fetching provider profile:", providerError);
+        return;
       }
       
-      // Update postal codes - first delete existing ones
-      await supabase
-        .from('provider_service_areas')
-        .delete()
-        .eq('provider_id', user.id);
+      if (providerData) {
+        setProvider(providerData);
         
-      // Then add new postal codes
-      const postalCodes = formData.postalCodes
-        .split(',')
-        .map(code => code.trim())
-        .filter(Boolean);
+        // Set form default values
+        profileForm.reset({
+          first_name: providerData.first_name || "",
+          last_name: providerData.last_name || "",
+          email: providerData.email || "",
+          phone: providerData.phone || "",
+          bio: providerData.bio || "",
+        });
         
-      if (postalCodes.length > 0) {
-        const postalCodeRecords = postalCodes.map(postal_code => ({
-          provider_id: user.id,
-          postal_code,
-        }));
+        // Get service areas
+        try {
+          const { data: areasData, error: areasError } = await supabase
+            .from('provider_service_areas')
+            .select('*')
+            .eq('provider_id', user.id);
+            
+          if (!areasError && areasData) {
+            setServiceAreas(areasData);
+          }
+        } catch (error) {
+          console.error("Error fetching service areas:", error);
+        }
         
-        const { error: postalCodeError } = await supabase
-          .from('provider_service_areas')
-          .insert(postalCodeRecords);
-          
-        if (postalCodeError) {
-          console.error('Error updating postal codes:', postalCodeError);
+        // Get skills
+        try {
+          const { data: skillsData, error: skillsError } = await supabase
+            .from('provider_skills')
+            .select('*')
+            .eq('provider_id', user.id);
+            
+          if (!skillsError && skillsData) {
+            setSkills(skillsData);
+          }
+        } catch (error) {
+          console.error("Error fetching skills:", error);
         }
       }
-      
-      toast({
-        title: 'Profile Updated',
-        description: 'Your profile has been successfully updated',
-      });
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Update Failed',
-        description: 'There was an error updating your profile',
-      });
+      console.error("Error fetching profile:", error);
+      toast.error("Failed to load profile");
     } finally {
-      setIsUpdating(false);
+      setLoading(false);
     }
   };
 
-  if (isLoading) {
+  const onProfileSubmit = async (values: ProfileFormValues) => {
+    try {
+      setLoading(true);
+      
+      if (!provider?.id) {
+        toast.error("Provider ID not found");
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('service_providers')
+        .update({
+          first_name: values.first_name,
+          last_name: values.last_name,
+          email: values.email,
+          phone: values.phone,
+          bio: values.bio,
+        })
+        .eq('id', provider.id);
+        
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Profile updated successfully");
+      setIsEditing(false);
+      fetchProfile();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addServiceArea = async (values: ServiceAreaFormValues) => {
+    try {
+      if (!provider?.id) {
+        toast.error("Provider ID not found");
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('provider_service_areas')
+        .insert({
+          provider_id: provider.id,
+          postal_code: values.postal_code,
+          travel_distance: values.travel_distance,
+        });
+        
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Service area added");
+      serviceAreaForm.reset();
+      fetchProfile();
+    } catch (error) {
+      console.error("Error adding service area:", error);
+      toast.error("Failed to add service area");
+    }
+  };
+
+  const addSkill = async (values: SkillFormValues) => {
+    try {
+      if (!provider?.id) {
+        toast.error("Provider ID not found");
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('provider_skills')
+        .insert({
+          provider_id: provider.id,
+          skill: values.skill,
+          experience_years: values.experience_years,
+          certification: values.certification,
+        });
+        
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Skill added");
+      skillForm.reset();
+      fetchProfile();
+    } catch (error) {
+      console.error("Error adding skill:", error);
+      toast.error("Failed to add skill");
+    }
+  };
+
+  const removeServiceArea = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('provider_service_areas')
+        .delete()
+        .eq('id', id);
+        
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Service area removed");
+      fetchProfile();
+    } catch (error) {
+      console.error("Error removing service area:", error);
+      toast.error("Failed to remove service area");
+    }
+  };
+
+  const removeSkill = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('provider_skills')
+        .delete()
+        .eq('id', id);
+        
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Skill removed");
+      fetchProfile();
+    } catch (error) {
+      console.error("Error removing skill:", error);
+      toast.error("Failed to remove skill");
+    }
+  };
+
+  if (loading && !provider) {
     return (
-      <div className="container mx-auto py-6 px-4 mt-16 flex justify-center items-center min-h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="container flex items-center justify-center h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-6 px-4 mt-16">
-      <h1 className="text-2xl font-bold mb-6">Provider Profile</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Picture</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center">
-              <Avatar className="h-24 w-24 mb-4">
-                <AvatarImage src="" alt="Profile picture" />
-                <AvatarFallback className="bg-primary/10 text-primary text-xl">
-                  <UserCircle className="h-12 w-12" />
-                </AvatarFallback>
-              </Avatar>
-              <p className="text-lg font-medium">
-                {profile.first_name} {profile.last_name}
-              </p>
-              <p className="text-sm text-muted-foreground">{profile.email}</p>
-              
-              <Separator className="my-4" />
-              
-              <div className="w-full">
-                <p className="text-sm font-medium mb-2">Provider Status</p>
-                <div className="flex items-center">
-                  <div className={`h-2.5 w-2.5 rounded-full mr-2 ${
-                    profile.status === 'approved' ? 'bg-green-500' : 
-                    profile.status === 'pending_approval' ? 'bg-yellow-500' : 'bg-gray-400'
-                  }`}></div>
-                  <p className="text-sm capitalize">
-                    {profile.status === 'approved' ? 'Active' : 
-                     profile.status === 'pending_approval' ? 'Pending Approval' : 
-                     profile.status}
-                  </p>
-                </div>
-              </div>
-              
-              <Separator className="my-4" />
-              
-              <Button 
-                variant="outline" 
-                className="w-full" 
-                onClick={() => navigate('/provider/dashboard')}
-              >
-                Back to Dashboard
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="md:col-span-2">
-          <Tabs defaultValue="personal" className="w-full">
-            <TabsList className="mb-4">
-              <TabsTrigger value="personal">Personal Information</TabsTrigger>
-              <TabsTrigger value="services">Services & Areas</TabsTrigger>
-            </TabsList>
-            
-            <form onSubmit={handleSubmit}>
-              <TabsContent value="personal" className="mt-0">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                          id="firstName"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                          id="lastName"
-                          name="lastName"
-                          value={formData.lastName}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <div className="container mx-auto p-4 space-y-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="md:w-1/3">
+            <Card>
+              <CardHeader className="flex flex-col items-center">
+                <Avatar className="h-24 w-24">
+                  <AvatarImage src="/placeholder.svg" alt="Provider" />
+                  <AvatarFallback>
+                    {provider?.first_name?.charAt(0)}{provider?.last_name?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <CardTitle className="mt-4">
+                  {provider?.first_name} {provider?.last_name}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">{provider?.email}</p>
+                {!isEditing && (
+                  <Button 
+                    onClick={() => setIsEditing(true)} 
+                    variant="outline" 
+                    className="mt-4"
+                  >
+                    Edit Profile
+                  </Button>
+                )}
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {provider?.phone && (
+                    <div>
+                      <h4 className="text-sm font-semibold">Phone</h4>
+                      <p>{provider.phone}</p>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        disabled
-                      />
-                      <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+                  )}
+                  {provider?.bio && (
+                    <div>
+                      <h4 className="text-sm font-semibold">About</h4>
+                      <p className="text-sm">{provider.bio}</p>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="bio">Bio / About Me</Label>
-                      <Input
-                        id="bio"
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleInputChange}
-                        className="min-h-[100px]"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Share information about your experience and qualifications
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="services" className="mt-0">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Services & Service Areas</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-4">
-                      <Label>Services You Provide</Label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {serviceTypes.map((service) => (
-                          <div key={service.id} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`service-${service.id}`}
-                              checked={formData.services.includes(service.id)}
-                              onCheckedChange={() => toggleService(service.id)}
-                            />
-                            <Label htmlFor={`service-${service.id}`} className="font-normal cursor-pointer">
-                              {service.label}
-                            </Label>
-                          </div>
+                  )}
+                  {provider?.services && provider.services.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold">Services</h4>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {provider.services.map((service: string) => (
+                          <Badge key={service} variant="secondary">{service}</Badge>
                         ))}
                       </div>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="postalCodes">Service Areas (Postal Codes)</Label>
-                      <Input
-                        id="postalCodes"
-                        name="postalCodes"
-                        value={formData.postalCodes}
-                        onChange={handleInputChange}
-                        placeholder="e.g. 10115, 10117, 10119"
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="md:w-2/3">
+            <Card>
+              <CardHeader>
+                <CardTitle>{isEditing ? "Edit Profile" : "Provider Details"}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isEditing ? (
+                  <Form {...profileForm}>
+                    <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={profileForm.control}
+                          name="first_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>First Name</FormLabel>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={profileForm.control}
+                          name="last_name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Name</FormLabel>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={profileForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="email" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                      <p className="text-xs text-muted-foreground">
-                        Enter postal codes separated by commas (e.g. 10115, 10117, 10119)
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <div className="mt-6 flex justify-end">
-                <Button type="submit" disabled={isUpdating}>
-                  {isUpdating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Updating...
-                    </>
-                  ) : 'Save Changes'}
-                </Button>
-              </div>
-            </form>
-          </Tabs>
+                      <FormField
+                        control={profileForm.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={profileForm.control}
+                        name="bio"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Bio</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field} 
+                                placeholder="Tell clients about yourself"
+                                className="min-h-[100px]"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => setIsEditing(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Saving..." : "Save Changes"}
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                ) : (
+                  <Tabs defaultValue="service-areas">
+                    <TabsList className="mb-4">
+                      <TabsTrigger value="service-areas">Service Areas</TabsTrigger>
+                      <TabsTrigger value="skills">Skills & Certifications</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="service-areas" className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {serviceAreas.length > 0 ? (
+                          serviceAreas.map((area) => (
+                            <Card key={area.id} className="p-4">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <h4 className="font-medium">{area.postal_code}</h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    Travel distance: {area.travel_distance} km
+                                  </p>
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => removeServiceArea(area.id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </Card>
+                          ))
+                        ) : (
+                          <p className="text-muted-foreground col-span-2">No service areas added yet.</p>
+                        )}
+                      </div>
+                      
+                      <Separator className="my-4" />
+                      
+                      <Form {...serviceAreaForm}>
+                        <form onSubmit={serviceAreaForm.handleSubmit(addServiceArea)} className="space-y-4">
+                          <h3 className="text-lg font-medium">Add Service Area</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField
+                              control={serviceAreaForm.control}
+                              name="postal_code"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Postal Code</FormLabel>
+                                  <FormControl>
+                                    <Input {...field} placeholder="e.g., 10115" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={serviceAreaForm.control}
+                              name="travel_distance"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Travel Distance (km)</FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      type="number" 
+                                      {...field}
+                                      onChange={(e) => field.onChange(Number(e.target.value))}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <Button type="submit" className="mt-2">Add Service Area</Button>
+                        </form>
+                      </Form>
+                    </TabsContent>
+                    
+                    <TabsContent value="skills" className="space-y-4">
+                      <div className="grid grid-cols-1 gap-4">
+                        {skills.length > 0 ? (
+                          skills.map((skill) => (
+                            <Card key={skill.id} className="p-4">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <h4 className="font-medium">{skill.skill}</h4>
+                                  <p className="text-sm text-muted-foreground">
+                                    {skill.experience_years} years experience
+                                  </p>
+                                  {skill.certification && (
+                                    <Badge variant="outline" className="mt-1">
+                                      {skill.certification}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={() => removeSkill(skill.id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </Card>
+                          ))
+                        ) : (
+                          <p className="text-muted-foreground">No skills added yet.</p>
+                        )}
+                      </div>
+                      
+                      <Separator className="my-4" />
+                      
+                      <Form {...skillForm}>
+                        <form onSubmit={skillForm.handleSubmit(addSkill)} className="space-y-4">
+                          <h3 className="text-lg font-medium">Add Skill</h3>
+                          <FormField
+                            control={skillForm.control}
+                            name="skill"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Skill Name</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="e.g., Deep Cleaning" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField
+                              control={skillForm.control}
+                              name="experience_years"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Years of Experience</FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      type="number" 
+                                      {...field}
+                                      onChange={(e) => field.onChange(Number(e.target.value))}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={skillForm.control}
+                              name="certification"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Certification (optional)</FormLabel>
+                                  <FormControl>
+                                    <Input {...field} placeholder="e.g., Certified Professional Cleaner" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <Button type="submit" className="mt-2">Add Skill</Button>
+                        </form>
+                      </Form>
+                    </TabsContent>
+                  </Tabs>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
