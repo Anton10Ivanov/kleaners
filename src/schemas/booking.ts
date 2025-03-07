@@ -48,6 +48,10 @@ export const bookingSchema = z.object({
   contactForSchedule: z.boolean().optional(),
   provideKey: z.boolean().optional(),
   
+  // Frequency and time preferences for business bookings
+  weekdayPreference: z.string().optional(),
+  timePreference: z.string().optional(),
+  
   // Deep cleaning specific fields
   propertyCondition: z.string().optional(),
   animalPresence: z.boolean().optional(),

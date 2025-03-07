@@ -1,102 +1,80 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { navigationData } from './navigationData';
-import { BellIcon, User, LogOut } from 'lucide-react';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger, 
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu';
+import { DynamicIcon } from './icons';
+import { cn } from '@/lib/utils';
+import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useNotifications } from '@/hooks/useNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
-interface NavigationMenuProps {
-  isLoggedIn: boolean;
-  userType: string;
-}
+export function NavigationMenu() {
+  const location = useLocation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: 'Your booking has been confirmed!', read: false },
+    { id: 2, text: 'Provider John Smith will arrive tomorrow at 9 AM', read: false },
+  ]);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
-export function NavigationMenu({ isLoggedIn, userType }: NavigationMenuProps) {
-  const [notificationOpen, setNotificationOpen] = useState(false);
-  const { unreadCount } = useNotifications();
+  // Close notifications when changing pages
+  useEffect(() => {
+    setIsNotificationOpen(false);
+  }, [location.pathname]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/';
-  };
-
-  const getDashboardLink = () => {
-    switch (userType) {
-      case 'admin':
-        return '/admin';
-      case 'provider':
-        return '/provider/dashboard';
-      default:
-        return '/user/dashboard';
-    }
-  };
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="flex items-center space-x-2">
-      {isLoggedIn && (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="relative">
-                <BellIcon className="h-4 w-4" />
-                {unreadCount > 0 && (
-                  <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px] flex items-center justify-center">
-                    {unreadCount}
-                  </Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <NotificationCenter />
-            </DropdownMenuContent>
-          </DropdownMenu>
+    <nav className={cn(
+      "flex items-center space-x-4",
+      isMobile ? "justify-between w-full" : "justify-end"
+    )}>
+      <div className="hidden md:flex items-center space-x-6">
+        {navigationData.mainNav.map((item) => (
+          <Link
+            key={item.href}
+            to={item.href}
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              location.pathname === item.href
+                ? "text-primary"
+                : "text-muted-foreground"
+            )}
+          >
+            {item.name}
+          </Link>
+        ))}
+      </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <User className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <Link to={getDashboardLink()}>
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
-              </Link>
-              <Link to="/user/profile">
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-              </Link>
-              <Link to="/user/bookings">
-                <DropdownMenuItem>My Bookings</DropdownMenuItem>
-              </Link>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-500">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
-      )}
-      
-      {!isLoggedIn && (
-        <div className="space-x-2">
-          <Link to="/auth/login">
-            <Button variant="ghost">Log in</Button>
-          </Link>
-          <Link to="/auth/signup">
-            <Button>Sign up</Button>
-          </Link>
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+          >
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center"
+              >
+                {unreadCount}
+              </Badge>
+            )}
+          </Button>
+
+          {isNotificationOpen && (
+            <NotificationCenter 
+              isOpen={isNotificationOpen} 
+              onClose={() => setIsNotificationOpen(false)} 
+            />
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </nav>
   );
 }
