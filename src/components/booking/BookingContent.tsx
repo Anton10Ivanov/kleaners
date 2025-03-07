@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
@@ -11,11 +12,14 @@ import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { supabase } from '@/integrations/supabase/client';
+
 interface BookingContentProps {
   currentStep: number;
   selectedService: string;
   form: ReturnType<typeof useForm<BookingFormData>>;
 }
+
 const fadeVariant = {
   hidden: {
     opacity: 0,
@@ -29,23 +33,79 @@ const fadeVariant = {
     }
   }
 };
+
 const BookingContent = ({
   currentStep,
   selectedService,
   form
 }: BookingContentProps) => {
-  const handleSubmit = (data: BookingFormData) => {
-    console.log('Form submitted:', data);
-    toast.success('Booking submitted successfully!');
+  const handleSubmit = async (data: BookingFormData) => {
+    try {
+      // Get current user, if logged in
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      // Prepare booking data
+      const bookingData = {
+        service_type: data.service || selectedService,
+        hours: data.hours,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        frequency: data.frequency,
+        date: data.date,
+        preferredTime: data.preferredTime,
+        extras: data.extras,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        postal_code: data.postalCode,
+        special_instructions: data.specialInstructions,
+        total_price: data.totalAmount,
+        user_id: user?.id, // Will be null for guest bookings
+        status: 'pending',
+        assigned_provider_id: data.selectedProviderId || null
+      };
+      
+      // Insert booking into supabase
+      const { data: booking, error } = await supabase
+        .from('bookings')
+        .insert(bookingData)
+        .select()
+        .single();
+        
+      if (error) throw error;
+      
+      console.log('Booking submitted:', booking);
+      toast.success('Booking submitted successfully!');
+      
+      // Reset form or redirect to confirmation
+      form.reset();
+      
+      // If a provider was selected, notify them
+      if (data.selectedProviderId) {
+        // In a real app, you would send a notification to the provider
+        console.log(`Notifying provider ${data.selectedProviderId} of new booking`);
+      }
+      
+      return booking;
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      toast.error('There was an error submitting your booking. Please try again.');
+      throw error;
+    }
   };
+  
   const frequency = form.watch('frequency') as Frequency | undefined;
   const postalCode = form.watch('postalCode') || '';
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
+  
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
+  
   return <div className={`w-full ${isMobile ? 'px-2' : 'md:w-[80%]'}`} onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
@@ -71,4 +131,5 @@ const BookingContent = ({
       </Form>
     </div>;
 };
+
 export default BookingContent;

@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "./SocialLogin";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -22,14 +24,33 @@ const SignupForm = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<"client" | "provider">("client");
+
+  // Parse query parameters
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type');
+    const email = params.get('email');
+    
+    if (type === 'provider') {
+      setActiveTab('provider');
+      setFormData(prev => ({ ...prev, userType: 'provider' }));
+    }
+    
+    if (email) {
+      setFormData(prev => ({ ...prev, email }));
+    }
+  }, [location]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (value: string) => {
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as "client" | "provider");
     setFormData(prev => ({ ...prev, userType: value as "client" | "provider" }));
   };
 
@@ -73,29 +94,66 @@ const SignupForm = () => {
 
       // If we have a user, create additional records based on user type
       if (authData.user) {
+        const userId = authData.user.id;
+        
+        // Update profiles table with user type
+        await supabase
+          .from('profiles')
+          .update({
+            user_type: formData.userType,
+            first_name: formData.firstName,
+            last_name: formData.lastName
+          })
+          .eq('id', userId);
+          
         if (formData.userType === "provider") {
           // Create a provider record
           const { error: providerError } = await supabase
             .from('service_providers')
             .insert({
-              id: authData.user.id,
+              id: userId,
               email: formData.email,
               first_name: formData.firstName,
               last_name: formData.lastName,
+              status: 'pending_approval',
             });
             
           if (providerError) {
             console.error('Error creating provider record:', providerError);
           }
+          
+          // Connect with provider application if it exists
+          const { data: applicationData } = await supabase
+            .from('provider_applications')
+            .select('id')
+            .eq('email', formData.email)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+            
+          if (applicationData?.id) {
+            await supabase
+              .from('provider_applications')
+              .update({ 
+                user_id: userId,
+                status: 'account_created'
+              })
+              .eq('id', applicationData.id);
+          }
+          
+          toast({
+            title: "Provider Account Created",
+            description: "Your account is pending approval. We'll review your application and get back to you soon.",
+          });
+        } else {
+          // Customer record is created automatically by DB trigger
+          toast({
+            title: "Welcome!",
+            description: "Your account has been created. You can now book services.",
+          });
         }
-        
-        // Customer record is created automatically by DB trigger
       }
 
-      toast({
-        title: "Welcome!",
-        description: "Your account has been created. Please check your email for verification.",
-      });
       navigate('/');
     } catch (error) {
       console.error('Signup error:', error);
@@ -114,7 +172,7 @@ const SignupForm = () => {
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
-          Sign up with your Apple or Google account
+          Sign up with your email or social accounts
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -129,6 +187,32 @@ const SignupForm = () => {
             </span>
           </div>
         </div>
+        
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="client">Client Account</TabsTrigger>
+            <TabsTrigger value="provider">Provider Account</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="client" className="mt-0">
+            <div className="flex items-center mb-4">
+              <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400">
+                Client
+              </Badge>
+              <p className="text-xs ml-2 text-muted-foreground">Book cleaning services for your home or business</p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="provider" className="mt-0">
+            <div className="flex items-center mb-4">
+              <Badge variant="outline" className="bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-700 dark:text-emerald-400">
+                Provider
+              </Badge>
+              <p className="text-xs ml-2 text-muted-foreground">Offer cleaning services as a professional</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+        
         <form onSubmit={handleSignup} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -162,23 +246,6 @@ const SignupForm = () => {
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="userType">Account Type</Label>
-            <Select value={formData.userType} onValueChange={handleSelectChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select account type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="client">Client</SelectItem>
-                <SelectItem value="provider">Service Provider</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground">
-              {formData.userType === "client" 
-                ? "As a client, you can book cleaning services." 
-                : "As a service provider, you can offer cleaning services."}
-            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
