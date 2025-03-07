@@ -1,183 +1,138 @@
 
-import { UseFormReturn } from "react-hook-form";
-import { BookingFormData, Frequency } from "@/schemas/booking";
-import { toast } from "sonner";
-import { DaySelector } from "./days/DaySelector";
-import { TimeSlotSelector } from "./time/TimeSlotSelector";
-import { useMemo } from "react";
-import { DAYS } from "../constants/timeConstants";
-import { orderDaysChronologically } from "../utils/timeUtils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { useState, useEffect } from "react";
+import { Frequency } from "@/schemas/booking";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { InfoIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 interface FrequencyTimeSelectorProps {
-  form: UseFormReturn<BookingFormData>;
+  frequency: string | null;
+  setFrequency: (frequency: Frequency) => void;
+  weekdayPreference: string | null;
+  setWeekdayPreference: (weekday: string) => void;
+  timePreference: string | null;
+  setTimePreference: (time: string) => void;
 }
 
-export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
-  const frequency = form.watch('frequency');
-  const selectedDays = useMemo(() => 
-    orderDaysChronologically([...(form.watch('selectedDays') || [])], Array.from(DAYS)),
-    [form.watch('selectedDays')]
-  );
-  const timeSlots = form.watch('timeSlots') || {};
-  const dynamicScheduling = form.watch('contactForSchedule');
+export function FrequencyTimeSelector({
+  frequency,
+  setFrequency,
+  weekdayPreference,
+  setWeekdayPreference,
+  timePreference,
+  setTimePreference,
+}: FrequencyTimeSelectorProps) {
+  const [showAdditionalOptions, setShowAdditionalOptions] = useState(false);
 
-  const handleDaySelect = (day: string) => {
-    const currentDays = form.getValues('selectedDays') || [];
-    
-    if (frequency === Frequency.Weekly) {
-      requestAnimationFrame(() => {
-        form.setValue('selectedDays', [day], { shouldDirty: true });
-      });
-      return;
-    }
-
-    let newDays: string[];
-    if (currentDays.includes(day)) {
-      newDays = currentDays.filter(d => d !== day);
+  useEffect(() => {
+    // Show additional options only for recurring frequencies
+    if (frequency === Frequency.Weekly || frequency === Frequency.Biweekly || frequency === "Monthly") {
+      setShowAdditionalOptions(true);
     } else {
-      newDays = [...currentDays, day];
+      setShowAdditionalOptions(false);
     }
-    
-    requestAnimationFrame(() => {
-      form.setValue('selectedDays', orderDaysChronologically(newDays, Array.from(DAYS)), { shouldDirty: true });
-    });
-  };
+  }, [frequency]);
 
-  // Add validation for minimum days when attempting to proceed
-  const validateDaysSelected = () => {
-    if (frequency === Frequency.Custom && (selectedDays.length < 2)) {
-      toast.error("Please select at least 2 days for custom schedule before proceeding");
-      return false;
-    }
-    return true;
-  };
+  const weekdays = [
+    { id: "monday", label: "Monday" },
+    { id: "tuesday", label: "Tuesday" },
+    { id: "wednesday", label: "Wednesday" },
+    { id: "thursday", label: "Thursday" },
+    { id: "friday", label: "Friday" },
+  ];
 
-  // Add effect to trigger validation when form is submitted
-  form.register('selectedDays', {
-    validate: () => {
-      if (frequency === Frequency.Custom && selectedDays.length < 2) {
-        return "Please select at least 2 days for custom schedule";
-      }
-      return true;
-    }
-  });
+  const timeSlots = [
+    { id: "morning", label: "Morning (8am-12pm)" },
+    { id: "afternoon", label: "Afternoon (12pm-4pm)" },
+    { id: "evening", label: "Evening (4pm-8pm)" },
+  ];
 
-  const handleTimeSelect = (day: string, time: string) => {
-    const currentTimeSlots = { ...form.getValues('timeSlots') } || {};
-    currentTimeSlots[day] = time;
-    
-    requestAnimationFrame(() => {
-      form.setValue('timeSlots', currentTimeSlots, { shouldDirty: true });
-    });
-
-    const selectedTimeSlots = Object.values(currentTimeSlots).filter(Boolean);
-    if (selectedTimeSlots.length === 1) {
-      const confirmed = window.confirm(`Would you like to apply ${time} to all selected days?`);
-      if (confirmed) {
-        const updatedTimeSlots = { ...currentTimeSlots };
-        selectedDays.forEach(selectedDay => {
-          updatedTimeSlots[selectedDay] = time;
-        });
-        requestAnimationFrame(() => {
-          form.setValue('timeSlots', updatedTimeSlots, { shouldDirty: true });
-          toast.success("Time applied to all selected days");
-        });
-      }
-    }
+  const handleFrequencyChange = (value: string) => {
+    setFrequency(value as Frequency);
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold mb-4">Preferred Days & Times</h3>
-      
-      <div className="space-y-6">
-        <div className="space-y-4 border-b pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="key-toggle">Provide key for faster service</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <InfoIcon className="h-4 w-4 text-[#F97316] cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent 
-                    className="bg-[#F97316] text-white border-none"
-                    sideOffset={5}
-                  >
-                    <p>Rest assured, your key is protected under our key insurance policy, and we follow strict security protocols!</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="key-toggle"
-              onCheckedChange={(checked) => {
-                form.setValue('provideKey', checked);
-              }}
-              checked={form.watch('provideKey') || false}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="contact-toggle">Dynamic scheduling needed</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <InfoIcon className="h-4 w-4 text-[#F97316] cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent 
-                    className="bg-[#F97316] text-white border-none"
-                    sideOffset={5}
-                  >
-                    <p>Scheduling should be done week-to-week or for the whole month in advance</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Switch
-              id="contact-toggle"
-              onCheckedChange={(checked) => {
-                form.setValue('contactForSchedule', checked);
-              }}
-              checked={form.watch('contactForSchedule') || false}
-            />
-          </div>
-        </div>
-
-        <DaySelector
-          form={form}
-          days={Array.from(DAYS)}
-          selectedDays={selectedDays}
-          frequency={frequency as Frequency}
-          onDaySelect={handleDaySelect}
-        />
-
-        {selectedDays.length > 0 && !dynamicScheduling && (
-          <div className="space-y-4">
-            <div className={`grid ${selectedDays.length > 3 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
-              {selectedDays.map((day) => (
-                <TimeSlotSelector
-                  key={day}
-                  form={form}
-                  day={day}
-                  timeSlots={timeSlots}
-                  onTimeSelect={handleTimeSelect}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="frequency">How often do you need cleaning?</Label>
+        <Select
+          value={frequency || undefined}
+          onValueChange={handleFrequencyChange}
+        >
+          <SelectTrigger id="frequency">
+            <SelectValue placeholder="Select frequency" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={Frequency.OneTime}>One-time cleaning</SelectItem>
+            <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
+            <SelectItem value={Frequency.Biweekly}>Bi-weekly</SelectItem>
+            <SelectItem value="Monthly">Monthly</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
+
+      {/* Fixed the truthy check here */}
+      {showAdditionalOptions && (
+        <>
+          <div className="space-y-2">
+            <Label>Preferred day of the week</Label>
+            <RadioGroup
+              value={weekdayPreference || undefined}
+              onValueChange={setWeekdayPreference}
+              className="grid grid-cols-2 md:grid-cols-5 gap-2"
+            >
+              {weekdays.map((day) => (
+                <Label
+                  key={day.id}
+                  htmlFor={day.id}
+                  className={cn(
+                    "flex items-center justify-center space-x-2 rounded-md border p-3 cursor-pointer",
+                    weekdayPreference === day.id
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-input"
+                  )}
+                >
+                  <RadioGroupItem value={day.id} id={day.id} className="sr-only" />
+                  {weekdayPreference === day.id && (
+                    <Check className="w-4 h-4 mr-1" />
+                  )}
+                  <span>{day.label}</span>
+                </Label>
+              ))}
+            </RadioGroup>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Preferred time of day</Label>
+            <RadioGroup
+              value={timePreference || undefined}
+              onValueChange={setTimePreference}
+              className="grid grid-cols-1 md:grid-cols-3 gap-2"
+            >
+              {timeSlots.map((slot) => (
+                <Label
+                  key={slot.id}
+                  htmlFor={slot.id}
+                  className={cn(
+                    "flex items-center justify-center space-x-2 rounded-md border p-3 cursor-pointer",
+                    timePreference === slot.id
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-input"
+                  )}
+                >
+                  <RadioGroupItem value={slot.id} id={slot.id} className="sr-only" />
+                  {timePreference === slot.id && (
+                    <Check className="w-4 h-4 mr-1" />
+                  )}
+                  <span>{slot.label}</span>
+                </Label>
+              ))}
+            </RadioGroup>
+          </div>
+        </>
+      )}
     </div>
   );
-};
+}
