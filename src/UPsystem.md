@@ -123,7 +123,7 @@ This document outlines the plan to restructure the application to clearly define
 
 ### Real-time Chat System
 
-The real-time chat system will enable communication between clients and providers:
+The real-time chat system will utilize Supabase's real-time capabilities to enable messaging between clients and providers:
 
 ```typescript
 // Chat service architecture
@@ -201,21 +201,38 @@ class SupabaseAnalyticsService implements AnalyticsService {
   async getBookingMetrics(period: 'daily' | 'weekly' | 'monthly'): Promise<BookingMetrics> {
     // Implementation using Supabase queries and aggregate functions
     // Returns metrics like total bookings, completion rate, cancellation rate, etc.
+    const { data, error } = await this.supabaseClient.rpc('get_booking_metrics', { period_type: period });
+    if (error) throw error;
+    return data;
   }
   
   async getProviderPerformance(providerId?: string): Promise<ProviderPerformance[]> {
     // Fetch performance metrics for providers
-    // Include metrics like on-time percentage, customer satisfaction, completion rate
+    let query = this.supabaseClient
+      .from('provider_performance_view')
+      .select('*');
+      
+    if (providerId) {
+      query = query.eq('provider_id', providerId);
+    }
+    
+    const { data, error } = await query;
+    if (error) throw error;
+    return data;
   }
   
   async getRevenueData(period: 'daily' | 'weekly' | 'monthly'): Promise<RevenueData> {
     // Fetch revenue data for specified period
-    // Include metrics like total revenue, average per booking, growth rate
+    const { data, error } = await this.supabaseClient.rpc('get_revenue_data', { period_type: period });
+    if (error) throw error;
+    return data;
   }
   
   async getCustomerRetentionMetrics(): Promise<RetentionMetrics> {
     // Calculate customer retention metrics
-    // Include metrics like repeat customer rate, average bookings per customer
+    const { data, error } = await this.supabaseClient.rpc('get_customer_retention');
+    if (error) throw error;
+    return data;
   }
 }
 ```
@@ -230,14 +247,18 @@ interface LocalizationService {
   translate(key: string, params?: Record<string, string>): string;
   changeLanguage(language: string): void;
   getCurrentLanguage(): string;
+  getSupportedLanguages(): string[];
 }
 
 class I18nLocalizationService implements LocalizationService {
-  private currentLanguage: string = 'en';
-  private translations: Record<string, Record<string, string>> = {};
+  private currentLanguage: string;
+  private translations: Record<string, Record<string, string>>;
+  private supportedLanguages: string[];
   
-  constructor(initialTranslations: Record<string, Record<string, string>>) {
+  constructor(initialTranslations: Record<string, Record<string, string>>, defaultLanguage: string = 'en') {
     this.translations = initialTranslations;
+    this.currentLanguage = defaultLanguage;
+    this.supportedLanguages = Object.keys(initialTranslations);
   }
   
   translate(key: string, params?: Record<string, string>): string {
@@ -256,6 +277,8 @@ class I18nLocalizationService implements LocalizationService {
   changeLanguage(language: string): void {
     if (this.translations[language]) {
       this.currentLanguage = language;
+      document.documentElement.lang = language;
+      localStorage.setItem('preferredLanguage', language);
     } else {
       console.error(`Language "${language}" is not supported.`);
     }
@@ -264,7 +287,32 @@ class I18nLocalizationService implements LocalizationService {
   getCurrentLanguage(): string {
     return this.currentLanguage;
   }
+  
+  getSupportedLanguages(): string[] {
+    return this.supportedLanguages;
+  }
 }
+
+// Usage example
+const translations = {
+  en: {
+    'welcome': 'Welcome to our service!',
+    'booking.success': 'Your booking was successful',
+    'error.generic': 'Something went wrong. Please try again.'
+  },
+  de: {
+    'welcome': 'Willkommen bei unserem Service!',
+    'booking.success': 'Ihre Buchung war erfolgreich',
+    'error.generic': 'Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.'
+  },
+  es: {
+    'welcome': '¡Bienvenido a nuestro servicio!',
+    'booking.success': 'Su reserva fue exitosa',
+    'error.generic': 'Algo salió mal. Por favor, inténtelo de nuevo.'
+  }
+};
+
+const i18n = new I18nLocalizationService(translations);
 ```
 
 ### Service Matching Algorithm
@@ -326,19 +374,47 @@ class ProviderMatchingService implements MatchingService {
   async optimizeProviderSchedule(providerId: string): Promise<OptimizedSchedule> {
     // Optimize provider's schedule to minimize travel time and maximize earnings
     // Consider factors like location of bookings, duration, travel time
+    const { data, error } = await this.supabaseClient
+      .from('bookings')
+      .select('*')
+      .eq('assigned_provider_id', providerId)
+      .gte('date', new Date().toISOString().split('T')[0]);
+      
+    if (error) throw error;
+    
+    // Apply optimization algorithm to rearrange bookings
+    const optimizedSchedule = this.generateOptimizedSchedule(data);
+    return optimizedSchedule;
   }
   
   // Helper methods for score calculation
   private calculateLocationScore(provider: Provider, request: BookingRequest): number {
-    // Calculate location proximity score
+    // Calculate location proximity score based on postal code distance
+    // Implementation would use geocoding or postal code proximity
+    return 30; // Example score
   }
   
   private calculateSkillsScore(provider: Provider, request: BookingRequest): number {
-    // Calculate skills match score
+    // Calculate skills match score based on service type requirements
+    return 25; // Example score
   }
   
   private calculateAvailabilityScore(provider: Provider, request: BookingRequest): number {
-    // Calculate availability match score
+    // Calculate availability match score based on preferred date/time
+    return 18; // Example score
+  }
+  
+  private generateOptimizedSchedule(bookings: any[]): OptimizedSchedule {
+    // Implementation of scheduling algorithm
+    // (e.g., using traveling salesman problem approaches)
+    return {
+      bookings: bookings.sort((a, b) => 
+        new Date(a.date + 'T' + a.time).getTime() - 
+        new Date(b.date + 'T' + b.time).getTime()
+      ),
+      estimatedTravelTime: 120, // in minutes
+      efficiency: 0.85 // 85% efficient
+    };
   }
 }
 ```
@@ -366,3 +442,23 @@ class ProviderMatchingService implements MatchingService {
 - Launch referral program for clients and providers
 - Add support for specialized cleaning services
 - Develop franchise management capabilities
+
+## Deployment Strategy
+
+### Staging Environment
+- Deploy updates to staging environment first
+- Conduct thorough testing with mock data
+- Perform load testing for high-traffic features
+- Security audits for authentication and payment flows
+
+### Production Rollout
+- Implement feature flags for gradual rollout
+- Deploy during off-peak hours (weekends)
+- Monitor performance metrics during rollout
+- Prepare rollback plan for critical failures
+
+### Post-Deployment
+- Monitor error rates and user feedback
+- Address critical issues immediately
+- Collect usage analytics for feature improvements
+- Schedule regular performance reviews

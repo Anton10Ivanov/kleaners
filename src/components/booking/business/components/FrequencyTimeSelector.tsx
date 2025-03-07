@@ -6,24 +6,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
 
 interface FrequencyTimeSelectorProps {
-  frequency: string | null;
-  setFrequency: (frequency: Frequency) => void;
-  weekdayPreference: string | null;
-  setWeekdayPreference: (weekday: string) => void;
-  timePreference: string | null;
-  setTimePreference: (time: string) => void;
+  form: UseFormReturn<BookingFormData>;
 }
 
-export function FrequencyTimeSelector({
-  frequency,
-  setFrequency,
-  weekdayPreference,
-  setWeekdayPreference,
-  timePreference,
-  setTimePreference,
-}: FrequencyTimeSelectorProps) {
+export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
+  const frequency = form.watch("frequency");
+  const weekdayPreference = form.watch("weekdayPreference");
+  const timePreference = form.watch("timePreference");
+  
   const [showAdditionalOptions, setShowAdditionalOptions] = useState(false);
 
   useEffect(() => {
@@ -50,7 +44,15 @@ export function FrequencyTimeSelector({
   ];
 
   const handleFrequencyChange = (value: string) => {
-    setFrequency(value as Frequency);
+    form.setValue("frequency", value as Frequency);
+  };
+
+  const handleWeekdayChange = (value: string) => {
+    form.setValue("weekdayPreference", value);
+  };
+
+  const handleTimeChange = (value: string) => {
+    form.setValue("timePreference", value);
   };
 
   return (
@@ -73,14 +75,13 @@ export function FrequencyTimeSelector({
         </Select>
       </div>
 
-      {/* Fixed the truthy check here */}
       {showAdditionalOptions && (
         <>
           <div className="space-y-2">
             <Label>Preferred day of the week</Label>
             <RadioGroup
               value={weekdayPreference || undefined}
-              onValueChange={setWeekdayPreference}
+              onValueChange={handleWeekdayChange}
               className="grid grid-cols-2 md:grid-cols-5 gap-2"
             >
               {weekdays.map((day) => (
@@ -108,7 +109,7 @@ export function FrequencyTimeSelector({
             <Label>Preferred time of day</Label>
             <RadioGroup
               value={timePreference || undefined}
-              onValueChange={setTimePreference}
+              onValueChange={handleTimeChange}
               className="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
               {timeSlots.map((slot) => (
