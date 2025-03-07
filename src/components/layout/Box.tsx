@@ -7,6 +7,10 @@ interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   border?: boolean;
   shadow?: "none" | "sm" | "md" | "lg";
   rounded?: "none" | "sm" | "md" | "lg" | "full";
+  /**
+   * @dev Used to highlight component boundaries during development
+   */
+  debug?: boolean;
 }
 
 /**
@@ -16,6 +20,7 @@ interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
  * @param border - Whether to show a border
  * @param shadow - Shadow size (none, sm, md, lg)
  * @param rounded - Border radius (none: 0, sm: 4px, md: 8px, lg: 12px, full: 9999px)
+ * @param debug - Highlight component boundaries (dev mode only)
  */
 export function Box({
   children,
@@ -24,6 +29,7 @@ export function Box({
   border = false,
   shadow = "none",
   rounded = "md",
+  debug = false,
   ...props
 }: BoxProps) {
   const paddingClasses = {
@@ -48,6 +54,11 @@ export function Box({
     full: "rounded-full",
   };
 
+  // Development outline for easier component visualization
+  const debugClass = debug && import.meta.env.DEV 
+    ? "outline outline-1 outline-dashed outline-pink-500" 
+    : "";
+
   return (
     <div
       className={cn(
@@ -55,6 +66,7 @@ export function Box({
         shadowClasses[shadow],
         roundedClasses[rounded],
         border && "border",
+        debugClass,
         "bg-card text-card-foreground",
         className
       )}

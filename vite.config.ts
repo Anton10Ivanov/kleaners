@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -18,5 +19,27 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    // Improve build performance
+    target: 'es2015',
+    minify: 'terser',
+    // Split chunks for better caching
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+        }
+      }
+    },
+    // Reduce build output for faster debugging
+    sourcemap: mode === 'development',
+    // Speed up build process
+    reportCompressedSize: false,
+  },
+  // Optimize dev server
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'sonner'],
   },
 }));
