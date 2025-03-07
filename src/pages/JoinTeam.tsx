@@ -1,19 +1,19 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Progress } from '@/components/ui/progress';
 import { Steps, Step } from '@/components/ui/steps';
-import { CheckCircle, FileText, CheckCheck, UserPlus, Info } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { UserPlus, FileText, CheckCheck, CheckCircle } from 'lucide-react';
+import { PersonalInfoStep } from '@/components/provider/application/PersonalInfoStep';
+import { ExperienceStep } from '@/components/provider/application/ExperienceStep';
+import { DocumentsStep } from '@/components/provider/application/DocumentsStep';
+import { AgreementStep } from '@/components/provider/application/AgreementStep';
+import { ConfirmationStep } from '@/components/provider/application/ConfirmationStep';
+import { SuccessSubmission } from '@/components/provider/application/SuccessSubmission';
 
 // Define verification process steps
 enum ApplicationStep {
@@ -273,313 +273,79 @@ const JoinTeam = () => {
     );
   };
 
+  if (applicationSubmitted) {
+    return <SuccessSubmission email={email} applicationId={applicationId} />;
+  }
+
   const renderStepContent = () => {
     switch (currentStep) {
       case ApplicationStep.PERSONAL_INFO:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
-              <Input
-                id="name"
-                placeholder="Your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="Your phone number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-          </div>
+          <PersonalInfoStep
+            name={name}
+            email={email}
+            phone={phone}
+            setName={setName}
+            setEmail={setEmail}
+            setPhone={setPhone}
+          />
         );
         
       case ApplicationStep.EXPERIENCE:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="position">Position of Interest <span className="text-red-500">*</span></Label>
-              <Select onValueChange={setPosition} value={position}>
-                <SelectTrigger id="position">
-                  <SelectValue placeholder="Select a position" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cleaner">Cleaner</SelectItem>
-                  <SelectItem value="supervisor">Cleaning Supervisor</SelectItem>
-                  <SelectItem value="customer-service">Customer Service</SelectItem>
-                  <SelectItem value="admin">Administrative Staff</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="experience">Years of Experience <span className="text-red-500">*</span></Label>
-              <Select onValueChange={setExperience} value={experience}>
-                <SelectTrigger id="experience">
-                  <SelectValue placeholder="Select your experience" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0-1">0-1 years</SelectItem>
-                  <SelectItem value="1-3">1-3 years</SelectItem>
-                  <SelectItem value="3-5">3-5 years</SelectItem>
-                  <SelectItem value="5+">5+ years</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Skills <span className="text-red-500">*</span></Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
-                {["Deep Cleaning", "Commercial Cleaning", "Residential Cleaning", 
-                  "Window Cleaning", "Carpet Cleaning", "Move In/Out Cleaning"].map((skill) => (
-                  <div key={skill} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`skill-${skill}`} 
-                      checked={skills.includes(skill)}
-                      onCheckedChange={() => toggleSkill(skill)}
-                    />
-                    <Label htmlFor={`skill-${skill}`} className="text-sm font-normal">{skill}</Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Availability <span className="text-red-500">*</span></Label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-                  <div key={day} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`day-${day}`} 
-                      checked={availability.includes(day)}
-                      onCheckedChange={() => toggleAvailability(day)}
-                    />
-                    <Label htmlFor={`day-${day}`} className="text-sm font-normal">{day}</Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <ExperienceStep
+            position={position}
+            experience={experience}
+            availability={availability}
+            skills={skills}
+            setPosition={setPosition}
+            setExperience={setExperience}
+            toggleAvailability={toggleAvailability}
+            toggleSkill={toggleSkill}
+          />
         );
         
       case ApplicationStep.DOCUMENTS:
         return (
-          <div className="space-y-4">
-            <Alert className="mb-4">
-              <Info className="h-4 w-4" />
-              <AlertTitle>Verification Required</AlertTitle>
-              <AlertDescription>
-                To ensure the safety of our clients, we require documentation and background checks for all service providers.
-              </AlertDescription>
-            </Alert>
-            
-            <div className="space-y-2">
-              <Label htmlFor="resume">Resume/CV <span className="text-red-500">*</span></Label>
-              <Input
-                id="resume"
-                type="file"
-                onChange={(e) => handleFileChange(e, setResume)}
-                className="cursor-pointer"
-                accept=".pdf,.doc,.docx"
-              />
-              <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="identification">ID Verification</Label>
-              <Input
-                id="identification"
-                type="file"
-                onChange={(e) => handleFileChange(e, setIdentificationDoc)}
-                className="cursor-pointer"
-                accept=".jpg,.jpeg,.png,.pdf"
-              />
-              <p className="text-xs text-muted-foreground">Please provide a government-issued ID (driver's license, passport, etc.)</p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="background-check">Background Check Consent Form</Label>
-              <Input
-                id="background-check"
-                type="file"
-                onChange={(e) => handleFileChange(e, setBackgroundCheckConsent)}
-                className="cursor-pointer"
-                accept=".pdf"
-              />
-              <p className="text-xs text-muted-foreground">Download, fill and upload our <a href="#" className="text-primary hover:underline">Background Check Consent Form</a></p>
-            </div>
-          </div>
+          <DocumentsStep
+            handleFileChange={handleFileChange}
+            setResume={setResume}
+            setIdentificationDoc={setIdentificationDoc}
+            setBackgroundCheckConsent={setBackgroundCheckConsent}
+          />
         );
         
       case ApplicationStep.AGREEMENT:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="message">Why do you want to join our team?</Label>
-              <Textarea
-                id="message"
-                placeholder="Tell us about yourself and why you're interested in this position"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="min-h-[120px]"
-              />
-            </div>
-            
-            <div className="space-y-4 pt-4">
-              <div className="flex items-start space-x-2">
-                <Checkbox 
-                  id="terms" 
-                  checked={agreeToTerms}
-                  onCheckedChange={(checked) => setAgreeToTerms(checked === true)}
-                />
-                <div>
-                  <Label htmlFor="terms" className="text-sm font-normal">
-                    I agree to the <a href="#" className="text-primary hover:underline">Terms and Conditions</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a> <span className="text-red-500">*</span>
-                  </Label>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2">
-                <Checkbox 
-                  id="backgroundCheck" 
-                  checked={agreeToBackgroundCheck}
-                  onCheckedChange={(checked) => setAgreeToBackgroundCheck(checked === true)}
-                />
-                <div>
-                  <Label htmlFor="backgroundCheck" className="text-sm font-normal">
-                    I consent to a background check as part of the application process <span className="text-red-500">*</span>
-                  </Label>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2">
-                <Checkbox 
-                  id="training" 
-                  checked={agreeToTraining}
-                  onCheckedChange={(checked) => setAgreeToTraining(checked === true)}
-                />
-                <div>
-                  <Label htmlFor="training" className="text-sm font-normal">
-                    I am willing to complete required training if my application is accepted
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </div>
+          <AgreementStep
+            message={message}
+            agreeToTerms={agreeToTerms}
+            agreeToBackgroundCheck={agreeToBackgroundCheck}
+            agreeToTraining={agreeToTraining}
+            setMessage={setMessage}
+            setAgreeToTerms={setAgreeToTerms}
+            setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
+            setAgreeToTraining={setAgreeToTraining}
+          />
         );
         
       case ApplicationStep.CONFIRMATION:
         return (
-          <div className="space-y-4 py-4">
-            <Alert className="bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-900">
-              <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-              <AlertTitle>Application Review</AlertTitle>
-              <AlertDescription>
-                Please review your information before submitting the application.
-              </AlertDescription>
-            </Alert>
-            
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Personal Information</h3>
-                <p><span className="font-medium">Name:</span> {name}</p>
-                <p><span className="font-medium">Email:</span> {email}</p>
-                <p><span className="font-medium">Phone:</span> {phone}</p>
-              </div>
-              
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Professional Information</h3>
-                <p><span className="font-medium">Position:</span> {position}</p>
-                <p><span className="font-medium">Experience:</span> {experience}</p>
-                <p><span className="font-medium">Skills:</span> {skills.join(', ') || 'None specified'}</p>
-                <p><span className="font-medium">Availability:</span> {availability.join(', ')}</p>
-              </div>
-              
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Documents</h3>
-                <p><span className="font-medium">Resume:</span> {resume ? '✓ Uploaded' : '✗ Not uploaded'}</p>
-                <p><span className="font-medium">ID Verification:</span> {identificationDoc ? '✓ Uploaded' : '✗ Not uploaded'}</p>
-                <p><span className="font-medium">Background Check Consent:</span> {backgroundCheckConsent ? '✓ Uploaded' : '✗ Not uploaded'}</p>
-              </div>
-            </div>
-            
-            <p className="text-sm text-muted-foreground">By clicking submit, your application will be sent for review.</p>
-          </div>
+          <ConfirmationStep
+            name={name}
+            email={email}
+            phone={phone}
+            position={position}
+            experience={experience}
+            skills={skills}
+            availability={availability}
+            resume={resume}
+            identificationDoc={identificationDoc}
+            backgroundCheckConsent={backgroundCheckConsent}
+          />
         );
     }
   };
-
-  if (applicationSubmitted) {
-    return (
-      <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-md mx-auto">
-          <Card className="border-0 shadow-md">
-            <CardHeader>
-              <div className="flex items-center justify-center mb-4">
-                <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-                  <CheckCheck className="h-8 w-8 text-green-600" />
-                </div>
-              </div>
-              <CardTitle className="text-center">Application Submitted!</CardTitle>
-              <CardDescription className="text-center">Thank you for applying to join our team</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-center text-muted-foreground">
-                Your application has been received and is now being reviewed. We'll contact you soon about next steps.
-              </p>
-              
-              <div className="border rounded-md p-4 bg-muted/30">
-                <p className="text-sm"><span className="font-medium">Application ID:</span> {applicationId}</p>
-                <p className="text-sm"><span className="font-medium">Status:</span> Under Review</p>
-              </div>
-              
-              <p className="text-center text-sm text-muted-foreground">
-                You'll be redirected to create an account in a few seconds...
-              </p>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-2">
-              <Button 
-                onClick={() => navigate(`/auth/signup?type=provider&email=${encodeURIComponent(email)}&applicationId=${applicationId}`)}
-                className="w-full"
-              >
-                Continue to Account Setup
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => navigate('/')}
-                className="w-full"
-              >
-                Return to Homepage
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
