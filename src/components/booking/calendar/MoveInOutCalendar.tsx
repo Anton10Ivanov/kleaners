@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { startOfWeek, addDays, eachDayOfInterval, format, isBefore, isAfter, isSameDay } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
@@ -5,9 +6,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
 import { cn } from "@/lib/utils";
+
 interface MoveInOutCalendarProps {
   form: UseFormReturn<BookingFormData>;
 }
+
 const MoveInOutCalendar = ({
   form
 }: MoveInOutCalendarProps) => {
@@ -28,8 +31,11 @@ const MoveInOutCalendar = ({
 
   // Update form whenever selectedDates changes
   useEffect(() => {
-    form.setValue('selectedDates', selectedDates);
+    if (selectedDates.length > 0) {
+      form.setValue('selectedDates', selectedDates);
+    }
   }, [selectedDates, form]);
+
   const handleDateSelect = (date: Date) => {
     setSelectedDates(prev => {
       const isSelected = prev.some(d => isSameDay(d, date));
@@ -40,15 +46,19 @@ const MoveInOutCalendar = ({
       }
     });
   };
+
   const handlePreviousWeek = () => {
     setWeekStart(prevWeek => addDays(prevWeek, -7));
   };
+
   const handleNextWeek = () => {
     setWeekStart(prevWeek => addDays(prevWeek, 7));
   };
+
   const startMonth = format(weekDates[0], 'MMMM');
   const endMonth = format(weekDates[6], 'MMMM');
   const monthDisplay = startMonth === endMonth ? startMonth : `${startMonth}/${endMonth}`;
+
   return <div className="bg-white dark:bg-dark-background p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
       <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">On which days you prefer the cleaning?</h3>
       
@@ -87,4 +97,5 @@ const MoveInOutCalendar = ({
         </div>}
     </div>;
 };
+
 export default MoveInOutCalendar;

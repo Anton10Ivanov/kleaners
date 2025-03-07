@@ -21,6 +21,9 @@ export const useBookingForm = () => {
       businessType: undefined,
       selectedDays: [],
       timeSlots: {},
+      cleaningOptions: [],
+      propertySize: undefined,
+      specialRequirements: '',
     }
   });
 
@@ -56,6 +59,7 @@ export const useBookingForm = () => {
       formData: {
         ...formData,
         date: formData.date?.toISOString(),
+        selectedDates: formData.selectedDates?.map(date => date.toISOString()),
       }
     }));
   }, [currentStep, getValues]);
@@ -66,13 +70,21 @@ export const useBookingForm = () => {
       try {
         const parsed = JSON.parse(savedProgress) as {
           step: number;
-          formData: Partial<BookingFormData> & { date?: string };
+          formData: Partial<BookingFormData> & { 
+            date?: string; 
+            selectedDates?: string[];
+          };
         };
         
         if (parsed.formData) {
           Object.entries(parsed.formData).forEach(([key, value]) => {
             if (key === 'date' && typeof value === 'string') {
               setValue(key as keyof BookingFormData, new Date(value));
+            } else if (key === 'selectedDates' && Array.isArray(value)) {
+              setValue(
+                key as keyof BookingFormData, 
+                value.map(dateStr => new Date(dateStr))
+              );
             } else if (value !== undefined) {
               setValue(key as keyof BookingFormData, value as any);
             }

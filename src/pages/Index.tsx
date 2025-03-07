@@ -13,6 +13,7 @@ import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { Frequency } from '@/schemas/booking';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -33,7 +34,8 @@ const Index = () => {
   const selectedExtras = watch('extras') || [];
   const postalCode = watch('postalCode') || '';
 
-  const currentPrice = frequency === 'weekly' ? 27 : frequency === 'biweekly' ? 30 : 35;
+  const currentPrice = frequency === Frequency.Weekly ? 27 : 
+                      frequency === Frequency.BiWeekly ? 30 : 35;
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
