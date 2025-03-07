@@ -45,3 +45,6 @@ export const handleApiError = (error: unknown, fallbackMessage = 'An error occur
   
   toast.error(errorMessage);
 };
+
+// For backward compatibility
+export const handleError = handleApiError;
