@@ -34,7 +34,10 @@ export const bookingSchema = z.object({
   addressLine2: z.string().optional(),
   city: z.string().optional(),
   postalCode: z.string().optional(),
+  
+  // Special instructions
   specialRequirements: z.string().optional(),
+  specialInstructions: z.string().optional(),
   
   // Business booking specific fields
   businessType: z.string().optional(),
@@ -72,7 +75,22 @@ export const bookingSchema = z.object({
 
   // Multiple dates (for recurring bookings)
   selectedDates: z.array(z.date()).optional(),
+  
+  // Access details
   entryCode: z.string().optional(),
+  floor: z.string().optional(),
+  accessMethod: z.string().optional(),
+  accessInstructions: z.string().optional(),
+  
+  // Authentication
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
+  
+  // Promotions
+  promoCode: z.string().optional(),
+  
+  // Pricing
+  totalAmount: z.number().optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;

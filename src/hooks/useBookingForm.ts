@@ -25,6 +25,8 @@ export const useBookingForm = () => {
       propertySize: undefined,
       specialRequirements: '',
       providerOptions: [],
+      specialInstructions: '',
+      totalAmount: 0,
     }
   });
 
@@ -55,13 +57,17 @@ export const useBookingForm = () => {
 
   useEffect(() => {
     const formData = getValues();
+    
+    // Save to local storage, handling Date objects
+    const serializedFormData = {
+      ...formData,
+      date: formData.date?.toISOString(),
+      selectedDates: formData.selectedDates?.map(date => date.toISOString()),
+    };
+    
     localStorage.setItem('bookingProgress', JSON.stringify({
       step: currentStep,
-      formData: {
-        ...formData,
-        date: formData.date?.toISOString(),
-        selectedDates: formData.selectedDates?.map(date => date.toISOString()),
-      }
+      formData: serializedFormData
     }));
   }, [currentStep, getValues]);
 
