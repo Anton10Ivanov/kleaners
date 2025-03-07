@@ -49,7 +49,7 @@ export const TimeSlotSelector = ({
     <div className="p-2 border rounded-lg bg-gray-50 dark:bg-gray-800/50">
       <FormField
         control={form.control}
-        name={`timeSlots.${day}`}
+        name={`timeSlots.${day}` as any}
         render={() => (
           <FormItem className="space-y-2">
             <div className="flex items-center gap-2">
@@ -96,4 +96,3 @@ export const TimeSlotSelector = ({
     </div>
   );
 };
-

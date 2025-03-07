@@ -72,7 +72,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   });
 
   const handleTimeSelect = (day: string, time: string) => {
-    const currentTimeSlots = { ...form.getValues('timeSlots') };
+    const currentTimeSlots = { ...form.getValues('timeSlots') } || {};
     currentTimeSlots[day] = time;
     
     requestAnimationFrame(() => {
@@ -158,7 +158,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
           form={form}
           days={Array.from(DAYS)}
           selectedDays={selectedDays}
-          frequency={frequency}
+          frequency={frequency as Frequency}
           onDaySelect={handleDaySelect}
         />
 
@@ -181,4 +181,3 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
     </div>
   );
 };
-

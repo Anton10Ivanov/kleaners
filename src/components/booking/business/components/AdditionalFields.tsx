@@ -28,7 +28,7 @@ export const AdditionalFields = ({ form, businessType }: AdditionalFieldsProps) 
               </FormControl>
               <SelectContent>
                 <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="biweekly">Bi-weekly</SelectItem>
+                <SelectItem value="bi_weekly">Bi-weekly</SelectItem>
                 <SelectItem value="monthly">Monthly</SelectItem>
               </SelectContent>
             </Select>
@@ -47,8 +47,8 @@ export const AdditionalFields = ({ form, businessType }: AdditionalFieldsProps) 
               <Input 
                 type="number" 
                 placeholder="Enter property size" 
-                {...field} 
-                onChange={(e) => field.onChange(Number(e.target.value))} 
+                value={field.value || ''}
+                onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)} 
               />
             </FormControl>
             <FormMessage />
@@ -67,7 +67,8 @@ export const AdditionalFields = ({ form, businessType }: AdditionalFieldsProps) 
                 <Textarea 
                   placeholder="Please specify any special requirements or instructions"
                   className="min-h-[100px]"
-                  {...field}
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               </FormControl>
               <FormMessage />

@@ -63,6 +63,11 @@ export interface BookingFormData {
   businessName?: string;
   businessSize?: string;
   businessDetails?: string;
+  // Add missing fields from the errors
+  propertySize?: number;
+  specialRequirements?: string;
+  cleaningOptions?: string[];
+  selectedDates?: Date[];
   providerOptions?: Array<{
     id: string;
     name: string;
@@ -71,7 +76,7 @@ export interface BookingFormData {
   selectedProviderId?: string;
   // Additional fields for business custom scheduling
   selectedDays?: string[];
-  timeSlots?: Record<string, string[]>;
+  timeSlots?: Record<string, string>;
   contactForSchedule?: boolean;
   provideKey?: boolean;
   // For security in booking form
@@ -106,6 +111,11 @@ export const bookingSchema = z.object({
   businessName: z.string().optional(),
   businessSize: z.string().optional(),
   businessDetails: z.string().optional(),
+  // Add missing fields for the schema
+  propertySize: z.number().optional(),
+  specialRequirements: z.string().optional(),
+  cleaningOptions: z.array(z.string()).optional(),
+  selectedDates: z.array(z.date()).optional(),
   providerOptions: z.array(
     z.object({
       id: z.string(),
@@ -116,7 +126,7 @@ export const bookingSchema = z.object({
   selectedProviderId: z.string().optional(),
   // Additional fields for business scheduling
   selectedDays: z.array(z.string()).optional(),
-  timeSlots: z.record(z.array(z.string())).optional(),
+  timeSlots: z.record(z.string()).optional(),
   contactForSchedule: z.boolean().optional(),
   provideKey: z.boolean().optional(),
   // For security in booking form
