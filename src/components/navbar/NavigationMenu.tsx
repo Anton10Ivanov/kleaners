@@ -1,8 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { navigationData } from './navigationData';
-import { DynamicIcon } from './icons';
+import { navigationData, Icons } from './navigationData';
 import { cn } from '@/lib/utils';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,7 +31,7 @@ export function NavigationMenu() {
       isMobile ? "justify-between w-full" : "justify-end"
     )}>
       <div className="hidden md:flex items-center space-x-6">
-        {navigationData.mainNav.map((item) => (
+        {navigationData.map((item) => (
           <Link
             key={item.href}
             to={item.href}
@@ -43,7 +42,7 @@ export function NavigationMenu() {
                 : "text-muted-foreground"
             )}
           >
-            {item.name}
+            {item.title}
           </Link>
         ))}
       </div>
