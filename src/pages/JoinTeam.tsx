@@ -1,10 +1,13 @@
 
+import { useState } from 'react';
 import { useJoinTeamForm } from '@/hooks/useJoinTeamForm';
 import { ApplicationForm } from '@/components/provider/application/ApplicationForm';
 import { BenefitsPanel } from '@/components/provider/application/BenefitsPanel';
 import { SuccessSubmission } from '@/components/provider/application/SuccessSubmission';
+import { Button } from '@/components/ui/button';
 
 const JoinTeam = () => {
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
   const {
     currentStep,
     formProgress,
@@ -57,42 +60,58 @@ const JoinTeam = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-8">
-          <ApplicationForm 
-            currentStep={currentStep}
-            formProgress={formProgress}
-            name={name}
-            email={email}
-            phone={phone}
-            position={position}
-            experience={experience}
-            availability={availability}
-            skills={skills}
-            resume={resume}
-            backgroundCheckConsent={backgroundCheckConsent}
-            message={message}
-            agreeToTerms={agreeToTerms}
-            agreeToBackgroundCheck={agreeToBackgroundCheck}
-            agreeToTraining={agreeToTraining}
-            isLoading={isLoading}
-            setName={setName}
-            setEmail={setEmail}
-            setPhone={setPhone}
-            setPosition={setPosition}
-            setExperience={setExperience}
-            setMessage={setMessage}
-            setAgreeToTerms={setAgreeToTerms}
-            setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
-            setAgreeToTraining={setAgreeToTraining}
-            handleFileChange={handleFileChange}
-            toggleAvailability={toggleAvailability}
-            toggleSkill={toggleSkill}
-            prevStep={prevStep}
-            handleSubmit={handleSubmit}
-          />
+        {!showApplicationForm ? (
+          <div className="space-y-12">
+            <BenefitsPanel className="border-0 shadow-md" />
+            
+            <div className="flex justify-center mt-8">
+              <Button 
+                size="lg" 
+                onClick={() => setShowApplicationForm(true)}
+                className="font-semibold text-base px-8 py-6"
+              >
+                Apply Now
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-5 gap-8">
+            <ApplicationForm 
+              currentStep={currentStep}
+              formProgress={formProgress}
+              name={name}
+              email={email}
+              phone={phone}
+              position={position}
+              experience={experience}
+              availability={availability}
+              skills={skills}
+              resume={resume}
+              backgroundCheckConsent={backgroundCheckConsent}
+              message={message}
+              agreeToTerms={agreeToTerms}
+              agreeToBackgroundCheck={agreeToBackgroundCheck}
+              agreeToTraining={agreeToTraining}
+              isLoading={isLoading}
+              setName={setName}
+              setEmail={setEmail}
+              setPhone={setPhone}
+              setPosition={setPosition}
+              setExperience={setExperience}
+              setMessage={setMessage}
+              setAgreeToTerms={setAgreeToTerms}
+              setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
+              setAgreeToTraining={setAgreeToTraining}
+              handleFileChange={handleFileChange}
+              toggleAvailability={toggleAvailability}
+              toggleSkill={toggleSkill}
+              prevStep={prevStep}
+              handleSubmit={handleSubmit}
+            />
 
-          <BenefitsPanel />
-        </div>
+            <BenefitsPanel />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,9 +1,14 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
-export const BenefitsPanel = () => {
+interface BenefitsPanelProps {
+  className?: string;
+}
+
+export const BenefitsPanel = ({ className }: BenefitsPanelProps) => {
   return (
-    <Card className="border-0 shadow-md md:col-span-2">
+    <Card className={cn("border-0 shadow-md md:col-span-2", className)}>
       <CardHeader>
         <CardTitle>Why Work With Us?</CardTitle>
         <CardDescription>Benefits of joining our team</CardDescription>
