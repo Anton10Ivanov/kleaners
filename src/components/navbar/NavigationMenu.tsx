@@ -1,94 +1,102 @@
 
-import { NotificationCenter } from '@/components/notifications/NotificationCenter';
-import { NavigationMenu as Nav } from "@/components/ui/navigation-menu";
-import { navigationLinks } from "./navigationData";
-import { AuthButtons } from "./AuthButtons";
-import { ThemeToggle } from "./ThemeToggle";
-import { LanguageSelector } from "./LanguageSelector";
-import { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { ShoppingCart } from "lucide-react";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { navigationData } from './navigationData';
+import { BellIcon, User, LogOut } from 'lucide-react';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger, 
+  DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useNotifications } from '@/hooks/useNotifications';
+import { NotificationCenter } from '../notifications/NotificationCenter';
 
-export function NavigationMenu() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState<string | null>(null);
-  const location = useLocation();
+interface NavigationMenuProps {
+  isLoggedIn: boolean;
+  userType: string;
+}
 
-  // Check if the user is logged in
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data } = await supabase.auth.getSession();
-        setIsLoggedIn(!!data.session);
+export function NavigationMenu({ isLoggedIn, userType }: NavigationMenuProps) {
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const { unreadCount } = useNotifications();
 
-        // Fetch user data including user_type if logged in
-        if (data.session) {
-          const user = await supabase.auth.getUser();
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('user_type')
-            .eq('id', user.data.user?.id)
-            .single();
-
-          if (profileData) {
-            setUserType(profileData.user_type);
-          }
-        }
-      } catch (error) {
-        console.error("Auth error:", error);
-      }
-    };
-
-    checkAuth();
-  }, [location.pathname]);
-
-  const renderDashboardButton = () => {
-    if (!isLoggedIn) return null;
-
-    // Determine dashboard URL based on user type
-    let dashboardUrl = '/user/dashboard'; // Default for clients
-    if (userType === 'provider') {
-      dashboardUrl = '/provider/dashboard';
-    } else if (userType === 'admin') {
-      dashboardUrl = '/admin';
-    }
-
-    return (
-      <Link to={dashboardUrl}>
-        <Button variant="outline" size="sm">
-          Dashboard
-        </Button>
-      </Link>
-    );
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
   };
 
-  const showUtilityItems = !location.pathname.includes('/admin') && 
-                          !location.pathname.includes('/user') &&
-                          !location.pathname.includes('/provider');
+  const getDashboardLink = () => {
+    switch (userType) {
+      case 'admin':
+        return '/admin';
+      case 'provider':
+        return '/provider/dashboard';
+      default:
+        return '/user/dashboard';
+    }
+  };
 
   return (
-    <Nav className="flex items-center space-x-2">
-      {showUtilityItems && (
+    <div className="flex items-center space-x-2">
+      {isLoggedIn && (
         <>
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/cart">
-              <ShoppingCart className="h-5 w-5" />
-            </Link>
-          </Button>
-          
-          {isLoggedIn && <NotificationCenter />}
-          
-          <ThemeToggle />
-          
-          <LanguageSelector />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" className="relative">
+                <BellIcon className="h-4 w-4" />
+                {unreadCount > 0 && (
+                  <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px] flex items-center justify-center">
+                    {unreadCount}
+                  </Badge>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <NotificationCenter />
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <User className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <Link to={getDashboardLink()}>
+                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+              </Link>
+              <Link to="/user/profile">
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+              </Link>
+              <Link to="/user/bookings">
+                <DropdownMenuItem>My Bookings</DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </>
       )}
       
-      {renderDashboardButton()}
-      
-      <AuthButtons isLoggedIn={isLoggedIn} userType={userType} />
-    </Nav>
+      {!isLoggedIn && (
+        <div className="space-x-2">
+          <Link to="/auth/login">
+            <Button variant="ghost">Log in</Button>
+          </Link>
+          <Link to="/auth/signup">
+            <Button>Sign up</Button>
+          </Link>
+        </div>
+      )}
+    </div>
   );
 }

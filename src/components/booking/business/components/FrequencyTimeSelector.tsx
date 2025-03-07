@@ -54,7 +54,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
 
   // Add validation for minimum days when attempting to proceed
   const validateDaysSelected = () => {
-    if (frequency === Frequency.Custom && selectedDays.length < 2) {
+    if (frequency === Frequency.Custom && (selectedDays.length < 2)) {
       toast.error("Please select at least 2 days for custom schedule before proceeding");
       return false;
     }

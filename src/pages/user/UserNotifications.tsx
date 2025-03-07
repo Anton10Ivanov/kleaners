@@ -1,206 +1,170 @@
 
 import React, { useState } from 'react';
-import { useTitle } from '@/hooks/useTitle';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { CheckCircle, Trash } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Link } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Bell, CheckCheck, Trash2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { Separator } from '@/components/ui/separator';
 
 export default function UserNotifications() {
   useTitle('Notifications | Kleaners');
-  const [tab, setTab] = useState('all');
-  const { notifications, loading, markAsRead, markAllAsRead } = useNotifications();
+  const navigate = useNavigate();
+  const { notifications, loading, markAsRead, markAllAsRead, unreadCount } = useNotifications();
+  const [activeTab, setActiveTab] = useState<string>('all');
 
-  // Filter notifications based on selected tab
   const filteredNotifications = notifications.filter(notification => {
-    if (tab === 'all') return true;
-    if (tab === 'unread') return !notification.read;
-    return notification.type === tab;
+    if (activeTab === 'all') return true;
+    if (activeTab === 'unread') return !notification.read;
+    return notification.type === activeTab;
   });
 
-  // Get counts for badge displays
-  const unreadCount = notifications.filter(n => !n.read).length;
-  const bookingCount = notifications.filter(n => n.type === 'booking').length;
-  const providerCount = notifications.filter(n => n.type === 'provider').length;
-  const systemCount = notifications.filter(n => n.type === 'system').length;
+  const handleNotificationClick = (notification: any) => {
+    if (!notification.read) {
+      markAsRead(notification.id);
+    }
+    
+    if (notification.link) {
+      navigate(notification.link);
+    }
+  };
 
-  return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold">Notifications</h1>
-        
-        {unreadCount > 0 && (
-          <Button 
-            variant="outline" 
-            onClick={markAllAsRead}
-            className="mt-4 md:mt-0"
-          >
-            <CheckCircle className="mr-2 h-4 w-4" />
-            Mark all as read
-          </Button>
-        )}
-      </div>
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'booking':
+        return <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+          <Bell className="h-5 w-5 text-blue-500" />
+        </div>;
+      case 'payment':
+        return <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+          <Bell className="h-5 w-5 text-green-500" />
+        </div>;
+      case 'provider':
+        return <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+          <Bell className="h-5 w-5 text-purple-500" />
+        </div>;
+      default:
+        return <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+          <Bell className="h-5 w-5 text-gray-500" />
+        </div>;
+    }
+  };
 
-      <Tabs defaultValue="all" value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <TabsTrigger value="all" className="relative">
-            All
-            {notifications.length > 0 && (
-              <Badge className="ml-2 bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300">
-                {notifications.length}
-              </Badge>
-            )}
-          </TabsTrigger>
-          
-          <TabsTrigger value="unread" className="relative">
-            Unread
-            {unreadCount > 0 && (
-              <Badge className="ml-2 bg-primary text-white">
-                {unreadCount}
-              </Badge>
-            )}
-          </TabsTrigger>
-          
-          <TabsTrigger value="booking" className="relative">
-            Bookings
-            {bookingCount > 0 && (
-              <Badge className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                {bookingCount}
-              </Badge>
-            )}
-          </TabsTrigger>
-          
-          <TabsTrigger value="provider" className="relative">
-            Providers
-            {providerCount > 0 && (
-              <Badge className="ml-2 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
-                {providerCount}
-              </Badge>
-            )}
-          </TabsTrigger>
-          
-          <TabsTrigger value="system" className="relative">
-            System
-            {systemCount > 0 && (
-              <Badge className="ml-2 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                {systemCount}
-              </Badge>
-            )}
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value={tab} className="mt-6">
-          {loading ? (
-            <div className="flex justify-center items-center h-32">
-              <p className="text-slate-500">Loading notifications...</p>
-            </div>
-          ) : filteredNotifications.length === 0 ? (
-            <Card className="p-8 text-center">
-              <h3 className="text-xl font-medium mb-2">No notifications</h3>
-              <p className="text-muted-foreground">
-                {tab === 'all'
-                  ? "You don't have any notifications."
-                  : tab === 'unread'
-                  ? "You don't have any unread notifications."
-                  : `You don't have any ${tab} notifications.`}
-              </p>
-            </Card>
-          ) : (
+  const handleClearAll = () => {
+    toast.success('All notifications marked as read');
+    markAllAsRead();
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Notifications</CardTitle>
+            <CardDescription>Loading your notifications...</CardDescription>
+          </CardHeader>
+          <CardContent>
             <div className="space-y-4">
-              {filteredNotifications.map(notification => (
-                <NotificationItem 
-                  key={notification.id}
-                  notification={notification}
-                  onMarkAsRead={markAsRead}
-                />
+              {[1, 2, 3].map(i => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="p-4">
+                    <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto py-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Notifications</CardTitle>
+            <CardDescription>
+              {unreadCount ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up!'}
+            </CardDescription>
+          </div>
+          {unreadCount > 0 && (
+            <Button variant="outline" size="sm" onClick={handleClearAll}>
+              <CheckCheck className="h-4 w-4 mr-2" />
+              Mark all as read
+            </Button>
           )}
-        </TabsContent>
-      </Tabs>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="mb-4">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="unread" className="relative">
+                Unread
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="booking">Bookings</TabsTrigger>
+              <TabsTrigger value="provider">Providers</TabsTrigger>
+              <TabsTrigger value="system">System</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value={activeTab}>
+              {filteredNotifications.length === 0 ? (
+                <div className="text-center py-8">
+                  <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                  <h3 className="text-lg font-medium">No notifications</h3>
+                  <p className="text-muted-foreground">
+                    {activeTab === 'all' 
+                      ? "You don't have any notifications yet" 
+                      : `You don't have any ${activeTab === 'unread' ? 'unread' : activeTab} notifications`}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {filteredNotifications.map((notification) => (
+                    <div key={notification.id}>
+                      <div 
+                        className={`flex items-start p-3 hover:bg-muted/50 cursor-pointer rounded-lg transition-colors ${!notification.read ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''}`}
+                        onClick={() => handleNotificationClick(notification)}
+                      >
+                        <div className="flex-shrink-0 mr-4">
+                          {getNotificationIcon(notification.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm font-medium mb-1 ${!notification.read ? 'text-primary' : ''}`}>
+                            {notification.title}
+                          </p>
+                          <p className="text-sm text-muted-foreground mb-1">
+                            {notification.message}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
+                          </p>
+                        </div>
+                        {!notification.read && (
+                          <div className="flex-shrink-0 ml-2">
+                            <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                      <Separator />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
-
-const NotificationItem = ({ 
-  notification, 
-  onMarkAsRead 
-}: { 
-  notification: import('@/hooks/useNotifications').Notification;
-  onMarkAsRead: (id: string) => void;
-}) => {
-  const handleMarkAsRead = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!notification.read) {
-      onMarkAsRead(notification.id);
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'booking':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-      case 'payment':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 'system':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
-      case 'provider':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
-    }
-  };
-
-  return (
-    <Link to={notification.link || '#'}>
-      <Card className={`p-4 hover:shadow-md transition-shadow ${!notification.read ? 'border-l-4 border-l-primary' : ''}`}>
-        <div className="flex justify-between items-start">
-          <div className="flex-1">
-            <div className="flex justify-between items-center">
-              <h3 className="font-medium">{notification.title}</h3>
-              <Badge variant="outline" className={`ml-2 ${getTypeColor(notification.type)}`}>
-                {notification.type}
-              </Badge>
-            </div>
-            
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
-              {notification.message}
-            </p>
-            
-            <div className="mt-4 text-xs text-slate-500">
-              {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
-            </div>
-          </div>
-          
-          <div className="ml-4 flex items-center space-x-2">
-            {!notification.read && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 text-slate-400 hover:text-primary"
-                onClick={handleMarkAsRead}
-                title="Mark as read"
-              >
-                <CheckCircle className="h-4 w-4" />
-              </Button>
-            )}
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8 text-slate-400 hover:text-destructive"
-              title="Delete notification"
-            >
-              <Trash className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </Card>
-    </Link>
-  );
-};
