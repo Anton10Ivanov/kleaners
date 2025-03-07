@@ -6,16 +6,16 @@ import { Info } from 'lucide-react';
 
 interface DocumentsStepProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
-  setResume: React.Dispatch<React.SetStateAction<File | null>>;
-  setIdentificationDoc: React.Dispatch<React.SetStateAction<File | null>>;
-  setBackgroundCheckConsent: React.Dispatch<React.SetStateAction<File | null>>;
+  resume: File | null;
+  identificationDoc: File | null;
+  backgroundCheckConsent: File | null;
 }
 
 export const DocumentsStep = ({
   handleFileChange,
-  setResume,
-  setIdentificationDoc,
-  setBackgroundCheckConsent
+  resume,
+  identificationDoc,
+  backgroundCheckConsent
 }: DocumentsStepProps) => {
   return (
     <div className="space-y-4">
@@ -32,7 +32,7 @@ export const DocumentsStep = ({
         <Input
           id="resume"
           type="file"
-          onChange={(e) => handleFileChange(e, setResume)}
+          onChange={(e) => handleFileChange(e, (file) => {})}
           className="cursor-pointer"
           accept=".pdf,.doc,.docx"
         />
@@ -44,7 +44,7 @@ export const DocumentsStep = ({
         <Input
           id="identification"
           type="file"
-          onChange={(e) => handleFileChange(e, setIdentificationDoc)}
+          onChange={(e) => handleFileChange(e, (file) => {})}
           className="cursor-pointer"
           accept=".jpg,.jpeg,.png,.pdf"
         />
@@ -56,7 +56,7 @@ export const DocumentsStep = ({
         <Input
           id="background-check"
           type="file"
-          onChange={(e) => handleFileChange(e, setBackgroundCheckConsent)}
+          onChange={(e) => handleFileChange(e, (file) => {})}
           className="cursor-pointer"
           accept=".pdf"
         />

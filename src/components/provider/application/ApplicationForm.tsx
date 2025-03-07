@@ -111,9 +111,9 @@ export const ApplicationForm = ({
         return (
           <DocumentsStep
             handleFileChange={handleFileChange}
-            setResume={setResume}
-            setIdentificationDoc={setIdentificationDoc}
-            setBackgroundCheckConsent={setBackgroundCheckConsent}
+            resume={resume}
+            identificationDoc={identificationDoc}
+            backgroundCheckConsent={backgroundCheckConsent}
           />
         );
         
