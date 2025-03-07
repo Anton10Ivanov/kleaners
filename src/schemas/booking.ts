@@ -1,100 +1,68 @@
+import { z } from "zod";
 
-import { z } from 'zod';
-
-export enum Frequency {
-  OneTime = 'one_time',
-  Weekly = 'weekly',
-  Biweekly = 'biweekly',
-  Monthly = 'monthly',
-  Custom = 'custom',
+export enum Service {
+  Regular = "regular",
+  MoveInOut = "moveInOut",
+  Business = "business"
 }
 
-export const providerOptionSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  rating: z.number().optional(),
-});
+export enum Frequency {
+  OneTime = "oneTime",
+  Weekly = "weekly",
+  BiWeekly = "biWeekly",
+  Monthly = "monthly",
+  Custom = "custom"
+}
 
-export type ProviderOption = z.infer<typeof providerOptionSchema>;
+export enum BusinessType {
+  Office = "office",
+  Retail = "retail",
+  Restaurant = "restaurant",
+  Other = "other"
+}
+
+export enum CleaningOption {
+  Dusting = "dusting",
+  Vacuuming = "vacuuming",
+  Mopping = "mopping",
+  RestroomCleaning = "restroomCleaning",
+  TrashRemoval = "trashRemoval"
+}
+
+export enum PropertySize {
+  Small = "small",
+  Medium = "medium",
+  Large = "large"
+}
 
 export const bookingSchema = z.object({
-  service: z.string().optional(),
+  service: z.nativeEnum(Service).optional(),
+  postalCode: z.string().min(5, { message: "Postal code must be at least 5 characters." }),
   date: z.date().optional(),
-  preferredTime: z.string().optional(),
-  frequency: z.nativeEnum(Frequency).default(Frequency.OneTime),
-  hours: z.number().min(1).default(2),
-  bedrooms: z.number().min(0).default(1),
-  bathrooms: z.number().min(0).default(1),
+  frequency: z.nativeEnum(Frequency).optional(),
+  hours: z.number().min(2).max(8).optional(),
+  bedrooms: z.number().min(1).max(5).optional(),
+  bathrooms: z.number().min(1).max(5).optional(),
   extras: z.array(z.string()).optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  email: z.string().email().optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
-  addressLine2: z.string().optional(),
-  city: z.string().optional(),
-  postalCode: z.string().optional(),
-  
-  // Special instructions
-  specialRequirements: z.string().optional(),
-  specialInstructions: z.string().optional(),
-  
-  // Business booking specific fields
-  businessType: z.string().optional(),
-  propertySize: z.string().optional(),
-  selectedDays: z.array(z.string()).optional(),
-  timeSlots: z.record(z.string(), z.string()).optional(),
-  cleaningOptions: z.array(z.string()).optional(),
-  contactForSchedule: z.boolean().optional(),
-  provideKey: z.boolean().optional(),
-  
-  // Frequency and time preferences for business bookings
-  weekdayPreference: z.string().optional(),
-  timePreference: z.string().optional(),
-  
-  // Deep cleaning specific fields
-  propertyCondition: z.string().optional(),
-  animalPresence: z.boolean().optional(),
-  hasHardwoodFloors: z.boolean().optional(),
-  hasCarpets: z.boolean().optional(),
-  smokingEnvironment: z.boolean().optional(),
-  numberOfLevels: z.number().optional(),
-  personalItems: z.string().optional(),
-  jobPriority: z.string().optional(),
-  specificChallenges: z.string().optional(),
-  
-  // Move in/out specific fields
-  moveType: z.string().optional(),
-  currentCondition: z.string().optional(),
-  floorCount: z.number().optional(),
-  furnishingStatus: z.string().optional(),
-  paintRequired: z.boolean().optional(),
-  carpetCleaning: z.boolean().optional(),
-  windowCleaning: z.boolean().optional(),
-  additionalNotes: z.string().optional(),
-
-  // Selected providers
-  providerOptions: z.array(providerOptionSchema).optional(),
-  selectedProviderId: z.string().optional(),
-
-  // Multiple dates (for recurring bookings)
   selectedDates: z.array(z.date()).optional(),
-  
-  // Access details
-  entryCode: z.string().optional(),
-  floor: z.string().optional(),
-  accessMethod: z.string().optional(),
-  accessInstructions: z.string().optional(),
-  
-  // Authentication
-  password: z.string().optional(),
-  confirmPassword: z.string().optional(),
-  
-  // Promotions
-  promoCode: z.string().optional(),
-  
-  // Pricing
+  timeSlots: z.record(z.string(), z.array(z.string())).optional(),
+
+  // Business Cleaning
+  businessType: z.nativeEnum(BusinessType).optional(),
+  cleaningOptions: z.array(z.nativeEnum(CleaningOption)).optional(),
+  propertySize: z.nativeEnum(PropertySize).optional(),
+  specialRequirements: z.string().optional(),
+  providerOptions: z.array(z.string()).optional(),
+  specialInstructions: z.string().optional(),
   totalAmount: z.number().optional(),
+
+  // Additional fields for MoveInOutStep
+  squareMeters: z.number().optional(),
+  dirtinessLevel: z.number().optional(),
+  lastCleaned: z.number().optional(),
+  cleaningPersonnel: z.enum(["normal", "experienced"]).optional(),
+  specialConditions: z.array(z.string()).optional(),
+  additionalNotes: z.string().optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
