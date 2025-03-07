@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { BookingFormData } from "@/schemas/booking";
+import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
@@ -18,12 +18,6 @@ interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
   postalCode: string;
   onSubmit: (data: BookingFormData) => void;
-}
-
-interface ProviderOption {
-  id: string;
-  name: string;
-  rating?: number;
 }
 
 const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {

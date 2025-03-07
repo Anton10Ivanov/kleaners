@@ -23,7 +23,7 @@ export const useBookingSubmission = () => {
         bathrooms: data.bathrooms,
         frequency: data.frequency,
         date: data.date,
-        preferredTime: data.preferredTime,
+        preferred_time: data.preferredTime,
         extras: data.extras,
         first_name: data.firstName,
         last_name: data.lastName,

@@ -13,7 +13,7 @@ import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Frequency } from '@/schemas/booking';
+import { Frequency, Service } from '@/schemas/booking';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -36,7 +36,7 @@ const Index = () => {
 
   // Use the proper enum comparison
   const currentPrice = frequency === Frequency.Weekly ? 27 : 
-                       frequency === Frequency.Biweekly ? 30 : 35;
+                       frequency === Frequency.BiWeekly ? 30 : 35;
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -63,7 +63,7 @@ const Index = () => {
           >
             <Hero 
               selectedService={selectedService}
-              setSelectedService={(service) => setValue('service', service)}
+              setSelectedService={(service) => setValue('service', service as Service)}
               postalCode={postalCode}
               setPostalCode={(code) => setValue('postalCode', code)}
               handleNextStep={handleNextStep}
