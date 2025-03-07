@@ -12,6 +12,14 @@
   }
 }
 
+/* Make the admin panel full-width */
+.admin-panel-container {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -105,4 +113,39 @@
     position: fixed;
     width: 100%;
   }
+}
+
+/* Fix for admin panel visibility */
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-layout {
+  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Fix content visibility in admin and user areas */
+.admin-content,
+.user-content,
+.provider-content {
+  overflow-y: auto;
+  max-height: calc(100vh - 64px);
+}
+
+/* Override the root container for admin, user and provider layouts */
+.admin-route #root,
+.user-route #root,
+.provider-route #root {
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  text-align: left;
 }

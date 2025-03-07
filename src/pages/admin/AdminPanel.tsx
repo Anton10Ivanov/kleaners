@@ -1,23 +1,19 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import AdminTabs, { AdminTab } from '@/components/admin/AdminTabs';
 import { useTitle } from '@/hooks/useTitle';
+import { Outlet } from 'react-router-dom';
 
 const AdminPanel = () => {
   useTitle("Admin Panel");
-  const [activeTab, setActiveTab] = useState<AdminTab>("bookings");
-
-  const handleTabChange = (tab: AdminTab) => {
-    setActiveTab(tab);
-  };
 
   return (
-    <div className="space-y-6 p-6">
-      <div>
+    <div className="w-full h-full overflow-auto">
+      <div className="container mx-auto p-4 md:p-6">
         <h1 className="text-2xl font-bold mb-2">Admin Panel</h1>
         <p className="text-muted-foreground">Manage bookings, customers, providers, and questions</p>
+        <Outlet />
       </div>
-      <AdminTabs activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   );
 };

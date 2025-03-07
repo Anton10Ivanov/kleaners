@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+
+import { lazy, Suspense, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import UserLayout from '@/components/user/UserLayout';
 
@@ -51,8 +52,27 @@ import ProviderLayout from '@/components/provider/ProviderLayout';
 import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 function App() {
+  const location = useLocation();
+
+  // Add route-specific class to body for CSS targeting
+  useEffect(() => {
+    const path = location.pathname.split('/')[1] || 'root';
+    document.body.className = ''; // Clear previous classes
+    document.body.classList.add(`${path}-route`);
+
+    // Also add a specific class to #root for admin/user/provider routes
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.className = '';
+      if (['admin', 'user', 'provider'].includes(path)) {
+        rootElement.classList.add('admin-panel-container');
+      }
+    }
+  }, [location]);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
@@ -81,36 +101,36 @@ function App() {
           <Route path="/legal/terms" element={<TermsOfService />} />
           <Route path="/legal/privacy" element={<PrivacyPolicy />} />
           
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminPanel />}>
-            <Route index element={<Dashboard />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="providers" element={<AdminProviders />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
-          
-          {/* User Routes */}
-          <Route path="/user" element={<UserLayout />}>
-            <Route path="dashboard" element={<UserDashboard />} />
-            <Route path="bookings" element={<UserBookings />} />
-            <Route path="profile" element={<UserProfile />} />
-            <Route path="settings" element={<UserSettings />} />
-            <Route path="invoices" element={<UserInvoices />} />
-            <Route path="notifications" element={<UserNotifications />} />
-          </Route>
-          
-          {/* Provider Routes */}
-          <Route path="/provider" element={<ProviderLayout />}>
-            <Route path="dashboard" element={<ProviderDashboard />} />
-            <Route path="profile" element={<ProviderProfile />} />
-            <Route path="bookings" element={<ProviderBookings />} />
-            <Route path="settings" element={<ProviderSettings />} />
-            <Route path="availability" element={<ProviderAvailability />} />
-          </Route>
-          
           {/* 404 - Not Found */}
           <Route path="*" element={<NotFound />} />
+        </Route>
+
+        {/* Admin Routes - Note: no longer nested under RootLayout */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="providers" element={<AdminProviders />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
+        
+        {/* User Routes */}
+        <Route path="/user" element={<UserLayout />}>
+          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path="bookings" element={<UserBookings />} />
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="settings" element={<UserSettings />} />
+          <Route path="invoices" element={<UserInvoices />} />
+          <Route path="notifications" element={<UserNotifications />} />
+        </Route>
+        
+        {/* Provider Routes */}
+        <Route path="/provider" element={<ProviderLayout />}>
+          <Route path="dashboard" element={<ProviderDashboard />} />
+          <Route path="profile" element={<ProviderProfile />} />
+          <Route path="bookings" element={<ProviderBookings />} />
+          <Route path="settings" element={<ProviderSettings />} />
+          <Route path="availability" element={<ProviderAvailability />} />
         </Route>
       </Routes>
     </Suspense>
