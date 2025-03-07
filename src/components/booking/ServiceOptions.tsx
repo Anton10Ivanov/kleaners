@@ -18,10 +18,10 @@ const ServiceOptions = ({
   setFrequency,
   isRegularCleaning = false
 }: ServiceOptionsProps) => {
-  // Set default frequency to BiWeekly when component mounts
+  // Set default frequency to Biweekly when component mounts
   useEffect(() => {
     if (!frequency) {
-      setFrequency(Frequency.BiWeekly);
+      setFrequency(Frequency.Biweekly);
     }
   }, []);
   
@@ -35,7 +35,7 @@ const ServiceOptions = ({
           <SelectContent>
             <SelectItem value={Frequency.OneTime}>One Time</SelectItem>
             <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
-            <SelectItem value={Frequency.BiWeekly}>Every 2 Weeks</SelectItem>
+            <SelectItem value={Frequency.Biweekly}>Every 2 Weeks</SelectItem>
             {!isRegularCleaning && <SelectItem value={Frequency.Custom}>Custom Schedule</SelectItem>}
           </SelectContent>
         </Select>
