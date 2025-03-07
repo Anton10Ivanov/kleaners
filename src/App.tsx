@@ -12,10 +12,10 @@ import JoinTeam from '@/pages/JoinTeam';
 
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
-import AdminBookings from '@/pages/admin/AdminBookings';
-import AdminCustomers from '@/pages/admin/AdminCustomers';
-import AdminProviders from '@/pages/admin/AdminProviders';
-import AdminSettings from '@/pages/admin/AdminSettings';
+import { AdminBookings } from '@/pages/admin/AdminBookings';
+import { AdminCustomers } from '@/pages/admin/AdminCustomers';
+import { AdminProviders } from '@/pages/admin/AdminProviders';
+import { AdminSettings } from '@/pages/admin/AdminSettings';
 import Dashboard from '@/pages/admin/Dashboard';
 
 // User pages
@@ -46,6 +46,10 @@ import PrivacyPolicy from '@/pages/legal/PrivacyPolicy';
 // Provider pages
 import ProviderDashboard from '@/pages/provider/ProviderDashboard';
 import ProviderProfile from '@/pages/provider/ProviderProfile';
+import ProviderLayout from '@/components/provider/ProviderLayout';
+import ProviderBookings from '@/pages/provider/ProviderBookings';
+import ProviderSettings from '@/pages/provider/ProviderSettings';
+import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 
 function App() {
   return (
@@ -94,10 +98,12 @@ function App() {
           </Route>
           
           {/* Provider Routes */}
-          <Route path="/provider">
+          <Route path="/provider" element={<ProviderLayout />}>
             <Route path="dashboard" element={<ProviderDashboard />} />
             <Route path="profile" element={<ProviderProfile />} />
-            {/* Add more provider-specific routes here */}
+            <Route path="bookings" element={<ProviderBookings />} />
+            <Route path="settings" element={<ProviderSettings />} />
+            <Route path="availability" element={<ProviderAvailability />} />
           </Route>
           
           {/* 404 - Not Found */}

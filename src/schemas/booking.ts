@@ -69,6 +69,15 @@ export interface BookingFormData {
     rating?: number;
   }>;
   selectedProviderId?: string;
+  // Additional fields for business custom scheduling
+  selectedDays?: string[];
+  timeSlots?: Record<string, string[]>;
+  contactForSchedule?: boolean;
+  provideKey?: boolean;
+  // For security in booking form
+  password?: string;
+  confirmPassword?: string;
+  entryCode?: string;
 }
 
 export const bookingSchema = z.object({
@@ -105,4 +114,13 @@ export const bookingSchema = z.object({
     })
   ).optional(),
   selectedProviderId: z.string().optional(),
+  // Additional fields for business scheduling
+  selectedDays: z.array(z.string()).optional(),
+  timeSlots: z.record(z.array(z.string())).optional(),
+  contactForSchedule: z.boolean().optional(),
+  provideKey: z.boolean().optional(),
+  // For security in booking form
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
+  entryCode: z.string().optional(),
 });
