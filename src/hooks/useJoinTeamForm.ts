@@ -6,6 +6,15 @@ import { z } from 'zod';
 import { handleApiError, ErrorSeverity } from '@/utils/errorHandling';
 import { toast } from 'sonner';
 
+// Define application steps enum
+export enum ApplicationStep {
+  PERSONAL_INFO = 0,
+  EXPERIENCE = 1,
+  DOCUMENTS = 2,
+  AGREEMENT = 3,
+  CONFIRMATION = 4
+}
+
 // Define the form schema with Zod
 const joinTeamSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -30,6 +39,26 @@ type JoinTeamFormData = z.infer<typeof joinTeamSchema>;
 export const useJoinTeamForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [currentStep, setCurrentStep] = useState<ApplicationStep>(ApplicationStep.PERSONAL_INFO);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [position, setPosition] = useState('cleaner');
+  const [experience, setExperience] = useState('0-1');
+  const [availability, setAvailability] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [resume, setResume] = useState<File | null>(null);
+  const [identificationDoc, setIdentificationDoc] = useState<File | null>(null);
+  const [backgroundCheckConsent, setBackgroundCheckConsent] = useState<File | null>(null);
+  const [message, setMessage] = useState('');
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [agreeToBackgroundCheck, setAgreeToBackgroundCheck] = useState(false);
+  const [agreeToTraining, setAgreeToTraining] = useState(false);
+  const [applicationSubmitted, setApplicationSubmitted] = useState(false);
+  const [applicationId, setApplicationId] = useState('');
+  
+  // Calculate form progress percentage
+  const formProgress = ((currentStep + 1) / 5) * 100;
   
   // Initialize the form
   const form = useForm<JoinTeamFormData>({
@@ -49,6 +78,45 @@ export const useJoinTeamForm = () => {
     },
   });
   
+  // Move to next step
+  const nextStep = () => {
+    if (currentStep < ApplicationStep.CONFIRMATION) {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+  
+  // Move to previous step
+  const prevStep = () => {
+    if (currentStep > ApplicationStep.PERSONAL_INFO) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+  
+  // Handle file change
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => {
+    if (e.target.files && e.target.files[0]) {
+      setter(e.target.files[0]);
+    }
+  };
+  
+  // Toggle availability days
+  const toggleAvailability = (day: string) => {
+    setAvailability(prev => 
+      prev.includes(day) 
+        ? prev.filter(d => d !== day) 
+        : [...prev, day]
+    );
+  };
+  
+  // Toggle skills
+  const toggleSkill = (skill: string) => {
+    setSkills(prev => 
+      prev.includes(skill) 
+        ? prev.filter(s => s !== skill) 
+        : [...prev, skill]
+    );
+  };
+
   // Form submission handler
   const onSubmit = async (data: JoinTeamFormData) => {
     setIsSubmitting(true);
@@ -68,6 +136,10 @@ export const useJoinTeamForm = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
+      // Set application submitted state
+      setApplicationSubmitted(true);
+      setApplicationId(Math.random().toString(36).substring(2, 10));
+      
       // Show success message
       toast.success('Your application has been submitted successfully!');
       setIsSubmitSuccessful(true);
@@ -80,10 +152,68 @@ export const useJoinTeamForm = () => {
     }
   };
   
+  // Handle form submission based on current step
+  const handleSubmit = () => {
+    if (currentStep === ApplicationStep.CONFIRMATION) {
+      // Submit the form on the final step
+      onSubmit({
+        firstName: name.split(' ')[0] || '',
+        lastName: name.split(' ').slice(1).join(' ') || '',
+        email,
+        phone,
+        experience: 'less-than-1',
+        availability: 'part-time',
+        hasOwnTransportation: true,
+        hasOwnEquipment: true,
+        hasCleaningCertificates: false,
+        message,
+        agreeToTerms,
+      });
+    } else {
+      // Move to next step
+      nextStep();
+    }
+  };
+  
   return {
     form,
     isSubmitting,
     isSubmitSuccessful,
     onSubmit: form.handleSubmit(onSubmit),
+    // Add all the new properties
+    currentStep,
+    formProgress,
+    name,
+    email,
+    phone,
+    position,
+    experience,
+    availability,
+    skills,
+    resume,
+    identificationDoc,
+    backgroundCheckConsent,
+    message,
+    agreeToTerms,
+    agreeToBackgroundCheck,
+    agreeToTraining,
+    isLoading: isSubmitting,
+    applicationSubmitted,
+    applicationId,
+    setName,
+    setEmail,
+    setPhone,
+    setPosition,
+    setExperience,
+    setMessage,
+    setAgreeToTerms,
+    setAgreeToBackgroundCheck,
+    setAgreeToTraining,
+    nextStep,
+    prevStep,
+    handleSubmit,
+    handleFileChange,
+    toggleAvailability,
+    toggleSkill
   };
 };
