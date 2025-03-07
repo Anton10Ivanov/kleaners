@@ -82,7 +82,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
           <div className="space-y-2">
             <Label>Preferred day of the week</Label>
             <RadioGroup
-              value={weekdayPreference}
+              value={weekdayPreference || ""}
               onValueChange={handleWeekdayChange}
               className="grid grid-cols-2 md:grid-cols-5 gap-2"
             >
@@ -110,7 +110,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
           <div className="space-y-2">
             <Label>Preferred time of day</Label>
             <RadioGroup
-              value={timePreference}
+              value={timePreference || ""}
               onValueChange={handleTimeChange}
               className="grid grid-cols-1 md:grid-cols-3 gap-2"
             >
