@@ -146,14 +146,14 @@ export const ApplicationForm = ({
   };
 
   return (
-    <Card className="border-0 shadow-md md:col-span-3">
-      <CardHeader>
+    <Card className="border-0 shadow-md w-full">
+      <CardHeader className="px-4 sm:px-6">
         <CardTitle>Provider Application</CardTitle>
         <CardDescription>Step {currentStep + 1} of 5</CardDescription>
       </CardHeader>
       
-      <div className="px-6 pt-2 pb-4">
-        <Steps currentStep={currentStep} className="mb-6">
+      <div className="px-4 sm:px-6 pt-2 pb-4 overflow-x-auto">
+        <Steps currentStep={currentStep} className="mb-6 min-w-[400px]">
           <Step icon={<UserPlus className="h-4 w-4" />} title="Personal Info" />
           <Step icon={<CheckCircle className="h-4 w-4" />} title="Experience" />
           <Step icon={<FileText className="h-4 w-4" />} title="Documents" />
@@ -162,11 +162,11 @@ export const ApplicationForm = ({
         </Steps>
       </div>
       
-      <CardContent>
+      <CardContent className="px-4 sm:px-6">
         {renderStepContent()}
       </CardContent>
       
-      <CardFooter className="flex justify-between pt-2 pb-4">
+      <CardFooter className="flex justify-between pt-2 pb-4 px-4 sm:px-6">
         <Button
           variant="outline"
           onClick={prevStep}

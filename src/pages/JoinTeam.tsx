@@ -75,7 +75,7 @@ const JoinTeam = () => {
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-5 gap-8">
+          <div className="w-full">
             <ApplicationForm 
               currentStep={currentStep}
               formProgress={formProgress}
@@ -108,8 +108,6 @@ const JoinTeam = () => {
               prevStep={prevStep}
               handleSubmit={handleSubmit}
             />
-
-            <BenefitsPanel />
           </div>
         )}
       </div>
