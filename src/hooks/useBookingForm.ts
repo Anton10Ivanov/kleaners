@@ -13,14 +13,12 @@ export const useBookingForm = () => {
     defaultValues: {
       service: undefined,
       postalCode: '',
-      frequency: Frequency.Onetime,
+      frequency: Frequency.OneTime,
       hours: 2,
       bedrooms: 1,
       bathrooms: 1,
       extras: [],
       businessType: undefined,
-      propertySize: undefined,
-      specialRequirements: '',
       selectedDays: [],
       timeSlots: {},
     }
