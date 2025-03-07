@@ -1,411 +1,196 @@
 
-import { useEffect, useState } from "react";
-import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { supabase, hasAdminAccess, UserRole } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import React, { useState, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Loader2, 
-  ShieldAlert, 
+  LayoutDashboard, 
+  CalendarDays, 
   Users, 
-  Calendar, 
-  Home, 
-  LogOut, 
+  UserCog,
   Settings,
+  LogOut,
   Menu,
-  X,
-  AlertTriangle,
-  LayoutDashboard
-} from "lucide-react";
-import { handleError, ErrorSeverity } from "@/utils/errorHandling";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ErrorBoundary } from "react-error-boundary";
+  X
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { Separator } from '@/components/ui/separator';
+import { handleApiError, boolToString } from '@/utils/errorHandling';
+import { ErrorSeverity } from '@/schemas/booking';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
-// Error fallback component for the error boundary
-const ErrorFallback = ({ error, resetErrorBoundary }) => (
-  <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-    <Alert variant="destructive" className="mb-6">
-      <AlertTriangle className="h-4 w-4" />
-      <AlertTitle>Something went wrong</AlertTitle>
-      <AlertDescription>
-        {error.message || "An unexpected error occurred in the admin panel."}
-      </AlertDescription>
-    </Alert>
-    <Button onClick={resetErrorBoundary}>Try again</Button>
-  </div>
-);
+// Navigation item type
+type NavItem = {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  active?: boolean;
+};
 
 const AdminLayout = () => {
-  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Save the current admin route for post-login redirect
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
+  // Create nav items array
+  const navItems: NavItem[] = [
+    {
+      title: 'Dashboard',
+      href: '/admin',
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      title: 'Bookings',
+      href: '/admin/bookings',
+      icon: <CalendarDays className="h-5 w-5" />,
+    },
+    {
+      title: 'Customers',
+      href: '/admin/customers',
+      icon: <Users className="h-5 w-5" />,
+    },
+    {
+      title: 'Providers',
+      href: '/admin/providers',
+      icon: <UserCog className="h-5 w-5" />,
+    },
+    {
+      title: 'Settings',
+      href: '/admin/settings',
+      icon: <Settings className="h-5 w-5" />,
+    },
+  ];
+  
+  // Set active nav item based on current location
   useEffect(() => {
-    if (location.pathname.startsWith('/admin')) {
-      sessionStorage.setItem('authReturnUrl', location.pathname);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        setIsLoading(true);
-        setHasError(false);
-        
-        console.log("Checking admin status...");
-        const { data: { user }, error: sessionError } = await supabase.auth.getUser();
-        
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          handleError(
-            sessionError, 
-            'Session error', 
-            true, 
-            { 
-              severity: ErrorSeverity.HIGH, 
-              component: 'AdminLayout' 
-            }
-          );
-          setHasError(true);
-          setErrorMessage("Authentication error. Please log in again.");
-          
-          // Store current path for redirect after login
-          sessionStorage.setItem('authReturnUrl', location.pathname);
-          
-          navigate('/auth/login');
-          return;
-        }
-
-        if (!user) {
-          console.log('No user session found - redirecting to login');
-          
-          // Store current path for redirect after login
-          sessionStorage.setItem('authReturnUrl', location.pathname);
-          
-          navigate('/auth/login');
-          return;
-        }
-
-        console.log('Checking admin role for user:', user.id);
-        const isAdmin = await hasAdminAccess(user.id);
-        console.log("Admin access check result:", isAdmin);
-        
-        if (!isAdmin) {
-          console.log('Not an admin user');
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "You don't have permission to access this area.",
-          });
-          navigate('/');
-          return;
-        }
-        
-        // Get user display name and check if super admin
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('first_name, last_name')
-          .eq('id', user.id)
-          .maybeSingle();
-          
-        if (profileData?.first_name) {
-          setUserName(profileData.first_name);
-        } else {
-          // Fall back to email if no name is set
-          setUserName(user.email?.split('@')[0] || 'Admin');
-        }
-
-        // Check if user is super admin
-        const { data: roleData } = await supabase
-          .from('admin_roles')
-          .select('role')
-          .eq('user_id', user.id);
-
-        const isSuperAdmin = roleData?.some(role => role.role === 'super_admin');
-
-        if (isSuperAdmin) {
-          setUserRole(UserRole.SUPER_ADMIN);
-        } else if (isAdmin) {
-          setUserRole(UserRole.ADMIN);
-        }
-
-        console.log('Admin access verified successfully');
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error in admin authentication check:", error);
-        setHasError(true);
-        setErrorMessage("Failed to verify admin access. Please try again.");
-        
-        handleError(
-          error, 
-          'Error in admin authentication check', 
-          true, 
-          { 
-            severity: ErrorSeverity.HIGH, 
-            component: 'AdminLayout'
-          }
-        );
-        
-        navigate('/auth/login');
-      }
-    };
-
-    // Only perform admin check once when component mounts
-    checkAdminStatus();
-
-    // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed in AdminLayout:', event);
-      if (event === 'SIGNED_OUT' || !session) {
-        navigate('/auth/login');
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [navigate, toast, location.pathname]);
-
-  const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
-      navigate('/auth/login');
-      toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your admin account."
-      });
+      const path = location.pathname.split('/')[2] || '';
+      if (path) {
+        setActiveItem(path);
+      } else {
+        setActiveItem('dashboard');
+      }
     } catch (error) {
-      handleError(
+      handleApiError(
         error, 
-        'Error signing out', 
-        true, 
-        { 
-          severity: ErrorSeverity.MEDIUM, 
-          component: 'AdminLayout' 
-        }
+        "Navigation error occurred", 
+        boolToString(true), 
+        ErrorSeverity.HIGH
+      );
+    }
+  }, [location]);
+  
+  // Handle navigation click
+  const handleNavClick = (href: string) => {
+    try {
+      navigate(href);
+      if (isMobile) {
+        setIsSidebarOpen(false);
+      }
+    } catch (error) {
+      handleApiError(
+        error, 
+        "Navigation failed", 
+        boolToString(true), 
+        ErrorSeverity.HIGH
       );
     }
   };
-
-  const handleErrorReset = () => {
-    setHasError(false);
-    setErrorMessage("");
-    window.location.reload();
+  
+  // Handle logout
+  const handleLogout = () => {
+    try {
+      // Add your logout logic here
+      navigate('/auth/login');
+    } catch (error) {
+      handleApiError(
+        error, 
+        "Logout failed", 
+        boolToString(true), 
+        ErrorSeverity.MEDIUM
+      );
+    }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="p-8 rounded-lg bg-white dark:bg-gray-800 shadow-lg max-w-md w-full flex flex-col items-center">
-          <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-          <h1 className="text-xl font-semibold mb-2">Verifying Admin Access</h1>
-          <p className="text-muted-foreground text-center mb-4">
-            Please wait while we verify your credentials...
-          </p>
+  
+  // Render sidebar content
+  const renderSidebarContent = () => (
+    <div className="flex h-full flex-col bg-background">
+      <div className="px-3 py-4">
+        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+          Admin Dashboard
+        </h2>
+        <div className="space-y-1">
+          {navItems.map((item) => (
+            <Button
+              key={item.title}
+              variant={activeItem === item.title.toLowerCase() ? "secondary" : "ghost"}
+              className="w-full justify-start"
+              onClick={() => handleNavClick(item.href)}
+            >
+              {item.icon}
+              <span className="ml-2">{item.title}</span>
+            </Button>
+          ))}
         </div>
       </div>
-    );
-  }
-
-  if (hasError) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="p-8 rounded-lg bg-white dark:bg-gray-800 shadow-lg max-w-md w-full">
-          <Alert variant="destructive" className="mb-6">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Authentication Error</AlertTitle>
-            <AlertDescription>
-              {errorMessage || "Failed to verify admin access."}
-            </AlertDescription>
-          </Alert>
-          
-          <div className="flex flex-col space-y-3">
-            <Button onClick={handleErrorReset} className="w-full">
-              Try Again
-            </Button>
-            <Button variant="outline" onClick={() => navigate('/auth/login')} className="w-full">
-              Back to Login
-            </Button>
-          </div>
-        </div>
+      <div className="mt-auto px-3 py-4">
+        <Separator className="mb-4" />
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-500 hover:bg-red-500/10 hover:text-red-500"
+          onClick={handleLogout}
+        >
+          <LogOut className="h-5 w-5" />
+          <span className="ml-2">Logout</span>
+        </Button>
       </div>
-    );
-  }
-
-  const isActive = (path: string) => {
-    return location.pathname === path ? 
-      "bg-primary text-primary-foreground" : 
-      "text-muted-foreground hover:bg-muted hover:text-foreground";
-  };
-
-  const NavItems = () => (
-    <ul className="flex flex-col md:flex-row space-y-1 md:space-y-0 space-x-0 md:space-x-1">
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <Home className="h-4 w-4 mr-2" />
-          <span>Admin Panel</span>
-        </Link>
-      </li>
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin/dashboard" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/dashboard')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <LayoutDashboard className="h-4 w-4 mr-2" />
-          <span>Dashboard</span>
-        </Link>
-      </li>
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin/bookings" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/bookings')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <Calendar className="h-4 w-4 mr-2" />
-          <span>Bookings</span>
-        </Link>
-      </li>
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin/customers" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/customers')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <Users className="h-4 w-4 mr-2" />
-          <span>Customers</span>
-        </Link>
-      </li>
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin/providers" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/providers')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <Users className="h-4 w-4 mr-2" />
-          <span>Providers</span>
-        </Link>
-      </li>
-      <li className="w-full md:w-auto">
-        <Link 
-          to="/admin/settings" 
-          className={`px-3 py-2 rounded-md text-sm font-medium flex items-center w-full ${isActive('/admin/settings')}`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <Settings className="h-4 w-4 mr-2" />
-          <span>Settings</span>
-        </Link>
-      </li>
-    </ul>
+    </div>
   );
-
+  
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
-      {/* Top Navigation Bar */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-10">
-        <div className="flex items-center">
-          <ShieldAlert className="h-5 w-5 text-primary mr-2" />
-          <h1 className="text-xl font-bold">Kleaners</h1>
-          {userRole === UserRole.SUPER_ADMIN && (
-            <span className="ml-2 text-xs px-1.5 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-800 dark:text-amber-100 rounded-md">
-              Super Admin
-            </span>
-          )}
+    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+      {/* Desktop Sidebar */}
+      {!isMobile && (
+        <div className="hidden w-64 border-r bg-background md:block">
+          {renderSidebarContent()}
         </div>
-        
-        {/* Mobile Menu */}
-        <div className="md:hidden">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[80%] sm:w-[350px]">
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-6 pb-2 border-b">
-                  <div className="flex items-center">
-                    <ShieldAlert className="h-5 w-5 text-primary mr-2" />
-                    <h2 className="font-bold">Kleaners Admin</h2>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                {userName && (
-                  <div className="mb-6 flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-2">
-                      {userName.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{userName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {userRole === UserRole.SUPER_ADMIN ? 'Super Admin' : 'Admin'}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                
-                <nav className="flex-grow">
-                  <NavItems />
-                </nav>
-                
-                <div className="mt-auto pt-4 border-t">
-                  <Button variant="destructive" className="w-full" onClick={handleLogout}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Log Out
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block flex-1 overflow-x-auto ml-6">
-          <NavItems />
-        </nav>
-        
-        <div className="flex items-center">
-          {userName && (
-            <div className="hidden md:flex items-center mr-3 rounded-full px-3 py-1 bg-primary/10">
-              <span className="text-sm font-medium">{userName}</span>
-            </div>
-          )}
-          <Button variant="outline" size="sm" onClick={handleLogout} className="hidden md:flex whitespace-nowrap">
-            <LogOut className="h-4 w-4 mr-2" />
-            Log Out
-          </Button>
-        </div>
-      </header>
-
-      {/* Main Content with Error Boundary */}
-      <main className="flex-1 p-4 sm:p-6 overflow-auto">
-        <ErrorBoundary
-          FallbackComponent={ErrorFallback}
-          onReset={() => window.location.reload()}
-        >
-          <Outlet />
-        </ErrorBoundary>
-      </main>
+      )}
       
-      {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 shadow-sm p-3 text-center text-xs text-muted-foreground">
-        <p>© {new Date().getFullYear()} Kleaners Admin Dashboard</p>
-      </footer>
+      {/* Mobile Sidebar */}
+      {isMobile && (
+        <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 top-4 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0">
+            {renderSidebarContent()}
+          </SheetContent>
+        </Sheet>
+      )}
+      
+      {/* Main Content */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Main content header */}
+        <header className="border-b bg-background p-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-semibold">
+              {navItems.find(item => item.title.toLowerCase() === activeItem)?.title || 'Dashboard'}
+            </h1>
+          </div>
+        </header>
+        
+        {/* Main content area with scrolling */}
+        <main className="flex-1 overflow-auto bg-muted/40">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
