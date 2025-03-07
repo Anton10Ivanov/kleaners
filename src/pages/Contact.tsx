@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,27 +5,25 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission here
     toast({
       title: "Message Sent",
-      description: "We'll get back to you soon!",
+      description: "We'll get back to you soon!"
     });
     setName('');
     setEmail('');
     setMessage('');
   };
-
-  return (
-    <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
+  return <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -47,35 +44,15 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Your name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
+                  <Input id="name" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <Input id="email" type="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Your message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                    className="min-h-[120px]"
-                  />
+                  <Textarea id="message" placeholder="Your message" value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px]" />
                 </div>
                 <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                   Send Message
@@ -90,13 +67,7 @@ const Contact = () => {
               <CardDescription>Other ways to reach us</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Address</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  123 Cleaning Street<br />
-                  Berlin, Germany 12345
-                </p>
-              </div>
+              
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -121,8 +92,6 @@ const Contact = () => {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Contact;
