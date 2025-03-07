@@ -11,8 +11,8 @@ interface ConfirmationStepProps {
   skills: string[];
   availability: string[];
   resume: File | null;
-  identificationDoc: File | null;
   backgroundCheckConsent: File | null;
+  hasCriminalRecord: boolean;
 }
 
 export const ConfirmationStep = ({
@@ -24,8 +24,8 @@ export const ConfirmationStep = ({
   skills,
   availability,
   resume,
-  identificationDoc,
-  backgroundCheckConsent
+  backgroundCheckConsent,
+  hasCriminalRecord
 }: ConfirmationStepProps) => {
   return (
     <div className="space-y-4 py-4">
@@ -54,10 +54,10 @@ export const ConfirmationStep = ({
         </div>
         
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">Documents</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">Documents & Background</h3>
           <p><span className="font-medium">Resume:</span> {resume ? '✓ Uploaded' : '✗ Not uploaded'}</p>
-          <p><span className="font-medium">ID Verification:</span> {identificationDoc ? '✓ Uploaded' : '✗ Not uploaded'}</p>
-          <p><span className="font-medium">Background Check Consent:</span> {backgroundCheckConsent ? '✓ Uploaded' : '✗ Not uploaded'}</p>
+          <p><span className="font-medium">Background Check Form:</span> {backgroundCheckConsent ? '✓ Uploaded' : '✗ Not uploaded'}</p>
+          <p><span className="font-medium">Criminal Record:</span> {hasCriminalRecord ? 'Has record' : 'No record'}</p>
         </div>
       </div>
       

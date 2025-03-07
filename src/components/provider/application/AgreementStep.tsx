@@ -59,7 +59,7 @@ export const AgreementStep = ({
           />
           <div>
             <Label htmlFor="backgroundCheck" className="text-sm font-normal">
-              I consent to a background check as part of the application process <span className="text-red-500">*</span>
+              I have no criminal record <span className="text-red-500">*</span>
             </Label>
           </div>
         </div>

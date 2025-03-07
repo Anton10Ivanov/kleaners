@@ -1,7 +1,6 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Steps, Step } from '@/components/ui/steps';
 import { UserPlus, FileText, CheckCheck, CheckCircle } from 'lucide-react';
 import { PersonalInfoStep } from '@/components/provider/application/PersonalInfoStep';
@@ -112,7 +111,6 @@ export const ApplicationForm = ({
           <DocumentsStep
             handleFileChange={handleFileChange}
             resume={resume}
-            identificationDoc={identificationDoc}
             backgroundCheckConsent={backgroundCheckConsent}
           />
         );
@@ -142,8 +140,8 @@ export const ApplicationForm = ({
             skills={skills}
             availability={availability}
             resume={resume}
-            identificationDoc={identificationDoc}
             backgroundCheckConsent={backgroundCheckConsent}
+            hasCriminalRecord={!agreeToBackgroundCheck}
           />
         );
     }
@@ -154,7 +152,6 @@ export const ApplicationForm = ({
       <CardHeader>
         <CardTitle>Provider Application</CardTitle>
         <CardDescription>Step {currentStep + 1} of 5</CardDescription>
-        <Progress value={formProgress} className="h-2 mt-2" />
       </CardHeader>
       
       <div className="px-6 pt-2 pb-4">
@@ -181,7 +178,7 @@ export const ApplicationForm = ({
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={isLoading}
+          disabled={isLoading || (currentStep === ApplicationStep.AGREEMENT && (!agreeToTerms || !agreeToBackgroundCheck))}
         >
           {isLoading ? "Submitting..." : 
             currentStep === ApplicationStep.CONFIRMATION ? "Submit Application" : "Next Step"}
