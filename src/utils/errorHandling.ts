@@ -2,6 +2,7 @@
 import { toast } from 'sonner';
 import { FieldValues, FieldErrors } from 'react-hook-form';
 import { ErrorSeverity } from '@/schemas/booking';
+import { boolToString } from './typeUtils';
 
 /**
  * Display form errors as toast notifications
@@ -19,15 +20,6 @@ export const displayFormErrors = <T extends FieldValues>(errors: FieldErrors<T>)
       toast.error(message);
     }
   });
-};
-
-/**
- * Helper to ensure boolean is converted to string for API calls
- * @param value - The boolean value to convert
- * @returns - "true" or "false" string
- */
-export const boolToString = (value: boolean): string => {
-  return value ? "true" : "false";
 };
 
 /**
