@@ -11,7 +11,7 @@ export enum Service {
 export enum Frequency {
   OneTime = "oneTime",
   Weekly = "weekly",
-  BiWeekly = "biWeekly",
+  BiWeekly = "biWeekly", // Keep this consistent (BiWeekly not Biweekly)
   Monthly = "monthly",
   Custom = "custom"
 }
@@ -43,7 +43,6 @@ export enum ErrorSeverity {
   MEDIUM = "medium",
   HIGH = "high",
   CRITICAL = "critical",
-  // Additional values needed by other components
   INFO = "info",
   WARNING = "warning",
   ERROR = "error"
@@ -109,3 +108,23 @@ export const bookingSchema = z.object({
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
+
+// Add new schemas for better typing of booking filters and status updates
+export const bookingFilterSchema = z.object({
+  status: z.string().optional(),
+  searchTerm: z.string().optional(),
+  dateFrom: z.date().optional(),
+  dateTo: z.date().optional(),
+  providerId: z.string().optional(),
+});
+
+export type BookingFilterParams = z.infer<typeof bookingFilterSchema>;
+
+export const bookingStatusUpdateSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  providerId: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+export type BookingStatusUpdate = z.infer<typeof bookingStatusUpdateSchema>;

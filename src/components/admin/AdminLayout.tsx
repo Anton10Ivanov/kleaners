@@ -14,7 +14,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Separator } from '@/components/ui/separator';
-import { handleApiError, boolToString } from '@/utils/errorHandling';
+import { handleApiError } from '@/utils/errorHandling';
+import { boolToString } from '@/utils/typeUtils';
 import { ErrorSeverity } from '@/schemas/booking';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 

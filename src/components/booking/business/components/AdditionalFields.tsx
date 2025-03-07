@@ -1,6 +1,6 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from "@/schemas/booking";
+import { BookingFormData, Frequency } from "@/schemas/booking";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,9 +27,9 @@ export const AdditionalFields = ({ form, businessType }: AdditionalFieldsProps) 
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="bi_weekly">Bi-weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
+                <SelectItem value={Frequency.BiWeekly}>Bi-weekly</SelectItem>
+                <SelectItem value={Frequency.Monthly}>Monthly</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
