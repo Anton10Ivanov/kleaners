@@ -1,103 +1,96 @@
 
-import { UseFormReturn } from "react-hook-form";
-import { BookingFormData, Frequency } from "@/schemas/booking";
-import { FormField } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { UseFormReturn } from "react-hook-form";
+import { BookingFormData } from "@/schemas/booking";
+import { Badge } from "@/components/ui/badge";
 
 interface DaySelectorProps {
   form: UseFormReturn<BookingFormData>;
-  days: string[];
-  selectedDays: string[];
-  frequency: Frequency;
-  onDaySelect: (day: string) => void;
 }
 
-export const DaySelector = ({ form, days, selectedDays, frequency, onDaySelect }: DaySelectorProps) => {
-  const isWeekly = frequency === Frequency.Weekly;
-  const isCustom = frequency === Frequency.Custom;
+export function DaySelector({ form }: DaySelectorProps) {
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const selectedDates = form.watch("selectedDates") || [];
 
-  if (isWeekly) {
-    return (
-      <FormField
-        control={form.control}
-        name="selectedDays"
-        render={() => (
-          <Select
-            value={selectedDays[0]}
-            onValueChange={(day) => onDaySelect(day)}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a day" />
-            </SelectTrigger>
-            <SelectContent>
-              {days.map((day) => (
-                <SelectItem key={day} value={day}>{day}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      />
+  const handleSelect = (day: Date | undefined) => {
+    if (!day) return;
+    
+    setDate(day);
+    
+    // Check if date already exists in the array
+    const dateExists = selectedDates.some(
+      (d) => format(d, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
     );
-  }
+    
+    // If date exists, remove it, otherwise add it
+    if (dateExists) {
+      const newDates = selectedDates.filter(
+        (d) => format(d, 'yyyy-MM-dd') !== format(day, 'yyyy-MM-dd')
+      );
+      form.setValue("selectedDates", newDates);
+    } else {
+      form.setValue("selectedDates", [...selectedDates, day]);
+    }
+  };
 
-  if (isCustom) {
-    return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {days.map((day) => {
-          const isSelected = selectedDays.includes(day);
-          return (
-            <Button
-              key={day}
-              type="button"
-              variant={isSelected ? "default" : "outline"}
-              className={`h-12 flex items-center justify-between gap-2 transition-all ${
-                isSelected ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"
-              }`}
-              onClick={() => onDaySelect(day)}
-            >
-              <span>{day}</span>
-              {isSelected && <Check className="h-4 w-4" />}
-            </Button>
-          );
-        })}
-      </div>
+  const isSelected = (day: Date) => {
+    return selectedDates.some(
+      (d) => format(d, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
     );
-  }
+  };
+
+  const clearSelection = () => {
+    form.setValue("selectedDates", []);
+    setDate(undefined);
+  };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {days.map((day) => (
-        <FormField
-          key={day}
-          control={form.control}
-          name="selectedDays"
-          render={() => (
-            <Select
-              value={selectedDays.includes(day) ? day : undefined}
-              onValueChange={() => onDaySelect(day)}
+    <Card className="border-0 shadow-sm">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium">Select Cleaning Days</h3>
+          {selectedDates.length > 0 && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={clearSelection}
             >
-              <SelectTrigger
-                className={`w-full ${selectedDays.includes(day) ? 'border-primary' : ''}`}
-              >
-                <SelectValue placeholder={day} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={day}>{day}</SelectItem>
-              </SelectContent>
-            </Select>
+              Clear Selection
+            </Button>
           )}
-        />
-      ))}
-    </div>
+        </div>
+        
+        <div className="flex flex-col items-center space-y-4">
+          <Calendar
+            mode="multiple"
+            selected={selectedDates}
+            onSelect={(days) => {
+              if (Array.isArray(days)) {
+                form.setValue("selectedDates", days);
+              }
+            }}
+            className="rounded-md border"
+            disabled={{ before: new Date() }}
+          />
+          
+          {selectedDates.length > 0 && (
+            <div className="w-full">
+              <p className="text-sm text-muted-foreground mb-2">Selected days ({selectedDates.length}):</p>
+              <div className="flex flex-wrap gap-2">
+                {selectedDates.map((date, idx) => (
+                  <Badge key={idx} variant="outline">
+                    {format(date, 'MMM dd, yyyy')}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
-};
-
+}

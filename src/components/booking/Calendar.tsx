@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { DatePicker } from "@/components/booking/calendar/DatePicker";
 import { TimeSlots } from "@/components/booking/calendar/TimeSlots";
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from "@/schemas/booking";
+import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -76,10 +76,11 @@ const Calendar = ({
         setAvailableProviders(available);
         
         if (available.length > 0) {
-          form.setValue('providerOptions', available.map(p => ({
+          const providerOptions: ProviderOption[] = available.map(p => ({
             id: p.id,
             name: `${p.first_name} ${p.last_name}`
-          })));
+          }));
+          form.setValue('providerOptions', providerOptions);
         } else {
           form.setValue('providerOptions', []);
         }
@@ -105,7 +106,9 @@ const Calendar = ({
     form.setValue('preferredTime', timeSlot);
     
     try {
-      await addToGoogleCalendar(date, form.watch('service') || "Regular Cleaning", form.watch('hours') || 2, form.watch('address') || "Address will be provided");
+      const service = form.watch('service');
+      const serviceString = service ? String(service) : "Regular Cleaning";
+      await addToGoogleCalendar(date, serviceString, hours, "Address will be provided");
       toast.success("Event added to Google Calendar!");
     } catch (error) {
       console.error("Failed to add event to Google Calendar:", error);

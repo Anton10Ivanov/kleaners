@@ -19,7 +19,7 @@ export const useBookingForm = () => {
       bathrooms: 1,
       extras: [],
       businessType: undefined,
-      selectedDays: [],
+      selectedDates: [],
       timeSlots: {},
       cleaningOptions: [],
       propertySize: undefined,
@@ -36,7 +36,7 @@ export const useBookingForm = () => {
     if (currentStep === 2 && 
         watch('service') === 'business' && 
         watch('frequency') === Frequency.Custom && 
-        (watch('selectedDays')?.length || 0) < 2) {
+        (watch('selectedDates')?.length || 0) < 2) {
       toast.error("Please select at least 2 days for custom schedule before proceeding");
       return;
     }

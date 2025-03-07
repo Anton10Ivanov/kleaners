@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../../types/database';
 import { handleError } from '../../utils/errorHandling';
@@ -21,7 +22,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
     // Add global error handling for all Supabase requests
     fetch: (url, options) => {
       return fetch(url, options).catch(error => {
-        handleError(error, "Network request failed", false);
+        handleError(error, "Network request failed", "high");
         throw error;
       });
     }
@@ -57,7 +58,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
       
     if (adminRolesError) {
       console.error("Error checking admin roles:", adminRolesError);
-      handleError(adminRolesError, 'Failed to check admin role', false);
+      handleError(adminRolesError, 'Failed to check admin role', "high");
     }
     
     const roles: UserRole[] = [];
@@ -81,7 +82,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
       .maybeSingle();
       
     if (providerError) {
-      handleError(providerError, 'Failed to check provider role', false);
+      handleError(providerError, 'Failed to check provider role', "medium");
     }
     
     if (providerData) {
@@ -96,7 +97,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
       .maybeSingle();
       
     if (clientError) {
-      handleError(clientError, 'Failed to check client role', false);
+      handleError(clientError, 'Failed to check client role', "medium");
     }
     
     if (clientData) {
@@ -111,7 +112,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
     return roles;
   } catch (error) {
     console.error("Error in getUserRoles:", error);
-    handleError(error, 'Failed to get user roles', false);
+    handleError(error, 'Failed to get user roles', "high");
     return [];
   }
 }
@@ -144,7 +145,7 @@ export async function fetchData<T>(
     
     return data as T[];
   } catch (error) {
-    handleError(error, `Failed to fetch data from ${tableName}`, false);
+    handleError(error, `Failed to fetch data from ${tableName}`, "medium");
     return [];
   }
 }
@@ -168,7 +169,7 @@ export async function getRecordById<T>(
     
     return data as T;
   } catch (error) {
-    handleError(error, `Failed to get ${tableName} record with ID ${id}`, false);
+    handleError(error, `Failed to get ${tableName} record with ID ${id}`, "medium");
     return null;
   }
 }
@@ -193,7 +194,7 @@ export async function insertRecord<T>(
     
     return data as T;
   } catch (error) {
-    handleError(error, `Failed to insert record in ${tableName}`, false);
+    handleError(error, `Failed to insert record in ${tableName}`, "high");
     return null;
   }
 }
@@ -220,7 +221,7 @@ export async function updateRecord<T>(
     
     return data as T;
   } catch (error) {
-    handleError(error, `Failed to update record in ${tableName}`, false);
+    handleError(error, `Failed to update record in ${tableName}`, "medium");
     return null;
   }
 }
@@ -244,7 +245,7 @@ export async function deleteRecord(
     
     return true;
   } catch (error) {
-    handleError(error, `Failed to delete record from ${tableName}`, false);
+    handleError(error, `Failed to delete record from ${tableName}`, "medium");
     return false;
   }
 }

@@ -15,15 +15,15 @@ interface FrequencyTimeSelectorProps {
 
 export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
   const frequency = form.watch("frequency");
-  const weekdayPreference = form.watch("weekdayPreference");
-  const timePreference = form.watch("timePreference");
+  const weekdayPreference = form.watch("weekdayPreference") as string | undefined;
+  const timePreference = form.watch("timePreference") as string | undefined;
   
   const [showAdditionalOptions, setShowAdditionalOptions] = useState(false);
 
   useEffect(() => {
     // Show additional options only for recurring frequencies
     if (frequency === Frequency.Weekly || 
-        frequency === Frequency.Biweekly || 
+        frequency === Frequency.BiWeekly || 
         frequency === Frequency.Monthly) {
       setShowAdditionalOptions(true);
     } else {
@@ -71,7 +71,7 @@ export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
           <SelectContent>
             <SelectItem value={Frequency.OneTime}>One-time cleaning</SelectItem>
             <SelectItem value={Frequency.Weekly}>Weekly</SelectItem>
-            <SelectItem value={Frequency.Biweekly}>Bi-weekly</SelectItem>
+            <SelectItem value={Frequency.BiWeekly}>Bi-weekly</SelectItem>
             <SelectItem value={Frequency.Monthly}>Monthly</SelectItem>
           </SelectContent>
         </Select>
