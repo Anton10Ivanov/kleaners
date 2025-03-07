@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useMockApi } from '@/hooks/useMockApi';
 
 /**
  * DevTools component provides development utilities and debugging tools
@@ -12,6 +12,7 @@ export function DevTools() {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const { isAvailable: isMockApiAvailable, isEnabled: isMockApiEnabled, toggleMockApi } = useMockApi();
   
   // Hide in production
   if (import.meta.env.PROD) return null;
@@ -123,6 +124,21 @@ export function DevTools() {
                 New UI
               </button>
               
+              {/* New Mock API toggle */}
+              {isMockApiAvailable && (
+                <button 
+                  className={cn(
+                    "px-2 py-1 rounded text-xs",
+                    isMockApiEnabled
+                      ? "bg-blue-600" 
+                      : "bg-slate-700"
+                  )}
+                  onClick={toggleMockApi}
+                >
+                  {isMockApiEnabled ? "Disable" : "Enable"} Mock API
+                </button>
+              )}
+              
               <button 
                 className="px-2 py-1 rounded text-xs bg-slate-700"
                 onClick={() => {
@@ -160,6 +176,12 @@ export function DevTools() {
                 <span>Build Time:</span>
                 <span className="font-mono">{import.meta.env.VITE_BUILD_TIME || 'N/A'}</span>
               </div>
+              {isMockApiAvailable && (
+                <div className="flex justify-between">
+                  <span>Mock API:</span>
+                  <span className="font-mono">{isMockApiEnabled ? 'Enabled' : 'Disabled'}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
