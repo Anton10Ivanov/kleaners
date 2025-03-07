@@ -1,30 +1,30 @@
 
-import { useEffect, useRef } from 'react';
+import { RefObject, useEffect } from 'react';
 
-/**
- * Hook that alerts when you click outside of the passed ref
- */
+type Handler = (event: MouseEvent | TouchEvent) => void;
+
 export function useClickAway<T extends HTMLElement = HTMLElement>(
-  callback: () => void
-) {
-  const ref = useRef<T>(null);
-
+  ref: RefObject<T>,
+  handler: Handler
+): void {
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
+    const listener = (event: MouseEvent | TouchEvent) => {
+      const el = ref.current;
+      
+      // Do nothing if clicking ref's element or descendent elements
+      if (!el || el.contains(event.target as Node)) {
+        return;
       }
-    }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside);
+      
+      handler(event);
     };
-  }, [callback]);
-
-  return ref;
+    
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+    
+    return () => {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler]);
 }
-
-export default useClickAway;
