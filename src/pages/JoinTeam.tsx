@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 const JoinTeam = () => {
   const [name, setName] = useState('');
@@ -18,23 +20,71 @@ const JoinTeam = () => {
   const [message, setMessage] = useState('');
   const [resume, setResume] = useState<File | null>(null);
   const [availability, setAvailability] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    toast({
-      title: "Application Submitted",
-      description: "We'll review your application and get back to you soon!",
-    });
-    setName('');
-    setEmail('');
-    setPhone('');
-    setPosition('');
-    setExperience('');
-    setMessage('');
-    setResume(null);
-    setAvailability([]);
+    setIsLoading(true);
+    
+    try {
+      // Create provider application record
+      const { data, error } = await supabase
+        .from('provider_applications')
+        .insert({
+          full_name: name,
+          email: email,
+          phone: phone,
+          position: position,
+          experience_level: experience,
+          availability: availability,
+          message: message,
+          // We'll handle file upload separately
+        })
+        .select('id')
+        .single();
+      
+      if (error) throw error;
+
+      // Handle resume upload if provided
+      if (resume && data?.id) {
+        const fileExt = resume.name.split('.').pop();
+        const filePath = `provider_applications/${data.id}/${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('applications')
+          .upload(filePath, resume);
+          
+        if (uploadError) {
+          console.error('Resume upload error:', uploadError);
+          // We don't throw here to avoid breaking the flow
+        } else {
+          // Update the record with the resume path
+          await supabase
+            .from('provider_applications')
+            .update({ resume_path: filePath })
+            .eq('id', data.id);
+        }
+      }
+      
+      toast({
+        title: "Application Submitted",
+        description: "We'll review your application and get back to you soon!",
+      });
+      
+      // Redirect to provider signup page with email prefilled
+      navigate(`/auth/signup?type=provider&email=${encodeURIComponent(email)}`);
+    } catch (error) {
+      console.error('Application submission error:', error);
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description: "There was a problem submitting your application. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +99,10 @@ const JoinTeam = () => {
         ? current.filter(day => day !== value)
         : [...current, value]
     );
+  };
+
+  const goToProviderSignup = () => {
+    navigate('/auth/signup?type=provider');
   };
 
   return (
@@ -178,11 +232,27 @@ const JoinTeam = () => {
                   />
                 </div>
                 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-                  Submit Application
+                <Button 
+                  type="submit" 
+                  className="w-full bg-primary hover:bg-primary/90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Submitting..." : "Submit Application"}
                 </Button>
               </form>
             </CardContent>
+            <CardFooter className="flex justify-center pt-2 pb-4">
+              <p className="text-sm text-gray-500">
+                Already have a provider account?{" "}
+                <Button 
+                  variant="link" 
+                  className="h-auto p-0"
+                  onClick={() => navigate('/auth/login')}
+                >
+                  Sign in
+                </Button>
+              </p>
+            </CardFooter>
           </Card>
 
           <Card className="border-0 shadow-md md:col-span-2">
@@ -215,11 +285,16 @@ const JoinTeam = () => {
                   Join a friendly, diverse, and supportive work environment.
                 </p>
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Contact Us</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  If you have any questions about available positions, please email us at:
-                  <a href="mailto:careers@cleaningservice.com" className="text-primary block mt-1">careers@cleaningservice.com</a>
+              <div className="pt-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full border-primary text-primary hover:bg-primary/10"
+                  onClick={goToProviderSignup}
+                >
+                  Skip to Provider Registration
+                </Button>
+                <p className="text-xs text-center mt-2 text-gray-500">
+                  If you're already qualified and want to register directly
                 </p>
               </div>
             </CardContent>
