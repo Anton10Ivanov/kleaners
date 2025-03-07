@@ -9,7 +9,7 @@ export const useBookingForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
   const form = useForm<BookingFormData>({
-    resolver: zodResolver(bookingSchema),
+    resolver: zodResolver(bookingSchema) as any, // Type assertion to bypass complex type resolution
     defaultValues: {
       service: undefined,
       postalCode: '',
