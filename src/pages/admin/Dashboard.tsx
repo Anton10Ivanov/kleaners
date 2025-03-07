@@ -2,9 +2,9 @@
 import React from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useAdminDashboard } from '@/hooks/admin/useAdminDashboard';
-import DashboardHeader from '@/components/admin/dashboard/DashboardHeader';
-import StatCards from '@/components/admin/dashboard/StatCards';
-import BookingTrends from '@/components/admin/dashboard/BookingTrends';
+import { DashboardHeader } from '@/components/admin/dashboard/DashboardHeader';
+import { StatCards } from '@/components/admin/dashboard/StatCards';
+import { BookingTrends } from '@/components/admin/dashboard/BookingTrends';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,6 +12,7 @@ import { RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
   useTitle("Admin Dashboard");
+  const { isLoading, userName, stats, sampleBookingData, handleRefresh } = useAdminDashboard();
 
   // Error fallback component
   const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => (
@@ -27,9 +28,20 @@ const Dashboard = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <div className="space-y-4 p-4 md:p-8">
-        <DashboardHeader />
-        <StatCards />
-        <BookingTrends />
+        <DashboardHeader 
+          userName={userName}
+          isLoading={isLoading}
+          onRefresh={handleRefresh}
+          isMobile={window.innerWidth < 768}
+        />
+        <StatCards 
+          isLoading={isLoading}
+          stats={stats}
+        />
+        <BookingTrends 
+          isLoading={isLoading}
+          data={sampleBookingData}
+        />
       </div>
     </ErrorBoundary>
   );
