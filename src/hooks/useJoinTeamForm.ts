@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -57,10 +56,8 @@ export const useJoinTeamForm = () => {
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
   const [applicationId, setApplicationId] = useState('');
   
-  // Calculate form progress percentage
   const formProgress = ((currentStep + 1) / 5) * 100;
   
-  // Initialize the form
   const form = useForm<JoinTeamFormData>({
     resolver: zodResolver(joinTeamSchema),
     defaultValues: {
@@ -79,28 +76,24 @@ export const useJoinTeamForm = () => {
     },
   });
   
-  // Move to next step
   const nextStep = () => {
     if (currentStep < ApplicationStep.CONFIRMATION) {
       setCurrentStep(prev => prev + 1);
     }
   };
   
-  // Move to previous step
   const prevStep = () => {
     if (currentStep > ApplicationStep.PERSONAL_INFO) {
       setCurrentStep(prev => prev - 1);
     }
   };
   
-  // Handle file change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => {
     if (e.target.files && e.target.files[0]) {
       setter(e.target.files[0]);
     }
   };
   
-  // Toggle availability days
   const toggleAvailability = (day: string) => {
     setAvailability(prev => 
       prev.includes(day) 
@@ -109,7 +102,6 @@ export const useJoinTeamForm = () => {
     );
   };
   
-  // Toggle skills
   const toggleSkill = (skill: string) => {
     setSkills(prev => 
       prev.includes(skill) 
@@ -118,31 +110,28 @@ export const useJoinTeamForm = () => {
     );
   };
 
-  // Form submission handler
   const onSubmit = async (data: JoinTeamFormData) => {
     setIsSubmitting(true);
     try {
       console.log('Form data submitted:', data);
       
-      // Convert booleans to strings for the log
       const formattedData = {
         ...data,
         hasOwnTransportation: data.hasOwnTransportation ? 'Yes' : 'No',
         hasOwnEquipment: data.hasOwnEquipment ? 'Yes' : 'No',
         hasCleaningCertificates: data.hasCleaningCertificates ? 'Yes' : 'No',
-        hasCriminalRecord: !agreeToBackgroundCheck ? 'Yes' : 'No', // Inverse of "I have no criminal record"
+        hasCriminalRecord: !agreeToBackgroundCheck ? 'Yes' : 'No',
+        employmentType: availability.filter(item => ['vollzeit', 'midijob', 'minijob'].includes(item)).join(', '),
+        workDays: availability.filter(item => !['vollzeit', 'midijob', 'minijob'].includes(item)).join(', ')
       };
       
       console.log('Formatted form data:', formattedData);
       
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Set application submitted state
       setApplicationSubmitted(true);
       setApplicationId(Math.random().toString(36).substring(2, 10));
       
-      // Show success message
       toast.success('Your application has been submitted successfully!');
       setIsSubmitSuccessful(true);
       form.reset();
@@ -154,10 +143,8 @@ export const useJoinTeamForm = () => {
     }
   };
   
-  // Handle form submission based on current step
   const handleSubmit = () => {
     if (currentStep === ApplicationStep.CONFIRMATION) {
-      // Submit the form on the final step
       onSubmit({
         firstName: name.split(' ')[0] || '',
         lastName: name.split(' ').slice(1).join(' ') || '',
@@ -168,12 +155,11 @@ export const useJoinTeamForm = () => {
         hasOwnTransportation: true,
         hasOwnEquipment: true,
         hasCleaningCertificates: false,
-        hasCriminalRecord: !agreeToBackgroundCheck, // Inverse of "I have no criminal record"
+        hasCriminalRecord: !agreeToBackgroundCheck,
         message,
         agreeToTerms,
       });
     } else {
-      // Move to next step
       nextStep();
     }
   };
@@ -183,7 +169,6 @@ export const useJoinTeamForm = () => {
     isSubmitting,
     isSubmitSuccessful,
     onSubmit: form.handleSubmit(onSubmit),
-    // Add all the new properties
     currentStep,
     formProgress,
     name,
