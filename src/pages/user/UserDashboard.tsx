@@ -1,14 +1,9 @@
 
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Calendar, Clock, Package, AlertCircle } from "lucide-react";
 import type { User } from "@/types/supabase";
-
-interface UserContextType {
-  user: User;
-}
 
 type UserBookingSummary = {
   total: number;
@@ -18,7 +13,6 @@ type UserBookingSummary = {
 }
 
 const UserDashboard = () => {
-  const { user } = useOutletContext<UserContextType>();
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState<any>(null);
   const [bookingSummary, setBookingSummary] = useState<UserBookingSummary>({
@@ -31,6 +25,14 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+
         // Fetch customer data
         const { data: customerData, error: customerError } = await supabase
           .from('customers')
@@ -70,10 +72,8 @@ const UserDashboard = () => {
       }
     };
 
-    if (user) {
-      fetchData();
-    }
-  }, [user]);
+    fetchData();
+  }, []);
 
   if (loading) {
     return (
@@ -84,7 +84,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl md:text-3xl font-bold">Welcome back, {customer?.first_name || 'there'}!</h1>
         <p className="text-muted-foreground">Here's an overview of your cleaning services.</p>
