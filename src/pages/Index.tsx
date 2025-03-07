@@ -34,8 +34,9 @@ const Index = () => {
   const selectedExtras = watch('extras') || [];
   const postalCode = watch('postalCode') || '';
 
+  // Use the proper enum comparison
   const currentPrice = frequency === Frequency.Weekly ? 27 : 
-                      frequency === Frequency.Biweekly ? 30 : 35;
+                       frequency === Frequency.Biweekly ? 30 : 35;
 
   const handleNext = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

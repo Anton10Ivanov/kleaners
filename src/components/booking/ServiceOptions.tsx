@@ -25,7 +25,8 @@ const ServiceOptions = ({
     }
   }, [frequency, setFrequency]);
   
-  return <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-6">
         <h3 className="text-xl text-center text-zinc-900 font-normal">Cleaning interval</h3>
         <Select value={frequency} onValueChange={(value: Frequency) => setFrequency(value)}>
@@ -43,7 +44,9 @@ const ServiceOptions = ({
 
       <div className="flex justify-center">
         <Popover>
-          <PopoverTrigger className="text-primary text-sm hover:underline">Show differences</PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="link" className="text-primary text-sm hover:underline">Show differences</Button>
+          </PopoverTrigger>
           <PopoverContent className="w-[300px] sm:w-[450px]" align="center">
             <Table>
               <TableHeader>
@@ -78,7 +81,8 @@ const ServiceOptions = ({
           </PopoverContent>
         </Popover>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default ServiceOptions;
