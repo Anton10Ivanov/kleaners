@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Bell, X, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,11 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
     { id: 3, text: 'Special discount: 20% off your next booking!', read: true, time: '3 days ago' },
   ]);
 
-  const ref = useClickAway<HTMLDivElement>(() => {
+  // Create a ref for the click away functionality
+  const ref = useRef<HTMLDivElement>(null);
+  
+  // Use the useClickAway hook correctly with the ref and callback
+  useClickAway(ref, () => {
     if (isOpen) onClose();
   });
 

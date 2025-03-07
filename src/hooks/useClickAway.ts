@@ -1,18 +1,20 @@
 
 import { RefObject, useEffect } from 'react';
 
-type Handler = (event: MouseEvent | TouchEvent) => void;
-
-export function useClickAway<T extends HTMLElement = HTMLElement>(
+/**
+ * A hook that handles click outside of the specified element
+ * 
+ * @param ref - The ref object for the element to detect clicks outside of
+ * @param handler - The callback function to be called when a click outside occurs
+ */
+export function useClickAway<T extends HTMLElement>(
   ref: RefObject<T>,
-  handler: Handler
+  handler: (event: MouseEvent | TouchEvent) => void
 ): void {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
-      const el = ref.current;
-      
       // Do nothing if clicking ref's element or descendent elements
-      if (!el || el.contains(event.target as Node)) {
+      if (!ref.current || ref.current.contains(event.target as Node)) {
         return;
       }
       
