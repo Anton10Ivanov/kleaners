@@ -24,6 +24,7 @@ export const useBookingForm = () => {
       cleaningOptions: [],
       propertySize: undefined,
       specialRequirements: '',
+      providerOptions: [],
     }
   });
 
