@@ -10,70 +10,130 @@ interface PersonalInfoFormValues {
   phone: string;
 }
 
+// Updated interface to support both form-based and direct state-based usage
 interface PersonalInfoStepProps {
-  form: UseFormReturn<PersonalInfoFormValues>;
+  form?: UseFormReturn<PersonalInfoFormValues>;
+  // Direct state props for JoinTeam.tsx
+  name?: string;
+  email?: string;
+  phone?: string;
+  setName?: React.Dispatch<React.SetStateAction<string>>;
+  setEmail?: React.Dispatch<React.SetStateAction<string>>;
+  setPhone?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const PersonalInfoStep = ({ form }: PersonalInfoStepProps) => {
-  const { control } = form;
-
+export const PersonalInfoStep = ({ 
+  form, 
+  name, 
+  email, 
+  phone, 
+  setName, 
+  setEmail, 
+  setPhone 
+}: PersonalInfoStepProps) => {
+  // If using react-hook-form
+  if (form) {
+    const { control } = form;
+    
+    return (
+      <div className="space-y-4">
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="space-y-2">
+              <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Your full name"
+                  required
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="Your email"
+                    required
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="Your phone number"
+                    required
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+    );
+  }
+  
+  // If using direct state management (for JoinTeam.tsx)
   return (
     <div className="space-y-4">
-      <FormField
-        control={control}
-        name="name"
-        render={({ field }) => (
-          <FormItem className="space-y-2">
-            <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Your full name"
-                required
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="space-y-2">
+        <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e) => setName?.(e.target.value)}
+          placeholder="Your full name"
+          required
+        />
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="space-y-2">
-              <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="email"
-                  placeholder="Your email"
-                  required
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem className="space-y-2">
-              <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="tel"
-                  placeholder="Your phone number"
-                  required
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="space-y-2">
+          <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail?.(e.target.value)}
+            placeholder="Your email"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
+          <Input
+            id="phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone?.(e.target.value)}
+            placeholder="Your phone number"
+            required
+          />
+        </div>
       </div>
     </div>
   );

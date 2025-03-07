@@ -1,16 +1,7 @@
 
 import { toast } from 'sonner';
 import { FieldValues, FieldErrors } from 'react-hook-form';
-
-/**
- * Error severity levels for enhanced error reporting
- */
-export enum ErrorSeverity {
-  INFO = 'info',
-  WARNING = 'warning',
-  ERROR = 'error',
-  CRITICAL = 'critical'
-}
+import { ErrorSeverity } from '@/schemas/booking';
 
 /**
  * Display form errors as toast notifications
