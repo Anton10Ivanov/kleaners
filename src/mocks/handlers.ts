@@ -69,7 +69,8 @@ export const handlers = [
 
   // Example: Mock auth API - login
   http.post('/api/auth/login', async ({ request }) => {
-    const { email, password } = await request.json()
+    const data = await request.json();
+    const { email, password } = data as { email: string; password: string };
     
     // Simple validation for demo purposes
     if (email === "demo@example.com" && password === "password") {
