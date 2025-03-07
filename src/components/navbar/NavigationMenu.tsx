@@ -1,40 +1,94 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { navigationData } from './navigationData';
+import { NotificationCenter } from '@/components/notifications/NotificationCenter';
+import { NavigationMenu as Nav } from "@/components/ui/navigation-menu";
+import { navigationLinks } from "./navigationData";
+import { AuthButtons } from "./AuthButtons";
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSelector } from "./LanguageSelector";
+import { useEffect, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { ShoppingCart } from "lucide-react";
 
-interface NavigationMenuProps {
-  className?: string;
-}
+export function NavigationMenu() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
+  const location = useLocation();
 
-export const NavigationMenu: React.FC<NavigationMenuProps> = ({ className }) => {
+  // Check if the user is logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        setIsLoggedIn(!!data.session);
+
+        // Fetch user data including user_type if logged in
+        if (data.session) {
+          const user = await supabase.auth.getUser();
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', user.data.user?.id)
+            .single();
+
+          if (profileData) {
+            setUserType(profileData.user_type);
+          }
+        }
+      } catch (error) {
+        console.error("Auth error:", error);
+      }
+    };
+
+    checkAuth();
+  }, [location.pathname]);
+
+  const renderDashboardButton = () => {
+    if (!isLoggedIn) return null;
+
+    // Determine dashboard URL based on user type
+    let dashboardUrl = '/user/dashboard'; // Default for clients
+    if (userType === 'provider') {
+      dashboardUrl = '/provider/dashboard';
+    } else if (userType === 'admin') {
+      dashboardUrl = '/admin';
+    }
+
+    return (
+      <Link to={dashboardUrl}>
+        <Button variant="outline" size="sm">
+          Dashboard
+        </Button>
+      </Link>
+    );
+  };
+
+  const showUtilityItems = !location.pathname.includes('/admin') && 
+                          !location.pathname.includes('/user') &&
+                          !location.pathname.includes('/provider');
+
   return (
-    <nav className={cn('hidden md:flex items-center justify-center space-x-4', className)}>
-      {navigationData.map((item) => (
-        <div key={item.title} className="relative group">
-          <Link
-            to={item.href}
-            className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors py-2 px-3 text-sm font-medium"
-          >
-            {item.title}
-          </Link>
+    <Nav className="flex items-center space-x-2">
+      {showUtilityItems && (
+        <>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/cart">
+              <ShoppingCart className="h-5 w-5" />
+            </Link>
+          </Button>
           
-          {item.children && (
-            <div className="absolute left-0 mt-1 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black dark:ring-gray-700 ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-              {item.children.map((child) => (
-                <Link
-                  key={child.title}
-                  to={child.href}
-                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  {child.title}
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-    </nav>
+          {isLoggedIn && <NotificationCenter />}
+          
+          <ThemeToggle />
+          
+          <LanguageSelector />
+        </>
+      )}
+      
+      {renderDashboardButton()}
+      
+      <AuthButtons isLoggedIn={isLoggedIn} userType={userType} />
+    </Nav>
   );
-};
+}

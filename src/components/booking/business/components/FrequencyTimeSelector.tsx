@@ -64,7 +64,7 @@ export const FrequencyTimeSelector = ({ form }: FrequencyTimeSelectorProps) => {
   // Add effect to trigger validation when form is submitted
   form.register('selectedDays', {
     validate: () => {
-      if (frequency === Frequency.Custom && (form.getValues('selectedDays')?.length || 0) < 2) {
+      if (frequency === Frequency.Custom && selectedDays.length < 2) {
         return "Please select at least 2 days for custom schedule";
       }
       return true;
