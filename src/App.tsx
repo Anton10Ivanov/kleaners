@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -9,6 +8,7 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
+import LayoutDemo from '@/pages/LayoutDemo';
 
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
@@ -61,6 +61,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
+          <Route path="/layout-demo" element={<LayoutDemo />} />
           
           {/* Auth Routes */}
           <Route path="/auth/login" element={<Login />} />

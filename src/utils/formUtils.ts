@@ -1,6 +1,6 @@
 
 import { z } from 'zod';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, Path, PathValue } from 'react-hook-form';
 
 /**
  * Validates and updates a form field
@@ -12,7 +12,7 @@ import { UseFormReturn } from 'react-hook-form';
  */
 export const validateAndUpdateField = async <T extends Record<string, any>>(
   form: UseFormReturn<T>,
-  fieldName: keyof T,
+  fieldName: Path<T>,
   schema: z.ZodType<any>,
   value: any
 ): Promise<boolean> => {
@@ -21,7 +21,7 @@ export const validateAndUpdateField = async <T extends Record<string, any>>(
     await schema.parseAsync(value);
     
     // If valid, update the form value
-    form.setValue(fieldName as string, value, {
+    form.setValue(fieldName, value as PathValue<T, Path<T>>, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -32,7 +32,7 @@ export const validateAndUpdateField = async <T extends Record<string, any>>(
     // If validation fails, set the error
     if (error instanceof z.ZodError) {
       const fieldError = error.errors[0]?.message || 'Invalid value';
-      form.setError(fieldName as string, {
+      form.setError(fieldName, {
         type: 'manual',
         message: fieldError,
       });
