@@ -1,211 +1,142 @@
-
-import { useState, useCallback } from 'react';
-import { handleError } from './errorHandling';
-import { logger } from './logging';
-
-interface FormSubmissionOptions<T> {
-  /**
-   * The function to call when the form is submitted
-   */
-  onSubmit: (data: T) => Promise<any>;
-  
-  /**
-   * A callback to run before submitting the form
-   */
-  onBeforeSubmit?: (data: T) => T | Promise<T>;
-  
-  /**
-   * A callback to run after the form is submitted successfully
-   */
-  onSuccess?: (result: any, data: T) => void;
-  
-  /**
-   * A callback to run when the form submission fails
-   */
-  onError?: (error: unknown, data: T) => void;
-  
-  /**
-   * The component name for logging purposes
-   */
-  component?: string;
-  
-  /**
-   * Whether to show a toast notification on success
-   */
-  showSuccessToast?: boolean;
-  
-  /**
-   * Whether to show a toast notification on error
-   */
-  showErrorToast?: boolean;
-  
-  /**
-   * The success message to show in the toast
-   */
-  successMessage?: string;
-  
-  /**
-   * The error message to show in the toast
-   */
-  errorMessage?: string;
-}
+import { toast } from 'sonner';
+import { ErrorSeverity } from '@/schemas/booking';
 
 /**
- * A hook for handling form submissions with loading state and error handling
+ * Handles form submission errors and displays appropriate messages
+ * @param error - The error object
+ * @param fallbackMessage - Optional fallback message if error doesn't have one
+ * @param showToast - Whether to show a toast notification
  */
-export function useFormSubmission<T>({
-  onSubmit,
-  onBeforeSubmit,
-  onSuccess,
-  onError,
-  component,
-  showSuccessToast = true,
-  showErrorToast = true,
-  successMessage = 'Form submitted successfully',
-  errorMessage = 'There was an error submitting the form'
-}: FormSubmissionOptions<T>) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<unknown>(null);
+export const handleFormSubmissionError = (
+  error: unknown, 
+  fallbackMessage = 'An error occurred while submitting the form. Please try again.',
+  showToast = true
+) => {
+  console.error('Form submission error:', error);
   
-  const handleSubmit = useCallback(
-    async (data: T) => {
-      try {
-        setIsSubmitting(true);
-        setError(null);
-        
-        // Process data before submission if needed
-        let processedData = data;
-        if (onBeforeSubmit) {
-          processedData = await onBeforeSubmit(data);
-        }
-        
-        // Log the submission attempt
-        logger.info('Form submission started', { component });
-        
-        // Submit the form
-        const result = await onSubmit(processedData);
-        
-        // Handle success
-        setIsSuccess(true);
-        
-        // Log the successful submission
-        logger.info('Form submission successful', { component });
-        
-        // Call the success callback
-        if (onSuccess) {
-          onSuccess(result, processedData);
-        }
-        
-        return result;
-      } catch (err) {
-        // Handle error
-        setError(err);
-        
-        // Log the error
-        handleError(
-          err,
-          errorMessage,
-          showErrorToast,
-          { component }
-        );
-        
-        // Call the error callback
-        if (onError) {
-          onError(err, data);
-        }
-        
-        throw err;
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [
-      onBeforeSubmit,
-      onSubmit,
-      onSuccess,
-      onError,
-      component,
-      showErrorToast,
-      errorMessage
-    ]
-  );
+  let errorMessage = fallbackMessage;
   
-  const reset = useCallback(() => {
-    setIsSubmitting(false);
-    setIsSuccess(false);
-    setError(null);
-  }, []);
+  if (typeof error === 'object' && error !== null) {
+    const anyError = error as any;
+    
+    if (anyError.message) {
+      errorMessage = anyError.message;
+    } else if (anyError.error?.message) {
+      errorMessage = anyError.error.message;
+    }
+  }
+  
+  if (showToast) {
+    toast.error(errorMessage);
+  }
+  
+  return errorMessage;
+};
+
+/**
+ * Validates form data before submission
+ * @param data - The form data to validate
+ * @param requiredFields - Array of field names that are required
+ * @returns Object with isValid flag and any error messages
+ */
+export const validateFormData = (data: Record<string, any>, requiredFields: string[]) => {
+  const errors: Record<string, string> = {};
+  
+  for (const field of requiredFields) {
+    const value = data[field];
+    
+    if (value === undefined || value === null || value === '') {
+      errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')} is required`;
+    }
+  }
   
   return {
-    handleSubmit,
-    isSubmitting,
-    isSuccess,
-    error,
-    reset
+    isValid: Object.keys(errors).length === 0,
+    errors
   };
-}
+};
 
 /**
- * Creates a debounced function that delays invoking the provided function
- * until after the specified wait time has elapsed since the last time it was invoked.
- * @param func The function to debounce
- * @param wait The number of milliseconds to delay
- * @returns A debounced version of the provided function
+ * Formats form data for API submission
+ * @param data - The raw form data
+ * @param fieldMappings - Optional mappings from form field names to API field names
+ * @returns Formatted data ready for API submission
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+export const formatFormDataForSubmission = (
+  data: Record<string, any>,
+  fieldMappings?: Record<string, string>
+) => {
+  const formattedData: Record<string, any> = {};
   
-  return function(this: any, ...args: Parameters<T>) {
-    const context = this;
-    
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-    }
-    
-    timeoutId = setTimeout(() => {
-      func.apply(context, args);
-      timeoutId = null;
-    }, wait);
-  };
-}
+  // Apply field mappings if provided
+  if (fieldMappings) {
+    Object.entries(data).forEach(([key, value]) => {
+      const apiFieldName = fieldMappings[key] || key;
+      formattedData[apiFieldName] = value;
+    });
+  } else {
+    // Convert camelCase to snake_case for API
+    Object.entries(data).forEach(([key, value]) => {
+      const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+      formattedData[snakeCaseKey] = value;
+    });
+  }
+  
+  return formattedData;
+};
 
 /**
- * Creates a throttled function that only invokes the provided function
- * at most once per every wait milliseconds.
- * @param func The function to throttle
- * @param wait The number of milliseconds to throttle invocations to
- * @returns A throttled version of the provided function
+ * Handles successful form submission
+ * @param response - The API response data
+ * @param successMessage - Optional success message to display
+ * @param showToast - Whether to show a toast notification
  */
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let lastCall = 0;
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+export const handleFormSubmissionSuccess = (
+  response: any,
+  successMessage = 'Form submitted successfully!',
+  showToast: string | boolean = true
+) => {
+  // Convert boolean to string if needed
+  const shouldShowToast = ensureStringParameter(showToast);
   
-  return function(this: any, ...args: Parameters<T>) {
-    const context = this;
-    const now = Date.now();
-    const timeSinceLastCall = now - lastCall;
-    
-    if (timeSinceLastCall >= wait) {
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
-      }
-      
-      lastCall = now;
-      func.apply(context, args);
-    } else if (timeoutId === null) {
-      timeoutId = setTimeout(() => {
-        lastCall = Date.now();
-        timeoutId = null;
-        func.apply(context, args);
-      }, wait - timeSinceLastCall);
-    }
+  if (shouldShowToast === 'true') {
+    toast.success(successMessage);
+  }
+  
+  return {
+    success: true,
+    data: response
   };
-}
+};
+
+// Helper function to ensure the showToast parameter is a string
+export const ensureStringParameter = (value: boolean | string): string => {
+  if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  }
+  return value;
+};
+
+/**
+ * Utility to track form submission analytics
+ * @param formName - Name of the form being submitted
+ * @param success - Whether submission was successful
+ * @param metadata - Additional metadata about the submission
+ */
+export const trackFormSubmission = (
+  formName: string,
+  success: boolean,
+  metadata?: Record<string, any>
+) => {
+  // In a real app, this would send data to an analytics service
+  if (import.meta.env.DEV) {
+    console.log(`[ANALYTICS] Form submission: ${formName}`, {
+      success,
+      timestamp: new Date().toISOString(),
+      ...metadata
+    });
+  }
+  
+  // Placeholder for actual analytics implementation
+  // analytics.track('form_submission', { formName, success, ...metadata });
+};

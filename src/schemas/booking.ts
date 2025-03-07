@@ -5,13 +5,13 @@ export enum Service {
   Regular = "regular",
   MoveInOut = "moveInOut",
   Business = "business",
-  Construction = "construction" // Added construction to match the usage in Index.tsx
+  Construction = "construction"
 }
 
 export enum Frequency {
   OneTime = "oneTime",
   Weekly = "weekly",
-  BiWeekly = "biWeekly", // Note: This is the correct spelling used in the code
+  BiWeekly = "biWeekly",
   Monthly = "monthly",
   Custom = "custom"
 }
@@ -37,11 +37,16 @@ export enum PropertySize {
   Large = "large"
 }
 
-// Adding ErrorSeverity enum to fix AdminLayout errors
+// Update ErrorSeverity enum to include all needed values
 export enum ErrorSeverity {
   LOW = "low",
   MEDIUM = "medium",
-  HIGH = "high"
+  HIGH = "high",
+  CRITICAL = "critical",
+  // Additional values needed by other components
+  INFO = "info",
+  WARNING = "warning",
+  ERROR = "error"
 }
 
 export interface ProviderOption {
