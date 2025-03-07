@@ -22,6 +22,15 @@ export const displayFormErrors = <T extends FieldValues>(errors: FieldErrors<T>)
 };
 
 /**
+ * Helper to ensure boolean is converted to string for API calls
+ * @param value - The boolean value to convert
+ * @returns - "true" or "false" string
+ */
+export const boolToString = (value: boolean): string => {
+  return value ? "true" : "false";
+};
+
+/**
  * Handles API errors in a standardized way
  * @param error - The error object
  * @param fallbackMessage - Optional fallback message if error doesn't have one
@@ -65,6 +74,15 @@ export const handleApiError = (
       // For critical errors, we might want to do something more
       toast.error(`Critical error: ${errorMessage}`);
       break;
+    case ErrorSeverity.HIGH:
+      toast.error(`High priority: ${errorMessage}`);
+      break;
+    case ErrorSeverity.MEDIUM:
+      toast.error(`Medium priority: ${errorMessage}`);
+      break;
+    case ErrorSeverity.LOW:
+      toast.info(`Low priority: ${errorMessage}`);
+      break;
     case ErrorSeverity.ERROR:
     default:
       toast.error(errorMessage);
@@ -73,6 +91,9 @@ export const handleApiError = (
 
 // For backward compatibility - support existing codebase
 export const handleError = handleApiError;
+
+// Re-export the ErrorSeverity enum to ensure it's available everywhere
+export { ErrorSeverity };
 
 /**
  * Developer debugging utility - logs debug information during development

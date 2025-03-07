@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { boolToString } from '@/utils/errorHandling';
 
 // Define verification process steps
 export enum ApplicationStep {
@@ -135,9 +136,9 @@ export const useJoinTeamForm = () => {
           availability: availability,
           skills: skills,
           message: message,
-          background_check_consent: agreeToBackgroundCheck,
-          terms_agreement: agreeToTerms,
-          training_agreement: agreeToTraining,
+          background_check_consent: boolToString(agreeToBackgroundCheck),
+          terms_agreement: boolToString(agreeToTerms),
+          training_agreement: boolToString(agreeToTraining),
           application_status: 'pending_review',
           verification_status: 'not_started'
         })
@@ -257,8 +258,8 @@ export const useJoinTeamForm = () => {
   const toggleSkill = (value: string) => {
     setSkills(current => 
       current.includes(value)
-        ? current.filter(skill => skill !== value)
-        : [...current, skill]
+        ? current.filter(skillItem => skillItem !== value)
+        : [...current, value]
     );
   };
 
@@ -294,6 +295,9 @@ export const useJoinTeamForm = () => {
     setAgreeToTerms,
     setAgreeToBackgroundCheck,
     setAgreeToTraining,
+    setResume,
+    setIdentificationDoc,
+    setBackgroundCheckConsent,
     
     // Methods
     nextStep,
