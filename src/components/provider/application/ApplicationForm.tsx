@@ -21,7 +21,6 @@ interface ApplicationFormProps {
   availability: string[];
   skills: string[];
   resume: File | null;
-  identificationDoc: File | null;
   backgroundCheckConsent: File | null;
   message: string;
   agreeToTerms: boolean;
@@ -55,7 +54,6 @@ export const ApplicationForm = ({
   availability,
   skills,
   resume,
-  identificationDoc,
   backgroundCheckConsent,
   message,
   agreeToTerms,

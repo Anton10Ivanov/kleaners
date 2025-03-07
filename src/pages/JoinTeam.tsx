@@ -16,7 +16,6 @@ const JoinTeam = () => {
     availability,
     skills,
     resume,
-    identificationDoc,
     backgroundCheckConsent,
     message,
     agreeToTerms,
@@ -70,7 +69,6 @@ const JoinTeam = () => {
             availability={availability}
             skills={skills}
             resume={resume}
-            identificationDoc={identificationDoc}
             backgroundCheckConsent={backgroundCheckConsent}
             message={message}
             agreeToTerms={agreeToTerms}
