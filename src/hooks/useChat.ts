@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { FileAttachment, loadMessages, sendMessage } from '@/utils/chat';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useChat = (conversationId: string, userId: string, recipientId: string, recipientName: string) => {
   const [messages, setMessages] = useState<any[]>([]);
@@ -23,22 +24,39 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
     
     if (conversationId) {
       fetchMessages();
-    }
-    
-    // For demo, simulate the other user typing after a delay
-    const typingTimeout = setTimeout(() => {
-      setIsTyping(true);
       
-      // Stop "typing" after 3 seconds
-      setTimeout(() => {
-        setIsTyping(false);
-      }, 3000);
-    }, 1000);
-    
-    return () => {
-      clearTimeout(typingTimeout);
-    };
-  }, [conversationId]);
+      // Set up real-time subscription for new messages
+      const channel = supabase
+        .channel(`messages:${conversationId}`)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${conversationId}`,
+        }, (payload) => {
+          const newMessage = payload.new;
+          
+          // Add the message to our state if it's not already there
+          setMessages(prev => {
+            const exists = prev.some(msg => msg.id === newMessage.id);
+            if (!exists) {
+              return [...prev, newMessage];
+            }
+            return prev;
+          });
+          
+          // If the message is from the recipient, show typing indicator
+          if (newMessage.sender_id === recipientId) {
+            setIsTyping(false);
+          }
+        })
+        .subscribe();
+        
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [conversationId, recipientId]);
   
   // Generate random replies for the demo
   const getRandomReply = (name: string) => {
@@ -59,12 +77,16 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
     
     try {
       // Add message to UI immediately for better UX
+      const tempId = `temp-${Date.now()}`;
       const newMessage = {
-        id: `temp-${Date.now()}`,
+        id: tempId,
         content: message,
         sender_id: userId,
+        recipient_id: recipientId,
         created_at: new Date().toISOString(),
-        attachments: fileAttachments
+        attachments: fileAttachments,
+        is_read: true,
+        status: 'sending'
       };
       
       setMessages(prev => [...prev, newMessage]);
@@ -78,10 +100,11 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
         fileAttachments
       );
       
-      // Simulate reply for demo
+      // Simulate typing indicator for demo
       setTimeout(() => {
         setIsTyping(true);
         
+        // Simulate reply after a delay
         setTimeout(() => {
           setIsTyping(false);
           
@@ -90,8 +113,11 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
             id: `temp-reply-${Date.now()}`,
             content: replyContent,
             sender_id: recipientId,
+            recipient_id: userId,
             created_at: new Date().toISOString(),
-            attachments: []
+            attachments: [],
+            is_read: false,
+            status: 'sent'
           };
           
           setMessages(prev => [...prev, replyMessage]);

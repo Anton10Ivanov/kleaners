@@ -14,9 +14,7 @@ import {
 } from './chat';
 
 // Re-export types with 'export type' to fix the 'isolatedModules' error
-export type { Message } from './chat';
-export type { Conversation } from './chat';
-export type { FileAttachment } from './chat';
+export type { Message, Conversation, FileAttachment } from './chat';
 
 export {
   createConversation,
