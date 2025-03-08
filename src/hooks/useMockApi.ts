@@ -1,5 +1,5 @@
 
-import { setupWorker, http } from 'msw';
+import { http } from 'msw';
 import { dev } from '@/lib/utils';
 
 /**
@@ -26,9 +26,27 @@ export const useMockApi = () => {
     return dev && window.location.search.includes('mock=true');
   };
   
+  // Extended functionality for DevTools component
+  const isAvailable = () => dev;
+  const isEnabled = () => isMockActive();
+  const toggleMockApi = () => {
+    if (!dev) return;
+    
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('mock')) {
+      url.searchParams.delete('mock');
+    } else {
+      url.searchParams.set('mock', 'true');
+    }
+    window.location.href = url.toString();
+  };
+  
   return {
     registerMock,
-    isMockActive
+    isMockActive,
+    isAvailable,
+    isEnabled,
+    toggleMockApi
   };
 };
 

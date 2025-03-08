@@ -14,6 +14,8 @@ import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency, Service } from '@/schemas/booking';
+import ChatBanner from '@/components/chat/ChatBanner';
+import { useRef } from 'react';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -24,6 +26,7 @@ const ErrorFallback = () => (
 const Index = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const chatButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const selectedService = watch('service');
   const frequency = watch('frequency');
@@ -51,6 +54,14 @@ const Index = () => {
     handleBackStep();
   };
 
+  const handleChatClick = () => {
+    // Find the floating chat button in the DOM and click it
+    const floatingChatButton = document.querySelector('[data-floating-chat-button]') as HTMLButtonElement;
+    if (floatingChatButton) {
+      floatingChatButton.click();
+    }
+  };
+
   return (
     <div className="min-h-screen font-raleway bg-white dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
@@ -68,6 +79,11 @@ const Index = () => {
               setPostalCode={(code) => setValue('postalCode', code)}
               handleNextStep={handleNextStep}
             />
+            
+            <div className="max-w-7xl mx-auto px-4">
+              <ChatBanner onChatClick={handleChatClick} />
+            </div>
+            
             <SlickWhyChooseUs />
             <Services />
             <ErrorBoundary FallbackComponent={ErrorFallback}>

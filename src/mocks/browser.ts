@@ -33,11 +33,11 @@ export const handlers = [
 ];
 
 // Create the worker instance
-const worker = setupWorker(...handlers);
+const worker = typeof window !== 'undefined' ? setupWorker(...handlers) : null;
 
 // Conditionally start the worker
 export const startMockServiceWorker = async () => {
-  if (dev) {
+  if (dev && worker) {
     await worker.start({
       onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
     });
