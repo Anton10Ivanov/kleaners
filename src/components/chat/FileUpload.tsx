@@ -48,6 +48,7 @@ const FileUpload = ({
       const url = URL.createObjectURL(file);
       
       fileAttachments.push({
+        id: `temp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
         file,
         name: file.name,
         size: file.size,

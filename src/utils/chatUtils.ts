@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { useCallback, useEffect } from 'react';
 
@@ -340,4 +339,38 @@ export const useTypingIndicator = (conversationId: string, userId: string) => {
     stopTyping,
     useTypingStatusSubscription
   };
+};
+
+// Load messages for a conversation
+export const loadMessages = async (conversationId: string): Promise<any[]> => {
+  try {
+    // In a real app, this would fetch messages from the database
+    // For this demo, we'll return mock data
+    return [
+      {
+        id: 'msg1',
+        content: 'Hello! How can I help you today?',
+        sender_id: 'support123',
+        created_at: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+        attachments: []
+      },
+      {
+        id: 'msg2',
+        content: 'I have a question about your services.',
+        sender_id: 'user123',
+        created_at: new Date(Date.now() - 3000000).toISOString(), // 50 minutes ago
+        attachments: []
+      },
+      {
+        id: 'msg3',
+        content: 'Sure, I\'d be happy to help. What would you like to know?',
+        sender_id: 'support123',
+        created_at: new Date(Date.now() - 2400000).toISOString(), // 40 minutes ago
+        attachments: []
+      }
+    ];
+  } catch (error) {
+    console.error('Error loading messages:', error);
+    return [];
+  }
 };
