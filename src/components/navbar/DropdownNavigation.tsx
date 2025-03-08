@@ -3,7 +3,7 @@ import { useState } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icons } from "./navigationData";
 
 type NavItem = {
@@ -28,9 +28,16 @@ type Props = {
 export function DropdownNavigation({ navItems }: Props) {
   const [openMenu, setOpenMenu] = React.useState<string | null>(null);
   const [isHover, setIsHover] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleHover = (menuLabel: string | null) => {
     setOpenMenu(menuLabel);
+  };
+
+  const handleNavigation = (path: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpenMenu(null);
+    navigate(path);
   };
 
   return (
@@ -49,6 +56,7 @@ export function DropdownNavigation({ navItems }: Props) {
                 className="text-sm py-1.5 px-4 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 text-muted-foreground hover:text-foreground relative" 
                 onMouseEnter={() => setIsHover(navItem.id)} 
                 onMouseLeave={() => setIsHover(null)}
+                onClick={(e) => handleNavigation(navItem.link!, e)}
               >
                 <span>{navItem.label}</span>
                 {isHover === navItem.id && (
@@ -109,6 +117,11 @@ export function DropdownNavigation({ navItems }: Props) {
                                   <Link 
                                     to={item.path || "#"} 
                                     className="flex items-start space-x-3 group"
+                                    onClick={(e) => {
+                                      if (item.path) {
+                                        handleNavigation(item.path, e);
+                                      }
+                                    }}
                                   >
                                     <div className="border border-border text-foreground rounded-md flex items-center justify-center size-9 shrink-0 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
                                       <Icon className="h-5 w-5 flex-none" />

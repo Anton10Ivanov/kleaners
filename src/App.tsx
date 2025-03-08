@@ -1,5 +1,5 @@
 
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import UserLayout from '@/components/user/UserLayout';
@@ -72,19 +72,18 @@ const queryClient = new QueryClient({
 function App() {
   const location = useLocation();
 
-  useEffect(() => {
-    const path = location.pathname.split('/')[1] || 'root';
-    document.body.className = ''; // Clear previous classes
-    document.body.classList.add(`${path}-route`);
+  // Set body class based on route for styling purposes
+  const path = location.pathname.split('/')[1] || 'root';
+  document.body.className = ''; // Clear previous classes
+  document.body.classList.add(`${path}-route`);
 
-    const rootElement = document.getElementById('root');
-    if (rootElement) {
-      rootElement.className = '';
-      if (['admin', 'user', 'provider'].includes(path)) {
-        rootElement.classList.add('admin-panel-container');
-      }
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.className = '';
+    if (['admin', 'user', 'provider'].includes(path)) {
+      rootElement.classList.add('admin-panel-container');
     }
-  }, [location]);
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -125,15 +124,17 @@ function App() {
               <Route path="vacation-requests" element={<AdminVacationRequests />} />
             </Route>
             
-            <Route element={<UserLayout />}>
-              <Route path="/user/dashboard" element={<UserDashboard />} />
-              <Route path="/user/bookings" element={<UserBookings />} />
-              <Route path="/user/messages" element={<UserMessages />} />
-              <Route path="/user/invoices" element={<UserInvoices />} />
-              <Route path="/user/profile" element={<UserProfile />} />
+            <Route path="/user" element={<UserLayout />}>
+              <Route index element={<UserDashboard />} />
+              <Route path="dashboard" element={<UserDashboard />} />
+              <Route path="bookings" element={<UserBookings />} />
+              <Route path="messages" element={<UserMessages />} />
+              <Route path="invoices" element={<UserInvoices />} />
+              <Route path="profile" element={<UserProfile />} />
             </Route>
             
             <Route path="/provider" element={<ProviderLayout />}>
+              <Route index element={<ProviderProfile />} />
               <Route path="profile" element={<ProviderProfile />} />
               <Route path="bookings" element={<ProviderBookings />} />
               <Route path="messages" element={<ProviderMessages />} />
