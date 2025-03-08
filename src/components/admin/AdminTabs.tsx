@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import BookingsSection from './sections/BookingsSection';
-import CustomersSection from './sections/CustomersSection';
-import ProvidersSection from './sections/ProvidersSection';
+import { BookingsSection } from './sections/BookingsSection';
+import { CustomersSection } from './sections/CustomersSection';
+import { ProvidersSection } from './sections/ProvidersSection';
 import CustomerQuestionsSection from './sections/CustomerQuestionsSection';
-import CalendarSection from './sections/CalendarSection';
+import { CalendarSection } from './sections/CalendarSection';
 import { VacationRequestsSection } from './sections/VacationRequestsSection';
 
 // Admin tab sections configuration
