@@ -1,8 +1,7 @@
-
 import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { dev } from '@/lib/utils';
-import { mockData } from '@/utils/mockData';
+import { mockData } from '@/utils/mock';
 
 // Define handlers
 export const handlers = [

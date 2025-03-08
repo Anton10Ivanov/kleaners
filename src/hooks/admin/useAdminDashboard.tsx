@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { mockData } from "@/utils/mockData";
+import { mockData } from "@/utils/mock";
 
 export interface DashboardStats {
   totalBookings: number;
