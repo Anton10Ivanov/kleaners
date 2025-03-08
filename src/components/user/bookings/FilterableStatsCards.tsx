@@ -26,13 +26,11 @@ export function FilterableStatsCards({
         onClick={() => setFilterType('all')}
       >
         <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
-              <h3 className="text-2xl font-bold mt-1">{bookingSummary.total}</h3>
-            </div>
-            <div className="bg-primary/10 p-3 rounded-full">
-              <Package className="h-6 w-6 text-primary" />
+          <div className="flex flex-col items-center text-center">
+            <p className="text-2xl font-bold">{bookingSummary.total}</p>
+            <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
+            <div className="bg-primary/10 p-3 rounded-full mt-3">
+              <Package className="h-5 w-5 text-primary" />
             </div>
           </div>
         </CardContent>
@@ -43,13 +41,11 @@ export function FilterableStatsCards({
         onClick={() => setFilterType('upcoming')}
       >
         <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Upcoming Bookings</p>
-              <h3 className="text-2xl font-bold mt-1">{bookingSummary.upcoming}</h3>
-            </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              <Calendar className="h-6 w-6 text-blue-500" />
+          <div className="flex flex-col items-center text-center">
+            <p className="text-2xl font-bold">{bookingSummary.upcoming}</p>
+            <p className="text-sm font-medium text-muted-foreground">Upcoming Bookings</p>
+            <div className="bg-blue-100 p-3 rounded-full mt-3 dark:bg-blue-950/30">
+              <Calendar className="h-5 w-5 text-blue-500" />
             </div>
           </div>
         </CardContent>
@@ -60,13 +56,11 @@ export function FilterableStatsCards({
         onClick={() => setFilterType('completed')}
       >
         <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Completed Bookings</p>
-              <h3 className="text-2xl font-bold mt-1">{bookingSummary.completed}</h3>
-            </div>
-            <div className="bg-green-100 p-3 rounded-full">
-              <Clock className="h-6 w-6 text-green-500" />
+          <div className="flex flex-col items-center text-center">
+            <p className="text-2xl font-bold">{bookingSummary.completed}</p>
+            <p className="text-sm font-medium text-muted-foreground">Completed Bookings</p>
+            <div className="bg-green-100 p-3 rounded-full mt-3 dark:bg-green-950/30">
+              <Clock className="h-5 w-5 text-green-500" />
             </div>
           </div>
         </CardContent>
@@ -77,13 +71,11 @@ export function FilterableStatsCards({
         onClick={() => setFilterType('cancelled')}
       >
         <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Cancelled Bookings</p>
-              <h3 className="text-2xl font-bold mt-1">{bookingSummary.cancelled}</h3>
-            </div>
-            <div className="bg-red-100 p-3 rounded-full">
-              <AlertCircle className="h-6 w-6 text-red-500" />
+          <div className="flex flex-col items-center text-center">
+            <p className="text-2xl font-bold">{bookingSummary.cancelled}</p>
+            <p className="text-sm font-medium text-muted-foreground">Cancelled Bookings</p>
+            <div className="bg-red-100 p-3 rounded-full mt-3 dark:bg-red-950/30">
+              <AlertCircle className="h-5 w-5 text-red-500" />
             </div>
           </div>
         </CardContent>
