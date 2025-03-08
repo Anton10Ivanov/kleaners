@@ -8,7 +8,8 @@ import {
   User, 
   Calendar, 
   FileText,
-  MessageSquare
+  MessageSquare,
+  Home
 } from "lucide-react";
 
 const UserSidebar = () => {
@@ -16,6 +17,12 @@ const UserSidebar = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const routes = [
+    {
+      label: "Dashboard",
+      icon: <Home className="h-5 w-5 mr-2" />,
+      href: "/user/dashboard",
+      active: pathname === "/user/dashboard",
+    },
     {
       label: "Bookings",
       icon: <Calendar className="h-5 w-5 mr-2" />,

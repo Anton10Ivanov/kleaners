@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import UserSidebar from './UserSidebar';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -13,7 +13,16 @@ const UserLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isLoading } = useAuth();
+  
+  // Handle navigation based on current location path
+  useEffect(() => {
+    // If at the user/ root path, redirect to dashboard
+    if (location.pathname === '/user' || location.pathname === '/user/') {
+      navigate('/user/dashboard');
+    }
+  }, [location.pathname, navigate]);
   
   // For development, we're not enforcing authentication
   // In production, you would uncomment this code
