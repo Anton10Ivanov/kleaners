@@ -1,0 +1,28 @@
+
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+
+interface ErrorStateProps {
+  onRefresh: () => void;
+}
+
+export const ErrorState = ({ onRefresh }: ErrorStateProps) => {
+  return (
+    <div className="p-8 bg-white dark:bg-gray-800 rounded-md border shadow-sm">
+      <div className="text-center py-4">
+        <p className="text-destructive font-medium">Failed to load bookings</p>
+        <p className="text-muted-foreground text-sm mt-1">
+          Please try refreshing the page
+        </p>
+        <Button 
+          variant="outline" 
+          className="mt-4"
+          onClick={onRefresh}
+        >
+          <RefreshCw className="mr-2 h-4 w-4" />
+          Refresh Data
+        </Button>
+      </div>
+    </div>
+  );
+};
