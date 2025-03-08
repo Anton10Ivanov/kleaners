@@ -1,26 +1,30 @@
 
-import React from 'react';
-import AdminLayout from '@/components/admin/AdminLayout';
+import React, { useEffect } from 'react';
 import AdminTabs from '@/components/admin/AdminTabs';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Bell } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AdminPanel = () => {
   const { notifications, loading, unreadCount } = useNotifications();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine which tab to display by default
+  const searchParams = new URLSearchParams(location.search);
+  const defaultTab = searchParams.get('tab') || 'questions';
   
   // Filter for question notifications only
   const questionNotifications = notifications.filter(n => n.type === 'system' && n.title.includes('Question'));
   
   return (
-    <div>
+    <div className="p-4">
       {questionNotifications.length > 0 && (
-        <div className="p-4">
-          <Alert className="mb-4 border-primary/20 bg-primary/5">
+        <div className="mb-4">
+          <Alert className="border-primary/20 bg-primary/5">
             <Bell className="h-5 w-5 text-primary" />
             <AlertTitle className="flex items-center gap-2">
               New Customer Questions
@@ -34,7 +38,11 @@ const AdminPanel = () => {
                     <Button 
                       size="sm" 
                       onClick={() => {
-                        navigate('/admin');
+                        // Update URL with tab parameter
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('tab', 'questions');
+                        window.history.pushState({}, '', url);
+                        
                         // This will ensure the questions tab is active
                         const tabsElement = document.getElementById('questions-tab');
                         if (tabsElement) tabsElement.click();
@@ -49,7 +57,7 @@ const AdminPanel = () => {
           </Alert>
         </div>
       )}
-      <AdminTabs defaultTab="questions" />
+      <AdminTabs defaultTab={defaultTab} />
     </div>
   );
 };

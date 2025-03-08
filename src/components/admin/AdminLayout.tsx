@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -8,7 +9,9 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  MessageSquareText,
+  BarChart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -43,7 +46,7 @@ const AdminLayout = () => {
     {
       title: 'Analytics',
       href: '/admin/dashboard',
-      icon: <LayoutDashboard className="h-5 w-5" />,
+      icon: <BarChart className="h-5 w-5" />,
     },
     {
       title: 'Bookings',
@@ -61,6 +64,11 @@ const AdminLayout = () => {
       icon: <UserCog className="h-5 w-5" />,
     },
     {
+      title: 'Questions',
+      href: '/admin?tab=questions',
+      icon: <MessageSquareText className="h-5 w-5" />,
+    },
+    {
       title: 'Settings',
       href: '/admin/settings',
       icon: <Settings className="h-5 w-5" />,
@@ -71,6 +79,13 @@ const AdminLayout = () => {
   useEffect(() => {
     try {
       const path = location.pathname.split('/')[2] || '';
+      
+      // Handle the special case for the questions tab
+      if (location.pathname === '/admin' && location.search.includes('tab=questions')) {
+        setActiveItem('questions');
+        return;
+      }
+      
       if (path) {
         setActiveItem(path);
       } else {
