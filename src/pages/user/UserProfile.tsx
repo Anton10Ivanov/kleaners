@@ -2,16 +2,14 @@
 import React, { useState } from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useUserProfileData } from '@/hooks/useUserProfileData';
-import { AvatarSection } from '@/components/user/profile/AvatarSection';
-import { ProfileTabs } from '@/components/user/profile/ProfileTabs';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AlertTriangle } from 'lucide-react';
 import { AccountInfoCard } from '@/components/user/profile/AccountInfoCard';
 import { SecuritySettings } from '@/components/user/profile/SecuritySettings';
 import { NotificationSettings } from '@/components/user/profile/NotificationSettings';
 import { AccountPreferences } from '@/components/user/profile/AccountPreferences';
-import { TabsContent } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle } from 'lucide-react';
+import { AvatarSection } from '@/components/user/profile/AvatarSection';
 
 /**
  * UserProfile Page
@@ -22,7 +20,6 @@ import { AlertTriangle } from 'lucide-react';
  */
 export default function UserProfile(): JSX.Element {
   useTitle("Your Profile | Kleaners");
-  const [activeTab, setActiveTab] = useState('account');
   
   const {
     profile,
@@ -34,11 +31,6 @@ export default function UserProfile(): JSX.Element {
     checkPasswordStrength,
     changePassword
   } = useUserProfileData();
-  
-  // Handle tab change
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-  };
   
   // Loading state
   if (isLoading) {
@@ -80,7 +72,7 @@ export default function UserProfile(): JSX.Element {
   }
   
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto p-4 space-y-6">
       {/* Avatar and name section */}
       <div className="flex flex-col items-center mb-8">
         <AvatarSection
@@ -90,40 +82,32 @@ export default function UserProfile(): JSX.Element {
         />
       </div>
       
-      {/* Tabs section */}
-      <ProfileTabs
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      >
-        <TabsContent value="account">
-          <AccountInfoCard
-            profile={profile}
-            onSave={updateProfile}
-          />
-        </TabsContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Account Information Card */}
+        <AccountInfoCard
+          profile={profile}
+          onSave={updateProfile}
+        />
         
-        <TabsContent value="security">
-          <SecuritySettings
-            passwordStrength={passwordStrength}
-            onPasswordCheck={checkPasswordStrength}
-            onPasswordChange={changePassword}
-          />
-        </TabsContent>
+        {/* Security Settings Card */}
+        <SecuritySettings
+          passwordStrength={passwordStrength}
+          onPasswordCheck={checkPasswordStrength}
+          onPasswordChange={changePassword}
+        />
         
-        <TabsContent value="notifications">
-          <NotificationSettings
-            preferences={profile.notificationPreferences}
-            onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
-          />
-        </TabsContent>
+        {/* Notification Settings Card */}
+        <NotificationSettings
+          preferences={profile.notificationPreferences}
+          onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
+        />
         
-        <TabsContent value="preferences">
-          <AccountPreferences
-            preferences={profile.accountPreferences}
-            onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
-          />
-        </TabsContent>
-      </ProfileTabs>
+        {/* Account Preferences Card */}
+        <AccountPreferences
+          preferences={profile.accountPreferences}
+          onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
+        />
+      </div>
     </div>
   );
 }
