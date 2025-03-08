@@ -27,7 +27,6 @@ import Dashboard from '@/pages/admin/Dashboard';
 import UserDashboard from '@/pages/user/UserDashboard';
 import UserBookings from '@/pages/user/UserBookings';
 import UserProfile from '@/pages/user/UserProfile';
-import UserSettings from '@/pages/user/UserSettings';
 import UserInvoices from '@/pages/user/UserInvoices';
 import UserNotifications from '@/pages/user/UserNotifications';
 import UserMessages from '@/pages/user/UserMessages';
@@ -126,7 +125,6 @@ function App() {
         <Route path="/user/invoices" element={<UserInvoices />} />
         <Route path="/user/notifications" element={<UserNotifications />} />
         <Route path="/user/profile" element={<UserProfile />} />
-        <Route path="/user/settings" element={<UserSettings />} />
       </Route>
       
       {/* Provider Routes */}

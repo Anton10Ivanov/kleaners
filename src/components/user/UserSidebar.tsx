@@ -1,10 +1,10 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  Settings, 
   User, 
   Calendar, 
   FileText,
@@ -46,12 +46,6 @@ const UserSidebar = () => {
       icon: <User className="h-5 w-5 mr-2" />,
       href: "/user/profile",
       active: pathname === "/user/profile",
-    },
-    {
-      label: "Settings",
-      icon: <Settings className="h-5 w-5 mr-2" />,
-      href: "/user/settings",
-      active: pathname === "/user/settings",
     },
   ];
 
