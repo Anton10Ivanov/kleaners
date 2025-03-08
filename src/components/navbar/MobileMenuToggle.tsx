@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AlignJustify } from 'lucide-react';
+import { AlignJustify, X } from 'lucide-react';
 
 interface MobileMenuToggleProps {
   isMenuOpen: boolean;
@@ -15,8 +15,13 @@ const MobileMenuToggle: React.FC<MobileMenuToggleProps> = ({
     <button 
       onClick={() => setIsMenuOpen(!isMenuOpen)} 
       className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors p-1"
+      aria-label={isMenuOpen ? "Close menu" : "Open menu"}
     >
-      <AlignJustify size={28} />
+      {isMenuOpen ? (
+        <X size={28} />
+      ) : (
+        <AlignJustify size={28} />
+      )}
     </button>
   );
 };
