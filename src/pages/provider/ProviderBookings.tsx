@@ -1,8 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import BookingTabs from '@/components/provider/bookings/BookingTabs';
 import { getBookingData } from '@/components/provider/bookings/bookingData';
+import { FilterableStatsCards } from '@/components/provider/bookings/FilterableStatsCards';
 
 const ProviderBookings = () => {
   useTitle('Provider Bookings');
@@ -12,6 +13,29 @@ const ProviderBookings = () => {
   // Get booking data from our utility
   const { upcomingBookings, pendingBookings, completedBookings } = getBookingData();
 
+  // Summary data for the filterable stats cards
+  const [bookingSummary, setBookingSummary] = useState({
+    total: 0,
+    upcoming: 0,
+    pending: 0,
+    completed: 0
+  });
+
+  // Calculate booking summary
+  useEffect(() => {
+    setBookingSummary({
+      total: upcomingBookings.length + pendingBookings.length + completedBookings.length,
+      upcoming: upcomingBookings.length,
+      pending: pendingBookings.length,
+      completed: completedBookings.length
+    });
+  }, [upcomingBookings, pendingBookings, completedBookings]);
+
+  // Handle filter type change
+  const handleFilterTypeChange = (type: string) => {
+    setSelectedTab(type === 'all' ? 'upcoming' : type);
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div>
@@ -19,7 +43,16 @@ const ProviderBookings = () => {
         <p className="text-muted-foreground">Manage your cleaning assignments</p>
       </div>
 
-      <div className="pt-6">
+      {/* Add FilterableStatsCards component */}
+      <div className="mt-6">
+        <FilterableStatsCards
+          filterType={selectedTab}
+          setFilterType={handleFilterTypeChange}
+          bookingSummary={bookingSummary}
+        />
+      </div>
+
+      <div className="pt-2">
         <BookingTabs
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
