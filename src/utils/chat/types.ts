@@ -9,6 +9,7 @@ export interface Message {
   sent_at: Date;
   status: 'sending' | 'sent' | 'delivered' | 'read';
   is_read: boolean;
+  isFromMe?: boolean; // Add this property to fix the type error
 }
 
 export interface Conversation {

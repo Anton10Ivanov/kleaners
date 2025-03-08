@@ -22,7 +22,7 @@ const ProviderBookings = () => {
   const mapLocations = allBookings.map(booking => ({
     id: booking.id,
     address: booking.address,
-    coordinates: booking.coordinates,
+    coordinates: booking.coordinates as [number, number],
     clientName: booking.clientName,
     service: booking.service,
   }));
