@@ -1,14 +1,15 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTitle } from "@/hooks/useTitle";
 import { BookingList } from "@/components/user/bookings/BookingList";
 import { BookingFilters } from "@/components/user/bookings/BookingFilters";
 import { useUserBookings } from "@/hooks/useUserBookings";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Package, Calendar, Clock, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ErrorBoundary } from "react-error-boundary";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * UserBookings Page
@@ -29,6 +30,36 @@ export default function UserBookings(): JSX.Element {
     cancelBooking,
     rescheduleBooking
   } = useUserBookings();
+
+  const [bookingSummary, setBookingSummary] = useState({
+    total: 0,
+    upcoming: 0,
+    completed: 0,
+    cancelled: 0
+  });
+  
+  useEffect(() => {
+    const calculateSummary = () => {
+      if (bookings.length === 0) return;
+      
+      const upcoming = bookings.filter(b => 
+        new Date(b.date) > new Date() && 
+        (b.status === 'pending' || b.status === 'confirmed')
+      );
+      
+      const completed = bookings.filter(b => b.status === 'completed');
+      const cancelled = bookings.filter(b => b.status === 'cancelled');
+      
+      setBookingSummary({
+        total: bookings.length,
+        upcoming: upcoming.length,
+        completed: completed.length,
+        cancelled: cancelled.length
+      });
+    };
+
+    calculateSummary();
+  }, [bookings]);
   
   // Process bookings based on filters
   const filteredBookings = bookings
@@ -71,6 +102,65 @@ export default function UserBookings(): JSX.Element {
               <PlusCircle className="mr-2 h-4 w-4" /> Book New Service
             </Button>
           </Link>
+        </div>
+        
+        {/* Booking Summary Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
+                  <h3 className="text-2xl font-bold mt-1">{bookingSummary.total}</h3>
+                </div>
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <Package className="h-6 w-6 text-primary" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Upcoming Bookings</p>
+                  <h3 className="text-2xl font-bold mt-1">{bookingSummary.upcoming}</h3>
+                </div>
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Calendar className="h-6 w-6 text-blue-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Completed Bookings</p>
+                  <h3 className="text-2xl font-bold mt-1">{bookingSummary.completed}</h3>
+                </div>
+                <div className="bg-green-100 p-3 rounded-full">
+                  <Clock className="h-6 w-6 text-green-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Cancelled Bookings</p>
+                  <h3 className="text-2xl font-bold mt-1">{bookingSummary.cancelled}</h3>
+                </div>
+                <div className="bg-red-100 p-3 rounded-full">
+                  <AlertCircle className="h-6 w-6 text-red-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
         
         <BookingFilters
