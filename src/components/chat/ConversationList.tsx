@@ -1,36 +1,19 @@
 
 import { useState, useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Search, Plus } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Search, MessageSquarePlus, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/integrations/supabase/client';
+import { getUserConversations, getUnreadMessageCount } from '@/utils/chatUtils';
 import { formatDistanceToNow } from 'date-fns';
-
-interface Conversation {
-  id: string;
-  lastMessage: {
-    content: string;
-    sent_at: Date;
-    is_read: boolean;
-  };
-  participant: {
-    id: string;
-    name: string;
-    avatar?: string;
-    isTyping?: boolean;
-  };
-  unreadCount: number;
-}
 
 interface ConversationListProps {
   userId: string;
   selectedConversationId?: string;
   onSelectConversation: (conversationId: string, participantId: string, participantName: string) => void;
-  onNewConversation?: () => void;
+  onNewConversation: () => void;
 }
 
 export const ConversationList = ({
@@ -39,339 +22,185 @@ export const ConversationList = ({
   onSelectConversation,
   onNewConversation
 }: ConversationListProps) => {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [conversations, setConversations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
-    const fetchConversations = async () => {
-      setIsLoading(true);
-      try {
-        // Fetch conversations with the most recent message
-        const { data, error } = await supabase
-          .from('conversations')
-          .select(`
-            id,
-            participants:conversation_participants(
-              user_id,
-              user:profiles(id, first_name, last_name)
-            ),
-            messages:messages(
-              id, content, sent_at, is_read, sender_id, recipient_id
-            )
-          `)
-          .or(`participants.user_id.eq.${userId}`)
-          .order('updated_at', { ascending: false });
-          
-        if (error) throw error;
-        
-        // Process the data to get the format we need
-        const processedConversations = data.map((conversation: any) => {
-          // Filter out messages involving the current user
-          const relevantMessages = conversation.messages.filter(
-            (message: any) => message.sender_id === userId || message.recipient_id === userId
-          );
-          
-          // Sort messages by date
-          const sortedMessages = relevantMessages.sort(
-            (a: any, b: any) => new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime()
-          );
-          
-          // Get the last message
-          const lastMessage = sortedMessages[0] || null;
-          
-          // Get unread count
-          const unreadCount = relevantMessages.filter(
-            (message: any) => message.recipient_id === userId && !message.is_read
-          ).length;
-          
-          // Find the other participant (not the current user)
-          const otherParticipant = conversation.participants.find(
-            (p: any) => p.user_id !== userId
-          );
-          
-          const participantUser = otherParticipant?.user;
-          const participantName = participantUser 
-            ? `${participantUser.first_name} ${participantUser.last_name}`
-            : 'Unknown';
-            
-          return {
-            id: conversation.id,
-            lastMessage: lastMessage ? {
-              content: lastMessage.content,
-              sent_at: new Date(lastMessage.sent_at),
-              is_read: lastMessage.is_read
-            } : null,
-            participant: {
-              id: otherParticipant?.user_id || '',
-              name: participantName,
-              avatar: undefined
-            },
-            unreadCount
-          };
-        });
-        
-        setConversations(processedConversations);
-      } catch (error) {
-        console.error('Error fetching conversations:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     fetchConversations();
-    
-    // Set up real-time subscription for typing indicators
-    const typingSubscription = supabase
-      .channel('typing_updates')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'typing_indicators'
-        },
-        (payload) => {
-          const typingData = payload.new as {
-            conversation_id: string;
-            user_id: string;
-            is_typing: boolean;
-          };
-          
-          if (typingData.user_id !== userId) {
-            setConversations(prevConversations => 
-              prevConversations.map(conversation => {
-                if (conversation.id === typingData.conversation_id) {
-                  return {
-                    ...conversation,
-                    participant: {
-                      ...conversation.participant,
-                      isTyping: typingData.is_typing
-                    }
-                  };
-                }
-                return conversation;
-              })
-            );
-          }
-        }
-      )
-      .subscribe();
-      
-    // Set up real-time subscription for new messages
-    const messageSubscription = supabase
+  }, [userId]);
+  
+  const fetchConversations = async () => {
+    setIsLoading(true);
+    try {
+      const conversationsData = await getUserConversations(userId);
+      setConversations(conversationsData);
+    } catch (error) {
+      console.error('Error fetching conversations:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Subscribe to new messages
+  useEffect(() => {
+    const subscription = supabase
       .channel('new_messages')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages'
-        },
-        (payload) => {
-          const newMessage = payload.new as {
-            conversation_id: string;
-            sender_id: string;
-            recipient_id: string;
-            content: string;
-            sent_at: string;
-            is_read: boolean;
-          };
-          
-          // Only update if the message involves the current user
-          if (newMessage.sender_id === userId || newMessage.recipient_id === userId) {
-            setConversations(prevConversations => {
-              // Find the conversation
-              const conversationIndex = prevConversations.findIndex(
-                c => c.id === newMessage.conversation_id
-              );
-              
-              if (conversationIndex >= 0) {
-                // Update existing conversation
-                const updatedConversations = [...prevConversations];
-                const conversation = updatedConversations[conversationIndex];
-                
-                // Update with new message
-                updatedConversations[conversationIndex] = {
-                  ...conversation,
-                  lastMessage: {
-                    content: newMessage.content,
-                    sent_at: new Date(newMessage.sent_at),
-                    is_read: newMessage.is_read
-                  },
-                  unreadCount: newMessage.recipient_id === userId && !newMessage.is_read
-                    ? conversation.unreadCount + 1
-                    : conversation.unreadCount
-                };
-                
-                // Move conversation to top
-                const [movedConversation] = updatedConversations.splice(conversationIndex, 1);
-                return [movedConversation, ...updatedConversations];
-              }
-              
-              return prevConversations;
-            });
-          }
-        }
-      )
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+        filter: `recipient_id=eq.${userId}`,
+      }, () => {
+        // Refetch conversations when a new message arrives
+        fetchConversations();
+      })
       .subscribe();
       
-    // Set up real-time subscription for read receipts
-    const readReceiptSubscription = supabase
-      .channel('read_receipts')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'messages',
-          filter: `sender_id=eq.${userId}`
-        },
-        (payload) => {
-          const updatedMessage = payload.new as {
-            conversation_id: string;
-            is_read: boolean;
-          };
-          
-          if (updatedMessage.is_read) {
-            setConversations(prevConversations => 
-              prevConversations.map(conversation => {
-                if (conversation.id === updatedMessage.conversation_id) {
-                  return {
-                    ...conversation,
-                    lastMessage: conversation.lastMessage 
-                      ? { ...conversation.lastMessage, is_read: true }
-                      : null
-                  };
-                }
-                return conversation;
-              })
-            );
-          }
-        }
-      )
-      .subscribe();
-    
     return () => {
-      typingSubscription.unsubscribe();
-      messageSubscription.unsubscribe();
-      readReceiptSubscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, [userId]);
   
   // Filter conversations based on search query
-  const filteredConversations = conversations.filter(conversation => 
-    conversation.participant.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
-  const formatLastMessageTime = (date: Date) => {
-    return formatDistanceToNow(date, { addSuffix: true });
+  const filteredConversations = searchQuery.trim() === ''
+    ? conversations
+    : conversations.filter(conversation => 
+        conversation.participant.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+  const renderConversationItem = (conversation: any) => {
+    const isSelected = selectedConversationId === conversation.id;
+    const hasUnread = conversation.unreadCount > 0;
+    
+    return (
+      <div
+        key={conversation.id}
+        className={cn(
+          "flex items-center gap-3 p-3 rounded-md cursor-pointer transition-colors",
+          isSelected 
+            ? "bg-primary text-primary-foreground" 
+            : "hover:bg-muted",
+          hasUnread && !isSelected && "bg-accent/20"
+        )}
+        onClick={() => onSelectConversation(
+          conversation.id, 
+          conversation.participant.id,
+          conversation.participant.name
+        )}
+      >
+        <Avatar className="h-10 w-10 flex-shrink-0">
+          <AvatarImage src={`https://avatar.vercel.sh/${conversation.participant.id}`} />
+          <AvatarFallback>{conversation.participant.name[0]}</AvatarFallback>
+        </Avatar>
+        
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-start">
+            <h4 className={cn(
+              "font-medium truncate",
+              hasUnread && !isSelected && "font-bold"
+            )}>
+              {conversation.participant.name}
+            </h4>
+            
+            {conversation.latestMessage && (
+              <span className={cn(
+                "text-xs",
+                isSelected ? "text-primary-foreground/70" : "text-muted-foreground"
+              )}>
+                {formatDistanceToNow(conversation.latestMessage.sent_at, { addSuffix: false })}
+              </span>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-1">
+            {conversation.latestMessage?.isFromMe && (
+              <Check className={cn(
+                "h-3 w-3 flex-shrink-0",
+                conversation.latestMessage.is_read 
+                  ? "text-green-500" 
+                  : "text-gray-400"
+              )} />
+            )}
+            
+            <p className={cn(
+              "text-sm truncate",
+              isSelected 
+                ? "text-primary-foreground/70" 
+                : "text-muted-foreground",
+              hasUnread && !isSelected && "text-foreground font-medium"
+            )}>
+              {conversation.latestMessage 
+                ? (conversation.latestMessage.attachments?.length 
+                    ? '📎 Attachment' 
+                    : conversation.latestMessage.content || 'New message')
+                : 'No messages yet'}
+            </p>
+            
+            {hasUnread && !isSelected && (
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                {conversation.unreadCount > 9 ? '9+' : conversation.unreadCount}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   };
   
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-background">
-      <div className="p-4 border-b">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Messages</h2>
-          
-          {onNewConversation && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-8 w-8 p-0 rounded-full"
-              onClick={onNewConversation}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
+    <div className="h-full flex flex-col border rounded-lg overflow-hidden bg-background">
+      <div className="p-3 border-b">
+        <h3 className="font-medium mb-3">Messages</h3>
         
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search conversations..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className="flex gap-2 items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search conversations..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          
+          <Button
+            size="icon"
+            onClick={onNewConversation}
+            title="New conversation"
+          >
+            <MessageSquarePlus className="h-4 w-4" />
+          </Button>
         </div>
       </div>
       
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         {isLoading ? (
-          <div className="p-4 text-center text-muted-foreground">
-            Loading conversations...
+          <div className="p-3 space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-3 w-full" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredConversations.length === 0 ? (
-          <div className="p-4 text-center text-muted-foreground">
-            {searchQuery 
-              ? 'No conversations found'
-              : 'No conversations yet'}
+          <div className="p-8 text-center text-muted-foreground">
+            {searchQuery.trim() !== '' 
+              ? 'No conversations matching your search.' 
+              : 'No conversations yet.'}
           </div>
         ) : (
           <div className="divide-y">
-            {filteredConversations.map((conversation) => (
-              <Button
-                key={conversation.id}
-                variant="ghost"
-                className={cn(
-                  "w-full flex items-start p-3 h-auto justify-start rounded-none",
-                  selectedConversationId === conversation.id && "bg-muted"
-                )}
-                onClick={() => onSelectConversation(
-                  conversation.id, 
-                  conversation.participant.id,
-                  conversation.participant.name
-                )}
-              >
-                <div className="relative mr-3">
-                  <Avatar>
-                    <AvatarImage 
-                      src={conversation.participant.avatar || `https://avatar.vercel.sh/${conversation.participant.id}`} 
-                    />
-                    <AvatarFallback>
-                      {conversation.participant.name.substring(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  {conversation.unreadCount > 0 && (
-                    <Badge 
-                      className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center"
-                      variant="destructive"
-                    >
-                      {conversation.unreadCount}
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="flex-1 overflow-hidden text-left">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium truncate">
-                      {conversation.participant.name}
-                    </span>
-                    
-                    {conversation.lastMessage && (
-                      <span className="text-xs text-muted-foreground">
-                        {formatLastMessageTime(conversation.lastMessage.sent_at)}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="truncate text-sm text-muted-foreground">
-                    {conversation.participant.isTyping ? (
-                      <span className="text-primary italic">Typing...</span>
-                    ) : conversation.lastMessage ? (
-                      conversation.lastMessage.content
-                    ) : (
-                      "No messages yet"
-                    )}
-                  </div>
-                </div>
-              </Button>
-            ))}
+            {filteredConversations.map(renderConversationItem)}
           </div>
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 };
+
+export default ConversationList;

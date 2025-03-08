@@ -1,3 +1,4 @@
+
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -5,7 +6,7 @@ import UserLayout from '@/components/user/UserLayout';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import ScrollToTop from '@/components/ScrollToTop';
-import Toaster from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/toaster';
 
 // Import pages
 import Index from '@/pages/Index';

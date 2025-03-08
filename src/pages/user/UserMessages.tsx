@@ -4,7 +4,20 @@ import { supabase } from '@/integrations/supabase/client';
 import { ChatInterface } from '@/components/chat/ChatInterface';
 import { ConversationList } from '@/components/chat/ConversationList';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Message } from '@/utils/chatUtils';
+import { Message, getUserConversations } from '@/utils/chatUtils';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 const UserMessages = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -16,6 +29,10 @@ const UserMessages = () => {
   } | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [newMessageEmail, setNewMessageEmail] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isStartingNewConversation, setIsStartingNewConversation] = useState(false);
+  const { toast } = useToast();
   
   useEffect(() => {
     const getUser = async () => {
@@ -82,6 +99,97 @@ const UserMessages = () => {
     });
   };
   
+  const handleStartNewConversation = async () => {
+    if (!userId || !newMessageEmail.trim() || !newMessageEmail.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsStartingNewConversation(true);
+    
+    try {
+      // First, get user by email
+      const { data: users, error: userError } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name')
+        .eq('email', newMessageEmail.trim())
+        .limit(1);
+        
+      if (userError) throw userError;
+      
+      if (!users || users.length === 0) {
+        toast({
+          title: "User not found",
+          description: "No user with that email address was found",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      const recipient = users[0];
+      
+      // Check if conversation already exists
+      const { data: conversations, error: convError } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(`participant1_id.eq.${userId},participant2_id.eq.${userId}`)
+        .or(`participant1_id.eq.${recipient.id},participant2_id.eq.${recipient.id}`)
+        .limit(1);
+        
+      if (convError) throw convError;
+      
+      let conversationId;
+      
+      if (conversations && conversations.length > 0) {
+        // Conversation exists
+        conversationId = conversations[0].id;
+      } else {
+        // Create new conversation
+        const { data: newConv, error: createError } = await supabase
+          .from('conversations')
+          .insert({
+            participant1_id: userId,
+            participant2_id: recipient.id,
+            created_at: new Date().toISOString()
+          })
+          .select('id')
+          .single();
+          
+        if (createError) throw createError;
+        conversationId = newConv.id;
+      }
+      
+      // Select the conversation
+      handleSelectConversation(
+        conversationId, 
+        recipient.id, 
+        `${recipient.first_name || ''} ${recipient.last_name || ''}`.trim() || 'User'
+      );
+      
+      setIsDialogOpen(false);
+      setNewMessageEmail('');
+      
+      toast({
+        title: "Conversation created",
+        description: "You can now start messaging",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error starting new conversation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to start new conversation",
+        variant: "destructive"
+      });
+    } finally {
+      setIsStartingNewConversation(false);
+    }
+  };
+  
   if (isLoading) {
     return (
       <div className="container mx-auto py-6 px-4 mt-16">
@@ -115,7 +223,7 @@ const UserMessages = () => {
             userId={userId}
             selectedConversationId={selectedConversation?.id}
             onSelectConversation={handleSelectConversation}
-            onNewConversation={() => {/* TODO: Implement new conversation flow */}}
+            onNewConversation={() => setIsDialogOpen(true)}
           />
         </div>
         
@@ -136,14 +244,51 @@ const UserMessages = () => {
             <div className="h-full border rounded-lg flex items-center justify-center bg-muted/50">
               <div className="text-center p-6">
                 <h3 className="text-lg font-medium mb-2">No conversation selected</h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground mb-4">
                   Select a conversation from the list or start a new one.
                 </p>
+                <Button onClick={() => setIsDialogOpen(true)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  New Conversation
+                </Button>
               </div>
             </div>
           )}
         </div>
       </div>
+      
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New Conversation</DialogTitle>
+            <DialogDescription>
+              Enter the email address of the user you want to message.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={newMessageEmail}
+                onChange={(e) => setNewMessageEmail(e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <div className="flex justify-end">
+            <Button 
+              onClick={handleStartNewConversation}
+              disabled={isStartingNewConversation || !newMessageEmail.trim()}
+            >
+              {isStartingNewConversation ? 'Starting...' : 'Start Conversation'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

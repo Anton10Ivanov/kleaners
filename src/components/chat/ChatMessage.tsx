@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Message } from '@/utils/chatUtils';
 import { CheckCircle, Circle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import FileAttachmentComponent from './FileAttachment';
 
 interface ChatMessageProps {
   message: Message;
@@ -43,6 +44,9 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
     }
   };
   
+  const hasAttachments = message.attachments && message.attachments.length > 0;
+  const hasContent = message.content && message.content.trim() !== '';
+  
   return (
     <div className={cn(
       "flex items-end gap-2 mb-4",
@@ -56,12 +60,35 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
       )}
       
       <div className={cn(
-        "max-w-[75%] rounded-lg px-4 py-2",
+        "max-w-[75%]",
+        hasContent && "rounded-lg px-4 py-2",
         isOwn 
           ? "bg-primary text-primary-foreground rounded-tr-none" 
           : "bg-muted rounded-tl-none"
       )}>
-        <div className="break-words">{message.content}</div>
+        {hasContent && (
+          <div className="break-words">{message.content}</div>
+        )}
+        
+        {hasAttachments && (
+          <div className={cn(
+            "flex flex-col gap-2",
+            hasContent && "mt-2"
+          )}>
+            {message.attachments.map(file => (
+              <FileAttachmentComponent 
+                key={file.id} 
+                file={file} 
+                showRemove={false}
+                className={cn(
+                  isOwn 
+                    ? "bg-primary-foreground/10 text-primary-foreground" 
+                    : "bg-background"
+                )}
+              />
+            ))}
+          </div>
+        )}
         
         <div className={cn(
           "flex items-center mt-1 text-xs",
@@ -88,3 +115,5 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
     </div>
   );
 };
+
+export default ChatMessage;
