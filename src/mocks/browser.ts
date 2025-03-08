@@ -2,6 +2,7 @@
 import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { dev } from '@/lib/utils';
+import { mockData } from '@/utils/mockData';
 
 // Define handlers
 export const handlers = [
@@ -27,6 +28,51 @@ export const handlers = [
         status: 'scheduled'
       },
     ]);
+  }),
+  
+  // Invoice handlers
+  http.get('/api/invoices/check/:bookingId', ({ params }) => {
+    const { bookingId } = params;
+    const invoice = mockData.invoices.find(inv => inv.bookingId === bookingId);
+    
+    return HttpResponse.json({ 
+      exists: !!invoice,
+      invoice: invoice || null
+    });
+  }),
+  
+  http.get('/api/invoices/download/:bookingId', async ({ params }) => {
+    const { bookingId } = params;
+    const invoice = mockData.invoices.find(inv => inv.bookingId === bookingId);
+    
+    if (!invoice) {
+      return new HttpResponse(null, { status: 404 });
+    }
+    
+    // Create a simple PDF-like blob
+    const invoiceContent = `
+      Invoice #${invoice.invoiceNumber}
+      -------------------------
+      Booking ID: ${invoice.bookingId}
+      Amount: $${invoice.amount.toFixed(2)}
+      Issue Date: ${new Date(invoice.issueDate).toLocaleDateString()}
+      Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}
+      Status: ${invoice.status}
+      
+      Thank you for your business!
+    `;
+    
+    // Simulate a PDF file with text content
+    const blob = new Blob([invoiceContent], { type: 'application/pdf' });
+    
+    // Create a fake download response
+    return new HttpResponse(blob, { 
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="invoice-${invoice.invoiceNumber}.pdf"`
+      }
+    });
   }),
   
   // Add more handlers as needed
