@@ -1,26 +1,24 @@
+
 import React, { useState, useEffect } from "react";
 import { useTitle } from "@/hooks/useTitle";
 import { BookingList } from "@/components/user/bookings/BookingList";
-import { BookingFilters } from "@/components/user/bookings/BookingFilters";
 import { useUserBookings } from "@/hooks/useUserBookings";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Package, Calendar, Clock, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ErrorBoundary } from "react-error-boundary";
-import { supabase } from "@/integrations/supabase/client";
 
 /**
  * UserBookings Page
  * 
- * Displays a user's booking history with filtering options
+ * Displays a user's booking history with filtering options via stats cards
  * 
  * @returns {JSX.Element} User bookings page component
  */
 export default function UserBookings(): JSX.Element {
   useTitle("Your Bookings | Kleaners");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filterType, setFilterType] = useState<string>("upcoming");
   
   const { 
     bookings, 
@@ -62,16 +60,17 @@ export default function UserBookings(): JSX.Element {
   
   const filteredBookings = bookings
     .filter(booking => {
-      if (statusFilter !== "all" && booking.status !== statusFilter) {
-        return false;
+      if (filterType === "upcoming") {
+        return new Date(booking.date) > new Date() && 
+          ['pending', 'confirmed'].includes(booking.status);
+      } else if (filterType === "completed") {
+        return booking.status === "completed";
+      } else if (filterType === "cancelled") {
+        return booking.status === "cancelled";
+      } else if (filterType === "all") {
+        return true;
       }
-      
-      if (searchQuery && !booking.service.toLowerCase().includes(searchQuery.toLowerCase()) && 
-          !booking.address.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
-      }
-      
-      return true;
+      return false;
     })
     .map(booking => ({
       ...booking,
@@ -99,7 +98,10 @@ export default function UserBookings(): JSX.Element {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card>
+          <Card 
+            className={`cursor-pointer transition-all ${filterType === 'all' ? 'ring-2 ring-primary' : ''}`}
+            onClick={() => setFilterType('all')}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -113,7 +115,10 @@ export default function UserBookings(): JSX.Element {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className={`cursor-pointer transition-all ${filterType === 'upcoming' ? 'ring-2 ring-primary' : ''}`}
+            onClick={() => setFilterType('upcoming')}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -127,7 +132,10 @@ export default function UserBookings(): JSX.Element {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className={`cursor-pointer transition-all ${filterType === 'completed' ? 'ring-2 ring-primary' : ''}`}
+            onClick={() => setFilterType('completed')}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -141,7 +149,10 @@ export default function UserBookings(): JSX.Element {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className={`cursor-pointer transition-all ${filterType === 'cancelled' ? 'ring-2 ring-primary' : ''}`}
+            onClick={() => setFilterType('cancelled')}
+          >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -156,17 +167,10 @@ export default function UserBookings(): JSX.Element {
           </Card>
         </div>
         
-        <BookingFilters
-          statusFilter={statusFilter}
-          onStatusChange={setStatusFilter}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
-        
         {filteredBookings.length === 0 && !isLoading ? (
           <Card className="p-8 text-center">
             <h3 className="text-xl font-medium mb-2">No bookings found</h3>
-            <p className="text-muted-foreground mb-6">You don't have any bookings matching your criteria.</p>
+            <p className="text-muted-foreground mb-6">You don't have any {filterType} bookings.</p>
             <Link to="/">
               <Button>Book Your First Cleaning</Button>
             </Link>
