@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { SearchX } from 'lucide-react';
+import { CalendarX2 } from 'lucide-react';
 
 export interface EmptyStateProps {
   hasFilters: boolean;
@@ -10,24 +10,22 @@ export interface EmptyStateProps {
 
 export const EmptyState: React.FC<EmptyStateProps> = ({ hasFilters, onClearFilters }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-md border p-8 text-center">
-      <div className="flex justify-center mb-4">
-        <SearchX className="h-12 w-12 text-gray-400" />
-      </div>
-      <h3 className="text-lg font-medium mb-2">No bookings found</h3>
+    <div className="flex flex-col items-center justify-center py-12 px-4 bg-white dark:bg-gray-800 rounded-lg border">
+      <CalendarX2 className="h-16 w-16 text-gray-400 mb-4" />
+      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">No bookings found</h3>
       
       {hasFilters ? (
-        <>
-          <p className="text-muted-foreground mb-4">
-            No bookings match your current filters. Try changing or clearing your filters.
+        <div className="mt-4 text-center">
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
+            There are no bookings matching your current filters.
           </p>
           <Button onClick={onClearFilters} variant="outline">
-            Clear All Filters
+            Clear Filters
           </Button>
-        </>
+        </div>
       ) : (
-        <p className="text-muted-foreground">
-          There are no bookings in the system yet. They will appear here once created.
+        <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">
+          There are no bookings in the system yet. New bookings will appear here.
         </p>
       )}
     </div>

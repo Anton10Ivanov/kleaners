@@ -18,7 +18,7 @@ export const BookingsSection: React.FC = () => {
   // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
   
-  // Using the hook without parameters for now - we'll add them once we refactor completely
+  // Using the hook with parameters
   const {
     bookings,
     isLoading,
@@ -84,8 +84,8 @@ export const BookingsSection: React.FC = () => {
 
   const handleContactClient = (booking: Booking) => {
     // Contact client functionality
-    const clientName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim();
-    console.log('Contact client:', clientName);
+    const name = `${booking.first_name || ''} ${booking.last_name || ''}`.trim();
+    console.log('Contact client:', name);
   };
 
   if (isLoading && bookings.length === 0) {
