@@ -2,15 +2,16 @@
 import React from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useUserProfileData } from '@/hooks/useUserProfileData';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, Bell, FileText, User } from 'lucide-react';
+import { Bell, FileText, User } from 'lucide-react';
 import { AccountInfoCard } from '@/components/user/profile/AccountInfoCard';
 import { SecuritySettings } from '@/components/user/profile/SecuritySettings';
 import { AccountPreferences } from '@/components/user/profile/AccountPreferences';
 import { AvatarSection } from '@/components/user/profile/AvatarSection';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Accordion } from '@/components/ui/accordion';
 import { NotificationsPanel } from '@/components/user/profile/NotificationsPanel';
+import { ProfileSkeleton } from '@/components/user/profile/ProfileSkeleton';
+import { ProfileErrorState } from '@/components/user/profile/ProfileErrorState';
+import { AccordionSection } from '@/components/user/profile/AccordionSection';
 
 /**
  * UserProfile Page
@@ -35,32 +36,12 @@ export default function UserProfile(): JSX.Element {
   
   // Loading state for profile
   if (profileLoading) {
-    return (
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col items-center mb-6">
-          <Skeleton className="h-24 w-24 rounded-full mb-4" />
-          <Skeleton className="h-8 w-48 mb-4" />
-        </div>
-        
-        <Card>
-          <CardContent className="mt-6">
-            <Skeleton className="h-10 w-full mb-4" />
-            <Skeleton className="h-32 w-full" />
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
   
   // Error state
   if (profileError) {
-    return (
-      <div className="container mx-auto px-4 py-6 flex flex-col items-center text-center">
-        <AlertTriangle className="h-12 w-12 text-amber-500 mb-2" />
-        <h2 className="text-xl font-semibold">Error Loading Profile</h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">{profileError.message}</p>
-      </div>
-    );
+    return <ProfileErrorState message={profileError.message} />;
   }
   
   // No profile data
@@ -85,69 +66,53 @@ export default function UserProfile(): JSX.Element {
       
       <Accordion type="single" collapsible className="w-full space-y-4">
         {/* Account Information Accordion */}
-        <AccordionItem value="account-info" className="border rounded-lg shadow-sm overflow-hidden">
-          <AccordionTrigger className="p-4 hover:no-underline">
-            <div className="flex items-center">
-              <User className="h-5 w-5 mr-2 text-primary" />
-              <span className="font-semibold">Account Information</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-4 pb-4">
-            <AccountInfoCard
-              profile={profile}
-              onSave={updateProfile}
-            />
-          </AccordionContent>
-        </AccordionItem>
+        <AccordionSection
+          value="account-info"
+          title="Account Information"
+          icon={User}
+        >
+          <AccountInfoCard
+            profile={profile}
+            onSave={updateProfile}
+          />
+        </AccordionSection>
 
         {/* Security Settings Accordion */}
-        <AccordionItem value="security" className="border rounded-lg shadow-sm overflow-hidden">
-          <AccordionTrigger className="p-4 hover:no-underline">
-            <div className="flex items-center">
-              <FileText className="h-5 w-5 mr-2 text-primary" />
-              <span className="font-semibold">Security Settings</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-4 pb-4">
-            <SecuritySettings
-              passwordStrength={passwordStrength}
-              onPasswordCheck={checkPasswordStrength}
-              onPasswordChange={changePassword}
-            />
-          </AccordionContent>
-        </AccordionItem>
+        <AccordionSection
+          value="security"
+          title="Security Settings"
+          icon={FileText}
+        >
+          <SecuritySettings
+            passwordStrength={passwordStrength}
+            onPasswordCheck={checkPasswordStrength}
+            onPasswordChange={changePassword}
+          />
+        </AccordionSection>
 
-        {/* Notifications Accordion - Now using the combined component */}
-        <AccordionItem value="notifications" className="border rounded-lg shadow-sm overflow-hidden">
-          <AccordionTrigger className="p-4 hover:no-underline">
-            <div className="flex items-center">
-              <Bell className="h-5 w-5 mr-2 text-primary" />
-              <span className="font-semibold">Notifications</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-4 pb-4">
-            <NotificationsPanel
-              preferences={profile.notificationPreferences}
-              onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
-            />
-          </AccordionContent>
-        </AccordionItem>
+        {/* Notifications Accordion */}
+        <AccordionSection
+          value="notifications"
+          title="Notifications"
+          icon={Bell}
+        >
+          <NotificationsPanel
+            preferences={profile.notificationPreferences}
+            onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
+          />
+        </AccordionSection>
 
         {/* Account Preferences Accordion */}
-        <AccordionItem value="account-prefs" className="border rounded-lg shadow-sm overflow-hidden">
-          <AccordionTrigger className="p-4 hover:no-underline">
-            <div className="flex items-center">
-              <User className="h-5 w-5 mr-2 text-primary" />
-              <span className="font-semibold">Account Preferences</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-4 pb-4">
-            <AccountPreferences
-              preferences={profile.accountPreferences}
-              onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
-            />
-          </AccordionContent>
-        </AccordionItem>
+        <AccordionSection
+          value="account-prefs"
+          title="Account Preferences"
+          icon={User}
+        >
+          <AccountPreferences
+            preferences={profile.accountPreferences}
+            onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
+          />
+        </AccordionSection>
       </Accordion>
     </div>
   );
