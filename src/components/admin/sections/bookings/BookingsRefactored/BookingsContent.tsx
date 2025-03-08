@@ -71,8 +71,10 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
     });
   };
 
+  // Check if there are any active filters
   const hasFilters = status !== 'all' || searchTerm !== '' || dateRange !== undefined;
   
+  // Handle clearing all filters
   const handleClearFilters = () => {
     setStatus('all');
     setSearchTerm('');
@@ -88,11 +90,6 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
     return <EmptyState hasFilters={hasFilters} onClearFilters={handleClearFilters} />;
   }
 
-  // Mock function for refreshData
-  const refreshData = () => {
-    console.log('Refreshing data...');
-  };
-
   return (
     <div className="space-y-4">
       <BookingsFilter
@@ -104,6 +101,7 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
         selectedDateRange={dateRange}
       />
       
+      {/* We need to modify the BookingsTable component or create a wrapper that accepts our props */}
       <div className="border rounded-md overflow-hidden">
         <BookingsTable
           bookings={bookings}
@@ -112,7 +110,7 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
           toggleSort={() => {}} 
           updateBookingStatus={onUpdateStatus}
           deleteBooking={onDeleteBooking}
-          refreshData={refreshData}
+          refreshData={() => {}}
           assignProvider={onAssignProvider}
           viewDetails={onViewDetails}
           contactClient={onContactClient}
