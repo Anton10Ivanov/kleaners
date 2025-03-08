@@ -1,38 +1,29 @@
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTitle } from '@/hooks/useTitle';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { CalendarView } from '@/components/provider/availability/CalendarView';
 import { WeeklySchedule } from '@/components/provider/availability/WeeklySchedule';
+import { useProviderAvailability } from '@/hooks/useProviderAvailability';
 
 const ProviderAvailability = () => {
   useTitle('Availability Management');
-  const [selectedTab, setSelectedTab] = useState('calendar');
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [dateEvents, setDateEvents] = useState<any[]>([]);
   
-  // Mock availability data
-  const [availableDays, setAvailableDays] = useState({
-    monday: true,
-    tuesday: true,
-    wednesday: true,
-    thursday: true,
-    friday: true,
-    saturday: false,
-    sunday: false,
-  });
-  
-  const [timeRanges, setTimeRanges] = useState([
-    { id: 1, day: 'monday', start: '09:00', end: '17:00' },
-    { id: 2, day: 'tuesday', start: '09:00', end: '17:00' },
-    { id: 3, day: 'wednesday', start: '09:00', end: '17:00' },
-    { id: 4, day: 'thursday', start: '09:00', end: '17:00' },
-    { id: 5, day: 'friday', start: '09:00', end: '17:00' },
-  ]);
-  
-  const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
+  const {
+    selectedTab,
+    setSelectedTab,
+    selectedDate,
+    setSelectedDate,
+    availableDays,
+    timeRanges,
+    unavailableDates,
+    addTimeRange,
+    removeTimeRange,
+    updateTimeRange,
+    toggleDayAvailability,
+    toggleDateUnavailable
+  } = useProviderAvailability();
   
   const form = useForm({
     defaultValues: {
@@ -46,45 +37,10 @@ const ProviderAvailability = () => {
     }
   });
   
-  const addTimeRange = (day: string) => {
-    const newId = Math.max(0, ...timeRanges.map(r => r.id)) + 1;
-    setTimeRanges([...timeRanges, { id: newId, day, start: '09:00', end: '17:00' }]);
-  };
-  
-  const removeTimeRange = (id: number) => {
-    setTimeRanges(timeRanges.filter(range => range.id !== id));
-  };
-  
-  const updateTimeRange = (id: number, field: 'start' | 'end', value: string) => {
-    setTimeRanges(timeRanges.map(range => 
-      range.id === id ? { ...range, [field]: value } : range
-    ));
-  };
-  
-  const toggleDayAvailability = (day: string, value: boolean) => {
-    setAvailableDays({ ...availableDays, [day]: value });
-    
-    if (!value) {
-      // Remove all time ranges for this day when marked as unavailable
-      setTimeRanges(timeRanges.filter(range => range.day !== day));
-    } else if (value && !timeRanges.some(range => range.day === day)) {
-      // Add a default time range when day is marked as available
-      addTimeRange(day);
-    }
-  };
-  
   const saveAvailability = () => {
     // In a real app, this would send the data to the server
     console.log('Saving availability:', { availableDays, timeRanges, unavailableDates });
     toast.success('Availability settings saved successfully');
-  };
-  
-  const toggleDateUnavailable = (date: Date) => {
-    if (unavailableDates.some(d => d.toDateString() === date.toDateString())) {
-      setUnavailableDates(unavailableDates.filter(d => d.toDateString() !== date.toDateString()));
-    } else {
-      setUnavailableDates([...unavailableDates, date]);
-    }
   };
   
   return (
