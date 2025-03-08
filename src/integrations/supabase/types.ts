@@ -433,6 +433,36 @@ export type Database = {
           },
         ]
       }
+      provider_vacation_requests: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          provider_id: string
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          provider_id: string
+          start_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          provider_id?: string
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_providers: {
         Row: {
           created_at: string | null
