@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -15,13 +14,12 @@ import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
 
 // Admin pages
-import AdminHome from '@/pages/admin/AdminHome';
+import AdminPanel from '@/pages/admin/AdminPanel';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
 import { AdminCustomers } from '@/pages/admin/AdminCustomers';
 import { AdminProviders } from '@/pages/admin/AdminProviders';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
-import AdminAnalytics from '@/pages/admin/AdminAnalytics';
-import AdminSupportQueries from '@/pages/admin/AdminSupportQueries';
+import Dashboard from '@/pages/admin/Dashboard';
 
 // User pages
 import UserDashboard from '@/pages/user/UserDashboard';
@@ -99,12 +97,11 @@ function App() {
       </Route>
 
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminHome />} />
-        <Route path="analytics" element={<AdminAnalytics />} />
+        <Route index element={<AdminPanel />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="providers" element={<AdminProviders />} />
-        <Route path="support-queries" element={<AdminSupportQueries />} />
         <Route path="settings" element={<AdminSettings />} />
       </Route>
       
