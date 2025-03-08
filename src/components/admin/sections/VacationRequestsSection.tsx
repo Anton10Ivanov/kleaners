@@ -1,118 +1,187 @@
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
-import { format, parseISO } from 'date-fns';
-import { useProviderVacation } from '@/hooks/useProviderVacation';
 import { Check, X } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
-export const VacationRequestsSection: React.FC = () => {
-  const { 
-    allVacationRequests, 
-    isLoadingAllVacations, 
-    allVacationsError,
-    updateVacationStatus 
-  } = useProviderVacation();
-  
-  const formatDate = (dateString: string) => {
+interface VacationRequest {
+  id: string;
+  provider_id: string;
+  provider_name?: string;
+  start_date: string;
+  end_date: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+}
+
+export function VacationRequestsSection() {
+  const [vacationRequests, setVacationRequests] = useState<VacationRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch vacation requests
+  const fetchVacationRequests = async () => {
     try {
-      return format(parseISO(dateString), 'MMM dd, yyyy');
+      setIsLoading(true);
+      
+      const { data, error } = await supabase
+        .from('provider_vacation_requests')
+        .select(`
+          id,
+          provider_id,
+          start_date,
+          end_date,
+          status,
+          created_at
+        `)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Get provider names
+      if (data && data.length > 0) {
+        const providerIds = [...new Set(data.map(req => req.provider_id))];
+        
+        const { data: providersData, error: providersError } = await supabase
+          .from('service_providers')
+          .select('id, first_name, last_name')
+          .in('id', providerIds);
+          
+        if (providersError) {
+          console.error("Error fetching provider names:", providersError);
+        }
+        
+        // Map provider names to vacation requests
+        const requestsWithNames = data.map(request => {
+          const provider = providersData?.find(p => p.id === request.provider_id);
+          return {
+            ...request,
+            provider_name: provider ? `${provider.first_name} ${provider.last_name}` : 'Unknown Provider'
+          };
+        });
+        
+        setVacationRequests(requestsWithNames);
+      } else {
+        setVacationRequests([]);
+      }
     } catch (error) {
-      return 'Invalid date';
+      console.error("Error fetching vacation requests:", error);
+      toast.error("Failed to fetch vacation requests");
+    } finally {
+      setIsLoading(false);
     }
   };
   
-  const getStatusBadgeClass = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 'rejected':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-      default:
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+  useEffect(() => {
+    fetchVacationRequests();
+  }, []);
+  
+  const updateRequestStatus = async (id: string, status: 'approved' | 'rejected') => {
+    try {
+      const { error } = await supabase
+        .from('provider_vacation_requests')
+        .update({ status })
+        .eq('id', id);
+        
+      if (error) {
+        throw error;
+      }
+      
+      // Update local state
+      setVacationRequests(
+        vacationRequests.map(req => 
+          req.id === id ? { ...req, status } : req
+        )
+      );
+      
+      toast.success(`Vacation request ${status}`);
+    } catch (error) {
+      console.error(`Error ${status} vacation request:`, error);
+      toast.error(`Failed to ${status} vacation request`);
     }
   };
-  
-  if (isLoadingAllVacations) {
-    return (
-      <div className="flex justify-center items-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-  
-  if (allVacationsError) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-red-500">Error loading vacation requests.</p>
-        <Button variant="outline" className="mt-4">Retry</Button>
-      </div>
-    );
-  }
-  
-  if (!allVacationRequests || allVacationRequests.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">No vacation requests found.</p>
-      </div>
-    );
-  }
   
   return (
     <Card>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Provider</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>End Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Requested On</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {allVacationRequests.map((request) => (
-              <TableRow key={request.id}>
-                <TableCell className="font-medium">{request.provider_name || 'Unknown'}</TableCell>
-                <TableCell>{formatDate(request.start_date)}</TableCell>
-                <TableCell>{formatDate(request.end_date)}</TableCell>
-                <TableCell>
-                  <Badge variant="outline" className={getStatusBadgeClass(request.status)}>
-                    {request.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{formatDate(request.created_at)}</TableCell>
-                <TableCell className="text-right">
-                  {request.status === 'pending' && (
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 bg-green-50 text-green-600 hover:bg-green-100 border-green-200"
-                        onClick={() => updateVacationStatus({ id: request.id, status: 'approved' })}
-                      >
-                        <Check className="h-4 w-4 mr-1" /> Approve
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 bg-red-50 text-red-600 hover:bg-red-100 border-red-200"
-                        onClick={() => updateVacationStatus({ id: request.id, status: 'rejected' })}
-                      >
-                        <X className="h-4 w-4 mr-1" /> Reject
-                      </Button>
-                    </div>
-                  )}
-                </TableCell>
+      <CardHeader>
+        <CardTitle>Vacation Requests</CardTitle>
+        <CardDescription>
+          Review and manage service provider vacation requests
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <div className="py-6 text-center text-muted-foreground">Loading vacation requests...</div>
+        ) : vacationRequests.length === 0 ? (
+          <div className="py-6 text-center text-muted-foreground">No vacation requests found</div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Provider</TableHead>
+                <TableHead>Start Date</TableHead>
+                <TableHead>End Date</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {vacationRequests.map((request) => {
+                const startDate = new Date(request.start_date);
+                const endDate = new Date(request.end_date);
+                const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                
+                return (
+                  <TableRow key={request.id}>
+                    <TableCell>{request.provider_name}</TableCell>
+                    <TableCell>{format(startDate, 'MMM dd, yyyy')}</TableCell>
+                    <TableCell>{format(endDate, 'MMM dd, yyyy')}</TableCell>
+                    <TableCell>{duration} day{duration !== 1 ? 's' : ''}</TableCell>
+                    <TableCell>
+                      <Badge variant={
+                        request.status === 'approved' ? 'success' : 
+                        request.status === 'rejected' ? 'destructive' : 
+                        'outline'
+                      }>
+                        {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {request.status === 'pending' && (
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0 text-green-500" 
+                            onClick={() => updateRequestStatus(request.id, 'approved')}
+                          >
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0 text-red-500" 
+                            onClick={() => updateRequestStatus(request.id, 'rejected')}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   );
-};
+}

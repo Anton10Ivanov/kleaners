@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -7,21 +6,21 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   setCurrentPage: (page: number) => void;
-  isMobile?: boolean;
+  isMobile: boolean;
   startIndex: number;
   endIndex: number;
   totalItems: number;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
+export const Pagination = ({
   currentPage,
   totalPages,
   setCurrentPage,
-  isMobile = false,
+  isMobile,
   startIndex,
   endIndex,
   totalItems
-}) => {
+}: PaginationProps) => {
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);

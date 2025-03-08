@@ -12,40 +12,33 @@ import {
 } from '@/components/ui/dialog';
 import { DateRange } from 'react-day-picker';
 import { addDays } from 'date-fns';
-import { useProviderVacation } from '@/hooks/useProviderVacation';
-import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 interface VacationRequestDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onVacationRequest: (dateRange: DateRange) => void;
 }
 
 export function VacationRequestDialog({
   open,
-  onOpenChange
+  onOpenChange,
+  onVacationRequest
 }: VacationRequestDialogProps) {
-  const { user } = useAuth();
-  const { submitVacationRequest } = useProviderVacation(user?.id);
-  
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
     from: undefined,
     to: undefined
   });
   
   const handleSubmit = () => {
-    if (!dateRange?.from) {
+    if (dateRange?.from) {
+      onVacationRequest(dateRange);
+      toast.success("Vacation request submitted successfully");
+      onOpenChange(false);
+      setDateRange({ from: undefined, to: undefined });
+    } else {
       toast.error("Please select at least one day");
-      return;
     }
-    
-    if (!dateRange.to) {
-      dateRange.to = dateRange.from;
-    }
-    
-    submitVacationRequest(dateRange);
-    onOpenChange(false);
-    setDateRange({ from: undefined, to: undefined });
   };
   
   const today = new Date();

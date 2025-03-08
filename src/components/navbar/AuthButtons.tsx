@@ -131,16 +131,13 @@ export const AuthButtons = () => {
   };
 
   if (loading) {
-    return (
-      <Button variant="ghost" size="sm" disabled>
+    return <Button variant="ghost" size="sm" disabled>
         <Loader2 className="h-4 w-4 animate-spin" />
-      </Button>
-    );
+      </Button>;
   }
   
   if (user) {
-    return (
-      <DropdownMenu>
+    return <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm" className="flex items-center gap-2">
             <UserCircle className="h-5 w-5" />
@@ -173,7 +170,7 @@ export const AuthButtons = () => {
           )}
           
           {userRole === 'provider' && (
-            <DropdownMenuItem onClick={() => navigate('/provider')}>
+            <DropdownMenuItem onClick={() => navigate('/provider/dashboard')}>
               <LayoutDashboard className="mr-2 h-4 w-4" />
               <span>Provider Dashboard</span>
             </DropdownMenuItem>
@@ -188,7 +185,7 @@ export const AuthButtons = () => {
           )}
           
           {userRole === 'provider' && (
-            <DropdownMenuItem onClick={() => navigate('/provider/bookings')}>
+            <DropdownMenuItem onClick={() => navigate('/provider/assignments')}>
               <ClipboardList className="mr-2 h-4 w-4" />
               <span>My Assignments</span>
             </DropdownMenuItem>
@@ -219,18 +216,15 @@ export const AuthButtons = () => {
             <span>Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    );
+      </DropdownMenu>;
   }
   
-  return (
-    <div className="flex items-center gap-2">
+  return <div className="flex items-center gap-2">
       <Button variant="ghost" size="sm" onClick={() => navigate('/auth/login')}>
         Login
       </Button>
       <Button variant="default" size="sm" onClick={() => navigate('/auth/signup')}>
         Sign up
       </Button>
-    </div>
-  );
+    </div>;
 };

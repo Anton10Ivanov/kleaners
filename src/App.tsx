@@ -1,5 +1,5 @@
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import UserLayout from '@/components/user/UserLayout';
@@ -7,7 +7,6 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/hooks/useAuth';
 
 // Import pages
 import Index from '@/pages/Index';
@@ -17,7 +16,12 @@ import JoinTeam from '@/pages/JoinTeam';
 
 // Admin pages
 import AdminHome from '@/pages/admin/AdminHome';
-import AdminLayout from '@/components/admin/AdminLayout';
+import { AdminBookings } from '@/pages/admin/AdminBookings';
+import { AdminCustomers } from '@/pages/admin/AdminCustomers';
+import { AdminProviders } from '@/pages/admin/AdminProviders';
+import { AdminSettings } from '@/pages/admin/AdminSettings';
+import AdminAnalytics from '@/pages/admin/AdminAnalytics';
+import AdminSupportQueries from '@/pages/admin/AdminSupportQueries';
 
 // User pages
 import UserDashboard from '@/pages/user/UserDashboard';
@@ -51,88 +55,75 @@ import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import ProviderMessages from '@/pages/provider/ProviderMessages';
-
-// Create a Query Client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+import AdminLayout from '@/components/admin/AdminLayout';
 
 function App() {
   const location = useLocation();
 
-  // Set body class based on route for styling purposes
-  const path = location.pathname.split('/')[1] || 'root';
-  document.body.className = ''; // Clear previous classes
-  document.body.classList.add(`${path}-route`);
+  useEffect(() => {
+    const path = location.pathname.split('/')[1] || 'root';
+    document.body.className = ''; // Clear previous classes
+    document.body.classList.add(`${path}-route`);
 
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    rootElement.className = '';
-    if (['admin', 'user', 'provider'].includes(path)) {
-      rootElement.classList.add('admin-panel-container');
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.className = '';
+      if (['admin', 'user', 'provider'].includes(path)) {
+        rootElement.classList.add('admin-panel-container');
+      }
     }
-  }
+  }, [location]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <AuthProvider>
-          <ScrollToTop />
-          <Routes>
-            <Route element={<RootLayout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/join-team" element={<JoinTeam />} />
-              
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/signup" element={<Signup />} />
-              
-              <Route path="/about/values" element={<CompanyValues />} />
-              <Route path="/about/faq" element={<FAQ />} />
-              
-              <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-              <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-              <Route path="/services/move-in-out" element={<MoveInOut />} />
-              <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-              
-              <Route path="/legal/terms" element={<TermsOfService />} />
-              <Route path="/legal/privacy" element={<PrivacyPolicy />} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Route>
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route path="/" element={<Index />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/join-team" element={<JoinTeam />} />
+        
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
+        
+        <Route path="/about/values" element={<CompanyValues />} />
+        <Route path="/about/faq" element={<FAQ />} />
+        
+        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+        <Route path="/services/move-in-out" element={<MoveInOut />} />
+        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+        
+        <Route path="/legal/terms" element={<TermsOfService />} />
+        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+        
+        <Route path="*" element={<NotFound />} />
+      </Route>
 
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminHome />} />
-              {/* Removed empty routes */}
-            </Route>
-            
-            <Route path="/user" element={<UserLayout />}>
-              <Route index element={<UserDashboard />} />
-              <Route path="dashboard" element={<UserDashboard />} />
-              <Route path="bookings" element={<UserBookings />} />
-              <Route path="messages" element={<UserMessages />} />
-              <Route path="invoices" element={<UserInvoices />} />
-              <Route path="profile" element={<UserProfile />} />
-            </Route>
-            
-            <Route path="/provider" element={<ProviderLayout />}>
-              <Route index element={<ProviderProfile />} />
-              <Route path="profile" element={<ProviderProfile />} />
-              <Route path="bookings" element={<ProviderBookings />} />
-              <Route path="messages" element={<ProviderMessages />} />
-              <Route path="settings" element={<ProviderSettings />} />
-              <Route path="availability" element={<ProviderAvailability />} />
-            </Route>
-          </Routes>
-          <Toaster />
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminHome />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="providers" element={<AdminProviders />} />
+        <Route path="support-queries" element={<AdminSupportQueries />} />
+        <Route path="settings" element={<AdminSettings />} />
+      </Route>
+      
+      <Route element={<UserLayout />}>
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/bookings" element={<UserBookings />} />
+        <Route path="/user/messages" element={<UserMessages />} />
+        <Route path="/user/invoices" element={<UserInvoices />} />
+        <Route path="/user/profile" element={<UserProfile />} />
+      </Route>
+      
+      <Route path="/provider" element={<ProviderLayout />}>
+        <Route path="profile" element={<ProviderProfile />} />
+        <Route path="bookings" element={<ProviderBookings />} />
+        <Route path="messages" element={<ProviderMessages />} />
+        <Route path="settings" element={<ProviderSettings />} />
+        <Route path="availability" element={<ProviderAvailability />} />
+      </Route>
+    </Routes>
   );
 }
 
