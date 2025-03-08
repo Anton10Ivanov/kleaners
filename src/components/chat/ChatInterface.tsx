@@ -7,7 +7,7 @@ import { Send, Paperclip, Image, Smile } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Message, getConversation, sendMessage, markMessagesAsRead, uploadAttachments, FileAttachment, useTypingIndicator } from '@/utils/chatUtils';
 import ChatMessage from './ChatMessage';
-import TypingIndicator from './TypingIndicator';
+import { TypingIndicator } from './TypingIndicator';
 import FileUpload from './FileUpload';
 import FileAttachmentComponent from './FileAttachment';
 import { supabase } from '@/integrations/supabase/client';
@@ -284,7 +284,7 @@ const ChatInterface = ({
           </>
         )}
         
-        {isRecipientTyping && <TypingIndicator />}
+        {isRecipientTyping && <TypingIndicator isTyping={true} />}
         
         <div ref={messagesEndRef} />
       </div>
@@ -316,7 +316,7 @@ const ChatInterface = ({
                 "min-h-10 resize-none py-3 pr-12",
                 attachments.length > 0 && "rounded-b-md rounded-t-none border-t-0"
               )}
-              maxRows={5}
+              rows={1}
             />
             
             <div className="absolute right-3 bottom-3 flex items-center gap-1">
@@ -354,10 +354,12 @@ const ChatInterface = ({
       </div>
       
       {/* Hidden file input */}
-      <FileUpload 
+      <input
+        type="file"
         ref={fileInputRef}
-        onUpload={handleFileUpload}
-        isUploading={isUploading}
+        onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+        style={{ display: 'none' }}
+        multiple
       />
     </div>
   );
