@@ -17,13 +17,7 @@ import JoinTeam from '@/pages/JoinTeam';
 
 // Admin pages
 import AdminHome from '@/pages/admin/AdminHome';
-import { AdminBookings } from '@/pages/admin/AdminBookings';
-import { AdminCustomers } from '@/pages/admin/AdminCustomers';
-import { AdminProviders } from '@/pages/admin/AdminProviders';
-import { AdminSettings } from '@/pages/admin/AdminSettings';
-import AdminAnalytics from '@/pages/admin/AdminAnalytics';
-import AdminSupportQueries from '@/pages/admin/AdminSupportQueries';
-import AdminVacationRequests from '@/pages/admin/AdminVacationRequests';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 // User pages
 import UserDashboard from '@/pages/user/UserDashboard';
@@ -57,7 +51,6 @@ import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import ProviderMessages from '@/pages/provider/ProviderMessages';
-import AdminLayout from '@/components/admin/AdminLayout';
 
 // Create a Query Client
 const queryClient = new QueryClient({
@@ -115,13 +108,7 @@ function App() {
 
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminHome />} />
-              <Route path="analytics" element={<AdminAnalytics />} />
-              <Route path="bookings" element={<AdminBookings />} />
-              <Route path="customers" element={<AdminCustomers />} />
-              <Route path="providers" element={<AdminProviders />} />
-              <Route path="support-queries" element={<AdminSupportQueries />} />
-              <Route path="settings" element={<AdminSettings />} />
-              <Route path="vacation-requests" element={<AdminVacationRequests />} />
+              {/* Removed empty routes */}
             </Route>
             
             <Route path="/user" element={<UserLayout />}>
