@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Package, Calendar, Clock, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, AlertCircle } from 'lucide-react';
 
 interface FilterableStatsCardsProps {
   filterType: string;
@@ -20,22 +20,7 @@ export function FilterableStatsCards({
   bookingSummary
 }: FilterableStatsCardsProps): JSX.Element {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <Card 
-        className={`cursor-pointer transition-all ${filterType === 'all' ? 'ring-2 ring-primary' : ''}`}
-        onClick={() => setFilterType('all')}
-      >
-        <CardContent className="pt-6">
-          <div className="flex flex-col items-center text-center">
-            <p className="text-2xl font-bold">{bookingSummary.total}</p>
-            <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
-            <div className="bg-primary/10 p-3 rounded-full mt-3">
-              <Package className="h-5 w-5 text-primary" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <Card 
         className={`cursor-pointer transition-all ${filterType === 'upcoming' ? 'ring-2 ring-primary' : ''}`}
         onClick={() => setFilterType('upcoming')}
