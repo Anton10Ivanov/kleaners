@@ -1,11 +1,9 @@
-
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  Home, 
   Settings, 
   User, 
   Calendar, 
@@ -19,12 +17,6 @@ const UserSidebar = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const routes = [
-    {
-      label: "Dashboard",
-      icon: <Home className="h-5 w-5 mr-2" />,
-      href: "/user/dashboard",
-      active: pathname === "/user/dashboard",
-    },
     {
       label: "Bookings",
       icon: <Calendar className="h-5 w-5 mr-2" />,

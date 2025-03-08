@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useTitle } from "@/hooks/useTitle";
 import { BookingList } from "@/components/user/bookings/BookingList";
@@ -44,7 +43,7 @@ export default function UserBookings(): JSX.Element {
       
       const upcoming = bookings.filter(b => 
         new Date(b.date) > new Date() && 
-        (b.status === 'pending' || b.status === 'confirmed')
+        ['pending', 'confirmed'].includes(b.status)
       );
       
       const completed = bookings.filter(b => b.status === 'completed');
@@ -61,15 +60,12 @@ export default function UserBookings(): JSX.Element {
     calculateSummary();
   }, [bookings]);
   
-  // Process bookings based on filters
   const filteredBookings = bookings
     .filter(booking => {
-      // Filter by status
       if (statusFilter !== "all" && booking.status !== statusFilter) {
         return false;
       }
       
-      // Filter by search
       if (searchQuery && !booking.service.toLowerCase().includes(searchQuery.toLowerCase()) && 
           !booking.address.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
@@ -79,11 +75,9 @@ export default function UserBookings(): JSX.Element {
     })
     .map(booking => ({
       ...booking,
-      // Add the hours property needed by BookingCard
-      hours: booking.duration || 2 // Fallback to a default value if duration is missing
+      hours: booking.duration || 2
     }));
   
-  // Error fallback component
   const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => (
     <Card className="p-8 text-center">
       <h3 className="text-xl font-medium mb-2">Something went wrong</h3>
@@ -104,7 +98,6 @@ export default function UserBookings(): JSX.Element {
           </Link>
         </div>
         
-        {/* Booking Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card>
             <CardContent className="pt-6">
