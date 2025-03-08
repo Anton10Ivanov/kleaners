@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { BookingsTable } from '../../bookings/BookingsTable';
 import { BookingsFilter } from '../../bookings/BookingsFilter';
@@ -87,6 +88,11 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
     return <EmptyState hasFilters={hasFilters} onClearFilters={handleClearFilters} />;
   }
 
+  // Mock function for refreshData
+  const refreshData = () => {
+    console.log('Refreshing data...');
+  };
+
   return (
     <div className="space-y-4">
       <BookingsFilter
@@ -106,7 +112,7 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
           toggleSort={() => {}} 
           updateBookingStatus={onUpdateStatus}
           deleteBooking={onDeleteBooking}
-          refreshData={() => {}}
+          refreshData={refreshData}
           assignProvider={onAssignProvider}
           viewDetails={onViewDetails}
           contactClient={onContactClient}
