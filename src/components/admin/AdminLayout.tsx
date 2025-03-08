@@ -10,7 +10,7 @@ import { MobileSidebar } from './navigation/MobileSidebar';
 import { getNavItems } from './navigation/getNavItems';
 
 const AdminLayout = () => {
-  const [activeItem, setActiveItem] = useState('dashboard');
+  const [activeItem, setActiveItem] = useState('admin home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,18 +22,27 @@ const AdminLayout = () => {
   // Set active nav item based on current location
   useEffect(() => {
     try {
-      const path = location.pathname.split('/')[2] || '';
-      
-      // Handle the special case for the questions tab
-      if (location.pathname === '/admin' && location.search.includes('tab=questions')) {
-        setActiveItem('questions');
-        return;
-      }
+      const pathSegments = location.pathname.split('/');
+      const path = pathSegments.length > 2 ? pathSegments[2] : '';
       
       if (path) {
-        setActiveItem(path);
+        // Convert path to title format for matching (e.g., 'support-queries' to 'Support Queries')
+        const formattedPath = path
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+          
+        // Find nav item with matching path segment
+        const matchingNavItem = navItems.find(item => 
+          item.href.includes(path) || 
+          item.title.toLowerCase().includes(formattedPath.toLowerCase())
+        );
+        
+        if (matchingNavItem) {
+          setActiveItem(matchingNavItem.title.toLowerCase());
+        }
       } else {
-        setActiveItem('dashboard');
+        setActiveItem('admin home');
       }
     } catch (error) {
       handleApiError(
@@ -43,7 +52,7 @@ const AdminLayout = () => {
         ErrorSeverity.HIGH
       );
     }
-  }, [location]);
+  }, [location, navItems]);
   
   // Handle navigation click
   const handleNavClick = (href: string) => {
@@ -108,7 +117,7 @@ const AdminLayout = () => {
         <header className="border-b bg-background p-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold">
-              {navItems.find(item => item.title.toLowerCase() === activeItem)?.title || 'Dashboard'}
+              {navItems.find(item => item.title.toLowerCase() === activeItem)?.title || 'Admin'}
             </h1>
           </div>
         </header>

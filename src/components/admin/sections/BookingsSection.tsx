@@ -68,6 +68,22 @@ export const BookingsSection = () => {
     setRefreshKey(prev => prev + 1);
   };
 
+  // Mock assignProvider function
+  const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
+    console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
+  };
+
+  // View details functionality
+  const viewDetails = (booking: any) => {
+    console.log('View details:', booking);
+  };
+
+  // Contact client functionality
+  const contactClient = (booking: any) => {
+    const name = `${booking.first_name || ''} ${booking.last_name || ''}`.trim();
+    console.log('Contact client:', name);
+  };
+
   // Calculate pagination
   const totalItems = bookings?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -87,18 +103,40 @@ export const BookingsSection = () => {
     }
   };
 
+  const handleFilterChange = (newFilters: {
+    status?: BookingStatus | 'all';
+    search?: string;
+    dateRange?: DateRange | undefined;
+  }) => {
+    if (newFilters.status !== undefined) {
+      setSelectedStatus(newFilters.status === 'all' ? null : newFilters.status);
+    }
+    if (newFilters.search !== undefined) {
+      setSearchTerm(newFilters.search);
+    }
+    if (newFilters.dateRange !== undefined) {
+      setDateRange(newFilters.dateRange);
+    }
+  };
+
+  const handleClearFilters = () => {
+    setSelectedStatus(null);
+    setSearchTerm("");
+    setDateRange(undefined);
+  };
+
   return (
     <div className="space-y-4">
       <BookingsFilter
         searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedStatus={selectedStatus}
-        setSelectedStatus={setSelectedStatus}
-        dateRange={dateRange}
-        setDateRange={setDateRange}
+        selectedStatus={selectedStatus === null ? 'all' : selectedStatus}
+        selectedDateRange={dateRange}
+        onSearchChange={(value) => handleFilterChange({ search: value })}
+        onStatusChange={(value) => handleFilterChange({ status: value })}
+        onDateRangeChange={(value) => handleFilterChange({ dateRange: value })}
       />
       
-      {isLoading ? (
+      {isLoading && currentBookings.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-8 bg-white dark:bg-gray-800 rounded-md border shadow-sm">
           <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
           <p className="text-muted-foreground">Loading bookings...</p>
@@ -148,6 +186,9 @@ export const BookingsSection = () => {
                   updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
                   deleteBooking={deleteBooking}
                   refreshData={handleRefresh}
+                  assignProvider={assignProvider}
+                  viewDetails={viewDetails}
+                  contactClient={contactClient}
                 />
               </div>
               
@@ -216,11 +257,7 @@ export const BookingsSection = () => {
                 <Button
                   variant="outline"
                   className="mt-4"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setSelectedStatus(null);
-                    setDateRange(undefined);
-                  }}
+                  onClick={handleClearFilters}
                 >
                   Clear All Filters
                 </Button>
