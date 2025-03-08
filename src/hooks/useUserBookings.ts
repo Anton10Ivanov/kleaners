@@ -56,6 +56,9 @@ interface UseUserBookingsResult {
   
   /** Function to reschedule a booking */
   rescheduleBooking: (bookingId: string, newDate: string) => Promise<boolean>;
+  
+  /** Function to generate an invoice for a completed booking */
+  generateInvoice: (bookingId: string) => Promise<boolean>;
 }
 
 /**
@@ -166,12 +169,98 @@ export function useUserBookings(): UseUserBookingsResult {
     }
   };
 
+  // Generate an invoice for a completed booking
+  const generateInvoice = async (bookingId: string): Promise<boolean> => {
+    try {
+      const booking = bookings.find(b => b.id === bookingId);
+      
+      if (!booking) {
+        toast.error('Booking not found');
+        return false;
+      }
+      
+      if (booking.status !== 'completed') {
+        toast.error('Can only generate invoices for completed bookings');
+        return false;
+      }
+      
+      // In a real app, this would create a PDF invoice and store it in Supabase
+      const { data: user } = await supabase.auth.getUser();
+      
+      if (!user.user) {
+        toast.error('User not authenticated');
+        return false;
+      }
+      
+      // For demo purposes, we'll create a mock invoice record
+      // In production, you would generate a real PDF and upload it to Supabase Storage
+      
+      // First check if invoice already exists
+      const { data: existingInvoice } = await supabase
+        .from('invoices')
+        .select('id')
+        .eq('booking_id', bookingId)
+        .maybeSingle();
+        
+      if (existingInvoice) {
+        // Invoice already exists
+        toast.info('Invoice already exists for this booking');
+        return true;
+      }
+      
+      // Generate invoice number (simple implementation for demo)
+      const invoiceNumber = `INV-${Date.now().toString().slice(-6)}`;
+      
+      // Create invoice record
+      const { error: invoiceError } = await supabase
+        .from('invoices')
+        .insert({
+          booking_id: bookingId,
+          amount: booking.price,
+          invoice_number: invoiceNumber,
+          file_path: `${user.user.id}/${bookingId}.pdf`
+        });
+        
+      if (invoiceError) {
+        console.error('Error creating invoice:', invoiceError);
+        toast.error('Failed to generate invoice');
+        return false;
+      }
+      
+      // In a real app, you would generate a PDF here and upload to Storage
+      
+      toast.success('Invoice generated successfully');
+      return true;
+    } catch (error) {
+      console.error('Error generating invoice:', error);
+      toast.error('Failed to generate invoice');
+      return false;
+    }
+  };
+
+  // For demonstration purposes, auto-generate invoices for completed bookings
+  useEffect(() => {
+    const createMockInvoices = async () => {
+      if (isLoading || !bookings.length) return;
+      
+      // Find completed bookings and create invoices for them
+      const completedBookings = bookings.filter(b => b.status === 'completed');
+      
+      for (const booking of completedBookings) {
+        await generateInvoice(booking.id);
+      }
+    };
+    
+    createMockInvoices();
+  }, [bookings, isLoading]);
+
   return {
     bookings,
     isLoading,
     error: error || null,
     refetch,
     cancelBooking,
-    rescheduleBooking
+    rescheduleBooking,
+    generateInvoice
   };
 }
