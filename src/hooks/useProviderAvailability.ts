@@ -1,14 +1,8 @@
 
 import { useState } from 'react';
 
-interface TimeRange {
-  id: number;
-  day: string;
-  start: string;
-  end: string;
-}
-
-interface DaysAvailability {
+// Update the interface to include an index signature
+export interface DaysAvailability {
   monday: boolean;
   tuesday: boolean;
   wednesday: boolean;
@@ -16,6 +10,14 @@ interface DaysAvailability {
   friday: boolean;
   saturday: boolean;
   sunday: boolean;
+  [key: string]: boolean; // Add index signature to allow string indexing
+}
+
+interface TimeRange {
+  id: number;
+  day: string;
+  start: string;
+  end: string;
 }
 
 export const useProviderAvailability = () => {
