@@ -85,6 +85,9 @@ export default function UserBookings(): JSX.Element {
     </Card>
   );
   
+  // Determine whether to show bookings or empty state
+  const showEmptyState = !isLoading && filteredBookings.length === 0;
+  
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <div className="container mx-auto px-4 py-6">
@@ -94,19 +97,21 @@ export default function UserBookings(): JSX.Element {
           bookingSummary={bookingSummary}
         />
         
-        <BookingActionButton />
-        
-        {filteredBookings.length === 0 && !isLoading ? (
-          <BookingEmptyState filterType={filterType} />
-        ) : (
-          <BookingList 
-            bookings={filteredBookings}
-            isLoading={isLoading}
-            error={error}
-            onCancel={cancelBooking}
-            onReschedule={rescheduleBooking}
-          />
-        )}
+        <div className="pt-6">
+          <BookingActionButton />
+          
+          {showEmptyState ? (
+            <BookingEmptyState filterType={filterType} />
+          ) : (
+            <BookingList 
+              bookings={filteredBookings}
+              isLoading={isLoading}
+              error={error}
+              onCancel={cancelBooking}
+              onReschedule={rescheduleBooking}
+            />
+          )}
+        </div>
       </div>
     </ErrorBoundary>
   );
