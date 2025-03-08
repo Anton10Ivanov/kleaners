@@ -413,6 +413,7 @@ export const getUserConversations = async (userId: string): Promise<any[]> => {
       }
       
       // Fix the type issue by accessing properties safely
+      // otherParticipant is an object, not an array
       const participantId = otherParticipant?.id || 'unknown';
       const firstName = otherParticipant?.first_name || '';
       const lastName = otherParticipant?.last_name || '';
