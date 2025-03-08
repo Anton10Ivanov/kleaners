@@ -79,7 +79,7 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
               <FileAttachmentComponent 
                 key={file.id} 
                 file={file} 
-                showRemove={false}
+                showRemoveButton={false}
                 className={cn(
                   isOwn 
                     ? "bg-primary-foreground/10 text-primary-foreground" 
