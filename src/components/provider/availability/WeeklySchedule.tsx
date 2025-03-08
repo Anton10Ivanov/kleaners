@@ -8,6 +8,7 @@ import { Plus, Save, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { generateTimeOptions, isTimeBeforeStart } from '../../../utils/timeUtils';
 import { UseFormReturn } from 'react-hook-form';
+import { DaysAvailability } from '@/hooks/useProviderAvailability';
 
 interface TimeRange {
   id: number;
@@ -18,7 +19,7 @@ interface TimeRange {
 
 interface WeeklyScheduleProps {
   form: UseFormReturn<any>;
-  availableDays: Record<string, boolean>;
+  availableDays: DaysAvailability;
   timeRanges: TimeRange[];
   toggleDayAvailability: (day: string, value: boolean) => void;
   addTimeRange: (day: string) => void;
