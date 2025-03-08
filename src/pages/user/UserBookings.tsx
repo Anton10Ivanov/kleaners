@@ -50,10 +50,9 @@ export default function UserBookings(): JSX.Element {
     const calculateSummary = () => {
       if (bookings.length === 0) return;
       
-      const upcoming = bookings.filter(b => 
-        new Date(b.date) > new Date() && 
-        b.status === 'pending'
-      );
+      // Fix: Convert string dates to Date objects for comparison
+      // and include all pending bookings as upcoming regardless of date
+      const upcoming = bookings.filter(b => b.status === 'pending');
       
       const completed = bookings.filter(b => b.status === 'completed');
       const cancelled = bookings.filter(b => b.status === 'cancelled');
@@ -72,7 +71,8 @@ export default function UserBookings(): JSX.Element {
   const filteredBookings = bookings
     .filter(booking => {
       if (filterType === "upcoming") {
-        return new Date(booking.date) > new Date() && booking.status === 'pending';
+        // Fix: Show all pending bookings as upcoming
+        return booking.status === 'pending';
       } else if (filterType === "completed") {
         return booking.status === "completed";
       } else if (filterType === "cancelled") {

@@ -19,7 +19,7 @@ export const fetchUserBookings = async (): Promise<UserBooking[]> => {
     {
       id: "1",
       status: "pending",
-      date: "2023-05-15T10:00:00",
+      date: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
       service: "Regular Cleaning",
       address: "123 Main St, Apt 4B",
       price: 120,
