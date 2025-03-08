@@ -20,9 +20,10 @@ const tabSections = [
 
 interface AdminTabsProps {
   defaultTab?: string;
+  children?: React.ReactNode;
 }
 
-const AdminTabs = ({ defaultTab = 'bookings' }: AdminTabsProps) => {
+const AdminTabs = ({ defaultTab = 'bookings', children }: AdminTabsProps) => {
   const [activeTab, setActiveTab] = React.useState(defaultTab);
 
   // Handle tab change
@@ -37,6 +38,7 @@ const AdminTabs = ({ defaultTab = 'bookings' }: AdminTabsProps) => {
           <TabsTrigger 
             key={section.id}
             value={section.id}
+            id={`${section.id}-tab`}
             className="flex-1 min-w-fit data-[state=active]:bg-background"
           >
             {section.label}
@@ -49,6 +51,8 @@ const AdminTabs = ({ defaultTab = 'bookings' }: AdminTabsProps) => {
           <section.component />
         </TabsContent>
       ))}
+      
+      {children}
     </Tabs>
   );
 };

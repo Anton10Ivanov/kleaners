@@ -36,7 +36,6 @@ const AdminPanel = () => {
                       onClick={() => {
                         navigate('/admin');
                         // This will ensure the questions tab is active
-                        // The actual implementation would depend on how your tabs are managed
                         const tabsElement = document.getElementById('customer-questions-tab');
                         if (tabsElement) tabsElement.click();
                       }}
