@@ -7,6 +7,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/hooks/useAuth';
 
 // Import pages
 import Index from '@/pages/Index';
@@ -58,6 +59,16 @@ import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import ProviderMessages from '@/pages/provider/ProviderMessages';
 import AdminLayout from '@/components/admin/AdminLayout';
 
+// Create a Query Client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 function App() {
   const location = useLocation();
 
@@ -76,56 +87,64 @@ function App() {
   }, [location]);
 
   return (
-    <Routes>
-      <Route element={<RootLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/join-team" element={<JoinTeam />} />
-        
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        
-        <Route path="/about/values" element={<CompanyValues />} />
-        <Route path="/about/faq" element={<FAQ />} />
-        
-        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-        <Route path="/services/move-in-out" element={<MoveInOut />} />
-        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-        
-        <Route path="/legal/terms" element={<TermsOfService />} />
-        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
-        
-        <Route path="*" element={<NotFound />} />
-      </Route>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <AuthProvider>
+          <ScrollToTop />
+          <Routes>
+            <Route element={<RootLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/join-team" element={<JoinTeam />} />
+              
+              <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/signup" element={<Signup />} />
+              
+              <Route path="/about/values" element={<CompanyValues />} />
+              <Route path="/about/faq" element={<FAQ />} />
+              
+              <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+              <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+              <Route path="/services/move-in-out" element={<MoveInOut />} />
+              <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+              
+              <Route path="/legal/terms" element={<TermsOfService />} />
+              <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+              
+              <Route path="*" element={<NotFound />} />
+            </Route>
 
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminHome />} />
-        <Route path="analytics" element={<AdminAnalytics />} />
-        <Route path="bookings" element={<AdminBookings />} />
-        <Route path="customers" element={<AdminCustomers />} />
-        <Route path="providers" element={<AdminProviders />} />
-        <Route path="support-queries" element={<AdminSupportQueries />} />
-        <Route path="settings" element={<AdminSettings />} />
-        <Route path="vacation-requests" element={<AdminVacationRequests />} />
-      </Route>
-      
-      <Route element={<UserLayout />}>
-        <Route path="/user/dashboard" element={<UserDashboard />} />
-        <Route path="/user/bookings" element={<UserBookings />} />
-        <Route path="/user/messages" element={<UserMessages />} />
-        <Route path="/user/invoices" element={<UserInvoices />} />
-        <Route path="/user/profile" element={<UserProfile />} />
-      </Route>
-      
-      <Route path="/provider" element={<ProviderLayout />}>
-        <Route path="profile" element={<ProviderProfile />} />
-        <Route path="bookings" element={<ProviderBookings />} />
-        <Route path="messages" element={<ProviderMessages />} />
-        <Route path="settings" element={<ProviderSettings />} />
-        <Route path="availability" element={<ProviderAvailability />} />
-      </Route>
-    </Routes>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminHome />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="bookings" element={<AdminBookings />} />
+              <Route path="customers" element={<AdminCustomers />} />
+              <Route path="providers" element={<AdminProviders />} />
+              <Route path="support-queries" element={<AdminSupportQueries />} />
+              <Route path="settings" element={<AdminSettings />} />
+              <Route path="vacation-requests" element={<AdminVacationRequests />} />
+            </Route>
+            
+            <Route element={<UserLayout />}>
+              <Route path="/user/dashboard" element={<UserDashboard />} />
+              <Route path="/user/bookings" element={<UserBookings />} />
+              <Route path="/user/messages" element={<UserMessages />} />
+              <Route path="/user/invoices" element={<UserInvoices />} />
+              <Route path="/user/profile" element={<UserProfile />} />
+            </Route>
+            
+            <Route path="/provider" element={<ProviderLayout />}>
+              <Route path="profile" element={<ProviderProfile />} />
+              <Route path="bookings" element={<ProviderBookings />} />
+              <Route path="messages" element={<ProviderMessages />} />
+              <Route path="settings" element={<ProviderSettings />} />
+              <Route path="availability" element={<ProviderAvailability />} />
+            </Route>
+          </Routes>
+          <Toaster />
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

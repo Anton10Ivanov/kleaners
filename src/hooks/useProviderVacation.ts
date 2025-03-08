@@ -1,159 +1,142 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 import { DateRange } from 'react-day-picker';
+import { toast } from 'sonner';
 
-export interface VacationRequest {
+interface VacationRequest {
   id: string;
   provider_id: string;
-  provider_name?: string;
   start_date: string;
   end_date: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
+  updated_at: string;
+  provider_name?: string;
+}
+
+interface UpdateVacationStatusParams {
+  id: string;
+  status: 'approved' | 'rejected';
 }
 
 export const useProviderVacation = (providerId?: string) => {
   const queryClient = useQueryClient();
-  
-  // Get vacation requests for a specific provider
-  const getProviderVacationRequests = async () => {
-    if (!providerId) return [];
-    
-    const { data, error } = await supabase
-      .from('provider_vacation_requests')
-      .select('*')
-      .eq('provider_id', providerId)
-      .order('created_at', { ascending: false });
-      
-    if (error) throw error;
-    return data as VacationRequest[];
-  };
-  
-  // Create a vacation request
-  const createVacationRequest = async (dateRange: DateRange) => {
-    if (!providerId || !dateRange.from || !dateRange.to) {
-      throw new Error('Invalid vacation request data');
-    }
-    
-    const { data, error } = await supabase
-      .from('provider_vacation_requests')
-      .insert({
-        provider_id: providerId,
-        start_date: dateRange.from.toISOString(),
-        end_date: dateRange.to.toISOString(),
-        status: 'pending'
-      })
-      .select();
-      
-    if (error) throw error;
-    return data[0] as VacationRequest;
-  };
-  
-  // Get all vacation requests (admin only)
-  const getAllVacationRequests = async () => {
-    const { data, error } = await supabase
-      .from('provider_vacation_requests')
-      .select(`
-        id,
-        provider_id,
-        start_date,
-        end_date,
-        status,
-        created_at
-      `)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    
-    // Get provider names
-    if (data && data.length > 0) {
-      const providerIds = [...new Set(data.map(req => req.provider_id))];
-      
-      const { data: providersData, error: providersError } = await supabase
-        .from('service_providers')
-        .select('id, first_name, last_name')
-        .in('id', providerIds);
+
+  // For development purposes, use a default provider ID if none is provided
+  const effectiveProviderId = providerId || 'dev-provider-id';
+
+  // Fetch vacation requests for a specific provider
+  const { 
+    data: vacationRequests = [], 
+    isLoading: isLoadingVacations,
+    error: vacationsError
+  } = useQuery({
+    queryKey: ['providerVacations', effectiveProviderId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('provider_vacation_requests')
+        .select('*')
+        .eq('provider_id', effectiveProviderId);
         
-      if (providersError) {
-        console.error("Error fetching provider names:", providersError);
+      if (error) throw error;
+      return data as VacationRequest[];
+    },
+    enabled: !!effectiveProviderId,
+  });
+
+  // Fetch all vacation requests (for admin)
+  const {
+    data: allVacationRequests = [],
+    isLoading: isLoadingAllVacations,
+    error: allVacationsError
+  } = useQuery({
+    queryKey: ['allVacationRequests'],
+    queryFn: async () => {
+      // In a real app, you'd want to add security here
+      const { data, error } = await supabase
+        .from('provider_vacation_requests')
+        .select(`
+          *,
+          service_providers(first_name, last_name)
+        `);
+        
+      if (error) throw error;
+      
+      // Format the data to include provider name
+      return data.map(request => ({
+        ...request,
+        provider_name: request.service_providers ? 
+          `${request.service_providers.first_name} ${request.service_providers.last_name}` : 
+          'Unknown Provider'
+      })) as VacationRequest[];
+    }
+  });
+
+  // Submit a new vacation request
+  const { mutate: submitVacationRequest } = useMutation({
+    mutationFn: async (dateRange: DateRange) => {
+      if (!dateRange.from || !effectiveProviderId) {
+        throw new Error('Invalid request data');
       }
       
-      // Map provider names to vacation requests
-      return data.map(request => {
-        const provider = providersData?.find(p => p.id === request.provider_id);
-        return {
-          ...request,
-          provider_name: provider ? `${provider.first_name} ${provider.last_name}` : 'Unknown Provider'
-        };
-      }) as VacationRequest[];
-    }
-    
-    return [] as VacationRequest[];
-  };
-  
-  // Update vacation request status (admin only)
-  const updateVacationRequestStatus = async ({ id, status }: { id: string; status: 'approved' | 'rejected' }) => {
-    const { data, error } = await supabase
-      .from('provider_vacation_requests')
-      .update({ status })
-      .eq('id', id)
-      .select();
-      
-    if (error) throw error;
-    return data[0] as VacationRequest;
-  };
-  
-  // Query hook for provider's vacation requests
-  const providerVacationsQuery = useQuery({
-    queryKey: ['provider-vacations', providerId],
-    queryFn: getProviderVacationRequests,
-    enabled: !!providerId,
-  });
-  
-  // Query hook for all vacation requests (admin)
-  const allVacationsQuery = useQuery({
-    queryKey: ['admin-vacations'],
-    queryFn: getAllVacationRequests,
-  });
-  
-  // Mutation for creating vacation request
-  const createVacationMutation = useMutation({
-    mutationFn: createVacationRequest,
+      const { data, error } = await supabase
+        .from('provider_vacation_requests')
+        .insert({
+          provider_id: effectiveProviderId,
+          start_date: dateRange.from.toISOString(),
+          end_date: (dateRange.to || dateRange.from).toISOString(),
+          status: 'pending'
+        })
+        .select()
+        .single();
+        
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['provider-vacations', providerId] });
       toast.success('Vacation request submitted successfully');
+      queryClient.invalidateQueries({ queryKey: ['providerVacations', effectiveProviderId] });
     },
-    onError: (error: Error) => {
-      toast.error(`Failed to submit vacation request: ${error.message}`);
-    },
+    onError: (error) => {
+      console.error('Error submitting vacation request:', error);
+      toast.error('Failed to submit vacation request');
+    }
   });
-  
-  // Mutation for updating vacation request status
-  const updateVacationStatusMutation = useMutation({
-    mutationFn: updateVacationRequestStatus,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['admin-vacations'] });
-      toast.success(`Vacation request ${data.status}`);
+
+  // Update vacation request status (for admin)
+  const { mutate: updateVacationStatus } = useMutation({
+    mutationFn: async ({ id, status }: UpdateVacationStatusParams) => {
+      const { data, error } = await supabase
+        .from('provider_vacation_requests')
+        .update({ status })
+        .eq('id', id)
+        .select()
+        .single();
+        
+      if (error) throw error;
+      return data;
     },
-    onError: (error: Error) => {
-      toast.error(`Failed to update vacation request: ${error.message}`);
+    onSuccess: (_, variables) => {
+      const action = variables.status === 'approved' ? 'approved' : 'rejected';
+      toast.success(`Vacation request ${action}`);
+      queryClient.invalidateQueries({ queryKey: ['allVacationRequests'] });
     },
+    onError: (error) => {
+      console.error('Error updating vacation request:', error);
+      toast.error('Failed to update vacation request');
+    }
   });
-  
+
   return {
-    // Provider specific
-    providerVacations: providerVacationsQuery.data || [],
-    isLoadingProviderVacations: providerVacationsQuery.isLoading,
-    providerVacationError: providerVacationsQuery.error,
-    submitVacationRequest: createVacationMutation.mutate,
-    
-    // Admin specific
-    allVacationRequests: allVacationsQuery.data || [],
-    isLoadingAllVacations: allVacationsQuery.isLoading,
-    allVacationsError: allVacationsQuery.error,
-    updateVacationStatus: updateVacationStatusMutation.mutate,
+    vacationRequests,
+    isLoadingVacations,
+    vacationsError,
+    allVacationRequests,
+    isLoadingAllVacations,
+    allVacationsError,
+    submitVacationRequest,
+    updateVacationStatus
   };
 };
