@@ -7,7 +7,7 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
 const Login = () => {
   const [isResetMode, setIsResetMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Changed to false for faster initial load
+  const [isLoading, setIsLoading] = useState(false); // Already set to false for faster initial load
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,14 +26,14 @@ const Login = () => {
   }, [location]);
 
   useEffect(() => {
-    // Simplified auth check without waiting for verification
+    // Check if user is already logged in
     const checkAuth = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           console.log('User logged in:', user.id);
           
-          // Simplified redirect - no role verification for development
+          // Redirect to return URL or default page
           const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
           console.log('Redirecting to:', returnUrl);
           sessionStorage.removeItem('authReturnUrl');
@@ -46,12 +46,12 @@ const Login = () => {
 
     checkAuth();
 
-    // Simplified auth state listener
+    // Auth state listener for login events
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event);
       
       if (event === 'SIGNED_IN' && session?.user) {
-        // Immediate redirect without role check for faster experience
+        // Redirect after login
         const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
         console.log('Signed in, redirecting to:', returnUrl);
         sessionStorage.removeItem('authReturnUrl');
@@ -64,7 +64,6 @@ const Login = () => {
     };
   }, [navigate]);
 
-  // Only show loading if explicitly set to true elsewhere
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
