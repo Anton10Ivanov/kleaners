@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { Outlet, useNavigate } from 'react-router-dom';
 import UserSidebar from './UserSidebar';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { useAuth } from '@/hooks/useAuth';
 
