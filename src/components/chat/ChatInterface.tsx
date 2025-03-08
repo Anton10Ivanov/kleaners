@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Send, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,8 @@ import { ChatMessage } from './ChatMessage';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import FileUpload from './FileUpload';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import FileAttachmentComponent from './FileAttachment';
 
 interface ChatInterfaceProps {
   conversationId: string;
@@ -41,12 +42,10 @@ export const ChatInterface = ({
     currentUserId
   );
   
-  // When messages change, scroll to bottom
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
   
-  // Mark messages as read when they're displayed
   useEffect(() => {
     const unreadMessages = messages
       .filter(m => m.recipient_id === currentUserId && !m.is_read)
@@ -55,7 +54,6 @@ export const ChatInterface = ({
     if (unreadMessages.length > 0) {
       markMessagesAsRead(unreadMessages);
       
-      // Also update local state
       setMessages(prev => 
         prev.map(m => 
           unreadMessages.includes(m.id) 
@@ -66,7 +64,6 @@ export const ChatInterface = ({
     }
   }, [messages, currentUserId]);
   
-  // Set up real-time listener for new messages
   useEffect(() => {
     const subscription = supabase
       .channel(`messages:${conversationId}`)
@@ -78,13 +75,11 @@ export const ChatInterface = ({
       }, (payload) => {
         const newMessage = payload.new as any;
         
-        // Format the message
         const formattedMessage: Message = {
           ...newMessage,
           sent_at: new Date(newMessage.sent_at),
         };
         
-        // Add to state
         setMessages(prev => [...prev, formattedMessage]);
       })
       .subscribe();
@@ -94,7 +89,6 @@ export const ChatInterface = ({
     };
   }, [conversationId]);
   
-  // Listen for typing indicators
   useEffect(() => {
     const subscription = supabase
       .channel(`typing:${conversationId}`)
@@ -121,7 +115,6 @@ export const ChatInterface = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
     
-    // If typing, send typing indicator
     if (e.target.value.length > 0) {
       startTyping();
     } else {
@@ -130,7 +123,6 @@ export const ChatInterface = ({
   };
   
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Send message on Enter without Shift
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -149,7 +141,6 @@ export const ChatInterface = ({
     setIsSubmitting(true);
     
     try {
-      // Create optimistic message
       const optimisticId = `temp-${Date.now()}`;
       const optimisticMessage: Message = {
         id: optimisticId,
@@ -162,22 +153,18 @@ export const ChatInterface = ({
         attachments: attachments
       };
       
-      // Add to UI immediately
       setMessages(prev => [...prev, optimisticMessage]);
       
-      // Clear input
       setInputValue('');
       setAttachments([]);
       stopTyping();
       
-      // Upload attachments if any
       let uploadedAttachments: FileAttachment[] = [];
       if (attachments.length > 0) {
         uploadedAttachments = await Promise.all(
           attachments.map(async (attachment) => {
             if (!attachment.file) return attachment;
             
-            // Upload file to storage
             const fileName = `${Date.now()}-${attachment.name}`;
             const { data, error } = await supabase.storage
               .from('message_attachments')
@@ -185,7 +172,6 @@ export const ChatInterface = ({
               
             if (error) throw error;
             
-            // Get public URL
             const { data: urlData } = supabase.storage
               .from('message_attachments')
               .getPublicUrl(`${conversationId}/${fileName}`);
@@ -201,7 +187,6 @@ export const ChatInterface = ({
         );
       }
       
-      // Send actual message to server
       const sentMessage = await sendMessage(
         currentUserId,
         recipientId,
@@ -210,17 +195,14 @@ export const ChatInterface = ({
         uploadedAttachments
       );
       
-      // Replace optimistic message with real one
       setMessages(prev => prev.map(m => 
         m.id === optimisticId ? sentMessage : m
       ));
       
-      // Focus textarea
       textareaRef.current?.focus();
     } catch (error) {
       console.error('Error sending message:', error);
       
-      // Mark optimistic message as failed
       setMessages(prev => prev.map(m => 
         m.status === 'sending' ? { ...m, status: 'failed' } : m
       ));
@@ -237,7 +219,6 @@ export const ChatInterface = ({
   
   return (
     <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-background">
-      {/* Header */}
       <div className="p-3 border-b flex items-center gap-2">
         <Avatar className="h-8 w-8">
           <AvatarImage src={`https://avatar.vercel.sh/${recipientId}`} />
@@ -248,7 +229,6 @@ export const ChatInterface = ({
         </div>
       </div>
       
-      {/* Messages List */}
       <div className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-muted-foreground">
@@ -279,7 +259,6 @@ export const ChatInterface = ({
         )}
       </div>
       
-      {/* Attachments Preview */}
       {attachments.length > 0 && (
         <div className="px-3 py-2 border-t max-h-32 overflow-y-auto">
           <div className="flex flex-wrap gap-2">
@@ -295,7 +274,6 @@ export const ChatInterface = ({
         </div>
       )}
       
-      {/* Input Area */}
       <div className="p-3 border-t">
         <div className="flex items-end gap-2">
           <Popover>
