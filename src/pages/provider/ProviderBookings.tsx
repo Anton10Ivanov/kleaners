@@ -31,11 +31,6 @@ const ProviderBookings = () => {
     });
   }, [upcomingBookings, pendingBookings, completedBookings]);
 
-  // Handle filter type change
-  const handleFilterTypeChange = (type: string) => {
-    setSelectedTab(type === 'all' ? 'upcoming' : type);
-  };
-
   return (
     <div className="container mx-auto px-4 py-6">
       <div>
@@ -47,7 +42,7 @@ const ProviderBookings = () => {
       <div className="mt-6">
         <FilterableStatsCards
           filterType={selectedTab}
-          setFilterType={handleFilterTypeChange}
+          setFilterType={setSelectedTab}
           bookingSummary={bookingSummary}
         />
       </div>

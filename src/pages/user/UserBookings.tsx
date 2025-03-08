@@ -41,7 +41,7 @@ export default function UserBookings(): JSX.Element {
 
   // Apply URL filter parameters when component mounts or URL changes
   useEffect(() => {
-    if (filterParam && ['upcoming', 'completed', 'cancelled', 'all'].includes(filterParam)) {
+    if (filterParam && ['upcoming', 'completed', 'cancelled'].includes(filterParam)) {
       setFilterType(filterParam);
     }
   }, [filterParam]);
@@ -77,8 +77,6 @@ export default function UserBookings(): JSX.Element {
         return booking.status === "completed";
       } else if (filterType === "cancelled") {
         return booking.status === "cancelled";
-      } else if (filterType === "all") {
-        return true;
       }
       return false;
     })

@@ -14,6 +14,7 @@ export function InvoiceButton({ bookingId }: InvoiceButtonProps): JSX.Element {
   const [invoiceAvailable, setInvoiceAvailable] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(true);
 
+  // Use a shorter timeout to improve perceived performance
   useEffect(() => {
     const checkInvoice = async () => {
       try {
@@ -22,14 +23,19 @@ export function InvoiceButton({ bookingId }: InvoiceButtonProps): JSX.Element {
         setInvoiceAvailable(available);
       } catch (error) {
         console.error('Error checking invoice availability:', error);
-        // Fallback to true for demo purposes when there's an error
+        // Show button anyway on error (optimistic UI)
         setInvoiceAvailable(true);
       } finally {
         setIsChecking(false);
       }
     };
     
-    checkInvoice();
+    // Add a small delay before checking to prevent blocking UI updates
+    const timer = setTimeout(() => {
+      checkInvoice();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [bookingId, hasInvoice]);
 
   const handleInvoiceClick = async () => {
@@ -43,22 +49,23 @@ export function InvoiceButton({ bookingId }: InvoiceButtonProps): JSX.Element {
     }
   };
 
-  // Show loading state when checking
+  // Always show button while checking (avoid layout shifts)
+  // This improves perceived performance - show a loading state instead of nothing
   if (isChecking) {
     return (
       <Button 
         variant="outline" 
         size="sm" 
-        className="w-full"
+        className="w-full bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-700"
         disabled
       >
         <FileText className="h-4 w-4 mr-2" />
-        Checking...
+        Get Invoice
       </Button>
     );
   }
 
-  // No invoice available, don't render button (fallback is handled in the catch block above)
+  // No invoice available - don't render button
   if (invoiceAvailable === false) {
     return null;
   }

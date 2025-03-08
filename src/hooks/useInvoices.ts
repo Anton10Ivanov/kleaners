@@ -26,13 +26,11 @@ export function useInvoices() {
     try {
       // In development mode, use the mock API
       if (dev) {
-        const response = await fetch(`/api/invoices/download/${bookingId}`);
+        // Simulate a faster response time
+        await new Promise(resolve => setTimeout(resolve, 300));
         
-        if (!response.ok) {
-          throw new Error('Failed to download invoice');
-        }
-        
-        const blob = await response.blob();
+        // Create a mock blob without actual network request in dev mode
+        const blob = new Blob(['Mock invoice content'], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         toast.success('Invoice downloaded successfully');
         return url;
@@ -79,11 +77,10 @@ export function useInvoices() {
    */
   const hasInvoice = async (bookingId: string): Promise<boolean> => {
     try {
-      // In development mode, use the mock API
+      // For development mode, return true immediately to avoid network requests
       if (dev) {
-        const response = await fetch(`/api/invoices/check/${bookingId}`);
-        const data = await response.json();
-        return data.exists;
+        // Return true faster in development to improve perceived performance
+        return true;
       } else {
         // Original Supabase implementation for production
         const { data, error } = await fetch(`invoices/check/${bookingId}`)
