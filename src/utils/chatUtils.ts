@@ -51,8 +51,11 @@ export const useMessageSubscription = (
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          const newMessage = payload.new as Message;
-          onNewMessage(newMessage);
+          const newMessage = payload.new as any;
+          onNewMessage({
+            ...newMessage,
+            sent_at: new Date(newMessage.sent_at),
+          });
         }
       )
       .subscribe();
