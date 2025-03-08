@@ -4,8 +4,8 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { Link } from 'react-router-dom';
-import { serviceLinks } from './navigationData';
-import { Icons } from "./icons";
+import { Icons } from "./navigationData";
+
 type NavItem = {
   id: number;
   label: string;
@@ -20,49 +20,96 @@ type NavItem = {
   }[];
   link?: string;
 };
+
 type Props = {
   navItems: NavItem[];
 };
-export function DropdownNavigation({
-  navItems
-}: Props) {
+
+export function DropdownNavigation({ navItems }: Props) {
   const [openMenu, setOpenMenu] = React.useState<string | null>(null);
   const [isHover, setIsHover] = useState<number | null>(null);
+
   const handleHover = (menuLabel: string | null) => {
     setOpenMenu(menuLabel);
   };
-  return <div className="hidden md:block">
+
+  return (
+    <div className="hidden md:block">
       <ul className="relative flex items-center space-x-0">
-        {navItems.map(navItem => <li key={navItem.label} className="relative" onMouseEnter={() => handleHover(navItem.label)} onMouseLeave={() => handleHover(null)}>
-            {navItem.link ? <Link to={navItem.link} className="text-sm py-1.5 px-4 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 text-muted-foreground hover:text-foreground relative" onMouseEnter={() => setIsHover(navItem.id)} onMouseLeave={() => setIsHover(null)}>
+        {navItems.map(navItem => (
+          <li 
+            key={navItem.label} 
+            className="relative" 
+            onMouseEnter={() => handleHover(navItem.label)} 
+            onMouseLeave={() => handleHover(null)}
+          >
+            {navItem.link ? (
+              <Link 
+                to={navItem.link} 
+                className="text-sm py-1.5 px-4 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 text-muted-foreground hover:text-foreground relative" 
+                onMouseEnter={() => setIsHover(navItem.id)} 
+                onMouseLeave={() => setIsHover(null)}
+              >
                 <span>{navItem.label}</span>
-                {isHover === navItem.id && <motion.div layoutId="hover-bg" className="absolute inset-0 size-full bg-primary/10" style={{
-            borderRadius: 99
-          }} />}
-              </Link> : <button onMouseEnter={() => setIsHover(navItem.id)} onMouseLeave={() => setIsHover(null)} className="py-1.5 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 relative px-[17px] text-sm font-medium text-center rounded-none text-inherit">
+                {isHover === navItem.id && (
+                  <motion.div 
+                    layoutId="hover-bg" 
+                    className="absolute inset-0 size-full bg-primary/10" 
+                    style={{ borderRadius: 99 }} 
+                  />
+                )}
+              </Link>
+            ) : (
+              <button 
+                type="button"
+                onMouseEnter={() => setIsHover(navItem.id)} 
+                onMouseLeave={() => setIsHover(null)} 
+                className="py-1.5 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 relative px-[17px] text-sm font-medium text-center rounded-none text-inherit"
+              >
                 <span>{navItem.label}</span>
-                {navItem.subMenus && <ChevronDown className={`h-4 w-4 group-hover:rotate-180 duration-300 transition-transform
-                      ${openMenu === navItem.label ? "rotate-180" : ""}`} />}
-                {(isHover === navItem.id || openMenu === navItem.label) && <motion.div layoutId="hover-bg" className="absolute inset-0 size-full bg-primary/10" style={{
-            borderRadius: 99
-          }} />}
-              </button>}
+                {navItem.subMenus && (
+                  <ChevronDown 
+                    className={`h-4 w-4 group-hover:rotate-180 duration-300 transition-transform
+                      ${openMenu === navItem.label ? "rotate-180" : ""}`} 
+                  />
+                )}
+                {(isHover === navItem.id || openMenu === navItem.label) && (
+                  <motion.div 
+                    layoutId="hover-bg" 
+                    className="absolute inset-0 size-full bg-primary/10" 
+                    style={{ borderRadius: 99 }} 
+                  />
+                )}
+              </button>
+            )}
 
             <AnimatePresence>
-              {openMenu === navItem.label && navItem.subMenus && <div className="w-auto absolute left-0 top-full pt-2">
-                  <motion.div className="bg-background border border-border p-4 w-max" style={{
-              borderRadius: 16
-            }} layoutId="menu">
+              {openMenu === navItem.label && navItem.subMenus && (
+                <div className="w-auto absolute left-0 top-full pt-2 z-50">
+                  <motion.div 
+                    className="bg-background border border-border p-4 w-max shadow-lg" 
+                    style={{ borderRadius: 16 }} 
+                    layoutId="menu"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <div className="w-fit shrink-0 flex space-x-9 overflow-hidden">
-                      {navItem.subMenus.map(sub => <motion.div layout className="w-full" key={sub.title}>
+                      {navItem.subMenus.map(sub => (
+                        <motion.div layout className="w-full" key={sub.title}>
                           <h3 className="mb-4 text-sm font-medium capitalize text-muted-foreground">
                             {sub.title}
                           </h3>
                           <ul className="space-y-6">
                             {sub.items.map(item => {
-                      const Icon = item.icon;
-                      return <li key={item.label}>
-                                  <Link to={item.path || "#"} className="flex items-start space-x-3 group">
+                              const Icon = item.icon;
+                              return (
+                                <li key={item.label}>
+                                  <Link 
+                                    to={item.path || "#"} 
+                                    className="flex items-start space-x-3 group"
+                                  >
                                     <div className="border border-border text-foreground rounded-md flex items-center justify-center size-9 shrink-0 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300">
                                       <Icon className="h-5 w-5 flex-none" />
                                     </div>
@@ -75,15 +122,20 @@ export function DropdownNavigation({
                                       </p>
                                     </div>
                                   </Link>
-                                </li>;
-                    })}
+                                </li>
+                              );
+                            })}
                           </ul>
-                        </motion.div>)}
+                        </motion.div>
+                      ))}
                     </div>
                   </motion.div>
-                </div>}
+                </div>
+              )}
             </AnimatePresence>
-          </li>)}
+          </li>
+        ))}
       </ul>
-    </div>;
+    </div>
+  );
 }
