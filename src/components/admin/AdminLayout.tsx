@@ -26,20 +26,15 @@ const AdminLayout = () => {
       const path = pathSegments.length > 2 ? pathSegments[2] : '';
       
       if (path) {
-        // Convert path to title format for matching (e.g., 'support-queries' to 'Support Queries')
-        const formattedPath = path
-          .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
-          
-        // Find nav item with matching path segment
+        // Find matching nav item by url path
         const matchingNavItem = navItems.find(item => 
-          item.href.includes(path) || 
-          item.title.toLowerCase().includes(formattedPath.toLowerCase())
+          item.href.includes(`/${path}`)
         );
         
         if (matchingNavItem) {
           setActiveItem(matchingNavItem.title.toLowerCase());
+        } else {
+          setActiveItem('admin home');
         }
       } else {
         setActiveItem('admin home');

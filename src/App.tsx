@@ -22,6 +22,7 @@ import { AdminProviders } from '@/pages/admin/AdminProviders';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
 import AdminAnalytics from '@/pages/admin/AdminAnalytics';
 import AdminSupportQueries from '@/pages/admin/AdminSupportQueries';
+import AdminVacationRequests from '@/pages/admin/AdminVacationRequests';
 
 // User pages
 import UserDashboard from '@/pages/user/UserDashboard';
@@ -106,6 +107,7 @@ function App() {
         <Route path="providers" element={<AdminProviders />} />
         <Route path="support-queries" element={<AdminSupportQueries />} />
         <Route path="settings" element={<AdminSettings />} />
+        <Route path="vacation-requests" element={<AdminVacationRequests />} />
       </Route>
       
       <Route element={<UserLayout />}>
