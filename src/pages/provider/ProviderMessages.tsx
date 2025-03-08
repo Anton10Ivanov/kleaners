@@ -15,7 +15,7 @@ const ProviderMessages = () => {
   
   return (
     <div className="container mx-auto py-6 px-4 mt-16">
-      <PageHeader heading="Messages" description="Manage your conversations with clients" />
+      <PageHeader title="Messages" description="Manage your conversations with clients" />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <MessagesSidebar 
