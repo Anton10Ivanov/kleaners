@@ -42,7 +42,6 @@ export const ConversationList = ({
     }
   };
   
-  // Subscribe to new messages
   useEffect(() => {
     const subscription = supabase
       .channel('new_messages')
@@ -52,7 +51,6 @@ export const ConversationList = ({
         table: 'messages',
         filter: `recipient_id=eq.${userId}`,
       }, () => {
-        // Refetch conversations when a new message arrives
         fetchConversations();
       })
       .subscribe();
@@ -62,7 +60,6 @@ export const ConversationList = ({
     };
   }, [userId]);
   
-  // Filter conversations based on search query
   const filteredConversations = searchQuery.trim() === ''
     ? conversations
     : conversations.filter(conversation => 
