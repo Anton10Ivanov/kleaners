@@ -1,47 +1,46 @@
 
 import { useState, useEffect } from 'react';
+import { http } from 'msw';
 import { dev } from '@/lib/utils';
 
-/**
- * Example hook demonstrating how to use MSW with a typical data fetch pattern
- */
-export function useUserExampleData() {
+// Example of how to use MSW for mocking API calls
+export const useMswExample = () => {
   const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // This request will be intercepted by MSW in development
-      const response = await fetch('/api/profile');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-      
-      const result = await response.json();
-      setData(result);
-      dev.log('Data fetched successfully (intercepted by MSW if enabled)', result);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(new Error(errorMessage));
-      dev.log('Error fetching data', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch data from API or mock
+        const response = await fetch('/api/users');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, []);
 
-  return {
-    data,
-    isLoading,
-    error,
-    refetch: fetchData
+  // Add mock handler (this would typically be in a separate file)
+  const addMockHandler = (mockHandler: any) => {
+    if (dev) {
+      // In a real app, you would add this to your MSW worker
+      console.log('Added mock handler:', mockHandler);
+    }
   };
-}
+
+  return { data, loading, error, addMockHandler };
+};
