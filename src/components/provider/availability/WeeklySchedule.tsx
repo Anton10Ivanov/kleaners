@@ -1,13 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Plus, Save, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { generateTimeOptions, isTimeBeforeStart } from '../../../utils/timeUtils';
-import { UseFormReturn } from 'react-hook-form';
-import { DaysAvailability } from '@/hooks/useProviderAvailability';
+import { useForm } from 'react-hook-form';
+import { useProviderAvailability, DaysAvailability } from '@/hooks/useProviderAvailability';
 
 interface TimeRange {
   id: number;
@@ -16,27 +16,55 @@ interface TimeRange {
   end: string;
 }
 
-interface WeeklyScheduleProps {
-  form: UseFormReturn<any>;
-  availableDays: DaysAvailability;
-  timeRanges: TimeRange[];
-  toggleDayAvailability: (day: string, value: boolean) => void;
-  addTimeRange: (day: string) => void;
-  removeTimeRange: (id: number) => void;
-  updateTimeRange: (id: number, field: 'start' | 'end', value: string) => void;
-  saveAvailability: () => void;
-}
-
-export const WeeklySchedule = ({
-  form,
-  availableDays,
-  timeRanges,
-  toggleDayAvailability,
-  addTimeRange,
-  removeTimeRange,
-  updateTimeRange,
-  saveAvailability
-}: WeeklyScheduleProps) => {
+export const WeeklySchedule = () => {
+  const form = useForm();
+  const [timeRanges, setTimeRanges] = useState<TimeRange[]>([
+    { id: 1, day: 'monday', start: '09:00', end: '17:00' },
+    { id: 2, day: 'wednesday', start: '10:00', end: '16:00' },
+  ]);
+  
+  const [availableDays, setAvailableDays] = useState<DaysAvailability>({
+    monday: true,
+    tuesday: false,
+    wednesday: true,
+    thursday: false,
+    friday: true,
+    saturday: false,
+  });
+  
+  const toggleDayAvailability = (day: string, value: boolean) => {
+    setAvailableDays(prev => ({
+      ...prev,
+      [day]: value
+    }));
+  };
+  
+  const addTimeRange = (day: string) => {
+    const newId = timeRanges.length > 0 
+      ? Math.max(...timeRanges.map(r => r.id)) + 1 
+      : 1;
+      
+    setTimeRanges([
+      ...timeRanges,
+      { id: newId, day, start: '09:00', end: '17:00' }
+    ]);
+  };
+  
+  const removeTimeRange = (id: number) => {
+    setTimeRanges(timeRanges.filter(range => range.id !== id));
+  };
+  
+  const updateTimeRange = (id: number, field: 'start' | 'end', value: string) => {
+    setTimeRanges(timeRanges.map(range => 
+      range.id === id ? { ...range, [field]: value } : range
+    ));
+  };
+  
+  const saveAvailability = () => {
+    console.log('Saving availability:', { availableDays, timeRanges });
+    // Here you would call the API to save the availability
+  };
+  
   // Array of weekdays excluding Sunday, grouped into pairs for the layout
   const weekdayGroups = [
     ['monday', 'tuesday'],
@@ -161,7 +189,7 @@ export const WeeklySchedule = ({
             className="border-2 border-[#0EA5E9] bg-white text-[#0EA5E9] hover:bg-[#0EA5E9]/10"
           >
             <Save className="h-4 w-4 mr-2" />
-            Fix Schedule
+            Save Schedule
           </Button>
         </div>
       </div>

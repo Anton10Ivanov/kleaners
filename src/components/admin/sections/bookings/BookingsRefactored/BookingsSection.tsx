@@ -15,7 +15,7 @@ export const BookingsSection: React.FC = () => {
     dateRange: undefined as DateRange | undefined,
   });
   
-  // We need to mock these properties since they don't exist in the hook
+  // Mock totalPages for pagination
   const [totalPages, setTotalPages] = useState(5);
   
   // Using the hook with parameters
@@ -65,6 +65,7 @@ export const BookingsSection: React.FC = () => {
     }));
   };
 
+  // Fix the updateStatus function to match the expected signature
   const handleUpdateStatus = (id: string, status: BookingStatus) => {
     updateBookingStatus({ id, status });
   };
