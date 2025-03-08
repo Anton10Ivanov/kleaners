@@ -1,6 +1,6 @@
 
 import { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import UserLayout from '@/components/user/UserLayout';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -59,8 +59,6 @@ import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import AdminLayout from '@/components/admin/AdminLayout';
 
-const queryClient = new QueryClient();
-
 function App() {
   const location = useLocation();
 
@@ -81,79 +79,66 @@ function App() {
   }, [location]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="system" storageKey="cleanly-theme">
-        <Routes>
-          {/* Root Layout Routes */}
-          <Route element={<RootLayout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/join-team" element={<JoinTeam />} />
-            <Route path="/layout-demo" element={<LayoutDemo />} />
-            
-            {/* Auth Routes */}
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/signup" element={<Signup />} />
-            
-            {/* About Routes */}
-            <Route path="/about/values" element={<CompanyValues />} />
-            <Route path="/about/faq" element={<FAQ />} />
-            
-            {/* Service Routes */}
-            <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-            <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-            <Route path="/services/move-in-out" element={<MoveInOut />} />
-            <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-            
-            {/* Legal Routes */}
-            <Route path="/legal/terms" element={<TermsOfService />} />
-            <Route path="/legal/privacy" element={<PrivacyPolicy />} />
-            
-            {/* 404 - Not Found */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
+    <Routes>
+      {/* Root Layout Routes */}
+      <Route element={<RootLayout />}>
+        <Route path="/" element={<Index />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/join-team" element={<JoinTeam />} />
+        <Route path="/layout-demo" element={<LayoutDemo />} />
+        
+        {/* Auth Routes */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
+        
+        {/* About Routes */}
+        <Route path="/about/values" element={<CompanyValues />} />
+        <Route path="/about/faq" element={<FAQ />} />
+        
+        {/* Service Routes */}
+        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+        <Route path="/services/move-in-out" element={<MoveInOut />} />
+        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+        
+        {/* Legal Routes */}
+        <Route path="/legal/terms" element={<TermsOfService />} />
+        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+        
+        {/* 404 - Not Found */}
+        <Route path="*" element={<NotFound />} />
+      </Route>
 
-          {/* Admin Routes - Note: no longer nested under RootLayout */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="providers" element={<AdminProviders />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
-          
-          {/* User Routes */}
-          <Route element={<UserLayout />}>
-            <Route path="/user/dashboard" element={<UserDashboard />} />
-            <Route path="/user/bookings" element={<UserBookings />} />
-            <Route path="/user/messages" element={<UserMessages />} />
-            <Route path="/user/invoices" element={<UserInvoices />} />
-            <Route path="/user/notifications" element={<UserNotifications />} />
-            <Route path="/user/profile" element={<UserProfile />} />
-            <Route path="/user/settings" element={<UserSettings />} />
-          </Route>
-          
-          {/* Provider Routes */}
-          <Route path="/provider" element={<ProviderLayout />}>
-            <Route path="dashboard" element={<ProviderDashboard />} />
-            <Route path="profile" element={<ProviderProfile />} />
-            <Route path="bookings" element={<ProviderBookings />} />
-            <Route path="settings" element={<ProviderSettings />} />
-            <Route path="availability" element={<ProviderAvailability />} />
-          </Route>
-        </Routes>
-        <ScrollToTop />
-        <Toaster />
-      </ThemeProvider>
-    </QueryClientProvider>
+      {/* Admin Routes - Note: no longer nested under RootLayout */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="providers" element={<AdminProviders />} />
+        <Route path="settings" element={<AdminSettings />} />
+      </Route>
+      
+      {/* User Routes */}
+      <Route element={<UserLayout />}>
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/bookings" element={<UserBookings />} />
+        <Route path="/user/messages" element={<UserMessages />} />
+        <Route path="/user/invoices" element={<UserInvoices />} />
+        <Route path="/user/notifications" element={<UserNotifications />} />
+        <Route path="/user/profile" element={<UserProfile />} />
+        <Route path="/user/settings" element={<UserSettings />} />
+      </Route>
+      
+      {/* Provider Routes */}
+      <Route path="/provider" element={<ProviderLayout />}>
+        <Route path="dashboard" element={<ProviderDashboard />} />
+        <Route path="profile" element={<ProviderProfile />} />
+        <Route path="bookings" element={<ProviderBookings />} />
+        <Route path="settings" element={<ProviderSettings />} />
+        <Route path="availability" element={<ProviderAvailability />} />
+      </Route>
+    </Routes>
   );
 }
 
-// Wrapper component to handle the BrowserRouter
-export default function AppWithRouter() {
-  return (
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
-}
+export default App;
