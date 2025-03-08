@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FilterableStatsCards } from "@/components/user/bookings/FilterableStatsCards";
 import { BookingEmptyState } from "@/components/user/bookings/BookingEmptyState";
 import { BookingActionButton } from "@/components/user/bookings/BookingActionButton";
+import { useSearchParams } from "react-router-dom";
 
 /**
  * UserBookings Page
@@ -19,7 +20,9 @@ import { BookingActionButton } from "@/components/user/bookings/BookingActionBut
  */
 export default function UserBookings(): JSX.Element {
   useTitle("Your Bookings | Kleaners");
-  const [filterType, setFilterType] = useState<string>("upcoming");
+  const [searchParams] = useSearchParams();
+  const filterParam = searchParams.get('filter');
+  const [filterType, setFilterType] = useState<string>(filterParam || "upcoming");
   
   const { 
     bookings, 
@@ -35,6 +38,13 @@ export default function UserBookings(): JSX.Element {
     completed: 0,
     cancelled: 0
   });
+
+  // Apply URL filter parameters when component mounts or URL changes
+  useEffect(() => {
+    if (filterParam && ['upcoming', 'completed', 'cancelled', 'all'].includes(filterParam)) {
+      setFilterType(filterParam);
+    }
+  }, [filterParam]);
   
   useEffect(() => {
     const calculateSummary = () => {

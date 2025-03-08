@@ -8,6 +8,7 @@ import { StatusBadge } from './StatusBadge';
 import { BookingDetails } from './BookingDetails';
 import { ReschedulingDialog } from './ReschedulingDialog';
 import { CancellationDialog } from './CancellationDialog';
+import { InvoiceButton } from './InvoiceButton';
 
 export interface BookingCardProps {
   /** Booking data with hours field */
@@ -71,6 +72,13 @@ export function BookingCard({
         </div>
         
         <BookingDetails booking={booking} />
+        
+        {/* Show invoice button for completed bookings */}
+        {booking.status === 'completed' && (
+          <div className="mt-2">
+            <InvoiceButton bookingId={booking.id} />
+          </div>
+        )}
       </CardContent>
       
       {booking.status === 'pending' && (
