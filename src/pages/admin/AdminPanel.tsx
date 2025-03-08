@@ -17,7 +17,7 @@ const AdminPanel = () => {
   const questionNotifications = notifications.filter(n => n.type === 'system' && n.title.includes('Question'));
   
   return (
-    <AdminLayout>
+    <div>
       {questionNotifications.length > 0 && (
         <div className="p-4">
           <Alert className="mb-4 border-primary/20 bg-primary/5">
@@ -36,7 +36,7 @@ const AdminPanel = () => {
                       onClick={() => {
                         navigate('/admin');
                         // This will ensure the questions tab is active
-                        const tabsElement = document.getElementById('customer-questions-tab');
+                        const tabsElement = document.getElementById('questions-tab');
                         if (tabsElement) tabsElement.click();
                       }}
                     >
@@ -49,8 +49,8 @@ const AdminPanel = () => {
           </Alert>
         </div>
       )}
-      <AdminTabs />
-    </AdminLayout>
+      <AdminTabs defaultTab="questions" />
+    </div>
   );
 };
 
