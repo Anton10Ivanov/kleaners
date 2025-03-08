@@ -73,7 +73,10 @@ export function VacationRequestDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button 
+            onClick={handleSubmit}
+            className="flex items-center gap-2 border-[#D946EF] text-[#D946EF] hover:bg-[#FFDEE2]/10 border"
+          >
             Submit Request
           </Button>
         </DialogFooter>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 // Update the interface to include an index signature
 export interface DaysAvailability {
@@ -103,26 +104,58 @@ export const useProviderAvailability = () => {
     }
   };
 
-  const handleVacationRequest = (dateRange: DateRange) => {
+  const handleVacationRequest = async (dateRange: DateRange) => {
     if (dateRange.from) {
-      setVacationRequests([...vacationRequests, dateRange]);
-      
-      // Mark all dates in the range as unavailable
-      if (dateRange.from && dateRange.to) {
-        const start = new Date(dateRange.from);
-        const end = new Date(dateRange.to);
-        const dates: Date[] = [];
+      try {
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
         
-        let currentDate = start;
-        while (currentDate <= end) {
-          dates.push(new Date(currentDate));
-          currentDate.setDate(currentDate.getDate() + 1);
+        if (!user) {
+          toast.error("You must be logged in to request vacation");
+          return;
         }
         
-        setUnavailableDates([...unavailableDates, ...dates]);
-      } else if (dateRange.from) {
-        // Single day selection
-        setUnavailableDates([...unavailableDates, dateRange.from]);
+        // Save vacation request to database
+        const { error } = await supabase
+          .from('provider_vacation_requests')
+          .insert({
+            provider_id: user.id,
+            start_date: dateRange.from.toISOString(),
+            end_date: dateRange.to ? dateRange.to.toISOString() : dateRange.from.toISOString(),
+            status: 'pending'
+          });
+          
+        if (error) {
+          console.error("Error saving vacation request:", error);
+          toast.error("Failed to save vacation request");
+          return;
+        }
+      
+        // Update local state  
+        setVacationRequests([...vacationRequests, dateRange]);
+      
+        // Mark all dates in the range as unavailable
+        if (dateRange.from && dateRange.to) {
+          const start = new Date(dateRange.from);
+          const end = new Date(dateRange.to);
+          const dates: Date[] = [];
+          
+          let currentDate = start;
+          while (currentDate <= end) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+          
+          setUnavailableDates([...unavailableDates, ...dates]);
+        } else if (dateRange.from) {
+          // Single day selection
+          setUnavailableDates([...unavailableDates, dateRange.from]);
+        }
+        
+        toast.success("Vacation request submitted for approval");
+      } catch (error) {
+        console.error("Error handling vacation request:", error);
+        toast.error("An error occurred while submitting your vacation request");
       }
     }
   };
