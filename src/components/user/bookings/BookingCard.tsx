@@ -65,6 +65,14 @@ export function BookingCard({
     }
   };
   
+  // Get display status text
+  const getStatusText = () => {
+    if (booking.status === 'pending') {
+      return 'Upcoming';
+    }
+    return booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
+  };
+  
   // Handle booking cancellation
   const handleCancel = async () => {
     setIsCancelling(true);
@@ -95,7 +103,7 @@ export function BookingCard({
         <div className="mb-4 flex justify-between items-start">
           <h3 className="text-lg font-semibold">{booking.service}</h3>
           <Badge className={cn("ml-2", getStatusColor())}>
-            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+            {getStatusText()}
           </Badge>
         </div>
         

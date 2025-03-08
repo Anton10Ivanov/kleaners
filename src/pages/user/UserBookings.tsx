@@ -41,7 +41,7 @@ export default function UserBookings(): JSX.Element {
       
       const upcoming = bookings.filter(b => 
         new Date(b.date) > new Date() && 
-        ['pending', 'confirmed'].includes(b.status)
+        b.status === 'pending'
       );
       
       const completed = bookings.filter(b => b.status === 'completed');
@@ -61,8 +61,7 @@ export default function UserBookings(): JSX.Element {
   const filteredBookings = bookings
     .filter(booking => {
       if (filterType === "upcoming") {
-        return new Date(booking.date) > new Date() && 
-          ['pending', 'confirmed'].includes(booking.status);
+        return new Date(booking.date) > new Date() && booking.status === 'pending';
       } else if (filterType === "completed") {
         return booking.status === "completed";
       } else if (filterType === "cancelled") {
