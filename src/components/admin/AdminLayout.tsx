@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -39,6 +38,11 @@ const AdminLayout = () => {
     {
       title: 'Dashboard',
       href: '/admin',
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      title: 'Analytics',
+      href: '/admin/dashboard',
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
@@ -102,7 +106,6 @@ const AdminLayout = () => {
   // Handle logout
   const handleLogout = () => {
     try {
-      // Add your logout logic here
       navigate('/auth/login');
     } catch (error) {
       handleApiError(
