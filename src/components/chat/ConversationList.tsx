@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, MessageSquarePlus, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getUserConversations, getUnreadMessageCount } from '@/utils/chatUtils';
+import { getUserConversations, getUnreadMessageCount } from '@/utils/chat';
 import { formatDistanceToNow } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 

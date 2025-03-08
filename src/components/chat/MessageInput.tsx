@@ -4,7 +4,7 @@ import { Send, Paperclip } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import FileUpload from './FileUpload';
-import { FileAttachment } from '@/utils/chatUtils';
+import { FileAttachment } from '@/utils/chat';
 
 interface MessageInputProps {
   onSendMessage: (message: string, attachments: FileAttachment[]) => void;

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { FileAttachment, loadMessages, sendMessage } from '@/utils/chatUtils';
+import { FileAttachment, loadMessages, sendMessage } from '@/utils/chat';
 
 export const useChat = (conversationId: string, userId: string, recipientId: string, recipientName: string) => {
   const [messages, setMessages] = useState<any[]>([]);
