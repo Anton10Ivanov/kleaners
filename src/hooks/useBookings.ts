@@ -121,11 +121,15 @@ export const useBookings = ({
     },
   });
 
+  // Add totalPages calculation
+  const totalPages = Math.ceil((bookingsQuery.data?.length || 0) / 10);
+
   return {
     bookings: bookingsQuery.data || [],
     isLoading: bookingsQuery.isLoading,
     error: bookingsQuery.error as Error | null,
     updateBookingStatus: updateBookingStatus.mutate,
     deleteBooking: deleteBooking.mutate,
+    totalPages,
   };
 };

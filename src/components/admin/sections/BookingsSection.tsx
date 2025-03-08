@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useBookings } from '@/hooks/useBookings';
 import { DateRange } from 'react-day-picker';
@@ -26,7 +27,6 @@ export function BookingsSection() {
     updateBookingStatus,
     deleteBooking,
   } = useBookings({
-    page: currentPage,
     selectedStatus: selectedStatus === 'all' ? null : selectedStatus,
     searchTerm,
     sortField,
@@ -73,6 +73,7 @@ export function BookingsSection() {
     toast.success('Bookings Refreshed!');
   };
 
+  // Fix for the type mismatch - this function wraps the mutation to match the expected signature
   const handleUpdateStatus = (id: string, status: BookingStatus) => {
     updateBookingStatus({ id, status });
   };
@@ -112,22 +113,24 @@ export function BookingsSection() {
         sortField={sortField}
         sortOrder={sortOrder}
         toggleSort={toggleSort}
-        updateBookingStatus={updateBookingStatus}
-        deleteBooking={deleteBooking}
+        updateBookingStatus={handleUpdateStatus}
+        deleteBooking={handleDeleteBooking}
         refreshData={fetchBookings}
         assignProvider={handleAssignProvider}
         viewDetails={handleViewDetails}
         contactClient={handleContactClient}
       />
       
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={handlePageChange}
-        startIndex={(currentPage - 1) * 10 + 1}
-        endIndex={Math.min(currentPage * 10, bookings.length)}
-        totalItems={bookings.length}
-      />
+      <div className="pagination-container">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={handlePageChange}
+          startIndex={(currentPage - 1) * 10 + 1}
+          endIndex={Math.min(currentPage * 10, bookings.length)}
+          totalItems={bookings.length}
+        />
+      </div>
     </div>
   );
 }
