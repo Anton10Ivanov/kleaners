@@ -44,14 +44,6 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const handleFilterChange = () => {
-    onFilterChange({
-      status,
-      search: searchTerm,
-      dateRange: dateRange
-    });
-  };
-
   const handleStatusChange = (newStatus: BookingStatus | 'all') => {
     setStatus(newStatus);
     onFilterChange({
@@ -109,14 +101,21 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
         selectedDateRange={dateRange}
       />
       
-      <BookingsTable
-        bookings={bookings}
-        onUpdateStatus={onUpdateStatus}
-        onDeleteBooking={onDeleteBooking}
-        onAssignProvider={onAssignProvider}
-        onViewDetails={onViewDetails}
-        onContactClient={onContactClient}
-      />
+      {/* We need to modify the BookingsTable component or create a wrapper that accepts our props */}
+      <div className="border rounded-md overflow-hidden">
+        <BookingsTable
+          bookings={bookings}
+          sortField="date"
+          sortOrder="desc"
+          toggleSort={() => {}} 
+          updateBookingStatus={onUpdateStatus}
+          deleteBooking={onDeleteBooking}
+          refreshData={() => {}}
+          assignProvider={onAssignProvider}
+          viewDetails={onViewDetails}
+          contactClient={onContactClient}
+        />
+      </div>
       
       {totalPages > 1 && (
         <Pagination

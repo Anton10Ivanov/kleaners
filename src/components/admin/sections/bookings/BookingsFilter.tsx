@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DateRange } from 'react-day-picker';
 import { BookingStatus } from './types';
-import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { DatePickerWithRange } from '@/components/ui/date-range-picker';
 import { Search, X } from 'lucide-react';
 
 export interface BookingsFilterProps {
@@ -78,10 +78,10 @@ export const BookingsFilter: React.FC<BookingsFilterProps> = ({
 
         <div>
           <label className="text-sm font-medium mb-1 block">Date Range</label>
-          <DateRangePicker
-            value={selectedDateRange}
-            onChange={onDateRangeChange}
-            placeholder="Select date range"
+          <DatePickerWithRange
+            className=""
+            date={selectedDateRange}
+            setDate={onDateRangeChange}
           />
         </div>
       </div>

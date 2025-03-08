@@ -1,28 +1,26 @@
 
-import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 
-interface ErrorStateProps {
+export interface ErrorStateProps {
   onRefresh: () => void;
 }
 
-export const ErrorState = ({ onRefresh }: ErrorStateProps) => {
+export const ErrorState: React.FC<ErrorStateProps> = ({ onRefresh }) => {
   return (
-    <div className="p-8 bg-white dark:bg-gray-800 rounded-md border shadow-sm">
-      <div className="text-center py-4">
-        <p className="text-destructive font-medium">Failed to load bookings</p>
-        <p className="text-muted-foreground text-sm mt-1">
-          Please try refreshing the page
-        </p>
-        <Button 
-          variant="outline" 
-          className="mt-4"
-          onClick={onRefresh}
-        >
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh Data
-        </Button>
+    <div className="bg-white dark:bg-gray-800 rounded-md border p-8 text-center">
+      <div className="flex justify-center mb-4">
+        <AlertTriangle className="h-12 w-12 text-destructive" />
       </div>
+      <h3 className="text-lg font-medium mb-2">Failed to load bookings</h3>
+      <p className="text-muted-foreground mb-4">
+        There was an error loading the bookings. Please try again.
+      </p>
+      <Button onClick={onRefresh} variant="outline">
+        <RefreshCw className="h-4 w-4 mr-2" />
+        Refresh
+      </Button>
     </div>
   );
 };
