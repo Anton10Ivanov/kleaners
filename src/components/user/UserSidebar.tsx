@@ -8,8 +8,7 @@ import {
   User, 
   Calendar, 
   FileText,
-  MessageSquare, 
-  Bell 
+  MessageSquare
 } from "lucide-react";
 
 const UserSidebar = () => {
@@ -34,12 +33,6 @@ const UserSidebar = () => {
       icon: <FileText className="h-5 w-5 mr-2" />,
       href: "/user/invoices",
       active: pathname === "/user/invoices",
-    },
-    {
-      label: "Notifications",
-      icon: <Bell className="h-5 w-5 mr-2" />,
-      href: "/user/notifications",
-      active: pathname === "/user/notifications",
     },
     {
       label: "Profile",

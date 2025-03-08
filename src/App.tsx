@@ -28,7 +28,6 @@ import UserDashboard from '@/pages/user/UserDashboard';
 import UserBookings from '@/pages/user/UserBookings';
 import UserProfile from '@/pages/user/UserProfile';
 import UserInvoices from '@/pages/user/UserInvoices';
-import UserNotifications from '@/pages/user/UserNotifications';
 import UserMessages from '@/pages/user/UserMessages';
 
 // Auth pages
@@ -123,7 +122,6 @@ function App() {
         <Route path="/user/bookings" element={<UserBookings />} />
         <Route path="/user/messages" element={<UserMessages />} />
         <Route path="/user/invoices" element={<UserInvoices />} />
-        <Route path="/user/notifications" element={<UserNotifications />} />
         <Route path="/user/profile" element={<UserProfile />} />
       </Route>
       
