@@ -49,12 +49,12 @@ import TermsOfService from '@/pages/legal/TermsOfService';
 import PrivacyPolicy from '@/pages/legal/PrivacyPolicy';
 
 // Provider pages
-import ProviderDashboard from '@/pages/provider/ProviderDashboard';
 import ProviderProfile from '@/pages/provider/ProviderProfile';
 import ProviderLayout from '@/components/provider/ProviderLayout';
 import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
+import ProviderMessages from '@/pages/provider/ProviderMessages';
 import AdminLayout from '@/components/admin/AdminLayout';
 
 function App() {
@@ -127,9 +127,9 @@ function App() {
       
       {/* Provider Routes */}
       <Route path="/provider" element={<ProviderLayout />}>
-        <Route path="dashboard" element={<ProviderDashboard />} />
         <Route path="profile" element={<ProviderProfile />} />
         <Route path="bookings" element={<ProviderBookings />} />
+        <Route path="messages" element={<ProviderMessages />} />
         <Route path="settings" element={<ProviderSettings />} />
         <Route path="availability" element={<ProviderAvailability />} />
       </Route>

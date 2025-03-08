@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CalendarClock, Home, Settings, User, Briefcase, Clock } from "lucide-react";
+import { CalendarClock, Home, Settings, User, Briefcase, Clock, MessageSquare } from "lucide-react";
 
 const ProviderSidebar = () => {
   const { pathname } = useLocation();
@@ -12,16 +12,16 @@ const ProviderSidebar = () => {
   
   const routes = [
     {
-      label: "Dashboard",
-      icon: <Home className="h-5 w-5 mr-2" />,
-      href: "/provider/dashboard",
-      active: pathname === "/provider/dashboard",
-    },
-    {
       label: "Bookings",
       icon: <Briefcase className="h-5 w-5 mr-2" />,
       href: "/provider/bookings",
       active: pathname === "/provider/bookings",
+    },
+    {
+      label: "Messages",
+      icon: <MessageSquare className="h-5 w-5 mr-2" />,
+      href: "/provider/messages",
+      active: pathname === "/provider/messages",
     },
     {
       label: "Availability",
