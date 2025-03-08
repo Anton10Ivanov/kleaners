@@ -63,15 +63,17 @@ const BookingMap = ({ locations, selectedBookingId, onSelectBooking }: BookingMa
 
     // Add new markers and store them in the ref
     locations.forEach(location => {
+      // Create a DOM element for the marker
       const el = document.createElement('div');
       el.className = 'marker';
-      el.style.backgroundColor = location.id === selectedBookingId ? '#ef4444' : '#3b82f6';
+      // Apply styles directly to the element
       el.style.width = '25px';
       el.style.height = '25px';
       el.style.borderRadius = '50%';
-      el.style.cursor = 'pointer';
+      el.style.backgroundColor = location.id === selectedBookingId ? '#ef4444' : '#3b82f6';
       el.style.border = '2px solid white';
       el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+      el.style.cursor = 'pointer';
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat(location.coordinates)
@@ -111,8 +113,10 @@ const BookingMap = ({ locations, selectedBookingId, onSelectBooking }: BookingMa
     if (!isMapLoaded || !map.current) return;
 
     Object.entries(markers.current).forEach(([id, marker]) => {
-      const el = marker.getElement().querySelector('.marker') || marker.getElement();
-      el.style.backgroundColor = id === selectedBookingId ? '#ef4444' : '#3b82f6';
+      const markerElement = marker.getElement().firstChild as HTMLElement;
+      if (markerElement) {
+        markerElement.style.backgroundColor = id === selectedBookingId ? '#ef4444' : '#3b82f6';
+      }
     });
   }, [selectedBookingId, isMapLoaded]);
 
