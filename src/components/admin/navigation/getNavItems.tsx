@@ -14,13 +14,13 @@ import { NavItem } from './NavItem';
 export const getNavItems = (): NavItem[] => {
   return [
     {
-      title: 'Dashboard',
+      title: 'Admin Home',
       href: '/admin',
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
       title: 'Analytics',
-      href: '/admin/dashboard',
+      href: '/admin/analytics',
       icon: <BarChart className="h-5 w-5" />,
     },
     {
@@ -39,8 +39,8 @@ export const getNavItems = (): NavItem[] => {
       icon: <UserCog className="h-5 w-5" />,
     },
     {
-      title: 'Questions',
-      href: '/admin?tab=questions',
+      title: 'Support Queries',
+      href: '/admin/support-queries',
       icon: <MessageSquareText className="h-5 w-5" />,
     },
     {
