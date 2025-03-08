@@ -48,7 +48,7 @@ export default function UserProfile(): JSX.Element {
   if (!profile) {
     return (
       <div className="container mx-auto px-4 py-6 text-center">
-        <h2>No profile data available</h2>
+        <p className="text-zinc-800">No profile data available</p>
       </div>
     );
   }
