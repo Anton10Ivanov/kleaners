@@ -1,5 +1,5 @@
 
-import { BookingsSection } from "@/components/admin/sections/BookingsSection";
+import { BookingsSection } from "@/components/admin/sections/bookings/BookingsRefactored";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const AdminBookings = () => {
