@@ -17,3 +17,6 @@ export function formatFileSize(bytes: number, decimals = 1): string {
   
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+// Add dev flag for MSW and other development utilities
+export const dev = process.env.NODE_ENV === 'development';

@@ -1,43 +1,35 @@
 
-import { dev } from '@/lib/utils'
+import { setupWorker, http } from 'msw';
+import { dev } from '@/lib/utils';
 
 /**
- * Hook to manage Mock API settings
- * Allows enabling/disabling the Mock Service Worker during development
+ * A hook to facilitate working with MSW for API mocking
  */
-export function useMockApi() {
-  // Only works in development mode
-  const isAvailable = import.meta.env.DEV
-
-  const isEnabled = isAvailable && localStorage.getItem('enableMockApi') !== 'false'
-
-  const enableMockApi = () => {
-    if (isAvailable) {
-      localStorage.setItem('enableMockApi', 'true')
-      window.location.reload()
+export const useMockApi = () => {
+  /**
+   * Register a new mock API endpoint
+   */
+  const registerMock = (method: string, url: string, responseData: any) => {
+    if (!dev) {
+      console.warn('Mock APIs can only be registered in development mode');
+      return;
     }
-  }
-
-  const disableMockApi = () => {
-    if (isAvailable) {
-      localStorage.setItem('enableMockApi', 'false')
-      window.location.reload()
-    }
-  }
-
-  const toggleMockApi = () => {
-    if (isEnabled) {
-      disableMockApi()
-    } else {
-      enableMockApi()
-    }
-  }
-
+    
+    // In a real implementation, you would integrate this with your MSW worker
+    console.log(`Registered mock ${method} handler for ${url}`);
+  };
+  
+  /**
+   * Check if MSW is active
+   */
+  const isMockActive = () => {
+    return dev && window.location.search.includes('mock=true');
+  };
+  
   return {
-    isAvailable,
-    isEnabled,
-    enableMockApi,
-    disableMockApi,
-    toggleMockApi
-  }
-}
+    registerMock,
+    isMockActive
+  };
+};
+
+export default useMockApi;
