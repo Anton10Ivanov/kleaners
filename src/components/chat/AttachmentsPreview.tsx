@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { FileAttachment } from '@/utils/chatUtils';
+import { FileAttachment } from '@/utils/chat';
 
 interface AttachmentsPreviewProps {
   fileAttachments: FileAttachment[];

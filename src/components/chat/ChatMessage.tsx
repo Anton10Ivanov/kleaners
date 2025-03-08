@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { Message } from '@/utils/chatUtils';
+import { Message } from '@/utils/chat';
 import { CheckCircle, Circle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import FileAttachmentComponent from './FileAttachment';

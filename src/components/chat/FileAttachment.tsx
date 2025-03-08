@@ -1,9 +1,7 @@
-
 import { cn } from '@/lib/utils';
 import { Download, FileText, Image, Paperclip, X } from 'lucide-react';
-import { FileAttachment } from '@/utils/chatUtils';
+import { FileAttachment } from '@/utils/chat';
 import { Button } from '@/components/ui/button';
-import { formatFileSize } from '@/lib/utils';
 
 interface FileAttachmentProps {
   file: FileAttachment;

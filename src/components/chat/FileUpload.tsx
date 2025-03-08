@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { formatFileSize } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { FileAttachment } from '@/utils/chatUtils';
+import { FileAttachment } from '@/utils/chat';
 
 interface FileUploadProps {
   children: React.ReactNode;
