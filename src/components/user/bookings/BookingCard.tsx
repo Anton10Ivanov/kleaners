@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { UserBooking } from '@/hooks/useUserBookings';
+import { UserBooking } from '@/types/bookings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';

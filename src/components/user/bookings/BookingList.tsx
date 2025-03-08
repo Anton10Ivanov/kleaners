@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { BookingCard } from './BookingCard';
-import { UserBooking } from '@/hooks/useUserBookings';
+import { UserBooking } from '@/types/bookings';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle } from 'lucide-react';
 

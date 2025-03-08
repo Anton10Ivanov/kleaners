@@ -2,7 +2,7 @@
 import React from 'react';
 import { Calendar, Clock, MapPin, DollarSign } from 'lucide-react';
 import { format } from 'date-fns';
-import { UserBooking } from '@/hooks/useUserBookings';
+import { UserBooking } from '@/types/bookings';
 
 interface BookingDetailsProps {
   booking: UserBooking & { hours: number };
