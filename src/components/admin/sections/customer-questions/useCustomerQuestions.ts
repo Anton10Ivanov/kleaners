@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -31,6 +31,39 @@ export function useCustomerQuestions() {
       return data as CustomerQuestion[];
     }
   });
+
+  // Set up realtime subscription for new questions
+  useEffect(() => {
+    // Subscribe to realtime changes
+    const channel = supabase
+      .channel('customer_questions_changes')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'customer_questions'
+      }, (payload) => {
+        // When a new question is received, show a toast notification
+        if (payload.new) {
+          const newQuestion = payload.new as CustomerQuestion;
+          
+          // Show toast notification
+          toast({
+            title: 'New Customer Question',
+            description: `From: ${newQuestion.name} - ${newQuestion.email.substring(0, 15)}...`,
+            variant: 'default',
+          });
+          
+          // Invalidate the query to refresh the data
+          queryClient.invalidateQueries({ queryKey: ['customerQuestions'] });
+        }
+      })
+      .subscribe();
+      
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient, toast]);
 
   // Update question status mutation
   const updateStatusMutation = useMutation({

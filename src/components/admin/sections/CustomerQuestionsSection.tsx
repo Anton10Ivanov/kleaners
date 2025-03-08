@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QuestionFilters } from './customer-questions/QuestionFilters';
 import { QuestionsTable } from './customer-questions/QuestionsTable';
 import { QuestionDetailsDialog } from './customer-questions/QuestionDetailsDialog';
@@ -20,6 +20,9 @@ const CustomerQuestionsSection = () => {
     handleDeleteQuestion,
   } = useCustomerQuestions();
 
+  // Calculate the count of pending questions
+  const pendingCount = questions?.filter(q => q.status === 'pending').length || 0;
+
   if (error) return <div className="p-4 text-red-500">Error loading questions: {error.message}</div>;
 
   return (
@@ -28,7 +31,8 @@ const CustomerQuestionsSection = () => {
         <h2 className="text-2xl font-bold">Customer Questions</h2>
         <QuestionFilters 
           statusFilter={statusFilter} 
-          setStatusFilter={setStatusFilter} 
+          setStatusFilter={setStatusFilter}
+          pendingCount={pendingCount}
         />
       </div>
 
