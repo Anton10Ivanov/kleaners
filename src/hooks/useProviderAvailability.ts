@@ -11,7 +11,6 @@ export interface DaysAvailability {
   thursday: boolean;
   friday: boolean;
   saturday: boolean;
-  sunday: boolean;
   [key: string]: boolean; // Add index signature to allow string indexing
 }
 
@@ -29,7 +28,7 @@ export const useProviderAvailability = () => {
   const [vacationDialogOpen, setVacationDialogOpen] = useState(false);
   const [vacationRequests, setVacationRequests] = useState<DateRange[]>([]);
   
-  // Availability data
+  // Availability data - removed sunday
   const [availableDays, setAvailableDays] = useState<DaysAvailability>({
     monday: true,
     tuesday: true,
@@ -37,7 +36,6 @@ export const useProviderAvailability = () => {
     thursday: true,
     friday: true,
     saturday: false,
-    sunday: false,
   });
   
   const [timeRanges, setTimeRanges] = useState<TimeRange[]>([

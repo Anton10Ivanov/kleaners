@@ -33,7 +33,6 @@ const ProviderAvailability = () => {
       thursday: true,
       friday: true,
       saturday: false,
-      sunday: false,
     }
   });
   
@@ -46,7 +45,7 @@ const ProviderAvailability = () => {
         </div>
         <Button 
           variant="outline" 
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 border-[#D946EF] text-[#D946EF] hover:bg-[#FFDEE2]/10"
           onClick={() => setVacationDialogOpen(true)}
         >
           <CalendarIcon className="h-4 w-4" />
