@@ -38,8 +38,8 @@ export const BookingsSection: React.FC = () => {
     console.log('Fetching bookings with filters:', filters);
   };
 
-  // Mock assignProvider function
-  const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
+  // Mock assignProvider function - fixed to match expected signature
+  const assignProvider = (bookingId: string, providerId: string) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
   };
 
@@ -74,7 +74,7 @@ export const BookingsSection: React.FC = () => {
   };
 
   const handleAssignProvider = (bookingId: string, providerId: string) => {
-    assignProvider({ bookingId, providerId });
+    assignProvider(bookingId, providerId);
   };
 
   const handleViewDetails = (booking: Booking) => {
