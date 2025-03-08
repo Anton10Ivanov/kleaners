@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { Search, MessageSquarePlus, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getUserConversations, getUnreadMessageCount } from '@/utils/chatUtils';
 import { formatDistanceToNow } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ConversationListProps {
   userId: string;

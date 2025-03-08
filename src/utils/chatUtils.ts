@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { useEffect, useState } from 'react';
 
@@ -413,11 +412,16 @@ export const getUserConversations = async (userId: string): Promise<any[]> => {
         )[0];
       }
       
+      // Fix the type issue by accessing properties safely
+      const participantId = otherParticipant?.id || 'unknown';
+      const firstName = otherParticipant?.first_name || '';
+      const lastName = otherParticipant?.last_name || '';
+      
       return {
         id: conversation.id,
         participant: {
-          id: otherParticipant.id,
-          name: `${otherParticipant.first_name || ''} ${otherParticipant.last_name || ''}`.trim() || 'Unknown',
+          id: participantId,
+          name: `${firstName} ${lastName}`.trim() || 'Unknown',
         },
         latestMessage: latestMessage ? {
           ...latestMessage,
