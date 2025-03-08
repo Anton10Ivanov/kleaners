@@ -19,7 +19,7 @@ export function InvoiceButton({ bookingId }: InvoiceButtonProps): JSX.Element | 
     };
     
     checkInvoice();
-  }, [bookingId]);
+  }, [bookingId, hasInvoice]);
 
   // Don't render until we know if invoice is available
   if (invoiceAvailable === null) {
