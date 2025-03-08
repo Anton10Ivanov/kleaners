@@ -18,22 +18,30 @@ serve(async (req) => {
     // Get request info
     const { questionId } = await req.json()
     const clientIp = req.headers.get('x-forwarded-for') || 'unknown'
+    const userAgent = req.headers.get('user-agent') || 'unknown'
     
     // Create Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
     const supabase = createClient(supabaseUrl, supabaseKey)
     
-    // Update the question with the client IP
+    console.log(`Updating question ${questionId} with metadata: IP=${clientIp}`)
+    
+    // Update the question with the client IP and user agent
     const { error } = await supabase
       .from('customer_questions')
-      .update({ ip_address: clientIp })
+      .update({ 
+        ip_address: clientIp,
+        user_agent: userAgent
+      })
       .eq('id', questionId)
     
     if (error) {
       console.error('Error updating question metadata:', error)
       throw error
     }
+    
+    console.log('Successfully updated question metadata')
     
     // Return success response
     return new Response(

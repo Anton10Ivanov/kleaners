@@ -129,13 +129,13 @@ const CustomerQuestionsSection = () => {
   };
 
   const getStatusBadge = (status: string, isSpam: boolean) => {
-    if (isSpam) return <Badge className="bg-red-500">Spam</Badge>;
+    if (isSpam) return <Badge variant="destructive">Spam</Badge>;
     
     switch (status) {
       case 'pending':
         return <Badge className="bg-yellow-500">Pending</Badge>;
       case 'answered':
-        return <Badge className="bg-green-500">Answered</Badge>;
+        return <Badge variant="success">Answered</Badge>;
       case 'ignored':
         return <Badge className="bg-gray-500">Ignored</Badge>;
       default:
