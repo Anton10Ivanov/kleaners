@@ -2,6 +2,7 @@
 import { useApiQuery } from '@/hooks/useApiQuery';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useEffect } from 'react'; // Add this import
 
 /**
  * Interface representing a user booking
