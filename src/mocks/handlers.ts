@@ -1,6 +1,6 @@
 
 import { http, HttpResponse } from 'msw'
-import { UserBooking } from '@/hooks/useUserBookings'
+import { UserBooking } from '@/types/bookings'
 import { UserData } from '@/hooks/useUserProfileData'
 
 /**
