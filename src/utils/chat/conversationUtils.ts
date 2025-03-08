@@ -9,11 +9,10 @@ export const createConversation = async (userId: string, recipientId: string): P
     const { data: existingConversation } = await supabase
       .from('conversations')
       .select('id')
-      .or(`participants=cs.{${userId},${recipientId}},participants=cs.{${recipientId},${userId}}`)
-      .single();
+      .contains('participants', [userId, recipientId]);
     
-    if (existingConversation) {
-      return existingConversation.id;
+    if (existingConversation && existingConversation.length > 0) {
+      return existingConversation[0].id;
     }
     
     // Create a new conversation
@@ -44,19 +43,14 @@ export const getUserConversations = async (userId: string): Promise<Conversation
       .contains('participants', [userId]);
     
     if (error) throw error;
+
+    if (!conversations) return [];
     
     // Get the latest message for each conversation
     const conversationsWithMessages = await Promise.all(
       conversations.map(async (conversation) => {
         // Get the other participant
-        const otherParticipantId = conversation.participants.find(id => id !== userId);
-        
-        // Get user details
-        const { data: userData } = await supabase
-          .from('users')
-          .select('id, first_name, last_name')
-          .eq('id', otherParticipantId)
-          .single();
+        const otherParticipantId = conversation.participants.find(id => id !== userId) || '';
         
         // Get latest message
         const { data: latestMessage } = await supabase
@@ -70,7 +64,7 @@ export const getUserConversations = async (userId: string): Promise<Conversation
         // Get unread count
         const { count } = await supabase
           .from('messages')
-          .select('*', { count: 'exact' })
+          .select('*', { count: 'exact', head: true })
           .eq('conversation_id', conversation.id)
           .eq('recipient_id', userId)
           .eq('is_read', false);
@@ -80,8 +74,8 @@ export const getUserConversations = async (userId: string): Promise<Conversation
           created_at: conversation.created_at,
           updated_at: conversation.updated_at,
           participant: {
-            id: userData?.id || otherParticipantId,
-            name: userData ? `${userData.first_name} ${userData.last_name}` : 'Unknown User'
+            id: otherParticipantId,
+            name: otherParticipantId.includes('provider') ? 'Service Provider' : 'Client'
           },
           latestMessage: latestMessage ? {
             ...latestMessage,

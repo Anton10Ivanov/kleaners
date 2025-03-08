@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { FileAttachment, loadMessages, sendMessage } from '@/utils/chat';
+import { FileAttachment, loadMessages, sendMessage, getConversation } from '@/utils/chat';
 import { supabase } from '@/integrations/supabase/client';
 
 export const useChat = (conversationId: string, userId: string, recipientId: string, recipientName: string) => {
@@ -13,7 +13,12 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
     const fetchMessages = async () => {
       setIsLoading(true);
       try {
-        const loadedMessages = await loadMessages(conversationId);
+        if (!conversationId) {
+          setMessages([]);
+          return;
+        }
+        
+        const loadedMessages = await getConversation(conversationId);
         setMessages(loadedMessages);
       } catch (error) {
         console.error('Error loading messages:', error);
@@ -22,40 +27,41 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
       }
     };
     
-    if (conversationId) {
-      fetchMessages();
-      
-      // Set up real-time subscription for new messages
-      const channel = supabase
-        .channel(`messages:${conversationId}`)
-        .on('postgres_changes', {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `conversation_id=eq.${conversationId}`,
-        }, (payload) => {
-          const newMessage = payload.new;
-          
-          // Add the message to our state if it's not already there
-          setMessages(prev => {
-            const exists = prev.some(msg => msg.id === newMessage.id);
-            if (!exists) {
-              return [...prev, newMessage];
-            }
-            return prev;
-          });
-          
-          // If the message is from the recipient, show typing indicator
-          if (newMessage.sender_id === recipientId) {
-            setIsTyping(false);
-          }
-        })
-        .subscribe();
+    fetchMessages();
+    
+    // Set up real-time subscription for new messages
+    const channel = supabase
+      .channel(`messages:${conversationId}`)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+        filter: `conversation_id=eq.${conversationId}`,
+      }, (payload) => {
+        const newMessage = payload.new;
         
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
+        // Add the message to our state if it's not already there
+        setMessages(prev => {
+          const exists = prev.some(msg => msg.id === newMessage.id);
+          if (!exists) {
+            return [...prev, {
+              ...newMessage,
+              sent_at: new Date(newMessage.sent_at)
+            }];
+          }
+          return prev;
+        });
+        
+        // If the message is from the recipient, show typing indicator
+        if (newMessage.sender_id === recipientId) {
+          setIsTyping(false);
+        }
+      })
+      .subscribe();
+      
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [conversationId, recipientId]);
   
   // Generate random replies for the demo
@@ -83,7 +89,8 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
         content: message,
         sender_id: userId,
         recipient_id: recipientId,
-        created_at: new Date().toISOString(),
+        conversation_id: conversationId,
+        sent_at: new Date(),
         attachments: fileAttachments,
         is_read: true,
         status: 'sending'
@@ -114,13 +121,24 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
             content: replyContent,
             sender_id: recipientId,
             recipient_id: userId,
-            created_at: new Date().toISOString(),
+            conversation_id: conversationId,
+            sent_at: new Date(),
             attachments: [],
             is_read: false,
             status: 'sent'
           };
           
+          // Add to frontend state
           setMessages(prev => [...prev, replyMessage]);
+          
+          // Send to backend
+          sendMessage(
+            conversationId,
+            recipientId,
+            userId,
+            replyContent,
+            []
+          ).catch(console.error);
         }, 2000);
       }, 1000);
     } catch (error) {
