@@ -1,105 +1,104 @@
 
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  HomeIcon, 
-  CalendarIcon, 
-  UserIcon, 
-  CreditCardIcon, 
-  SettingsIcon,
-  BellIcon,
-  XIcon
-} from 'lucide-react';
-import { useNotifications } from '@/hooks/useNotifications';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+  Home, 
+  Settings, 
+  User, 
+  Calendar, 
+  FileText,
+  MessageSquare, 
+  Bell 
+} from "lucide-react";
 
-interface UserSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const UserSidebar = ({ isOpen, onClose }: UserSidebarProps) => {
-  const { unreadCount } = useNotifications();
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const UserSidebar = () => {
+  const { pathname } = useLocation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   
-  const navItems = [
+  const routes = [
     {
-      title: 'Dashboard',
-      icon: <HomeIcon className="h-5 w-5" />,
-      href: '/user/dashboard'
+      label: "Dashboard",
+      icon: <Home className="h-5 w-5 mr-2" />,
+      href: "/user/dashboard",
+      active: pathname === "/user/dashboard",
     },
     {
-      title: 'Bookings',
-      icon: <CalendarIcon className="h-5 w-5" />,
-      href: '/user/bookings'
+      label: "Bookings",
+      icon: <Calendar className="h-5 w-5 mr-2" />,
+      href: "/user/bookings",
+      active: pathname === "/user/bookings",
     },
     {
-      title: 'Notifications',
-      icon: <BellIcon className="h-5 w-5" />,
-      href: '/user/notifications',
-      badge: unreadCount > 0 ? unreadCount : undefined
+      label: "Messages",
+      icon: <MessageSquare className="h-5 w-5 mr-2" />,
+      href: "/user/messages",
+      active: pathname === "/user/messages",
     },
     {
-      title: 'Profile',
-      icon: <UserIcon className="h-5 w-5" />,
-      href: '/user/profile'
+      label: "Invoices",
+      icon: <FileText className="h-5 w-5 mr-2" />,
+      href: "/user/invoices",
+      active: pathname === "/user/invoices",
     },
     {
-      title: 'Invoices',
-      icon: <CreditCardIcon className="h-5 w-5" />,
-      href: '/user/invoices'
+      label: "Notifications",
+      icon: <Bell className="h-5 w-5 mr-2" />,
+      href: "/user/notifications",
+      active: pathname === "/user/notifications",
     },
     {
-      title: 'Settings',
-      icon: <SettingsIcon className="h-5 w-5" />,
-      href: '/user/settings'
-    }
+      label: "Profile",
+      icon: <User className="h-5 w-5 mr-2" />,
+      href: "/user/profile",
+      active: pathname === "/user/profile",
+    },
+    {
+      label: "Settings",
+      icon: <Settings className="h-5 w-5 mr-2" />,
+      href: "/user/settings",
+      active: pathname === "/user/settings",
+    },
   ];
 
-  if (!isOpen && isMobile) return null;
-
   return (
-    <div className={`${isMobile ? 'fixed inset-0 bg-white z-30 w-64 shadow-lg transition-all duration-300 ease-in-out' : 'w-64 h-screen fixed'}`}>
-      {isMobile && (
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="font-semibold">Menu</h2>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <XIcon className="h-5 w-5" />
-          </Button>
-        </div>
-      )}
-      <div className="h-full space-y-4 py-4 overflow-y-auto">
-        <div className="px-3 py-2 text-muted-foreground">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Client Dashboard
-          </h2>
-          <div className="space-y-1">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.href}
-                to={item.href}
-                onClick={isMobile ? onClose : undefined}
-                className={({ isActive }) =>
-                  `flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors ${
-                    isActive ? 'bg-accent text-accent-foreground' : 'transparent'
-                  }`
-                }
-              >
-                <div className="flex items-center">
-                  {item.icon}
-                  <span className="ml-3">{item.title}</span>
-                </div>
-                {item.badge && (
-                  <Badge variant="default" className="bg-primary text-white">
-                    {item.badge}
-                  </Badge>
-                )}
-              </NavLink>
-            ))}
-          </div>
-        </div>
+    <div className={cn(
+      "bg-white dark:bg-gray-800 h-full shadow-sm flex flex-col",
+      isMobile ? "w-16 py-4" : "w-64 py-6 px-4"
+    )}>
+      <div className="flex items-center mb-8 px-4">
+        {!isMobile && (
+          <h1 className="text-xl font-bold">User Portal</h1>
+        )}
+        {isMobile && (
+          <User className="h-6 w-6 mx-auto" />
+        )}
       </div>
+      <ScrollArea className="flex-1 pt-4">
+        <div className="flex flex-col gap-2 px-2">
+          {routes.map((route) => (
+            <Link 
+              key={route.href} 
+              to={route.href}
+              className="no-underline"
+            >
+              <Button
+                variant={route.active ? "default" : "ghost"}
+                className={cn(
+                  "w-full justify-start",
+                  isMobile && "justify-center px-2"
+                )}
+                size={isMobile ? "icon" : "default"}
+              >
+                {route.icon}
+                {!isMobile && <span>{route.label}</span>}
+              </Button>
+            </Link>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
