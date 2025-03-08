@@ -31,9 +31,6 @@ interface BookingsTableProps {
   updateBookingStatus: (id: string, status: BookingStatus) => void;
   deleteBooking: (id: string) => void;
   refreshData: () => void;
-  assignProvider: (bookingId: string, providerId: string) => void;
-  viewDetails: (booking: Booking) => void;
-  contactClient: (booking: Booking) => void;
 }
 
 export const BookingsTable = ({
@@ -44,9 +41,6 @@ export const BookingsTable = ({
   updateBookingStatus,
   deleteBooking,
   refreshData,
-  assignProvider,
-  viewDetails,
-  contactClient,
 }: BookingsTableProps) => {
   const [bookingToDelete, setBookingToDelete] = useState<string | null>(null);
   const [bookingToAssign, setBookingToAssign] = useState<string | null>(null);

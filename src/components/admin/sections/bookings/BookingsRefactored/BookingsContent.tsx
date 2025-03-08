@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { BookingsTable } from '../../bookings/BookingsTable';
 import { BookingsFilter } from '../../bookings/BookingsFilter';
@@ -70,8 +71,10 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
     });
   };
 
+  // Check if there are any active filters
   const hasFilters = status !== 'all' || searchTerm !== '' || dateRange !== undefined;
   
+  // Handle clearing all filters
   const handleClearFilters = () => {
     setStatus('all');
     setSearchTerm('');
@@ -98,6 +101,7 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
         selectedDateRange={dateRange}
       />
       
+      {/* We need to modify the BookingsTable component or create a wrapper that accepts our props */}
       <div className="border rounded-md overflow-hidden">
         <BookingsTable
           bookings={bookings}
