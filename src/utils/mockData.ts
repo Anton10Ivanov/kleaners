@@ -1,4 +1,3 @@
-
 import { format, subDays, subMonths } from 'date-fns';
 
 // Customer mock data
@@ -41,6 +40,18 @@ export interface MockBooking {
   providerName?: string;
   address: string;
   totalPrice: number;
+}
+
+// Invoice mock data
+export interface MockInvoice {
+  id: string;
+  bookingId: string;
+  invoiceNumber: string;
+  amount: number;
+  issueDate: string;
+  dueDate: string;
+  status: 'paid' | 'pending' | 'overdue';
+  filePath: string;
 }
 
 // Generate random mock customers
@@ -162,6 +173,29 @@ export const generateMockBookings = (
   });
 };
 
+// Generate mock invoices for completed bookings
+export const generateMockInvoices = (bookings: MockBooking[]): MockInvoice[] => {
+  // Filter completed bookings
+  const completedBookings = bookings.filter(booking => booking.status === 'completed');
+  
+  return completedBookings.map((booking, index) => {
+    const issueDate = new Date(booking.date);
+    const dueDate = new Date(issueDate);
+    dueDate.setDate(dueDate.getDate() + 30); // Due 30 days after issue
+    
+    return {
+      id: `inv-${index + 1}`,
+      bookingId: booking.id,
+      invoiceNumber: `INV-${new Date().getFullYear()}-${1000 + index}`,
+      amount: booking.totalPrice,
+      issueDate: issueDate.toISOString(),
+      dueDate: dueDate.toISOString(),
+      status: 'paid',
+      filePath: `/invoices/${booking.id}.pdf`
+    };
+  });
+};
+
 // Generate dashboard stats based on bookings
 export const generateDashboardStats = (bookings: MockBooking[]) => {
   const now = new Date();
@@ -226,6 +260,7 @@ export const generateMockAppData = () => {
   const customers = generateMockCustomers(15);
   const providers = generateMockProviders(8);
   const bookings = generateMockBookings(customers, providers, 40);
+  const invoices = generateMockInvoices(bookings);
   const dashboardStats = generateDashboardStats(bookings);
   const monthlyBookingData = generateMonthlyBookingData(bookings);
   
@@ -233,6 +268,7 @@ export const generateMockAppData = () => {
     customers,
     providers,
     bookings,
+    invoices,
     dashboardStats,
     monthlyBookingData
   };
