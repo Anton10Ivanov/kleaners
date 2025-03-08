@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   LayoutDashboard, 
@@ -44,15 +45,15 @@ export function getNavItems(): NavItem[] {
       icon: <MessageSquareText className="h-5 w-5" />,
     },
     {
+      title: 'Vacation Requests',
+      href: '/admin/vacation-requests',
+      icon: <Calendar className="h-5 w-5" />,
+      description: "Manage provider vacation requests",
+    },
+    {
       title: 'Settings',
       href: '/admin/settings',
       icon: <Settings className="h-5 w-5" />,
-    },
-    {
-      title: "Vacation Requests",
-      href: "/admin/vacation-requests",
-      icon: <Calendar className="h-4 w-4" />,
-      description: "Manage provider vacation requests",
     },
   ];
 

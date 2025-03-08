@@ -38,7 +38,7 @@ export const BookingsSection: React.FC = () => {
     console.log('Fetching bookings with filters:', filters);
   };
 
-  // Mock assignProvider function - fixed to match expected signature
+  // Fixed assignProvider function type to match expected signature in BookingsContent
   const assignProvider = (bookingId: string, providerId: string) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
   };
