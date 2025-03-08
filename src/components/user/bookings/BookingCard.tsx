@@ -9,6 +9,8 @@ import { BookingDetails } from './BookingDetails';
 import { ReschedulingDialog } from './ReschedulingDialog';
 import { CancellationDialog } from './CancellationDialog';
 import { InvoiceButton } from './InvoiceButton';
+import { FileText } from 'lucide-react';
+import { useInvoices } from '@/hooks/useInvoices';
 
 export interface BookingCardProps {
   /** Booking data with hours field */
@@ -75,7 +77,7 @@ export function BookingCard({
         
         {/* Show invoice button for completed bookings */}
         {booking.status === 'completed' && (
-          <div className="mt-2">
+          <div className="mt-4">
             <InvoiceButton bookingId={booking.id} />
           </div>
         )}
