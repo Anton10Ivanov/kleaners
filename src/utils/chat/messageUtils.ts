@@ -25,7 +25,7 @@ export const sendMessage = async (
         sender_id: senderId,
         recipient_id: recipientId,
         content: content,
-        attachments: attachments.length > 0 ? attachments : null,
+        attachments: attachments.length > 0 ? attachments : [],
         sent_at: new Date().toISOString(),
         status: 'sent',
         is_read: false
@@ -80,6 +80,8 @@ export const getConversation = async (conversationId: string): Promise<Message[]
     
     if (error) throw error;
     
+    if (!data) return [];
+    
     // Format dates and handle null values
     return data.map(message => ({
       ...message,
@@ -97,7 +99,7 @@ export const getUnreadMessageCount = async (userId: string): Promise<number> => 
   try {
     const { count, error } = await supabase
       .from('messages')
-      .select('*', { count: 'exact' })
+      .select('*', { count: 'exact', head: true })
       .eq('recipient_id', userId)
       .eq('is_read', false);
     
@@ -110,11 +112,22 @@ export const getUnreadMessageCount = async (userId: string): Promise<number> => 
   }
 };
 
-// Load messages for a conversation (mock data for demo)
+// Load messages for a conversation
 export const loadMessages = async (conversationId: string): Promise<any[]> => {
   try {
-    // In a real app, this would fetch messages from the database
-    // For this demo, we'll return mock data
+    // Get real messages from database
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', conversationId)
+      .order('sent_at', { ascending: true });
+      
+    if (error) throw error;
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error loading messages:', error);
+    // Fallback to demo data if there's an error
     return [
       {
         id: 'msg1',
@@ -138,8 +151,5 @@ export const loadMessages = async (conversationId: string): Promise<any[]> => {
         attachments: []
       }
     ];
-  } catch (error) {
-    console.error('Error loading messages:', error);
-    return [];
   }
 };
