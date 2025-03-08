@@ -83,16 +83,13 @@ export function NotificationsPanel({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Notifications</CardTitle>
+          <CardDescription className="text-zinc-800 font-normal text-base">Notifications</CardDescription>
           {unreadCount > 0 && (
             <span className="bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
               {unreadCount}
             </span>
           )}
         </div>
-        <CardDescription>
-          Manage your notifications and preferences
-        </CardDescription>
       </CardHeader>
       
       <Tabs defaultValue="recent" className="w-full">
