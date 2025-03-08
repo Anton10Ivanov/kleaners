@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 
@@ -47,6 +47,19 @@ export const useProviderAvailability = () => {
   ]);
   
   const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
+  
+  // Add event listener for vacation dialog
+  useEffect(() => {
+    const handleOpenVacationDialog = () => {
+      setVacationDialogOpen(true);
+    };
+    
+    window.addEventListener('open-vacation-dialog', handleOpenVacationDialog);
+    
+    return () => {
+      window.removeEventListener('open-vacation-dialog', handleOpenVacationDialog);
+    };
+  }, []);
   
   const addTimeRange = (day: string) => {
     const newId = Math.max(0, ...timeRanges.map(r => r.id)) + 1;

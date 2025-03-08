@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Plus, Save, Trash2 } from 'lucide-react';
+import { Plus, Save, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { generateTimeOptions, isTimeBeforeStart } from '../../../utils/timeUtils';
 import { UseFormReturn } from 'react-hook-form';
@@ -147,7 +147,19 @@ export const WeeklySchedule = ({
         ))}
         
         <div className="flex justify-between items-center mt-6">
-          <Button onClick={saveAvailability} className="md:w-auto">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2 border-[#D946EF] text-[#D946EF] hover:bg-[#FFDEE2]/10"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-vacation-dialog'))}
+          >
+            <CalendarIcon className="h-4 w-4" />
+            Request Vacation
+          </Button>
+          
+          <Button 
+            onClick={saveAvailability} 
+            className="border-2 border-[#0EA5E9] bg-white text-[#0EA5E9] hover:bg-[#0EA5E9]/10"
+          >
             <Save className="h-4 w-4 mr-2" />
             Fix Schedule
           </Button>
