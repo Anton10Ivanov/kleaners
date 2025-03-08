@@ -1,17 +1,22 @@
 
+import { format } from "date-fns";
+import { CalendarIcon, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface BookingCardProps {
   booking: any;
   onAction: () => void;
   actionLabel: string;
   actionIcon?: React.ReactNode;
-  actionVariant?: 'default' | 'destructive' | 'outline';
+  actionVariant: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "home";
   secondaryAction?: () => void;
   secondaryLabel?: string;
   secondaryIcon?: React.ReactNode;
-  secondaryVariant?: 'default' | 'destructive' | 'outline';
+  secondaryVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "home";
+  selected?: boolean;
+  onClick?: () => void;
 }
 
 const BookingCard = ({
@@ -19,53 +24,78 @@ const BookingCard = ({
   onAction,
   actionLabel,
   actionIcon,
-  actionVariant = 'default',
+  actionVariant,
   secondaryAction,
   secondaryLabel,
   secondaryIcon,
-  secondaryVariant = 'outline',
+  secondaryVariant,
+  selected = false,
+  onClick,
 }: BookingCardProps) => {
   return (
-    <Card>
+    <Card 
+      className={cn(
+        "hover:shadow-md transition-shadow cursor-pointer", 
+        selected && "border-2 border-primary"
+      )}
+      onClick={onClick}
+    >
       <CardContent className="p-4">
-        <div className="flex flex-col md:flex-row justify-between">
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">{booking.clientName}</h3>
-            <p className="text-muted-foreground text-sm">{booking.address}</p>
-            <div className="flex items-center gap-4">
-              <div>
-                <p className="text-sm font-medium">{booking.date.toLocaleDateString()}</p>
-                <p className="text-sm text-muted-foreground">{booking.time}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">{booking.service}</p>
-                <p className="text-sm text-muted-foreground">{booking.hours} hours</p>
-              </div>
-            </div>
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <h3 className="font-medium">{booking.clientName}</h3>
+            <span className="text-sm font-medium">{booking.service}</span>
           </div>
           
-          <div className="flex mt-4 md:mt-0 gap-2 self-end">
-            {secondaryAction && secondaryLabel && (
-              <Button 
-                variant={secondaryVariant} 
-                onClick={secondaryAction}
-                size="sm"
-              >
-                {secondaryIcon}
-                {secondaryLabel}
-              </Button>
-            )}
-            <Button 
-              variant={actionVariant} 
-              onClick={onAction}
-              size="sm"
-            >
-              {actionIcon}
-              {actionLabel}
-            </Button>
+          <div className="flex items-start text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4 mr-1 mt-0.5 shrink-0" />
+            <span>{booking.address}</span>
+          </div>
+          
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center">
+              <CalendarIcon className="h-4 w-4 mr-1" />
+              <span>
+                {booking.date ? format(booking.date, "MMM dd, yyyy") : "TBD"}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-1" />
+              <span>{booking.time}</span>
+            </div>
           </div>
         </div>
       </CardContent>
+      
+      <CardFooter className="p-4 pt-0 flex justify-between gap-2">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAction();
+          }}
+          variant={actionVariant}
+          size="sm"
+          className="flex-1"
+        >
+          {actionIcon}
+          {actionLabel}
+        </Button>
+        
+        {secondaryAction && secondaryLabel && (
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              secondaryAction();
+            }}
+            variant={secondaryVariant || "outline"}
+            size="sm"
+            className="flex-1"
+          >
+            {secondaryIcon}
+            {secondaryLabel}
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   );
 };

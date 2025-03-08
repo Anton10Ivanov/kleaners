@@ -1,12 +1,15 @@
+
 import { Check, X } from "lucide-react";
 import BookingCard from "./BookingCard";
 
 interface BookingListProps {
   bookings: any[];
   type: 'upcoming' | 'pending' | 'completed';
+  onSelectBooking?: (id: string) => void;
+  selectedBookingId?: string;
 }
 
-const BookingList = ({ bookings, type }: BookingListProps) => {
+const BookingList = ({ bookings, type, onSelectBooking, selectedBookingId }: BookingListProps) => {
   // Placeholder action handlers
   const handleAction = () => {};
   const handleSecondaryAction = () => {};
@@ -22,13 +25,15 @@ const BookingList = ({ bookings, type }: BookingListProps) => {
   return (
     <div className="space-y-4">
       {bookings.map((booking) => {
-        // Configure card props based on booking type
-        const cardProps = {
+        // Base card props
+        const cardProps: any = {
           booking,
           onAction: handleAction,
           actionLabel: 'Cancel',
           actionIcon: <X className="h-4 w-4 mr-2" />,
           actionVariant: 'destructive' as const,
+          selected: booking.id === selectedBookingId,
+          onClick: () => onSelectBooking && onSelectBooking(booking.id)
         };
 
         if (type === 'upcoming') {
@@ -36,15 +41,15 @@ const BookingList = ({ bookings, type }: BookingListProps) => {
         } else if (type === 'pending') {
           cardProps.actionLabel = 'Accept';
           cardProps.actionIcon = <Check className="h-4 w-4 mr-2" />;
-          cardProps.actionVariant = 'default';
+          cardProps.actionVariant = 'default' as const;
           cardProps.secondaryAction = handleSecondaryAction;
           cardProps.secondaryLabel = 'Decline';
           cardProps.secondaryIcon = <X className="h-4 w-4 mr-2" />;
-          cardProps.secondaryVariant = 'outline';
+          cardProps.secondaryVariant = 'outline' as const;
         } else if (type === 'completed') {
           cardProps.actionLabel = 'Details';
           cardProps.actionIcon = undefined;
-          cardProps.actionVariant = 'outline';
+          cardProps.actionVariant = 'outline' as const;
         }
 
         return <BookingCard key={booking.id} {...cardProps} />;
