@@ -39,7 +39,7 @@ export function AccordionSection({
           <span className="font-semibold">{title}</span>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="px-4 pb-4">
+      <AccordionContent className="px-4 pb-4 text-zinc-800">
         {children}
       </AccordionContent>
     </AccordionItem>
