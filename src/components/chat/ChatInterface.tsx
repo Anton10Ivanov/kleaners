@@ -1,124 +1,147 @@
-import { useState, useRef, useEffect } from 'react';
-import { Send, Paperclip } from 'lucide-react';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { TypingIndicator } from './TypingIndicator';
-import { Message, FileAttachment, sendMessage, markMessagesAsRead, useTypingIndicator } from '@/utils/chatUtils';
-import { ChatMessage } from './ChatMessage';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Send, Paperclip, Image, Smile } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Message, getConversation, sendMessage, markMessagesAsRead, uploadAttachments, FileAttachment, useTypingIndicator } from '@/utils/chatUtils';
+import ChatMessage from './ChatMessage';
+import TypingIndicator from './TypingIndicator';
 import FileUpload from './FileUpload';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import FileAttachmentComponent from './FileAttachment';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ChatInterfaceProps {
   conversationId: string;
-  currentUserId: string;
+  userId: string;
   recipientId: string;
   recipientName: string;
-  initialMessages?: Message[];
 }
 
-export const ChatInterface = ({
+const ChatInterface = ({
   conversationId,
-  currentUserId,
+  userId,
   recipientId,
-  recipientName,
-  initialMessages = []
+  recipientName
 }: ChatInterfaceProps) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [inputValue, setInputValue] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const [attachments, setAttachments] = useState<FileAttachment[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
-  const { startTyping, stopTyping } = useTypingIndicator(
-    conversationId, 
-    currentUserId
+  const { isTyping, startTyping, stopTyping, useTypingStatusSubscription } = useTypingIndicator(
+    conversationId,
+    userId
   );
   
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   
+  // Subscribe to typing status changes
+  useTypingStatusSubscription(conversationId, (typingUserId, typing) => {
+    if (typingUserId === recipientId) {
+      setIsRecipientTyping(typing);
+    }
+  });
+  
+  // Fetch messages on component mount
+  useEffect(() => {
+    fetchMessages();
+    
+    // Subscribe to new messages
+    const subscription = supabase
+      .channel('new_messages')
+      .on(
+        'postgres_changes', 
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${conversationId}`,
+        },
+        (payload) => {
+          const newMsg = payload.new as any;
+          
+          // Only add the message if it's not already in the list
+          if (!messages.some(m => m.id === newMsg.id)) {
+            const formattedMessage: Message = {
+              ...newMsg,
+              sent_at: new Date(newMsg.sent_at),
+            };
+            
+            setMessages(prevMessages => [...prevMessages, formattedMessage]);
+            
+            // Mark message as read if it's from the other user
+            if (newMsg.sender_id === recipientId) {
+              markMessagesAsRead([newMsg.id]);
+            }
+          }
+        }
+      )
+      .subscribe();
+      
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [conversationId, userId, recipientId]);
+  
+  // Mark messages as read when conversation is opened
   useEffect(() => {
     const unreadMessages = messages
-      .filter(m => m.recipient_id === currentUserId && !m.is_read)
+      .filter(m => m.sender_id === recipientId && !m.is_read)
       .map(m => m.id);
       
     if (unreadMessages.length > 0) {
       markMessagesAsRead(unreadMessages);
-      
-      setMessages(prev => 
-        prev.map(m => 
-          unreadMessages.includes(m.id) 
-            ? { ...m, is_read: true, status: 'read' } 
-            : m
-        )
-      );
     }
-  }, [messages, currentUserId]);
+  }, [messages, recipientId]);
   
+  // Scroll to bottom when messages change
   useEffect(() => {
-    const subscription = supabase
-      .channel(`messages:${conversationId}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `conversation_id=eq.${conversationId}`
-      }, (payload) => {
-        const newMessage = payload.new as any;
-        
-        const formattedMessage: Message = {
-          ...newMessage,
-          sent_at: new Date(newMessage.sent_at),
-        };
-        
-        setMessages(prev => [...prev, formattedMessage]);
-      })
-      .subscribe();
-      
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [conversationId]);
+    scrollToBottom();
+  }, [messages, isRecipientTyping]);
   
-  useEffect(() => {
-    const subscription = supabase
-      .channel(`typing:${conversationId}`)
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'typing_indicators',
-        filter: `conversation_id=eq.${conversationId} AND user_id=eq.${recipientId}`
-      }, (payload) => {
-        const typingData = payload.new as { is_typing: boolean };
-        setIsTyping(typingData.is_typing);
-      })
-      .subscribe();
-      
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [conversationId, recipientId]);
+  const fetchMessages = async () => {
+    setIsLoading(true);
+    try {
+      const fetchedMessages = await getConversation(conversationId);
+      setMessages(fetchedMessages.reverse()); // Reverse to show oldest first
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
+  const handleSendMessage = async () => {
+    if ((newMessage.trim() === '' && attachments.length === 0) || isSending) return;
     
-    if (e.target.value.length > 0) {
-      startTyping();
-    } else {
-      stopTyping();
+    setIsSending(true);
+    stopTyping();
+    
+    try {
+      await sendMessage(
+        userId,
+        recipientId,
+        newMessage,
+        conversationId,
+        attachments
+      );
+      
+      setNewMessage('');
+      setAttachments([]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
     }
   };
   
@@ -129,189 +152,213 @@ export const ChatInterface = ({
     }
   };
   
-  const handleFilesSelected = (files: FileAttachment[]) => {
-    setAttachments(files);
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMessage(e.target.value);
+    startTyping();
   };
   
-  const handleSendMessage = async () => {
-    const trimmedInput = inputValue.trim();
+  const handleFileUpload = async (files: FileList) => {
+    if (files.length === 0) return;
     
-    if (trimmedInput === '' && attachments.length === 0) return;
-    
-    setIsSubmitting(true);
+    setIsUploading(true);
     
     try {
-      const optimisticId = `temp-${Date.now()}`;
-      const optimisticMessage: Message = {
-        id: optimisticId,
-        sender_id: currentUserId,
-        recipient_id: recipientId,
-        content: trimmedInput,
-        sent_at: new Date(),
-        is_read: false,
-        status: 'sending',
-        attachments: attachments
-      };
+      const fileArray = Array.from(files);
+      const uploadedAttachments = await uploadAttachments(fileArray, conversationId);
       
-      setMessages(prev => [...prev, optimisticMessage]);
-      
-      setInputValue('');
-      setAttachments([]);
-      stopTyping();
-      
-      let uploadedAttachments: FileAttachment[] = [];
-      if (attachments.length > 0) {
-        uploadedAttachments = await Promise.all(
-          attachments.map(async (attachment) => {
-            if (!attachment.file) return attachment;
-            
-            const fileName = `${Date.now()}-${attachment.name}`;
-            const { data, error } = await supabase.storage
-              .from('message_attachments')
-              .upload(`${conversationId}/${fileName}`, attachment.file);
-              
-            if (error) throw error;
-            
-            const { data: urlData } = supabase.storage
-              .from('message_attachments')
-              .getPublicUrl(`${conversationId}/${fileName}`);
-              
-            return {
-              id: data.path,
-              name: attachment.name,
-              type: attachment.type,
-              url: urlData.publicUrl,
-              size: attachment.size
-            };
-          })
-        );
-      }
-      
-      const sentMessage = await sendMessage(
-        currentUserId,
-        recipientId,
-        trimmedInput,
-        conversationId,
-        uploadedAttachments
-      );
-      
-      setMessages(prev => prev.map(m => 
-        m.id === optimisticId ? sentMessage : m
-      ));
-      
-      textareaRef.current?.focus();
+      setAttachments(prev => [...prev, ...uploadedAttachments]);
     } catch (error) {
-      console.error('Error sending message:', error);
-      
-      setMessages(prev => prev.map(m => 
-        m.status === 'sending' ? { ...m, status: 'failed' } : m
-      ));
-      
-      toast({
-        title: "Failed to send message",
-        description: "Your message couldn't be sent. Please try again.",
-        variant: "destructive"
-      });
+      console.error('Error uploading files:', error);
     } finally {
-      setIsSubmitting(false);
+      setIsUploading(false);
     }
   };
   
+  const handleOpenFileDialog = () => {
+    fileInputRef.current?.click();
+  };
+  
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+  
+  // Group messages by date
+  const groupedMessages: { [date: string]: Message[] } = {};
+  
+  messages.forEach(message => {
+    const date = message.sent_at.toDateString();
+    if (!groupedMessages[date]) {
+      groupedMessages[date] = [];
+    }
+    groupedMessages[date].push(message);
+  });
+  
+  // Group consecutive messages from the same sender
+  const renderMessageGroups = (messagesForDate: Message[]) => {
+    const groups: Message[][] = [];
+    let currentGroup: Message[] = [];
+    
+    messagesForDate.forEach((message, index) => {
+      if (
+        index === 0 || 
+        messagesForDate[index - 1].sender_id !== message.sender_id ||
+        new Date(message.sent_at).getTime() - new Date(messagesForDate[index - 1].sent_at).getTime() > 5 * 60 * 1000
+      ) {
+        if (currentGroup.length > 0) {
+          groups.push(currentGroup);
+        }
+        currentGroup = [message];
+      } else {
+        currentGroup.push(message);
+      }
+    });
+    
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup);
+    }
+    
+    return groups.map((group, groupIndex) => (
+      <div key={`group-${groupIndex}`} className="mb-4">
+        {group.map((message, msgIndex) => (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            isOwn={message.sender_id === userId}
+            showAvatar={msgIndex === group.length - 1}
+          />
+        ))}
+      </div>
+    ));
+  };
+  
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-background">
-      <div className="p-3 border-b flex items-center gap-2">
-        <Avatar className="h-8 w-8">
+    <div className="flex flex-col h-full bg-background border rounded-lg overflow-hidden">
+      {/* Header */}
+      <div className="p-3 border-b flex items-center gap-3">
+        <Avatar>
           <AvatarImage src={`https://avatar.vercel.sh/${recipientId}`} />
           <AvatarFallback>{recipientName[0]}</AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="text-sm font-medium">{recipientName}</h3>
+          <h3 className="font-medium">{recipientName}</h3>
+          <p className="text-xs text-muted-foreground">
+            {isRecipientTyping ? (
+              <span className="text-primary">typing...</span>
+            ) : (
+              'Online'
+            )}
+          </p>
         </div>
       </div>
       
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4">
-        {messages.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-muted-foreground">
-            <p>No messages yet. Start the conversation!</p>
+        {isLoading ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
+            <div className="mb-2 p-4 rounded-full bg-muted">
+              <Send className="h-6 w-6" />
+            </div>
+            <p>No messages yet</p>
+            <p className="text-sm">Send a message to start the conversation</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {messages.map((message, i) => (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                isOwn={message.sender_id === currentUserId}
-                showAvatar={
-                  i === 0 || 
-                  messages[i - 1].sender_id !== message.sender_id
-                }
-              />
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
-        {isTyping && (
-          <TypingIndicator
-            isTyping={isTyping}
-            name={recipientName}
-            className="mt-2"
-          />
-        )}
-      </div>
-      
-      {attachments.length > 0 && (
-        <div className="px-3 py-2 border-t max-h-32 overflow-y-auto">
-          <div className="flex flex-wrap gap-2">
-            {attachments.map(file => (
-              <div key={file.id} className="max-w-[200px]">
-                <FileAttachmentComponent
-                  file={file}
-                  onRemove={() => setAttachments(prev => prev.filter(f => f.id !== file.id))}
-                />
+          <>
+            {Object.entries(groupedMessages).map(([date, messagesForDate]) => (
+              <div key={date}>
+                <div className="flex items-center justify-center my-4">
+                  <div className="bg-muted text-muted-foreground text-xs px-3 py-1 rounded-full">
+                    {new Date(date).toLocaleDateString(undefined, { 
+                      weekday: 'long', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </div>
+                </div>
+                {renderMessageGroups(messagesForDate)}
               </div>
             ))}
-          </div>
+          </>
+        )}
+        
+        {isRecipientTyping && <TypingIndicator />}
+        
+        <div ref={messagesEndRef} />
+      </div>
+      
+      {/* Attachments preview */}
+      {attachments.length > 0 && (
+        <div className="px-4 pt-2 pb-0 space-y-2 max-h-40 overflow-y-auto">
+          {attachments.map((file, index) => (
+            <FileAttachmentComponent 
+              key={file.id || index}
+              file={file}
+              onRemove={() => removeAttachment(index)}
+              showRemoveButton={true}
+            />
+          ))}
         </div>
       )}
       
+      {/* Input */}
       <div className="p-3 border-t">
         <div className="flex items-end gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 flex-shrink-0"
-                type="button"
+          <div className="relative flex-1">
+            <Textarea
+              placeholder="Write a message..."
+              value={newMessage}
+              onChange={handleMessageChange}
+              onKeyDown={handleKeyDown}
+              className={cn(
+                "min-h-10 resize-none py-3 pr-12",
+                attachments.length > 0 && "rounded-b-md rounded-t-none border-t-0"
+              )}
+              maxRows={5}
+            />
+            
+            <div className="absolute right-3 bottom-3 flex items-center gap-1">
+              <Button 
+                type="button" 
+                size="icon" 
+                variant="ghost" 
+                className="h-8 w-8"
+                onClick={handleOpenFileDialog}
+                disabled={isUploading}
               >
                 <Paperclip className="h-4 w-4" />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent side="top" align="start" className="w-72">
-              <FileUpload onFileSelect={handleFilesSelected} />
-            </PopoverContent>
-          </Popover>
+              
+              <Button 
+                type="button" 
+                size="icon" 
+                variant="ghost" 
+                className="h-8 w-8"
+              >
+                <Smile className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
           
-          <Textarea
-            ref={textareaRef}
-            placeholder="Type a message..."
-            className="min-h-9 resize-none"
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            disabled={isSubmitting}
-          />
-          
-          <Button
-            size="icon"
-            className="h-9 w-9 flex-shrink-0"
-            disabled={isSubmitting || (inputValue.trim() === '' && attachments.length === 0)}
+          <Button 
+            type="button" 
             onClick={handleSendMessage}
+            disabled={isSending || (newMessage.trim() === '' && attachments.length === 0)}
+            className="h-10 w-10 rounded-full"
           >
             <Send className="h-4 w-4" />
           </Button>
         </div>
       </div>
+      
+      {/* Hidden file input */}
+      <FileUpload 
+        ref={fileInputRef}
+        onUpload={handleFileUpload}
+        isUploading={isUploading}
+      />
     </div>
   );
 };
