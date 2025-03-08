@@ -20,6 +20,7 @@ export interface FileAttachment {
   type: string;
   url: string;
   size: number;
+  file?: File; // Only used client-side for uploading
 }
 
 export interface Conversation {
@@ -209,6 +210,46 @@ export const getUnreadMessageCount = async (userId: string): Promise<number> => 
   }
 };
 
+// File handling functions
+export const uploadAttachment = async (
+  file: File,
+  conversationId: string
+): Promise<FileAttachment> => {
+  try {
+    const fileName = `${Date.now()}-${file.name}`;
+    const { data, error } = await supabase.storage
+      .from('message_attachments')
+      .upload(`${conversationId}/${fileName}`, file);
+      
+    if (error) throw error;
+    
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('message_attachments')
+      .getPublicUrl(`${conversationId}/${fileName}`);
+      
+    return {
+      id: data.path,
+      name: file.name,
+      type: file.type,
+      url: urlData.publicUrl,
+      size: file.size
+    };
+  } catch (error) {
+    console.error('Error uploading attachment:', error);
+    throw error;
+  }
+};
+
+export const uploadAttachments = async (
+  files: File[],
+  conversationId: string
+): Promise<FileAttachment[]> => {
+  return Promise.all(
+    files.map(file => uploadAttachment(file, conversationId))
+  );
+};
+
 // Send message with optimistic updates
 export const sendMessage = async (
   senderId: string,
@@ -284,6 +325,114 @@ export const getConversation = async (
     }));
   } catch (error) {
     console.error('Error getting conversation:', error);
+    return [];
+  }
+};
+
+// Get or create conversation between two users
+export const getOrCreateConversation = async (
+  userId1: string,
+  userId2: string
+): Promise<string> => {
+  try {
+    // Check if conversation exists
+    const { data, error } = await supabase
+      .from('conversations')
+      .select('id')
+      .or(`participant1_id.eq.${userId1},participant2_id.eq.${userId1}`)
+      .or(`participant1_id.eq.${userId2},participant2_id.eq.${userId2}`)
+      .single();
+      
+    if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+      throw error;
+    }
+    
+    if (data) {
+      return data.id;
+    }
+    
+    // Create new conversation
+    const { data: newConversation, error: createError } = await supabase
+      .from('conversations')
+      .insert({
+        participant1_id: userId1,
+        participant2_id: userId2,
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+      
+    if (createError) throw createError;
+    
+    return newConversation.id;
+  } catch (error) {
+    console.error('Error getting or creating conversation:', error);
+    throw error;
+  }
+};
+
+// Get user's conversations
+export const getUserConversations = async (userId: string): Promise<any[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('conversations')
+      .select(`
+        id, 
+        created_at,
+        participant1_id,
+        participant2_id,
+        profiles1:participant1_id(id, first_name, last_name),
+        profiles2:participant2_id(id, first_name, last_name),
+        latest_message:messages(
+          id, 
+          content, 
+          sent_at, 
+          sender_id, 
+          is_read,
+          attachments
+        )
+      `)
+      .or(`participant1_id.eq.${userId},participant2_id.eq.${userId}`)
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    
+    // Process conversations to add last message and other participant details
+    return data.map(conversation => {
+      const isParticipant1 = conversation.participant1_id === userId;
+      const otherParticipant = isParticipant1 
+        ? conversation.profiles2
+        : conversation.profiles1;
+        
+      // Find the latest message
+      let latestMessage = null;
+      if (conversation.latest_message && conversation.latest_message.length > 0) {
+        // Sort messages by sent_at descending
+        latestMessage = conversation.latest_message.sort((a: any, b: any) => 
+          new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime()
+        )[0];
+      }
+      
+      return {
+        id: conversation.id,
+        participant: {
+          id: otherParticipant.id,
+          name: `${otherParticipant.first_name || ''} ${otherParticipant.last_name || ''}`.trim() || 'Unknown',
+        },
+        latestMessage: latestMessage ? {
+          ...latestMessage,
+          sent_at: new Date(latestMessage.sent_at),
+          isFromMe: latestMessage.sender_id === userId
+        } : null,
+        unreadCount: conversation.latest_message
+          ? conversation.latest_message.filter((m: any) => 
+              m.recipient_id === userId && !m.is_read
+            ).length
+          : 0
+      };
+    });
+  } catch (error) {
+    console.error('Error getting user conversations:', error);
     return [];
   }
 };
