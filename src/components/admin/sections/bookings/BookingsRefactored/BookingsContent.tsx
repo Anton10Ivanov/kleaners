@@ -1,121 +1,113 @@
 
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { Loader2, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { BookingStatus, SortField, SortOrder, Booking } from "../types";
-import { DateRange } from "react-day-picker";
-import { BookingsTable } from "../BookingsTable";
-import { Pagination } from "./Pagination";
-import { EmptyState } from "./EmptyState";
-import { LoadingState } from "./LoadingState";
-import { ErrorState } from "./ErrorState";
+import React, { useState } from 'react';
+import { Booking, BookingStatus } from '@/types/bookings';
+import { BookingsTable } from '../../bookings/BookingsTable';
+import { BookingsFilter } from '../../bookings/BookingsFilter';
+import { EmptyState } from './EmptyState';
+import { Pagination } from './Pagination';
+import { DateRange } from 'react-day-picker';
 
 interface BookingsContentProps {
-  bookings: Booking[] | null;
-  isLoading: boolean;
-  error: Error | null;
+  bookings: Booking[];
   currentPage: number;
-  setCurrentPage: (page: number) => void;
-  sortField: SortField;
-  sortOrder: SortOrder;
-  toggleSort: (field: SortField) => void;
-  selectedStatus: BookingStatus | null;
-  updateBookingStatus: (id: string, status: BookingStatus) => void;
-  deleteBooking: (id: string) => void;
-  handleRefresh: () => void;
-  setSearchTerm: (term: string) => void;
-  setSelectedStatus: (status: BookingStatus | null) => void;
-  setDateRange: (range: DateRange | undefined) => void;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  onUpdateStatus: (id: string, status: BookingStatus) => void;
+  onDeleteBooking: (id: string) => void;
+  onAssignProvider: (bookingId: string, providerId: string) => void;
+  onViewDetails: (booking: Booking) => void;
+  onContactClient: (booking: Booking) => void;
+  isLoading: boolean;
+  onFilterChange: (filters: {
+    status?: BookingStatus | 'all';
+    search?: string;
+    dateRange?: DateRange | undefined;
+  }) => void;
 }
 
-export const BookingsContent = ({
+export const BookingsContent: React.FC<BookingsContentProps> = ({
   bookings,
-  isLoading,
-  error,
   currentPage,
-  setCurrentPage,
-  sortField,
-  sortOrder,
-  toggleSort,
-  selectedStatus,
-  updateBookingStatus,
-  deleteBooking,
-  handleRefresh,
-  setSearchTerm,
-  setSelectedStatus,
-  setDateRange
-}: BookingsContentProps) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const itemsPerPage = isMobile ? 5 : 10;
+  totalPages,
+  onPageChange,
+  onUpdateStatus,
+  onDeleteBooking,
+  onAssignProvider,
+  onViewDetails,
+  onContactClient,
+  isLoading,
+  onFilterChange,
+}) => {
+  const [status, setStatus] = useState<BookingStatus | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
-  // Calculate pagination
-  const totalItems = bookings?.length || 0;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const currentBookings = bookings?.slice(startIndex, endIndex) || [];
+  const handleFilterChange = () => {
+    onFilterChange({
+      status,
+      search: searchTerm,
+      dateRange: dateRange
+    });
+  };
 
-  if (isLoading) {
-    return <LoadingState />;
-  }
+  const handleStatusChange = (newStatus: BookingStatus | 'all') => {
+    setStatus(newStatus);
+    onFilterChange({
+      status: newStatus,
+      search: searchTerm,
+      dateRange: dateRange
+    });
+  };
 
-  if (error) {
-    return <ErrorState onRefresh={handleRefresh} />;
-  }
+  const handleSearchChange = (search: string) => {
+    setSearchTerm(search);
+    onFilterChange({
+      status,
+      search,
+      dateRange
+    });
+  };
 
-  if (!bookings || bookings.length === 0) {
-    return (
-      <EmptyState 
-        hasFilters={!!(searchTerm || selectedStatus || dateRange)}
-        onClearFilters={() => {
-          setSearchTerm("");
-          setSelectedStatus(null);
-          setDateRange(undefined);
-        }}
-      />
-    );
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+    onFilterChange({
+      status,
+      search: searchTerm,
+      dateRange: range
+    });
+  };
+
+  if (bookings.length === 0 && !isLoading) {
+    return <EmptyState onFilterChange={handleFilterChange} />;
   }
 
   return (
-    <>
-      <div className="flex justify-between items-center mb-2">
-        <p className="text-sm text-muted-foreground">
-          Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-          <span className="font-medium">{endIndex}</span> of{" "}
-          <span className="font-medium">{totalItems}</span> bookings
-        </p>
-        {selectedStatus && (
-          <div className="text-sm font-medium">
-            <span className="px-2 py-1 rounded-md bg-primary/10 text-primary">
-              {totalItems} {selectedStatus} {totalItems === 1 ? "booking" : "bookings"}
-            </span>
-          </div>
-        )}
-      </div>
+    <div className="space-y-4">
+      <BookingsFilter
+        onStatusChange={handleStatusChange}
+        onSearchChange={handleSearchChange}
+        onDateRangeChange={handleDateRangeChange}
+        selectedStatus={status}
+        searchTerm={searchTerm}
+        selectedDateRange={dateRange}
+      />
       
-      <div className="bg-white dark:bg-gray-800 rounded-md border shadow-sm overflow-hidden">
-        <BookingsTable
-          bookings={currentBookings}
-          sortField={sortField}
-          sortOrder={sortOrder}
-          toggleSort={toggleSort}
-          updateBookingStatus={updateBookingStatus}
-          deleteBooking={deleteBooking}
-          refreshData={handleRefresh}
-        />
-      </div>
+      <BookingsTable
+        bookings={bookings}
+        onUpdateStatus={onUpdateStatus}
+        onDeleteBooking={onDeleteBooking}
+        onAssignProvider={onAssignProvider}
+        onViewDetails={onViewDetails}
+        onContactClient={onContactClient}
+      />
       
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-          isMobile={isMobile}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          totalItems={totalItems}
+          onPageChange={onPageChange}
         />
       )}
-    </>
+    </div>
   );
 };
