@@ -1,5 +1,7 @@
 
 import { useState } from 'react';
+import { DateRange } from 'react-day-picker';
+import { toast } from 'sonner';
 
 // Update the interface to include an index signature
 export interface DaysAvailability {
@@ -21,9 +23,11 @@ interface TimeRange {
 }
 
 export const useProviderAvailability = () => {
-  const [selectedTab, setSelectedTab] = useState<string>('calendar');
+  const [selectedTab, setSelectedTab] = useState<string>('schedule');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [dateEvents, setDateEvents] = useState<any[]>([]);
+  const [vacationDialogOpen, setVacationDialogOpen] = useState(false);
+  const [vacationRequests, setVacationRequests] = useState<DateRange[]>([]);
   
   // Availability data
   const [availableDays, setAvailableDays] = useState<DaysAvailability>({
@@ -76,6 +80,7 @@ export const useProviderAvailability = () => {
   const saveAvailability = () => {
     // In a real app, this would send the data to the server
     console.log('Saving availability:', { availableDays, timeRanges, unavailableDates });
+    toast.success('Availability settings saved successfully');
     return { availableDays, timeRanges, unavailableDates };
   };
   
@@ -84,6 +89,30 @@ export const useProviderAvailability = () => {
       setUnavailableDates(unavailableDates.filter(d => d.toDateString() !== date.toDateString()));
     } else {
       setUnavailableDates([...unavailableDates, date]);
+    }
+  };
+
+  const handleVacationRequest = (dateRange: DateRange) => {
+    if (dateRange.from) {
+      setVacationRequests([...vacationRequests, dateRange]);
+      
+      // Mark all dates in the range as unavailable
+      if (dateRange.from && dateRange.to) {
+        const start = new Date(dateRange.from);
+        const end = new Date(dateRange.to);
+        const dates: Date[] = [];
+        
+        let currentDate = start;
+        while (currentDate <= end) {
+          dates.push(new Date(currentDate));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        
+        setUnavailableDates([...unavailableDates, ...dates]);
+      } else if (dateRange.from) {
+        // Single day selection
+        setUnavailableDates([...unavailableDates, dateRange.from]);
+      }
     }
   };
 
@@ -103,5 +132,9 @@ export const useProviderAvailability = () => {
     toggleDayAvailability,
     saveAvailability,
     toggleDateUnavailable,
+    vacationDialogOpen,
+    setVacationDialogOpen,
+    handleVacationRequest,
+    vacationRequests,
   };
 };
