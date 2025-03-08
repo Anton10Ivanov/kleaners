@@ -18,6 +18,9 @@
   margin: 0 !important;
   padding: 0 !important;
   text-align: left !important;
+  height: 100vh !important; /* Force full height */
+  width: 100% !important;
+  overflow-x: hidden !important;
 }
 
 .logo {
@@ -117,9 +120,10 @@
 
 /* Fix for admin panel visibility */
 #root {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .admin-layout {
@@ -136,6 +140,7 @@
 .provider-content {
   overflow-y: auto;
   max-height: calc(100vh - 64px);
+  width: 100%;
 }
 
 /* Override the root container for admin, user and provider layouts */
@@ -148,4 +153,24 @@
   padding: 0;
   margin: 0;
   text-align: left;
+  overflow-y: auto;
+}
+
+/* Fix navbar height for mobile */
+@media (max-width: 768px) {
+  .fixed.w-full.z-50 {
+    min-height: 64px;
+  }
+}
+
+/* Ensure main content is always visible */
+main.flex-grow {
+  width: 100%;
+  padding-top: 64px; /* Height of the navbar */
+}
+
+/* Ensure RootLayout takes full height and width */
+.min-h-screen.flex.flex-col {
+  min-height: 100vh;
+  width: 100%;
 }

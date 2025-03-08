@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
@@ -12,6 +13,7 @@ import NavbarContainer from './navbar/NavbarContainer';
 import UserControls from './navbar/UserControls';
 import MobileUserControls from './navbar/MobileUserControls';
 import MobileMenuToggle from './navbar/MobileMenuToggle';
+import { Icons } from './navbar/navigationData';
 
 const navItems = [
   {
