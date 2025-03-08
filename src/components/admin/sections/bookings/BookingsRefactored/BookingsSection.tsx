@@ -18,19 +18,27 @@ export const BookingsSection: React.FC = () => {
   // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
   
+  // Using the hook without parameters for now - we'll add them once we refactor completely
   const {
     bookings,
     isLoading,
     error,
     updateBookingStatus,
     deleteBooking,
-  } = useBookings();
+  } = useBookings({
+    selectedStatus: filters.status === 'all' ? null : filters.status,
+    searchTerm: filters.search,
+    sortField: 'date',
+    sortOrder: 'desc',
+    dateRange: filters.dateRange,
+  });
 
-  // Mock fetchBookings and assignProvider functions
+  // Mock fetchBookings function
   const fetchBookings = () => {
     console.log('Fetching bookings with filters:', filters);
   };
 
+  // Mock assignProvider function
   const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
   };
@@ -76,7 +84,8 @@ export const BookingsSection: React.FC = () => {
 
   const handleContactClient = (booking: Booking) => {
     // Contact client functionality
-    console.log('Contact client:', booking.clientName);
+    const clientName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim();
+    console.log('Contact client:', clientName);
   };
 
   if (isLoading && bookings.length === 0) {
