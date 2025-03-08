@@ -1,13 +1,13 @@
 
 import React from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { Dashboard } from './Dashboard';
+import Dashboard from './Dashboard';
 import { AdminBookings } from './AdminBookings';
-import { AdminCustomers } from './AdminCustomers';
-import { AdminProviders } from './AdminProviders';
-import { AdminSettings } from './AdminSettings';
-import { AdminSupportQueries } from './AdminSupportQueries';
-import { AdminAnalytics } from './AdminAnalytics';
+import AdminCustomers from './AdminCustomers';
+import AdminProviders from './AdminProviders';
+import AdminSettings from './AdminSettings';
+import AdminSupportQueries from './AdminSupportQueries';
+import AdminAnalytics from './AdminAnalytics';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 /**
