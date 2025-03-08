@@ -1,22 +1,89 @@
 
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { handleApiError } from '@/utils/errorHandling';
+import { boolToString } from '@/utils/typeUtils';
+import { ErrorSeverity } from '@/schemas/booking';
 import { SidebarContent } from './navigation/SidebarContent';
 import { MobileSidebar } from './navigation/MobileSidebar';
-import { useAdminNavigation } from '@/hooks/useAdminNavigation';
+import { getNavItems } from './navigation/getNavItems';
 
 const AdminLayout = () => {
-  const { 
-    activeItem, 
-    navItems, 
-    isSidebarOpen, 
-    setIsSidebarOpen, 
-    handleNavClick, 
-    handleLogout 
-  } = useAdminNavigation();
-  
+  const [activeItem, setActiveItem] = useState('admin home');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 768px)');
+  
+  // Get nav items
+  const navItems = getNavItems();
+  
+  // Set active nav item based on current location
+  useEffect(() => {
+    try {
+      const pathSegments = location.pathname.split('/');
+      const path = pathSegments.length > 2 ? pathSegments[2] : '';
+      
+      if (path) {
+        // Convert path to title format for matching (e.g., 'support-queries' to 'Support Queries')
+        const formattedPath = path
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+          
+        // Find nav item with matching path segment
+        const matchingNavItem = navItems.find(item => 
+          item.href.includes(path) || 
+          item.title.toLowerCase().includes(formattedPath.toLowerCase())
+        );
+        
+        if (matchingNavItem) {
+          setActiveItem(matchingNavItem.title.toLowerCase());
+        }
+      } else {
+        setActiveItem('admin home');
+      }
+    } catch (error) {
+      handleApiError(
+        error, 
+        "Navigation error occurred", 
+        boolToString(true), 
+        ErrorSeverity.HIGH
+      );
+    }
+  }, [location, navItems]);
+  
+  // Handle navigation click
+  const handleNavClick = (href: string) => {
+    try {
+      navigate(href);
+      if (isMobile) {
+        setIsSidebarOpen(false);
+      }
+    } catch (error) {
+      handleApiError(
+        error, 
+        "Navigation failed", 
+        boolToString(true), 
+        ErrorSeverity.HIGH
+      );
+    }
+  };
+  
+  // Handle logout
+  const handleLogout = () => {
+    try {
+      navigate('/auth/login');
+    } catch (error) {
+      handleApiError(
+        error, 
+        "Logout failed", 
+        boolToString(true), 
+        ErrorSeverity.MEDIUM
+      );
+    }
+  };
   
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">

@@ -15,7 +15,7 @@ export const BookingsSection: React.FC = () => {
     dateRange: undefined as DateRange | undefined,
   });
   
-  // Mock totalPages for pagination
+  // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
   
   // Using the hook with parameters
@@ -38,8 +38,8 @@ export const BookingsSection: React.FC = () => {
     console.log('Fetching bookings with filters:', filters);
   };
 
-  // Fixed assignProvider function type to match expected signature in BookingsContent
-  const assignProvider = (bookingId: string, providerId: string) => {
+  // Mock assignProvider function
+  const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
   };
 
@@ -65,7 +65,6 @@ export const BookingsSection: React.FC = () => {
     }));
   };
 
-  // Fix the updateStatus function to match the expected signature
   const handleUpdateStatus = (id: string, status: BookingStatus) => {
     updateBookingStatus({ id, status });
   };
@@ -75,7 +74,7 @@ export const BookingsSection: React.FC = () => {
   };
 
   const handleAssignProvider = (bookingId: string, providerId: string) => {
-    assignProvider(bookingId, providerId);
+    assignProvider({ bookingId, providerId });
   };
 
   const handleViewDetails = (booking: Booking) => {

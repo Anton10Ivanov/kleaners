@@ -7,13 +7,12 @@ import {
   UserCog,
   Settings,
   MessageSquareText,
-  BarChart,
-  Calendar
+  BarChart
 } from 'lucide-react';
 import { NavItem } from './NavItem';
 
-export function getNavItems(): NavItem[] {
-  const items: NavItem[] = [
+export const getNavItems = (): NavItem[] => {
+  return [
     {
       title: 'Admin Home',
       href: '/admin',
@@ -45,17 +44,9 @@ export function getNavItems(): NavItem[] {
       icon: <MessageSquareText className="h-5 w-5" />,
     },
     {
-      title: 'Vacation Requests',
-      href: '/admin/vacation-requests',
-      icon: <Calendar className="h-5 w-5" />,
-      description: "Manage provider vacation requests",
-    },
-    {
       title: 'Settings',
       href: '/admin/settings',
       icon: <Settings className="h-5 w-5" />,
     },
   ];
-
-  return items;
-}
+};

@@ -1,44 +1,31 @@
 
 import { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import UserSidebar from './UserSidebar';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { useAuth } from '@/hooks/useAuth';
 
 const UserLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user, isLoading } = useAuth();
   
-  // Handle navigation based on current location path
   useEffect(() => {
-    // If at the user/ root path, redirect to dashboard
-    if (location.pathname === '/user' || location.pathname === '/user/') {
-      navigate('/user/dashboard');
-    }
-  }, [location.pathname, navigate]);
-  
-  // For development, we're not enforcing authentication
-  // In production, you would uncomment this code
-  /*
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate('/auth/login');
-    }
-  }, [user, isLoading, navigate]);
-  
-  if (isLoading) {
-    return <div className="flex h-screen items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-    </div>;
-  }
-  */
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/auth/login');
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
   
   return (
     <div className="min-h-screen bg-background flex">
