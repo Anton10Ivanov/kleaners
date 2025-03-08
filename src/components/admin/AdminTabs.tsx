@@ -1,18 +1,12 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookingsSection } from './sections/BookingsSection';
-import { CustomersSection } from './sections/CustomersSection';
-import { ProvidersSection } from './sections/ProvidersSection';
-import CustomerQuestionsSection from './sections/CustomerQuestionsSection';
+import { CustomerQuestionsSection } from './sections/CustomerQuestionsSection';
 import { CalendarSection } from './sections/CalendarSection';
 import { VacationRequestsSection } from './sections/VacationRequestsSection';
 
-// Admin tab sections configuration
+// Admin tab sections configuration - focusing only on unique components
 const tabSections = [
-  { id: 'bookings', label: 'Bookings', component: BookingsSection },
-  { id: 'customers', label: 'Customers', component: CustomersSection },
-  { id: 'providers', label: 'Providers', component: ProvidersSection },
   { id: 'questions', label: 'FAQ Questions', component: CustomerQuestionsSection },
   { id: 'vacation', label: 'Vacation', component: VacationRequestsSection },
   { id: 'calendar', label: 'Calendar', component: CalendarSection },
@@ -23,13 +17,27 @@ interface AdminTabsProps {
   children?: React.ReactNode;
 }
 
-const AdminTabs = ({ defaultTab = 'bookings', children }: AdminTabsProps) => {
+const AdminTabs = ({ defaultTab = 'questions', children }: AdminTabsProps) => {
   const [activeTab, setActiveTab] = React.useState(defaultTab);
 
   // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    
+    // Update URL with tab parameter
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', value);
+    window.history.pushState({}, '', url);
   };
+
+  // Set initial tab based on URL
+  React.useEffect(() => {
+    const url = new URL(window.location.href);
+    const tabParam = url.searchParams.get('tab');
+    if (tabParam && tabSections.some(section => section.id === tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, []);
 
   return (
     <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="space-y-4">
