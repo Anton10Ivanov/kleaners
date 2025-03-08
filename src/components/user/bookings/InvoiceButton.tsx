@@ -35,12 +35,12 @@ export function InvoiceButton({ bookingId }: InvoiceButtonProps): JSX.Element | 
     <Button 
       variant="outline" 
       size="sm" 
-      className="mt-2"
+      className="w-full"
       onClick={() => viewInvoice(bookingId)}
       disabled={isDownloading}
     >
       <FileText className="h-4 w-4 mr-2" />
-      {isDownloading ? 'Loading...' : 'View Invoice'}
+      {isDownloading ? 'Loading...' : 'Get Invoice'}
     </Button>
   );
 }
