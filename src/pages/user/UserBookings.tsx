@@ -41,7 +41,7 @@ export default function UserBookings(): JSX.Element {
       
       const upcoming = bookings.filter(b => 
         new Date(b.date) > new Date() && 
-        ['pending', 'confirmed'].includes(b.status)
+        ['upcoming', 'confirmed'].includes(b.status)
       );
       
       const completed = bookings.filter(b => b.status === 'completed');
@@ -62,7 +62,7 @@ export default function UserBookings(): JSX.Element {
     .filter(booking => {
       if (filterType === "upcoming") {
         return new Date(booking.date) > new Date() && 
-          ['pending', 'confirmed'].includes(booking.status);
+          ['upcoming', 'confirmed'].includes(booking.status);
       } else if (filterType === "completed") {
         return booking.status === "completed";
       } else if (filterType === "cancelled") {
@@ -88,15 +88,6 @@ export default function UserBookings(): JSX.Element {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-          <h1 className="text-2xl font-bold">Your Bookings</h1>
-          <Link to="/">
-            <Button className="mt-4 md:mt-0 bg-primary hover:bg-primary/90">
-              <PlusCircle className="mr-2 h-4 w-4" /> Book New Service
-            </Button>
-          </Link>
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card 
             className={`cursor-pointer transition-all ${filterType === 'all' ? 'ring-2 ring-primary' : ''}`}
@@ -165,6 +156,14 @@ export default function UserBookings(): JSX.Element {
               </div>
             </CardContent>
           </Card>
+        </div>
+        
+        <div className="flex justify-center mb-6">
+          <Link to="/">
+            <Button className="bg-primary hover:bg-primary/90">
+              <PlusCircle className="mr-2 h-4 w-4" /> Book New Service
+            </Button>
+          </Link>
         </div>
         
         {filteredBookings.length === 0 && !isLoading ? (
