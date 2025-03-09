@@ -110,10 +110,8 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
           updateBookingStatus={onUpdateStatus}
           deleteBooking={onDeleteBooking}
           refreshData={() => {}}
-          // Pass the callbacks to the BookingsTable component
           viewDetails={onViewDetails}
           contactClient={onContactClient}
-          // Don't pass assignProvider here as it's not in the interface
         />
       </div>
       
