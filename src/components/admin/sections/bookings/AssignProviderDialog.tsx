@@ -1,6 +1,5 @@
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,108 +8,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { Database } from "@/integrations/supabase/types";
-import { Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Booking } from "./types";
 
-type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
-type Booking = Database["public"]["Tables"]["bookings"]["Row"];
+// Mock data for providers
+const MOCK_PROVIDERS = [
+  { id: "1", name: "John Doe" },
+  { id: "2", name: "Jane Smith" },
+  { id: "3", name: "Robert Johnson" },
+];
 
-interface AssignProviderDialogProps {
+export interface AssignProviderDialogProps {
   open: boolean;
   onClose: () => void;
-  bookingId: string | null;
-  onAssigned: () => void;
-  currentBooking?: Booking | null;
+  booking: Booking;
+  onAssign: (bookingId: string, providerId: string) => void;
 }
 
-export const AssignProviderDialog = ({
+export const AssignProviderDialog: React.FC<AssignProviderDialogProps> = ({
   open,
   onClose,
-  bookingId,
-  onAssigned,
-  currentBooking,
-}: AssignProviderDialogProps) => {
-  const [providers, setProviders] = useState<ServiceProvider[]>([]);
+  booking,
+  onAssign,
+}) => {
   const [selectedProviderId, setSelectedProviderId] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  const { toast } = useToast();
 
-  useEffect(() => {
-    if (open && bookingId) {
-      fetchProviders();
-      // Reset selection when dialog opens
+  const handleAssign = () => {
+    if (selectedProviderId) {
+      onAssign(booking.id, selectedProviderId);
       setSelectedProviderId("");
-    }
-  }, [open, bookingId]);
-
-  const fetchProviders = async () => {
-    setIsFetching(true);
-    try {
-      const { data, error } = await supabase
-        .from("service_providers")
-        .select("*")
-        .order("first_name", { ascending: true });
-
-      if (error) throw error;
-      setProviders(data || []);
-    } catch (error: any) {
-      console.error("Error fetching providers:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load providers: " + error.message,
-      });
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  const handleAssign = async () => {
-    if (!bookingId || !selectedProviderId) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Please select a provider",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const { error } = await supabase
-        .from("bookings")
-        .update({ provider_id: selectedProviderId, status: "assigned" })
-        .eq("id", bookingId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Provider assigned successfully",
-      });
-      
-      onAssigned();
-      onClose();
-    } catch (error: any) {
-      console.error("Error assigning provider:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to assign provider: " + error.message,
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -118,62 +46,36 @@ export const AssignProviderDialog = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Assign Provider to Booking</DialogTitle>
+          <DialogTitle>Assign Provider</DialogTitle>
           <DialogDescription>
-            Select a service provider to assign to this booking.
+            Select a service provider for this booking.
           </DialogDescription>
         </DialogHeader>
-
-        <div className="space-y-4 py-4">
-          {currentBooking && (
-            <div className="space-y-2">
-              <h4 className="font-medium">Booking Details</h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="text-muted-foreground">Customer:</div>
-                <div>{currentBooking.first_name} {currentBooking.last_name}</div>
-                <div className="text-muted-foreground">Service:</div>
-                <div>{currentBooking.service_type}</div>
-                <div className="text-muted-foreground">Date:</div>
-                <div>{currentBooking.date ? new Date(currentBooking.date).toLocaleDateString() : 'Not scheduled'}</div>
-              </div>
-            </div>
-          )}
-
+        <div className="grid gap-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="provider">Service Provider</Label>
-            {isFetching ? (
-              <div className="flex items-center justify-center py-2">
-                <Loader2 className="h-5 w-5 animate-spin text-primary" />
-              </div>
-            ) : (
-              <Select
-                value={selectedProviderId}
-                onValueChange={setSelectedProviderId}
-              >
-                <SelectTrigger id="provider">
-                  <SelectValue placeholder="Select a provider" />
-                </SelectTrigger>
-                <SelectContent>
-                  {providers.map((provider) => (
-                    <SelectItem key={provider.id} value={provider.id}>
-                      {provider.first_name} {provider.last_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+            <Label htmlFor="provider">Provider</Label>
+            <Select
+              value={selectedProviderId}
+              onValueChange={setSelectedProviderId}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a provider" />
+              </SelectTrigger>
+              <SelectContent>
+                {MOCK_PROVIDERS.map((provider) => (
+                  <SelectItem key={provider.id} value={provider.id}>
+                    {provider.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
-
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} type="button">
+          <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button 
-            onClick={handleAssign} 
-            disabled={isLoading || !selectedProviderId}
-          >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button onClick={handleAssign} disabled={!selectedProviderId}>
             Assign Provider
           </Button>
         </DialogFooter>
