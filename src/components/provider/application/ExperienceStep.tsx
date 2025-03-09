@@ -2,6 +2,7 @@
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 interface ExperienceStepProps {
   position: string;
@@ -38,8 +39,6 @@ export const ExperienceStep = ({
             <SelectItem value="cleaner">Cleaner</SelectItem>
             <SelectItem value="supervisor">Cleaning Supervisor</SelectItem>
             <SelectItem value="customer-service">Customer Service</SelectItem>
-            <SelectItem value="admin">Administrative Staff</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -96,18 +95,22 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Availability <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-            <div key={day} className="flex items-center space-x-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
+            <div 
+              key={day} 
+              className="flex items-center space-x-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+              onClick={() => toggleAvailability(day)}
+            >
               <Checkbox 
                 id={`day-${day}`} 
                 checked={availability.includes(day)}
                 onCheckedChange={() => toggleAvailability(day)}
-                className="h-4 w-4"
+                className="h-5 w-5"
               />
               <Label 
                 htmlFor={`day-${day}`} 
-                className="text-sm font-medium cursor-pointer"
+                className="text-sm font-medium cursor-pointer flex-grow"
               >
                 {day}
               </Label>
@@ -123,22 +126,29 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Skills <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div className="grid grid-cols-1 gap-4 pt-1">
           {["Deep Cleaning", "Commercial Cleaning", "Residential Cleaning", 
             "Window Cleaning", "Carpet Cleaning", "Move In/Out Cleaning"].map((skill) => (
-            <div key={skill} className="flex items-center space-x-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-              <Checkbox 
-                id={`skill-${skill}`} 
-                checked={skills.includes(skill)}
-                onCheckedChange={() => toggleSkill(skill)}
-                className="h-5 w-5"
-              />
-              <Label 
-                htmlFor={`skill-${skill}`} 
-                className="text-sm font-medium cursor-pointer"
-              >
-                {skill}
-              </Label>
+            <div 
+              key={skill} 
+              className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
+              onClick={() => toggleSkill(skill)}
+            >
+              <Label className="text-sm font-medium cursor-pointer">{skill}</Label>
+              <div className="flex items-center gap-3">
+                <span className={`text-sm ${skills.includes(skill) ? 'text-green-600' : 'text-red-500'}`}>
+                  {skills.includes(skill) ? 'Yes' : 'No'}
+                </span>
+                <Switch 
+                  checked={skills.includes(skill)}
+                  onCheckedChange={() => toggleSkill(skill)}
+                  className={`${
+                    skills.includes(skill) 
+                      ? 'bg-green-500 hover:bg-green-600' 
+                      : 'bg-red-500 hover:bg-red-600'
+                  }`}
+                />
+              </div>
             </div>
           ))}
         </div>
