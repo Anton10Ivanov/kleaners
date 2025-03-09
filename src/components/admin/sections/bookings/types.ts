@@ -1,6 +1,7 @@
 
 import { Database } from "@/integrations/supabase/types";
 
+// Include "assigned" in the BookingStatus type to match your app requirements
 export type BookingStatus = "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
 
 export const statusColors = {
@@ -14,7 +15,7 @@ export const statusColors = {
 export type SortField = "date" | "total_price" | "created_at";
 export type SortOrder = "asc" | "desc";
 
-// Define the Booking type to include provider_id
+// Define the Booking type to include provider_id and ensure it matches the database structure
 export type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
   provider_id?: string;
 };

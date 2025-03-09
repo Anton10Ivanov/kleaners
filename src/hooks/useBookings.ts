@@ -5,7 +5,7 @@ import { DateRange } from "react-day-picker";
 import { isWithinInterval, parseISO } from "date-fns";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { handleApiError } from "@/utils/errorHandling";
+import { handleApiError, ErrorSeverity } from "@/utils/errorHandling";
 
 interface UseBookingsProps {
   selectedStatus: BookingStatus | null;
@@ -92,7 +92,7 @@ export const useBookings = ({
         return data as Booking[];
       } catch (error) {
         // Use our enhanced error handling utility
-        handleApiError(error, "Failed to fetch bookings", "useBookings.bookingsQuery", "high");
+        handleApiError(error, "Failed to fetch bookings", "useBookings.bookingsQuery", ErrorSeverity.ERROR);
         throw error;
       }
     },
@@ -130,7 +130,8 @@ export const useBookings = ({
       
       // Perform an optimistic update
       if (previousBookings) {
-        queryClient.setQueryData<Booking[]>(queryKey, 
+        queryClient.setQueryData<Booking[]>(
+          queryKey, 
           previousBookings.map(booking => 
             booking.id === id ? { ...booking, status } : booking
           )
@@ -160,7 +161,7 @@ export const useBookings = ({
         error, 
         `Failed to update booking status to ${variables.status}`,
         "useBookings.updateStatus",
-        "high"
+        ErrorSeverity.HIGH
       );
       
       // Save the error for potential UI display
@@ -224,7 +225,7 @@ export const useBookings = ({
         error, 
         `Failed to delete booking`,
         "useBookings.deleteBooking",
-        "high"
+        ErrorSeverity.HIGH
       );
       
       // Save the error for potential UI display
