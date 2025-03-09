@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +6,23 @@
 
 @layer base {
   :root {
-    /* Font family variable */
+    /* Font family variables */
     --ff: 'Raleway', sans-serif;
+    --ff2: 'Raleway', sans-serif;
+    
+    /* Typography values from the provided image */
+    --p: 1rem/1.5em var(--ff);
+    --h1: 600 3rem/1.2em var(--ff2);
+    --h2: 600 2rem/1.2em var(--ff2);
+    
+    /* Spacing values from the provided image */
+    --spacing1: 4px;
+    --spacing2: 8px;
+    --spacing3: 16px;
+    --spacing4: 20px;
+    --spacing5: 40px;
+    --spacing6: 80px;
+    --spacing7: 160px;
     
     /* Light mode - Updated with specified colors */
     --background: 0 0% 100%; /* White #FFFFFF */
@@ -36,6 +52,7 @@
   }
 
   .dark {
+    /* Dark mode colors remain the same */
     --background: 229 19% 13%; /* #1A1F2C */
     --foreground: 220 6% 57%; /* #8E9196 */
     --secondary-text: 220 6% 57%; /* #8E9196 */
@@ -74,43 +91,40 @@
   body {
     @apply bg-background text-foreground antialiased transition-colors duration-300 scrollbar-none;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-    font-family: var(--ff);
-    line-height: 1.4em;
+    font: var(--p);
+    line-height: 1.5em;
   }
 
+  /* Apply the new typography values */
   h1 {
-    font-size: 1.125rem;
-    line-height: 1.4em;
-    font-family: var(--ff);
-    @apply font-bold text-gray-900 dark:text-white;
+    font: var(--h1);
+    @apply text-gray-900 dark:text-white;
   }
 
   h2 {
-    font-size: 1rem;
-    line-height: 1.4em;
-    font-family: var(--ff);
-    @apply font-bold text-gray-900 dark:text-white;
+    font: var(--h2);
+    @apply text-gray-900 dark:text-white;
   }
 
   h3 {
-    font-size: 0.9375rem;
-    line-height: 1.4em;
-    font-family: var(--ff);
-    @apply font-bold text-gray-900 dark:text-white;
+    font-size: 1.5rem;
+    line-height: 1.3em;
+    font-weight: 600;
+    font-family: var(--ff2);
+    @apply text-gray-900 dark:text-white;
   }
 
   h4, h5, h6 {
-    font-size: 0.875rem;
-    line-height: 1.4em;
-    font-family: var(--ff);
-    @apply font-bold text-gray-900 dark:text-white;
+    font-size: 1.25rem;
+    line-height: 1.3em;
+    font-weight: 600;
+    font-family: var(--ff2);
+    @apply text-gray-900 dark:text-white;
   }
 
   p {
-    font-size: 0.875rem;
-    line-height: 1.4em;
-    font-family: var(--ff);
-    @apply font-medium text-gray-700 dark:text-gray-300;
+    font: var(--p);
+    @apply text-gray-700 dark:text-gray-300;
   }
 
   a {
@@ -119,8 +133,8 @@
 
   button, input, select, textarea {
     font-family: var(--ff);
-    font-size: 0.875rem;
-    line-height: 1.4em;
+    font-size: 1rem;
+    line-height: 1.5em;
   }
 }
 
@@ -132,6 +146,42 @@
   
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Add spacing utilities based on the provided values */
+  .space-1 {
+    margin: var(--spacing1);
+    padding: var(--spacing1);
+  }
+  
+  .space-2 {
+    margin: var(--spacing2);
+    padding: var(--spacing2);
+  }
+  
+  .space-3 {
+    margin: var(--spacing3);
+    padding: var(--spacing3);
+  }
+  
+  .space-4 {
+    margin: var(--spacing4);
+    padding: var(--spacing4);
+  }
+  
+  .space-5 {
+    margin: var(--spacing5);
+    padding: var(--spacing5);
+  }
+  
+  .space-6 {
+    margin: var(--spacing6);
+    padding: var(--spacing6);
+  }
+  
+  .space-7 {
+    margin: var(--spacing7);
+    padding: var(--spacing7);
   }
 
   .glass-morphism {

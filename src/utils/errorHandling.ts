@@ -96,9 +96,6 @@ export const handleApiError = (
 // For backward compatibility - support existing codebase
 export const handleError = handleApiError;
 
-// Re-export the ErrorSeverity enum to ensure it's available everywhere
-export { ErrorSeverity };
-
 /**
  * Developer debugging utility - logs debug information during development
  */

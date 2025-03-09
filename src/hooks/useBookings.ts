@@ -130,7 +130,7 @@ export const useBookings = ({
       
       // Perform an optimistic update
       if (previousBookings) {
-        queryClient.setQueryData<Booking[]>(
+        queryClient.setQueryData(
           queryKey, 
           previousBookings.map(booking => 
             booking.id === id ? { ...booking, status } : booking
