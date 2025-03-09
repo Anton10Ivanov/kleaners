@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        theme: {
+          blue: "hsl(206, 65%, 70%)",
+          green: "hsl(122, 65%, 84%)",
+        },
         dark: {
           background: "#1A1F2C",
           neutral: "#8E9196",
@@ -66,7 +70,16 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        raleway: ["Raleway", "sans-serif"],
+        raleway: ["var(--ff)"],
+      },
+      spacing: {
+        '1': 'var(--spacing1)',
+        '2': 'var(--spacing2)',
+        '3': 'var(--spacing3)',
+        '4': 'var(--spacing4)',
+        '5': 'var(--spacing5)',
+        '6': 'var(--spacing6)',
+        '7': 'var(--spacing7)',
       },
       keyframes: {
         "accordion-down": {
