@@ -20,7 +20,7 @@ export const getNavItems = (): NavItem[] => {
     },
     {
       title: 'Analytics',
-      href: '/admin/dashboard',
+      href: '/admin/analytics',
       icon: <BarChart className="h-5 w-5" />,
     },
     {
