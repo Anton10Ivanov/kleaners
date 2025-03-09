@@ -41,7 +41,10 @@ export const useBookings = ({
   // Helper to refresh data with current filters
   const refreshBookings = () => {
     console.log("Manually refreshing bookings data");
-    return queryClient.invalidateQueries({ queryKey: bookingsQuery.queryKey });
+    // Fix the build error by using the query key from the useBookingsQuery hook
+    return queryClient.invalidateQueries({ 
+      queryKey: getBookingsQueryKey(currentFilters) 
+    });
   };
 
   return {
@@ -67,3 +70,6 @@ export const useBookings = ({
     }
   };
 };
+
+// Import the utility needed for the refreshBookings function
+import { getBookingsQueryKey } from './bookings/bookingsUtils';

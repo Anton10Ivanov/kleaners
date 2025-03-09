@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { handleApiError } from '@/utils/errorHandling';
+import { handleApiError, ErrorSeverity } from '@/utils/errors';
 import { boolToString } from '@/utils/typeUtils';
-import { ErrorSeverity } from '@/schemas/booking';
 import { SidebarContent } from './navigation/SidebarContent';
 import { MobileSidebar } from './navigation/MobileSidebar';
 import { getNavItems } from './navigation/getNavItems';

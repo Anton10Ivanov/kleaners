@@ -2,7 +2,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BookingStatus, Booking } from "@/components/admin/sections/bookings/types";
 import { supabase } from "@/integrations/supabase/client";
-import { handleApiError, ErrorSeverity } from "@/utils/errorHandling";
+import { handleApiError, ErrorSeverity } from "@/utils/errors";
 import { toast } from "sonner";
 import { getBookingsQueryKey } from "./bookingsUtils";
 
