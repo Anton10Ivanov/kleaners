@@ -12,7 +12,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const BookingsSection = () => {
   const { toast } = useToast();
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
@@ -30,7 +30,7 @@ export const BookingsSection = () => {
     updateBookingStatus, 
     deleteBooking 
   } = useBookings({
-    selectedStatus,
+    selectedStatus: selectedStatus === "all" ? null : selectedStatus,
     searchTerm,
     sortField,
     sortOrder,
@@ -68,6 +68,15 @@ export const BookingsSection = () => {
     setRefreshKey(prev => prev + 1);
   };
 
+  // Mock functions for required BookingsTable props
+  const handleViewDetails = (booking: any) => {
+    console.log("View details:", booking);
+  };
+
+  const handleContactClient = (booking: any) => {
+    console.log("Contact client:", booking);
+  };
+
   // Calculate pagination
   const totalItems = bookings?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -87,15 +96,27 @@ export const BookingsSection = () => {
     }
   };
 
+  const handleStatusChange = (status: BookingStatus | 'all') => {
+    setSelectedStatus(status);
+  };
+
+  const handleSearchChange = (search: string) => {
+    setSearchTerm(search);
+  };
+
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+  };
+
   return (
     <div className="space-y-4">
       <BookingsFilter
         searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
+        onSearchChange={handleSearchChange}
         selectedStatus={selectedStatus}
-        setSelectedStatus={setSelectedStatus}
-        dateRange={dateRange}
-        setDateRange={setDateRange}
+        onStatusChange={handleStatusChange}
+        selectedDateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
       />
       
       {isLoading ? (
@@ -130,7 +151,7 @@ export const BookingsSection = () => {
                   <span className="font-medium">{endIndex}</span> of{" "}
                   <span className="font-medium">{totalItems}</span> bookings
                 </p>
-                {selectedStatus && (
+                {selectedStatus !== "all" && (
                   <div className="text-sm font-medium">
                     <span className="px-2 py-1 rounded-md bg-primary/10 text-primary">
                       {totalItems} {selectedStatus} {totalItems === 1 ? "booking" : "bookings"}
@@ -148,6 +169,8 @@ export const BookingsSection = () => {
                   updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
                   deleteBooking={deleteBooking}
                   refreshData={handleRefresh}
+                  viewDetails={handleViewDetails}
+                  contactClient={handleContactClient}
                 />
               </div>
               
@@ -212,13 +235,13 @@ export const BookingsSection = () => {
           ) : (
             <div className="text-center py-8 bg-white dark:bg-gray-800 rounded-md border shadow-sm">
               <p className="text-gray-500 dark:text-gray-400">No bookings found matching your filters</p>
-              {(searchTerm || selectedStatus || dateRange) && (
+              {(searchTerm || selectedStatus !== "all" || dateRange) && (
                 <Button
                   variant="outline"
                   className="mt-4"
                   onClick={() => {
                     setSearchTerm("");
-                    setSelectedStatus(null);
+                    setSelectedStatus("all");
                     setDateRange(undefined);
                   }}
                 >

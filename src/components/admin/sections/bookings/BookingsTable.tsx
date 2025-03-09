@@ -184,8 +184,8 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
       {/* Assign Provider Dialog */}
       {selectedBooking && (
         <AssignProviderDialog
-          isOpen={isAssignDialogOpen}
-          onClose={() => setIsAssignDialogOpen(false)}
+          open={isAssignDialogOpen}
+          onOpenChange={setIsAssignDialogOpen}
           booking={selectedBooking}
           onAssign={handleAssignProvider}
         />
@@ -194,11 +194,10 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
       {/* Delete Booking Dialog */}
       {selectedBooking && (
         <DeleteBookingDialog
-          isOpen={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-          booking={selectedBooking}
-          onDelete={(id) => {
-            deleteBooking(id);
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onConfirm={() => {
+            deleteBooking(selectedBooking.id);
             setIsDeleteDialogOpen(false);
           }}
         />
@@ -207,10 +206,10 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
       {/* Message Client Dialog */}
       {selectedBooking && (
         <MessageClientDialog
-          isOpen={isMessageDialogOpen}
-          onClose={() => setIsMessageDialogOpen(false)}
+          open={isMessageDialogOpen}
+          onOpenChange={setIsMessageDialogOpen}
           booking={selectedBooking}
-          onSend={() => {
+          onMessageSent={() => {
             contactClient(selectedBooking);
             setIsMessageDialogOpen(false);
           }}
