@@ -1,7 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../../types/database';
-import { handleError } from '../../utils/errorHandling';
+import { handleError } from '../../utils/errors';
 import { logger } from '../../utils/logging';
 
 // Use direct values for now to fix the immediate error
