@@ -6,6 +6,7 @@ import { LoadingState } from './LoadingState';
 import { ErrorState } from './ErrorState';
 import { BookingsContent } from './BookingsContent';
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
+import { toast } from 'sonner';
 
 export const BookingsSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,13 +19,16 @@ export const BookingsSection: React.FC = () => {
   // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
   
-  // Using the hook without parameters for now - we'll add them once we refactor completely
+  // Using the enhanced hook with better error handling and query invalidation
   const {
     bookings,
     isLoading,
+    isFetching,
     error,
     updateBookingStatus,
     deleteBooking,
+    refreshBookings,
+    mutations
   } = useBookings({
     selectedStatus: filters.status === 'all' ? null : filters.status,
     searchTerm: filters.search,
@@ -33,20 +37,32 @@ export const BookingsSection: React.FC = () => {
     dateRange: filters.dateRange,
   });
 
-  // Mock fetchBookings function
-  const fetchBookings = () => {
-    console.log('Fetching bookings with filters:', filters);
-  };
-
   // Mock assignProvider function
   const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
+    toast.success(`Provider assigned to booking`);
+    
+    // Refresh data after assignment
+    refreshBookings();
   };
 
-  // Fetch bookings whenever page or filters change
+  // Log when error status changes
   useEffect(() => {
-    fetchBookings();
-  }, [currentPage, filters.status, filters.search, filters.dateRange]);
+    if (error) {
+      console.error('Bookings data error:', error);
+    }
+  }, [error]);
+
+  // Track mutation errors to provide feedback
+  useEffect(() => {
+    if (mutations.updateStatus.isError) {
+      console.error('Status update error:', mutations.updateStatus.error);
+    }
+    
+    if (mutations.delete.isError) {
+      console.error('Delete booking error:', mutations.delete.error);
+    }
+  }, [mutations.updateStatus.isError, mutations.delete.isError]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -63,6 +79,8 @@ export const BookingsSection: React.FC = () => {
       ...prev,
       ...newFilters,
     }));
+    
+    console.log('Filters changed:', { ...filters, ...newFilters });
   };
 
   const handleUpdateStatus = (id: string, status: BookingStatus) => {
@@ -93,7 +111,14 @@ export const BookingsSection: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorState onRefresh={fetchBookings} />;
+    return (
+      <ErrorState 
+        onRefresh={refreshBookings} 
+        error={error}
+        title="Couldn't load bookings"
+        description="There was a problem loading the booking data."
+      />
+    );
   }
 
   return (
@@ -107,7 +132,7 @@ export const BookingsSection: React.FC = () => {
       onAssignProvider={handleAssignProvider}
       onViewDetails={handleViewDetails}
       onContactClient={handleContactClient}
-      isLoading={isLoading}
+      isLoading={isLoading || isFetching}
       onFilterChange={handleFilterChange}
     />
   );
