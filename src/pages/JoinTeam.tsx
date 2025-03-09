@@ -51,28 +51,28 @@ const JoinTeam = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Join Our Team
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
             We're looking for passionate individuals to join our cleaning service. Apply today and become part of our growing team!
           </p>
+          
+          {!showApplicationForm && (
+            <Button 
+              size="lg" 
+              onClick={() => setShowApplicationForm(true)}
+              className="font-semibold text-base px-8 py-6 mb-8"
+            >
+              Apply Now
+            </Button>
+          )}
         </div>
 
         {!showApplicationForm ? (
           <div className="space-y-12">
             <BenefitsPanel className="border-0 shadow-md" />
-            
-            <div className="flex justify-center mt-8">
-              <Button 
-                size="lg" 
-                onClick={() => setShowApplicationForm(true)}
-                className="font-semibold text-base px-8 py-6"
-              >
-                Apply Now
-              </Button>
-            </div>
           </div>
         ) : (
           <div className="w-full">
