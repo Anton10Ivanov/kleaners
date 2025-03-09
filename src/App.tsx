@@ -1,3 +1,4 @@
+
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -98,7 +99,7 @@ function App() {
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPanel />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="analytics" element={<Dashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="providers" element={<AdminProviders />} />

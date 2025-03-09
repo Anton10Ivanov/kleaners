@@ -101,7 +101,6 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
         selectedDateRange={dateRange}
       />
       
-      {/* We need to modify the BookingsTable component or create a wrapper that accepts our props */}
       <div className="border rounded-md overflow-hidden">
         <BookingsTable
           bookings={bookings}
@@ -111,9 +110,10 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
           updateBookingStatus={onUpdateStatus}
           deleteBooking={onDeleteBooking}
           refreshData={() => {}}
-          assignProvider={onAssignProvider}
+          // Pass the callbacks to the BookingsTable component
           viewDetails={onViewDetails}
           contactClient={onContactClient}
+          // Don't pass assignProvider here as it's not in the interface
         />
       </div>
       
