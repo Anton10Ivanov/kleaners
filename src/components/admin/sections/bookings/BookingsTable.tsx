@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Table, TableBody } from '@/components/ui/table';
 import { Booking, BookingStatus, SortField, SortOrder } from './types';
-import { TableHeader } from './components/TableHeader';
+import { BookingsTableHeader } from './components/TableHeader';
 import { BookingTableRow } from './components/BookingTableRow';
 import { AssignProviderDialog } from './AssignProviderDialog';
 import { DeleteBookingDialog } from './DeleteBookingDialog';
@@ -63,7 +63,7 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
   return (
     <>
       <Table>
-        <TableHeader 
+        <BookingsTableHeader 
           sortField={sortField}
           sortOrder={sortOrder}
           toggleSort={toggleSort}

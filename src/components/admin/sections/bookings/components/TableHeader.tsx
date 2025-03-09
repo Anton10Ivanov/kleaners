@@ -11,7 +11,7 @@ interface TableHeaderProps {
   toggleSort: (field: SortField) => void;
 }
 
-export const TableHeader: React.FC<TableHeaderProps> = ({
+export const BookingsTableHeader: React.FC<TableHeaderProps> = ({
   sortField,
   sortOrder,
   toggleSort,
