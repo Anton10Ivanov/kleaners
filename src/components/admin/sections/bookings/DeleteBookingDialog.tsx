@@ -1,4 +1,5 @@
 
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,8 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
 
 export interface DeleteBookingDialogProps {
   open: boolean;

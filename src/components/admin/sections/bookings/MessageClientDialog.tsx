@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,7 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { Booking } from "./types";
 
-interface MessageClientDialogProps {
+export interface MessageClientDialogProps {
   open: boolean;
   onClose: () => void;
   booking: Booking | null;
@@ -36,14 +36,14 @@ export const MessageClientDialog = ({
   const { toast } = useToast();
 
   // Generate a default message when the dialog opens
-  useState(() => {
+  useEffect(() => {
     if (booking) {
       const defaultMessage = `Hello ${booking.first_name},\n\nWe wanted to provide you with an update on your ${booking.service_type} service scheduled for ${
         booking.date ? new Date(booking.date).toLocaleDateString() : 'the upcoming date'
       }.\n\n[Your message here]\n\nIf you have any questions, please don't hesitate to contact us.\n\nBest regards,\nYour Cleaning Team`;
       setMessage(defaultMessage);
     }
-  });
+  }, [booking]);
 
   const handleSendMessage = async () => {
     if (!booking || !message.trim()) {
