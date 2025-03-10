@@ -1,3 +1,4 @@
+
 import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { dev } from '@/lib/utils';
@@ -78,14 +79,25 @@ export const handlers = [
 ];
 
 // Create the worker instance
-const worker = typeof window !== 'undefined' ? setupWorker(...handlers) : null;
+let worker: ReturnType<typeof setupWorker> | null = null;
 
 // Conditionally start the worker
 export const startMockServiceWorker = async () => {
-  if (dev && worker) {
-    await worker.start({
-      onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
-    });
-    console.log('Mock Service Worker started');
+  if (typeof window === 'undefined') return;
+  
+  try {
+    // Only setup the worker if it hasn't been set up yet
+    if (!worker) {
+      worker = setupWorker(...handlers);
+    }
+    
+    if (dev) {
+      await worker.start({
+        onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
+      });
+      console.log('Mock Service Worker started');
+    }
+  } catch (error) {
+    console.warn('Could not start MSW worker:', error);
   }
 };

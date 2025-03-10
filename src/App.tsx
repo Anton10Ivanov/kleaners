@@ -74,54 +74,62 @@ function App() {
   }, [location]);
 
   return (
-    <Routes>
-      <Route element={<RootLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/join-team" element={<JoinTeam />} />
-        
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        
-        <Route path="/about/values" element={<CompanyValues />} />
-        <Route path="/about/faq" element={<FAQ />} />
-        
-        <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-        <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
-        <Route path="/services/move-in-out" element={<MoveInOut />} />
-        <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
-        
-        <Route path="/legal/terms" element={<TermsOfService />} />
-        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
-        
-        <Route path="*" element={<NotFound />} />
-      </Route>
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Root layout with nested routes */}
+        <Route element={<RootLayout />}>
+          <Route index element={<Index />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/join-team" element={<JoinTeam />} />
+          
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/signup" element={<Signup />} />
+          
+          <Route path="/about/values" element={<CompanyValues />} />
+          <Route path="/about/faq" element={<FAQ />} />
+          
+          <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
+          <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+          <Route path="/services/move-in-out" element={<MoveInOut />} />
+          <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+          
+          <Route path="/legal/terms" element={<TermsOfService />} />
+          <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+        </Route>
 
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPanel />} />
-        <Route path="analytics" element={<Dashboard />} />
-        <Route path="bookings" element={<AdminBookings />} />
-        <Route path="customers" element={<AdminCustomers />} />
-        <Route path="providers" element={<AdminProviders />} />
-        <Route path="settings" element={<AdminSettings />} />
-      </Route>
-      
-      <Route element={<UserLayout />}>
-        <Route path="/user/dashboard" element={<UserDashboard />} />
-        <Route path="/user/bookings" element={<UserBookings />} />
-        <Route path="/user/messages" element={<UserMessages />} />
-        <Route path="/user/invoices" element={<UserInvoices />} />
-        <Route path="/user/profile" element={<UserProfile />} />
-      </Route>
-      
-      <Route path="/provider" element={<ProviderLayout />}>
-        <Route path="profile" element={<ProviderProfile />} />
-        <Route path="bookings" element={<ProviderBookings />} />
-        <Route path="messages" element={<ProviderMessages />} />
-        <Route path="settings" element={<ProviderSettings />} />
-        <Route path="availability" element={<ProviderAvailability />} />
-      </Route>
-    </Routes>
+        {/* Admin routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminPanel />} />
+          <Route path="analytics" element={<Dashboard />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="providers" element={<AdminProviders />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
+        
+        {/* User routes */}
+        <Route path="/user" element={<UserLayout />}>
+          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path="bookings" element={<UserBookings />} />
+          <Route path="messages" element={<UserMessages />} />
+          <Route path="invoices" element={<UserInvoices />} />
+          <Route path="profile" element={<UserProfile />} />
+        </Route>
+        
+        {/* Provider routes */}
+        <Route path="/provider" element={<ProviderLayout />}>
+          <Route path="profile" element={<ProviderProfile />} />
+          <Route path="bookings" element={<ProviderBookings />} />
+          <Route path="messages" element={<ProviderMessages />} />
+          <Route path="settings" element={<ProviderSettings />} />
+          <Route path="availability" element={<ProviderAvailability />} />
+        </Route>
+
+        {/* 404 route - must be at the end */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
