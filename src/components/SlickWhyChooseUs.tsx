@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Slider from "react-slick";
-import { whyChooseUsContent } from "./why-choose-us/WhyChooseUsContent";
+import { whyChooseUsContent, advantagesByCategory } from "./why-choose-us/WhyChooseUsContent";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -40,33 +40,78 @@ const SlickWhyChooseUs = () => {
     ]
   };
 
+  // Featured advantages to display in the grid (limited selection)
+  const featuredAdvantages = [
+    whyChooseUsContent.find(item => item.title === "Local Cleaners"),
+    whyChooseUsContent.find(item => item.title === "Transparent Pricing"),
+    whyChooseUsContent.find(item => item.title === "Customizable Service"),
+    whyChooseUsContent.find(item => item.title === "Flexible Scheduling"),
+    whyChooseUsContent.find(item => item.title === "Fully Insured"),
+    whyChooseUsContent.find(item => item.title === "Fast Booking")
+  ].filter(Boolean);
+
   return (
     <section id="why-choose-us-slider" className="py-8 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="text-left mb-6 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 drop-shadow-sm my-[12px] text-zinc-950">
-            Our advantages 
+            Why Choose Us
           </h2>
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl">
+            We make home cleaning simple, reliable, and tailored to your needs with our trusted local professionals.
+          </p>
         </div>
 
-        {/* Advantages Grid - 2 columns on mobile, 6 on desktop */}
+        {/* Advantages Grid - organized by top features */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 lg:gap-4 mb-8 md:mb-12">
-          {whyChooseUsContent.map((item, index) => (
+          {featuredAdvantages.map((item, index) => (
             <div 
               key={`box-${index}`} 
               className="p-3 md:p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
             >
               <div className="p-2 md:p-3 bg-[#E3F4FF] rounded-full mb-2 md:mb-3">
-                <item.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
+                <item!.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
               </div>
               <h3 className="text-xs md:text-sm lg:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
-                {item.title}
+                {item!.title}
               </h3>
             </div>
           ))}
         </div>
 
-        {/* Slider - Optimized for mobile with larger touch targets */}
+        {/* Categorized advantages in tabs/sections */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-2 mb-6 justify-center">
+            {Object.entries(advantagesByCategory).map(([category, items], idx) => (
+              <div key={category} className="w-full md:w-auto">
+                <h3 className="text-xl font-bold text-center md:text-left mb-4 capitalize">
+                  {category === 'trust' ? 'Trust & Security' : 
+                   category === 'convenience' ? 'Convenience' : 'Flexibility'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {items.slice(0, 3).map((item, index) => (
+                    <div 
+                      key={`${category}-${index}`}
+                      className="p-4 bg-white rounded-lg shadow border border-gray-100 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start">
+                        <div className="p-2 bg-[#E3F4FF] rounded-full mr-3">
+                          <item.icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-1">{item.title}</h4>
+                          <p className="text-gray-600 text-sm">{item.description.split('.')[0]}.</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Slider - showcasing detailed advantages */}
         <div className="slick-container max-w-5xl mx-auto">
           <Slider {...settings}>
             {whyChooseUsContent.map((item, index) => (
@@ -115,83 +160,83 @@ const SlickWhyChooseUs = () => {
 
         {/* Custom styles for slider - Enhanced touch areas for mobile */}
         <style>
-          {`
-            .slick-dots {
-              bottom: -30px;
-              padding: 10px 0;
-            }
-            .slick-dots li {
-              margin: 0 5px;
-              width: 20px;
-              height: 20px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .slick-dots li button:before {
-              display: none;
-            }
-            .slick-prev, .slick-next {
-              width: 40px;
-              height: 40px;
-              z-index: 10;
-            }
-            .slick-prev {
-              left: -10px;
-            }
-            .slick-next {
-              right: -10px;
-            }
-            .slick-prev:before, .slick-next:before {
-              font-size: 40px;
-              color: #7ebce6;
-              opacity: 0.75;
-            }
-            .slick-prev:hover:before, .slick-next:hover:before {
-              opacity: 1;
-            }
-            .animate-fadeIn {
-              animation: fadeIn 0.8s ease-out forwards;
-            }
-            @keyframes fadeIn {
-              from {
-                opacity: 0;
-                transform: translateY(20px);
+            {`
+              .slick-dots {
+                bottom: -30px;
+                padding: 10px 0;
               }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            .animate-pulse {
-              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            }
-            @keyframes pulse {
-              0%, 100% {
-                opacity: 1;
-              }
-              50% {
-                opacity: 0.8;
-              }
-            }
-            
-            /* Mobile touch optimizations */
-            @media (max-width: 768px) {
               .slick-dots li {
-                width: 30px;
-                height: 30px;
+                margin: 0 5px;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
               }
-              .slick-slide {
-                touch-action: pan-y;
+              .slick-dots li button:before {
+                display: none;
               }
-              /* Larger tap targets */
               .slick-prev, .slick-next {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
+                z-index: 10;
               }
-            }
-          `}
-        </style>
+              .slick-prev {
+                left: -10px;
+              }
+              .slick-next {
+                right: -10px;
+              }
+              .slick-prev:before, .slick-next:before {
+                font-size: 40px;
+                color: #7ebce6;
+                opacity: 0.75;
+              }
+              .slick-prev:hover:before, .slick-next:hover:before {
+                opacity: 1;
+              }
+              .animate-fadeIn {
+                animation: fadeIn 0.8s ease-out forwards;
+              }
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              .animate-pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              }
+              @keyframes pulse {
+                0%, 100% {
+                  opacity: 1;
+                }
+                50% {
+                  opacity: 0.8;
+                }
+              }
+              
+              /* Mobile touch optimizations */
+              @media (max-width: 768px) {
+                .slick-dots li {
+                  width: 30px;
+                  height: 30px;
+                }
+                .slick-slide {
+                  touch-action: pan-y;
+                }
+                /* Larger tap targets */
+                .slick-prev, .slick-next {
+                  width: 50px;
+                  height: 50px;
+                }
+              }
+            `}
+          </style>
       </div>
     </section>
   );
