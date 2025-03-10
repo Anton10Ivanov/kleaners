@@ -66,13 +66,13 @@ export const AgreementStep = ({
         
         <div className="flex items-start space-x-2">
           <Checkbox 
-            id="training" 
+            id="addressConfirmation" 
             checked={agreeToTraining}
             onCheckedChange={(checked) => setAgreeToTraining(checked === true)}
           />
           <div>
-            <Label htmlFor="training" className="text-sm font-normal">
-              I am willing to complete required training if my application is accepted
+            <Label htmlFor="addressConfirmation" className="text-sm font-normal">
+              I confirm that I live at the address of my German ID card or "confirmation of registration" document issued to me from the government <span className="text-red-500">*</span>
             </Label>
           </div>
         </div>
