@@ -8,19 +8,7 @@ import { SocialProof } from "./SocialProof";
 export const MobileHero = memo(() => {
   return (
     <div className="flex flex-col items-center justify-between gap-6 py-6 relative">
-      {/* Background image with refined gradient overlay */}
-      <div className="absolute inset-0 z-0 opacity-20">
-        <div 
-          className="h-full w-full"
-          style={{
-            backgroundImage: "url('/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "center 25%",
-            backgroundRepeat: "no-repeat",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white/90"></div>
-      </div>
+      {/* Background image is now handled by BackgroundElements component */}
       
       <motion.div
         initial={{ opacity: 0, y: 10 }}

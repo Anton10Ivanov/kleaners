@@ -44,10 +44,10 @@ export const Hero = memo(({
   };
 
   return (
-    <div className="relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center py-12 bg-white transition-colors duration-300">
+    <div className="relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center py-12 bg-white transition-colors duration-300 overflow-hidden">
       <BackgroundElements />
       
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 bg-theme-green lg:px-[10px]">
+      <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-[10px]">
         <HeroProvider 
           initialService={selectedService}
           initialPostalCode={postalCode}
