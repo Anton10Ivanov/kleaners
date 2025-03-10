@@ -197,7 +197,7 @@ export const AuthButtons = () => {
       <Button variant="ghost" size="sm" onClick={() => navigate('/auth/login')}>
         Login
       </Button>
-      <Button variant="default" size="sm" onClick={() => navigate('/auth/signup')} className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm">
+      <Button variant="default" size="sm" onClick={() => navigate('/auth/signup')} className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50">
         Sign up
       </Button>
     </div>;
