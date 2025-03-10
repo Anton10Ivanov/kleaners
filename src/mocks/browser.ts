@@ -85,6 +85,12 @@ let worker: ReturnType<typeof setupWorker> | null = null;
 export const startMockServiceWorker = async () => {
   if (typeof window === 'undefined') return;
   
+  // Don't start the mock service worker in production or preview environments
+  if (import.meta.env.PROD) {
+    console.log('Mock Service Worker disabled in production');
+    return;
+  }
+  
   try {
     // Only setup the worker if it hasn't been set up yet
     if (!worker) {
