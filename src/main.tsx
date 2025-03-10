@@ -10,7 +10,11 @@ import { ThemeProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/toaster'
 
 // Initialize mock service worker if in development
-startMockServiceWorker()
+if (import.meta.env.DEV) {
+  startMockServiceWorker().catch(err => {
+    console.warn('Error starting mock service worker:', err)
+  })
+}
 
 // Create a client
 const queryClient = new QueryClient({
