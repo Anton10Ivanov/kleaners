@@ -10,7 +10,7 @@ export const BackgroundElements = memo(() => (
           className="w-full h-full bg-no-repeat bg-center"
           style={{
             backgroundImage: "url('/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png')",
-            backgroundSize: "125%", /* Increased by 25% */
+            backgroundSize: "100%", /* Reduced from 125% to 100% */
             backgroundPosition: "center center",
           }}
         ></div>
