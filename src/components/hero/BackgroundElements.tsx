@@ -7,11 +7,11 @@ export const BackgroundElements = memo(() => (
     <div className="absolute inset-0 overflow-hidden bg-theme-green">
       <div className="absolute inset-0 opacity-100 z-0">
         <div 
-          className="w-full h-full bg-no-repeat bg-center"
+          className="w-full h-full bg-no-repeat"
           style={{
             backgroundImage: "url('/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png')",
-            backgroundSize: "50%", /* Reduced from 100% to 50% */
-            backgroundPosition: "center center",
+            backgroundSize: "65%", /* Adjusted from 50% to 65% */
+            backgroundPosition: "right bottom", /* Changed from center center to right bottom */
           }}
         ></div>
       </div>
