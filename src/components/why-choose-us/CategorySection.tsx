@@ -1,0 +1,28 @@
+
+import { whyChooseUsContent } from "./WhyChooseUsContent";
+import { AdvantageCard } from "./AdvantageCard";
+
+type CategoryProps = {
+  title: string;
+  items: typeof whyChooseUsContent;
+};
+
+export const CategorySection = ({ title, items }: CategoryProps) => {
+  return (
+    <div className="w-full md:w-auto">
+      <h3 className="text-xl font-bold text-center md:text-left mb-4 capitalize">
+        {title}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.slice(0, 3).map((item, index) => (
+          <AdvantageCard
+            key={`${title}-${index}`}
+            title={item.title}
+            icon={item.icon}
+            description={item.description}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
