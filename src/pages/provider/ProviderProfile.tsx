@@ -15,6 +15,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ErrorBoundary } from "react-error-boundary";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTitle } from "@/hooks/useTitle";
 
 // Define the profile schema
 const profileSchema = z.object({
@@ -36,6 +39,20 @@ const skillSchema = z.object({
 
 type SkillFormValues = z.infer<typeof skillSchema>;
 
+// Experience levels
+const experienceLevels = [
+  { value: "0-1", label: "0-1 years" },
+  { value: "1-3", label: "1-3 years" },
+  { value: "3+", label: "3+ years" },
+];
+
+// Employment types
+const employmentTypes = [
+  { value: "vollzeit", label: "Vollzeit (Full-time)" },
+  { value: "midijob", label: "Midijob (Part-time)" },
+  { value: "minijob", label: "Minijob (Mini job)" },
+];
+
 // Error fallback component
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => {
   return (
@@ -54,10 +71,17 @@ const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetError
 };
 
 const ProviderProfile = () => {
+  useTitle('Provider Profile');
+  
   const [loading, setLoading] = useState(false);
   const [provider, setProvider] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [skills, setSkills] = useState<any[]>([]);
+  const [availability, setAvailability] = useState<string[]>([]);
+  const [employmentType, setEmploymentType] = useState<string>("vollzeit");
+  const [hasOwnTransportation, setHasOwnTransportation] = useState(false);
+  const [hasOwnEquipment, setHasOwnEquipment] = useState(false);
+  const [experienceLevel, setExperienceLevel] = useState<string>("1-3");
   
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -131,6 +155,14 @@ const ProviderProfile = () => {
         } catch (error) {
           console.error("Error fetching skills:", error);
         }
+        
+        // Get preferences and availability (in a real app, these would come from the database)
+        // For now using placeholder data based on the join form structure
+        setAvailability(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
+        setEmploymentType("vollzeit");
+        setHasOwnTransportation(true);
+        setHasOwnEquipment(true);
+        setExperienceLevel("1-3");
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -223,6 +255,20 @@ const ProviderProfile = () => {
     }
   };
 
+  const toggleAvailability = (day: string) => {
+    if (availability.includes(day)) {
+      setAvailability(availability.filter(d => d !== day));
+    } else {
+      setAvailability([...availability, day]);
+    }
+    // In a real app, this would also update the database
+  };
+
+  const updateEmploymentType = (type: string) => {
+    setEmploymentType(type);
+    // In a real app, this would also update the database
+  };
+
   if (loading && !provider) {
     return (
       <div className="container flex items-center justify-center h-[calc(100vh-200px)]">
@@ -272,16 +318,33 @@ const ProviderProfile = () => {
                       <p className="text-sm">{provider.bio}</p>
                     </div>
                   )}
-                  {provider?.services && provider.services.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-semibold">Services</h4>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {provider.services.map((service: string) => (
-                          <Badge key={service} variant="secondary">{service}</Badge>
-                        ))}
-                      </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-semibold">Employment Type</h4>
+                    <Badge variant="secondary" className="mt-1">
+                      {employmentTypes.find(type => type.value === employmentType)?.label || employmentType}
+                    </Badge>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-semibold">Experience Level</h4>
+                    <Badge variant="secondary" className="mt-1">
+                      {experienceLevels.find(level => level.value === experienceLevel)?.label || experienceLevel}
+                    </Badge>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-semibold">Equipment</h4>
+                    <div className="flex flex-col gap-1 mt-1">
+                      <Badge variant={hasOwnTransportation ? "success" : "outline"} className="inline-flex justify-center">
+                        {hasOwnTransportation ? "Has Own Transportation" : "No Transportation"}
+                      </Badge>
+                      <Badge variant={hasOwnEquipment ? "success" : "outline"} className="inline-flex justify-center">
+                        {hasOwnEquipment ? "Has Own Equipment" : "No Equipment"}
+                      </Badge>
                     </div>
-                  )}
+                  </div>
+                  
                 </div>
               </CardContent>
             </Card>
@@ -385,6 +448,8 @@ const ProviderProfile = () => {
                   <Tabs defaultValue="skills">
                     <TabsList className="mb-4">
                       <TabsTrigger value="skills">Skills & Certifications</TabsTrigger>
+                      <TabsTrigger value="availability">Availability</TabsTrigger>
+                      <TabsTrigger value="preferences">Work Preferences</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="skills" className="space-y-4">
@@ -473,6 +538,94 @@ const ProviderProfile = () => {
                           <Button type="submit" className="mt-2">Add Skill</Button>
                         </form>
                       </Form>
+                    </TabsContent>
+                    
+                    <TabsContent value="availability" className="space-y-4">
+                      <Card className="p-4">
+                        <h3 className="text-lg font-medium mb-4">Available Days</h3>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
+                            <div 
+                              key={day} 
+                              className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
+                                ${availability.includes(day) 
+                                  ? 'bg-primary/10 border-primary' 
+                                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                              onClick={() => toggleAvailability(day)}
+                            >
+                              <Switch 
+                                checked={availability.includes(day)} 
+                                onCheckedChange={() => toggleAvailability(day)}
+                              />
+                              <span className="text-sm font-medium">{day}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Note: For specific time slots, please use the Availability Management page.
+                        </p>
+                      </Card>
+                    </TabsContent>
+                    
+                    <TabsContent value="preferences" className="space-y-4">
+                      <Card className="p-6">
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-lg font-medium mb-3">Employment Type</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                              {employmentTypes.map((type) => (
+                                <div
+                                  key={type.value}
+                                  className={`flex items-center justify-between p-4 rounded-lg border transition-colors cursor-pointer
+                                    ${employmentType === type.value 
+                                      ? 'bg-primary/10 border-primary' 
+                                      : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                  onClick={() => updateEmploymentType(type.value)}
+                                >
+                                  <span className="text-sm font-medium">{type.label}</span>
+                                  <Switch checked={employmentType === type.value} />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-medium mb-3">Experience Level</h3>
+                            <Select value={experienceLevel} onValueChange={setExperienceLevel}>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select experience level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {experienceLevels.map(level => (
+                                  <SelectItem key={level.value} value={level.value}>
+                                    {level.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-medium mb-3">Equipment & Resources</h3>
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+                                <span className="text-sm font-medium">Own Transportation</span>
+                                <Switch 
+                                  checked={hasOwnTransportation} 
+                                  onCheckedChange={setHasOwnTransportation} 
+                                />
+                              </div>
+                              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+                                <span className="text-sm font-medium">Own Cleaning Equipment</span>
+                                <Switch 
+                                  checked={hasOwnEquipment} 
+                                  onCheckedChange={setHasOwnEquipment} 
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
                     </TabsContent>
                   </Tabs>
                 )}
