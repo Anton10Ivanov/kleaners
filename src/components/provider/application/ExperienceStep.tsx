@@ -146,7 +146,7 @@ export const ExperienceStep = ({
       
       <div className="space-y-3">
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Skills <span className="text-red-500">*</span>
+          My Skills or Interests of Work <span className="text-red-500">*</span>
         </Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           {[
@@ -174,7 +174,38 @@ export const ExperienceStep = ({
           ))}
         </div>
         <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          Select all cleaning skills that you possess
+          Select all cleaning skills that you possess or are interested in
+        </p>
+      </div>
+      
+      <div className="space-y-3">
+        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
+          Equipment & Resources <span className="text-red-500">*</span>
+        </Label>
+        <div className="space-y-3 pt-1">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+            <Label className="text-sm font-medium">Do you have your own vehicle?</Label>
+            <Switch 
+              checked={availability.includes("own-vehicle")}
+              onCheckedChange={() => toggleAvailability("own-vehicle")}
+              className={availability.includes("own-vehicle") 
+                ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
+                : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
+            />
+          </div>
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+            <Label className="text-sm font-medium">Do you have your own cleaning solvents/supplies?</Label>
+            <Switch 
+              checked={availability.includes("own-supplies")}
+              onCheckedChange={() => toggleAvailability("own-supplies")}
+              className={availability.includes("own-supplies") 
+                ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
+                : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
+            />
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+          Let us know about your available equipment
         </p>
       </div>
     </div>
