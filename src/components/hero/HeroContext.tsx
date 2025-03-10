@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { Service } from "@/schemas/booking";
 
 type HeroContextType = {
   selectedService: string;
@@ -24,8 +25,8 @@ export const HeroProvider = ({
   initialPostalCode, 
   onNextStep 
 }: HeroProviderProps) => {
-  const [selectedService, setSelectedService] = useState(initialService);
-  const [postalCode, setPostalCode] = useState(initialPostalCode);
+  const [selectedService, setSelectedService] = useState(initialService || Service.Regular);
+  const [postalCode, setPostalCode] = useState(initialPostalCode || '');
 
   const updateSelectedService = useCallback((service: string) => {
     setSelectedService(service);

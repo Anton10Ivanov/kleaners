@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/hero';
@@ -61,7 +62,7 @@ const Index = () => {
             transition={{ duration: 0.4 }}
           >
             <Hero 
-              selectedService={selectedService}
+              selectedService={selectedService || ''}
               setSelectedService={(service) => setValue('service', service as Service)}
               postalCode={postalCode}
               setPostalCode={(code) => setValue('postalCode', code)}
@@ -88,7 +89,7 @@ const Index = () => {
               <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
                 <BookingContent 
                   currentStep={currentStep}
-                  selectedService={selectedService}
+                  selectedService={selectedService || ''}
                   form={form}
                 />
                 <motion.div 
@@ -98,7 +99,7 @@ const Index = () => {
                   className={`w-full md:w-[20%] ${isMobile ? 'fixed bottom-0 left-0 right-0 z-20' : 'relative'}`}
                 >
                   <BookingSummary 
-                    selectedService={selectedService}
+                    selectedService={selectedService || ''}
                     frequency={frequency || ''}
                     hours={hours}
                     currentPrice={currentPrice}
