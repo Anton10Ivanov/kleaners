@@ -20,7 +20,6 @@ export const CategorySection = ({ title, items }: CategoryProps) => {
             title={item.title}
             icon={item.icon}
             description={item.description}
-            iconColor={item.iconColor}
           />
         ))}
       </div>

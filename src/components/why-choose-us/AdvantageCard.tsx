@@ -6,7 +6,6 @@ type AdvantageCardProps = {
   icon: LucideIcon;
   description?: string;
   compact?: boolean;
-  iconColor?: string;
 };
 
 export const AdvantageCard = ({
@@ -14,13 +13,12 @@ export const AdvantageCard = ({
   icon: Icon,
   description,
   compact = false,
-  iconColor = "#0FA0CE",
 }: AdvantageCardProps) => {
   if (compact) {
     return (
       <div className="p-3 md:p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100">
         <div className="p-2 md:p-3 bg-[#E3F4FF] rounded-full mb-2 md:mb-3">
-          <Icon className="w-5 h-5 md:w-7 md:h-7" style={{ color: iconColor }} />
+          <Icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
         </div>
         <h3 className="text-xs md:text-sm lg:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
           {title}
@@ -33,7 +31,7 @@ export const AdvantageCard = ({
     <div className="p-4 bg-white rounded-lg shadow border border-gray-100 hover:shadow-md transition-shadow">
       <div className="flex items-start">
         <div className="p-2 bg-[#E3F4FF] rounded-full mr-3">
-          <Icon className="w-5 h-5" style={{ color: iconColor }} />
+          <Icon className="w-5 h-5 text-primary" />
         </div>
         <div>
           <h4 className="font-semibold text-gray-900 mb-1">{title}</h4>
