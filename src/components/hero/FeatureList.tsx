@@ -8,9 +8,9 @@ type Feature = {
 };
 
 const FEATURES: Feature[] = [
-  { text: "All relevant to the industry insurances", delay: 0.1 },
+  { text: "Multiple cleaning service options", delay: 0.1 },
   { text: "24/6 Support", delay: 0.2 },
-  { text: "Betriebshaftpflichtversicherung bis zu 5 Mio.€", delay: 0.3 }
+  { text: "Fully insured professionals", delay: 0.3 }
 ];
 
 export const FeatureList = memo(() => {

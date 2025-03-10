@@ -19,16 +19,16 @@ const optionsData = [
         path: "/services/regular-cleaning"
       },
       {
-        title: "Deep Cleaning",
-        description: "A comprehensive clean that reaches every corner and tackles the tough spots regular cleaning misses.",
-        features: ["Detailed kitchen appliance cleaning", "Behind furniture cleaning", "Window sill and track cleaning", "Cabinet interior cleaning"],
-        path: "/services/deep-cleaning"
-      },
-      {
         title: "Move In/Out Cleaning",
         description: "Start fresh in your new home or leave your old one spotless with our specialized cleaning service.",
         features: ["Interior window cleaning", "Inside cabinet cleaning", "Appliance interior cleaning", "Wall mark cleaning"],
         path: "/services/move-in-out"
+      },
+      {
+        title: "Business Cleaning",
+        description: "Customized cleaning solutions for offices, retail spaces, and other commercial properties.",
+        features: ["Reception and common area cleaning", "Restroom sanitization", "Break room cleaning", "Trash removal and recycling"],
+        path: "/services/business-cleaning"
       }
     ]
   },
@@ -39,7 +39,7 @@ const optionsData = [
         title: "Residential Cleaning",
         description: "Tailored cleaning services for homes, apartments, and condos of any size.",
         features: ["Customized cleaning plans", "Regular or one-time services", "Eco-friendly options", "Pet-friendly cleaning"],
-        path: "/services/residential-cleaning"
+        path: "/services/regular-cleaning"
       },
       {
         title: "Business Cleaning",
@@ -62,19 +62,19 @@ const optionsData = [
         title: "Eco-Friendly Cleaning",
         description: "Environmentally conscious cleaning services using sustainable products and methods.",
         features: ["Natural cleaning agents", "Microfiber technology", "Reduced water usage", "Minimal waste generation"],
-        path: "/services/eco-friendly-cleaning"
+        path: "/services/regular-cleaning"
       },
       {
         title: "Vacation Rental Cleaning",
         description: "Specialized cleaning and turnaround services for Airbnb and other short-term rental properties.",
         features: ["Quick turnarounds", "Linen changes", "Restocking essentials", "Inspection services"],
-        path: "/services/vacation-rental-cleaning"
+        path: "/services/business-cleaning"
       },
       {
         title: "Custom Cleaning",
         description: "Bespoke cleaning solutions for unique properties or special requirements.",
         features: ["Personalized consultation", "Custom cleaning plan", "Specialized equipment if needed", "Flexible scheduling"],
-        path: "/services/custom-cleaning"
+        path: "/services/business-cleaning"
       }
     ]
   }
