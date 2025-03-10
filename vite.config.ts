@@ -42,4 +42,11 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'sonner'],
   },
+  // Add SPA fallback for production
+  preview: {
+    port: 8080,
+    strictPort: true,
+    host: true,
+    cors: true
+  },
 }));

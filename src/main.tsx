@@ -27,9 +27,10 @@ const queryClient = new QueryClient({
   },
 })
 
+// Using basename ensures proper routing in deployed environments
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="system" storageKey="cleanly-theme">
           <App />
