@@ -1,4 +1,5 @@
 
+import { useState, useCallback, memo } from "react";
 import { CalendarIcon } from "lucide-react";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -11,7 +12,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useEffect, useState } from "react";
 
 interface DatePickerWithRangeProps {
   className?: string;
@@ -19,16 +19,16 @@ interface DatePickerWithRangeProps {
   setDate: (date: DateRange | undefined) => void;
 }
 
-export function DatePickerWithRange({
+export const DatePickerWithRange = memo(({
   className,
   date,
   setDate,
-}: DatePickerWithRangeProps) {
+}: DatePickerWithRangeProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   // Format the date for display
-  const formatDateRange = () => {
+  const formatDateRange = useCallback(() => {
     if (date?.from) {
       if (date.to) {
         return `${format(date.from, "LLL dd")} - ${format(date.to, "LLL dd, y")}`;
@@ -36,7 +36,20 @@ export function DatePickerWithRange({
       return format(date.from, "LLL dd, y");
     }
     return "Select date range";
-  };
+  }, [date]);
+
+  const handleSelect = useCallback((newDate: DateRange | undefined) => {
+    setDate(newDate);
+    // Close the popover after selection on mobile
+    if (isMobile && newDate?.to) {
+      setTimeout(() => setIsPopoverOpen(false), 300);
+    }
+  }, [isMobile, setDate]);
+
+  const handleClear = useCallback(() => {
+    setDate(undefined);
+    setIsPopoverOpen(false);
+  }, [setDate]);
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -68,13 +81,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={(newDate) => {
-              setDate(newDate);
-              // Close the popover after selection on mobile
-              if (isMobile && newDate?.to) {
-                setTimeout(() => setIsPopoverOpen(false), 300);
-              }
-            }}
+            onSelect={handleSelect}
             numberOfMonths={isMobile ? 1 : 2}
             className="rounded-md border dark:border-gray-700"
           />
@@ -83,10 +90,7 @@ export function DatePickerWithRange({
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => {
-                  setDate(undefined);
-                  setIsPopoverOpen(false);
-                }}
+                onClick={handleClear}
               >
                 Clear
               </Button>
@@ -102,4 +106,6 @@ export function DatePickerWithRange({
       </Popover>
     </div>
   );
-}
+});
+
+DatePickerWithRange.displayName = "DatePickerWithRange";

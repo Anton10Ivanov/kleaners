@@ -1,4 +1,5 @@
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Users, LucideIcon, Clock, Shield } from "lucide-react";
 
@@ -26,7 +27,7 @@ const FEATURES: FeatureBadge[] = [
   }
 ];
 
-export const FeatureBadges = () => {
+export const FeatureBadges = memo(() => {
   return (
     <div className="flex flex-wrap justify-center gap-2">
       {FEATURES.map((feature, index) => (
@@ -43,4 +44,6 @@ export const FeatureBadges = () => {
       ))}
     </div>
   );
-};
+});
+
+FeatureBadges.displayName = "FeatureBadges";
