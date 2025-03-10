@@ -1,4 +1,3 @@
-
 import { CheckCircle2, XCircle } from "lucide-react";
 
 interface ConfirmationStepProps {
@@ -145,18 +144,6 @@ export const ConfirmationStep = ({
               ) : (
                 <span className="flex items-center text-red-600">
                   <XCircle className="h-4 w-4 mr-1" /> Not uploaded
-                </span>
-              )}
-            </p>
-            <p className="flex items-center space-x-2">
-              <span className="font-medium">Background Check:</span>
-              {backgroundCheckConsent ? (
-                <span className="flex items-center text-green-600">
-                  <CheckCircle2 className="h-4 w-4 mr-1" /> Uploaded
-                </span>
-              ) : (
-                <span className="flex items-center text-amber-600">
-                  <span className="flex items-center">Not required</span>
                 </span>
               )}
             </p>
