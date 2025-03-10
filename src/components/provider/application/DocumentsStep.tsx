@@ -31,11 +31,14 @@ export const DocumentsStep = ({
         <Input
           id="resume"
           type="file"
-          onChange={(e) => handleFileChange(e, (file) => {})}
+          onChange={(e) => handleFileChange(e, (file) => resume)}
           className="cursor-pointer"
           accept=".pdf,.doc,.docx"
         />
         <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX</p>
+        {resume && (
+          <p className="text-sm text-green-600">File uploaded: {resume.name}</p>
+        )}
       </div>
     </div>
   );
