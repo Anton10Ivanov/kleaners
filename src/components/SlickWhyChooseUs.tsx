@@ -1,8 +1,5 @@
 
-import { FeaturedAdvantages } from "./why-choose-us/FeaturedAdvantages";
 import { CategorizedAdvantages } from "./why-choose-us/CategorizedAdvantages";
-import { AdvantageSlider } from "./why-choose-us/AdvantageSlider";
-import { SliderStyles } from "./why-choose-us/SliderStyles";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 const SlickWhyChooseUs = () => {
@@ -20,17 +17,8 @@ const SlickWhyChooseUs = () => {
           </p>
         </div>
 
-        {/* Advantages Grid - organized by top features */}
-        <FeaturedAdvantages />
-
         {/* Categorized advantages in tabs/sections */}
         <CategorizedAdvantages />
-
-        {/* Slider - showcasing detailed advantages */}
-        <AdvantageSlider />
-
-        {/* Styles for slider and mobile fallback */}
-        {isMobile && <SliderStyles />}
       </div>
     </section>
   );

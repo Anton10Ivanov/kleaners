@@ -4,7 +4,8 @@ import React from "react";
 export const SliderStyles = () => {
   return (
     <>
-      <style jsx="true">{`
+      <style>
+        {`
         .slick-dots {
           bottom: -30px;
           padding: 10px 0;
@@ -79,10 +80,12 @@ export const SliderStyles = () => {
             height: 50px;
           }
         }
-      `}</style>
+      `}
+      </style>
       
       {/* Mobile cards view (as fallback if slider doesn't work) */}
-      <style jsx="true">{`
+      <style>
+        {`
         .slick-container {
           visibility: visible !important;
         }
@@ -91,7 +94,8 @@ export const SliderStyles = () => {
             visibility: visible !important;
           }
         }
-      `}</style>
+      `}
+      </style>
     </>
   );
 };
