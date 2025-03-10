@@ -3,7 +3,6 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { FeatureList } from "./FeatureList";
 import { BookingForm } from "./BookingForm";
-import { HeroImage } from "./HeroImage";
 
 export const DesktopHero = memo(() => {
   return (
@@ -32,7 +31,8 @@ export const DesktopHero = memo(() => {
         </motion.div>
       </div>
       
-      <HeroImage />
+      {/* The HeroImage component is removed as its functionality has been integrated into BackgroundElements */}
+      <div className="w-full md:w-1/2 order-1 md:order-2"></div>
     </div>
   );
 });
