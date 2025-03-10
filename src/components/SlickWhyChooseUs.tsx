@@ -70,10 +70,10 @@ const SlickWhyChooseUs = () => {
               className="p-3 md:p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-lg border border-gray-100"
             >
               <div className="p-2 md:p-3 bg-[#E3F4FF] rounded-full mb-2 md:mb-3">
-                <item!.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />
+                {item && <item.icon className="w-5 h-5 md:w-7 md:h-7 text-[#0FA0CE]" />}
               </div>
               <h3 className="text-xs md:text-sm lg:text-base font-bold text-gray-900 mb-1 drop-shadow-md">
-                {item!.title}
+                {item?.title}
               </h3>
             </div>
           ))}
