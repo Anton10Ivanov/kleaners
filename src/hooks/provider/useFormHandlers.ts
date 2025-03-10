@@ -2,6 +2,8 @@
 import React from 'react';
 
 export const useFormHandlers = (
+  availability: string[],
+  skills: string[],
   setAvailability: React.Dispatch<React.SetStateAction<string[]>>,
   setSkills: React.Dispatch<React.SetStateAction<string[]>>
 ) => {

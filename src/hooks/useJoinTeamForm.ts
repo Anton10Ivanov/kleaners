@@ -32,6 +32,10 @@ export const useJoinTeamForm = () => {
     setPhone,
     setPosition,
     setExperience,
+    setAvailability,
+    setSkills,
+    setResume,
+    setBackgroundCheckConsent,
     setMessage,
     setAgreeToTerms,
     setAgreeToBackgroundCheck,
@@ -43,6 +47,8 @@ export const useJoinTeamForm = () => {
   } = useFormState();
   
   const { handleFileChange, toggleAvailability, toggleSkill } = useFormHandlers(
+    availability,
+    skills,
     setAvailability, 
     setSkills
   );
@@ -130,6 +136,8 @@ export const useJoinTeamForm = () => {
     setAgreeToTerms,
     setAgreeToBackgroundCheck,
     setAgreeToTraining,
+    setResume,
+    setBackgroundCheckConsent,
     nextStep,
     prevStep,
     handleSubmit,
