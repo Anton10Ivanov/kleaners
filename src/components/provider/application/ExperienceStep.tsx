@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -27,6 +27,16 @@ export const ExperienceStep = ({
   toggleAvailability,
   toggleSkill
 }: ExperienceStepProps) => {
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
+
+  const toggleEquipment = (equipment: string) => {
+    if (selectedEquipment.includes(equipment)) {
+      setSelectedEquipment(selectedEquipment.filter(item => item !== equipment));
+    } else {
+      setSelectedEquipment([...selectedEquipment, equipment]);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -183,25 +193,117 @@ export const ExperienceStep = ({
           Equipment & Resources <span className="text-red-500">*</span>
         </Label>
         <div className="space-y-3 pt-1">
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-            <Label className="text-sm font-medium">Do you have your own vehicle?</Label>
-            <Switch 
-              checked={availability.includes("own-vehicle")}
-              onCheckedChange={() => toggleAvailability("own-vehicle")}
-              className={availability.includes("own-vehicle") 
-                ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
-                : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
-            />
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex justify-between items-center mb-2">
+              <Label className="text-sm font-medium">Do you have your own vehicle?</Label>
+              <div className="flex space-x-3">
+                <div 
+                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                    availability.includes("own-vehicle") ? 
+                    'bg-green-500 text-white border-green-600' : 
+                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                  }`}
+                  onClick={() => {
+                    if (!availability.includes("own-vehicle")) {
+                      toggleAvailability("own-vehicle");
+                    }
+                  }}
+                >
+                  <span className="font-medium">Yes</span>
+                </div>
+                <div 
+                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                    !availability.includes("own-vehicle") ? 
+                    'bg-red-500 text-white border-red-600' : 
+                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                  }`}
+                  onClick={() => {
+                    if (availability.includes("own-vehicle")) {
+                      toggleAvailability("own-vehicle");
+                    }
+                  }}
+                >
+                  <span className="font-medium">No</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-            <Label className="text-sm font-medium">Do you have your own cleaning solvents/supplies?</Label>
-            <Switch 
-              checked={availability.includes("own-supplies")}
-              onCheckedChange={() => toggleAvailability("own-supplies")}
-              className={availability.includes("own-supplies") 
-                ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
-                : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
-            />
+          
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex justify-between items-center mb-2">
+              <Label className="text-sm font-medium">Do you have your own cleaning supplies?</Label>
+              <div className="flex space-x-3">
+                <div 
+                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                    availability.includes("own-supplies") ? 
+                    'bg-green-500 text-white border-green-600' : 
+                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                  }`}
+                  onClick={() => {
+                    if (!availability.includes("own-supplies")) {
+                      toggleAvailability("own-supplies");
+                    }
+                  }}
+                >
+                  <span className="font-medium">Yes</span>
+                </div>
+                <div 
+                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                    !availability.includes("own-supplies") ? 
+                    'bg-red-500 text-white border-red-600' : 
+                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                  }`}
+                  onClick={() => {
+                    if (availability.includes("own-supplies")) {
+                      toggleAvailability("own-supplies");
+                    }
+                  }}
+                >
+                  <span className="font-medium">No</span>
+                </div>
+              </div>
+            </div>
+            
+            {availability.includes("own-supplies") && (
+              <div className="mt-4 border-t pt-3 border-gray-200 dark:border-gray-700">
+                <Label className="text-sm font-medium mb-2 block">Select the equipment you have:</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    "Vacuum Cleaner", 
+                    "Mop and Bucket", 
+                    "Microfiber Cloths",
+                    "Cleaning Chemicals", 
+                    "Broom and Dustpan", 
+                    "Squeegee",
+                    "Scrub Brushes",
+                    "Extension Pole"
+                  ].map((equipment) => (
+                    <div 
+                      key={equipment}
+                      className={`flex items-center space-x-2 p-2 rounded-md border ${
+                        selectedEquipment.includes(equipment) ? 
+                        'bg-primary/10 border-primary' : 
+                        'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                      }`}
+                      onClick={() => toggleEquipment(equipment)}
+                    >
+                      <Checkbox 
+                        id={`equipment-${equipment}`}
+                        checked={selectedEquipment.includes(equipment)}
+                        onCheckedChange={() => toggleEquipment(equipment)}
+                        className="h-4 w-4"
+                      />
+                      <Label 
+                        htmlFor={`equipment-${equipment}`}
+                        className="text-sm cursor-pointer"
+                      >
+                        {equipment}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <p className="text-xs text-gray-500 dark:text-gray-400 italic">
