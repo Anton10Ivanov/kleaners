@@ -44,21 +44,6 @@ export const DocumentsStep = ({
           <p className="text-sm text-green-600">File uploaded: {resume.name}</p>
         )}
       </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="background-check">Background Check Consent <span className="text-red-500">*</span></Label>
-        <Input
-          id="background-check"
-          type="file"
-          onChange={(e) => handleFileChange(e, setBackgroundCheckConsent)}
-          className="cursor-pointer"
-          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-        />
-        <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG</p>
-        {backgroundCheckConsent && (
-          <p className="text-sm text-green-600">File uploaded: {backgroundCheckConsent.name}</p>
-        )}
-      </div>
     </div>
   );
 };
