@@ -36,18 +36,6 @@ export const DocumentsStep = ({
         />
         <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX</p>
       </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="background-check">Background Check Acknowledgment Form</Label>
-        <Input
-          id="background-check"
-          type="file"
-          onChange={(e) => handleFileChange(e, (file) => {})}
-          className="cursor-pointer"
-          accept=".pdf"
-        />
-        <p className="text-xs text-muted-foreground">Download, fill and upload our <a href="#" className="text-primary hover:underline">Background Check Acknowledgment Form</a></p>
-      </div>
     </div>
   );
 };

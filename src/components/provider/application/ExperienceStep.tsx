@@ -1,6 +1,7 @@
 
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
@@ -54,8 +55,7 @@ export const ExperienceStep = ({
           <SelectContent>
             <SelectItem value="0-1">0-1 years</SelectItem>
             <SelectItem value="1-3">1-3 years</SelectItem>
-            <SelectItem value="3-5">3-5 years</SelectItem>
-            <SelectItem value="5+">5+ years</SelectItem>
+            <SelectItem value="3+">3+ years</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -64,23 +64,37 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Employment Type <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+        <RadioGroup 
+          value={availability.find(type => ["vollzeit", "midijob", "minijob"].includes(type)) || ""} 
+          onValueChange={(value) => {
+            // Remove any existing employment type
+            const filteredAvailability = availability.filter(type => !["vollzeit", "midijob", "minijob"].includes(type));
+            // Add the new employment type
+            toggleAvailability(value);
+          }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1"
+        >
           {[
             { id: "vollzeit", label: "Vollzeit (Full-time)" },
             { id: "midijob", label: "Midijob (Part-time)" },
             { id: "minijob", label: "Minijob (Mini job)" }
           ].map((type) => (
-            <div 
-              key={type.id} 
-              className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
-              onClick={() => toggleAvailability(type.id)}
+            <div
+              key={type.id}
+              className={`flex items-center space-x-2 p-3 rounded-lg border transition-colors cursor-pointer
+                ${availability.includes(type.id) 
+                  ? 'bg-primary/10 border-primary' 
+                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+              onClick={() => {
+                // Remove any existing employment type
+                const filteredAvailability = availability.filter(item => !["vollzeit", "midijob", "minijob"].includes(item));
+                // Add the new employment type if it's not already there
+                if (!availability.includes(type.id)) {
+                  toggleAvailability(type.id);
+                }
+              }}
             >
-              <Checkbox 
-                id={`job-type-${type.id}`} 
-                checked={availability.includes(type.id)}
-                onCheckedChange={() => toggleAvailability(type.id)}
-                className="h-5 w-5"
-              />
+              <RadioGroupItem id={`job-type-${type.id}`} value={type.id} className="h-5 w-5" />
               <Label 
                 htmlFor={`job-type-${type.id}`} 
                 className="text-sm font-medium cursor-pointer flex-grow"
@@ -89,7 +103,7 @@ export const ExperienceStep = ({
               </Label>
             </div>
           ))}
-        </div>
+        </RadioGroup>
         <p className="text-xs text-gray-500 dark:text-gray-400 italic">
           Select the type of employment you are looking for
         </p>
@@ -103,7 +117,10 @@ export const ExperienceStep = ({
           {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
             <div 
               key={day} 
-              className="flex items-center space-x-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+              className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
+                ${availability.includes(day) 
+                  ? 'bg-primary/10 border-primary' 
+                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               onClick={() => toggleAvailability(day)}
             >
               <Checkbox 
@@ -130,7 +147,7 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Skills <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 pt-1">
           {[
             ["Deep Cleaning", "Commercial Cleaning"],
             ["Residential Cleaning", "Window Cleaning"],
@@ -142,20 +159,13 @@ export const ExperienceStep = ({
               onClick={() => toggleSkill(skill)}
             >
               <Label className="text-sm font-medium cursor-pointer">{skill}</Label>
-              <div className="flex items-center gap-3">
-                <span className={`text-xs font-medium ${skills.includes(skill) ? 'text-green-600' : 'text-red-500'}`}>
-                  {skills.includes(skill) ? 'Yes' : 'No'}
-                </span>
-                <Switch 
-                  checked={skills.includes(skill)}
-                  onCheckedChange={() => toggleSkill(skill)}
-                  className={`${
-                    skills.includes(skill) 
-                      ? 'bg-green-500 hover:bg-green-600' 
-                      : 'bg-red-500 hover:bg-red-600'
-                  }`}
-                />
-              </div>
+              <Switch 
+                checked={skills.includes(skill)}
+                onCheckedChange={() => toggleSkill(skill)}
+                className={skills.includes(skill) 
+                  ? 'bg-green-500 hover:bg-green-600' 
+                  : 'bg-red-500 hover:bg-red-600'}
+              />
             </div>
           ))}
         </div>
