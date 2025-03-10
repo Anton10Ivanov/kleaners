@@ -1,3 +1,4 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,18 +136,18 @@ const Hero = ({
               <div className="backdrop-blur-xl p-5 border border-white/20 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white rounded-xl">
                 <div className="flex flex-col gap-4">
                   <Select value={selectedService} onValueChange={handleServiceChange}>
-                    <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-12 rounded-xl ring-offset-0 focus:ring-primary border-white/30 dark:border-gray-700 shadow-sm">
+                    <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-12 rounded-xl ring-offset-0 focus:ring-primary border-white/30 dark:border-gray-700 shadow-sm border-[#08B]">
                       <SelectValue placeholder="Select service type" />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
-                      <SelectItem value="regular" className="py-3">Regular Cleaning (RC)</SelectItem>
-                      <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning (MC)</SelectItem>
-                      <SelectItem value="business" className="py-3">Business Cleaning (BC)</SelectItem>
+                      <SelectItem value="regular" className="py-3">Regular Cleaning</SelectItem>
+                      <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning</SelectItem>
+                      <SelectItem value="business" className="py-3">Business Cleaning</SelectItem>
                       <SelectItem value="construction" className="py-3">Post-Construction Cleaning</SelectItem>
                     </SelectContent>
                   </Select>
                   
-                  <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-white-800/90 font-regular h-12 border-white/30 dark:border-blue-300 ring-offset-0 focus:ring-primary shadow-sm rounded-xl" />
+                  <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-white-800/90 font-regular h-12 border-white/30 dark:border-blue-300 ring-offset-0 focus:ring-primary shadow-sm rounded-xl border-[#08B]" />
                   
                   <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 w-full shadow-[0_8px_30px_rgba(126,188,230,0.3)] hover:shadow-[0_8px_30px_rgba(126,188,230,0.5)] transition-all font-bold h-12 rounded-xl text-zinc-950 text-center">
                     Next <ArrowRight className="ml-2 h-4 w-4" />
@@ -232,13 +233,13 @@ const Hero = ({
                     {/* Service type - 50% */}
                     <div className="w-full sm:w-1/2">
                       <Select value={selectedService} onValueChange={handleServiceChange}>
-                        <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary border border-white/30 dark:border-gray-700 shadow-sm">
+                        <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary border border-white/30 dark:border-gray-700 shadow-sm border-[#08B]">
                           <SelectValue placeholder="Select service type" />
                         </SelectTrigger>
                         <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
-                          <SelectItem value="regular" className="py-3">Regular Cleaning (RC)</SelectItem>
-                          <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning (MC)</SelectItem>
-                          <SelectItem value="business" className="py-3">Business Cleaning (BC)</SelectItem>
+                          <SelectItem value="regular" className="py-3">Regular Cleaning</SelectItem>
+                          <SelectItem value="moveInOut" className="py-3">Move In/Out Cleaning</SelectItem>
+                          <SelectItem value="business" className="py-3">Business Cleaning</SelectItem>
                           <SelectItem value="construction" className="py-3">Post-Construction Cleaning</SelectItem>
                         </SelectContent>
                       </Select>
