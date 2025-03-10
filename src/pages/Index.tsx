@@ -51,6 +51,16 @@ const Index = () => {
     handleBackStep();
   };
 
+  // Simple helper to log state for debugging
+  console.log("Current step:", currentStep);
+  console.log("Selected service:", selectedService);
+  console.log("Postal code:", postalCode);
+
+  const handleHeroNextStep = () => {
+    console.log("Hero next step clicked");
+    handleNextStep();
+  };
+
   return (
     <div className="min-h-screen font-raleway bg-white dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
@@ -63,10 +73,16 @@ const Index = () => {
           >
             <Hero 
               selectedService={selectedService || ''}
-              setSelectedService={(service) => setValue('service', service as Service)}
+              setSelectedService={(service) => {
+                console.log("Setting service to:", service);
+                setValue('service', service);
+              }}
               postalCode={postalCode}
-              setPostalCode={(code) => setValue('postalCode', code)}
-              handleNextStep={handleNextStep}
+              setPostalCode={(code) => {
+                console.log("Setting postal code to:", code);
+                setValue('postalCode', code);
+              }}
+              handleNextStep={handleHeroNextStep}
             />
             
             <SlickWhyChooseUs />

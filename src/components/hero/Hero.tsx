@@ -53,6 +53,8 @@ export const Hero = memo(({
           initialService={selectedService}
           initialPostalCode={postalCode}
           onNextStep={handleValidatedNextStep}
+          onServiceChange={setSelectedService}
+          onPostalCodeChange={setPostalCode}
         >
           {isMobile ? <MobileHero /> : <DesktopHero />}
         </HeroProvider>
