@@ -231,8 +231,9 @@ const Hero = ({
             duration: 0.5,
             delay: 0.2
           }} className="w-full">
-                <div className="backdrop-blur-xl p-7 border-2 border-[#08B]/30 transition-all hover:shadow-[0_15px_50px_-12px_rgba(126,188,230,0.3)] duration-300 bg-white/95 rounded-2xl">
-                  <div className="flex flex-col sm:flex-row gap-5 items-center">
+                <div className="backdrop-blur-xl p-6 border-2 border-[#08B]/30 transition-all hover:shadow-[0_15px_50px_-12px_rgba(126,188,230,0.3)] duration-300 bg-white/95 rounded-2xl">
+                  {/* Reduced padding in parent div (from p-7 to p-6) and increased space in child by reducing gap */}
+                  <div className="flex flex-col sm:flex-row gap-4 items-center">
                     <div className="w-full sm:w-1/2">
                       <label className="text-sm font-medium text-gray-700 mb-1.5 block">Select Service</label>
                       <Select value={selectedService} onValueChange={handleServiceChange} defaultValue="regular">
