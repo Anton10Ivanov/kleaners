@@ -44,9 +44,16 @@ export const MobileHero = ({
         transition={{ duration: 0.4 }}
         className="relative z-10 w-full text-center mb-1"
       >
-        <span className="inline-block py-1 px-3 rounded-full text-xs font-semibold bg-primary/10 text-primary mb-3">
-          Your trusted cleaning partner
-        </span>
+        {/* Moved customer social proof here and removed the span element */}
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <div className="flex -space-x-2">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
+            <img src="https://randomuser.me/api/portraits/men/86.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
+            <img src="https://randomuser.me/api/portraits/women/24.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
+          </div>
+          <span className="text-xs text-gray-600">Trusted by 2,300+ customers</span>
+        </div>
+        
         <motion.h1 
           initial={{ opacity: 0, y: 10 }} 
           animate={{ opacity: 1, y: 0 }} 
@@ -107,14 +114,7 @@ export const MobileHero = ({
           </div>
         </div>
         
-        <div className="flex items-center justify-center mt-4 gap-2">
-          <div className="flex -space-x-2">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
-            <img src="https://randomuser.me/api/portraits/men/86.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
-            <img src="https://randomuser.me/api/portraits/women/24.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
-          </div>
-          <span className="text-xs text-gray-600">Trusted by 2,300+ customers</span>
-        </div>
+        {/* Removed this element since it's now at the top */}
       </motion.div>
     </div>
   );
