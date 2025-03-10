@@ -171,13 +171,36 @@ export const ExperienceStep = ({
                   className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 transition-colors"
                 >
                   <Label className="text-sm font-medium">{skill}</Label>
-                  <Switch 
-                    checked={skills.includes(skill)}
-                    onCheckedChange={() => toggleSkill(skill)}
-                    className={skills.includes(skill) 
-                      ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
-                      : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
-                  />
+                  <div className="flex space-x-3">
+                    <div 
+                      className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                        skills.includes(skill) ? 
+                        'bg-green-500 text-white border-green-600' : 
+                        'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                      }`}
+                      onClick={() => {
+                        if (!skills.includes(skill)) {
+                          toggleSkill(skill);
+                        }
+                      }}
+                    >
+                      <span className="font-medium">Yes</span>
+                    </div>
+                    <div 
+                      className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
+                        !skills.includes(skill) ? 
+                        'bg-red-500 text-white border-red-600' : 
+                        'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                      }`}
+                      onClick={() => {
+                        if (skills.includes(skill)) {
+                          toggleSkill(skill);
+                        }
+                      }}
+                    >
+                      <span className="font-medium">No</span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </React.Fragment>
