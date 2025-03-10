@@ -147,26 +147,29 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Skills <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           {[
             ["Deep Cleaning", "Commercial Cleaning"],
             ["Residential Cleaning", "Window Cleaning"],
             ["Carpet Cleaning", "Move In/Out Cleaning"]
-          ].flat().map((skill) => (
-            <div 
-              key={skill} 
-              className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
-              onClick={() => toggleSkill(skill)}
-            >
-              <Label className="text-sm font-medium cursor-pointer">{skill}</Label>
-              <Switch 
-                checked={skills.includes(skill)}
-                onCheckedChange={() => toggleSkill(skill)}
-                className={skills.includes(skill) 
-                  ? 'bg-green-500 hover:bg-green-600' 
-                  : 'bg-red-500 hover:bg-red-600'}
-              />
-            </div>
+          ].map((row, rowIndex) => (
+            <React.Fragment key={`row-${rowIndex}`}>
+              {row.map((skill) => (
+                <div 
+                  key={skill} 
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 transition-colors"
+                >
+                  <Label className="text-sm font-medium">{skill}</Label>
+                  <Switch 
+                    checked={skills.includes(skill)}
+                    onCheckedChange={() => toggleSkill(skill)}
+                    className={skills.includes(skill) 
+                      ? 'bg-green-500 data-[state=checked]:bg-green-500 hover:bg-green-600' 
+                      : 'bg-red-500 data-[state=unchecked]:bg-red-500 hover:bg-red-600'}
+                  />
+                </div>
+              ))}
+            </React.Fragment>
           ))}
         </div>
         <p className="text-xs text-gray-500 dark:text-gray-400 italic">
