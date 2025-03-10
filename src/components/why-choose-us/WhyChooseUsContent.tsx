@@ -1,8 +1,9 @@
 
 import { MapPin, Euro, Settings, Calendar, X, Star, Shield, Clock, UserCheck, Leaf, CheckCircle, FileText, MessageSquare, User, CalendarClock, Briefcase, Award } from "lucide-react";
+import { AdvantageItem } from "./WhyChooseUsTypes";
 
 // Content sections organized into categories for the advantage cards
-export const whyChooseUsContent = [
+export const whyChooseUsContent: AdvantageItem[] = [
   {
     title: "Local Trusted Cleaners",
     description: "Our carefully vetted cleaners live in your area, ensuring prompt arrivals with no travel fees and building community trust with every visit.",
@@ -117,9 +118,33 @@ export const whyChooseUsContent = [
   }
 ];
 
-// Group the advantages by category for better organization
-export const advantagesByCategory = {
-  trust: whyChooseUsContent.filter(item => ['trust', 'security'].includes(item.category)),
-  convenience: whyChooseUsContent.filter(item => ['convenience', 'transparency'].includes(item.category)),
-  flexibility: whyChooseUsContent.filter(item => ['flexibility', 'quality'].includes(item.category))
+// Group advantages by category using a more flexible approach
+export const getAdvantagesByCategories = (): Record<string, AdvantageItem[]> => {
+  const categoryMap: Record<string, AdvantageItem[]> = {};
+  
+  whyChooseUsContent.forEach(item => {
+    // Map categories to display groups
+    let displayCategory = item.category;
+    if (['trust', 'security'].includes(item.category)) {
+      displayCategory = 'trust';
+    } else if (['convenience', 'transparency'].includes(item.category)) {
+      displayCategory = 'convenience';
+    } else if (['flexibility', 'quality'].includes(item.category)) {
+      displayCategory = 'flexibility';
+    }
+    
+    if (!categoryMap[displayCategory]) {
+      categoryMap[displayCategory] = [];
+    }
+    categoryMap[displayCategory].push(item);
+  });
+  
+  return categoryMap;
+};
+
+// Create category display mappings
+export const categoryDisplayNames: Record<string, string> = {
+  trust: 'Trust & Security',
+  convenience: 'Convenience',
+  flexibility: 'Flexibility & Quality'
 };
