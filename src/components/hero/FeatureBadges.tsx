@@ -39,7 +39,7 @@ export const FeatureBadges = memo(() => {
           className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium flex items-center shadow-sm border border-gray-100"
         >
           <feature.icon className="w-3.5 h-3.5 text-primary mr-1.5" />
-          <span className="text-zinc-600 text-xs font-sans">{feature.text}</span>
+          <span className="text-zinc-600 text-xs">{feature.text}</span>
         </motion.div>
       ))}
     </div>

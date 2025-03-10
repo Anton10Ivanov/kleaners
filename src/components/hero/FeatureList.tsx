@@ -25,7 +25,7 @@ export const FeatureList = memo(() => {
           className="flex items-center justify-start gap-3 text-[#8E9196] dark:text-gray-300 font-medium"
         >
           <div className="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-          <span className="text-zinc-800 font-sans">{feature.text}</span>
+          <span className="text-zinc-800">{feature.text}</span>
         </motion.li>
       ))}
     </ul>
