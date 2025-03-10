@@ -22,11 +22,11 @@ export const MobileHero = memo(() => {
           initial={{ opacity: 0, y: 10 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5, delay: 0.1 }} 
-          className="text-3xl md:text-4xl font-bold leading-tight text-zinc-800 mb-3"
+          className="font-serif text-3xl md:text-4xl font-bold leading-tight text-zinc-800 mb-3"
         >
           Book your cleaning in 2 minutes
         </motion.h1>
-        <p className="text-gray-500 text-sm md:text-base max-w-md mx-auto">
+        <p className="text-gray-500 text-sm md:text-base max-w-md mx-auto font-sans">
           Professional local cleaners with transparent, fair pricing
         </p>
       </motion.div>

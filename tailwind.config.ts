@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -69,7 +70,37 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
+        // New Yorker style typography
+        serif: ["'Playfair Display'", "Georgia", "serif"],
+        sans: ["'Raleway'", "system-ui", "sans-serif"],
         raleway: ["var(--ff)"],
+      },
+      typography: {
+        newyorker: {
+          css: {
+            '--tw-prose-body': 'var(--foreground)',
+            '--tw-prose-headings': 'var(--foreground)',
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: '1.125rem',
+            lineHeight: '1.75',
+            p: {
+              marginBottom: '1.5em',
+            },
+            h1: {
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontWeight: '700',
+              fontSize: '2.5rem',
+              lineHeight: '1.2',
+              letterSpacing: '-0.025em',
+            },
+            h2: {
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontWeight: '600',
+              fontSize: '1.75rem',
+              lineHeight: '1.3',
+            },
+          },
+        },
       },
       keyframes: {
         "accordion-down": {
