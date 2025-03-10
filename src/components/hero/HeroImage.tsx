@@ -1,4 +1,3 @@
-
 import { memo } from "react";
 import { motion } from "framer-motion";
 
@@ -11,11 +10,7 @@ export const HeroImage = memo(() => {
         transition={{ duration: 0.5, delay: 0.3 }} 
         className="relative w-full md:w-auto"
       >
-        <img 
-          src="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png" 
-          alt="Professional Cleaning Service" 
-          className="w-full h-auto object-contain md:max-w-[500px] mx-auto" 
-        />
+        <div className="w-full h-auto md:h-[500px] md:w-[500px]" />
       </motion.div>
     </div>
   );
