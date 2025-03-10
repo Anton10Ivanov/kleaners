@@ -36,6 +36,8 @@ interface ApplicationFormProps {
   setAgreeToTerms: (value: boolean) => void;
   setAgreeToBackgroundCheck: (value: boolean) => void;
   setAgreeToTraining: (value: boolean) => void;
+  setResume: React.Dispatch<React.SetStateAction<File | null>>;
+  setBackgroundCheckConsent: React.Dispatch<React.SetStateAction<File | null>>;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
   toggleAvailability: (value: string) => void;
   toggleSkill: (value: string) => void;
@@ -69,6 +71,8 @@ export const ApplicationForm = ({
   setAgreeToTerms,
   setAgreeToBackgroundCheck,
   setAgreeToTraining,
+  setResume,
+  setBackgroundCheckConsent,
   handleFileChange,
   toggleAvailability,
   toggleSkill,
@@ -110,6 +114,8 @@ export const ApplicationForm = ({
             handleFileChange={handleFileChange}
             resume={resume}
             backgroundCheckConsent={backgroundCheckConsent}
+            setResume={setResume}
+            setBackgroundCheckConsent={setBackgroundCheckConsent}
           />
         );
         

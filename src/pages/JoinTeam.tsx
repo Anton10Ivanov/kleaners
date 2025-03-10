@@ -36,6 +36,8 @@ const JoinTeam = () => {
     setAgreeToTerms,
     setAgreeToBackgroundCheck,
     setAgreeToTraining,
+    setResume,
+    setBackgroundCheckConsent,
     nextStep,
     prevStep,
     handleSubmit,
@@ -102,6 +104,8 @@ const JoinTeam = () => {
               setAgreeToTerms={setAgreeToTerms}
               setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
               setAgreeToTraining={setAgreeToTraining}
+              setResume={setResume}
+              setBackgroundCheckConsent={setBackgroundCheckConsent}
               handleFileChange={handleFileChange}
               toggleAvailability={toggleAvailability}
               toggleSkill={toggleSkill}

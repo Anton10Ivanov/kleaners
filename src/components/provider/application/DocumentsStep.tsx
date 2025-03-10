@@ -9,12 +9,16 @@ interface DocumentsStepProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
   resume: File | null;
   backgroundCheckConsent: File | null;
+  setResume: React.Dispatch<React.SetStateAction<File | null>>;
+  setBackgroundCheckConsent: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export const DocumentsStep = ({
   handleFileChange,
   resume,
-  backgroundCheckConsent
+  backgroundCheckConsent,
+  setResume,
+  setBackgroundCheckConsent
 }: DocumentsStepProps) => {
   return (
     <div className="space-y-4">
@@ -31,13 +35,28 @@ export const DocumentsStep = ({
         <Input
           id="resume"
           type="file"
-          onChange={(e) => handleFileChange(e, (file) => resume)}
+          onChange={(e) => handleFileChange(e, setResume)}
           className="cursor-pointer"
           accept=".pdf,.doc,.docx"
         />
         <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX</p>
         {resume && (
           <p className="text-sm text-green-600">File uploaded: {resume.name}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="background-check">Background Check Consent <span className="text-red-500">*</span></Label>
+        <Input
+          id="background-check"
+          type="file"
+          onChange={(e) => handleFileChange(e, setBackgroundCheckConsent)}
+          className="cursor-pointer"
+          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+        />
+        <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG</p>
+        {backgroundCheckConsent && (
+          <p className="text-sm text-green-600">File uploaded: {backgroundCheckConsent.name}</p>
         )}
       </div>
     </div>
