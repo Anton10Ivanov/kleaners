@@ -251,7 +251,7 @@ const Hero = ({
                     
                     {/* Next button - 25% - Match postal code width */}
                     <div className="w-full sm:w-1/4">
-                      <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 w-full shadow-[0_8px_30px_rgba(126,188,230,0.3)] hover:shadow-[0_8px_30px_rgba(126,188,230,0.5)] transition-all font-bold h-14 px-8 rounded-xl text-zinc-950 text-center">
+                      <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 w-full shadow-[0_8px_30px_rgba(126,188,230,0.3)] hover:shadow-[0_8px_30px_rgba(126,188,230,0.5)] transition-all font-bold h-14 px-8 rounded-xl text-center text-white border-2 border-[#08B]">
                         Next <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </div>
