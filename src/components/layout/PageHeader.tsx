@@ -45,7 +45,7 @@ export function PageHeader({
         <div className={cn("flex flex-col gap-2", alignClasses[align])}>
           <div className="flex items-center justify-between gap-4">
             <h1 className={cn(
-              "font-serif font-bold text-gray-900 dark:text-white tracking-tight",
+              "font-bold text-gray-900 dark:text-white",
               {
                 "text-2xl": size === "sm",
                 "text-3xl": size === "md",
@@ -57,7 +57,7 @@ export function PageHeader({
             {actions && <div className="flex items-center gap-2">{actions}</div>}
           </div>
           {description && (
-            <p className="text-muted-foreground max-w-prose font-sans">
+            <p className="text-muted-foreground max-w-prose">
               {description}
             </p>
           )}
