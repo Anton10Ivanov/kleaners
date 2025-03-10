@@ -1,6 +1,7 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import Hero from '../components/Hero';
+import Hero from '../components/hero'; // Fix the import path
 import { Services } from '../components/Services';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import { Testimonials } from '../components/Testimonials';
