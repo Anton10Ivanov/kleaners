@@ -6,7 +6,7 @@ const SlickWhyChooseUs = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <section id="why-choose-us-slider" className="py-8 md:py-16 bg-white">
+    <section id="why-choose-us-slider" className="py-8 md:py-16 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="text-left mb-6 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 drop-shadow-sm my-[12px] text-zinc-950">
