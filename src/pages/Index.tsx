@@ -1,8 +1,6 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/hero';
-import { Services } from '../components/Services';
 import OurOptions from '../components/options/OurOptions';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import { Testimonials } from '../components/Testimonials';
@@ -71,7 +69,6 @@ const Index = () => {
             />
             
             <SlickWhyChooseUs />
-            <Services />
             <OurOptions />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Testimonials />
