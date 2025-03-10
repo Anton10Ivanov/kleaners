@@ -1,8 +1,9 @@
 
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import Hero from '../components/hero'; // Fix the import path
+import Hero from '../components/hero';
 import { Services } from '../components/Services';
+import OurOptions from '../components/options/OurOptions';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import { Testimonials } from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
@@ -14,7 +15,6 @@ import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency, Service } from '@/schemas/booking';
-import { useRef } from 'react';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -72,6 +72,7 @@ const Index = () => {
             
             <SlickWhyChooseUs />
             <Services />
+            <OurOptions />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Testimonials />
             </ErrorBoundary>
