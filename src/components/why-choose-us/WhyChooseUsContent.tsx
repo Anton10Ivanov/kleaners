@@ -1,11 +1,11 @@
 
-import { MapPin, Euro, Settings, Calendar, X, Star, Shield, Clock, UserCheck } from "lucide-react";
+import { MapPin, Euro, Settings, Calendar, X, Star, Shield, Clock, UserCheck, Leaf, CheckCircle, FileText, MessageSquare, User, CalendarClock, Briefcase, Award } from "lucide-react";
 
 // Content sections organized into categories for the advantage cards
 export const whyChooseUsContent = [
   {
-    title: "Local Cleaners",
-    description: "Our cleaners live in your area, thanks to our postal code-based system. This means no travel fees and prompt arrivals for every appointment.",
+    title: "Local Trusted Cleaners",
+    description: "Our carefully vetted cleaners live in your area, ensuring prompt arrivals with no travel fees and building community trust with every visit.",
     icon: MapPin,
     color: "bg-gradient-to-br from-cyan-500 to-emerald-500",
     category: "convenience"
@@ -39,9 +39,9 @@ export const whyChooseUsContent = [
     category: "flexibility"
   },
   {
-    title: "Exceptional Quality",
-    description: "Our 95% success rate speaks volumes about our dedication to quality. Experience the difference with cleaners who truly care about their work.",
-    icon: Star,
+    title: "Satisfaction Guarantee",
+    description: "Our 95% success rate and satisfaction guarantee ensure you'll be delighted with your cleaning, or we'll make it right at no additional cost.",
+    icon: CheckCircle,
     color: "bg-gradient-to-br from-amber-500 to-orange-500",
     category: "quality"
   },
@@ -50,10 +50,10 @@ export const whyChooseUsContent = [
     description: "All our cleaning services are fully insured up to €5M, providing you with complete peace of mind while we take care of your home.",
     icon: Shield,
     color: "bg-gradient-to-br from-green-500 to-teal-500",
-    category: "security"
+    category: "trust"
   },
   {
-    title: "Fast Booking",
+    title: "Fast Online Booking",
     description: "Our streamlined booking process takes just 2 minutes. Select your service, enter your location, and you're all set.",
     icon: Clock,
     color: "bg-gradient-to-br from-blue-400 to-indigo-500",
@@ -64,13 +64,62 @@ export const whyChooseUsContent = [
     description: "Every cleaner undergoes thorough background checks and training to ensure you receive the highest quality service.",
     icon: UserCheck,
     color: "bg-gradient-to-br from-indigo-500 to-purple-500",
-    category: "security"
+    category: "trust"
+  },
+  {
+    title: "Eco-Friendly Products",
+    description: "We use environmentally responsible cleaning products that are effective yet gentle on your home and the planet.",
+    icon: Leaf,
+    color: "bg-gradient-to-br from-green-400 to-emerald-600",
+    category: "quality"
+  },
+  {
+    title: "Digital Cleaning Reports",
+    description: "Receive detailed digital reports after each cleaning, documenting the work completed and any special attention areas.",
+    icon: FileText,
+    color: "bg-gradient-to-br from-blue-600 to-indigo-700",
+    category: "convenience"
+  },
+  {
+    title: "Same-Day Support",
+    description: "Get quick responses to any questions or concerns with our responsive customer service team available throughout the day.",
+    icon: MessageSquare,
+    color: "bg-gradient-to-br from-pink-500 to-rose-600",
+    category: "trust"
+  },
+  {
+    title: "Regular Cleaner Matching",
+    description: "We strive to match you with the same cleaner for recurring services, building familiarity with your home and preferences.",
+    icon: User,
+    color: "bg-gradient-to-br from-violet-500 to-purple-700",
+    category: "convenience"
+  },
+  {
+    title: "Smart Scheduling",
+    description: "Our intelligent scheduling system finds the perfect time slot that works for both you and our cleaning professionals.",
+    icon: CalendarClock,
+    color: "bg-gradient-to-br from-sky-500 to-blue-700",
+    category: "convenience"
+  },
+  {
+    title: "Equipment Provided",
+    description: "Our cleaners bring all necessary professional-grade equipment and supplies, so you don't have to worry about providing anything.",
+    icon: Briefcase,
+    color: "bg-gradient-to-br from-amber-600 to-orange-700",
+    category: "convenience"
+  },
+  {
+    title: "Service Warranty",
+    description: "All our cleaning services come with a warranty period, ensuring any issues are promptly addressed to your complete satisfaction.",
+    icon: Award,
+    color: "bg-gradient-to-br from-emerald-500 to-green-700",
+    category: "trust"
   }
 ];
 
 // Group the advantages by category for better organization
 export const advantagesByCategory = {
-  trust: whyChooseUsContent.filter(item => ['security', 'quality'].includes(item.category)),
+  trust: whyChooseUsContent.filter(item => ['trust', 'security'].includes(item.category)),
   convenience: whyChooseUsContent.filter(item => ['convenience', 'transparency'].includes(item.category)),
-  flexibility: whyChooseUsContent.filter(item => item.category === 'flexibility')
+  flexibility: whyChooseUsContent.filter(item => ['flexibility', 'quality'].includes(item.category))
 };
