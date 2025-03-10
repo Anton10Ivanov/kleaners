@@ -246,7 +246,7 @@ const Hero = ({
                     
                     {/* Postal code - 25% */}
                     <div className="w-full sm:w-1/4">
-                      <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-white-800/90 font-regular h-14 border-white/30 dark:border-blue-300 ring-offset-0 focus:ring-primary shadow-sm rounded-xl" />
+                      <Input type="text" placeholder="Your postal code/city" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="bg-white/90 dark:bg-white-800/90 font-regular h-14 border-white/30 dark:border-blue-300 ring-offset-0 focus:ring-primary shadow-sm rounded-xl border-[#08B]" />
                     </div>
                     
                     {/* Next button - 25% - Match postal code width */}
