@@ -8,7 +8,7 @@ import { SocialProof } from "./SocialProof";
 export const MobileHero = memo(() => {
   return (
     <div className="flex flex-col items-center justify-between gap-6 py-6 relative">
-      {/* Background image is now handled by BackgroundElements component */}
+      {/* Background image has been removed */}
       
       <motion.div
         initial={{ opacity: 0, y: 10 }}
