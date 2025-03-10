@@ -12,7 +12,7 @@ export const FeatureBadges = () => {
         className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium flex items-center shadow-sm border border-gray-100"
       >
         <CheckCircle2 className="w-3.5 h-3.5 text-primary mr-1.5" />
-        <span className="text-zinc-800 text-xs">Industry insurances</span>
+        <span className="text-zinc-600 text-xs">Industry insurances</span>
       </motion.div>
       
       <motion.div 
@@ -22,7 +22,7 @@ export const FeatureBadges = () => {
         className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium flex items-center shadow-sm border border-gray-100"
       >
         <CheckCircle2 className="w-3.5 h-3.5 text-primary mr-1.5" />
-        <span className="text-zinc-800 text-xs">24/6 Support</span>
+        <span className="text-zinc-600 text-xs">24/6 Support</span>
       </motion.div>
       
       <motion.div 
@@ -32,7 +32,7 @@ export const FeatureBadges = () => {
         className="px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium flex items-center shadow-sm border border-gray-100"
       >
         <CheckCircle2 className="w-3.5 h-3.5 text-primary mr-1.5" />
-        <span className="text-zinc-800 text-xs">Insured up to 5M€</span>
+        <span className="text-zinc-600 text-xs">Insured up to 5M€</span>
       </motion.div>
     </div>
   );

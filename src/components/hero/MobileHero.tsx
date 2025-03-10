@@ -44,25 +44,25 @@ export const MobileHero = ({
         transition={{ duration: 0.4 }}
         className="relative z-10 w-full text-center mb-1"
       >
-        {/* Moved customer social proof here and removed the span element */}
+        {/* Customer social proof with more subtle styling */}
         <div className="flex items-center justify-center gap-2 mb-3">
           <div className="flex -space-x-2">
             <img src="https://randomuser.me/api/portraits/women/44.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
             <img src="https://randomuser.me/api/portraits/men/86.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
             <img src="https://randomuser.me/api/portraits/women/24.jpg" className="w-7 h-7 rounded-full border-2 border-white" alt="Customer" />
           </div>
-          <span className="text-xs text-gray-600">Trusted by 2,300+ customers</span>
+          <span className="text-xs text-gray-500">Trusted by 2,300+ customers</span>
         </div>
         
         <motion.h1 
           initial={{ opacity: 0, y: 10 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5, delay: 0.1 }} 
-          className="text-3xl md:text-4xl font-bold leading-tight text-zinc-950 mb-3"
+          className="text-3xl md:text-4xl font-bold leading-tight text-zinc-800 mb-3"
         >
           We provide transparent prices.
         </motion.h1>
-        <p className="text-gray-600 text-sm md:text-base max-w-md mx-auto">
+        <p className="text-gray-500 text-sm md:text-base max-w-md mx-auto">
           Professional cleaning services tailored to your needs with clear pricing
         </p>
       </motion.div>
@@ -113,8 +113,6 @@ export const MobileHero = ({
             </Button>
           </div>
         </div>
-        
-        {/* Removed this element since it's now at the top */}
       </motion.div>
     </div>
   );
