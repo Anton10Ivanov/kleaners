@@ -70,7 +70,11 @@ export const ExperienceStep = ({
             { id: "midijob", label: "Midijob (Part-time)" },
             { id: "minijob", label: "Minijob (Mini job)" }
           ].map((type) => (
-            <div key={type.id} className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div 
+              key={type.id} 
+              className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+              onClick={() => toggleAvailability(type.id)}
+            >
               <Checkbox 
                 id={`job-type-${type.id}`} 
                 checked={availability.includes(type.id)}
@@ -79,7 +83,7 @@ export const ExperienceStep = ({
               />
               <Label 
                 htmlFor={`job-type-${type.id}`} 
-                className="text-sm font-medium cursor-pointer"
+                className="text-sm font-medium cursor-pointer flex-grow"
               >
                 {type.label}
               </Label>
@@ -126,17 +130,20 @@ export const ExperienceStep = ({
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Skills <span className="text-red-500">*</span>
         </Label>
-        <div className="grid grid-cols-1 gap-4 pt-1">
-          {["Deep Cleaning", "Commercial Cleaning", "Residential Cleaning", 
-            "Window Cleaning", "Carpet Cleaning", "Move In/Out Cleaning"].map((skill) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          {[
+            ["Deep Cleaning", "Commercial Cleaning"],
+            ["Residential Cleaning", "Window Cleaning"],
+            ["Carpet Cleaning", "Move In/Out Cleaning"]
+          ].flat().map((skill) => (
             <div 
               key={skill} 
-              className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
+              className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
               onClick={() => toggleSkill(skill)}
             >
               <Label className="text-sm font-medium cursor-pointer">{skill}</Label>
               <div className="flex items-center gap-3">
-                <span className={`text-sm ${skills.includes(skill) ? 'text-green-600' : 'text-red-500'}`}>
+                <span className={`text-xs font-medium ${skills.includes(skill) ? 'text-green-600' : 'text-red-500'}`}>
                   {skills.includes(skill) ? 'Yes' : 'No'}
                 </span>
                 <Switch 
