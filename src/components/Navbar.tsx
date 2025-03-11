@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
@@ -106,6 +105,7 @@ const Navbar = () => {
   const [currentLanguage, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<'client' | 'provider' | 'admin' | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -113,17 +113,67 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
     
-    // Check if user is logged in
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
+
+      if (user) {
+        const { data: adminData } = await supabase
+          .from('admin_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single();
+          
+        if (adminData) {
+          setUserRole('admin');
+        } else {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', user.id)
+            .single();
+            
+          if (profileData) {
+            setUserRole(profileData.user_type as 'client' | 'provider' || 'client');
+          } else {
+            setUserRole('client');
+          }
+        }
+      } else {
+        setUserRole(null);
+      }
     };
     
     checkUser();
     
-    // Set up auth state listener
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user || null);
+      
+      if (session?.user) {
+        const { data: adminData } = await supabase
+          .from('admin_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .single();
+          
+        if (adminData) {
+          setUserRole('admin');
+        } else {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', session.user.id)
+            .single();
+            
+          if (profileData) {
+            setUserRole(profileData.user_type as 'client' | 'provider' || 'client');
+          } else {
+            setUserRole('client');
+          }
+        }
+      } else {
+        setUserRole(null);
+      }
     });
     
     return () => {
@@ -201,6 +251,7 @@ const Navbar = () => {
         setIsMobileServicesOpen={setIsMobileServicesOpen} 
         currentLanguage={currentLanguage} 
         onLanguageChange={toggleLanguage} 
+        userRole={userRole}
       />
     </NavbarContainer>
   );

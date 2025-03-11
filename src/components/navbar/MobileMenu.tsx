@@ -56,6 +56,9 @@ interface MobileMenuProps {
   currentLanguage?: 'en' | 'de';
   onLanguageChange?: () => void;
   isAdmin?: boolean;
+  isProvider?: boolean;
+  isClient?: boolean;
+  userRole?: 'admin' | 'provider' | 'client' | null;
 }
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({
@@ -65,8 +68,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   setIsMobileServicesOpen,
   currentLanguage = 'en',
   onLanguageChange = () => {},
-  isAdmin = false
+  userRole = null
 }) => {
+  const isAdmin = userRole === 'admin';
+  const isProvider = userRole === 'provider';
+  const isClient = userRole === 'client' || (!userRole && isOpen); // Default to client if no role
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent side="right" className="w-[300px] sm:w-[350px] overflow-y-auto p-4">
@@ -85,11 +92,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             onLanguageChange={onLanguageChange}
           />
 
-          {/* Role-based sections with improved UI */}
+          {/* Role-based sections with conditional rendering */}
           <div className="space-y-6">
-            <ClientSection />
-            <ProviderSection />
-            <AdminSection setIsOpen={setIsOpen} />
+            {isClient && <ClientSection />}
+            {isProvider && <ProviderSection />}
+            {isAdmin && <AdminSection setIsOpen={setIsOpen} />}
             <NavigationSection navigationData={navigationData} />
             <LogoutButton setIsOpen={setIsOpen} />
           </div>
