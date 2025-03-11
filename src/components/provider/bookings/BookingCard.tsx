@@ -1,8 +1,9 @@
 
 import { format } from "date-fns";
-import { CalendarIcon, Clock, MapPin } from "lucide-react";
+import { CalendarIcon, Clock, MapPin, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface BookingCardProps {
@@ -32,19 +33,34 @@ const BookingCard = ({
   selected = false,
   onClick,
 }: BookingCardProps) => {
+  const isToday = booking.date && new Date(booking.date).toDateString() === new Date().toDateString();
+  const isPending = 'isConfirmationPending' in booking && booking.isConfirmationPending;
+
   return (
     <Card 
       className={cn(
-        "hover:shadow-md transition-shadow cursor-pointer", 
-        selected && "border-2 border-primary"
+        "hover:shadow-md transition-shadow cursor-pointer overflow-hidden", 
+        selected && "border-2 border-primary",
+        isToday && "border-l-4 border-l-blue-500"
       )}
       onClick={onClick}
     >
+      {isPending && (
+        <div className="bg-amber-50 py-1.5 px-4 border-b border-amber-100">
+          <div className="flex items-center text-xs text-amber-700">
+            <AlertCircle className="h-3.5 w-3.5 mr-1.5" />
+            Needs confirmation
+          </div>
+        </div>
+      )}
+      
       <CardContent className="p-4">
         <div className="space-y-2">
           <div className="flex justify-between">
             <h3 className="font-medium">{booking.clientName}</h3>
-            <span className="text-sm font-medium">{booking.service}</span>
+            <Badge variant={isToday ? "default" : "outline"} className={isToday ? "bg-blue-500" : ""}>
+              {booking.service}
+            </Badge>
           </div>
           
           <div className="flex items-start text-sm text-muted-foreground">
@@ -56,7 +72,8 @@ const BookingCard = ({
             <div className="flex items-center">
               <CalendarIcon className="h-4 w-4 mr-1" />
               <span>
-                {booking.date ? format(booking.date, "MMM dd, yyyy") : "TBD"}
+                {booking.date ? format(new Date(booking.date), "MMM dd, yyyy") : "TBD"}
+                {isToday && <span className="ml-1 text-blue-500 font-medium">Today</span>}
               </span>
             </div>
             <div className="flex items-center">
