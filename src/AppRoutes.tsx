@@ -99,15 +99,15 @@ const AppRoutes = () => {
       ]
     },
     {
-      path: "/user",
-      component: "UserLayout",
-      description: "Customer portal wrapper",
+      path: "/client",
+      component: "ClientLayout",
+      description: "Client portal wrapper",
       children: [
-        { path: "/user/dashboard", component: "UserDashboard", description: "Customer dashboard" },
-        { path: "/user/bookings", component: "UserBookings", description: "Customer bookings" },
-        { path: "/user/messages", component: "UserMessages", description: "Customer messages" },
-        { path: "/user/invoices", component: "UserInvoices", description: "Customer invoices" },
-        { path: "/user/profile", component: "UserProfile", description: "Customer profile" },
+        { path: "/client/dashboard", component: "ClientDashboard", description: "Client dashboard" },
+        { path: "/client/bookings", component: "ClientBookings", description: "Client bookings" },
+        { path: "/client/messages", component: "ClientMessages", description: "Client messages" },
+        { path: "/client/invoices", component: "ClientInvoices", description: "Client invoices" },
+        { path: "/client/profile", component: "ClientProfile", description: "Client profile" },
       ]
     },
     {
@@ -159,7 +159,7 @@ const AppRoutes = () => {
               <div>
                 <h3 className="text-sm font-medium mb-2">Protected Routes</h3>
                 <p className="text-sm text-muted-foreground">
-                  Routes that require authentication, like user dashboard, provider bookings, and admin panel.
+                  Routes that require authentication, like client dashboard, provider bookings, and admin panel.
                 </p>
               </div>
             </div>

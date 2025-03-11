@@ -40,7 +40,7 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       
       {/* Dashboard based on role */}
       {userRole === 'client' && (
-        <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
+        <DropdownMenuItem onClick={() => navigate('/client/dashboard')}>
           <LayoutDashboard className="mr-2 h-4 w-4" />
           <span>Client Dashboard</span>
         </DropdownMenuItem>
@@ -55,7 +55,7 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       
       {/* Role-specific functionality */}
       {userRole === 'client' && (
-        <DropdownMenuItem onClick={() => navigate('/user/bookings')}>
+        <DropdownMenuItem onClick={() => navigate('/client/bookings')}>
           <Calendar className="mr-2 h-4 w-4" />
           <span>My Bookings</span>
         </DropdownMenuItem>
@@ -77,12 +77,12 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       )}
       
       {/* Common functionality for all users */}
-      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/profile' : '/user/profile')}>
+      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/profile' : '/client/profile')}>
         <User className="mr-2 h-4 w-4" />
         <span>Profile</span>
       </DropdownMenuItem>
       
-      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/settings' : '/user/settings')}>
+      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/settings' : '/client/settings')}>
         <Settings className="mr-2 h-4 w-4" />
         <span>Settings</span>
       </DropdownMenuItem>

@@ -13,19 +13,19 @@ const ClientSection: React.FC = () => {
       </h3>
       <div className="space-y-2 pl-2">
         <SheetClose asChild>
-          <Link to="/user/bookings" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
+          <Link to="/client/bookings" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
             <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground" />
             <span>My Bookings</span>
           </Link>
         </SheetClose>
         <SheetClose asChild>
-          <Link to="/user/messages" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
+          <Link to="/client/messages" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
             <MessageSquare className="mr-2 h-4 w-4 text-muted-foreground" />
             <span>Messages</span>
           </Link>
         </SheetClose>
         <SheetClose asChild>
-          <Link to="/user/profile" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
+          <Link to="/client/profile" className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors">
             <Settings className="mr-2 h-4 w-4 text-muted-foreground" />
             <span>Profile Settings</span>
           </Link>
