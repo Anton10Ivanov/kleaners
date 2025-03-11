@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MapPin, Plus, LoaderCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ServiceAreaFormValues } from '@/types/serviceAreas';
@@ -66,13 +66,14 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
               </Label>
               <span className="text-sm font-medium text-primary">{travelDistance} km</span>
             </div>
-            <Slider
+            <Input
               id="travelDistance"
+              type="range"
               min={1}
               max={50}
               step={1}
-              value={[travelDistance]}
-              onValueChange={(value) => setTravelDistance(value[0])}
+              value={travelDistance}
+              onChange={(e) => setTravelDistance(parseInt(e.target.value))}
               className="py-2"
             />
           </div>
