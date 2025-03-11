@@ -5,7 +5,7 @@ import { Box } from '@/components/layout/Box';
 import { useToast } from '@/hooks/use-toast';
 import ChatInterface from '@/components/chat/ChatInterface';
 import ConversationList from '@/components/chat/ConversationList';
-import { createConversation } from '@/utils/chat';
+import { createConversation } from '@/utils/chatUtils';
 
 const ClientMessages = () => {
   const { toast } = useToast();
