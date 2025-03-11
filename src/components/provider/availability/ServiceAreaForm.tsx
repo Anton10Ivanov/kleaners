@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MapPin, Plus, LoaderCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
+import { Slider } from "@/components/ui/slider";
 import { toast } from 'sonner';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { ServiceAreaFormValues } from '@/hooks/useServiceAreas';
 
 interface ServiceAreaFormProps {
-  onSubmit: (postalCode: string, travelDistance: number) => void;
+  onSubmit: (values: ServiceAreaFormValues) => Promise<boolean>;
   loading: boolean;
 }
 
@@ -21,16 +22,18 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
   const [travelDistance, setTravelDistance] = useState(15);
   const isMobile = useMediaQuery("(max-width: 640px)");
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
     if (!postalCode.trim()) {
       toast.error('Please enter a postal code');
       return;
     }
     
-    onSubmit(postalCode, travelDistance);
+    await onSubmit({
+      postal_code: postalCode,
+      travel_distance: travelDistance
+    });
     setPostalCode('');
   };
   

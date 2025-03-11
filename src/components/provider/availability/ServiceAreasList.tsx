@@ -5,17 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Trash2, MapPin, LoaderCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '@/hooks/use-media-query';
-
-interface ServiceArea {
-  id: string;
-  postalCode: string;
-  city: string;
-  travelDistance: number;
-}
+import { ServiceArea } from '@/hooks/useServiceAreas';
 
 interface ServiceAreasListProps {
   serviceAreas: ServiceArea[];
-  onRemove: (id: string) => void;
+  onRemove: (id: string) => Promise<boolean>;
   loading: boolean;
 }
 
@@ -63,7 +57,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
               <div className="flex flex-col gap-1">
                 <div className="flex items-start justify-between">
                   <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 font-medium">
-                    {area.postalCode}
+                    {area.postal_code}
                   </Badge>
                   
                   <Button 
@@ -79,7 +73,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
                 <div className="mt-1">
                   <p className="font-medium">{area.city}</p>
                   <p className="text-xs text-muted-foreground">
-                    Travel up to {area.travelDistance} km
+                    Travel up to {area.travel_distance} km
                   </p>
                 </div>
               </div>
