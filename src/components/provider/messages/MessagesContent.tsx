@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import ChatInterface from '@/components/chat/ChatInterface';
 import { Button } from '@/components/ui/button';
 import { MessageSquarePlus } from 'lucide-react';
+import { Box } from '@/components/layout/Box';
 
 interface MessagesContentProps {
   selectedConversation: {
@@ -29,7 +30,7 @@ const MessagesContent = ({
           recipientName={selectedConversation.participantName}
         />
       ) : (
-        <div className="h-full flex items-center justify-center p-4">
+        <Box className="h-full flex items-center justify-center p-4">
           <div className="text-center max-w-md mx-auto">
             <div className="mb-4 bg-primary/10 h-16 w-16 rounded-full flex items-center justify-center mx-auto">
               <MessageSquarePlus className="h-8 w-8 text-primary" />
@@ -45,7 +46,7 @@ const MessagesContent = ({
               Start new conversation
             </Button>
           </div>
-        </div>
+        </Box>
       )}
     </Card>
   );
