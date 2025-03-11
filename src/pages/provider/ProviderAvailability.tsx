@@ -20,8 +20,6 @@ const ProviderAvailability = () => {
   const {
     availableDays,
     timeRanges,
-    addTimeRange,
-    removeTimeRange,
     updateTimeRange,
     toggleDayAvailability,
     saveAvailability,
@@ -104,10 +102,7 @@ const ProviderAvailability = () => {
                   availableDays={availableDays}
                   timeRanges={timeRanges}
                   toggleDayAvailability={toggleDayAvailability}
-                  addTimeRange={addTimeRange}
-                  removeTimeRange={removeTimeRange}
                   updateTimeRange={updateTimeRange}
-                  saveAvailability={saveAvailability}
                 />
               </CardContent>
             </Card>
