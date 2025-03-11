@@ -18,4 +18,5 @@ export type SortOrder = "asc" | "desc";
 // Define the Booking type to include provider_id and ensure it matches the database structure
 export type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
   provider_id?: string;
+  time_slot?: string; // Add time_slot property to fix the type error
 };

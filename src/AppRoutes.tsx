@@ -17,8 +17,8 @@ import ProviderSettings from '@/pages/provider/ProviderSettings';
 import AdminLayout from '@/components/admin/AdminLayout';
 import Dashboard from '@/pages/admin/Dashboard';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
-import { Customers } from '@/pages/admin/Customers';
-import { Providers } from '@/pages/admin/Providers';
+import { AdminCustomers } from '@/pages/admin/AdminCustomers';
+import { AdminProviders } from '@/pages/admin/AdminProviders';
 // Import the new pending bookings pool page
 import { AdminPendingBookingsPool } from './pages/admin/PendingBookingsPool';
 
@@ -60,8 +60,8 @@ const AppRoutes = () => {
         <Route index element={<Dashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="pending-pool" element={<AdminPendingBookingsPool />} />
-        <Route path="customers" element={<Customers />} />
-        <Route path="providers" element={<Providers />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="providers" element={<AdminProviders />} />
       </Route>
       
       {/* Default Route */}
