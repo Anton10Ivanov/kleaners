@@ -10,13 +10,7 @@ interface BookingDetailsCardProps {
 
 const BookingDetailsCard = ({ selectedBooking, onClose }: BookingDetailsCardProps) => {
   if (!selectedBooking) {
-    return (
-      <Card className="p-4 md:p-6 h-full flex flex-col items-center justify-center text-center shadow-sm">
-        <Info className="h-10 w-10 text-muted-foreground mb-4 opacity-50" />
-        <h3 className="text-lg font-medium mb-2">Booking Details</h3>
-        <p className="text-sm text-muted-foreground mb-4">Select a booking to view details</p>
-      </Card>
-    );
+    return null;
   }
 
   return (
