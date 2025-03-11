@@ -6,6 +6,7 @@ export interface Message {
   content: string;
   timestamp: string;
   read: boolean;
+  status?: 'sending' | 'sent' | 'delivered' | 'read';
   attachments?: FileAttachment[];
 }
 
@@ -14,6 +15,10 @@ export interface Conversation {
   participants: string[];
   lastMessage?: Message;
   unreadCount: number;
+  participant?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface FileAttachment {

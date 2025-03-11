@@ -25,16 +25,7 @@ export const markMessagesAsRead = async (conversationId: string, userId: string)
   console.log('Marking messages as read', { conversationId, userId });
 };
 
-export const getConversation = async (conversationId: string): Promise<Conversation> => {
-  // Mock implementation
-  return {
-    id: conversationId,
-    participants: [],
-    unreadCount: 0
-  };
-};
-
-export const loadMessages = async (conversationId: string): Promise<Message[]> => {
+export const getConversation = async (conversationId: string): Promise<Message[]> => {
   // Mock implementation
   return [];
 };
@@ -46,10 +37,11 @@ export const getUnreadMessageCount = async (userId: string): Promise<number> => 
 
 export const uploadAttachments = async (files: File[]): Promise<FileAttachment[]> => {
   // Mock implementation
-  return [];
-};
-
-export const useTypingIndicator = (conversationId: string) => {
-  // Mock implementation
-  return { isTyping: false };
+  return files.map(file => ({
+    id: `att-${Math.random()}`,
+    name: file.name,
+    url: URL.createObjectURL(file),
+    type: file.type,
+    size: file.size
+  }));
 };

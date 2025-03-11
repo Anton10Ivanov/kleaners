@@ -22,26 +22,17 @@ const ChatInterface = ({
   const { messages, isLoading, isTyping, sendMessage } = useChat(
     conversationId,
     userId,
-    recipientId,
-    recipientName
+    recipientId
   );
   
-  // Mark messages as read when the chat interface is opened
   useEffect(() => {
     if (messages.length > 0) {
-      const unreadMessageIds = messages
-        .filter(msg => msg.sender_id === recipientId && !msg.is_read)
-        .map(msg => msg.id);
-        
-      if (unreadMessageIds.length > 0) {
-        markMessagesAsRead(unreadMessageIds).catch(console.error);
-      }
+      markMessagesAsRead(conversationId, userId);
     }
-  }, [messages, recipientId]);
+  }, [messages, conversationId, userId]);
   
   return (
     <Box className="flex flex-col h-full border rounded-md overflow-hidden">
-      {/* Messages container */}
       <div className="flex-1 overflow-y-auto p-4">
         <MessageList 
           messages={messages} 
@@ -51,7 +42,6 @@ const ChatInterface = ({
         />
       </div>
       
-      {/* Input area */}
       <MessageInput onSendMessage={sendMessage} isLoading={isLoading} />
     </Box>
   );
