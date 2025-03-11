@@ -39,14 +39,16 @@ export const PersonalInfoStep = ({
     
     return (
       <div className="space-y-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <FormLabel className="text-base font-semibold">Contact Information</FormLabel>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <TooltipIndicator />
+                <span>
+                  <TooltipIndicator />
+                </span>
               </TooltipTrigger>
-              <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+              <TooltipContent side="right" className="bg-primary text-primary-foreground border border-primary/60 p-2 text-sm max-w-xs">
                 <p>Please provide your contact details so we can reach you</p>
               </TooltipContent>
             </Tooltip>
@@ -116,16 +118,18 @@ export const PersonalInfoStep = ({
   // If using direct state management (for JoinTeam.tsx)
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1">
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Contact Information
         </Label>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <TooltipIndicator />
+              <span>
+                <TooltipIndicator />
+              </span>
             </TooltipTrigger>
-            <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+            <TooltipContent side="right" className="bg-primary text-primary-foreground border border-primary/60 p-2 text-sm max-w-xs">
               <p>Please provide your contact details so we can reach you</p>
             </TooltipContent>
           </Tooltip>
