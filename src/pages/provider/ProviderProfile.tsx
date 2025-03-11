@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ErrorBoundary } from "react-error-boundary";
 import { Separator } from "@/components/ui/separator";
 import { useTitle } from "@/hooks/useTitle";
-import { FileText, Mail, Phone, User, Award, Briefcase, Clock, MapPin, CreditCard, ArrowRight } from "lucide-react";
+import { FileText, Mail, Phone, User, Award, Briefcase, Clock, MapPin, CreditCard, ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -254,7 +254,7 @@ const ProviderProfile = () => {
                       <div className="pt-3">
                         <p className="text-gray-500 text-sm mb-3">No payment information has been added yet</p>
                         <Button variant="outline" size="sm" asChild>
-                          <Link to="/provider/settings" className="flex items-center gap-1">
+                          <Link to="/provider/settings?tab=payment" className="flex items-center gap-1">
                             Add payment information <ArrowRight className="h-4 w-4" />
                           </Link>
                         </Button>
@@ -302,16 +302,25 @@ const ProviderProfile = () => {
                       Availability
                     </h2>
                     <Separator />
-                    <div className="flex flex-wrap gap-2 pt-3">
-                      {availability.length > 0 ? (
-                        availability.map((time, index) => (
-                          <Badge key={index} variant="outline" className="px-3 py-1 text-sm">
-                            {time}
-                          </Badge>
-                        ))
-                      ) : (
-                        <p className="text-gray-500 text-sm">No availability information</p>
-                      )}
+                    <div className="pt-3">
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-wrap gap-2">
+                          {availability.length > 0 ? (
+                            availability.map((time, index) => (
+                              <Badge key={index} variant="outline" className="px-3 py-1 text-sm">
+                                {time}
+                              </Badge>
+                            ))
+                          ) : (
+                            <p className="text-gray-500 text-sm mb-3">No availability information</p>
+                          )}
+                        </div>
+                        <Button variant="outline" size="sm" asChild className="self-start">
+                          <Link to="/provider/availability" className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" /> Manage availability
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   
