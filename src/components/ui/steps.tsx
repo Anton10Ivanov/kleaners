@@ -1,11 +1,15 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { CheckCircle } from "lucide-react";
+
+type StepStatus = "complete" | "incomplete" | "current" | "waiting";
 
 interface StepProps {
   title: string;
   icon?: React.ReactNode;
   className?: string;
+  status?: StepStatus;
 }
 
 interface StepsProps {
@@ -14,7 +18,7 @@ interface StepsProps {
   className?: string;
 }
 
-export const Step = ({ title, icon, className }: StepProps) => {
+export const Step = ({ title, icon, className, status }: StepProps) => {
   // This component doesn't render anything on its own
   // It's used to define the structure of the steps
   return null;
@@ -34,6 +38,7 @@ export const Steps = ({ currentStep, children, className }: StepsProps) => {
           const stepProps = (step as React.ReactElement).props;
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
+          const status = stepProps.status || (isCompleted ? "complete" : isCurrent ? "current" : "waiting");
           
           return (
             <div 
@@ -44,13 +49,16 @@ export const Steps = ({ currentStep, children, className }: StepsProps) => {
               {/* Step Circle */}
               <div
                 className={cn(
-                  "flex items-center justify-center rounded-full w-8 h-8 z-10 transition-colors",
-                  isCompleted ? "bg-primary text-primary-foreground" :
-                  isCurrent ? "bg-primary/90 text-primary-foreground" : 
+                  "flex items-center justify-center rounded-full w-8 h-8 z-10 transition-all duration-200",
+                  status === "complete" ? "bg-green-600 text-white" :
+                  status === "current" ? "bg-primary text-primary-foreground ring-2 ring-primary/30" : 
+                  status === "incomplete" && isCurrent ? "bg-amber-100 border border-amber-300 text-amber-600" :
                   "bg-muted border border-muted-foreground/20"
                 )}
               >
-                {stepProps.icon || (isCompleted ? index + 1 : index + 1)}
+                {status === "complete" ? (
+                  <CheckCircle className="h-5 w-5" />
+                ) : stepProps.icon || (index + 1)}
               </div>
               
               {/* Step Title */}
@@ -58,8 +66,9 @@ export const Steps = ({ currentStep, children, className }: StepsProps) => {
                 <span 
                   className={cn(
                     "font-medium",
-                    isCurrent ? "text-primary" : 
-                    isCompleted ? "text-muted-foreground" : 
+                    status === "complete" ? "text-green-600" :
+                    status === "current" ? "text-primary" : 
+                    status === "incomplete" && isCurrent ? "text-amber-600" :
                     "text-muted-foreground/60"
                   )}
                 >
@@ -75,8 +84,10 @@ export const Steps = ({ currentStep, children, className }: StepsProps) => {
                 >
                   <div 
                     className={cn(
-                      "h-full",
-                      isCompleted ? "bg-primary" : "bg-muted-foreground/20"
+                      "h-full transition-colors duration-300",
+                      status === "complete" ? "bg-green-600" :
+                      isCurrent ? "bg-gradient-to-r from-green-600 to-muted-foreground/20" : 
+                      "bg-muted-foreground/20"
                     )}
                   ></div>
                 </div>

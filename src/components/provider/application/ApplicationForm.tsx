@@ -1,12 +1,14 @@
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Steps, Step } from '@/components/ui/steps';
-import { UserPlus, FileText, CheckCheck, CheckCircle } from 'lucide-react';
+import { UserPlus, FileText, CheckCheck, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { PersonalInfoStep } from '@/components/provider/application/PersonalInfoStep';
 import { ExperienceStep } from '@/components/provider/application/ExperienceStep';
 import { DocumentsStep } from '@/components/provider/application/DocumentsStep';
 import { ConfirmationStep } from '@/components/provider/application/ConfirmationStep';
 import { ApplicationStep } from '@/hooks/useJoinTeamForm';
+import { useState, useEffect } from 'react';
 
 interface ApplicationFormProps {
   currentStep: ApplicationStep;
@@ -77,6 +79,40 @@ export const ApplicationForm = ({
   prevStep,
   handleSubmit
 }: ApplicationFormProps) => {
+  // State to track validation and form completeness
+  const [stepValidations, setStepValidations] = useState({
+    [ApplicationStep.PERSONAL_INFO]: false,
+    [ApplicationStep.EXPERIENCE]: false,
+    [ApplicationStep.DOCUMENTS]: false,
+    [ApplicationStep.CONFIRMATION]: true
+  });
+
+  // Validate Personal Info step
+  useEffect(() => {
+    const isPersonalInfoValid = name.trim() !== '' && 
+                                email.trim() !== '' && 
+                                email.includes('@') && 
+                                phone.trim() !== '';
+    
+    setStepValidations(prev => ({...prev, [ApplicationStep.PERSONAL_INFO]: isPersonalInfoValid}));
+  }, [name, email, phone]);
+
+  // Validate Experience step
+  useEffect(() => {
+    const isExperienceValid = position !== '' && 
+                             experience !== '' && 
+                             availability.length > 0 && 
+                             skills.length > 0;
+    
+    setStepValidations(prev => ({...prev, [ApplicationStep.EXPERIENCE]: isExperienceValid}));
+  }, [position, experience, availability, skills]);
+
+  // Validate Documents step
+  useEffect(() => {
+    const isDocumentsValid = agreeToTerms && agreeToBackgroundCheck && agreeToTraining;
+    
+    setStepValidations(prev => ({...prev, [ApplicationStep.DOCUMENTS]: isDocumentsValid}));
+  }, [agreeToTerms, agreeToBackgroundCheck, agreeToTraining]);
   
   const renderStepContent = () => {
     switch (currentStep) {
@@ -148,33 +184,48 @@ export const ApplicationForm = ({
     agreeToBackgroundCheck && 
     agreeToTraining;
 
+  const isStepComplete = () => {
+    return stepValidations[currentStep];
+  };
+
   const isNextButtonDisabled = () => {
     if (isLoading) return true;
-    
-    if (currentStep === ApplicationStep.DOCUMENTS) {
-      return !isDocumentsStepComplete;
-    }
-    
-    return false;
+    return !isStepComplete();
   };
 
   return (
     <Card className="border-0 shadow-md w-full">
-      <CardHeader className="px-4 sm:px-6">
+      <CardHeader className="px-4 sm:px-6 pb-0">
         <CardTitle>Provider Application</CardTitle>
         <CardDescription>Step {currentStep + 1} of 4</CardDescription>
       </CardHeader>
       
-      <div className="px-4 sm:px-6 pt-2 pb-4 overflow-x-auto">
+      <div className="px-4 sm:px-6 pt-4 pb-2 overflow-x-auto">
         <Steps currentStep={currentStep} className="mb-6 min-w-[400px]">
-          <Step icon={<UserPlus className="h-4 w-4" />} title="Personal Info" />
-          <Step icon={<CheckCircle className="h-4 w-4" />} title="Experience" />
-          <Step icon={<FileText className="h-4 w-4" />} title="Documents" />
-          <Step icon={<CheckCheck className="h-4 w-4" />} title="Review" />
+          <Step 
+            icon={<UserPlus className="h-4 w-4" />} 
+            title="Personal Info" 
+            status={stepValidations[ApplicationStep.PERSONAL_INFO] ? "complete" : "incomplete"}
+          />
+          <Step 
+            icon={<CheckCircle className="h-4 w-4" />} 
+            title="Experience" 
+            status={stepValidations[ApplicationStep.EXPERIENCE] ? "complete" : "incomplete"}
+          />
+          <Step 
+            icon={<FileText className="h-4 w-4" />} 
+            title="Documents" 
+            status={stepValidations[ApplicationStep.DOCUMENTS] ? "complete" : "incomplete"}
+          />
+          <Step 
+            icon={<CheckCheck className="h-4 w-4" />} 
+            title="Review" 
+            status="waiting"
+          />
         </Steps>
       </div>
       
-      <CardContent className="px-4 sm:px-6">
+      <CardContent className="px-4 sm:px-6 pt-2 pb-4">
         {renderStepContent()}
       </CardContent>
       
@@ -183,15 +234,23 @@ export const ApplicationForm = ({
           variant="outline"
           onClick={prevStep}
           disabled={currentStep === ApplicationStep.PERSONAL_INFO || isLoading}
+          className="flex items-center gap-1"
         >
+          <ArrowLeft className="h-4 w-4" />
           Previous
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isNextButtonDisabled()}
+          className="flex items-center gap-1"
         >
           {isLoading ? "Submitting..." : 
-            currentStep === ApplicationStep.CONFIRMATION ? "Submit Application" : "Next Step"}
+            currentStep === ApplicationStep.CONFIRMATION ? (
+              <>Submit Application</>
+            ) : (
+              <>Next Step<ArrowRight className="h-4 w-4" /></>
+            )
+          }
         </Button>
       </CardFooter>
     </Card>
