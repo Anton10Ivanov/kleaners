@@ -18,7 +18,7 @@ export const EmploymentTypeSection: React.FC<EmploymentTypeSectionProps> = ({
     <div className="space-y-3">
       <div className="flex items-center space-x-2">
         <Label htmlFor="employment-type" className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Employment Type <span className="text-red-500">*</span>
+          Employment Type
         </Label>
         <TooltipProvider>
           <Tooltip>

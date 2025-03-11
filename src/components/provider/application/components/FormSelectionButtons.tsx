@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Info } from 'lucide-react';
 
 interface SelectionButtonsProps {
   value: boolean;
@@ -41,5 +42,7 @@ export const SelectionButtons: React.FC<SelectionButtonsProps> = ({
 };
 
 export const TooltipIndicator: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={`inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help ${className}`}>?</div>
+  <div className={`inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help hover:bg-gray-500 transition-colors ${className}`}>
+    <Info className="h-3 w-3" />
+  </div>
 );

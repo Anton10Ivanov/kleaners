@@ -2,6 +2,8 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { TooltipIndicator } from './FormSelectionButtons';
 
 interface AvailabilitySectionProps {
   availability: string[];
@@ -16,9 +18,21 @@ export const AvailabilitySection: React.FC<AvailabilitySectionProps> = ({
   
   return (
     <div className="space-y-3">
-      <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-        Availability <span className="text-red-500">*</span>
-      </Label>
+      <div className="flex items-center space-x-2">
+        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
+          Availability
+        </Label>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <TooltipIndicator />
+            </TooltipTrigger>
+            <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+              <p>Select all days when you would be available to work</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
         {days.map((day) => (
           <div 
@@ -44,9 +58,6 @@ export const AvailabilitySection: React.FC<AvailabilitySectionProps> = ({
           </div>
         ))}
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-        Select all days when you would be available to work
-      </p>
     </div>
   );
 };

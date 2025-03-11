@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { TooltipIndicator } from './FormSelectionButtons';
 
 interface SkillsSectionProps {
   skills: string[];
@@ -16,9 +18,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, toggleSkil
   
   return (
     <div className="space-y-3">
-      <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-        My Skills or Interests of Work <span className="text-red-500">*</span>
-      </Label>
+      <div className="flex items-center space-x-2">
+        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
+          My Skills or Interests of Work
+        </Label>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <TooltipIndicator />
+            </TooltipTrigger>
+            <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+              <p>Select all cleaning skills that you possess or are interested in</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
         {skillsList.map((row, rowIndex) => (
           <React.Fragment key={`row-${rowIndex}`}>
@@ -63,9 +77,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, toggleSkil
           </React.Fragment>
         ))}
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-        Select all cleaning skills that you possess or are interested in
-      </p>
     </div>
   );
 };

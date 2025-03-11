@@ -3,6 +3,8 @@ import { UseFormReturn } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { TooltipIndicator } from './components/FormSelectionButtons';
 
 interface PersonalInfoFormValues {
   name: string;
@@ -37,12 +39,26 @@ export const PersonalInfoStep = ({
     
     return (
       <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <FormLabel className="text-base font-semibold">Contact Information</FormLabel>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TooltipIndicator />
+              </TooltipTrigger>
+              <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+                <p>Please provide your contact details so we can reach you</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        
         <FormField
           control={control}
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-2">
-              <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -61,7 +77,7 @@ export const PersonalInfoStep = ({
             name="email"
             render={({ field }) => (
               <FormItem className="space-y-2">
-                <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -79,7 +95,7 @@ export const PersonalInfoStep = ({
             name="phone"
             render={({ field }) => (
               <FormItem className="space-y-2">
-                <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Phone Number</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -100,8 +116,24 @@ export const PersonalInfoStep = ({
   // If using direct state management (for JoinTeam.tsx)
   return (
     <div className="space-y-4">
+      <div className="flex items-center space-x-2">
+        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
+          Contact Information
+        </Label>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <TooltipIndicator />
+            </TooltipTrigger>
+            <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+              <p>Please provide your contact details so we can reach you</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+      
       <div className="space-y-2">
-        <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
+        <Label htmlFor="name">Full Name</Label>
         <Input
           id="name"
           value={name}
@@ -113,7 +145,7 @@ export const PersonalInfoStep = ({
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
@@ -124,7 +156,7 @@ export const PersonalInfoStep = ({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
+          <Label htmlFor="phone">Phone Number</Label>
           <Input
             id="phone"
             type="tel"
