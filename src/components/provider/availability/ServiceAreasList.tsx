@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Trash2, MapPin, LoaderCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { ServiceArea } from '@/hooks/useServiceAreas';
+import { ServiceArea } from '@/types/serviceAreas';
 
 interface ServiceAreasListProps {
   serviceAreas: ServiceArea[];
@@ -71,7 +71,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
                 </div>
                 
                 <div className="mt-1">
-                  <p className="font-medium">{area.city}</p>
+                  {area.city && <p className="font-medium">{area.city}</p>}
                   <p className="text-xs text-muted-foreground">
                     Travel up to {area.travel_distance} km
                   </p>

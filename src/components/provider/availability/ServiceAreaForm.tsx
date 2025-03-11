@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from "@/components/ui/slider";
 import { toast } from 'sonner';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { ServiceAreaFormValues } from '@/hooks/useServiceAreas';
+import { ServiceAreaFormValues } from '@/types/serviceAreas';
 
 interface ServiceAreaFormProps {
   onSubmit: (values: ServiceAreaFormValues) => Promise<boolean>;

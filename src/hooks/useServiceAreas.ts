@@ -1,20 +1,11 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { ServiceArea, ServiceAreaFormValues } from '@/types/serviceAreas';
+import { fetchServiceAreas as fetchAreas, addServiceArea as addArea, removeServiceArea as removeArea } from '@/services/serviceAreasService';
 
-export interface ServiceArea {
-  id: string;
-  provider_id: string;
-  postal_code: string;
-  travel_distance: number;
-  created_at: string;
-}
-
-export interface ServiceAreaFormValues {
-  postal_code: string;
-  travel_distance: number;
-}
+// Re-export the types for backward compatibility
+export type { ServiceArea, ServiceAreaFormValues };
 
 export const useServiceAreas = () => {
   const [serviceAreas, setServiceAreas] = useState<ServiceArea[]>([]);
@@ -23,23 +14,8 @@ export const useServiceAreas = () => {
   const fetchServiceAreas = async () => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast.error("User not found, please login again");
-        return;
-      }
-      
-      const { data: areasData, error: areasError } = await supabase
-        .from('provider_service_areas')
-        .select('*')
-        .eq('provider_id', user.id);
-        
-      if (!areasError && areasData) {
-        setServiceAreas(areasData);
-      } else if (areasError) {
-        console.error("Error fetching service areas:", areasError);
-      }
+      const areasData = await fetchAreas();
+      setServiceAreas(areasData);
     } catch (error) {
       console.error("Error fetching service areas:", error);
       toast.error("Failed to load service areas");
@@ -51,25 +27,7 @@ export const useServiceAreas = () => {
   const addServiceArea = async (values: ServiceAreaFormValues) => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast.error("User not found, please login again");
-        return;
-      }
-      
-      const { error } = await supabase
-        .from('provider_service_areas')
-        .insert({
-          provider_id: user.id,
-          postal_code: values.postal_code,
-          travel_distance: values.travel_distance,
-        });
-        
-      if (error) {
-        throw error;
-      }
-      
+      await addArea(values);
       toast.success("Service area added");
       await fetchServiceAreas();
       return true;
@@ -85,15 +43,7 @@ export const useServiceAreas = () => {
   const removeServiceArea = async (id: string) => {
     try {
       setLoading(true);
-      const { error } = await supabase
-        .from('provider_service_areas')
-        .delete()
-        .eq('id', id);
-        
-      if (error) {
-        throw error;
-      }
-      
+      await removeArea(id);
       toast.success("Service area removed");
       await fetchServiceAreas();
       return true;
