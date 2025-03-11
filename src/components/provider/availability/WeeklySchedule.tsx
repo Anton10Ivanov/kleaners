@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { generateTimeOptions, isTimeBeforeStart } from '../../../utils/timeUtils';
 import { UseFormReturn } from 'react-hook-form';
 import { DaysAvailability } from '@/hooks/useProviderAvailability';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface TimeRange {
   id: number;
@@ -37,21 +38,20 @@ export const WeeklySchedule = ({
   updateTimeRange,
   saveAvailability
 }: WeeklyScheduleProps) => {
-  // Array of weekdays excluding Sunday, grouped into pairs for the layout
-  const weekdayGroups = [
-    ['monday', 'tuesday'],
-    ['wednesday', 'thursday'],
-    ['friday', 'saturday']
-  ];
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  
+  // Array of weekdays excluding Sunday
+  const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
   return (
     <Form {...form}>
       <div className="space-y-4">
-        {weekdayGroups.map((dayGroup, groupIndex) => (
-          <div key={groupIndex} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayGroup.map((day) => (
-              <div key={day} className="p-4 border rounded-lg bg-card">
-                <div className="flex items-center justify-between mb-4">
+        {/* Mobile view - Single column */}
+        {isMobile && (
+          <div className="grid grid-cols-1 gap-4">
+            {weekdays.map((day) => (
+              <div key={day} className="p-3 border rounded-lg bg-card shadow-sm hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
                   <FormField
                     control={form.control}
                     name={day as any}
@@ -77,26 +77,26 @@ export const WeeklySchedule = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-8"
+                      className="h-7 text-xs px-2 py-1"
                       onClick={() => addTimeRange(day)}
                     >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Time
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add
                     </Button>
                   )}
                 </div>
                 
                 {availableDays[day as keyof typeof availableDays] && (
-                  <div className="grid gap-2 pl-6">
+                  <div className="grid gap-2 pl-2">
                     {timeRanges
                       .filter(range => range.day === day)
                       .map(range => (
-                        <div key={range.id} className="flex items-center gap-2">
+                        <div key={range.id} className="flex items-center gap-1 bg-muted/20 p-2 rounded-md">
                           <Select
                             value={range.start}
                             onValueChange={(value) => updateTimeRange(range.id, 'start', value)}
                           >
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-[95px] text-xs h-8">
                               <SelectValue placeholder="Start" />
                             </SelectTrigger>
                             <SelectContent>
@@ -108,13 +108,13 @@ export const WeeklySchedule = ({
                             </SelectContent>
                           </Select>
                           
-                          <span>to</span>
+                          <span className="text-xs">to</span>
                           
                           <Select
                             value={range.end}
                             onValueChange={(value) => updateTimeRange(range.id, 'end', value)}
                           >
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-[95px] text-xs h-8">
                               <SelectValue placeholder="End" />
                             </SelectTrigger>
                             <SelectContent>
@@ -133,9 +133,10 @@ export const WeeklySchedule = ({
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="h-7 w-7"
                             onClick={() => removeTimeRange(range.id)}
                           >
-                            <Trash2 className="h-4 w-4 text-muted-foreground" />
+                            <Trash2 className="h-3 w-3 text-muted-foreground" />
                           </Button>
                         </div>
                       ))}
@@ -144,9 +145,117 @@ export const WeeklySchedule = ({
               </div>
             ))}
           </div>
-        ))}
+        )}
         
-        <div className="flex justify-between items-center mt-6">
+        {/* Desktop view - Grouped in pairs */}
+        {!isMobile && (
+          <>
+            {[
+              ['monday', 'tuesday'],
+              ['wednesday', 'thursday'],
+              ['friday', 'saturday']
+            ].map((dayGroup, groupIndex) => (
+              <div key={groupIndex} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {dayGroup.map((day) => (
+                  <div key={day} className="p-4 border rounded-lg bg-card">
+                    <div className="flex items-center justify-between mb-4">
+                      <FormField
+                        control={form.control}
+                        name={day as any}
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-2">
+                            <FormControl>
+                              <Checkbox 
+                                checked={availableDays[day as keyof typeof availableDays]}
+                                onCheckedChange={(checked) => {
+                                  toggleDayAvailability(day, checked as boolean);
+                                  field.onChange(checked);
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-base capitalize font-medium">
+                              {day}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {availableDays[day as keyof typeof availableDays] && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8"
+                          onClick={() => addTimeRange(day)}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Time
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {availableDays[day as keyof typeof availableDays] && (
+                      <div className="grid gap-2 pl-6">
+                        {timeRanges
+                          .filter(range => range.day === day)
+                          .map(range => (
+                            <div key={range.id} className="flex items-center gap-2">
+                              <Select
+                                value={range.start}
+                                onValueChange={(value) => updateTimeRange(range.id, 'start', value)}
+                              >
+                                <SelectTrigger className="w-[120px]">
+                                  <SelectValue placeholder="Start" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {generateTimeOptions().map(time => (
+                                    <SelectItem key={`start-${time}`} value={time}>
+                                      {time}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              
+                              <span>to</span>
+                              
+                              <Select
+                                value={range.end}
+                                onValueChange={(value) => updateTimeRange(range.id, 'end', value)}
+                              >
+                                <SelectTrigger className="w-[120px]">
+                                  <SelectValue placeholder="End" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {generateTimeOptions().map(time => (
+                                    <SelectItem 
+                                      key={`end-${time}`} 
+                                      value={time}
+                                      disabled={isTimeBeforeStart(time, range.start)}
+                                    >
+                                      {time}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeTimeRange(range.id)}
+                              >
+                                <Trash2 className="h-4 w-4 text-muted-foreground" />
+                              </Button>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </>
+        )}
+        
+        <div className="flex justify-between items-center mt-6 flex-wrap gap-2">
           <Button 
             variant="outline" 
             className="flex items-center gap-2 border-[#D946EF] text-[#D946EF] hover:bg-[#FFDEE2]/10"
@@ -161,7 +270,7 @@ export const WeeklySchedule = ({
             className="border-2 border-[#0EA5E9] bg-white text-[#0EA5E9] hover:bg-[#0EA5E9]/10"
           >
             <Save className="h-4 w-4 mr-2" />
-            Fix Schedule
+            Save Schedule
           </Button>
         </div>
       </div>
