@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import LanguageSelector from './navbar/LanguageSelector';
 import { MobileMenu } from './navbar/MobileMenu';
-import { AuthButtons } from './navbar/AuthButtons';
+import { AuthButtons } from './navbar/auth';
 import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
