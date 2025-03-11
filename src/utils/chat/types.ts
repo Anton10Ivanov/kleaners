@@ -15,10 +15,22 @@ export interface Conversation {
   participants: string[];
   lastMessage?: Message;
   unreadCount: number;
+  
+  // Additional fields for UI components compatibility
+  latestMessage?: {
+    content: string;
+    sent_at: Date;
+    is_read: boolean;
+    sender_id: string;
+    isFromMe: boolean;
+    attachments?: FileAttachment[];
+  };
   participant?: {
     id: string;
     name: string;
   };
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface FileAttachment {
@@ -27,4 +39,5 @@ export interface FileAttachment {
   url: string;
   type: string;
   size: number;
+  file?: File; // Add file property for FileUpload component
 }

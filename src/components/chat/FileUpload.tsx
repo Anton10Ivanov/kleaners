@@ -49,7 +49,6 @@ const FileUpload = ({
       
       fileAttachments.push({
         id: `temp-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-        file,
         name: file.name,
         size: file.size,
         type: file.type,

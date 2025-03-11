@@ -45,3 +45,19 @@ export const uploadAttachments = async (files: File[]): Promise<FileAttachment[]
     size: file.size
   }));
 };
+
+// Additional functions needed by chatUtils.ts
+export const getUserConversations = async (userId: string): Promise<Conversation[]> => {
+  // Mock implementation
+  return [];
+};
+
+export const useTypingIndicator = () => {
+  // Mock implementation
+  return { isTyping: false, setIsTyping: (value: boolean) => {} };
+};
+
+export const loadMessages = async () => {
+  // Mock implementation
+  return [];
+};
