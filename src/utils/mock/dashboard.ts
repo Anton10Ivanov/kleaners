@@ -1,62 +1,58 @@
 
-import { format, subMonths } from 'date-fns';
-import { MockBooking } from './types';
+import { addDays, format, subDays, subMonths } from 'date-fns';
+import { DashboardStats } from '@/hooks/admin/useAdminDashboard';
 
-// Generate dashboard stats based on bookings
-export const generateDashboardStats = (bookings: MockBooking[]) => {
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+// Generate mock dashboard statistics
+export const generateDashboardStats = (bookings: any[]): DashboardStats => {
+  const lastMonth = subMonths(new Date(), 1);
+  const lastMonthBookings = bookings.filter(booking => {
+    const bookingDate = new Date(booking.createdAt || booking.created_at);
+    return bookingDate.getMonth() === lastMonth.getMonth() && 
+           bookingDate.getFullYear() === lastMonth.getFullYear();
+  }).length;
   
-  // Filter bookings for current and previous month
-  const bookingsThisMonth = bookings.filter(booking => {
-    const bookingDate = new Date(booking.date);
-    return bookingDate.getMonth() === currentMonth && bookingDate.getFullYear() === currentYear;
-  });
-  
-  const bookingsLastMonth = bookings.filter(booking => {
-    const bookingDate = new Date(booking.date);
-    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-    return bookingDate.getMonth() === lastMonth && bookingDate.getFullYear() === lastMonthYear;
-  });
-  
-  // Calculate unique clients for each month
-  const clientIdsThisMonth = new Set(bookingsThisMonth.map(b => b.clientId));
-  const clientIdsLastMonth = new Set(bookingsLastMonth.map(b => b.clientId));
-  const newClientsThisMonth = [...clientIdsThisMonth].filter(id => !clientIdsLastMonth.has(id)).length;
+  const currentMonth = new Date();
+  const currentMonthBookings = bookings.filter(booking => {
+    const bookingDate = new Date(booking.createdAt || booking.created_at);
+    return bookingDate.getMonth() === currentMonth.getMonth() && 
+           bookingDate.getFullYear() === currentMonth.getFullYear();
+  }).length;
   
   // Calculate percent change
-  const percentChange = bookingsLastMonth.length > 0 
-    ? ((bookingsThisMonth.length - bookingsLastMonth.length) / bookingsLastMonth.length) * 100
+  const percentChange = lastMonthBookings > 0 
+    ? ((currentMonthBookings - lastMonthBookings) / lastMonthBookings) * 100
     : 0;
   
   return {
     totalBookings: bookings.length,
-    bookingsThisMonth: bookingsThisMonth.length,
-    bookingsLastMonth: bookingsLastMonth.length,
-    activeClients: new Set(bookings.map(b => b.clientId)).size,
-    newClientsThisMonth,
+    bookingsThisMonth: currentMonthBookings,
+    bookingsLastMonth: lastMonthBookings,
+    activeClients: 32,
+    newClientsThisMonth: 8,
     percentChange
   };
 };
 
-// Generate monthly booking data for charts
-export const generateMonthlyBookingData = (bookings: MockBooking[]) => {
-  // Create a map for all months
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const bookingsByMonth = new Map(months.map(month => [month, 0]));
-  
-  // Count bookings by month
-  bookings.forEach(booking => {
-    const date = new Date(booking.date);
-    const month = months[date.getMonth()];
-    bookingsByMonth.set(month, (bookingsByMonth.get(month) || 0) + 1);
+// Generate sample data for the monthly booking chart
+export const generateMonthlyBookingData = (bookings: any[]) => {
+  // Ensure we have at least 7 days of data
+  const result = Array.from({ length: 7 }, (_, i) => {
+    const date = subDays(new Date(), 6 - i);
+    const dateStr = format(date, 'MMM dd');
+    
+    // Count bookings for this day
+    const count = bookings.filter(booking => {
+      const bookingDate = new Date(booking.createdAt || booking.created_at);
+      return bookingDate.getDate() === date.getDate() && 
+             bookingDate.getMonth() === date.getMonth() && 
+             bookingDate.getFullYear() === date.getFullYear();
+    }).length;
+    
+    return {
+      date: dateStr,
+      bookings: count > 0 ? count : Math.floor(Math.random() * 6) + 1 // Random number (1-6) if no real data
+    };
   });
   
-  // Convert to array format for charts
-  return months.map(month => ({
-    date: month,
-    bookings: bookingsByMonth.get(month) || 0
-  }));
+  return result;
 };

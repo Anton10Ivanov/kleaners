@@ -8,8 +8,8 @@ interface StatCardsProps {
     totalBookings: number;
     bookingsThisMonth: number;
     bookingsLastMonth: number;
-    activeCustomers: number;
-    newCustomersThisMonth: number;
+    activeClients: number;
+    newClientsThisMonth: number;
     percentChange: number;
   };
 }
@@ -74,17 +74,17 @@ export const StatCards = ({ isLoading, stats }: StatCardsProps) => {
         </CardContent>
       </Card>
       
-      {/* Active Customers */}
+      {/* Active Clients */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Active Customers</CardTitle>
+          <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
             {isLoading ? (
               <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
             ) : (
-              stats.activeCustomers
+              stats.activeClients
             )}
           </div>
           <p className="text-xs text-muted-foreground mt-1 flex items-center">
@@ -94,17 +94,17 @@ export const StatCards = ({ isLoading, stats }: StatCardsProps) => {
         </CardContent>
       </Card>
       
-      {/* New Customers */}
+      {/* New Clients */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+          <CardTitle className="text-sm font-medium">New Clients</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
             {isLoading ? (
               <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
             ) : (
-              stats.newCustomersThisMonth
+              stats.newClientsThisMonth
             )}
           </div>
           <p className="text-xs text-muted-foreground mt-1 flex items-center">
