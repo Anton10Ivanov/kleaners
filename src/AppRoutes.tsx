@@ -1,11 +1,6 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { AuthLayout } from '@/components/auth/AuthLayout';
-import LoginPage from '@/pages/auth/LoginPage';
-import RegisterPage from '@/pages/auth/RegisterPage';
-import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage';
-import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
 import ClientLayout from '@/components/client/ClientLayout';
 import ClientDashboard from '@/pages/client/ClientDashboard';
 import ClientBookings from '@/pages/client/ClientBookings';
@@ -31,11 +26,11 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Auth Routes */}
-      <Route path="/auth" element={<AuthLayout />}>
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="reset-password" element={<ResetPasswordPage />} />
+      <Route path="/auth">
+        <Route path="login" element={<Navigate to="/auth/login" />} />
+        <Route path="register" element={<Navigate to="/auth/register" />} />
+        <Route path="forgot-password" element={<Navigate to="/auth/forgot-password" />} />
+        <Route path="reset-password" element={<Navigate to="/auth/reset-password" />} />
       </Route>
       
       {/* Client Routes */}
@@ -57,6 +52,7 @@ const AppRoutes = () => {
         <Route path="messages" element={<ProviderMessages />} />
         <Route path="profile" element={<ProviderProfile />} />
         <Route path="settings" element={<ProviderSettings />} />
+        <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Add pending pool access for providers */}
       </Route>
       
       {/* Admin Routes */}
