@@ -1,51 +1,83 @@
 
-import { useState } from "react";
-import { useCustomerQuestions } from "./client-questions/useCustomerQuestions";
-import { QuestionsTable } from "./client-questions/QuestionsTable";
-import { QuestionFilters } from "./client-questions/QuestionFilters";
-import { Input } from "@/components/ui/input";
+import React, { useState } from 'react';
+import { QuestionFilters } from './client-questions/QuestionFilters';
+import { QuestionsTable } from './client-questions/QuestionsTable';
+import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
+import { useCustomerQuestions } from './client-questions/useCustomerQuestions';
 import { CustomerQuestion } from './client-questions/types';
 
-export const ClientQuestionsSection = () => {
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-  const { questions, isLoading, markAsAnswered, markAsIgnored, markAsSpam, deleteQuestion } = useCustomerQuestions();
+const ClientQuestionsSection = () => {
+  const {
+    questions,
+    isLoading,
+    markAsAnswered,
+    markAsIgnored,
+    markAsSpam,
+    deleteQuestion,
+  } = useCustomerQuestions();
+  
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedQuestion, setSelectedQuestion] = useState<CustomerQuestion | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Filter questions by status and search term
-  const filteredQuestions = questions.filter((question) => {
-    const matchesStatus = statusFilter === "all" || question.status === statusFilter;
-    const matchesSearch = 
-      question.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.question.toLowerCase().includes(searchTerm.toLowerCase());
+  // Calculate the count of pending questions
+  const pendingCount = questions?.filter(q => q.status === 'pending').length || 0;
+
+  // Handle opening the question details dialog
+  const openQuestionDialog = (question: CustomerQuestion) => {
+    setSelectedQuestion(question);
+    setDialogOpen(true);
+  };
+
+  // Handle status updates based on the action
+  const handleStatusUpdate = (status: string) => {
+    if (!selectedQuestion) return;
     
-    return matchesStatus && matchesSearch;
-  });
+    if (status === 'answered') {
+      markAsAnswered(selectedQuestion.id);
+    } else if (status === 'ignored') {
+      markAsIgnored(selectedQuestion.id);
+    } else if (status === 'spam') {
+      markAsSpam(selectedQuestion.id);
+    }
+    
+    setDialogOpen(false);
+  };
 
-  // Count of pending questions for badge
-  const pendingCount = questions.filter(q => q.status === 'pending').length;
+  // Handle deleting a question
+  const handleDeleteQuestion = () => {
+    if (selectedQuestion) {
+      deleteQuestion(selectedQuestion.id);
+      setDialogOpen(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Client Questions</h2>
         <QuestionFilters 
           statusFilter={statusFilter} 
-          setStatusFilter={setStatusFilter} 
+          setStatusFilter={setStatusFilter}
           pendingCount={pendingCount}
-        />
-        <Input
-          placeholder="Search questions..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-xs"
         />
       </div>
 
-      <QuestionsTable
-        questions={filteredQuestions}
+      <QuestionsTable 
+        questions={questions} 
         isLoading={isLoading}
-        onViewQuestion={(question: CustomerQuestion) => {}}
+        onViewQuestion={openQuestionDialog}
+      />
+
+      <QuestionDetailsDialog
+        question={selectedQuestion}
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        onStatusUpdate={handleStatusUpdate}
+        onDeleteQuestion={handleDeleteQuestion}
       />
     </div>
   );
 };
+
+export default ClientQuestionsSection;
