@@ -1,6 +1,7 @@
 
 import BookingTabs from "@/components/provider/bookings/BookingTabs";
 import BookingDetailsCard from "@/components/provider/bookings/BookingDetailsCard";
+import { Box } from "@/components/layout/Box";
 
 interface BookingsContentProps {
   selectedTab: string;
@@ -33,7 +34,7 @@ const BookingsContent = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       <div className="md:col-span-2">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <Box className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4">
             <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <div className="text-xs md:text-sm text-muted-foreground">Total</div>
@@ -71,7 +72,7 @@ const BookingsContent = ({
             selectedBookingId={selectedBookingId}
             onSelectBooking={setSelectedBookingId}
           />
-        </div>
+        </Box>
       </div>
 
       <div className="md:col-span-1">
