@@ -1,3 +1,4 @@
+
 import BookingTabs from "@/components/provider/bookings/BookingTabs";
 import BookingDetailsCard from "@/components/provider/bookings/BookingDetailsCard";
 import { Box } from "@/components/layout/Box";
