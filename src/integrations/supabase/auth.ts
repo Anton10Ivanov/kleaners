@@ -94,4 +94,3 @@ export const hasAdminAccess = async (userId: string): Promise<boolean> => {
   console.log("Admin access check bypassed for development");
   return true; // Always return true for development
 };
-

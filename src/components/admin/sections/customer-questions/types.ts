@@ -12,4 +12,3 @@ export type ClientQuestion = {
 };
 
 export type { ClientQuestion as CustomerQuestion };  // Add type alias for backward compatibility
-
