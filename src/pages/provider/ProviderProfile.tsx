@@ -11,6 +11,8 @@ import { useTitle } from "@/hooks/useTitle";
 import { FileText, Mail, Phone, User, Award, Briefcase, Clock, MapPin, CreditCard, ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ProfileCompletionIndicator } from "@/components/provider/profile/ProfileCompletionIndicator";
+import { useProfileCompletion } from "@/hooks/useProfileCompletion";
 
 // Error fallback component
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => {
@@ -96,7 +98,8 @@ const ProviderProfile = () => {
           ...providerData,
           position: applicationData?.position || 'Cleaning Professional',
           experience: applicationData?.experience || '1-3 years',
-          message: applicationData?.message || ''
+          message: applicationData?.message || '',
+          paymentInfo: paymentData || null
         });
         
         // Parse skills and availability from application if available
@@ -132,6 +135,14 @@ const ProviderProfile = () => {
     }
   };
 
+  // Calculate profile completion from the hook
+  const profileSections = useProfileCompletion({
+    ...provider,
+    skills,
+    availability,
+    paymentInfo
+  });
+
   if (loading) {
     return (
       <div className="container flex items-center justify-center h-[calc(100vh-200px)]">
@@ -144,12 +155,17 @@ const ProviderProfile = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <div className="container mx-auto p-4">
         <div className="max-w-3xl mx-auto">
+          {/* Profile Completion Indicator */}
+          {provider && (
+            <ProfileCompletionIndicator sections={profileSections} />
+          )}
+          
           <Card className="shadow-lg border-0">
             <CardHeader className="relative pb-0">
               <div className="absolute inset-0 h-40 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-t-lg" />
               <div className="relative z-10 flex flex-col items-center pt-8">
                 <Avatar className="h-24 w-24 ring-4 ring-white bg-white">
-                  <AvatarImage src="/placeholder.svg" alt={provider?.first_name} />
+                  <AvatarImage src={provider?.avatar_url || "/placeholder.svg"} alt={provider?.first_name} />
                   <AvatarFallback className="bg-primary text-white">
                     {provider?.first_name?.charAt(0)}{provider?.last_name?.charAt(0)}
                   </AvatarFallback>

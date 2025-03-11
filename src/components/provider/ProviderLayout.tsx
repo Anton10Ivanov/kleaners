@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import ProviderSidebar from "./ProviderSidebar";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ProviderBottomNav } from "./ProviderBottomNav";
 
 const ProviderLayout = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -21,8 +22,13 @@ const ProviderLayout = () => {
           <div className="mx-auto container max-w-6xl">
             <Outlet />
           </div>
+          {/* Add padding at the bottom on mobile to account for the bottom nav */}
+          {isMobile && <div className="h-16" />}
         </ScrollArea>
       </main>
+      
+      {/* Mobile Bottom Navigation */}
+      <ProviderBottomNav />
     </div>
   );
 };
