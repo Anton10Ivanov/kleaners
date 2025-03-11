@@ -2,7 +2,6 @@
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/hero';
-import SimpleHero from '../components/hero/SimpleHero';
 import OurOptions from '../components/options/OurOptions';
 import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
 import { Testimonials } from '../components/Testimonials';
@@ -15,7 +14,6 @@ import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency, Service } from '@/schemas/booking';
-import { useState } from 'react';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -26,7 +24,6 @@ const ErrorFallback = () => (
 const Index = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [useSimpleHero, setUseSimpleHero] = useState(true);
 
   const selectedService = watch('service');
   const frequency = watch('frequency');
@@ -64,11 +61,6 @@ const Index = () => {
     handleNextStep();
   };
 
-  // Toggle between hero components
-  const toggleHeroComponent = () => {
-    setUseSimpleHero(prev => !prev);
-  };
-
   return (
     <div className="min-h-screen font-raleway bg-white dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
@@ -79,46 +71,19 @@ const Index = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="bg-blue-100 p-4 text-center">
-              <button 
-                onClick={toggleHeroComponent}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-              >
-                {useSimpleHero ? "Use Regular Hero" : "Use Simple Hero"}
-              </button>
-            </div>
-
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              {useSimpleHero ? (
-                <SimpleHero 
-                  selectedService={selectedService || ''}
-                  setSelectedService={(service) => {
-                    console.log("Setting service to:", service);
-                    setValue('service', service);
-                  }}
-                  postalCode={postalCode}
-                  setPostalCode={(code) => {
-                    console.log("Setting postal code to:", code);
-                    setValue('postalCode', code);
-                  }}
-                  handleNextStep={handleHeroNextStep}
-                />
-              ) : (
-                <Hero 
-                  selectedService={selectedService || ''}
-                  setSelectedService={(service) => {
-                    console.log("Setting service to:", service);
-                    setValue('service', service);
-                  }}
-                  postalCode={postalCode}
-                  setPostalCode={(code) => {
-                    console.log("Setting postal code to:", code);
-                    setValue('postalCode', code);
-                  }}
-                  handleNextStep={handleHeroNextStep}
-                />
-              )}
-            </ErrorBoundary>
+            <Hero 
+              selectedService={selectedService || ''}
+              setSelectedService={(service) => {
+                console.log("Setting service to:", service);
+                setValue('service', service);
+              }}
+              postalCode={postalCode}
+              setPostalCode={(code) => {
+                console.log("Setting postal code to:", code);
+                setValue('postalCode', code);
+              }}
+              handleNextStep={handleHeroNextStep}
+            />
             
             <SlickWhyChooseUs />
             <OurOptions />

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Service } from "@/schemas/booking";
 
@@ -28,60 +29,41 @@ export const HeroProvider = ({
   onServiceChange,
   onPostalCodeChange
 }: HeroProviderProps) => {
-  console.log("HeroProvider initializing with:", { initialService, initialPostalCode });
-  
-  const [selectedService, setSelectedService] = useState(() => {
-    console.log("Setting initial service state to:", initialService || Service.Regular);
-    return initialService || Service.Regular;
-  });
-  
-  const [postalCode, setPostalCode] = useState(() => {
-    console.log("Setting initial postal code state to:", initialPostalCode || '');
-    return initialPostalCode || '';
-  });
+  const [selectedService, setSelectedService] = useState(initialService || Service.Regular);
+  const [postalCode, setPostalCode] = useState(initialPostalCode || '');
 
-  // Keep local state in sync with parent props
+  // Sync internal state with parent component
   useEffect(() => {
-    if (initialService && initialService !== selectedService) {
-      console.log("Updating service from props:", initialService);
+    if (initialService !== selectedService && initialService) {
       setSelectedService(initialService);
     }
-  }, [initialService]);
-
-  useEffect(() => {
     if (initialPostalCode !== postalCode && initialPostalCode) {
-      console.log("Updating postal code from props:", initialPostalCode);
       setPostalCode(initialPostalCode);
     }
-  }, [initialPostalCode]);
+  }, [initialService, initialPostalCode]);
 
   const updateSelectedService = useCallback((service: string) => {
-    console.log("HeroContext: updating service to", service);
     setSelectedService(service);
     onServiceChange(service as Service);
   }, [onServiceChange]);
 
   const updatePostalCode = useCallback((code: string) => {
-    console.log("HeroContext: updating postal code to", code);
     setPostalCode(code);
     onPostalCodeChange(code);
   }, [onPostalCodeChange]);
 
   const handleNextStep = useCallback(() => {
-    console.log("HeroContext: handling next step");
     onNextStep();
   }, [onNextStep]);
 
-  const value = {
-    selectedService,
-    postalCode,
-    updateSelectedService,
-    updatePostalCode,
-    handleNextStep
-  };
-
   return (
-    <HeroContext.Provider value={value}>
+    <HeroContext.Provider value={{
+      selectedService,
+      postalCode,
+      updateSelectedService,
+      updatePostalCode,
+      handleNextStep
+    }}>
       {children}
     </HeroContext.Provider>
   );

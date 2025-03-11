@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { QuestionFilters } from '@/components/admin/sections/client-questions/QuestionFilters';
-import { QuestionsTable } from '@/components/admin/sections/client-questions/QuestionsTable';
-import { QuestionDetailsDialog } from '@/components/admin/sections/client-questions/QuestionDetailsDialog';
-import { useCustomerQuestions } from '@/components/admin/sections/client-questions/useCustomerQuestions';
-import { CustomerQuestion } from '@/components/admin/sections/client-questions/types';
+import { QuestionFilters } from './client-questions/QuestionFilters';
+import { QuestionsTable } from './client-questions/QuestionsTable';
+import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
+import { useCustomerQuestions } from './client-questions/useCustomerQuestions';
+import { CustomerQuestion } from './client-questions/types';
 
 const ClientQuestionsSection = () => {
   const {
