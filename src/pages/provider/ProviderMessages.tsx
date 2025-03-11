@@ -14,22 +14,30 @@ const ProviderMessages = () => {
   } = useConversationManagement(providerId);
   
   return (
-    <div className="container mx-auto py-6 px-4 mt-16">
-      <PageHeader title="Messages" description="Manage your conversations with clients" />
+    <div className="container mx-auto py-4 md:py-6 mt-4 md:mt-6 animate-fadeIn">
+      <PageHeader 
+        title="Messages" 
+        description="Manage your conversations with clients" 
+        className="mb-6"
+      />
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <MessagesSidebar 
-          providerId={providerId}
-          selectedConversationId={selectedConversation?.id}
-          onSelectConversation={handleSelectConversation}
-          onNewConversation={handleNewConversation}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+        <div className="md:col-span-1 xl:col-span-2">
+          <MessagesSidebar 
+            providerId={providerId}
+            selectedConversationId={selectedConversation?.id}
+            onSelectConversation={handleSelectConversation}
+            onNewConversation={handleNewConversation}
+          />
+        </div>
         
-        <MessagesContent
-          selectedConversation={selectedConversation}
-          providerId={providerId}
-          onNewConversation={handleNewConversation}
-        />
+        <div className="md:col-span-3 xl:col-span-3">
+          <MessagesContent
+            selectedConversation={selectedConversation}
+            providerId={providerId}
+            onNewConversation={handleNewConversation}
+          />
+        </div>
       </div>
     </div>
   );

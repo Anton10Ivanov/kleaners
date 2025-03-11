@@ -1,6 +1,5 @@
 
 import { Box } from '@/components/layout/Box';
-import { Button } from '@/components/ui/button';
 import ChatInterface from '@/components/chat/ChatInterface';
 
 interface MessagesContentProps {
@@ -19,7 +18,7 @@ const MessagesContent = ({
   onNewConversation 
 }: MessagesContentProps) => {
   return (
-    <div className="md:col-span-2 h-[calc(100vh-200px)]">
+    <div className="md:col-span-2 h-[calc(100vh-200px)] transition-all duration-200">
       {selectedConversation ? (
         <ChatInterface
           conversationId={selectedConversation.id}
@@ -28,18 +27,18 @@ const MessagesContent = ({
           recipientName={selectedConversation.participantName}
         />
       ) : (
-        <Box className="h-full flex items-center justify-center">
-          <div className="text-center">
-            <h3 className="font-medium mb-2">No conversation selected</h3>
-            <p className="text-muted-foreground mb-4">
-              Select a conversation from the list or start a new one
+        <Box className="h-full flex items-center justify-center bg-background/50 backdrop-blur-sm border rounded-xl shadow-sm">
+          <div className="text-center max-w-md mx-auto px-4">
+            <h3 className="font-medium text-lg mb-2 text-foreground">No conversation selected</h3>
+            <p className="text-muted-foreground mb-6 text-sm">
+              Select a conversation from the list or start a new one to begin messaging
             </p>
-            <Button
+            <button
               onClick={onNewConversation}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium text-sm shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               Start new conversation
-            </Button>
+            </button>
           </div>
         </Box>
       )}

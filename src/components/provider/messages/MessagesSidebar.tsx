@@ -1,7 +1,4 @@
 
-import { useState } from 'react';
-import { Box } from '@/components/layout/Box';
-import { Button } from '@/components/ui/button';
 import ConversationList from '@/components/chat/ConversationList';
 
 interface MessagesSidebarProps {
@@ -22,7 +19,7 @@ const MessagesSidebar = ({
   onNewConversation
 }: MessagesSidebarProps) => {
   return (
-    <div className="md:col-span-1 h-[calc(100vh-200px)]">
+    <div className="h-[calc(100vh-200px)] bg-background rounded-xl border shadow-sm">
       <ConversationList
         userId={providerId}
         selectedConversationId={selectedConversationId}
