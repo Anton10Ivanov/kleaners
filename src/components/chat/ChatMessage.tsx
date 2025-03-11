@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { Message } from '@/utils/chat';
+import { Message } from '@/utils/chat/types';
 import { CheckCircle, Circle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import FileAttachmentComponent from './FileAttachment';
@@ -17,16 +17,16 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
   const [timeAgo, setTimeAgo] = useState<string>('');
   
   useEffect(() => {
-    setTimeAgo(formatDistanceToNow(message.sent_at, { addSuffix: true }));
+    const updateTimeAgo = () => {
+      const date = new Date(message.timestamp);
+      setTimeAgo(formatDistanceToNow(date, { addSuffix: true }));
+    };
     
-    const interval = setInterval(() => {
-      setTimeAgo(formatDistanceToNow(message.sent_at, { addSuffix: true }));
-    }, 60000); // Update every minute
-    
+    updateTimeAgo();
+    const interval = setInterval(updateTimeAgo, 60000);
     return () => clearInterval(interval);
-  }, [message.sent_at]);
+  }, [message.timestamp]);
   
-  // Render read status indicator
   const renderReadStatus = () => {
     if (!isOwn) return null;
     
@@ -44,9 +44,6 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
     }
   };
   
-  const hasAttachments = message.attachments && message.attachments.length > 0;
-  const hasContent = message.content && message.content.trim() !== '';
-  
   return (
     <div className={cn(
       "flex items-end gap-2 mb-4",
@@ -54,27 +51,22 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
     )}>
       {showAvatar && !isOwn && (
         <Avatar className="h-8 w-8">
-          <AvatarImage src={`https://avatar.vercel.sh/${message.sender_id}`} />
+          <AvatarImage src={`https://avatar.vercel.sh/${message.senderId}`} />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
       )}
       
       <div className={cn(
         "max-w-[75%]",
-        hasContent && "rounded-lg px-4 py-2",
+        "rounded-lg px-4 py-2",
         isOwn 
           ? "bg-primary text-primary-foreground rounded-tr-none" 
           : "bg-muted rounded-tl-none"
       )}>
-        {hasContent && (
-          <div className="break-words">{message.content}</div>
-        )}
+        <div className="break-words">{message.content}</div>
         
-        {hasAttachments && (
-          <div className={cn(
-            "flex flex-col gap-2",
-            hasContent && "mt-2"
-          )}>
+        {message.attachments && message.attachments.length > 0 && (
+          <div className="mt-2 space-y-2">
             {message.attachments.map(file => (
               <FileAttachmentComponent 
                 key={file.id} 
@@ -108,7 +100,7 @@ export const ChatMessage = ({ message, isOwn, showAvatar = true }: ChatMessagePr
       
       {showAvatar && isOwn && (
         <Avatar className="h-8 w-8">
-          <AvatarImage src={`https://avatar.vercel.sh/${message.sender_id}`} />
+          <AvatarImage src={`https://avatar.vercel.sh/${message.senderId}`} />
           <AvatarFallback>Me</AvatarFallback>
         </Avatar>
       )}
