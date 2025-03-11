@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -13,6 +12,7 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
+import AppRoutes from '@/AppRoutes';
 
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
@@ -84,6 +84,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
+          <Route path="/app-routes" element={<AppRoutes />} />
           
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
