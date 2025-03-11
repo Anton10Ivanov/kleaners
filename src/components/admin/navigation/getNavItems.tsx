@@ -7,7 +7,8 @@ import {
   UserCog,
   Settings,
   MessageSquareText,
-  BarChart
+  BarChart,
+  InboxIcon
 } from 'lucide-react';
 import { NavItem } from './NavItem';
 
@@ -27,6 +28,11 @@ export const getNavItems = (): NavItem[] => {
       title: 'Bookings',
       href: '/admin/bookings',
       icon: <CalendarDays className="h-5 w-5" />,
+    },
+    {
+      title: 'Pending Pool',
+      href: '/admin/pending-pool',
+      icon: <InboxIcon className="h-5 w-5" />,
     },
     {
       title: 'Customers',
