@@ -15,8 +15,19 @@ export const statusColors = {
 export type SortField = "date" | "total_price" | "created_at";
 export type SortOrder = "asc" | "desc";
 
-// Define the Booking type to include provider_id and ensure it matches the database structure
-export type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+// Define the Booking type to be more flexible for both real and mock data
+export type Booking = Partial<Database["public"]["Tables"]["bookings"]["Row"]> & {
+  id: string;
+  status: BookingStatus;
+  service_type: string;
+  date: string;
+  total_price: number;
+  address: string;
+  created_at: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  phone?: string;
   provider_id?: string;
-  time_slot?: string; // Add time_slot property to fix the type error
+  time_slot?: string;
 };
