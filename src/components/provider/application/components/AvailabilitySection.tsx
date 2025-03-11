@@ -18,16 +18,18 @@ export const AvailabilitySection: React.FC<AvailabilitySectionProps> = ({
   
   return (
     <div className="space-y-3">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1">
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
           Availability
         </Label>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <TooltipIndicator />
+              <span>
+                <TooltipIndicator />
+              </span>
             </TooltipTrigger>
-            <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+            <TooltipContent side="right" className="bg-primary text-primary-foreground border border-primary/60 p-2 text-sm max-w-xs">
               <p>Select all days when you would be available to work</p>
             </TooltipContent>
           </Tooltip>

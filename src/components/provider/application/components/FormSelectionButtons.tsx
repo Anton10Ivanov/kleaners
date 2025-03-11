@@ -42,7 +42,7 @@ export const SelectionButtons: React.FC<SelectionButtonsProps> = ({
 };
 
 export const TooltipIndicator: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={`inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help hover:bg-gray-500 transition-colors ${className}`}>
-    <Info className="h-3 w-3" />
+  <div className={`inline-flex items-center justify-center w-4 h-4 ml-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-help transition-colors ${className}`}>
+    <Info className="h-3 w-3 text-gray-500" />
   </div>
 );
