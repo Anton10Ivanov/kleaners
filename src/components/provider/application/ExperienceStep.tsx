@@ -94,7 +94,7 @@ export const ExperienceStep = ({
               key={type.id}
               className={`flex items-center space-x-2 p-3 rounded-lg border transition-colors cursor-pointer
                 ${availability.includes(type.id) 
-                  ? 'bg-primary/10 border-primary' 
+                  ? 'bg-green-500/10 border-green-500' 
                   : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               onClick={() => {
                 // Remove any existing employment type
@@ -130,7 +130,7 @@ export const ExperienceStep = ({
               key={day} 
               className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
                 ${availability.includes(day) 
-                  ? 'bg-primary/10 border-primary' 
+                  ? 'bg-green-500/10 border-green-500' 
                   : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               onClick={() => toggleAvailability(day)}
             >
@@ -305,7 +305,7 @@ export const ExperienceStep = ({
                       key={equipment}
                       className={`flex items-center space-x-2 p-2 rounded-md border ${
                         selectedEquipment.includes(equipment) ? 
-                        'bg-primary/10 border-primary' : 
+                        'bg-green-500/10 border-green-500' : 
                         'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                       }`}
                       onClick={() => toggleEquipment(equipment)}
