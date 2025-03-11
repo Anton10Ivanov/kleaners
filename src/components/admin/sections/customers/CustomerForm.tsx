@@ -7,13 +7,13 @@ import { Database } from "@/integrations/supabase/types";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-type Customer = Database["public"]["Tables"]["customers"]["Row"];
+type Client = Database["public"]["Tables"]["clients"]["Row"];
 
 interface CustomerFormProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<Customer>) => void;
-  initialData?: Customer;
+  onSubmit: (data: Partial<Client>) => void;
+  initialData?: Client;
 }
 
 export const CustomerForm = ({
@@ -22,7 +22,7 @@ export const CustomerForm = ({
   onSubmit,
   initialData,
 }: CustomerFormProps) => {
-  const [formData, setFormData] = useState<Partial<Customer>>(
+  const [formData, setFormData] = useState<Partial<Client>>(
     initialData || {
       first_name: "",
       last_name: "",
@@ -52,7 +52,7 @@ export const CustomerForm = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Edit Customer" : "Add New Customer"}
+            {initialData ? "Edit Client" : "Add New Client"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
