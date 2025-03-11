@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,8 +9,8 @@ export interface DashboardStats {
   totalBookings: number;
   bookingsThisMonth: number;
   bookingsLastMonth: number;
-  activeClients: number;  // Updated from activeCustomers
-  newClientsThisMonth: number;  // Updated from newCustomersThisMonth
+  activeClients: number;  
+  newClientsThisMonth: number;
   percentChange: number;
 }
 
@@ -112,21 +113,21 @@ export const useAdminDashboard = () => {
           .gte('created_at', firstDayLastMonth)
           .lte('created_at', lastDayLastMonth);
           
-        // Fetch active customers (with at least one booking)
-        const { count: activeCustomers, error: customersError } = await supabase
-          .from('customers')
+        // Fetch active clients (with at least one booking)
+        const { count: activeClients, error: clientsError } = await supabase
+          .from('clients')
           .select('*', { count: 'exact', head: true });
           
-        // Fetch new customers this month
-        const { count: newCustomers, error: newCustomersError } = await supabase
-          .from('customers')
+        // Fetch new clients this month
+        const { count: newClients, error: newClientsError } = await supabase
+          .from('clients')
           .select('*', { count: 'exact', head: true })
           .gte('created_at', firstDayCurrentMonth)
           .lte('created_at', lastDayCurrentMonth);
           
-        if (totalError || currentError || prevError || customersError || newCustomersError) {
+        if (totalError || currentError || prevError || clientsError || newClientsError) {
           console.error("Error fetching statistics:", { 
-            totalError, currentError, prevError, customersError, newCustomersError 
+            totalError, currentError, prevError, clientsError, newClientsError 
           });
           throw new Error("Supabase data fetch failed");
         }
@@ -140,8 +141,8 @@ export const useAdminDashboard = () => {
           totalBookings: totalBookings || 0,
           bookingsThisMonth: currentMonthBookings || 0,
           bookingsLastMonth: previousMonthBookings || 0,
-          activeClients: activeCustomers || 0,
-          newClientsThisMonth: newCustomers || 0,
+          activeClients: activeClients || 0,
+          newClientsThisMonth: newClients || 0,
           percentChange
         });
       } catch (error) {
@@ -164,7 +165,7 @@ export const useAdminDashboard = () => {
       setIsLoading(true);
       // Invalidate and refetch all relevant queries
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["customers"] }),
+        queryClient.invalidateQueries({ queryKey: ["clients"] }),
         queryClient.invalidateQueries({ queryKey: ["admin-bookings"] }),
         queryClient.invalidateQueries({ queryKey: ["providers"] })
       ]);
