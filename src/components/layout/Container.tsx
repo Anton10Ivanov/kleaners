@@ -3,13 +3,13 @@ import { cn } from "@/lib/utils";
 
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
 }
 
 /**
  * Container component that centers content with consistent max-width
  * 
- * @param size - Size of the container (sm: 640px, md: 768px, lg: 1024px, xl: 1280px, full: 100%)
+ * @param size - Size of the container (sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px, 3xl: 1800px, full: 100%)
  */
 export function Container({
   children,
@@ -22,6 +22,8 @@ export function Container({
     md: "max-w-screen-md",
     lg: "max-w-screen-lg",
     xl: "max-w-screen-xl",
+    "2xl": "max-w-screen-2xl",
+    "3xl": "max-w-[1800px]",
     full: "max-w-full"
   };
 
