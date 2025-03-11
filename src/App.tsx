@@ -1,7 +1,8 @@
+
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
-import UserLayout from '@/components/user/UserLayout';
+import ClientLayout from '@/components/client/ClientLayout';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -22,12 +23,12 @@ import { AdminProviders } from '@/pages/admin/AdminProviders';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
 import Dashboard from '@/pages/admin/Dashboard';
 
-// User pages
-import UserDashboard from '@/pages/user/UserDashboard';
-import UserBookings from '@/pages/user/UserBookings';
-import UserProfile from '@/pages/user/UserProfile';
-import UserInvoices from '@/pages/user/UserInvoices';
-import UserMessages from '@/pages/user/UserMessages';
+// Client pages
+import ClientDashboard from '@/pages/client/ClientDashboard';
+import ClientBookings from '@/pages/client/ClientBookings';
+import ClientProfile from '@/pages/client/ClientProfile';
+import ClientInvoices from '@/pages/client/ClientInvoices';
+import ClientMessages from '@/pages/client/ClientMessages';
 
 // Auth pages
 import Login from '@/pages/auth/Login';
@@ -69,7 +70,7 @@ function App() {
     const rootElement = document.getElementById('root');
     if (rootElement) {
       rootElement.className = '';
-      if (['admin', 'user', 'provider'].includes(path)) {
+      if (['admin', 'client', 'provider'].includes(path)) {
         rootElement.classList.add('admin-panel-container');
       }
     }
@@ -112,13 +113,13 @@ function App() {
           <Route path="settings" element={<AdminSettings />} />
         </Route>
         
-        {/* User routes */}
-        <Route path="/user" element={<UserLayout />}>
-          <Route path="dashboard" element={<UserDashboard />} />
-          <Route path="bookings" element={<UserBookings />} />
-          <Route path="messages" element={<UserMessages />} />
-          <Route path="invoices" element={<UserInvoices />} />
-          <Route path="profile" element={<UserProfile />} />
+        {/* Client routes */}
+        <Route path="/client" element={<ClientLayout />}>
+          <Route path="dashboard" element={<ClientDashboard />} />
+          <Route path="bookings" element={<ClientBookings />} />
+          <Route path="messages" element={<ClientMessages />} />
+          <Route path="invoices" element={<ClientInvoices />} />
+          <Route path="profile" element={<ClientProfile />} />
         </Route>
         
         {/* Provider routes */}
@@ -131,6 +132,17 @@ function App() {
           <Route path="settings" element={<ProviderSettings />} />
           <Route path="availability" element={<ProviderAvailability />} />
         </Route>
+
+        {/* Legacy routes for backward compatibility */}
+        <Route path="/user/*" element={<Routes>
+          <Route path="*" element={<ClientLayout />}>
+            <Route path="dashboard" element={<ClientDashboard />} />
+            <Route path="bookings" element={<ClientBookings />} />
+            <Route path="messages" element={<ClientMessages />} />
+            <Route path="invoices" element={<ClientInvoices />} />
+            <Route path="profile" element={<ClientProfile />} />
+          </Route>
+        </Routes>} />
 
         {/* 404 route - must be at the end */}
         <Route path="*" element={<NotFound />} />
