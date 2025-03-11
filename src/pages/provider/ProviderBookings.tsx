@@ -9,12 +9,21 @@ import { CalendarClock, MapPin, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BookingMap from '@/components/provider/bookings/BookingMap';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 const ProviderBookings = () => {
   useTitle('Provider Bookings');
   const [selectedTab, setSelectedTab] = useState('upcoming');
   const [selectedBookingId, setSelectedBookingId] = useState<string | undefined>(undefined);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  // If we're on mobile, always use list view
+  useEffect(() => {
+    if (isMobile) {
+      setViewMode('list');
+    }
+  }, [isMobile]);
   
   // Get booking data from our utility
   const { upcomingBookings, pendingBookings, completedBookings } = getBookingData();
@@ -62,16 +71,18 @@ const ProviderBookings = () => {
           <p className="text-muted-foreground">Manage your cleaning assignments</p>
         </div>
 
-        <div className="mt-4 md:mt-0">
-          <TabsList className="grid w-[200px] grid-cols-2">
-            <TabsTrigger value="list" onClick={() => setViewMode('list')}>
-              List View
-            </TabsTrigger>
-            <TabsTrigger value="map" onClick={() => setViewMode('map')}>
-              Map View
-            </TabsTrigger>
-          </TabsList>
-        </div>
+        {!isMobile && (
+          <div className="mt-4 md:mt-0">
+            <TabsList className="grid w-[200px] grid-cols-2">
+              <TabsTrigger value="list" onClick={() => setViewMode('list')}>
+                List View
+              </TabsTrigger>
+              <TabsTrigger value="map" onClick={() => setViewMode('map')}>
+                Map View
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        )}
       </div>
 
       {/* Add FilterableStatsCards component */}
@@ -128,10 +139,10 @@ const ProviderBookings = () => {
         </div>
 
         <div className={`${viewMode === 'map' ? 'md:col-span-2' : 'md:col-span-1'}`}>
-          {viewMode === 'map' ? (
+          {!isMobile && viewMode === 'map' ? (
             <Card className="p-4 h-[600px]">
               <BookingMap 
-                bookings={bookingsWithCoordinates}
+                locations={bookingsWithCoordinates}
                 selectedBookingId={selectedBookingId}
                 onSelectBooking={setSelectedBookingId}
               />
