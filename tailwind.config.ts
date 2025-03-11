@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -10,13 +9,7 @@ export default {
       center: true,
       padding: "2rem",
       screens: {
-        "sm": "640px",
-        "md": "768px",
-        "lg": "1024px",
-        "xl": "1280px",
-        "2xl": "1536px",
-        "3xl": "1800px",  // Added larger breakpoint
-        "4xl": "2000px",  // Added even larger breakpoint
+        "2xl": "1400px",
       },
     },
     extend: {
@@ -69,16 +62,6 @@ export default {
           tertiary: "#6E59A5",
           surface: "#F1F0FB",
         },
-      },
-      // Add responsive spacing scales
-      spacing: {
-        '1': 'var(--spacing1)',
-        '2': 'var(--spacing2)',
-        '3': 'var(--spacing3)',
-        '4': 'var(--spacing4)',
-        '5': 'var(--spacing5)',
-        '6': 'var(--spacing6)',
-        '7': 'var(--spacing7)',
       },
       borderRadius: {
         lg: "var(--radius)",
