@@ -1,174 +1,74 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from "recharts";
-import { AreaChart, Area } from "recharts";
-import { ArrowUpIcon, ArrowDownIcon, DollarSign } from "lucide-react";
-import { EarningsPeriod, useProviderEarnings } from "@/hooks/useProviderEarnings";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { DollarSign } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-2 border shadow-sm rounded-md">
-        <p className="text-gray-500">{label}</p>
-        <p className="text-primary font-semibold">${payload[0].value?.toFixed(2)}</p>
-      </div>
-    );
-  }
-
-  return null;
-};
+// This is demo data; in a real app, this would come from an API
+const data = [
+  { month: "Jan", earnings: 1500 },
+  { month: "Feb", earnings: 2300 },
+  { month: "Mar", earnings: 1800 },
+  { month: "Apr", earnings: 2400 },
+  { month: "May", earnings: 2100 },
+  { month: "Jun", earnings: 1900 },
+  { month: "Jul", earnings: 3100 },
+];
 
 export function EarningsHistory() {
-  const [period, setPeriod] = useState<EarningsPeriod>("monthly");
-  const { earningsData, isLoading } = useProviderEarnings(period);
-
-  const handlePeriodChange = (value: string) => {
-    setPeriod(value as EarningsPeriod);
-  };
-
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <Skeleton className="h-8 w-3/4" />
-          <Skeleton className="h-4 w-1/2 mt-2" />
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-[300px] w-full" />
-        </CardContent>
-      </Card>
-    );
-  }
-
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
   return (
     <Card className="shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-xl flex items-center">
-          <DollarSign className="mr-2 h-5 w-5 text-primary" />
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg md:text-xl flex items-center">
+          <DollarSign className="mr-2 h-4 w-4 text-primary" />
           Earnings History
         </CardTitle>
-        <CardDescription>
-          Track your earnings over time
+        <CardDescription className="text-xs md:text-sm">
+          Your earnings over the last 7 months
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="monthly" onValueChange={handlePeriodChange}>
-          <div className="flex justify-between items-center mb-4">
-            <TabsList>
-              <TabsTrigger value="weekly">Weekly</TabsTrigger>
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
-              <TabsTrigger value="yearly">Yearly</TabsTrigger>
-            </TabsList>
-            
-            <div className="flex items-center">
-              <div className="text-2xl font-bold">
-                ${earningsData?.totalEarnings.toFixed(2)}
-              </div>
-              <div className={`ml-2 flex items-center text-sm ${
-                earningsData?.percentChange && earningsData.percentChange >= 0 
-                  ? 'text-green-500' 
-                  : 'text-red-500'
-              }`}>
-                {earningsData?.percentChange && earningsData.percentChange >= 0 ? (
-                  <ArrowUpIcon className="h-4 w-4 mr-1" />
-                ) : (
-                  <ArrowDownIcon className="h-4 w-4 mr-1" />
-                )}
-                {Math.abs(earningsData?.percentChange || 0).toFixed(1)}%
-              </div>
-            </div>
-          </div>
-          
-          <TabsContent value="weekly" className="mt-0">
-            <div className="h-[300px] mt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={earningsData?.chartData || []}>
-                  <defs>
-                    <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="date" />
-                  <YAxis 
-                    tickFormatter={(value) => `$${value}`}
-                    width={60}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#6366f1" 
-                    fillOpacity={1} 
-                    fill="url(#colorAmount)" 
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="monthly" className="mt-0">
-            <div className="h-[300px] mt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={earningsData?.chartData || []}>
-                  <defs>
-                    <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="date" />
-                  <YAxis 
-                    tickFormatter={(value) => `$${value}`}
-                    width={60}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#6366f1" 
-                    fillOpacity={1} 
-                    fill="url(#colorAmount)" 
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="yearly" className="mt-0">
-            <div className="h-[300px] mt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={earningsData?.chartData || []}>
-                  <defs>
-                    <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="date" />
-                  <YAxis 
-                    tickFormatter={(value) => `$${value}`}
-                    width={60}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#6366f1" 
-                    fillOpacity={1} 
-                    fill="url(#colorAmount)" 
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-        </Tabs>
+        <div className={isMobile ? "h-[200px]" : "h-[300px]"}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 10,
+                left: isMobile ? 0 : 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fontSize: isMobile ? 10 : 12 }}
+                tickMargin={isMobile ? 5 : 10}
+              />
+              <YAxis 
+                tickFormatter={(value) => `$${value}`} 
+                tick={{ fontSize: isMobile ? 10 : 12 }}
+                width={isMobile ? 40 : 60}
+              />
+              <Tooltip
+                formatter={(value) => [`$${value}`, "Earnings"]}
+                contentStyle={{ fontSize: isMobile ? 10 : 12 }}
+              />
+              <Legend wrapperStyle={{ fontSize: isMobile ? 10 : 12 }} />
+              <Line
+                type="monotone"
+                dataKey="earnings"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                activeDot={{ r: 6 }}
+                dot={{ r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );
