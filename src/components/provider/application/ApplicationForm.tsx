@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Steps, Step } from '@/components/ui/steps';
@@ -144,17 +143,14 @@ export const ApplicationForm = ({
     }
   };
 
-  // Check if all required options in Documents step are selected
   const isDocumentsStepComplete = 
     agreeToTerms && 
     agreeToBackgroundCheck && 
-    agreeToTraining && 
-    resume !== null;
+    agreeToTraining;
 
   const isNextButtonDisabled = () => {
     if (isLoading) return true;
     
-    // For Documents step, all three checkboxes and resume must be selected/uploaded
     if (currentStep === ApplicationStep.DOCUMENTS) {
       return !isDocumentsStepComplete;
     }

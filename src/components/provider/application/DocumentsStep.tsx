@@ -1,12 +1,12 @@
+
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Info } from 'lucide-react';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { TooltipIndicator } from './components/FormSelectionButtons';
+
 interface DocumentsStepProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
   resume: File | null;
@@ -22,6 +22,7 @@ interface DocumentsStepProps {
   setAgreeToBackgroundCheck: (value: boolean) => void;
   setAgreeToTraining: (value: boolean) => void;
 }
+
 export const DocumentsStep = ({
   handleFileChange,
   resume,
@@ -38,17 +39,9 @@ export const DocumentsStep = ({
   setAgreeToTraining
 }: DocumentsStepProps) => {
   return <div className="space-y-6">
-      <Alert className="mb-4">
-        <Info className="h-4 w-4" />
-        <AlertTitle>Verification Required</AlertTitle>
-        <AlertDescription>
-          To ensure the safety of our clients, we require documentation for all service providers.
-        </AlertDescription>
-      </Alert>
-      
       <div className="space-y-2">
         <div className="flex items-center space-x-1">
-          <Label htmlFor="resume">Resume/CV</Label>
+          <Label htmlFor="resume">Resume/CV (Optional)</Label>
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -57,7 +50,7 @@ export const DocumentsStep = ({
                 </span>
               </TooltipTrigger>
               <TooltipContent side="right" className="bg-primary text-primary-foreground border border-primary/60 p-2 text-sm max-w-xs">
-                <p>Upload your resume or CV in PDF, DOC, or DOCX format</p>
+                <p>Optionally upload your resume or CV in PDF, DOC, or DOCX format</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
