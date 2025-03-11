@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -100,7 +101,7 @@ export const ExperienceStep = ({
               <TooltipTrigger asChild>
                 <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
               </TooltipTrigger>
-              <TooltipContent className="bg-green-500 text-white border-green-600">
+              <TooltipContent className="bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60">
                 <p>Select the type of employment you are looking for</p>
               </TooltipContent>
             </Tooltip>
@@ -108,7 +109,6 @@ export const ExperienceStep = ({
         </div>
         
         <Select 
-          id="employment-type"
           value={selectedEmploymentType} 
           onValueChange={handleEmploymentTypeChange}
         >
@@ -133,7 +133,7 @@ export const ExperienceStep = ({
               key={day} 
               className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
                 ${availability.includes(day) 
-                  ? 'bg-green-500/10 border-green-500' 
+                  ? 'bg-primary/10 border-primary dark:bg-dark-primary/10 dark:border-dark-primary' 
                   : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               onClick={() => toggleAvailability(day)}
             >
@@ -178,7 +178,7 @@ export const ExperienceStep = ({
                     <div 
                       className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                         skills.includes(skill) ? 
-                        'bg-green-500 text-white border-green-600' : 
+                        'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
                         'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                       }`}
                       onClick={() => {
@@ -192,7 +192,7 @@ export const ExperienceStep = ({
                     <div 
                       className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                         !skills.includes(skill) ? 
-                        'bg-red-500 text-white border-red-600' : 
+                        'bg-destructive text-destructive-foreground border-destructive/60' : 
                         'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                       }`}
                       onClick={() => {
@@ -226,7 +226,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     availability.includes("own-vehicle") ? 
-                    'bg-green-500 text-white border-green-600' : 
+                    'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -240,7 +240,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     !availability.includes("own-vehicle") ? 
-                    'bg-red-500 text-white border-red-600' : 
+                    'bg-destructive text-destructive-foreground border-destructive/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -262,7 +262,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     availability.includes("own-supplies") ? 
-                    'bg-green-500 text-white border-green-600' : 
+                    'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -276,7 +276,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     !availability.includes("own-supplies") ? 
-                    'bg-red-500 text-white border-red-600' : 
+                    'bg-destructive text-destructive-foreground border-destructive/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -308,7 +308,7 @@ export const ExperienceStep = ({
                       key={equipment}
                       className={`flex items-center space-x-2 p-2 rounded-md border ${
                         selectedEquipment.includes(equipment) ? 
-                        'bg-green-500/10 border-green-500' : 
+                        'bg-primary/10 border-primary dark:bg-dark-primary/10 dark:border-dark-primary' : 
                         'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                       }`}
                       onClick={() => toggleEquipment(equipment)}
