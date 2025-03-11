@@ -1,63 +1,43 @@
 
-import { Link, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, Settings, User, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  CalendarDays, 
+  UserCircle, 
+  MessageSquare,
+  Settings,
+  InboxIcon
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export const ProviderBottomNav = () => {
+const ProviderBottomNav = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-
+  
   const navItems = [
-    {
-      name: "Dashboard",
-      icon: Home,
-      path: "/provider/dashboard",
-    },
-    {
-      name: "Bookings",
-      icon: Calendar,
-      path: "/provider/bookings",
-    },
-    {
-      name: "Availability",
-      icon: Clock,
-      path: "/provider/availability",
-    },
-    {
-      name: "Messages",
-      icon: MessageSquare,
-      path: "/provider/messages",
-    },
-    {
-      name: "Profile",
-      icon: User,
-      path: "/provider/profile",
-    },
+    { name: 'Dashboard', path: '/provider/dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
+    { name: 'Bookings', path: '/provider/bookings', icon: <CalendarDays className="h-5 w-5" /> },
+    { name: 'Pending', path: '/provider/pending-pool', icon: <InboxIcon className="h-5 w-5" /> },
+    { name: 'Messages', path: '/provider/messages', icon: <MessageSquare className="h-5 w-5" /> },
+    { name: 'Profile', path: '/provider/profile', icon: <UserCircle className="h-5 w-5" /> },
   ];
-
-  const isActive = (path: string) => {
-    if (path === '/provider/dashboard') {
-      return currentPath === path || currentPath === '/provider';
-    }
-    return currentPath === path || 
-      (path !== '/provider/dashboard' && currentPath.startsWith(path));
-  };
-
+  
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 md:hidden">
-      <div className="grid h-full grid-cols-5">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div className="grid grid-cols-5 h-16">
         {navItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
             className={cn(
               "flex flex-col items-center justify-center",
-              isActive(item.path)
+              currentPath === item.path
                 ? "text-primary"
-                : "text-gray-500 hover:text-primary"
+                : "text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
             )}
           >
-            <item.icon className="w-6 h-6" />
+            {item.icon}
             <span className="text-xs mt-1">{item.name}</span>
           </Link>
         ))}
@@ -65,3 +45,5 @@ export const ProviderBottomNav = () => {
     </div>
   );
 };
+
+export default ProviderBottomNav;
