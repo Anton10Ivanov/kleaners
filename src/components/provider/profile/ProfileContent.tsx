@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProfileHeader } from "./ProfileHeader";
 import { ContactSection } from "./sections/ContactSection";
 import { ExperienceSection } from "./sections/ExperienceSection";
@@ -9,7 +9,9 @@ import { PersonalStatementSection } from "./sections/PersonalStatementSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import { AvailabilitySection } from "./sections/AvailabilitySection";
 import { EmploymentSection } from "./sections/EmploymentSection";
-import { SettingsSection } from "./sections/SettingsSection";
+import { Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileContentProps {
   provider: any;
@@ -24,6 +26,8 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
   availability,
   paymentInfo
 }) => {
+  const navigate = useNavigate();
+
   return (
     <Card className="shadow-lg border-0">
       <CardHeader className="relative pb-0">
@@ -31,6 +35,18 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
       </CardHeader>
       
       <CardContent className="pt-12 px-6 pb-6">
+        <div className="mb-6 flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => navigate('/provider/settings')}
+          >
+            <Settings className="h-4 w-4" />
+            Settings
+          </Button>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-6">
             <ContactSection provider={provider} />
@@ -43,7 +59,6 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             <SkillsSection skills={skills} />
             <AvailabilitySection availability={availability} />
             <EmploymentSection />
-            <SettingsSection />
           </div>
         </div>
         
