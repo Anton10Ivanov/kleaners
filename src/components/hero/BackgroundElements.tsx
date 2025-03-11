@@ -1,9 +1,10 @@
+
 import React, { memo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
-// Make sure to import directly from utils/errors instead of errorHandling
+// Import from the new utils/errors file
 import { handleError } from '@/utils/errors';
 
 interface DotProps {

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { createConversation } from '@/utils/chatUtils';
+import { createConversation } from '@/utils/chat';
 
 export interface Conversation {
   id: string;
