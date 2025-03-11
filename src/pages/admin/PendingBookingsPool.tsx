@@ -25,12 +25,12 @@ export const AdminPendingBookingsPool = () => {
           email: 'john.davis@example.com',
           phone: '+1234567890',
           date: new Date(Date.now() + 172800000).toISOString(), // 2 days from now
-          time: '10:00 - 12:00',
-          status: 'pending',
           service_type: 'regular',
           address: '123 Main St, Apt 4B, New York',
           total_price: 120,
           created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+          status: 'pending',
+          time_slot: '10:00 - 12:00', // Changed from 'time' to 'time_slot'
         },
         {
           id: 'pool-2',
@@ -39,12 +39,12 @@ export const AdminPendingBookingsPool = () => {
           email: 'emily.wilson@example.com',
           phone: '+1987654321',
           date: new Date(Date.now() + 345600000).toISOString(), // 4 days from now
-          time: '14:00 - 17:00',
-          status: 'pending',
           service_type: 'deep',
           address: '456 Park Ave, Suite 303, Boston',
           total_price: 220,
           created_at: new Date(Date.now() - 43200000).toISOString(), // 12 hours ago
+          status: 'pending',
+          time_slot: '14:00 - 17:00', // Changed from 'time' to 'time_slot'
         },
         {
           id: 'pool-3',
@@ -53,12 +53,12 @@ export const AdminPendingBookingsPool = () => {
           email: 'michael.brown@example.com',
           phone: '+1122334455',
           date: new Date(Date.now() + 259200000).toISOString(), // 3 days from now
-          time: '09:00 - 11:00',
-          status: 'pending',
           service_type: 'move_in_out',
           address: '789 Oak St, Chicago',
           total_price: 180,
           created_at: new Date(Date.now() - 14400000).toISOString(), // 4 hours ago
+          status: 'pending',
+          time_slot: '09:00 - 11:00', // Changed from 'time' to 'time_slot'
         }
       ];
       
