@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { handleApiError, ErrorSeverity } from '@/utils/errors';
+import { handleApiError, ErrorSeverity } from '@/utils/errorHandling';
 import { JoinTeamFormData } from './types';
 
 export const useFormSubmission = (

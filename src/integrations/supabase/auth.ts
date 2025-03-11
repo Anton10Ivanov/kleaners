@@ -16,6 +16,13 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
       }
     }
     
+    // Special case for ai@kleaners.de - always grant super admin access
+    const { data: userData } = await supabase.auth.getUser();
+    if (userData?.user?.email === 'ai@kleaners.de') {
+      console.log('Granting SUPER_ADMIN role to ai@kleaners.de');
+      return [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.CLIENT];
+    }
+    
     // First check if user is an admin - using a direct query to admin_roles
     const { data: adminRolesData, error: adminRolesError } = await supabase
       .from('admin_roles')
@@ -85,12 +92,26 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
 
 // Check if user has a specific role
 export async function hasRole(role: UserRole, userId?: string): Promise<boolean> {
+  // Special case for ai@kleaners.de - always return true for any role check
+  const { data: userData } = await supabase.auth.getUser();
+  if (userData?.user?.email === 'ai@kleaners.de') {
+    console.log(`Granting ${role} access to ai@kleaners.de`);
+    return true;
+  }
+
   const roles = await getUserRoles(userId);
   return roles.includes(role);
 }
 
 // Check if user has admin access (either admin or super_admin)
 export const hasAdminAccess = async (userId: string): Promise<boolean> => {
+  // Special case for ai@kleaners.de
+  const { data: userData } = await supabase.auth.getUser();
+  if (userData?.user?.email === 'ai@kleaners.de') {
+    console.log('Granting admin access to ai@kleaners.de');
+    return true;
+  }
+
   console.log("Admin access check bypassed for development");
   return true; // Always return true for development
 };
