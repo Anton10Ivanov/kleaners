@@ -177,6 +177,48 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          notes: string | null
+          password: string | null
+          phone: string | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          notes?: string | null
+          password?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          notes?: string | null
+          password?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
       customer_profiles: {
         Row: {
           created_at: string | null
@@ -246,48 +288,6 @@ export type Database = {
           submission_count?: number | null
           user_agent?: string | null
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      customers: {
-        Row: {
-          address: string | null
-          created_at: string | null
-          email: string
-          first_name: string
-          id: string
-          last_name: string
-          notes: string | null
-          password: string | null
-          phone: string | null
-          updated_at: string | null
-          username: string | null
-        }
-        Insert: {
-          address?: string | null
-          created_at?: string | null
-          email: string
-          first_name: string
-          id?: string
-          last_name: string
-          notes?: string | null
-          password?: string | null
-          phone?: string | null
-          updated_at?: string | null
-          username?: string | null
-        }
-        Update: {
-          address?: string | null
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          last_name?: string
-          notes?: string | null
-          password?: string | null
-          phone?: string | null
-          updated_at?: string | null
-          username?: string | null
         }
         Relationships: []
       }
