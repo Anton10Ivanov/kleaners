@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { getBookingData } from '@/components/provider/bookings/bookingData';
-import { FilterableStatsCards } from '@/components/provider/bookings/FilterableStatsCards';
 import BookingsHeader from '@/components/provider/bookings/BookingsHeader';
 import BookingsContent from '@/components/provider/bookings/BookingsContent';
 
@@ -14,7 +13,7 @@ const ProviderBookings = () => {
   // Get booking data from our utility
   const { upcomingBookings, pendingBookings, completedBookings } = getBookingData();
 
-  // Summary data for the filterable stats cards
+  // Summary data for the stats cards
   const [bookingSummary, setBookingSummary] = useState({
     total: 0,
     upcoming: 0,
@@ -52,14 +51,7 @@ const ProviderBookings = () => {
         subtitle="Manage your cleaning assignments" 
       />
 
-      {/* Stats Cards */}
-      <FilterableStatsCards
-        filterType={selectedTab}
-        setFilterType={setSelectedTab}
-        bookingSummary={bookingSummary}
-      />
-
-      {/* Main Content */}
+      {/* Main Content with integrated stats */}
       <BookingsContent 
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
@@ -69,6 +61,7 @@ const ProviderBookings = () => {
         selectedBookingId={selectedBookingId}
         setSelectedBookingId={setSelectedBookingId}
         selectedBooking={selectedBooking}
+        bookingSummary={bookingSummary}
       />
     </div>
   );
