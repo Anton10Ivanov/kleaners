@@ -6,7 +6,6 @@ import { UserPlus, FileText, CheckCheck, CheckCircle } from 'lucide-react';
 import { PersonalInfoStep } from '@/components/provider/application/PersonalInfoStep';
 import { ExperienceStep } from '@/components/provider/application/ExperienceStep';
 import { DocumentsStep } from '@/components/provider/application/DocumentsStep';
-import { AgreementStep } from '@/components/provider/application/AgreementStep';
 import { ConfirmationStep } from '@/components/provider/application/ConfirmationStep';
 import { ApplicationStep } from '@/hooks/useJoinTeamForm';
 
@@ -116,12 +115,6 @@ export const ApplicationForm = ({
             backgroundCheckConsent={backgroundCheckConsent}
             setResume={setResume}
             setBackgroundCheckConsent={setBackgroundCheckConsent}
-          />
-        );
-        
-      case ApplicationStep.AGREEMENT:
-        return (
-          <AgreementStep
             message={message}
             agreeToTerms={agreeToTerms}
             agreeToBackgroundCheck={agreeToBackgroundCheck}
@@ -155,7 +148,7 @@ export const ApplicationForm = ({
     <Card className="border-0 shadow-md w-full">
       <CardHeader className="px-4 sm:px-6">
         <CardTitle>Provider Application</CardTitle>
-        <CardDescription>Step {currentStep + 1} of 5</CardDescription>
+        <CardDescription>Step {currentStep + 1} of 4</CardDescription>
       </CardHeader>
       
       <div className="px-4 sm:px-6 pt-2 pb-4 overflow-x-auto">
@@ -163,8 +156,7 @@ export const ApplicationForm = ({
           <Step icon={<UserPlus className="h-4 w-4" />} title="Personal Info" />
           <Step icon={<CheckCircle className="h-4 w-4" />} title="Experience" />
           <Step icon={<FileText className="h-4 w-4" />} title="Documents" />
-          <Step icon={<CheckCheck className="h-4 w-4" />} title="Agreement" />
-          <Step icon={<CheckCircle className="h-4 w-4" />} title="Review" />
+          <Step icon={<CheckCheck className="h-4 w-4" />} title="Review" />
         </Steps>
       </div>
       
@@ -182,7 +174,7 @@ export const ApplicationForm = ({
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={isLoading || (currentStep === ApplicationStep.AGREEMENT && (!agreeToTerms || !agreeToBackgroundCheck))}
+          disabled={isLoading || (currentStep === ApplicationStep.DOCUMENTS && (!agreeToTerms || !agreeToBackgroundCheck))}
         >
           {isLoading ? "Submitting..." : 
             currentStep === ApplicationStep.CONFIRMATION ? "Submit Application" : "Next Step"}

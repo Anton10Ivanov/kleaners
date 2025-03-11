@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { handleApiError, ErrorSeverity } from '@/utils/errorHandling';
 import { JoinTeamFormData } from './types';
-import { ApplicationStep } from './types';
 
 export const useFormSubmission = (
   agreeToBackgroundCheck: boolean,

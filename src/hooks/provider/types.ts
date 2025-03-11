@@ -6,8 +6,7 @@ export enum ApplicationStep {
   PERSONAL_INFO = 0,
   EXPERIENCE = 1,
   DOCUMENTS = 2,
-  AGREEMENT = 3,
-  CONFIRMATION = 4
+  CONFIRMATION = 3
 }
 
 // Define the form schema with Zod
