@@ -1,13 +1,21 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
-import { Save, Calendar as CalendarIcon } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
 import { DaysAvailability } from '@/hooks/useProviderAvailability';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { useProviderSchedule } from '@/hooks/useProviderSchedule';
+
+interface WeeklyScheduleProps {
+  form: UseFormReturn<any>;
+  availableDays: DaysAvailability;
+  timeRanges: TimeRange[];
+  toggleDayAvailability: (day: string, value: boolean) => void;
+  updateTimeRange: (id: number, field: 'start' | 'end', value: string) => void;
+}
 
 interface TimeRange {
   id: number;
@@ -16,27 +24,32 @@ interface TimeRange {
   end: string;
 }
 
-interface WeeklyScheduleProps {
-  form: UseFormReturn<any>;
-  availableDays: DaysAvailability;
-  timeRanges: TimeRange[];
-  toggleDayAvailability: (day: string, value: boolean) => void;
-  addTimeRange: (day: string) => void;
-  removeTimeRange: (id: number) => void;
-  updateTimeRange: (id: number, field: 'start' | 'end', value: string) => void;
-  saveAvailability: () => void;
-}
-
 export const WeeklySchedule = ({
   form,
   availableDays,
   timeRanges,
   toggleDayAvailability,
   updateTimeRange,
-  saveAvailability
 }: WeeklyScheduleProps) => {
+  const { saveSchedule, isLoading } = useProviderSchedule();
   const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   
+  const handleSaveSchedule = async () => {
+    const schedules = weekdays
+      .filter(day => availableDays[day as keyof typeof availableDays])
+      .map(day => {
+        const range = timeRanges.find(r => r.day === day);
+        return {
+          day,
+          start_time: range?.start || '09:00',
+          end_time: range?.end || '17:00',
+          is_available: true
+        };
+      });
+    
+    await saveSchedule(schedules);
+  };
+
   const convertTimeToMinutes = (time: string): number => {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
@@ -118,11 +131,12 @@ export const WeeklySchedule = ({
         
         <div className="flex justify-end mt-6">
           <Button 
-            onClick={saveAvailability} 
+            onClick={handleSaveSchedule}
             className="w-full sm:w-auto"
+            disabled={isLoading}
           >
             <Save className="h-4 w-4 mr-2" />
-            Save Schedule
+            {isLoading ? 'Saving...' : 'Save Schedule'}
           </Button>
         </div>
       </div>

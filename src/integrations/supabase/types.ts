@@ -475,6 +475,39 @@ export type Database = {
           },
         ]
       }
+      provider_schedules: {
+        Row: {
+          created_at: string | null
+          day: string
+          end_time: string
+          id: string
+          is_available: boolean | null
+          provider_id: string
+          start_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          day: string
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          provider_id: string
+          start_time: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          day?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          provider_id?: string
+          start_time?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       provider_vacation_requests: {
         Row: {
           created_at: string
