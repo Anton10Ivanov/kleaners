@@ -1,6 +1,6 @@
 
 import { Progress } from "@/components/ui/progress";
-import { InfoCircle } from "lucide-react";
+import { Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export type ProfileSection = {
@@ -37,7 +37,7 @@ export const ProfileCompletionIndicator = ({ sections }: ProfileCompletionIndica
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <InfoCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+                <Info className="h-4 w-4 text-muted-foreground cursor-help" />
               </TooltipTrigger>
               <TooltipContent>
                 <p className="w-64">Complete your profile to improve visibility to clients and increase booking opportunities.</p>
