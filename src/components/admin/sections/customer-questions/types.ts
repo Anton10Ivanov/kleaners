@@ -10,3 +10,6 @@ export type ClientQuestion = {
   ip_address: string | null;
   user_agent: string | null;
 };
+
+export type { ClientQuestion as CustomerQuestion };  // Add type alias for backward compatibility
+
