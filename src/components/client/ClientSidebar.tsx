@@ -1,83 +1,51 @@
 
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  User, 
-  Calendar, 
-  FileText,
-  MessageSquare
-} from "lucide-react";
+import { NavLink } from 'react-router-dom';
+import { BookOpenCheck, Calendar, Home, MessageSquare, Receipt, Settings, User } from 'lucide-react';
 
 const ClientSidebar = () => {
-  const { pathname } = useLocation();
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  
-  const routes = [
-    {
-      label: "Bookings",
-      icon: <Calendar className="h-5 w-5 mr-2" />,
-      href: "/client/bookings",
-      active: pathname === "/client/bookings",
-    },
-    {
-      label: "Messages",
-      icon: <MessageSquare className="h-5 w-5 mr-2" />,
-      href: "/client/messages",
-      active: pathname === "/client/messages",
-    },
-    {
-      label: "Invoices",
-      icon: <FileText className="h-5 w-5 mr-2" />,
-      href: "/client/invoices",
-      active: pathname === "/client/invoices",
-    },
-    {
-      label: "Profile",
-      icon: <User className="h-5 w-5 mr-2" />,
-      href: "/client/profile",
-      active: pathname === "/client/profile",
-    },
+  const navItems = [
+    { to: '/client/dashboard', label: 'Dashboard', icon: <Home className="h-5 w-5" /> },
+    { to: '/client/bookings', label: 'Bookings', icon: <Calendar className="h-5 w-5" /> },
+    { to: '/client/messages', label: 'Messages', icon: <MessageSquare className="h-5 w-5" /> },
+    { to: '/client/invoices', label: 'Invoices', icon: <Receipt className="h-5 w-5" /> },
+    { to: '/client/profile', label: 'Profile', icon: <User className="h-5 w-5" /> },
+    { to: '/client/settings', label: 'Settings', icon: <Settings className="h-5 w-5" /> },
   ];
 
   return (
-    <div className={cn(
-      "bg-white dark:bg-gray-800 h-full shadow-sm flex flex-col",
-      isMobile ? "w-16 py-4" : "w-64 py-6 px-4"
-    )}>
-      <div className="flex items-center mb-8 px-4">
-        {!isMobile && (
-          <h1 className="text-xl font-bold">Client Portal</h1>
-        )}
-        {isMobile && (
-          <User className="h-6 w-6 mx-auto" />
-        )}
+    <div className="w-64 bg-white h-full border-r border-gray-200 flex flex-col">
+      <div className="p-4 border-b border-gray-200">
+        <h2 className="text-lg font-bold text-primary">Kleaners</h2>
+        <p className="text-sm text-muted-foreground">Client Portal</p>
       </div>
-      <ScrollArea className="flex-1 pt-4">
-        <div className="flex flex-col gap-2 px-2">
-          {routes.map((route) => (
-            <Link 
-              key={route.href} 
-              to={route.href}
-              className="no-underline"
-            >
-              <Button
-                variant={route.active ? "default" : "ghost"}
-                className={cn(
-                  "w-full justify-start",
-                  isMobile && "justify-center px-2"
-                )}
-                size={isMobile ? "icon" : "default"}
+      
+      <nav className="flex-1 p-4">
+        <ul className="space-y-2">
+          {navItems.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-2 rounded-md transition-colors ${
+                    isActive
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  }`
+                }
               >
-                {route.icon}
-                {!isMobile && <span>{route.label}</span>}
-              </Button>
-            </Link>
+                <span className="mr-3">{item.icon}</span>
+                {item.label}
+              </NavLink>
+            </li>
           ))}
-        </div>
-      </ScrollArea>
+        </ul>
+      </nav>
+      
+      <div className="p-4 border-t border-gray-200">
+        <p className="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Kleaners
+        </p>
+      </div>
     </div>
   );
 };

@@ -2,16 +2,14 @@
 import React from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useUserProfileData } from '@/hooks/useUserProfileData';
-import { Bell, FileText, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import { AccountInfoCard } from '@/components/user/profile/AccountInfoCard';
-import { SecuritySettings } from '@/components/user/profile/SecuritySettings';
-import { AccountPreferences } from '@/components/user/profile/AccountPreferences';
 import { AvatarSection } from '@/components/user/profile/AvatarSection';
-import { Accordion } from '@/components/ui/accordion';
-import { NotificationsPanel } from '@/components/user/profile/NotificationsPanel';
 import { ProfileSkeleton } from '@/components/user/profile/ProfileSkeleton';
 import { ProfileErrorState } from '@/components/user/profile/ProfileErrorState';
-import { AccordionSection } from '@/components/user/profile/AccordionSection';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardFooter } from '@/components/ui/card';
 
 /**
  * ClientProfile Page
@@ -29,9 +27,6 @@ export default function ClientProfile(): JSX.Element {
     error: profileError,
     updateProfile,
     updateAvatar,
-    passwordStrength,
-    checkPasswordStrength,
-    changePassword
   } = useUserProfileData();
   
   // Loading state for profile
@@ -54,66 +49,96 @@ export default function ClientProfile(): JSX.Element {
   }
   
   return (
-    <div className="container mx-auto p-4 space-y-6">
-      {/* Avatar and name section */}
-      <div className="flex flex-col items-center mb-8">
-        <AvatarSection
-          avatarUrl={profile.avatarUrl}
-          fullName={profile.fullName}
-          onUpdateAvatar={updateAvatar}
+    <div className="container mx-auto p-4 space-y-6 pb-16 md:pb-0">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Your Profile</h1>
+        <Link to="/client/settings">
+          <Button variant="outline" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            Settings
+          </Button>
+        </Link>
+      </div>
+      
+      {/* Profile summary card */}
+      <Card className="overflow-hidden">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-6">
+          <AvatarSection
+            avatarUrl={profile.avatarUrl}
+            fullName={profile.fullName}
+            onUpdateAvatar={updateAvatar}
+          />
+        </div>
+        
+        <CardContent className="p-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold mb-2">Email</h3>
+              <p className="text-muted-foreground">{profile.email}</p>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-2">Phone</h3>
+              <p className="text-muted-foreground">{profile.phone || "Not provided"}</p>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-2">Member Since</h3>
+              <p className="text-muted-foreground">
+                {new Date(profile.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+        
+        <CardFooter className="bg-gray-50 px-6 py-4 flex justify-end">
+          <Button variant="outline" onClick={() => document.getElementById('edit-profile-button')?.click()}>
+            Edit Profile Information
+          </Button>
+        </CardFooter>
+      </Card>
+      
+      {/* Account Information Card */}
+      <div className="mt-8 id="account-details">
+        <AccountInfoCard
+          profile={profile}
+          onSave={updateProfile}
         />
       </div>
       
-      <Accordion type="single" collapsible className="w-full space-y-4">
-        {/* Account Information Accordion */}
-        <AccordionSection
-          value="account-info"
-          title="Account Information"
-          icon={User}
-        >
-          <AccountInfoCard
-            profile={profile}
-            onSave={updateProfile}
-          />
-        </AccordionSection>
-
-        {/* Security Settings Accordion */}
-        <AccordionSection
-          value="security"
-          title="Security Settings"
-          icon={FileText}
-        >
-          <SecuritySettings
-            passwordStrength={passwordStrength}
-            onPasswordCheck={checkPasswordStrength}
-            onPasswordChange={changePassword}
-          />
-        </AccordionSection>
-
-        {/* Notifications Accordion */}
-        <AccordionSection
-          value="notifications"
-          title="Notifications"
-          icon={Bell}
-        >
-          <NotificationsPanel
-            preferences={profile.notificationPreferences}
-            onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
-          />
-        </AccordionSection>
-
-        {/* Account Preferences Accordion */}
-        <AccordionSection
-          value="account-prefs"
-          title="Account Preferences"
-          icon={User}
-        >
-          <AccountPreferences
-            preferences={profile.accountPreferences}
-            onSave={(prefs) => updateProfile({ accountPreferences: prefs })}
-          />
-        </AccordionSection>
-      </Accordion>
+      {/* Settings shortcuts */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardDescription className="text-center">
+            Manage additional settings
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link to="/client/settings?tab=security">
+              <Button variant="outline" className="w-full justify-start">
+                <User className="mr-2 h-4 w-4" />
+                Security Settings
+              </Button>
+            </Link>
+            
+            <Link to="/client/settings?tab=notifications">
+              <Button variant="outline" className="w-full justify-start">
+                <User className="mr-2 h-4 w-4" />
+                Notification Preferences
+              </Button>
+            </Link>
+            
+            <Link to="/client/settings?tab=preferences">
+              <Button variant="outline" className="w-full justify-start">
+                <User className="mr-2 h-4 w-4" />
+                Account Preferences
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

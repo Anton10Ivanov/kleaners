@@ -27,6 +27,7 @@ import Dashboard from '@/pages/admin/Dashboard';
 import ClientDashboard from '@/pages/client/ClientDashboard';
 import ClientBookings from '@/pages/client/ClientBookings';
 import ClientProfile from '@/pages/client/ClientProfile';
+import ClientSettings from '@/pages/client/ClientSettings';
 import ClientInvoices from '@/pages/client/ClientInvoices';
 import ClientMessages from '@/pages/client/ClientMessages';
 
@@ -120,6 +121,7 @@ function App() {
           <Route path="messages" element={<ClientMessages />} />
           <Route path="invoices" element={<ClientInvoices />} />
           <Route path="profile" element={<ClientProfile />} />
+          <Route path="settings" element={<ClientSettings />} />
         </Route>
         
         {/* Provider routes */}
@@ -141,6 +143,7 @@ function App() {
             <Route path="messages" element={<ClientMessages />} />
             <Route path="invoices" element={<ClientInvoices />} />
             <Route path="profile" element={<ClientProfile />} />
+            <Route path="settings" element={<ClientSettings />} />
           </Route>
         </Routes>} />
 

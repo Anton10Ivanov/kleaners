@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronRight } from 'lucide-react';
@@ -108,6 +107,7 @@ const AppRoutes = () => {
         { path: "/client/messages", component: "ClientMessages", description: "Client messages" },
         { path: "/client/invoices", component: "ClientInvoices", description: "Client invoices" },
         { path: "/client/profile", component: "ClientProfile", description: "Client profile" },
+        { path: "/client/settings", component: "ClientSettings", description: "Client settings" },
       ]
     },
     {
