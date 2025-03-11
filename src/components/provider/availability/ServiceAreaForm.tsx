@@ -37,10 +37,10 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
   };
   
   return (
-    <div className="px-1">
-      <h3 className="text-lg font-medium mb-4">Add New Service Area</h3>
+    <div className="px-2 sm:px-1">
+      <h3 className="text-lg font-medium mb-3 sm:mb-4">Add New Service Area</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-4 gap-6'}`}>
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-4 gap-6'}`}>
           {/* Postal Code */}
           <div className={`${isMobile ? 'col-span-1' : 'col-span-2'}`}>
             <Label htmlFor="postalCode" className="text-sm font-medium mb-1.5 block">
@@ -53,7 +53,7 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
                 placeholder="e.g. 10115"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                className="pl-9"
+                className="pl-9 h-10"
               />
             </div>
           </div>
@@ -74,16 +74,16 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
               step={1}
               value={travelDistance}
               onChange={(e) => setTravelDistance(parseInt(e.target.value))}
-              className="py-2"
+              className="py-2 h-10"
             />
           </div>
         </div>
         
-        <div className={`${isMobile ? 'pt-2' : 'pt-4'} flex justify-end`}>
+        <div className={`${isMobile ? 'pt-1' : 'pt-4'} flex justify-end`}>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full sm:w-auto"
           >
             {loading ? (
               <>
