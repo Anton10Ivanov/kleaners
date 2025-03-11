@@ -8,8 +8,8 @@ export interface DashboardStats {
   totalBookings: number;
   bookingsThisMonth: number;
   bookingsLastMonth: number;
-  activeCustomers: number;
-  newCustomersThisMonth: number;
+  activeClients: number;  // Updated from activeCustomers
+  newClientsThisMonth: number;  // Updated from newCustomersThisMonth
   percentChange: number;
 }
 
@@ -23,8 +23,8 @@ export const useAdminDashboard = () => {
     totalBookings: 0,
     bookingsThisMonth: 0,
     bookingsLastMonth: 0,
-    activeCustomers: 0,
-    newCustomersThisMonth: 0,
+    activeClients: 0,
+    newClientsThisMonth: 0,
     percentChange: 0
   });
 
@@ -140,8 +140,8 @@ export const useAdminDashboard = () => {
           totalBookings: totalBookings || 0,
           bookingsThisMonth: currentMonthBookings || 0,
           bookingsLastMonth: previousMonthBookings || 0,
-          activeCustomers: activeCustomers || 0,
-          newCustomersThisMonth: newCustomers || 0,
+          activeClients: activeCustomers || 0,
+          newClientsThisMonth: newCustomers || 0,
           percentChange
         });
       } catch (error) {
