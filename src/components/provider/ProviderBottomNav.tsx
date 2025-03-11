@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, Settings, User } from "lucide-react";
+import { Home, Calendar, MessageSquare, Settings, User, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const ProviderBottomNav = () => {
@@ -19,6 +19,11 @@ export const ProviderBottomNav = () => {
       path: "/provider/bookings",
     },
     {
+      name: "Availability",
+      icon: Clock,
+      path: "/provider/availability",
+    },
+    {
       name: "Messages",
       icon: MessageSquare,
       path: "/provider/messages",
@@ -27,11 +32,6 @@ export const ProviderBottomNav = () => {
       name: "Profile",
       icon: User,
       path: "/provider/profile",
-    },
-    {
-      name: "Settings",
-      icon: Settings,
-      path: "/provider/settings",
     },
   ];
 

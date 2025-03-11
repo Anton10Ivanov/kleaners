@@ -1,3 +1,4 @@
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { CalendarClock, MapPin, Plus } from 'lucide-react';
 
 // Service Areas schema
 const serviceAreaSchema = z.object({
@@ -150,24 +152,36 @@ const ProviderAvailability = () => {
   };
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 pb-16 md:pb-0 animate-fadeIn">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold mb-2">Availability Management</h1>
-          <p className="text-muted-foreground">Manage when and where you're available for cleaning jobs</p>
+          <h1 className="text-2xl font-bold mb-2 flex items-center gap-2">
+            <CalendarClock className="h-6 w-6 text-primary" />
+            Availability Management
+          </h1>
+          <p className="text-muted-foreground">Set your working hours and service areas for optimal client matching</p>
         </div>
+        <Button 
+          onClick={() => setVacationDialogOpen(true)}
+          className="bg-gradient-to-r from-primary to-primary-hover text-white hover:opacity-90 transition-all font-medium"
+        >
+          Request Vacation
+        </Button>
       </div>
       
       <Tabs defaultValue="schedule" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="schedule">Weekly Schedule</TabsTrigger>
-          <TabsTrigger value="service-areas">Service Areas</TabsTrigger>
+        <TabsList className="w-full md:w-auto grid grid-cols-2 mb-4">
+          <TabsTrigger value="schedule" className="text-sm px-6">Weekly Schedule</TabsTrigger>
+          <TabsTrigger value="service-areas" className="text-sm px-6">Service Areas</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="schedule">
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Schedule</CardTitle>
+        <TabsContent value="schedule" className="pt-2">
+          <Card className="border shadow-sm bg-card hover:shadow-md transition-all duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl flex items-center gap-2">
+                <CalendarClock className="h-5 w-5 text-primary" />
+                Weekly Working Hours
+              </CardTitle>
               <CardDescription>Set your regular working hours for each day of the week</CardDescription>
             </CardHeader>
             <CardContent>
@@ -185,30 +199,36 @@ const ProviderAvailability = () => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="service-areas">
-          <Card>
-            <CardHeader>
-              <CardTitle>Service Areas</CardTitle>
+        <TabsContent value="service-areas" className="pt-2">
+          <Card className="border shadow-sm bg-card hover:shadow-md transition-all duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-primary" />
+                Service Coverage
+              </CardTitle>
               <CardDescription>Define the areas where you provide cleaning services</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {serviceAreas.length > 0 ? (
                     serviceAreas.map((area) => (
-                      <Card key={area.id} className="p-4">
+                      <Card key={area.id} className="p-4 border border-border/50 hover:border-primary/30 transition-all">
                         <div className="flex justify-between items-start">
-                          <div>
-                            <h4 className="font-medium">{area.postal_code}</h4>
+                          <div className="space-y-1">
+                            <h4 className="font-medium flex items-center gap-1.5">
+                              <MapPin className="h-4 w-4 text-primary" />
+                              {area.postal_code}
+                            </h4>
                             <p className="text-sm text-muted-foreground">
-                              Travel distance: {area.travel_distance} km
+                              Travel radius: {area.travel_distance} km
                             </p>
                           </div>
                           <Button 
                             variant="ghost" 
                             size="sm" 
                             onClick={() => removeServiceArea(area.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-destructive hover:text-destructive/90 hover:bg-destructive/10 -mt-1 -mr-2"
                           >
                             Remove
                           </Button>
@@ -216,15 +236,22 @@ const ProviderAvailability = () => {
                       </Card>
                     ))
                   ) : (
-                    <p className="text-muted-foreground col-span-2">No service areas added yet.</p>
+                    <div className="col-span-full py-6 text-center border border-dashed rounded-lg bg-muted/30">
+                      <MapPin className="h-10 w-10 text-muted-foreground mx-auto mb-2 opacity-60" />
+                      <p className="text-muted-foreground">No service areas added yet.</p>
+                      <p className="text-sm text-muted-foreground">Add your first service area below.</p>
+                    </div>
                   )}
                 </div>
                 
-                <Separator className="my-4" />
+                <Separator className="my-6" />
                 
                 <Form {...serviceAreaForm}>
                   <form onSubmit={serviceAreaForm.handleSubmit(addServiceArea)} className="space-y-4">
-                    <h3 className="text-lg font-medium">Add Service Area</h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Plus className="h-4 w-4 text-primary" />
+                      <h3 className="text-lg font-medium">Add Service Area</h3>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={serviceAreaForm.control}
@@ -233,7 +260,7 @@ const ProviderAvailability = () => {
                           <FormItem>
                             <FormLabel>Postal Code</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="e.g., 10115" />
+                              <Input {...field} placeholder="e.g., 10115" className="bg-background" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -250,6 +277,7 @@ const ProviderAvailability = () => {
                                 type="number" 
                                 {...field}
                                 onChange={(e) => field.onChange(Number(e.target.value))}
+                                className="bg-background"
                               />
                             </FormControl>
                             <FormMessage />
@@ -257,7 +285,11 @@ const ProviderAvailability = () => {
                         )}
                       />
                     </div>
-                    <Button type="submit" className="mt-2" disabled={loading}>
+                    <Button 
+                      type="submit" 
+                      className="mt-4 bg-gradient-to-r from-primary to-primary-hover text-white hover:opacity-90 transition-all" 
+                      disabled={loading}
+                    >
                       {loading ? "Adding..." : "Add Service Area"}
                     </Button>
                   </form>
