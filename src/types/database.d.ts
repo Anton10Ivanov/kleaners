@@ -2,7 +2,7 @@
 export interface Database {
   public: {
     Tables: {
-      customers: {
+      clients: {
         Row: {
           id: string;
           first_name: string;
@@ -50,7 +50,7 @@ export interface Database {
       bookings: {
         Row: {
           id: string;
-          customer_id: string;
+          client_id: string;
           service_type: "regular" | "business" | "move_in_out" | "post_construction";
           booking_date: string;
           start_time: string;
@@ -67,7 +67,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          customer_id: string;
+          client_id: string;
           service_type: "regular" | "business" | "move_in_out" | "post_construction";
           booking_date: string;
           start_time: string;
@@ -84,7 +84,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          customer_id?: string;
+          client_id?: string;
           service_type?: "regular" | "business" | "move_in_out" | "post_construction";
           booking_date?: string;
           start_time?: string;
@@ -147,7 +147,7 @@ export interface Database {
         Row: {
           id: string;
           booking_id: string;
-          customer_id: string;
+          client_id: string;
           provider_id: string;
           rating: number;
           comment?: string | null;
@@ -156,7 +156,7 @@ export interface Database {
         Insert: {
           id?: string;
           booking_id: string;
-          customer_id: string;
+          client_id: string;
           provider_id: string;
           rating: number;
           comment?: string | null;
@@ -165,7 +165,7 @@ export interface Database {
         Update: {
           id?: string;
           booking_id?: string;
-          customer_id?: string;
+          client_id?: string;
           provider_id?: string;
           rating?: number;
           comment?: string | null;
