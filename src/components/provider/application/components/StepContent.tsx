@@ -1,14 +1,12 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ApplicationStep } from '@/hooks/provider/types';
-import { useStepValidation } from '@/hooks/provider/useStepValidation';
-import { ApplicationSteps } from './components/ApplicationSteps';
-import { StepContent } from './components/StepContent';
-import { ApplicationNavigation } from './components/ApplicationNavigation';
+import { PersonalInfoStep } from '@/components/provider/application/PersonalInfoStep';
+import { ExperienceStep } from '@/components/provider/application/ExperienceStep';
+import { DocumentsStep } from '@/components/provider/application/DocumentsStep';
+import { ConfirmationStep } from '@/components/provider/application/ConfirmationStep';
 
-interface ApplicationFormProps {
+interface StepContentProps {
   currentStep: ApplicationStep;
-  formProgress: number;
   name: string;
   email: string;
   phone: string;
@@ -22,7 +20,6 @@ interface ApplicationFormProps {
   agreeToTerms: boolean;
   agreeToBackgroundCheck: boolean;
   agreeToTraining: boolean;
-  isLoading: boolean;
   setName: (value: string) => void;
   setEmail: (value: string) => void;
   setPhone: (value: string) => void;
@@ -37,13 +34,10 @@ interface ApplicationFormProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
   toggleAvailability: (value: string) => void;
   toggleSkill: (value: string) => void;
-  prevStep: () => void;
-  handleSubmit: () => void;
 }
 
-export const ApplicationForm = ({
+export const StepContent = ({ 
   currentStep,
-  formProgress,
   name,
   email,
   phone,
@@ -57,7 +51,6 @@ export const ApplicationForm = ({
   agreeToTerms,
   agreeToBackgroundCheck,
   agreeToTraining,
-  isLoading,
   setName,
   setEmail,
   setPhone,
@@ -71,80 +64,70 @@ export const ApplicationForm = ({
   setBackgroundCheckConsent,
   handleFileChange,
   toggleAvailability,
-  toggleSkill,
-  prevStep,
-  handleSubmit
-}: ApplicationFormProps) => {
-  // Use the custom hook for step validation
-  const { stepValidations, isStepComplete } = useStepValidation(
-    name,
-    email,
-    phone,
-    position,
-    experience,
-    availability,
-    skills,
-    agreeToTerms,
-    agreeToBackgroundCheck,
-    agreeToTraining
-  );
-
-  return (
-    <Card className="border-0 shadow-md w-full">
-      <CardHeader className="px-4 sm:px-6 pb-0">
-        <CardTitle>Provider Application</CardTitle>
-        <CardDescription>Step {currentStep + 1} of 4</CardDescription>
-      </CardHeader>
-      
-      <div className="px-4 sm:px-6 pt-4 pb-2 overflow-x-auto">
-        <ApplicationSteps 
-          currentStep={currentStep} 
-          stepValidations={stepValidations} 
+  toggleSkill
+}: StepContentProps) => {
+  switch (currentStep) {
+    case ApplicationStep.PERSONAL_INFO:
+      return (
+        <PersonalInfoStep
+          name={name}
+          email={email}
+          phone={phone}
+          setName={setName}
+          setEmail={setEmail}
+          setPhone={setPhone}
         />
-      </div>
+      );
       
-      <CardContent className="px-4 sm:px-6 pt-2 pb-4">
-        <StepContent
-          currentStep={currentStep}
+    case ApplicationStep.EXPERIENCE:
+      return (
+        <ExperienceStep
+          position={position}
+          experience={experience}
+          availability={availability}
+          skills={skills}
+          setPosition={setPosition}
+          setExperience={setExperience}
+          toggleAvailability={toggleAvailability}
+          toggleSkill={toggleSkill}
+        />
+      );
+      
+    case ApplicationStep.DOCUMENTS:
+      return (
+        <DocumentsStep
+          handleFileChange={handleFileChange}
+          resume={resume}
+          backgroundCheckConsent={backgroundCheckConsent}
+          setResume={setResume}
+          setBackgroundCheckConsent={setBackgroundCheckConsent}
+          message={message}
+          agreeToTerms={agreeToTerms}
+          agreeToBackgroundCheck={agreeToBackgroundCheck}
+          agreeToTraining={agreeToTraining}
+          setMessage={setMessage}
+          setAgreeToTerms={setAgreeToTerms}
+          setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
+          setAgreeToTraining={setAgreeToTraining}
+        />
+      );
+      
+    case ApplicationStep.CONFIRMATION:
+      return (
+        <ConfirmationStep
           name={name}
           email={email}
           phone={phone}
           position={position}
           experience={experience}
-          availability={availability}
           skills={skills}
+          availability={availability}
           resume={resume}
           backgroundCheckConsent={backgroundCheckConsent}
-          message={message}
-          agreeToTerms={agreeToTerms}
-          agreeToBackgroundCheck={agreeToBackgroundCheck}
-          agreeToTraining={agreeToTraining}
-          setName={setName}
-          setEmail={setEmail}
-          setPhone={setPhone}
-          setPosition={setPosition}
-          setExperience={setExperience}
-          setMessage={setMessage}
-          setAgreeToTerms={setAgreeToTerms}
-          setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
-          setAgreeToTraining={setAgreeToTraining}
-          setResume={setResume}
-          setBackgroundCheckConsent={setBackgroundCheckConsent}
-          handleFileChange={handleFileChange}
-          toggleAvailability={toggleAvailability}
-          toggleSkill={toggleSkill}
+          hasCriminalRecord={!agreeToBackgroundCheck}
         />
-      </CardContent>
-      
-      <CardFooter>
-        <ApplicationNavigation
-          currentStep={currentStep}
-          isLoading={isLoading}
-          isStepComplete={isStepComplete(currentStep)}
-          prevStep={prevStep}
-          handleSubmit={handleSubmit}
-        />
-      </CardFooter>
-    </Card>
-  );
+      );
+    default:
+      return null;
+  }
 };
