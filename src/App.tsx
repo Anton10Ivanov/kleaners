@@ -1,3 +1,4 @@
+
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -48,6 +49,7 @@ import TermsOfService from '@/pages/legal/TermsOfService';
 import PrivacyPolicy from '@/pages/legal/PrivacyPolicy';
 
 // Provider pages
+import ProviderDashboard from '@/pages/provider/ProviderDashboard';
 import ProviderProfile from '@/pages/provider/ProviderProfile';
 import ProviderLayout from '@/components/provider/ProviderLayout';
 import ProviderBookings from '@/pages/provider/ProviderBookings';
@@ -120,6 +122,8 @@ function App() {
         
         {/* Provider routes */}
         <Route path="/provider" element={<ProviderLayout />}>
+          <Route index element={<ProviderDashboard />} />
+          <Route path="dashboard" element={<ProviderDashboard />} />
           <Route path="profile" element={<ProviderProfile />} />
           <Route path="bookings" element={<ProviderBookings />} />
           <Route path="messages" element={<ProviderMessages />} />

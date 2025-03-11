@@ -12,6 +12,12 @@ const ProviderSidebar = () => {
   
   const routes = [
     {
+      label: "Dashboard",
+      icon: <Home className="h-5 w-5 mr-2" />,
+      href: "/provider/dashboard",
+      active: pathname === "/provider" || pathname === "/provider/dashboard",
+    },
+    {
       label: "Bookings",
       icon: <Briefcase className="h-5 w-5 mr-2" />,
       href: "/provider/bookings",
