@@ -20,7 +20,7 @@ const ProviderLayout = () => {
       
       <main className="flex-1 overflow-auto p-3 md:p-6">
         <ScrollArea className="h-full">
-          <div className="mx-auto container max-w-6xl">
+          <div className="mx-auto container max-w-[1400px]">
             <Outlet />
           </div>
           {/* Add padding at the bottom on mobile to account for the bottom nav */}
