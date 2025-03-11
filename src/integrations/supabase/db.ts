@@ -123,4 +123,3 @@ export async function deleteRecord(
     return false;
   }
 }
-
