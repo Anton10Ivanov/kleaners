@@ -1,6 +1,6 @@
 
 import { addDays, format, subDays, subMonths } from 'date-fns';
-import { DashboardStats } from '@/hooks/admin/useAdminDashboard';
+import { DashboardStats } from '@/hooks/admin/types';
 
 // Generate mock dashboard statistics
 export const generateDashboardStats = (bookings: any[]): DashboardStats => {
