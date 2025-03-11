@@ -36,7 +36,7 @@ const ProviderAvailability = () => {
   return (
     <div className="space-y-6 sm:space-y-8 pb-16 md:pb-0 animate-fadeIn">
       <motion.div 
-        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4 px-1 sm:px-0"
+        className="px-1 sm:px-0"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -50,12 +50,6 @@ const ProviderAvailability = () => {
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground">Set your working hours and service areas</p>
         </div>
-        <Button 
-          onClick={() => setVacationDialogOpen(true)}
-          className="bg-gradient-to-r from-[#D946EF] to-[#D946EF]/90 text-white hover:opacity-90 transition-all font-medium shadow-md h-10 w-full md:w-auto"
-        >
-          Request Vacation
-        </Button>
       </motion.div>
       
       <Tabs defaultValue="schedule" value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -126,12 +120,23 @@ const ProviderAvailability = () => {
           <TabsContent value="preferences" className="m-0 mt-4 sm:mt-6">
             <Card className="border shadow-md bg-card hover:shadow-lg transition-all duration-300 overflow-hidden">
               <CardHeader className="pb-2 sm:pb-3 bg-gradient-to-r from-primary/5 to-transparent p-4 sm:p-6">
-                <CardTitle className="text-lg sm:text-xl flex items-center gap-2 text-primary-hover">
-                  <div className="bg-primary/10 p-1.5 sm:p-2 rounded-full">
-                    <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                  </div>
-                  Work Preferences
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg sm:text-xl flex items-center gap-2 text-primary-hover">
+                    <div className="bg-primary/10 p-1.5 sm:p-2 rounded-full">
+                      <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                    </div>
+                    Work Preferences
+                  </CardTitle>
+                  
+                  <Button 
+                    onClick={() => setVacationDialogOpen(true)}
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs sm:text-sm"
+                  >
+                    Request Vacation
+                  </Button>
+                </div>
                 <CardDescription className="text-sm text-muted-foreground">
                   Define your work preferences and specializations
                 </CardDescription>
