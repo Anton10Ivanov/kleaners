@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { Box } from '@/components/layout/Box';
 import { useToast } from '@/hooks/use-toast';
 import ChatInterface from '@/components/chat/ChatInterface';
 import ConversationList from '@/components/chat/ConversationList';
-import { createConversation } from '@/utils/chatUtils';
+import { createConversation } from '@/utils/chat';
 
 const ClientMessages = () => {
   const { toast } = useToast();
@@ -30,11 +29,10 @@ const ClientMessages = () => {
   };
   
   const handleNewConversation = async () => {
-    // In a real app, you would show a user picker dialog here
-    const recipientId = "provider456";
-    const recipientName = "Service Provider";
-    
     try {
+      const recipientId = "provider456";
+      const recipientName = "Service Provider";
+      
       const conversationId = await createConversation(userId, recipientId);
       handleSelectConversation(conversationId, recipientId, recipientName);
       
@@ -57,7 +55,7 @@ const ClientMessages = () => {
       <h1 className="text-2xl font-bold mb-6 mt-8">Messages</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="md:col-span-1 h-[calc(100vh-200px)]">
+        <div className="md:col-span-1 h-[calc(100vh-280px)] md:h-[calc(100vh-200px)]">
           <ConversationList
             userId={userId}
             selectedConversationId={selectedConversation?.id}
@@ -66,7 +64,7 @@ const ClientMessages = () => {
           />
         </div>
         
-        <div className="md:col-span-2 h-[calc(100vh-200px)]">
+        <div className="md:col-span-2 h-[calc(100vh-280px)] md:h-[calc(100vh-200px)]">
           {selectedConversation ? (
             <ChatInterface
               conversationId={selectedConversation.id}

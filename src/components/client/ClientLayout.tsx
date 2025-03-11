@@ -1,14 +1,14 @@
 
 import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import ClientSidebar from './ClientSidebar';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
+import ClientBottomNav from './ClientBottomNav';
 
 const ClientLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,7 +16,6 @@ const ClientLayout = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Check if user is authenticated
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -29,7 +28,6 @@ const ClientLayout = () => {
   
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Mobile sidebar */}
       {isMobile ? (
         <>
           <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -53,12 +51,13 @@ const ClientLayout = () => {
         </div>
       )}
       
-      <main className="flex-1 overflow-x-hidden">
+      <main className="flex-1 overflow-x-hidden pb-16 md:pb-0">
         <div className="container mx-auto">
           <Outlet />
         </div>
       </main>
       
+      {isMobile && <ClientBottomNav />}
       <Toaster />
     </div>
   );
