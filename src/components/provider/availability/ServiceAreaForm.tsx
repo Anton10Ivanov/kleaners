@@ -37,7 +37,7 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
   };
   
   return (
-    <div>
+    <div className="px-1">
       <h3 className="text-lg font-medium mb-4">Add New Service Area</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-4 gap-6'}`}>
