@@ -8,11 +8,11 @@ interface BookingsHeaderProps {
 
 const BookingsHeader = ({ title, subtitle }: BookingsHeaderProps) => {
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">{title}</h1>
-        <p className="text-muted-foreground">{subtitle}</p>
-      </div>
+    <div className="mb-2 md:mb-4">
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{title}</h1>
+      <p className="text-muted-foreground text-sm md:text-base">
+        {subtitle}
+      </p>
     </div>
   );
 };

@@ -31,37 +31,34 @@ const BookingsContent = ({
   bookingSummary
 }: BookingsContentProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       <div className="md:col-span-2">
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex flex-wrap gap-4 mb-4">
-            <div className="flex-1 min-w-[120px] p-4 bg-blue-50 rounded-lg">
-              <div className="text-sm text-muted-foreground">Total</div>
-              <div className="text-2xl font-bold">{bookingSummary.total}</div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4">
+            <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div className="text-xs md:text-sm text-muted-foreground">Total</div>
+              <div className="text-xl md:text-2xl font-bold">{bookingSummary.total}</div>
             </div>
             <div 
-              className={`flex-1 min-w-[120px] p-4 rounded-lg ${selectedTab === 'upcoming' ? 'bg-green-50' : 'bg-gray-50'}`}
+              className={`p-3 md:p-4 rounded-lg cursor-pointer ${selectedTab === 'upcoming' ? 'bg-green-50 dark:bg-green-900/20' : 'bg-gray-50 dark:bg-gray-800'}`}
               onClick={() => setSelectedTab('upcoming')}
-              style={{ cursor: 'pointer' }}
             >
-              <div className="text-sm text-muted-foreground">Upcoming</div>
-              <div className="text-2xl font-bold">{bookingSummary.upcoming}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Upcoming</div>
+              <div className="text-xl md:text-2xl font-bold">{bookingSummary.upcoming}</div>
             </div>
             <div 
-              className={`flex-1 min-w-[120px] p-4 rounded-lg ${selectedTab === 'pending' ? 'bg-amber-50' : 'bg-gray-50'}`}
+              className={`p-3 md:p-4 rounded-lg cursor-pointer ${selectedTab === 'pending' ? 'bg-amber-50 dark:bg-amber-900/20' : 'bg-gray-50 dark:bg-gray-800'}`}
               onClick={() => setSelectedTab('pending')}
-              style={{ cursor: 'pointer' }}
             >
-              <div className="text-sm text-muted-foreground">Pending</div>
-              <div className="text-2xl font-bold">{bookingSummary.pending}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Pending</div>
+              <div className="text-xl md:text-2xl font-bold">{bookingSummary.pending}</div>
             </div>
             <div 
-              className={`flex-1 min-w-[120px] p-4 rounded-lg ${selectedTab === 'completed' ? 'bg-purple-50' : 'bg-gray-50'}`}
+              className={`p-3 md:p-4 rounded-lg cursor-pointer ${selectedTab === 'completed' ? 'bg-purple-50 dark:bg-purple-900/20' : 'bg-gray-50 dark:bg-gray-800'}`}
               onClick={() => setSelectedTab('completed')}
-              style={{ cursor: 'pointer' }}
             >
-              <div className="text-sm text-muted-foreground">Completed</div>
-              <div className="text-2xl font-bold">{bookingSummary.completed}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Completed</div>
+              <div className="text-xl md:text-2xl font-bold">{bookingSummary.completed}</div>
             </div>
           </div>
           
