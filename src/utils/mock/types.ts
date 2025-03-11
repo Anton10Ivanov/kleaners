@@ -1,8 +1,8 @@
 
 // Common types for mock data
 
-// Customer mock data
-export interface MockCustomer {
+// Client mock data
+export interface MockClient {
   id: string;
   firstName: string;
   lastName: string;
@@ -29,8 +29,8 @@ export interface MockProvider {
 // Booking mock data
 export interface MockBooking {
   id: string;
-  customerId: string;
-  customerName: string;
+  clientId: string;
+  clientName: string;
   service: string;
   date: string;
   time: string;
