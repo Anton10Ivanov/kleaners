@@ -22,7 +22,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-8">
+      <div className="flex justify-center items-center py-8 px-1">
         <LoaderCircle className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -30,7 +30,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
 
   if (serviceAreas.length === 0) {
     return (
-      <div className="text-center py-8 px-4 border border-dashed rounded-xl bg-muted/20">
+      <div className="text-center py-8 px-4 border border-dashed rounded-xl bg-muted/20 mx-1">
         <div className="bg-primary/10 p-3 rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center">
           <MapPin className="h-7 w-7 text-primary mx-auto opacity-80" />
         </div>
@@ -41,7 +41,7 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 px-1">
       <h3 className="text-lg font-medium mb-3">Your Service Areas</h3>
       <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3'} gap-3`}>
         <AnimatePresence>
