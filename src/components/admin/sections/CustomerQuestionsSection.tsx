@@ -5,7 +5,7 @@ import { QuestionsTable } from './customer-questions/QuestionsTable';
 import { QuestionDetailsDialog } from './customer-questions/QuestionDetailsDialog';
 import { useCustomerQuestions } from './customer-questions/useCustomerQuestions';
 
-const CustomerQuestionsSection = () => {
+const ClientQuestionsSection = () => {
   const {
     questions,
     isLoading,
@@ -28,7 +28,7 @@ const CustomerQuestionsSection = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Customer Questions</h2>
+        <h2 className="text-2xl font-bold">Client Questions</h2>
         <QuestionFilters 
           statusFilter={statusFilter} 
           setStatusFilter={setStatusFilter}
@@ -53,4 +53,4 @@ const CustomerQuestionsSection = () => {
   );
 };
 
-export default CustomerQuestionsSection;
+export default ClientQuestionsSection;

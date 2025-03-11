@@ -7,16 +7,16 @@ import { generateDashboardStats, generateMonthlyBookingData } from './dashboard'
 
 // Generate mock data for the entire application
 export const generateMockAppData = () => {
-  const customers = generateMockCustomers(15);
+  const clients = generateMockCustomers(15);
   const providers = generateMockProviders(8);
   
   // Generate regular bookings
-  const bookings = generateMockBookings(customers, providers, 40);
+  const bookings = generateMockBookings(clients, providers, 40);
   
   // Add a specific Deep Cleaning booking for testing invoices
-  const specificCustomer = customers[0];
+  const specificClient = clients[0];
   const specificProvider = providers[0];
-  const deepCleaningBooking = generateSpecificDeepCleaningBooking(specificCustomer, specificProvider);
+  const deepCleaningBooking = generateSpecificDeepCleaningBooking(specificClient, specificProvider);
   
   // Add the specific booking to our bookings array
   const allBookings = [...bookings, deepCleaningBooking];
@@ -30,7 +30,7 @@ export const generateMockAppData = () => {
   const monthlyBookingData = generateMonthlyBookingData(allBookings);
   
   return {
-    customers,
+    clients,
     providers,
     bookings: allBookings,
     invoices,
