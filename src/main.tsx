@@ -13,6 +13,7 @@ import { Toaster } from '@/components/ui/toaster'
 if (import.meta.env.DEV) {
   startMockServiceWorker().catch(err => {
     console.warn('Error starting mock service worker:', err)
+    // Continue with the app even if MSW fails
   })
 }
 
