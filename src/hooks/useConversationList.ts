@@ -47,6 +47,8 @@ export const useConversationList = (userId: string) => {
             
             return {
               id: convo.id,
+              participants: convo.participants,
+              unreadCount: count || 0,
               created_at: convo.created_at,
               updated_at: convo.updated_at,
               participant: {
@@ -54,20 +56,21 @@ export const useConversationList = (userId: string) => {
                 name: otherParticipantId.includes('provider') ? 'Service Provider' : 'Client'
               },
               latestMessage: messageData ? {
-                ...messageData,
+                content: messageData.content,
                 sent_at: new Date(messageData.sent_at),
-                attachments: messageData.attachments || [],
-                isFromMe: messageData.sender_id === userId
-              } : undefined,
-              unreadCount: count || 0
+                is_read: messageData.is_read,
+                sender_id: messageData.sender_id,
+                isFromMe: messageData.sender_id === userId,
+                attachments: messageData.attachments || []
+              } : undefined
             };
           })
         );
         
         // Sort by latest message or updated_at
         const sortedConversations = processedConversations.sort((a, b) => {
-          const dateA = a.latestMessage ? a.latestMessage.sent_at : new Date(a.updated_at);
-          const dateB = b.latestMessage ? b.latestMessage.sent_at : new Date(b.updated_at);
+          const dateA = a.latestMessage ? a.latestMessage.sent_at : new Date(a.updated_at || '');
+          const dateB = b.latestMessage ? b.latestMessage.sent_at : new Date(b.updated_at || '');
           return dateB.getTime() - dateA.getTime();
         });
         
@@ -106,7 +109,7 @@ export const useConversationList = (userId: string) => {
   const filteredConversations = searchQuery.trim() === ''
     ? conversations
     : conversations.filter(conversation => 
-        conversation.participant.name.toLowerCase().includes(searchQuery.toLowerCase())
+        conversation.participant?.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       
   return {

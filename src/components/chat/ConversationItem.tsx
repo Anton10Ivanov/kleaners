@@ -26,8 +26,8 @@ const ConversationItem = ({ conversation, isSelected, onSelect }: ConversationIt
       onClick={onSelect}
     >
       <Avatar className="h-10 w-10 flex-shrink-0">
-        <AvatarImage src={`https://avatar.vercel.sh/${conversation.participant.id}`} />
-        <AvatarFallback>{conversation.participant.name[0]}</AvatarFallback>
+        <AvatarImage src={`https://avatar.vercel.sh/${conversation.participant?.id}`} />
+        <AvatarFallback>{conversation.participant?.name[0]}</AvatarFallback>
       </Avatar>
       
       <div className="flex-1 min-w-0">
@@ -36,24 +36,28 @@ const ConversationItem = ({ conversation, isSelected, onSelect }: ConversationIt
             "font-medium truncate",
             hasUnread && !isSelected && "font-bold"
           )}>
-            {conversation.participant.name}
+            {conversation.participant?.name}
           </h4>
           
-          {conversation.latestMessage && (
+          {(conversation.lastMessage || conversation.latestMessage) && (
             <span className={cn(
               "text-xs",
               isSelected ? "text-primary-foreground/70" : "text-muted-foreground"
             )}>
-              {formatDistanceToNow(conversation.latestMessage.sent_at, { addSuffix: false })}
+              {formatDistanceToNow(
+                new Date(conversation.lastMessage?.timestamp || conversation.latestMessage?.sent_at || new Date()), 
+                { addSuffix: false }
+              )}
             </span>
           )}
         </div>
         
         <div className="flex items-center gap-1">
-          {conversation.latestMessage?.isFromMe && (
+          {(conversation.lastMessage?.senderId === conversation.participant?.id || 
+            conversation.latestMessage?.isFromMe) && (
             <Check className={cn(
               "h-3 w-3 flex-shrink-0",
-              conversation.latestMessage.is_read 
+              (conversation.lastMessage?.read || conversation.latestMessage?.is_read)
                 ? "text-green-500" 
                 : "text-gray-400"
             )} />
@@ -66,10 +70,10 @@ const ConversationItem = ({ conversation, isSelected, onSelect }: ConversationIt
               : "text-muted-foreground",
             hasUnread && !isSelected && "text-foreground font-medium"
           )}>
-            {conversation.latestMessage 
-              ? (conversation.latestMessage.attachments?.length 
+            {(conversation.lastMessage || conversation.latestMessage)
+              ? ((conversation.lastMessage?.attachments?.length || conversation.latestMessage?.attachments?.length) 
                   ? '📎 Attachment' 
-                  : conversation.latestMessage.content || 'New message')
+                  : conversation.lastMessage?.content || conversation.latestMessage?.content || 'New message')
               : 'No messages yet'}
           </p>
           
