@@ -39,15 +39,15 @@ const BookingCard = ({
   return (
     <Card 
       className={cn(
-        "hover:shadow-md transition-shadow cursor-pointer overflow-hidden", 
+        "hover:shadow-md transition-shadow cursor-pointer overflow-hidden shadow-sm", 
         selected && "border-2 border-primary",
         isToday && "border-l-4 border-l-blue-500"
       )}
       onClick={onClick}
     >
       {isPending && (
-        <div className="bg-amber-50 py-1.5 px-4 border-b border-amber-100">
-          <div className="flex items-center text-xs text-amber-700">
+        <div className="bg-amber-50 dark:bg-amber-900/20 py-1.5 px-4 border-b border-amber-100 dark:border-amber-800">
+          <div className="flex items-center text-xs text-amber-700 dark:text-amber-400">
             <AlertCircle className="h-3.5 w-3.5 mr-1.5" />
             Needs confirmation
           </div>
@@ -57,18 +57,18 @@ const BookingCard = ({
       <CardContent className="p-4">
         <div className="space-y-2">
           <div className="flex justify-between">
-            <h3 className="font-medium">{booking.clientName}</h3>
+            <h3 className="font-medium text-sm md:text-base">{booking.clientName}</h3>
             <Badge variant={isToday ? "default" : "outline"} className={isToday ? "bg-blue-500" : ""}>
               {booking.service}
             </Badge>
           </div>
           
-          <div className="flex items-start text-sm text-muted-foreground">
+          <div className="flex items-start text-xs md:text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 mr-1 mt-0.5 shrink-0" />
             <span>{booking.address}</span>
           </div>
           
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-xs md:text-sm">
             <div className="flex items-center">
               <CalendarIcon className="h-4 w-4 mr-1" />
               <span>
@@ -92,7 +92,7 @@ const BookingCard = ({
           }}
           variant={actionVariant}
           size="sm"
-          className="flex-1"
+          className="flex-1 text-xs"
         >
           {actionIcon}
           {actionLabel}
@@ -106,7 +106,7 @@ const BookingCard = ({
             }}
             variant={secondaryVariant || "outline"}
             size="sm"
-            className="flex-1"
+            className="flex-1 text-xs"
           >
             {secondaryIcon}
             {secondaryLabel}
