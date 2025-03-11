@@ -34,7 +34,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
         <ProfileHeader provider={provider} />
       </CardHeader>
       
-      <CardContent className="pt-12 px-6 pb-6">
+      <CardContent className="pt-14 px-6 pb-6">
         <div className="mb-6 flex justify-end">
           <Button
             variant="outline"
