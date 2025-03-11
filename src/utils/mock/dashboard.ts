@@ -21,10 +21,10 @@ export const generateDashboardStats = (bookings: MockBooking[]) => {
     return bookingDate.getMonth() === lastMonth && bookingDate.getFullYear() === lastMonthYear;
   });
   
-  // Calculate unique customers for each month
-  const customerIdsThisMonth = new Set(bookingsThisMonth.map(b => b.customerId));
-  const customerIdsLastMonth = new Set(bookingsLastMonth.map(b => b.customerId));
-  const newCustomersThisMonth = [...customerIdsThisMonth].filter(id => !customerIdsLastMonth.has(id)).length;
+  // Calculate unique clients for each month
+  const clientIdsThisMonth = new Set(bookingsThisMonth.map(b => b.clientId));
+  const clientIdsLastMonth = new Set(bookingsLastMonth.map(b => b.clientId));
+  const newClientsThisMonth = [...clientIdsThisMonth].filter(id => !clientIdsLastMonth.has(id)).length;
   
   // Calculate percent change
   const percentChange = bookingsLastMonth.length > 0 
@@ -35,8 +35,8 @@ export const generateDashboardStats = (bookings: MockBooking[]) => {
     totalBookings: bookings.length,
     bookingsThisMonth: bookingsThisMonth.length,
     bookingsLastMonth: bookingsLastMonth.length,
-    activeCustomers: new Set(bookings.map(b => b.customerId)).size,
-    newCustomersThisMonth,
+    activeClients: new Set(bookings.map(b => b.clientId)).size,
+    newClientsThisMonth,
     percentChange
   };
 };

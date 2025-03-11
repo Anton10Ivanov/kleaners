@@ -1,9 +1,9 @@
 
 import { format, subDays } from 'date-fns';
-import { MockCustomer } from './types';
+import { MockClient } from './types';
 
-// Generate random mock customers
-export const generateMockCustomers = (count: number = 10): MockCustomer[] => {
+// Generate random mock customers (legacy name kept for file path consistency)
+export const generateMockCustomers = (count: number = 10): MockClient[] => {
   const firstNames = ['John', 'Jane', 'Robert', 'Sarah', 'Michael', 'Emma', 'David', 'Olivia', 'James', 'Sophia'];
   const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Wilson', 'Taylor'];
   

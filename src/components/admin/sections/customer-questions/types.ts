@@ -1,5 +1,5 @@
 
-export type CustomerQuestion = {
+export type ClientQuestion = {
   id: string;
   name: string;
   email: string;
