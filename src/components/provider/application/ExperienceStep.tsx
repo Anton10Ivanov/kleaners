@@ -1,10 +1,15 @@
-
 import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 
 interface ExperienceStepProps {
   position: string;
@@ -35,6 +40,20 @@ export const ExperienceStep = ({
     } else {
       setSelectedEquipment([...selectedEquipment, equipment]);
     }
+  };
+
+  const selectedEmploymentType = availability.find(type => ["vollzeit", "midijob", "minijob"].includes(type)) || "";
+  
+  const handleEmploymentTypeChange = (value: string) => {
+    const filteredAvailability = availability.filter(type => !["vollzeit", "midijob", "minijob"].includes(type));
+    
+    if (selectedEmploymentType === value) return;
+    
+    if (selectedEmploymentType) {
+      toggleAvailability(selectedEmploymentType);
+    }
+    
+    toggleAvailability(value);
   };
 
   return (
@@ -72,52 +91,36 @@ export const ExperienceStep = ({
       </div>
       
       <div className="space-y-3">
-        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Employment Type <span className="text-red-500">*</span>
-        </Label>
-        <RadioGroup 
-          value={availability.find(type => ["vollzeit", "midijob", "minijob"].includes(type)) || ""} 
-          onValueChange={(value) => {
-            // Remove any existing employment type
-            const filteredAvailability = availability.filter(type => !["vollzeit", "midijob", "minijob"].includes(type));
-            // Add the new employment type
-            toggleAvailability(value);
-          }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1"
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="employment-type" className="text-base font-semibold text-gray-800 dark:text-gray-100">
+            Employment Type <span className="text-red-500">*</span>
+          </Label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-green-500 text-white border-green-600">
+                <p>Select the type of employment you are looking for</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        
+        <Select 
+          id="employment-type"
+          value={selectedEmploymentType} 
+          onValueChange={handleEmploymentTypeChange}
         >
-          {[
-            { id: "vollzeit", label: "Vollzeit (Full-time)" },
-            { id: "midijob", label: "Midijob (Part-time)" },
-            { id: "minijob", label: "Minijob (Mini job)" }
-          ].map((type) => (
-            <div
-              key={type.id}
-              className={`flex items-center space-x-2 p-3 rounded-lg border transition-colors cursor-pointer
-                ${availability.includes(type.id) 
-                  ? 'bg-green-500/10 border-green-500' 
-                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-              onClick={() => {
-                // Remove any existing employment type
-                const filteredAvailability = availability.filter(item => !["vollzeit", "midijob", "minijob"].includes(item));
-                // Add the new employment type if it's not already there
-                if (!availability.includes(type.id)) {
-                  toggleAvailability(type.id);
-                }
-              }}
-            >
-              <RadioGroupItem id={`job-type-${type.id}`} value={type.id} className="h-5 w-5" />
-              <Label 
-                htmlFor={`job-type-${type.id}`} 
-                className="text-sm font-medium cursor-pointer flex-grow"
-              >
-                {type.label}
-              </Label>
-            </div>
-          ))}
-        </RadioGroup>
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          Select the type of employment you are looking for
-        </p>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select employment type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="vollzeit">Vollzeit (Full-time)</SelectItem>
+            <SelectItem value="midijob">Midijob (Part-time)</SelectItem>
+            <SelectItem value="minijob">Minijob (Mini job)</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       
       <div className="space-y-3">
