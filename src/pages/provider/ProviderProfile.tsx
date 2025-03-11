@@ -8,7 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { ErrorBoundary } from "react-error-boundary";
 import { Separator } from "@/components/ui/separator";
 import { useTitle } from "@/hooks/useTitle";
-import { FileText, Mail, Phone, User, Award, Briefcase, Clock, MapPin } from "lucide-react";
+import { FileText, Mail, Phone, User, Award, Briefcase, Clock, MapPin, CreditCard, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 // Error fallback component
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) => {
@@ -33,6 +35,7 @@ const ProviderProfile = () => {
   const [provider, setProvider] = useState<any>(null);
   const [skills, setSkills] = useState<string[]>([]);
   const [availability, setAvailability] = useState<string[]>([]);
+  const [paymentInfo, setPaymentInfo] = useState<any>(null);
   
   // Fetch provider profile data
   useEffect(() => {
@@ -71,6 +74,21 @@ const ProviderProfile = () => {
         
       if (applicationError && applicationError.code !== 'PGRST116') {
         console.error("Error fetching application data:", applicationError);
+      }
+      
+      // Fetch payment settings data
+      const { data: paymentData, error: paymentError } = await supabase
+        .from('provider_payment_settings')
+        .select('*')
+        .eq('provider_id', user.id)
+        .single();
+        
+      if (paymentError && paymentError.code !== 'PGRST116') {
+        console.error("Error fetching payment data:", paymentError);
+      }
+      
+      if (paymentData) {
+        setPaymentInfo(paymentData);
       }
       
       if (providerData) {
@@ -190,6 +208,58 @@ const ProviderProfile = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h2 className="text-lg font-semibold flex items-center gap-2">
+                      <CreditCard className="h-5 w-5 text-primary" />
+                      Payment Information
+                    </h2>
+                    <Separator />
+                    {paymentInfo ? (
+                      <div className="space-y-3 pt-2">
+                        {paymentInfo.payment_method === 'bank_transfer' && (
+                          <>
+                            <div className="flex items-start gap-2">
+                              <div>
+                                <p className="text-sm text-gray-500">Bank Name</p>
+                                <p>{paymentInfo.bank_name || "Not provided"}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <div>
+                                <p className="text-sm text-gray-500">Account Name</p>
+                                <p>{paymentInfo.account_name || "Not provided"}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <div>
+                                <p className="text-sm text-gray-500">IBAN</p>
+                                <p>{paymentInfo.iban ? "••••" + paymentInfo.iban.slice(-4) : "Not provided"}</p>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        
+                        {paymentInfo.payment_method === 'paypal' && (
+                          <div className="flex items-start gap-2">
+                            <div>
+                              <p className="text-sm text-gray-500">PayPal Email</p>
+                              <p>{paymentInfo.paypal_email || "Not provided"}</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="pt-3">
+                        <p className="text-gray-500 text-sm mb-3">No payment information has been added yet</p>
+                        <Button variant="outline" size="sm" asChild>
+                          <Link to="/provider/settings" className="flex items-center gap-1">
+                            Add payment information <ArrowRight className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   
                   {provider?.message && (
