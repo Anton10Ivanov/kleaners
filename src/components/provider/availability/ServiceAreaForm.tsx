@@ -1,99 +1,101 @@
 
-import React from 'react';
-import { z } from "zod";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { type ServiceAreaFormValues } from '@/hooks/useServiceAreas';
-
-// Define the schema with required fields matching ServiceAreaFormValues
-const serviceAreaSchema = z.object({
-  postal_code: z.string().min(1, "Postal code is required"),
-  travel_distance: z.coerce.number().min(1, "Travel distance is required"),
-});
+import { Input } from '@/components/ui/input';
+import { MapPin, Plus, LoaderCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { toast } from 'sonner';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface ServiceAreaFormProps {
-  onSubmit: (values: ServiceAreaFormValues) => Promise<boolean>;
-  loading?: boolean;
+  onSubmit: (postalCode: string, travelDistance: number) => void;
+  loading: boolean;
 }
 
-export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
+export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({ 
   onSubmit,
-  loading = false
+  loading
 }) => {
-  const form = useForm<z.infer<typeof serviceAreaSchema>>({
-    resolver: zodResolver(serviceAreaSchema),
-    defaultValues: {
-      postal_code: "",
-      travel_distance: 5,
+  const [postalCode, setPostalCode] = useState('');
+  const [travelDistance, setTravelDistance] = useState(15);
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validation
+    if (!postalCode.trim()) {
+      toast.error('Please enter a postal code');
+      return;
     }
-  });
-
-  const handleSubmit = async (values: z.infer<typeof serviceAreaSchema>) => {
-    const success = await onSubmit(values as ServiceAreaFormValues);
-    if (success) {
-      form.reset();
-    }
+    
+    onSubmit(postalCode, travelDistance);
+    setPostalCode('');
   };
-
+  
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Plus className="h-4 w-4 text-primary" />
-          <h3 className="text-lg font-medium">Add Service Area</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="postal_code"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Postal Code</FormLabel>
-                <FormControl>
-                  <Input 
-                    {...field} 
-                    placeholder="e.g., 10115" 
-                    className="bg-background focus:ring-primary focus:border-primary"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div>
+      <h3 className="text-lg font-medium mb-4">Add New Service Area</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-4 gap-6'}`}>
+          {/* Postal Code */}
+          <div className={`${isMobile ? 'col-span-1' : 'col-span-2'}`}>
+            <Label htmlFor="postalCode" className="text-sm font-medium mb-1.5 block">
+              Postal Code
+            </Label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="postalCode"
+                placeholder="e.g. 10115"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </div>
           
-          <FormField
-            control={form.control}
-            name="travel_distance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Travel Distance (km)</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="number" 
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    className="bg-background focus:ring-primary focus:border-primary"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Travel Distance */}
+          <div className={`${isMobile ? 'col-span-1' : 'col-span-2'}`}>
+            <div className="flex justify-between items-center mb-1.5">
+              <Label htmlFor="travelDistance" className="text-sm font-medium">
+                Travel Distance
+              </Label>
+              <span className="text-sm font-medium text-primary">{travelDistance} km</span>
+            </div>
+            <Slider
+              id="travelDistance"
+              min={1}
+              max={50}
+              step={1}
+              value={[travelDistance]}
+              onValueChange={(value) => setTravelDistance(value[0])}
+              className="py-2"
+            />
+          </div>
         </div>
         
-        <Button 
-          type="submit" 
-          className="mt-4 bg-gradient-to-r from-primary to-primary-hover text-white hover:opacity-90 transition-all font-medium shadow-md" 
-          disabled={loading}
-        >
-          {loading ? "Adding..." : "Add Service Area"}
-        </Button>
+        <div className={`${isMobile ? 'pt-2' : 'pt-4'} flex justify-end`}>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {loading ? (
+              <>
+                <LoaderCircle className="h-4 w-4 mr-2 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              <>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Service Area
+              </>
+            )}
+          </Button>
+        </div>
       </form>
-    </Form>
+    </div>
   );
 };

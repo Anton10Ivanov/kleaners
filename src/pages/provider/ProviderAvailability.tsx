@@ -11,9 +11,11 @@ import { motion } from 'framer-motion';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 const ProviderAvailability = () => {
   useTitle('Availability Management');
+  const isMobile = useMediaQuery("(max-width: 640px)");
   
   const {
     availableDays,
@@ -57,28 +59,28 @@ const ProviderAvailability = () => {
       </motion.div>
       
       <Tabs defaultValue="schedule" value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <Box className="bg-white dark:bg-gray-800/60 rounded-xl shadow-sm mb-6">
-          <TabsList className="w-full justify-start h-auto p-0 bg-transparent overflow-x-auto">
+        <Box className="bg-white dark:bg-gray-800/60 rounded-xl shadow-sm mb-6 overflow-x-auto">
+          <TabsList className={`${isMobile ? 'w-[95vw] sm:w-full' : 'w-full'} justify-start h-auto p-0 bg-transparent flex`}>
             <TabsTrigger 
               value="schedule" 
-              className="py-3 px-6 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none"
+              className="py-3 px-4 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
             >
               <CalendarClock className="h-4 w-4" />
-              <span>Weekly Schedule</span>
+              <span className={isMobile ? "text-sm" : ""}>Weekly Schedule</span>
             </TabsTrigger>
             <TabsTrigger 
               value="areas"
-              className="py-3 px-6 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none"
+              className="py-3 px-4 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
             >
               <MapPin className="h-4 w-4" />
-              <span>Service Areas</span>
+              <span className={isMobile ? "text-sm" : ""}>Service Areas</span>
             </TabsTrigger>
             <TabsTrigger 
               value="preferences"
-              className="py-3 px-6 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none"
+              className="py-3 px-4 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
             >
               <Briefcase className="h-4 w-4" />
-              <span>Work Preferences</span>
+              <span className={isMobile ? "text-sm" : ""}>Work Preferences</span>
             </TabsTrigger>
           </TabsList>
         </Box>
