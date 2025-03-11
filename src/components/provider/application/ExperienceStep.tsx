@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -34,6 +34,56 @@ export const ExperienceStep = ({
   toggleSkill
 }: ExperienceStepProps) => {
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
+
+  // Initialize with all skills selected by default
+  useEffect(() => {
+    const allSkills = [
+      "Deep Cleaning", "Commercial Cleaning",
+      "Residential Cleaning", "Window Cleaning",
+      "Carpet Cleaning", "Move In/Out Cleaning"
+    ];
+    
+    // For each skill that's not already in the skills array, toggle it
+    allSkills.forEach(skill => {
+      if (!skills.includes(skill)) {
+        toggleSkill(skill);
+      }
+    });
+    
+    // Set all days as available by default
+    ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].forEach(day => {
+      if (!availability.includes(day)) {
+        toggleAvailability(day);
+      }
+    });
+    
+    // Set default equipment
+    setSelectedEquipment([
+      "Vacuum Cleaner", 
+      "Mop and Bucket", 
+      "Microfiber Cloths",
+      "Cleaning Chemicals", 
+      "Broom and Dustpan", 
+      "Squeegee",
+      "Scrub Brushes",
+      "Extension Pole"
+    ]);
+    
+    // Set default for own vehicle and supplies
+    if (!availability.includes("own-vehicle")) {
+      toggleAvailability("own-vehicle");
+    }
+    
+    if (!availability.includes("own-supplies")) {
+      toggleAvailability("own-supplies");
+    }
+    
+    // Default to vollzeit if no employment type is selected
+    const hasEmploymentType = ["vollzeit", "midijob", "minijob"].some(type => availability.includes(type));
+    if (!hasEmploymentType) {
+      toggleAvailability("vollzeit");
+    }
+  }, []);
 
   const toggleEquipment = (equipment: string) => {
     if (selectedEquipment.includes(equipment)) {
@@ -101,7 +151,7 @@ export const ExperienceStep = ({
               <TooltipTrigger asChild>
                 <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
               </TooltipTrigger>
-              <TooltipContent className="bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60">
+              <TooltipContent className="bg-theme-green text-gray-800 border border-theme-green/60">
                 <p>Select the type of employment you are looking for</p>
               </TooltipContent>
             </Tooltip>
@@ -133,7 +183,7 @@ export const ExperienceStep = ({
               key={day} 
               className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
                 ${availability.includes(day) 
-                  ? 'bg-primary/10 border-primary dark:bg-dark-primary/10 dark:border-dark-primary' 
+                  ? 'bg-theme-green/10 border-theme-green dark:bg-theme-green/10 dark:border-theme-green' 
                   : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               onClick={() => toggleAvailability(day)}
             >
@@ -178,7 +228,7 @@ export const ExperienceStep = ({
                     <div 
                       className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                         skills.includes(skill) ? 
-                        'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
+                        'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
                         'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                       }`}
                       onClick={() => {
@@ -215,9 +265,21 @@ export const ExperienceStep = ({
       </div>
       
       <div className="space-y-3">
-        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Equipment & Resources <span className="text-red-500">*</span>
-        </Label>
+        <div className="flex items-center space-x-2">
+          <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
+            Equipment & Resources <span className="text-red-500">*</span>
+          </Label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-theme-green text-gray-800 border border-theme-green/60">
+                <p>Let us know what equipment and resources you have available</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <div className="space-y-3 pt-1">
           <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
             <div className="flex justify-between items-center mb-2">
@@ -226,7 +288,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     availability.includes("own-vehicle") ? 
-                    'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
+                    'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -262,7 +324,7 @@ export const ExperienceStep = ({
                 <div 
                   className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                     availability.includes("own-supplies") ? 
-                    'bg-primary text-primary-foreground border-primary/60 dark:bg-dark-primary dark:text-white dark:border-dark-primary/60' : 
+                    'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
                     'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   onClick={() => {
@@ -308,7 +370,7 @@ export const ExperienceStep = ({
                       key={equipment}
                       className={`flex items-center space-x-2 p-2 rounded-md border ${
                         selectedEquipment.includes(equipment) ? 
-                        'bg-primary/10 border-primary dark:bg-dark-primary/10 dark:border-dark-primary' : 
+                        'bg-theme-green/10 border-theme-green dark:bg-theme-green/10 dark:border-theme-green' : 
                         'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                       }`}
                       onClick={() => toggleEquipment(equipment)}
