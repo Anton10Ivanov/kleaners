@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { toast } from 'sonner';
 import { WeeklySchedule } from '@/components/provider/availability/WeeklySchedule';
 import { useProviderAvailability } from '@/hooks/useProviderAvailability';
-import { Button } from '@/components/ui/button';
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { VacationRequestDialog } from '@/components/provider/availability/VacationRequestDialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -64,7 +61,6 @@ const ProviderAvailability = () => {
     }
   });
 
-  // Fetch service areas when component mounts
   useEffect(() => {
     fetchServiceAreas();
   }, []);
@@ -79,7 +75,6 @@ const ProviderAvailability = () => {
         return;
       }
       
-      // Get service areas
       const { data: areasData, error: areasError } = await supabase
         .from('provider_service_areas')
         .select('*')
@@ -160,10 +155,6 @@ const ProviderAvailability = () => {
           <h1 className="text-2xl font-bold mb-2">Availability Management</h1>
           <p className="text-muted-foreground">Manage when and where you're available for cleaning jobs</p>
         </div>
-        <Button onClick={() => setVacationDialogOpen(true)} variant="outline">
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          Request Time Off
-        </Button>
       </div>
       
       <Tabs defaultValue="schedule" className="space-y-6">
