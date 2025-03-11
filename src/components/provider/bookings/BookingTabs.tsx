@@ -1,5 +1,5 @@
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import BookingList from "./BookingList";
 
 interface BookingTabsProps {
@@ -22,13 +22,7 @@ const BookingTabs = ({
   onSelectBooking,
 }: BookingTabsProps) => {
   return (
-    <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-      <TabsList className="grid grid-cols-3 mb-4">
-        <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-        <TabsTrigger value="pending">Pending</TabsTrigger>
-        <TabsTrigger value="completed">Completed</TabsTrigger>
-      </TabsList>
-      
+    <Tabs value={selectedTab} onValueChange={setSelectedTab}>      
       <TabsContent value="upcoming">
         <BookingList 
           bookings={upcomingBookings} 
