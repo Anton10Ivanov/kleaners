@@ -4,6 +4,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { TooltipIndicator } from './components/FormSelectionButtons';
 
 interface DocumentsStepProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File | null>>) => void;
@@ -31,7 +33,19 @@ export const DocumentsStep = ({
       </Alert>
       
       <div className="space-y-2">
-        <Label htmlFor="resume">Resume/CV <span className="text-red-500">*</span></Label>
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="resume">Resume/CV</Label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TooltipIndicator />
+              </TooltipTrigger>
+              <TooltipContent className="bg-primary text-primary-foreground border border-primary/60">
+                <p>Upload your resume or CV in PDF, DOC, or DOCX format</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <Input
           id="resume"
           type="file"
@@ -39,7 +53,6 @@ export const DocumentsStep = ({
           className="cursor-pointer"
           accept=".pdf,.doc,.docx"
         />
-        <p className="text-xs text-muted-foreground">Accepted formats: PDF, DOC, DOCX</p>
         {resume && (
           <p className="text-sm text-green-600">File uploaded: {resume.name}</p>
         )}

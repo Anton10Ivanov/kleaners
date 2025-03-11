@@ -43,7 +43,7 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({
     <div className="space-y-3">
       <div className="flex items-center space-x-2">
         <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Equipment & Resources <span className="text-red-500">*</span>
+          Equipment & Resources
         </Label>
         <TooltipProvider>
           <Tooltip>
@@ -119,9 +119,6 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({
           )}
         </div>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-        Let us know about your available equipment
-      </p>
     </div>
   );
 };
