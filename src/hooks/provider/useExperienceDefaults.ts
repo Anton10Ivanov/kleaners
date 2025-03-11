@@ -46,7 +46,7 @@ export const useExperienceDefaults = (
     if (!hasEmploymentType) {
       toggleAvailability("vollzeit");
     }
-  }, []);
+  }, []);  // Empty dependency array ensures this only runs once
 
   // Calculate the currently selected employment type
   const selectedEmploymentType = availability.find(type => ["vollzeit", "midijob", "minijob"].includes(type)) || "";
