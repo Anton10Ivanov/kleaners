@@ -144,6 +144,24 @@ export const ApplicationForm = ({
     }
   };
 
+  // Check if all required options in Documents step are selected
+  const isDocumentsStepComplete = 
+    agreeToTerms && 
+    agreeToBackgroundCheck && 
+    agreeToTraining && 
+    resume !== null;
+
+  const isNextButtonDisabled = () => {
+    if (isLoading) return true;
+    
+    // For Documents step, all three checkboxes and resume must be selected/uploaded
+    if (currentStep === ApplicationStep.DOCUMENTS) {
+      return !isDocumentsStepComplete;
+    }
+    
+    return false;
+  };
+
   return (
     <Card className="border-0 shadow-md w-full">
       <CardHeader className="px-4 sm:px-6">
@@ -174,7 +192,7 @@ export const ApplicationForm = ({
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={isLoading || (currentStep === ApplicationStep.DOCUMENTS && (!agreeToTerms || !agreeToBackgroundCheck))}
+          disabled={isNextButtonDisabled()}
         >
           {isLoading ? "Submitting..." : 
             currentStep === ApplicationStep.CONFIRMATION ? "Submit Application" : "Next Step"}
