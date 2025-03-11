@@ -7,6 +7,7 @@ import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { Service } from "@/schemas/booking";
+import { ErrorBoundaryWrapper } from "@/components/provider/ErrorBoundaryWrapper";
 
 interface HeroProps {
   selectedService: string;
@@ -23,11 +24,13 @@ export const Hero = memo(({
   setPostalCode,
   handleNextStep
 }: HeroProps) => {
+  console.log("Hero rendering with:", { selectedService, postalCode });
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Set default service to "regular" when component mounts
   useEffect(() => {
     if (!selectedService) {
+      console.log("Setting default service to Regular");
       setSelectedService(Service.Regular);
     }
   }, [selectedService, setSelectedService]);
@@ -49,15 +52,17 @@ export const Hero = memo(({
       <BackgroundElements />
       
       <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-[10px]">
-        <HeroProvider 
-          initialService={selectedService}
-          initialPostalCode={postalCode}
-          onNextStep={handleValidatedNextStep}
-          onServiceChange={setSelectedService}
-          onPostalCodeChange={setPostalCode}
-        >
-          {isMobile ? <MobileHero /> : <DesktopHero />}
-        </HeroProvider>
+        <ErrorBoundaryWrapper fallbackMessage="Error rendering the booking form">
+          <HeroProvider 
+            initialService={selectedService}
+            initialPostalCode={postalCode}
+            onNextStep={handleValidatedNextStep}
+            onServiceChange={setSelectedService}
+            onPostalCodeChange={setPostalCode}
+          >
+            {isMobile ? <MobileHero /> : <DesktopHero />}
+          </HeroProvider>
+        </ErrorBoundaryWrapper>
       </div>
     </div>
   );
