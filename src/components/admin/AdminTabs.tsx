@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ClientQuestionsSection from './sections/CustomerQuestionsSection';
+import ClientQuestionsSection from './sections/ClientQuestionsSection';
 import { CalendarSection } from './sections/CalendarSection';
 import { VacationRequestsSection } from './sections/VacationRequestsSection';
 
