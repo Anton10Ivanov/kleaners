@@ -71,19 +71,23 @@ export const getUserConversations = async (userId: string): Promise<Conversation
         
         return {
           id: conversation.id,
+          participants: conversation.participants, // Use the participants array from the database
+          unreadCount: count || 0,
           created_at: conversation.created_at,
           updated_at: conversation.updated_at,
+          // Add the compatible fields for UI components
           participant: {
             id: otherParticipantId,
             name: otherParticipantId.includes('provider') ? 'Service Provider' : 'Client'
           },
           latestMessage: latestMessage ? {
-            ...latestMessage,
+            content: latestMessage.content,
             sent_at: new Date(latestMessage.sent_at),
-            attachments: latestMessage.attachments || [],
-            isFromMe: latestMessage.sender_id === userId
-          } : undefined,
-          unreadCount: count || 0
+            is_read: latestMessage.is_read,
+            sender_id: latestMessage.sender_id,
+            isFromMe: latestMessage.sender_id === userId,
+            attachments: latestMessage.attachments || []
+          } : undefined
         };
       })
     );
