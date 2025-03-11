@@ -9,6 +9,7 @@ import { PersonalStatementSection } from "./sections/PersonalStatementSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import { AvailabilitySection } from "./sections/AvailabilitySection";
 import { EmploymentSection } from "./sections/EmploymentSection";
+import { SettingsSection } from "./sections/SettingsSection";
 
 interface ProfileContentProps {
   provider: any;
@@ -42,6 +43,7 @@ export const ProfileContent: React.FC<ProfileContentProps> = ({
             <SkillsSection skills={skills} />
             <AvailabilitySection availability={availability} />
             <EmploymentSection />
+            <SettingsSection />
           </div>
         </div>
         
