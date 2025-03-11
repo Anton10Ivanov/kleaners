@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SecurityTab from "@/components/provider/settings/SecurityTab";
 import NotificationsTab from "@/components/provider/settings/NotificationsTab";
 import AppearanceTab from "@/components/provider/settings/AppearanceTab";
+import BillingTab from "@/components/provider/settings/BillingTab";
 
 const ProviderSettings = () => {
   return (
@@ -15,10 +16,11 @@ const ProviderSettings = () => {
       />
       
       <Tabs defaultValue="security" className="space-y-6">
-        <TabsList>
+        <TabsList className="w-full sm:w-auto flex flex-wrap justify-start">
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         
         <TabsContent value="security" className="space-y-4">
@@ -31,6 +33,10 @@ const ProviderSettings = () => {
         
         <TabsContent value="appearance" className="space-y-4">
           <AppearanceTab />
+        </TabsContent>
+        
+        <TabsContent value="billing" className="space-y-4">
+          <BillingTab />
         </TabsContent>
       </Tabs>
     </div>
