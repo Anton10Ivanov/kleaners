@@ -21,8 +21,6 @@ import { useTitle } from "@/hooks/useTitle";
 
 // Define the profile schema
 const profileSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   bio: z.string().optional(),
@@ -77,7 +75,6 @@ const ProviderProfile = () => {
   const [provider, setProvider] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [skills, setSkills] = useState<any[]>([]);
-  const [availability, setAvailability] = useState<string[]>([]);
   const [employmentType, setEmploymentType] = useState<string>("vollzeit");
   const [hasOwnTransportation, setHasOwnTransportation] = useState(false);
   const [hasOwnEquipment, setHasOwnEquipment] = useState(false);
@@ -86,8 +83,6 @@ const ProviderProfile = () => {
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
       email: "",
       phone: "",
       bio: "",
@@ -135,8 +130,6 @@ const ProviderProfile = () => {
         
         // Set form default values
         profileForm.reset({
-          first_name: providerData.first_name || "",
-          last_name: providerData.last_name || "",
           email: providerData.email || "",
           phone: providerData.phone || "",
           bio: providerData.bio || "",
@@ -156,9 +149,7 @@ const ProviderProfile = () => {
           console.error("Error fetching skills:", error);
         }
         
-        // Get preferences and availability (in a real app, these would come from the database)
         // For now using placeholder data based on the join form structure
-        setAvailability(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
         setEmploymentType("vollzeit");
         setHasOwnTransportation(true);
         setHasOwnEquipment(true);
@@ -184,8 +175,6 @@ const ProviderProfile = () => {
       const { error } = await supabase
         .from('service_providers')
         .update({
-          first_name: values.first_name,
-          last_name: values.last_name,
           email: values.email,
           phone: values.phone,
           bio: values.bio,
@@ -253,15 +242,6 @@ const ProviderProfile = () => {
       console.error("Error removing skill:", error);
       toast.error("Failed to remove skill");
     }
-  };
-
-  const toggleAvailability = (day: string) => {
-    if (availability.includes(day)) {
-      setAvailability(availability.filter(d => d !== day));
-    } else {
-      setAvailability([...availability, day]);
-    }
-    // In a real app, this would also update the database
   };
 
   const updateEmploymentType = (type: string) => {
@@ -359,34 +339,6 @@ const ProviderProfile = () => {
                 {isEditing ? (
                   <Form {...profileForm}>
                     <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={profileForm.control}
-                          name="first_name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>First Name</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={profileForm.control}
-                          name="last_name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Last Name</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
                       <FormField
                         control={profileForm.control}
                         name="email"
@@ -448,7 +400,6 @@ const ProviderProfile = () => {
                   <Tabs defaultValue="skills">
                     <TabsList className="mb-4">
                       <TabsTrigger value="skills">Skills & Certifications</TabsTrigger>
-                      <TabsTrigger value="availability">Availability</TabsTrigger>
                       <TabsTrigger value="preferences">Work Preferences</TabsTrigger>
                     </TabsList>
                     
@@ -538,33 +489,6 @@ const ProviderProfile = () => {
                           <Button type="submit" className="mt-2">Add Skill</Button>
                         </form>
                       </Form>
-                    </TabsContent>
-                    
-                    <TabsContent value="availability" className="space-y-4">
-                      <Card className="p-4">
-                        <h3 className="text-lg font-medium mb-4">Available Days</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
-                            <div 
-                              key={day} 
-                              className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
-                                ${availability.includes(day) 
-                                  ? 'bg-primary/10 border-primary' 
-                                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-                              onClick={() => toggleAvailability(day)}
-                            >
-                              <Switch 
-                                checked={availability.includes(day)} 
-                                onCheckedChange={() => toggleAvailability(day)}
-                              />
-                              <span className="text-sm font-medium">{day}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          Note: For specific time slots, please use the Availability Management page.
-                        </p>
-                      </Card>
                     </TabsContent>
                     
                     <TabsContent value="preferences" className="space-y-4">
