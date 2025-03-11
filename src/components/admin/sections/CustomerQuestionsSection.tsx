@@ -1,9 +1,9 @@
 
 import React, { useEffect } from 'react';
-import { QuestionFilters } from './customer-questions/QuestionFilters';
-import { QuestionsTable } from './customer-questions/QuestionsTable';
-import { QuestionDetailsDialog } from './customer-questions/QuestionDetailsDialog';
-import { useCustomerQuestions } from './customer-questions/useCustomerQuestions';
+import { QuestionFilters } from './client-questions/QuestionFilters';
+import { QuestionsTable } from './client-questions/QuestionsTable';
+import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
+import { useCustomerQuestions } from './client-questions/useCustomerQuestions';
 
 const ClientQuestionsSection = () => {
   const {
