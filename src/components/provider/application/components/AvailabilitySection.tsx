@@ -25,7 +25,7 @@ export const AvailabilitySection: React.FC<AvailabilitySectionProps> = ({
             key={day} 
             className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
               ${availability.includes(day) 
-                ? 'bg-primary/10 border-primary dark:bg-primary/10 dark:border-primary' 
+                ? 'bg-theme-green border-primary dark:bg-theme-green dark:border-primary' 
                 : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
             onClick={() => toggleAvailability(day)}
           >
