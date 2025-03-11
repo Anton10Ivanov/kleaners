@@ -1,29 +1,56 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QuestionFilters } from './client-questions/QuestionFilters';
 import { QuestionsTable } from './client-questions/QuestionsTable';
 import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
 import { useCustomerQuestions } from './client-questions/useCustomerQuestions';
+import { CustomerQuestion } from './client-questions/types';
 
 const ClientQuestionsSection = () => {
   const {
     questions,
     isLoading,
-    error,
-    selectedQuestion,
-    dialogOpen,
-    statusFilter,
-    setDialogOpen,
-    setStatusFilter,
-    openQuestionDialog,
-    handleStatusUpdate,
-    handleDeleteQuestion,
+    markAsAnswered,
+    markAsIgnored,
+    markAsSpam,
+    deleteQuestion,
   } = useCustomerQuestions();
+  
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedQuestion, setSelectedQuestion] = useState<CustomerQuestion | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Calculate the count of pending questions
   const pendingCount = questions?.filter(q => q.status === 'pending').length || 0;
 
-  if (error) return <div className="p-4 text-red-500">Error loading questions: {error.message}</div>;
+  // Handle opening the question details dialog
+  const openQuestionDialog = (question: CustomerQuestion) => {
+    setSelectedQuestion(question);
+    setDialogOpen(true);
+  };
+
+  // Handle status updates based on the action
+  const handleStatusUpdate = (status: string) => {
+    if (!selectedQuestion) return;
+    
+    if (status === 'answered') {
+      markAsAnswered(selectedQuestion.id);
+    } else if (status === 'ignored') {
+      markAsIgnored(selectedQuestion.id);
+    } else if (status === 'spam') {
+      markAsSpam(selectedQuestion.id);
+    }
+    
+    setDialogOpen(false);
+  };
+
+  // Handle deleting a question
+  const handleDeleteQuestion = () => {
+    if (selectedQuestion) {
+      deleteQuestion(selectedQuestion.id);
+      setDialogOpen(false);
+    }
+  };
 
   return (
     <div className="space-y-4">

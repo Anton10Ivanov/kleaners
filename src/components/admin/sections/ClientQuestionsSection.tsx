@@ -4,6 +4,7 @@ import { useCustomerQuestions } from "./client-questions/useCustomerQuestions";
 import { QuestionsTable } from "./client-questions/QuestionsTable";
 import { QuestionFilters } from "./client-questions/QuestionFilters";
 import { Input } from "@/components/ui/input";
+import { CustomerQuestion } from './client-questions/types';
 
 export const ClientQuestionsSection = () => {
   const [statusFilter, setStatusFilter] = useState("all");
@@ -43,10 +44,7 @@ export const ClientQuestionsSection = () => {
       <QuestionsTable
         questions={filteredQuestions}
         isLoading={isLoading}
-        onMarkAnswered={markAsAnswered}
-        onMarkIgnored={markAsIgnored}
-        onMarkSpam={markAsSpam}
-        onDelete={deleteQuestion}
+        onViewQuestion={(question: CustomerQuestion) => {}}
       />
     </div>
   );
