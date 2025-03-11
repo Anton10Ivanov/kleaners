@@ -1,6 +1,8 @@
 
-import { Box } from '@/components/layout/Box';
+import { Card, CardContent } from '@/components/ui/card';
 import ChatInterface from '@/components/chat/ChatInterface';
+import { Button } from '@/components/ui/button';
+import { MessageSquarePlus } from 'lucide-react';
 
 interface MessagesContentProps {
   selectedConversation: {
@@ -18,7 +20,7 @@ const MessagesContent = ({
   onNewConversation 
 }: MessagesContentProps) => {
   return (
-    <div className="md:col-span-2 h-[calc(100vh-200px)] transition-all duration-200">
+    <Card className="h-[calc(100vh-200px)] transition-all duration-200 shadow-sm overflow-hidden">
       {selectedConversation ? (
         <ChatInterface
           conversationId={selectedConversation.id}
@@ -27,22 +29,25 @@ const MessagesContent = ({
           recipientName={selectedConversation.participantName}
         />
       ) : (
-        <Box className="h-full flex items-center justify-center bg-background/50 backdrop-blur-sm border rounded-xl shadow-sm">
-          <div className="text-center max-w-md mx-auto px-4">
-            <h3 className="font-medium text-lg mb-2 text-foreground">No conversation selected</h3>
-            <p className="text-muted-foreground mb-6 text-sm">
+        <div className="h-full flex items-center justify-center p-4">
+          <div className="text-center max-w-md mx-auto">
+            <div className="mb-4 bg-primary/10 h-16 w-16 rounded-full flex items-center justify-center mx-auto">
+              <MessageSquarePlus className="h-8 w-8 text-primary" />
+            </div>
+            <h3 className="font-medium text-lg mb-2">No conversation selected</h3>
+            <p className="text-muted-foreground mb-6">
               Select a conversation from the list or start a new one to begin messaging
             </p>
-            <button
+            <Button
               onClick={onNewConversation}
-              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200 font-medium text-sm shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="px-6 py-2.5"
             >
               Start new conversation
-            </button>
+            </Button>
           </div>
-        </Box>
+        </div>
       )}
-    </div>
+    </Card>
   );
 };
 

@@ -1,5 +1,6 @@
 
 import ConversationList from '@/components/chat/ConversationList';
+import { Card, CardHeader } from '@/components/ui/card';
 
 interface MessagesSidebarProps {
   providerId: string;
@@ -19,14 +20,19 @@ const MessagesSidebar = ({
   onNewConversation
 }: MessagesSidebarProps) => {
   return (
-    <div className="h-[calc(100vh-200px)] bg-background rounded-xl border shadow-sm">
-      <ConversationList
-        userId={providerId}
-        selectedConversationId={selectedConversationId}
-        onSelectConversation={onSelectConversation}
-        onNewConversation={onNewConversation}
-      />
-    </div>
+    <Card className="h-[calc(100vh-200px)] shadow-sm overflow-hidden">
+      <CardHeader className="p-3 border-b">
+        <h3 className="text-lg font-medium">Conversations</h3>
+      </CardHeader>
+      <div className="h-[calc(100%-60px)]">
+        <ConversationList
+          userId={providerId}
+          selectedConversationId={selectedConversationId}
+          onSelectConversation={onSelectConversation}
+          onNewConversation={onNewConversation}
+        />
+      </div>
+    </Card>
   );
 };
 

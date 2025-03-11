@@ -49,17 +49,17 @@ export const TopNav = () => {
 
   return (
     <div className="hidden md:block w-full border-b bg-background">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+      <div className="max-w-[2000px] mx-auto flex h-14 items-center px-4 lg:px-6">
         <div className="mr-4 flex">
           <Link to="/provider" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">Provider Portal</span>
+            <span className="font-bold text-lg">Provider Portal</span>
           </Link>
           <nav className="flex items-center space-x-2">
             {routes.map((route) => (
               <Link key={route.href} to={route.href}>
                 <Button
                   variant={isActive(route.href) ? "default" : "ghost"}
-                  className="h-8"
+                  className="h-9"
                   size="sm"
                 >
                   {route.icon}

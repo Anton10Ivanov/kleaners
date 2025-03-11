@@ -5,6 +5,8 @@ import MessageInput from './MessageInput';
 import { useChat } from '@/hooks/useChat';
 import { markMessagesAsRead } from '@/utils/chat';
 import { useEffect } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ChatInterfaceProps {
   conversationId: string;
@@ -40,7 +42,21 @@ const ChatInterface = ({
   }, [messages, recipientId]);
   
   return (
-    <Box className="flex flex-col h-full border rounded-md overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Chat header */}
+      <div className="border-b p-3 flex items-center gap-3 bg-background">
+        <Avatar>
+          <AvatarImage src={`https://avatar.vercel.sh/${recipientId}`} />
+          <AvatarFallback>{recipientName[0]}</AvatarFallback>
+        </Avatar>
+        <div>
+          <h3 className="font-medium">{recipientName}</h3>
+          <p className="text-xs text-muted-foreground">
+            {isTyping ? 'Typing...' : 'Online'}
+          </p>
+        </div>
+      </div>
+      
       {/* Messages container */}
       <div className="flex-1 overflow-y-auto p-4">
         <MessageList 
@@ -53,7 +69,7 @@ const ChatInterface = ({
       
       {/* Input area */}
       <MessageInput onSendMessage={sendMessage} isLoading={isLoading} />
-    </Box>
+    </div>
   );
 };
 

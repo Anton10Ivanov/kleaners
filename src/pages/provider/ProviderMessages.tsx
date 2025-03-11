@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import MessagesSidebar from '@/components/provider/messages/MessagesSidebar';
 import MessagesContent from '@/components/provider/messages/MessagesContent';
 import { useConversationManagement } from '@/hooks/useConversationManagement';
+import { Container } from '@/components/layout/Container';
 
 const ProviderMessages = () => {
   const providerId = "provider123"; // In a real app, get this from auth state
@@ -14,7 +15,7 @@ const ProviderMessages = () => {
   } = useConversationManagement(providerId);
   
   return (
-    <div className="container mx-auto py-4 md:py-6 mt-4 md:mt-6 animate-fadeIn">
+    <Container size="3xl" className="py-4 md:py-6 mt-4 md:mt-6 animate-fadeIn">
       <PageHeader 
         title="Messages" 
         description="Manage your conversations with clients" 
@@ -39,7 +40,7 @@ const ProviderMessages = () => {
           />
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
