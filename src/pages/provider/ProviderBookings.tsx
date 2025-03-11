@@ -45,7 +45,7 @@ const ProviderBookings = () => {
   }, [upcomingBookings, pendingBookings, completedBookings]);
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-16 md:pb-0">
+    <div className="space-y-4 md:space-y-6 pb-16 md:pb-0 animate-fadeIn">
       <BookingsHeader 
         title="Your Bookings" 
         subtitle="Manage your cleaning assignments" 
