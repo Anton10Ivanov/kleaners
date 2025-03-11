@@ -1,16 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
+import React, { useEffect } from 'react';
+import { PositionSection } from './components/PositionSection';
+import { ExperienceSection } from './components/ExperienceSection';
+import { EmploymentTypeSection } from './components/EmploymentTypeSection';
+import { AvailabilitySection } from './components/AvailabilitySection';
+import { SkillsSection } from './components/SkillsSection';
+import { EquipmentSection } from './components/EquipmentSection';
 
 interface ExperienceStepProps {
   position: string;
@@ -33,7 +28,6 @@ export const ExperienceStep = ({
   toggleAvailability,
   toggleSkill
 }: ExperienceStepProps) => {
-  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
 
   // Initialize with all skills selected by default
   useEffect(() => {
@@ -57,18 +51,6 @@ export const ExperienceStep = ({
       }
     });
     
-    // Set default equipment
-    setSelectedEquipment([
-      "Vacuum Cleaner", 
-      "Mop and Bucket", 
-      "Microfiber Cloths",
-      "Cleaning Chemicals", 
-      "Broom and Dustpan", 
-      "Squeegee",
-      "Scrub Brushes",
-      "Extension Pole"
-    ]);
-    
     // Set default for own vehicle and supplies
     if (!availability.includes("own-vehicle")) {
       toggleAvailability("own-vehicle");
@@ -84,14 +66,6 @@ export const ExperienceStep = ({
       toggleAvailability("vollzeit");
     }
   }, []);
-
-  const toggleEquipment = (equipment: string) => {
-    if (selectedEquipment.includes(equipment)) {
-      setSelectedEquipment(selectedEquipment.filter(item => item !== equipment));
-    } else {
-      setSelectedEquipment([...selectedEquipment, equipment]);
-    }
-  };
 
   const selectedEmploymentType = availability.find(type => ["vollzeit", "midijob", "minijob"].includes(type)) || "";
   
@@ -109,295 +83,26 @@ export const ExperienceStep = ({
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="position" className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Position of Interest <span className="text-red-500">*</span>
-        </Label>
-        <Select onValueChange={setPosition} value={position}>
-          <SelectTrigger id="position" className="w-full">
-            <SelectValue placeholder="Select a position" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="cleaner">Cleaner</SelectItem>
-            <SelectItem value="supervisor">Cleaning Supervisor</SelectItem>
-            <SelectItem value="customer-service">Customer Service</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <PositionSection position={position} setPosition={setPosition} />
       
-      <div className="space-y-2">
-        <Label htmlFor="experience" className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Years of Experience <span className="text-red-500">*</span>
-        </Label>
-        <Select onValueChange={setExperience} value={experience}>
-          <SelectTrigger id="experience" className="w-full">
-            <SelectValue placeholder="Select your experience" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="0-1">0-1 years</SelectItem>
-            <SelectItem value="1-3">1-3 years</SelectItem>
-            <SelectItem value="3+">3+ years</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <ExperienceSection experience={experience} setExperience={setExperience} />
       
-      <div className="space-y-3">
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="employment-type" className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            Employment Type <span className="text-red-500">*</span>
-          </Label>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-theme-green text-gray-800 border border-theme-green/60">
-                <p>Select the type of employment you are looking for</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        
-        <Select 
-          value={selectedEmploymentType} 
-          onValueChange={handleEmploymentTypeChange}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select employment type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="vollzeit">Vollzeit (Full-time)</SelectItem>
-            <SelectItem value="midijob">Midijob (Part-time)</SelectItem>
-            <SelectItem value="minijob">Minijob (Mini job)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <EmploymentTypeSection 
+        selectedEmploymentType={selectedEmploymentType} 
+        handleEmploymentTypeChange={handleEmploymentTypeChange} 
+      />
       
-      <div className="space-y-3">
-        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          Availability <span className="text-red-500">*</span>
-        </Label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
-          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((day) => (
-            <div 
-              key={day} 
-              className={`flex items-center space-x-2 p-4 rounded-lg border transition-colors cursor-pointer
-                ${availability.includes(day) 
-                  ? 'bg-theme-green/10 border-theme-green dark:bg-theme-green/10 dark:border-theme-green' 
-                  : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-              onClick={() => toggleAvailability(day)}
-            >
-              <Checkbox 
-                id={`day-${day}`} 
-                checked={availability.includes(day)}
-                onCheckedChange={() => toggleAvailability(day)}
-                className="h-5 w-5"
-              />
-              <Label 
-                htmlFor={`day-${day}`} 
-                className="text-sm font-medium cursor-pointer flex-grow"
-              >
-                {day}
-              </Label>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          Select all days when you would be available to work
-        </p>
-      </div>
+      <AvailabilitySection 
+        availability={availability} 
+        toggleAvailability={toggleAvailability} 
+      />
       
-      <div className="space-y-3">
-        <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-          My Skills or Interests of Work <span className="text-red-500">*</span>
-        </Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-          {[
-            ["Deep Cleaning", "Commercial Cleaning"],
-            ["Residential Cleaning", "Window Cleaning"],
-            ["Carpet Cleaning", "Move In/Out Cleaning"]
-          ].map((row, rowIndex) => (
-            <React.Fragment key={`row-${rowIndex}`}>
-              {row.map((skill) => (
-                <div 
-                  key={skill} 
-                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 transition-colors"
-                >
-                  <Label className="text-sm font-medium">{skill}</Label>
-                  <div className="flex space-x-3">
-                    <div 
-                      className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                        skills.includes(skill) ? 
-                        'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
-                        'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                      }`}
-                      onClick={() => {
-                        if (!skills.includes(skill)) {
-                          toggleSkill(skill);
-                        }
-                      }}
-                    >
-                      <span className="font-medium">Yes</span>
-                    </div>
-                    <div 
-                      className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                        !skills.includes(skill) ? 
-                        'bg-destructive text-destructive-foreground border-destructive/60' : 
-                        'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                      }`}
-                      onClick={() => {
-                        if (skills.includes(skill)) {
-                          toggleSkill(skill);
-                        }
-                      }}
-                    >
-                      <span className="font-medium">No</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </React.Fragment>
-          ))}
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          Select all cleaning skills that you possess or are interested in
-        </p>
-      </div>
+      <SkillsSection skills={skills} toggleSkill={toggleSkill} />
       
-      <div className="space-y-3">
-        <div className="flex items-center space-x-2">
-          <Label className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            Equipment & Resources <span className="text-red-500">*</span>
-          </Label>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="inline-flex items-center justify-center w-4 h-4 text-xs font-medium text-white bg-gray-400 rounded-full cursor-help">?</div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-theme-green text-gray-800 border border-theme-green/60">
-                <p>Let us know what equipment and resources you have available</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div className="space-y-3 pt-1">
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-            <div className="flex justify-between items-center mb-2">
-              <Label className="text-sm font-medium">Do you have your own vehicle?</Label>
-              <div className="flex space-x-3">
-                <div 
-                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                    availability.includes("own-vehicle") ? 
-                    'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
-                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                  }`}
-                  onClick={() => {
-                    if (!availability.includes("own-vehicle")) {
-                      toggleAvailability("own-vehicle");
-                    }
-                  }}
-                >
-                  <span className="font-medium">Yes</span>
-                </div>
-                <div 
-                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                    !availability.includes("own-vehicle") ? 
-                    'bg-destructive text-destructive-foreground border-destructive/60' : 
-                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                  }`}
-                  onClick={() => {
-                    if (availability.includes("own-vehicle")) {
-                      toggleAvailability("own-vehicle");
-                    }
-                  }}
-                >
-                  <span className="font-medium">No</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-            <div className="flex justify-between items-center mb-2">
-              <Label className="text-sm font-medium">Do you have your own cleaning supplies?</Label>
-              <div className="flex space-x-3">
-                <div 
-                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                    availability.includes("own-supplies") ? 
-                    'bg-theme-green text-gray-800 border-theme-green/60 dark:bg-theme-green dark:text-gray-800 dark:border-theme-green/60' : 
-                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                  }`}
-                  onClick={() => {
-                    if (!availability.includes("own-supplies")) {
-                      toggleAvailability("own-supplies");
-                    }
-                  }}
-                >
-                  <span className="font-medium">Yes</span>
-                </div>
-                <div 
-                  className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
-                    !availability.includes("own-supplies") ? 
-                    'bg-destructive text-destructive-foreground border-destructive/60' : 
-                    'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                  }`}
-                  onClick={() => {
-                    if (availability.includes("own-supplies")) {
-                      toggleAvailability("own-supplies");
-                    }
-                  }}
-                >
-                  <span className="font-medium">No</span>
-                </div>
-              </div>
-            </div>
-            
-            {availability.includes("own-supplies") && (
-              <div className="mt-4 border-t pt-3 border-gray-200 dark:border-gray-700">
-                <Label className="text-sm font-medium mb-2 block">Select the equipment you have:</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {[
-                    "Vacuum Cleaner", 
-                    "Mop and Bucket", 
-                    "Microfiber Cloths",
-                    "Cleaning Chemicals", 
-                    "Broom and Dustpan", 
-                    "Squeegee",
-                    "Scrub Brushes",
-                    "Extension Pole"
-                  ].map((equipment) => (
-                    <div 
-                      key={equipment}
-                      className={`flex items-center space-x-2 p-2 rounded-md border ${
-                        selectedEquipment.includes(equipment) ? 
-                        'bg-theme-green/10 border-theme-green dark:bg-theme-green/10 dark:border-theme-green' : 
-                        'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-                      }`}
-                      onClick={() => toggleEquipment(equipment)}
-                    >
-                      <Checkbox 
-                        id={`equipment-${equipment}`}
-                        checked={selectedEquipment.includes(equipment)}
-                        onCheckedChange={() => toggleEquipment(equipment)}
-                        className="h-4 w-4"
-                      />
-                      <Label 
-                        htmlFor={`equipment-${equipment}`}
-                        className="text-sm cursor-pointer"
-                      >
-                        {equipment}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          Let us know about your available equipment
-        </p>
-      </div>
+      <EquipmentSection 
+        availability={availability} 
+        toggleAvailability={toggleAvailability} 
+      />
     </div>
   );
 };
