@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -32,6 +31,7 @@ import UserMessages from '@/pages/user/UserMessages';
 // Auth pages
 import Login from '@/pages/auth/Login';
 import Signup from '@/pages/auth/Signup';
+import VerifyProvider from "./pages/auth/VerifyProvider";
 
 // About pages
 import CompanyValues from '@/pages/about/CompanyValues';
@@ -85,6 +85,7 @@ function App() {
           
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
+          <Route path="/auth/verify-provider" element={<VerifyProvider />} />
           
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />

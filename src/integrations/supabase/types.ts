@@ -401,6 +401,48 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_applications: {
+        Row: {
+          created_at: string
+          email: string
+          experience: string | null
+          id: string
+          message: string | null
+          name: string
+          phone: string
+          position: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          experience?: string | null
+          id: string
+          message?: string | null
+          name: string
+          phone: string
+          position?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          experience?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string
+          position?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       provider_availability: {
         Row: {
           created_at: string | null
@@ -460,6 +502,36 @@ export type Database = {
           start_date?: string
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      provider_verification_tokens: {
+        Row: {
+          application_id: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          token: string
+          used: boolean
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          token: string
+          used?: boolean
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          token?: string
+          used?: boolean
         }
         Relationships: []
       }
