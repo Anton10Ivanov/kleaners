@@ -99,7 +99,7 @@ export default function ClientProfile(): JSX.Element {
       </Card>
       
       {/* Account Information Card */}
-      <div className="mt-8 id="account-details">
+      <div className="mt-8" id="account-details">
         <AccountInfoCard
           profile={profile}
           onSave={updateProfile}
