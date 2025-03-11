@@ -16,7 +16,9 @@ const ProviderLayout = () => {
 
   return (
     <div className="flex h-full min-h-screen bg-gray-50 dark:bg-gray-900">
-      <ProviderSidebar />
+      {/* Only show sidebar on non-mobile devices */}
+      {!isMobile && <ProviderSidebar />}
+      
       <main className="flex-1 overflow-auto p-4 md:p-6">
         <ScrollArea className="h-full">
           <div className="mx-auto container max-w-6xl">
