@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
+import { generateMockEarningsData } from "@/utils/mock/earnings";
 
 export type EarningsPeriod = "weekly" | "monthly" | "yearly";
 
@@ -18,7 +19,18 @@ export interface EarningsSummary {
   chartData: EarningsData[];
 }
 
-export function useProviderEarnings(period: EarningsPeriod = "monthly") {
+interface UseProviderEarningsReturn {
+  earningsData: EarningsSummary | null;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+/**
+ * Hook to fetch provider earnings data
+ * @param period The time period for earnings data (weekly, monthly, yearly)
+ * @returns Object containing earnings data, loading state, and error state
+ */
+export function useProviderEarnings(period: EarningsPeriod = "monthly"): UseProviderEarningsReturn {
   const [earningsData, setEarningsData] = useState<EarningsSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -27,27 +39,13 @@ export function useProviderEarnings(period: EarningsPeriod = "monthly") {
   useEffect(() => {
     const fetchEarningsData = async () => {
       setIsLoading(true);
+      
       try {
-        // In a production app, this would fetch from Supabase
-        // For now, we'll generate mock data
-        
-        const { data: user } = await supabase.auth.getUser();
-        
-        if (!user.user) {
-          throw new Error("User not authenticated");
-        }
-
-        // Generate mock data based on the selected period
+        await validateUserAuthentication();
         const mockData = generateMockEarningsData(period);
         setEarningsData(mockData);
       } catch (err) {
-        console.error("Error fetching earnings data:", err);
-        setError(err instanceof Error ? err : new Error("Failed to fetch earnings data"));
-        toast({
-          variant: "destructive",
-          title: "Error fetching earnings data",
-          description: "Please try again later",
-        });
+        handleError(err);
       } finally {
         setIsLoading(false);
       }
@@ -56,63 +54,27 @@ export function useProviderEarnings(period: EarningsPeriod = "monthly") {
     fetchEarningsData();
   }, [period, toast]);
 
-  return { earningsData, isLoading, error };
-}
-
-// Helper function to generate mock earnings data
-function generateMockEarningsData(period: EarningsPeriod): EarningsSummary {
-  const currentDate = new Date();
-  let chartData: EarningsData[] = [];
-  
-  // Generate appropriate chart data based on selected period
-  if (period === "weekly") {
-    // Last 7 days
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(currentDate);
-      date.setDate(date.getDate() - i);
-      chartData.push({
-        date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-        amount: Math.floor(Math.random() * 150) + 50
-      });
-    }
-  } else if (period === "monthly") {
-    // Last 30 days grouped by week
-    for (let i = 4; i >= 0; i--) {
-      const date = new Date(currentDate);
-      date.setDate(date.getDate() - (i * 7));
-      chartData.push({
-        date: `Week ${4-i + 1}`,
-        amount: Math.floor(Math.random() * 600) + 200
-      });
-    }
-  } else if (period === "yearly") {
-    // Last 12 months
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const currentMonth = currentDate.getMonth();
+  // Validate that user is authenticated
+  const validateUserAuthentication = async () => {
+    const { data: user } = await supabase.auth.getUser();
     
-    for (let i = 11; i >= 0; i--) {
-      const monthIndex = (currentMonth - i + 12) % 12;
-      chartData.push({
-        date: months[monthIndex],
-        amount: Math.floor(Math.random() * 2500) + 1000
-      });
+    if (!user.user) {
+      throw new Error("User not authenticated");
     }
-  }
-  
-  // Calculate summary statistics
-  const totalEarnings = chartData.reduce((sum, item) => sum + item.amount, 0);
-  const halfwayPoint = Math.floor(chartData.length / 2);
-  const currentPeriodEarnings = chartData.slice(halfwayPoint).reduce((sum, item) => sum + item.amount, 0);
-  const previousPeriodEarnings = chartData.slice(0, halfwayPoint).reduce((sum, item) => sum + item.amount, 0);
-  const percentChange = previousPeriodEarnings > 0 
-    ? ((currentPeriodEarnings - previousPeriodEarnings) / previousPeriodEarnings) * 100 
-    : 0;
-
-  return {
-    totalEarnings,
-    currentPeriodEarnings,
-    previousPeriodEarnings,
-    percentChange,
-    chartData
   };
+
+  // Handle errors in the data fetching process
+  const handleError = (err: unknown) => {
+    console.error("Error fetching earnings data:", err);
+    const errorInstance = err instanceof Error ? err : new Error("Failed to fetch earnings data");
+    setError(errorInstance);
+    
+    toast({
+      variant: "destructive",
+      title: "Error fetching earnings data",
+      description: "Please try again later",
+    });
+  };
+
+  return { earningsData, isLoading, error };
 }
