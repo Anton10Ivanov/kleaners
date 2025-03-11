@@ -9,9 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { type ServiceAreaFormValues } from '@/hooks/useServiceAreas';
 
+// Define the schema with required fields matching ServiceAreaFormValues
 const serviceAreaSchema = z.object({
   postal_code: z.string().min(1, "Postal code is required"),
-  travel_distance: z.number().min(1, "Travel distance is required"),
+  travel_distance: z.coerce.number().min(1, "Travel distance is required"),
 });
 
 interface ServiceAreaFormProps {
@@ -23,7 +24,7 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
   onSubmit,
   loading = false
 }) => {
-  const form = useForm<ServiceAreaFormValues>({
+  const form = useForm<z.infer<typeof serviceAreaSchema>>({
     resolver: zodResolver(serviceAreaSchema),
     defaultValues: {
       postal_code: "",
@@ -31,8 +32,8 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
     }
   });
 
-  const handleSubmit = async (values: ServiceAreaFormValues) => {
-    const success = await onSubmit(values);
+  const handleSubmit = async (values: z.infer<typeof serviceAreaSchema>) => {
+    const success = await onSubmit(values as ServiceAreaFormValues);
     if (success) {
       form.reset();
     }
@@ -54,7 +55,11 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
               <FormItem>
                 <FormLabel>Postal Code</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., 10115" className="bg-background" />
+                  <Input 
+                    {...field} 
+                    placeholder="e.g., 10115" 
+                    className="bg-background focus:ring-primary focus:border-primary"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -72,7 +77,7 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
                     type="number" 
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
-                    className="bg-background"
+                    className="bg-background focus:ring-primary focus:border-primary"
                   />
                 </FormControl>
                 <FormMessage />
@@ -83,7 +88,7 @@ export const ServiceAreaForm: React.FC<ServiceAreaFormProps> = ({
         
         <Button 
           type="submit" 
-          className="mt-4 bg-gradient-to-r from-primary to-primary-hover text-white hover:opacity-90 transition-all" 
+          className="mt-4 bg-gradient-to-r from-primary to-primary-hover text-white hover:opacity-90 transition-all font-medium shadow-md" 
           disabled={loading}
         >
           {loading ? "Adding..." : "Add Service Area"}
