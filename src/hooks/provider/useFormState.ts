@@ -20,7 +20,7 @@ export const useFormState = () => {
   const [applicationSubmitted, setApplicationSubmitted] = useState(false);
   const [applicationId, setApplicationId] = useState('');
   
-  const formProgress = ((currentStep + 1) / 5) * 100;
+  const formProgress = ((currentStep + 1) / 4) * 100;
   
   const nextStep = () => {
     if (currentStep < ApplicationStep.CONFIRMATION) {
