@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CustomerQuestionsSection from './sections/CustomerQuestionsSection';
+import ClientQuestionsSection from './sections/CustomerQuestionsSection';
 import { CalendarSection } from './sections/CalendarSection';
 import { VacationRequestsSection } from './sections/VacationRequestsSection';
 
 // Admin tab sections configuration - focusing only on unique components
 const tabSections = [
-  { id: 'questions', label: 'FAQ Questions', component: CustomerQuestionsSection },
+  { id: 'questions', label: 'FAQ Questions', component: ClientQuestionsSection },
   { id: 'vacation', label: 'Vacation', component: VacationRequestsSection },
   { id: 'calendar', label: 'Calendar', component: CalendarSection },
 ];

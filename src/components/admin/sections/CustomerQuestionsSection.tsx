@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { QuestionFilters } from './client-questions/QuestionFilters';
 import { QuestionsTable } from './client-questions/QuestionsTable';
 import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
