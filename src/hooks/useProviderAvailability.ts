@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { useForm } from 'react-hook-form';
 
 // Update the interface to include an index signature
 export interface DaysAvailability {
@@ -48,6 +48,18 @@ export const useProviderAvailability = () => {
   ]);
   
   const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
+  
+  // Create a form for the weekly schedule
+  const form = useForm({
+    defaultValues: {
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: false,
+    }
+  });
   
   // Add event listener for vacation dialog
   useEffect(() => {
@@ -180,5 +192,6 @@ export const useProviderAvailability = () => {
     setVacationDialogOpen,
     handleVacationRequest,
     vacationRequests,
+    form
   };
 };
