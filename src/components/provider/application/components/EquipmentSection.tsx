@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -14,7 +14,7 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({
   availability, 
   toggleAvailability 
 }) => {
-  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([
+  const allEquipment = [
     "Vacuum Cleaner", 
     "Mop and Bucket", 
     "Microfiber Cloths",
@@ -23,7 +23,10 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({
     "Squeegee",
     "Scrub Brushes",
     "Extension Pole"
-  ]);
+  ];
+  
+  // Initialize with all equipment selected by default
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>(allEquipment);
 
   const toggleEquipment = (equipment: string) => {
     if (selectedEquipment.includes(equipment)) {
@@ -87,21 +90,12 @@ export const EquipmentSection: React.FC<EquipmentSectionProps> = ({
             <div className="mt-4 border-t pt-3 border-gray-200 dark:border-gray-700">
               <Label className="text-sm font-medium mb-2 block">Select the equipment you have:</Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {[
-                  "Vacuum Cleaner", 
-                  "Mop and Bucket", 
-                  "Microfiber Cloths",
-                  "Cleaning Chemicals", 
-                  "Broom and Dustpan", 
-                  "Squeegee",
-                  "Scrub Brushes",
-                  "Extension Pole"
-                ].map((equipment) => (
+                {allEquipment.map((equipment) => (
                   <div 
                     key={equipment}
                     className={`flex items-center space-x-2 p-2 rounded-md border ${
                       selectedEquipment.includes(equipment) ? 
-                      'bg-primary/10 border-primary dark:bg-primary/10 dark:border-primary' : 
+                      'bg-theme-green border-primary/50 dark:bg-theme-green dark:border-primary/50' : 
                       'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                     }`}
                     onClick={() => toggleEquipment(equipment)}
