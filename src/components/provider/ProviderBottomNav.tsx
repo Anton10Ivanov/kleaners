@@ -36,6 +36,9 @@ export const ProviderBottomNav = () => {
   ];
 
   const isActive = (path: string) => {
+    if (path === '/provider/dashboard') {
+      return currentPath === path || currentPath === '/provider';
+    }
     return currentPath === path || 
       (path !== '/provider/dashboard' && currentPath.startsWith(path));
   };
