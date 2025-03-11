@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,10 +13,22 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Separator } from '@/components/ui/separator';
+import { useLocation } from 'react-router-dom';
 
 const ProviderSettings = () => {
   useTitle('Provider Settings');
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('notifications');
+
+  // Parse tab from URL query params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabParam = params.get('tab');
+    
+    if (tabParam && ['notifications', 'payment', 'account'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [location.search]);
 
   return (
     <div className="space-y-6">
