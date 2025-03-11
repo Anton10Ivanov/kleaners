@@ -6,7 +6,6 @@ import {
   CalendarDays, 
   UserCircle, 
   MessageSquare,
-  Settings,
   InboxIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProviderBottomNav } from "./ProviderBottomNav";
+import ProviderBottomNav from "./ProviderBottomNav";
 import { TopNav } from "./TopNav";
 import { Container } from "@/components/layout/Container";
 
@@ -30,7 +30,7 @@ const ProviderLayout = () => {
       </main>
       
       {/* Mobile Bottom Navigation */}
-      <ProviderBottomNav />
+      {isMobile && <ProviderBottomNav />}
     </div>
   );
 };
