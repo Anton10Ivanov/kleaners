@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Logo } from './navbar/Logo';
-import { ThemeToggle } from './navbar/ThemeToggle';
-import LanguageSelector from './navbar/LanguageSelector';
-import { MobileMenu } from './navbar/MobileMenu';
-import { AuthButtons } from './navbar/auth';
-import { DropdownNavigation } from './navbar/DropdownNavigation';
+import { Logo } from './Logo';
+import { ThemeToggle } from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
+import { MobileMenu } from './MobileMenu';
+import { AuthButtons } from './auth';
+import { DropdownNavigation } from './DropdownNavigation';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import NavbarContainer from './navbar/NavbarContainer';
-import ClientControls from './navbar/ClientControls';
-import MobileClientControls from './navbar/MobileClientControls';
-import MobileMenuToggle from './navbar/MobileMenuToggle';
-import { Icons } from './navbar/navigationData';
+import NavbarContainer from './NavbarContainer';
+import UserControls from './UserControls';
+import MobileUserControls from './MobileUserControls';
+import MobileMenuToggle from './MobileMenuToggle';
+import { Icons } from './navigationData';
 
 const navItems = [
   {
@@ -229,7 +229,7 @@ const Navbar = () => {
       <DropdownNavigation navItems={navItems} />
 
       <div className="hidden md:flex items-center space-x-3">
-        {user && <ClientControls user={user} />}
+        {user && <UserControls user={user} />}
         
         <ThemeToggle />
         <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
@@ -239,7 +239,7 @@ const Navbar = () => {
       <div className="md:hidden flex items-center gap-2">
         <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
         
-        {user && <MobileClientControls user={user} handleBookingsClick={handleBookingsClick} />}
+        {user && <MobileUserControls user={user} handleBookingsClick={handleBookingsClick} />}
         
         <MobileMenuToggle isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       </div>
