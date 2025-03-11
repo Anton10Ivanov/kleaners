@@ -7,24 +7,24 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-type Customer = Database["public"]["Tables"]["customers"]["Row"];
+type Client = Database["public"]["Tables"]["clients"]["Row"];
 
 interface CustomersTableProps {
-  customers: Customer[];
-  onEdit: (customer: Customer) => void;
+  clients: Client[];
+  onEdit: (client: Client) => void;
   onDelete: (id: string) => void;
 }
 
-export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTableProps) => {
+export const CustomersTable = ({ clients, onEdit, onDelete }: CustomersTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [customersPerPage] = useState(5);
-  const [customerToDelete, setCustomerToDelete] = useState<string | null>(null);
+  const [clientsPerPage] = useState(5);
+  const [clientToDelete, setClientToDelete] = useState<string | null>(null);
 
-  // Get current customers
-  const indexOfLastCustomer = currentPage * customersPerPage;
-  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
-  const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
-  const totalPages = Math.ceil(customers.length / customersPerPage);
+  // Get current clients
+  const indexOfLastClient = currentPage * clientsPerPage;
+  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient);
+  const totalPages = Math.ceil(clients.length / clientsPerPage);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -39,13 +39,13 @@ export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTablePr
   };
 
   const handleDeleteConfirm = (id: string) => {
-    setCustomerToDelete(id);
+    setClientToDelete(id);
   };
 
   const confirmDelete = () => {
-    if (customerToDelete) {
-      onDelete(customerToDelete);
-      setCustomerToDelete(null);
+    if (clientToDelete) {
+      onDelete(clientToDelete);
+      setClientToDelete(null);
     }
   };
 
@@ -65,21 +65,21 @@ export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTablePr
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentCustomers.map((customer) => (
-            <TableRow key={customer.id}>
-              <TableCell>{customer.first_name}</TableCell>
-              <TableCell>{customer.last_name}</TableCell>
-              <TableCell>{customer.username || "-"}</TableCell>
-              <TableCell>{customer.email}</TableCell>
-              <TableCell>{customer.phone || "-"}</TableCell>
-              <TableCell>{customer.address || "-"}</TableCell>
-              <TableCell>{customer.notes || "-"}</TableCell>
+          {currentClients.map((client) => (
+            <TableRow key={client.id}>
+              <TableCell>{client.first_name}</TableCell>
+              <TableCell>{client.last_name}</TableCell>
+              <TableCell>{client.username || "-"}</TableCell>
+              <TableCell>{client.email}</TableCell>
+              <TableCell>{client.phone || "-"}</TableCell>
+              <TableCell>{client.address || "-"}</TableCell>
+              <TableCell>{client.notes || "-"}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end space-x-2">
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => onEdit(customer)}
+                    onClick={() => onEdit(client)}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -87,7 +87,7 @@ export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTablePr
                     variant="ghost"
                     size="icon"
                     className="text-destructive"
-                    onClick={() => handleDeleteConfirm(customer.id)}
+                    onClick={() => handleDeleteConfirm(client.id)}
                   >
                     <Trash className="h-4 w-4" />
                   </Button>
@@ -95,20 +95,20 @@ export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTablePr
               </TableCell>
             </TableRow>
           ))}
-          {customers.length === 0 && (
+          {clients.length === 0 && (
             <TableRow>
               <TableCell colSpan={8} className="text-center text-muted-foreground">
-                No customers found
+                No clients found
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
       
-      {customers.length > 0 && (
+      {clients.length > 0 && (
         <div className="flex justify-between items-center py-4 px-6 border-t">
           <div className="text-sm text-muted-foreground">
-            Showing {indexOfFirstCustomer + 1} to {Math.min(indexOfLastCustomer, customers.length)} of {customers.length} entries
+            Showing {indexOfFirstClient + 1} to {Math.min(indexOfLastClient, clients.length)} of {clients.length} entries
           </div>
           <div className="flex items-center space-x-2">
             <Button 
@@ -142,12 +142,12 @@ export const CustomersTable = ({ customers, onEdit, onDelete }: CustomersTablePr
         </div>
       )}
       
-      <AlertDialog open={!!customerToDelete} onOpenChange={() => setCustomerToDelete(null)}>
+      <AlertDialog open={!!clientToDelete} onOpenChange={() => setClientToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Customer</AlertDialogTitle>
+            <AlertDialogTitle>Delete Client</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this customer? This action cannot be undone.
+              Are you sure you want to delete this client? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

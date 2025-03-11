@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../../types/database';
 import { handleError } from '../../utils/errors';
@@ -91,7 +90,7 @@ export async function getUserRoles(userId?: string): Promise<UserRole[]> {
     
     // Check if the user is a client
     const { data: clientData, error: clientError } = await supabase
-      .from('customers')
+      .from('clients')
       .select('id')
       .eq('id', userId)
       .maybeSingle();
