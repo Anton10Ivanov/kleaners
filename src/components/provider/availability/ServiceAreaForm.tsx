@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MapPin, Plus, LoaderCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Slider } from "@/components/ui/slider";
+import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ServiceAreaFormValues } from '@/types/serviceAreas';
