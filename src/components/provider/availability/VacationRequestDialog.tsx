@@ -70,10 +70,10 @@ export function VacationRequestDialog({
             fromDate={today}
             toDate={futureDate}
             className="rounded-md border mx-auto"
-            styles={{
-              caption: { color: 'var(--primary)' },
-              day_selected: { backgroundColor: '#D946EF' },
-              day_range_middle: { backgroundColor: '#FFDEE2' },
+            classNames={{
+              day_selected: "bg-[#D946EF] text-white hover:bg-[#D946EF]/90",
+              day_range_middle: "bg-[#FFDEE2] text-[#D946EF]",
+              day_today: "bg-accent text-accent-foreground",
             }}
           />
         </div>
