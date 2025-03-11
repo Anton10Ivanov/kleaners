@@ -55,7 +55,18 @@ const BookingsContent = ({
         </Box>
       </div>
 
-      
+      <div className="md:col-span-1">
+        {selectedBooking ? (
+          <BookingDetailsCard booking={selectedBooking} onClose={() => setSelectedBookingId(undefined)} />
+        ) : (
+          <Box className="h-full bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-center">
+            <div className="text-muted-foreground p-6">
+              <h3 className="text-lg font-medium mb-2">No booking selected</h3>
+              <p className="text-sm">Select a booking from the list to view details</p>
+            </div>
+          </Box>
+        )}
+      </div>
     </div>;
 };
 export default BookingsContent;
