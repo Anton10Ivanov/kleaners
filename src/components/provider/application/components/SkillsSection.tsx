@@ -32,7 +32,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, toggleSkil
                   <div 
                     className={`flex items-center px-3 py-1 rounded-md cursor-pointer transition-colors border ${
                       skills.includes(skill) ? 
-                      'bg-primary text-primary-foreground border-primary/60 dark:bg-primary dark:text-primary-foreground dark:border-primary/60' : 
+                      'bg-theme-green text-primary-foreground border-primary/60 dark:bg-theme-green dark:text-primary-foreground dark:border-primary/60' : 
                       'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
                     }`}
                     onClick={() => {
