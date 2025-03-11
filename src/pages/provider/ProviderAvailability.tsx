@@ -1,4 +1,3 @@
-
 import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/ui/button';
 import { WeeklySchedule } from '@/components/provider/availability/WeeklySchedule';
@@ -12,11 +11,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMediaQuery } from '@/hooks/use-media-query';
-
 const ProviderAvailability = () => {
   useTitle('Availability Management');
   const isMobile = useMediaQuery("(max-width: 640px)");
-  
   const {
     availableDays,
     timeRanges,
@@ -27,18 +24,18 @@ const ProviderAvailability = () => {
     setVacationDialogOpen,
     handleVacationRequest
   } = useProviderAvailability();
-  
   const scheduleForm = useProviderAvailability().form;
   const [activeTab, setActiveTab] = useState("schedule");
-  
-  return (
-    <div className="space-y-6 sm:space-y-8 pb-16 md:pb-0 animate-fadeIn">
-      <motion.div 
-        className="px-1 sm:px-0"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+  return <div className="space-y-6 sm:space-y-8 pb-16 md:pb-0 animate-fadeIn">
+      <motion.div className="px-1 sm:px-0" initial={{
+      opacity: 0,
+      y: -20
+    }} animate={{
+      opacity: 1,
+      y: 0
+    }} transition={{
+      duration: 0.3
+    }}>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 flex items-center gap-2 text-primary-hover">
             <div className="bg-primary/10 p-2 rounded-full">
@@ -46,43 +43,38 @@ const ProviderAvailability = () => {
             </div>
             Availability
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground">Set your working hours and service areas</p>
+          
         </div>
       </motion.div>
       
       <Tabs defaultValue="schedule" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <Box className="bg-white dark:bg-gray-800/60 rounded-lg sm:rounded-xl shadow-sm mb-4 sm:mb-6 overflow-x-auto mx-1 sm:mx-0">
           <TabsList className="w-full justify-start h-auto p-0 bg-transparent flex">
-            <TabsTrigger 
-              value="schedule" 
-              className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
-            >
+            <TabsTrigger value="schedule" className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap">
               <CalendarClock className="h-4 w-4" />
               <span className="text-xs sm:text-sm">Hours</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="areas"
-              className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
-            >
+            <TabsTrigger value="areas" className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap">
               <MapPin className="h-4 w-4" />
               <span className="text-xs sm:text-sm">Areas</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="preferences"
-              className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap"
-            >
+            <TabsTrigger value="preferences" className="py-2.5 sm:py-3 px-3 sm:px-6 flex-1 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none font-medium flex items-center gap-2 transition-all rounded-none whitespace-nowrap">
               <Briefcase className="h-4 w-4" />
               <span className="text-xs sm:text-sm">Preferences</span>
             </TabsTrigger>
           </TabsList>
         </Box>
         
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.3 }}
-          className="space-y-4 sm:space-y-6 mx-1 sm:mx-0"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        y: 10
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        delay: 0.1,
+        duration: 0.3
+      }} className="space-y-4 sm:space-y-6 mx-1 sm:mx-0">
           <TabsContent value="schedule" className="m-0 mt-4 sm:mt-6">
             <Card className="border shadow-md bg-card hover:shadow-lg transition-all duration-300 overflow-hidden">
               <CardHeader className="pb-2 sm:pb-3 bg-gradient-to-r from-primary/5 to-transparent p-4 sm:p-6">
@@ -97,13 +89,7 @@ const ProviderAvailability = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                <WeeklySchedule
-                  form={scheduleForm}
-                  availableDays={availableDays}
-                  timeRanges={timeRanges}
-                  toggleDayAvailability={toggleDayAvailability}
-                  updateTimeRange={updateTimeRange}
-                />
+                <WeeklySchedule form={scheduleForm} availableDays={availableDays} timeRanges={timeRanges} toggleDayAvailability={toggleDayAvailability} updateTimeRange={updateTimeRange} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -123,12 +109,7 @@ const ProviderAvailability = () => {
                     Work Preferences
                   </CardTitle>
                   
-                  <Button 
-                    onClick={() => setVacationDialogOpen(true)}
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 text-xs sm:text-sm"
-                  >
+                  <Button onClick={() => setVacationDialogOpen(true)} variant="outline" size="sm" className="gap-1.5 text-xs sm:text-sm">
                     Request Vacation
                   </Button>
                 </div>
@@ -150,13 +131,7 @@ const ProviderAvailability = () => {
         </motion.div>
       </Tabs>
       
-      <VacationRequestDialog 
-        open={vacationDialogOpen}
-        onOpenChange={setVacationDialogOpen}
-        onVacationRequest={handleVacationRequest}
-      />
-    </div>
-  );
+      <VacationRequestDialog open={vacationDialogOpen} onOpenChange={setVacationDialogOpen} onVacationRequest={handleVacationRequest} />
+    </div>;
 };
-
 export default ProviderAvailability;
