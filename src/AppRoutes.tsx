@@ -19,24 +19,26 @@ import Dashboard from '@/pages/admin/Dashboard';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
 import { AdminCustomers } from '@/pages/admin/AdminCustomers';
 import { AdminProviders } from '@/pages/admin/AdminProviders';
-// Import the new pending bookings pool page
+// Import the pending bookings pool page
 import { AdminPendingBookingsPool } from './pages/admin/PendingBookingsPool';
 // Import auth pages
 import Login from '@/pages/auth/Login';
 import Signup from '@/pages/auth/Signup';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
 import ResetPassword from '@/pages/auth/ResetPassword';
+import VerifyProvider from '@/pages/auth/VerifyProvider';
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Auth Routes */}
+      {/* Auth Routes - Standardized under /auth path */}
       <Route path="/auth">
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Signup />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path="signup" element={<Navigate to="/auth/register" replace />} /> {/* Redirect to standardized path */}
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="verify-provider" element={<VerifyProvider />} />
       </Route>
       
       {/* Client Routes */}
@@ -58,7 +60,7 @@ const AppRoutes = () => {
         <Route path="messages" element={<ProviderMessages />} />
         <Route path="profile" element={<ProviderProfile />} />
         <Route path="settings" element={<ProviderSettings />} />
-        <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Add pending pool access for providers */}
+        <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Keep provider's access to pending pool */}
       </Route>
       
       {/* Admin Routes */}
@@ -70,7 +72,7 @@ const AppRoutes = () => {
         <Route path="providers" element={<AdminProviders />} />
       </Route>
       
-      {/* Default Route */}
+      {/* Default Route - Redirects to login */}
       <Route path="*" element={<Navigate to="/auth/login" replace />} />
     </Routes>
   );
