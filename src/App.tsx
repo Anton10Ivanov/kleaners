@@ -35,6 +35,8 @@ import ClientMessages from '@/pages/client/ClientMessages';
 import Login from '@/pages/auth/Login';
 import Signup from '@/pages/auth/Signup';
 import VerifyProvider from "./pages/auth/VerifyProvider";
+import ForgotPassword from '@/pages/auth/ForgotPassword';
+import ResetPassword from '@/pages/auth/ResetPassword';
 
 // About pages
 import CompanyValues from '@/pages/about/CompanyValues';
@@ -86,11 +88,14 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
-          <Route path="/app-routes" element={<AppRoutes />} />
           
+          {/* Auth routes - Fixed to handle the registration and password reset pages */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
+          <Route path="/auth/register" element={<Signup />} /> {/* Alias for signup */}
           <Route path="/auth/verify-provider" element={<VerifyProvider />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/reset-password" element={<ResetPassword />} />
           
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
@@ -116,6 +121,7 @@ function App() {
         
         {/* Client routes */}
         <Route path="/client" element={<ClientLayout />}>
+          <Route index element={<ClientDashboard />} />
           <Route path="dashboard" element={<ClientDashboard />} />
           <Route path="bookings" element={<ClientBookings />} />
           <Route path="messages" element={<ClientMessages />} />
