@@ -1,14 +1,15 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Trash2, MapPin, LoaderCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { ServiceArea } from '@/types/serviceAreas';
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface ServiceAreasListProps {
   serviceAreas: ServiceArea[];
-  onRemove: (id: string) => void;
+  onRemove: (id: string) => Promise<boolean>;
   loading: boolean;
 }
 
@@ -17,66 +18,69 @@ export const ServiceAreasList: React.FC<ServiceAreasListProps> = ({
   onRemove,
   loading
 }) => {
-  if (loading && serviceAreas.length === 0) {
-    return <ServiceAreasListSkeleton />;
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-6 px-2">
+        <LoaderCircle className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (serviceAreas.length === 0) {
+    return (
+      <div className="text-center py-6 px-4 border border-dashed rounded-xl bg-muted/20 mx-2">
+        <div className="bg-primary/10 p-3 rounded-full w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+          <MapPin className="h-6 w-6 text-primary mx-auto opacity-80" />
+        </div>
+        <p className="text-muted-foreground font-medium">No service areas added yet</p>
+        <p className="text-sm text-muted-foreground mt-1">Add postal codes where you can provide services</p>
+      </div>
+    );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Your Service Areas</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {serviceAreas.length === 0 ? (
-          <div className="text-center py-6 text-gray-500">
-            <p>You haven't added any service areas yet.</p>
-            <p className="text-sm mt-1">Add postal codes where you're willing to work.</p>
-          </div>
-        ) : (
-          <div className="divide-y">
-            {serviceAreas.map((area) => (
-              <div key={area.id} className="py-3 flex justify-between items-center">
-                <div>
-                  <p className="font-medium">{area.postal_code}</p>
-                  <p className="text-sm text-gray-500">
-                    {area.city && `${area.city}, `} 
-                    {area.travel_distance} km travel distance
+    <div className="space-y-3 px-2 sm:px-1">
+      <h3 className="text-lg font-medium mb-2 sm:mb-3">Your Service Areas</h3>
+      <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3'} gap-3`}>
+        <AnimatePresence>
+          {serviceAreas.map((area) => (
+            <motion.div
+              key={area.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className="border rounded-lg p-3 bg-card hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div className="flex flex-col gap-1">
+                <div className="flex items-start justify-between">
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 font-medium">
+                    {area.postal_code}
+                  </Badge>
+                  
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => onRemove(area.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="mt-1">
+                  {area.city && <p className="font-medium">{area.city}</p>}
+                  <p className="text-xs text-muted-foreground">
+                    Travel up to {area.travel_distance} km
                   </p>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onRemove(area.id)}
-                  disabled={loading}
-                >
-                  <Trash2 className="h-4 w-4 text-red-500" />
-                </Button>
               </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
-
-const ServiceAreasListSkeleton = () => (
-  <Card>
-    <CardHeader>
-      <Skeleton className="h-6 w-40" />
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex justify-between items-center py-3">
-            <div className="space-y-2">
-              <Skeleton className="h-5 w-24" />
-              <Skeleton className="h-4 w-32" />
-            </div>
-            <Skeleton className="h-8 w-8 rounded-full" />
-          </div>
-        ))}
-      </div>
-    </CardContent>
-  </Card>
-);

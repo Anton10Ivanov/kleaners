@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import RootLayout from '@/components/RootLayout';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import ClientLayout from '@/components/client/ClientLayout';
 import ClientDashboard from '@/pages/client/ClientDashboard';
 import ClientBookings from '@/pages/client/ClientBookings';
@@ -15,42 +14,29 @@ import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderMessages from '@/pages/provider/ProviderMessages';
 import ProviderProfile from '@/pages/provider/ProviderProfile';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
-import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import AdminLayout from '@/components/admin/AdminLayout';
 import Dashboard from '@/pages/admin/Dashboard';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
 import { AdminCustomers } from '@/pages/admin/AdminCustomers';
 import { AdminProviders } from '@/pages/admin/AdminProviders';
+// Import the new pending bookings pool page
 import { AdminPendingBookingsPool } from './pages/admin/PendingBookingsPool';
-import Login from '@/pages/auth/Login';
-import Signup from '@/pages/auth/Signup';
-import ForgotPassword from '@/pages/auth/ForgotPassword';
-import ResetPassword from '@/pages/auth/ResetPassword';
-import VerifyProvider from '@/pages/auth/VerifyProvider';
-import Index from '@/pages/Index';
-import Contact from '@/pages/Contact';
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public routes wrapped in RootLayout */}
-      <Route element={<RootLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/contact" element={<Contact />} />
-      </Route>
-      
-      {/* Auth Routes - Standardized under /auth path */}
+      {/* Auth Routes */}
       <Route path="/auth">
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Signup />} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
-        <Route path="reset-password" element={<ResetPassword />} />
-        <Route path="verify-provider" element={<VerifyProvider />} />
+        <Route path="login" element={<Navigate to="/auth/login" />} />
+        <Route path="register" element={<Navigate to="/auth/register" />} />
+        <Route path="forgot-password" element={<Navigate to="/auth/forgot-password" />} />
+        <Route path="reset-password" element={<Navigate to="/auth/reset-password" />} />
       </Route>
       
       {/* Client Routes */}
       <Route path="/client" element={<ClientLayout />}>
         <Route index element={<ClientDashboard />} />
+        <Route path="dashboard" element={<ClientDashboard />} />
         <Route path="bookings" element={<ClientBookings />} />
         <Route path="messages" element={<ClientMessages />} />
         <Route path="invoices" element={<ClientInvoices />} />
@@ -61,12 +47,12 @@ const AppRoutes = () => {
       {/* Provider Routes */}
       <Route path="/provider" element={<ProviderLayout />}>
         <Route index element={<ProviderDashboard />} />
+        <Route path="dashboard" element={<ProviderDashboard />} />
         <Route path="bookings" element={<ProviderBookings />} />
         <Route path="messages" element={<ProviderMessages />} />
-        <Route path="availability" element={<ProviderAvailability />} />
         <Route path="profile" element={<ProviderProfile />} />
         <Route path="settings" element={<ProviderSettings />} />
-        <Route path="pending-pool" element={<AdminPendingBookingsPool />} />
+        <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Add pending pool access for providers */}
       </Route>
       
       {/* Admin Routes */}
@@ -78,10 +64,7 @@ const AppRoutes = () => {
         <Route path="providers" element={<AdminProviders />} />
       </Route>
       
-      {/* Redirect legacy routes */}
-      <Route path="/auth/signup" element={<Navigate to="/auth/register" replace />} />
-      
-      {/* Default Route - Redirects to login */}
+      {/* Default Route */}
       <Route path="*" element={<Navigate to="/auth/login" replace />} />
     </Routes>
   );
