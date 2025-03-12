@@ -1,10 +1,13 @@
 
 import React from 'react';
-import ResetPasswordForm from '../../components/auth/ResetPasswordForm';
+import { useNavigate } from 'react-router-dom';
+import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+
   const handleBackToLogin = () => {
-    window.location.href = '/auth/login';
+    navigate('/auth/login');
   };
 
   return (
