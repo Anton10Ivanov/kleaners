@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FloatingChatButton from "./chat/FloatingChatButton";
+import CookiePolicy from "./CookiePolicy";
 
 const RootLayout = () => {
   return (
@@ -12,6 +13,7 @@ const RootLayout = () => {
         <Outlet />
       </main>
       <FloatingChatButton />
+      <CookiePolicy />
       <Footer />
     </div>
   );
