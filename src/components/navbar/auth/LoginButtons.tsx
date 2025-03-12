@@ -1,16 +1,27 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-const LoginButtons = () => {
+const LoginButtons: React.FC = () => {
+  const navigate = useNavigate();
+  
   return (
-    <div className="flex gap-2">
-      <Button variant="ghost" asChild>
-        <Link to="/auth/login">Login</Link>
+    <div className="flex items-center gap-2">
+      <Button 
+        variant="ghost" 
+        size="sm" 
+        onClick={() => navigate('/auth/login')}
+      >
+        Login
       </Button>
-      <Button variant="default" asChild>
-        <Link to="/auth/register">Register</Link>
+      <Button 
+        variant="default" 
+        size="sm" 
+        onClick={() => navigate('/auth/signup')} 
+        className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50"
+      >
+        Sign up
       </Button>
     </div>
   );

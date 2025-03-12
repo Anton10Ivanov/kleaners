@@ -15,7 +15,7 @@ const ProviderBottomNav = () => {
   const currentPath = location.pathname;
   
   const navItems = [
-    { name: 'Dashboard', path: '/provider', icon: <LayoutDashboard className="h-5 w-5" /> },
+    { name: 'Dashboard', path: '/provider/dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
     { name: 'Bookings', path: '/provider/bookings', icon: <CalendarDays className="h-5 w-5" /> },
     { name: 'Pending', path: '/provider/pending-pool', icon: <InboxIcon className="h-5 w-5" /> },
     { name: 'Messages', path: '/provider/messages', icon: <MessageSquare className="h-5 w-5" /> },
