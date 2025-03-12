@@ -1,7 +1,6 @@
 
 import { Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
-import RootLayout from '@/components/RootLayout';
 import { Toaster } from '@/components/ui/toaster';
 
 // Import routes
