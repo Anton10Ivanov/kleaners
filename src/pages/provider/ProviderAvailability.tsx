@@ -1,3 +1,4 @@
+
 import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/ui/button';
 import { WeeklySchedule } from '@/components/provider/availability/WeeklySchedule';
@@ -11,31 +12,34 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMediaQuery } from '@/hooks/use-media-query';
+
 const ProviderAvailability = () => {
   useTitle('Availability Management');
   const isMobile = useMediaQuery("(max-width: 640px)");
   const {
     availableDays,
     timeRanges,
+    addTimeRange,
+    removeTimeRange,
     updateTimeRange,
     toggleDayAvailability,
     saveAvailability,
     vacationDialogOpen,
     setVacationDialogOpen,
-    handleVacationRequest
+    handleVacationRequest,
+    form
   } = useProviderAvailability();
-  const scheduleForm = useProviderAvailability().form;
+  
   const [activeTab, setActiveTab] = useState("schedule");
-  return <div className="space-y-6 sm:space-y-8 pb-16 md:pb-0 animate-fadeIn">
-      <motion.div className="px-1 sm:px-0" initial={{
-      opacity: 0,
-      y: -20
-    }} animate={{
-      opacity: 1,
-      y: 0
-    }} transition={{
-      duration: 0.3
-    }}>
+  
+  return (
+    <div className="space-y-6 sm:space-y-8 pb-16 md:pb-0 animate-fadeIn">
+      <motion.div 
+        className="px-1 sm:px-0" 
+        initial={{ opacity: 0, y: -20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <div>
           <h1 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2 flex items-center gap-2 text-primary-hover">
             <div className="bg-primary/10 p-2 rounded-full">
@@ -65,16 +69,12 @@ const ProviderAvailability = () => {
           </TabsList>
         </Box>
         
-        <motion.div initial={{
-        opacity: 0,
-        y: 10
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        delay: 0.1,
-        duration: 0.3
-      }} className="space-y-4 sm:space-y-6 mx-1 sm:mx-0">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+          className="space-y-4 sm:space-y-6 mx-1 sm:mx-0"
+        >
           <TabsContent value="schedule" className="m-0 mt-4 sm:mt-6">
             <Card className="border shadow-md bg-card hover:shadow-lg transition-all duration-300 overflow-hidden">
               <CardHeader className="pb-2 sm:pb-3 bg-gradient-to-r from-primary/5 to-transparent p-4 sm:p-6">
@@ -89,7 +89,15 @@ const ProviderAvailability = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                <WeeklySchedule form={scheduleForm} availableDays={availableDays} timeRanges={timeRanges} toggleDayAvailability={toggleDayAvailability} updateTimeRange={updateTimeRange} />
+                <WeeklySchedule 
+                  form={form}
+                  availableDays={availableDays} 
+                  timeRanges={timeRanges} 
+                  toggleDayAvailability={toggleDayAvailability}
+                  updateTimeRange={updateTimeRange}
+                  addTimeRange={addTimeRange}
+                  removeTimeRange={removeTimeRange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -131,7 +139,13 @@ const ProviderAvailability = () => {
         </motion.div>
       </Tabs>
       
-      <VacationRequestDialog open={vacationDialogOpen} onOpenChange={setVacationDialogOpen} onVacationRequest={handleVacationRequest} />
-    </div>;
+      <VacationRequestDialog 
+        open={vacationDialogOpen} 
+        onOpenChange={setVacationDialogOpen} 
+        onVacationRequest={handleVacationRequest} 
+      />
+    </div>
+  );
 };
+
 export default ProviderAvailability;
