@@ -4,72 +4,106 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface Schedule {
+  id: string;
+  provider_id: string;
   day: string;
   start_time: string;
   end_time: string;
-  is_available: boolean;
 }
 
 export const useProviderSchedule = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
-  const saveSchedule = async (schedules: Schedule[]) => {
+  const fetchSchedule = async (): Promise<Schedule[]> => {
     try {
-      setIsLoading(true);
+      setLoading(true);
       
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No authenticated user');
-
-      // First delete existing schedules for this provider
-      await supabase
-        .from('provider_schedules')
-        .delete()
-        .eq('provider_id', user.id);
-
-      // Insert new schedules
-      const { error } = await supabase
-        .from('provider_schedules')
-        .insert(
-          schedules.map(schedule => ({
-            provider_id: user.id,
-            ...schedule
-          }))
-        );
-
-      if (error) throw error;
       
-      toast.success('Schedule saved successfully');
-    } catch (error) {
-      console.error('Error saving schedule:', error);
-      toast.error('Failed to save schedule');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchSchedule = async () => {
-    try {
-      setIsLoading(true);
+      if (!user) {
+        toast.error("User not found, please log in again");
+        return [];
+      }
       
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No authenticated user');
-
       const { data, error } = await supabase
         .from('provider_schedules')
         .select('*')
         .eq('provider_id', user.id);
-
-      if (error) throw error;
+        
+      if (error) {
+        console.error('Error fetching schedule:', error);
+        toast.error("Failed to load schedule");
+        return [];
+      }
       
-      return data;
+      setSchedules(data || []);
+      return data || [];
     } catch (error) {
-      console.error('Error fetching schedule:', error);
-      toast.error('Failed to fetch schedule');
+      console.error('Error in fetchSchedule:', error);
+      toast.error("An error occurred while loading schedule");
       return [];
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  return { saveSchedule, fetchSchedule, isLoading };
+  const saveSchedule = async (scheduleData: Omit<Schedule, 'id' | 'provider_id'>[]) => {
+    try {
+      setLoading(true);
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error("User not found, please log in again");
+        return false;
+      }
+      
+      // Delete existing schedules
+      const { error: deleteError } = await supabase
+        .from('provider_schedules')
+        .delete()
+        .eq('provider_id', user.id);
+        
+      if (deleteError) {
+        console.error('Error deleting existing schedules:', deleteError);
+        toast.error("Failed to update schedule");
+        return false;
+      }
+      
+      // Insert new schedules
+      if (scheduleData.length > 0) {
+        const dataWithProvider = scheduleData.map(schedule => ({
+          ...schedule,
+          provider_id: user.id
+        }));
+        
+        const { error: insertError } = await supabase
+          .from('provider_schedules')
+          .insert(dataWithProvider);
+          
+        if (insertError) {
+          console.error('Error inserting schedules:', insertError);
+          toast.error("Failed to save schedule");
+          return false;
+        }
+      }
+      
+      toast.success("Schedule updated successfully");
+      return true;
+    } catch (error) {
+      console.error('Error in saveSchedule:', error);
+      toast.error("An error occurred while saving schedule");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    schedules,
+    fetchSchedule,
+    saveSchedule
+  };
 };
