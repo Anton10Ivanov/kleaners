@@ -4,7 +4,7 @@ import { BookingsTable } from '@/components/admin/sections/bookings/BookingsTabl
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { getFilteredMockBookings, updateMockBooking } from '@/utils/mock/mockDataService';
 import { BookingStatus as AppBookingStatus } from '@/types/enums';
