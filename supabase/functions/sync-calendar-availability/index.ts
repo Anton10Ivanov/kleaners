@@ -1,6 +1,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { format } from 'https://esm.sh/date-fns@2';
+import { corsHeaders } from '../_shared/cors.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -8,6 +9,11 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 Deno.serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
     const { startDate, endDate } = await req.json();
 
@@ -21,7 +27,7 @@ Deno.serve(async (req) => {
     if (!credentials) {
       return new Response(
         JSON.stringify({ error: 'No calendar credentials found' }),
-        { headers: { 'Content-Type': 'application/json' }, status: 404 }
+        { headers: { 'Content-Type': 'application/json', ...corsHeaders }, status: 404 }
       );
     }
 
@@ -61,13 +67,13 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({ message: 'Calendar availability updated successfully' }),
-      { headers: { 'Content-Type': 'application/json' } }
+      { headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   } catch (error) {
     console.error('Error syncing calendar availability:', error);
     return new Response(
       JSON.stringify({ error: 'Failed to sync calendar availability' }),
-      { headers: { 'Content-Type': 'application/json' }, status: 500 }
+      { headers: { 'Content-Type': 'application/json', ...corsHeaders }, status: 500 }
     );
   }
 });
