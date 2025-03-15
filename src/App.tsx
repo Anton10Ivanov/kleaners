@@ -14,6 +14,11 @@ import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
 
+// Auth pages
+import Login from '@/pages/auth/Login';
+import Signup from '@/pages/auth/Signup';
+import VerifyProvider from "@/pages/auth/VerifyProvider";
+
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
@@ -30,11 +35,6 @@ import ClientProfile from '@/pages/client/ClientProfile';
 import ClientSettings from '@/pages/client/ClientSettings';
 import ClientInvoices from '@/pages/client/ClientInvoices';
 import ClientMessages from '@/pages/client/ClientMessages';
-
-// Auth pages
-import Login from '@/pages/auth/Login';
-import Signup from '@/pages/auth/Signup';
-import VerifyProvider from "./pages/auth/VerifyProvider";
 
 // About pages
 import CompanyValues from '@/pages/about/CompanyValues';
@@ -86,11 +86,18 @@ function App() {
           <Route path="/join-team" element={<JoinTeam />} />
           
           {/* Auth routes - consolidated here */}
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Signup />} />
-          <Route path="/auth/verify-provider" element={<VerifyProvider />} />
-          <Route path="/auth/forgot-password" element={<Login />} /> {/* Reuse Login with reset mode */}
-          <Route path="/auth/reset-password" element={<Login />} /> {/* Reuse Login with reset mode */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<Login />} />
+          <Route path="/reset-password" element={<Login />} />
+          <Route path="/verify-provider" element={<VerifyProvider />} />
+          
+          {/* Legacy auth routes (redirect to new paths) */}
+          <Route path="/auth/login" element={<Navigate to="/login" replace />} />
+          <Route path="/auth/signup" element={<Navigate to="/signup" replace />} />
+          <Route path="/auth/forgot-password" element={<Navigate to="/forgot-password" replace />} />
+          <Route path="/auth/reset-password" element={<Navigate to="/reset-password" replace />} />
+          <Route path="/auth/verify-provider" element={<Navigate to="/verify-provider" replace />} />
           
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
