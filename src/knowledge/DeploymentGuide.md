@@ -1,0 +1,150 @@
+
+# Deployment Guide
+
+This guide provides detailed instructions for deploying the Kleaners application to various hosting environments outside of the lovable.dev platform.
+
+## Pre-Deployment Checklist
+
+Before deploying, ensure the following:
+
+1. **Environment Variables**: Create a `.env` file with the following variables:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+2. **Supabase Configuration**: Update `src/integrations/supabase/config.ts` to use environment variables:
+   ```typescript
+   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+   ```
+
+3. **Base URL**: If deploying to a subdirectory, update the `<base>` tag in `index.html`.
+
+4. **Build Configuration**: Review `vite.config.ts` to ensure it's properly configured for production.
+
+## Build Process
+
+To build the application for production:
+
+```bash
+# Install dependencies
+npm install
+
+# Build for production
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+The build output will be in the `dist` directory.
+
+## Deployment Options
+
+### Netlify
+
+1. Connect your GitHub repository to Netlify
+2. Configure build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+3. Add environment variables in the Netlify dashboard
+4. Configure redirects by creating a `netlify.toml` file:
+   ```toml
+   [[redirects]]
+     from = "/*"
+     to = "/index.html"
+     status = 200
+   ```
+
+### Vercel
+
+1. Import your GitHub repository to Vercel
+2. Configure build settings:
+   - Framework preset: Vite
+   - Build command: `npm run build`
+   - Output directory: `dist`
+3. Add environment variables in the Vercel dashboard
+4. Vercel handles SPA routing automatically
+
+### GitHub Pages
+
+1. Configure your project for GitHub Pages:
+   ```bash
+   # Add gh-pages package
+   npm install --save-dev gh-pages
+   
+   # Add deploy script to package.json
+   # "deploy": "gh-pages -d dist"
+   ```
+2. Create a custom 404.html that redirects to index.html
+3. Use the `gh-pages` branch for hosting
+4. For SPA support, consider using a custom domain with a service like Cloudflare
+
+### Custom Server (Nginx)
+
+1. Build the application
+2. Copy the `dist` directory to your server
+3. Configure Nginx:
+   ```nginx
+   server {
+       listen 80;
+       server_name yourdomain.com;
+       
+       root /path/to/dist;
+       index index.html;
+       
+       location / {
+           try_files $uri $uri/ /index.html;
+       }
+   }
+   ```
+
+## Supabase Edge Functions
+
+If your application uses Supabase Edge Functions:
+
+1. Deploy the functions to your Supabase instance:
+   ```bash
+   supabase functions deploy
+   ```
+
+2. Update CORS settings for your domain:
+   ```typescript
+   // in _shared/cors.ts
+   export const corsHeaders = {
+     'Access-Control-Allow-Origin': 'https://your-domain.com',
+     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+   };
+   ```
+
+## Post-Deployment Verification
+
+After deploying:
+
+1. Test authentication flows
+2. Verify API integrations
+3. Test client-side routing
+4. Check for console errors related to MSW or other development tools
+5. Verify that environment variables are properly loaded
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Routing Issues**: If routes outside the home page return 404, configure your server for SPA routing.
+
+2. **API Connection Errors**: Verify your Supabase URL and API key.
+
+3. **Missing Assets**: Ensure all assets are properly referenced with relative paths.
+
+4. **Environment Variables**: Make sure environment variables are properly set and accessed with `import.meta.env.VARIABLE_NAME`.
+
+5. **CORS Issues**: Check that Supabase functions have proper CORS configuration for your domain.
+
+### Debugging Tips
+
+1. Check browser console for errors
+2. Verify network requests in the browser developer tools
+3. Test API endpoints directly to isolate front-end vs back-end issues
+4. Review build logs for compilation errors

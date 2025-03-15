@@ -1,56 +1,126 @@
 
 # Technical Documentation
 
+## Application Architecture
+
+The Kleaners application is built using a component-based architecture with React and TypeScript. It follows modern frontend development practices with a focus on modularity, reusability, and maintainability.
+
+### Core Technologies
+
+- **Frontend Framework**: React with TypeScript
+- **Styling**: TailwindCSS with shadcn/ui components
+- **State Management**: 
+  - Local state with React hooks
+  - Server state with React Query
+  - Global state with Zustand
+- **Routing**: React Router v6
+- **API Integration**: Supabase for backend services
+- **Authentication**: Supabase Auth
+- **Form Handling**: React Hook Form with Zod validation
+- **Testing**: Not currently implemented
+
+## Project Structure
+
+The project follows a feature-based organization with the following main directories:
+
+```
+src/
+├── components/      # UI components organized by domain
+├── hooks/           # Custom React hooks
+├── integrations/    # External service integrations
+├── lib/             # Utility libraries and helpers
+├── mocks/           # Mock data and MSW handlers
+├── pages/           # Page components
+├── schemas/         # Validation schemas
+├── services/        # Business logic services
+├── store/           # Global state management
+├── types/           # TypeScript type definitions
+└── utils/           # General utility functions
+```
+
+## State Management Strategy
+
+The application uses a combination of state management approaches:
+
+1. **Component State**: For UI-specific, ephemeral state
+2. **React Query**: For server state, caching, and data fetching
+3. **Zustand**: For global application state
+4. **URL State**: For shareable, bookmarkable state
+
 ## Authentication Flow
 
-The application uses Supabase Auth for authentication with the following flows:
+The application uses Supabase Auth for authentication, which provides:
 
-1. **Login**: Email/password authentication with option for reset
-2. **Signup**: New user registration
-3. **Password Reset**: Email-based reset flow
-4. **Session Management**: Auth state tracking with protected routes
+- Email/password authentication
+- Magic link authentication
+- Social login (not currently implemented)
+- JWT-based session management
 
-Authentication state is checked in layout components (ClientLayout, ProviderLayout, AdminLayout) to ensure users are redirected to login when necessary.
+The authentication flow is managed across:
+- `src/integrations/supabase/auth.ts`: Core auth functions
+- `src/components/auth/`: Authentication UI components
+- `src/pages/auth/`: Authentication pages
+- `src/hooks/useAuthState.ts`: Custom hook for auth state management
 
-## State Management
+## External Deployment Considerations
 
-The application uses a combination of approaches for state management:
+To deploy this application outside of the lovable.dev platform, consider the following:
 
-1. **React Query**: For server state and data fetching
-2. **Zustand**: For global client state
-3. **React Context**: For specific feature contexts
-4. **Local Component State**: For UI-specific state
+### 1. Base URL Configuration
 
-## API Integration
+The application uses a `<base href="/" />` tag in `index.html`. For deployments to non-root paths:
 
-### Supabase Integration
+- Update this tag to match your deployment path
+- Configure your hosting platform for proper SPA routing
 
-Supabase is used for:
-- Authentication
-- Database access
-- Storage
-- Realtime subscriptions
+### 2. Environment Variables
 
-The integration is set up in `src/integrations/supabase/client.ts` and related files.
+The following environment variables should be configured:
 
-## Single Page App (SPA) Routing
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-React Router is used for client-side routing. The application includes a special SPA fallback script in `index.html` to handle deep linking and refreshes on deployed platforms.
+Currently, some of these are hardcoded in `src/integrations/supabase/config.ts` and should be updated for production deployments.
 
-### Route Structure
+### 3. Mock Service Worker
 
-- Public routes under the root layout
-- Protected client routes under `/client/*`
-- Protected provider routes under `/provider/*`
-- Protected admin routes under `/admin/*`
+The application uses MSW for API mocking in development. For production:
 
-## Form Handling
+- Ensure it's properly disabled in production builds
+- If seeing "Failed to register ServiceWorker" errors, you can safely ignore these in production
 
-The application uses React Hook Form for form management, with Zod for validation.
+### 4. Vite Configuration
 
-## Error Handling
+There are two vite.config.ts files:
+- Root `/vite.config.ts`: Main configuration
+- `src/vite.config.ts`: Contains duplicate settings
 
-Error handling is implemented using:
-- React Error Boundary
-- Try/catch blocks in API calls
-- Toast notifications for user feedback
+For external deployment, standardize to using only the root configuration file.
+
+### 5. 404 Handling for SPA
+
+Configure your hosting platform to serve `index.html` for 404 errors to support client-side routing.
+
+### 6. Supabase Edge Functions
+
+For Supabase Edge Functions (in `supabase/functions/`), ensure:
+- They're properly deployed to your Supabase instance
+- CORS settings are configured for your domain
+
+## Performance Considerations
+
+The application includes several performance optimizations:
+
+- Code splitting with React lazy loading (not fully implemented)
+- Asset optimization in build configuration
+- Tailwind purging for CSS size reduction
+- React Query for efficient data fetching and caching
+
+## Security Considerations
+
+- Authentication is handled through Supabase Auth with JWT
+- API keys should be stored as environment variables
+- XSS prevention through React's built-in protections
+- CORS headers for Supabase Edge Functions
