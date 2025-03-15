@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import BookingList from './BookingList';
 import BookingDetailsCard from './BookingDetailsCard';
-import { BookingMap } from './BookingMap';
-import FilterableStatsCards from './FilterableStatsCards';
+import BookingMap from './BookingMap';
+import { FilterableStatsCards } from './FilterableStatsCards';
 import { toast } from 'sonner';
 
 interface BookingsContentProps {
