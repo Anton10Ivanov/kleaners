@@ -19,7 +19,8 @@ const ClientLayout = () => {
       if (!session) {
         // Store the current URL to redirect back after login
         const returnUrl = window.location.pathname;
-        navigate(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
+        sessionStorage.setItem('authReturnUrl', returnUrl);
+        navigate('/login');
       }
     };
     

@@ -1,18 +1,33 @@
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProviderBottomNav from "./ProviderBottomNav";
 import { TopNav } from "./TopNav";
 import { Container } from "@/components/layout/Container";
+import { supabase } from "@/integrations/supabase/client";
 
 const ProviderLayout = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const navigate = useNavigate();
   
   useEffect(() => {
     document.title = "Provider Dashboard";
-  }, []);
+    
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        // Store the current URL to redirect back after login
+        const returnUrl = window.location.pathname;
+        sessionStorage.setItem('authReturnUrl', returnUrl);
+        navigate('/login');
+      }
+    };
+    
+    checkAuth();
+  }, [navigate]);
 
   return (
     <div className="flex h-full min-h-screen flex-col bg-gray-50 dark:bg-gray-900">

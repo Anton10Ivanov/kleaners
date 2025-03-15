@@ -85,7 +85,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
           
-          {/* Auth routes */}
+          {/* Auth routes - consolidated */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<Login />} />
