@@ -37,7 +37,7 @@ export const ProviderJobCard: React.FC<ProviderJobCardProps> = ({
             onClick={() => onAccept(booking.id)}
           >
             <Check className="h-4 w-4 mr-2" />
-            Accept Job
+            Accept
           </Button>
           <Button 
             variant="outline" 
@@ -46,7 +46,7 @@ export const ProviderJobCard: React.FC<ProviderJobCardProps> = ({
             onClick={() => onReject(booking.id)}
           >
             <X className="h-4 w-4 mr-2" />
-            Reject Job
+            Reject
           </Button>
         </div>
       </CardContent>
