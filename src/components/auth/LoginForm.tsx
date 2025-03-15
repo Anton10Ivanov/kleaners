@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,9 +8,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "./SocialLogin";
+
 interface LoginFormProps {
   onResetMode: () => void;
 }
+
 const LoginForm = ({
   onResetMode
 }: LoginFormProps) => {
@@ -20,6 +23,7 @@ const LoginForm = ({
   const {
     toast
   } = useToast();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -48,6 +52,7 @@ const LoginForm = ({
       setIsLoading(false);
     }
   };
+
   return <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
@@ -82,7 +87,7 @@ const LoginForm = ({
           <Button type="button" variant="link" onClick={onResetMode} className="px-0 text-sm text-gray-600 hover:text-gray-900">
             Forgot your password?
           </Button>
-          <Button type="button" variant="link" onClick={() => navigate('/auth/signup')} className="px-0 rounded-sm text-orange-600 bg-white font-bold text-base text-center">
+          <Button type="button" variant="link" onClick={() => navigate('/signup')} className="px-0 rounded-sm text-orange-600 bg-white font-bold text-base text-center">
             Sign up
           </Button>
         </div>
@@ -101,4 +106,5 @@ const LoginForm = ({
       </CardFooter>
     </Card>;
 };
+
 export default LoginForm;

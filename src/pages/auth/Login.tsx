@@ -35,14 +35,14 @@ const Login = () => {
   }, [location]);
 
   useEffect(() => {
-    // Simplified auth check without waiting for verification
+    // Check if already logged in
     const checkAuth = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           console.log('User logged in:', user.id);
           
-          // Simplified redirect - no role verification for development
+          // Redirect to returnUrl or default
           const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
           console.log('Redirecting to:', returnUrl);
           sessionStorage.removeItem('authReturnUrl');
@@ -55,12 +55,12 @@ const Login = () => {
 
     checkAuth();
 
-    // Simplified auth state listener
+    // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event);
       
       if (event === 'SIGNED_IN' && session?.user) {
-        // Immediate redirect without role check for faster experience
+        // Redirect on sign in
         const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
         console.log('Signed in, redirecting to:', returnUrl);
         sessionStorage.removeItem('authReturnUrl');
