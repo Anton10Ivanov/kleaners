@@ -45,12 +45,12 @@ const BookingList = ({
           cardProps.onAction = () => {};
         } else if (type === 'pending') {
           // Set up action buttons for pending jobs
-          cardProps.actionLabel = 'Accept Job';
+          cardProps.actionLabel = 'Accept';
           cardProps.actionIcon = <Check className="h-4 w-4 mr-2" />;
           cardProps.actionVariant = 'default' as const;
           cardProps.onAction = () => onAcceptJob && onAcceptJob(booking.id);
           
-          cardProps.secondaryLabel = 'Reject Job';
+          cardProps.secondaryLabel = 'Reject';
           cardProps.secondaryIcon = <X className="h-4 w-4 mr-2" />;
           cardProps.secondaryVariant = 'outline' as const;
           cardProps.secondaryAction = () => onRejectJob && onRejectJob(booking.id);
