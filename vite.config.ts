@@ -60,6 +60,7 @@ export default defineConfig(({ mode }) => ({
   },
   // Enable type checking in build
   typescript: {
-    tsconfigPath: mode === 'production' ? './tsconfig.strict.json' : './tsconfig.json'
+    tsconfigPath: mode === 'production' ? './tsconfig.strict.json' : './tsconfig.json',
+    typeCheck: true
   }
 }));

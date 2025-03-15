@@ -1,7 +1,8 @@
 
 import { Database } from "@/integrations/supabase/types";
-import { BookingStatus } from "@/types/enums";
+import { BookingStatus as BookingStatusEnum } from "@/types/enums";
 
+// Use the string literal union type for compatibility with existing code
 export type BookingStatus = "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
 
 export const statusColors = {

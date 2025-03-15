@@ -13,7 +13,7 @@ export const handlers = [
     return HttpResponse.json<UserBooking[]>([
       {
         id: "1",
-        status: "pending",
+        status: "pending" as const,
         date: "2023-05-15T10:00:00",
         service: "Regular Cleaning",
         address: "123 Main St, Apt 4B",
@@ -23,7 +23,7 @@ export const handlers = [
       },
       {
         id: "2",
-        status: "completed",
+        status: "completed" as const,
         date: "2023-05-01T14:00:00",
         service: "Deep Cleaning",
         address: "123 Main St, Apt 4B",
@@ -32,7 +32,7 @@ export const handlers = [
       },
       {
         id: "3",
-        status: "cancelled",
+        status: "cancelled" as const,
         date: "2023-04-22T09:00:00",
         service: "Move In/Out Cleaning",
         address: "456 Park Ave, Suite 203",
