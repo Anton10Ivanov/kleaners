@@ -1,75 +1,92 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Booking } from "@/components/admin/sections/bookings/types";
-import { isWithinInterval, parseISO } from "date-fns";
-import { supabase } from "@/integrations/supabase/client";
-import { handleApiError, ErrorSeverity } from "@/utils/errors";
 import { BookingsFilterParams, getBookingsQueryKey } from "./bookingsUtils";
 
-/**
- * Custom hook for fetching bookings with filtering and sorting
- */
-export const useBookingsQuery = (filterParams: BookingsFilterParams) => {
-  // Query key based on current filters
-  const queryKey = getBookingsQueryKey(filterParams);
-
-  return useQuery({
-    queryKey,
-    queryFn: async () => {
-      try {
-        console.log(`Fetching bookings with filters:`, filterParams);
-        
-        let query = supabase
-          .from('bookings')
-          .select('*')
-          .order(filterParams.sortField, { ascending: filterParams.sortOrder === 'asc' });
-
-        if (filterParams.selectedStatus) {
-          query = query.eq('status', filterParams.selectedStatus);
-        }
-
-        if (filterParams.searchTerm) {
-          query = query.or(
-            `first_name.ilike.%${filterParams.searchTerm}%,` +
-            `last_name.ilike.%${filterParams.searchTerm}%,` +
-            `email.ilike.%${filterParams.searchTerm}%`
-          );
-        }
-
-        const { data, error } = await query;
-        
-        if (error) throw error;
-        
-        if (!data) return [];
-
-        if (filterParams.dateRange?.from && filterParams.dateRange?.to) {
-          console.log(`Filtering by date range: ${filterParams.dateRange.from} to ${filterParams.dateRange.to}`);
-          
-          return data.filter(booking => 
-            booking.date && 
-            isWithinInterval(parseISO(booking.date), {
-              start: filterParams.dateRange.from,
-              end: filterParams.dateRange.to
-            })
-          ) as Booking[];
-        }
-
-        console.log(`Fetched ${data.length} bookings`);
-        return data as Booking[];
-      } catch (error) {
-        // Use our enhanced error handling utility
-        handleApiError(error, "Failed to fetch bookings", "useBookingsQuery", ErrorSeverity.ERROR);
-        throw error;
-      }
-    },
-    // Add retry logic for transient network failures
-    retry: (failureCount, error) => {
-      // Don't retry on 4xx errors (client errors)
-      if (error instanceof Error && error.message.includes('status code 4')) {
-        return false;
-      }
-      // Retry up to 3 times for other errors
-      return failureCount < 3;
+// Mock function to fetch bookings - in a real app this would interact with an API
+const fetchBookings = async (filters: BookingsFilterParams): Promise<Booking[]> => {
+  console.log("Fetching bookings with filters:", filters);
+  
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  // This is a mock implementation, would normally call an API endpoint
+  const response = await fetch("/api/bookings");
+  
+  if (!response.ok) {
+    throw new Error("Failed to fetch bookings");
+  }
+  
+  try {
+    const data = await response.json();
+    
+    // Apply filters on the client side (this would normally be done on the server)
+    let bookings = data as Booking[];
+    
+    // Filter by status if provided
+    if (filters.selectedStatus) {
+      bookings = bookings.filter(booking => booking.status === filters.selectedStatus);
     }
+    
+    // Filter by search term if provided
+    if (filters.searchTerm) {
+      const searchLower = filters.searchTerm.toLowerCase();
+      bookings = bookings.filter(booking => {
+        const nameMatch = `${booking.first_name || ''} ${booking.last_name || ''}`.toLowerCase().includes(searchLower);
+        const serviceMatch = booking.service_type?.toLowerCase().includes(searchLower);
+        const addressMatch = booking.address?.toLowerCase().includes(searchLower);
+        return nameMatch || serviceMatch || addressMatch;
+      });
+    }
+    
+    // Filter by date range if provided
+    if (filters.dateRange?.from) {
+      const fromDate = new Date(filters.dateRange.from);
+      bookings = bookings.filter(booking => {
+        const bookingDate = new Date(booking.date);
+        return bookingDate >= fromDate;
+      });
+    }
+    
+    if (filters.dateRange?.to) {
+      const toDate = new Date(filters.dateRange.to);
+      bookings = bookings.filter(booking => {
+        const bookingDate = new Date(booking.date);
+        return bookingDate <= toDate;
+      });
+    }
+    
+    // Sort bookings
+    bookings.sort((a, b) => {
+      // Handle different sort fields
+      switch (filters.sortField) {
+        case 'date':
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case 'total_price':
+          return a.total_price - b.total_price;
+        case 'created_at':
+        default:
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      }
+    });
+    
+    // Apply sort order
+    if (filters.sortOrder === 'desc') {
+      bookings.reverse();
+    }
+    
+    return bookings;
+  } catch (error) {
+    console.error("Error parsing bookings data:", error);
+    throw new Error("Failed to parse bookings data");
+  }
+};
+
+export const useBookingsQuery = (filters: BookingsFilterParams) => {
+  return useQuery({
+    queryKey: getBookingsQueryKey(filters),
+    queryFn: () => fetchBookings(filters),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: true,
   });
 };
