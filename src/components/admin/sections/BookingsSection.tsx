@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
-import { BookingStatus } from "./bookings/types";
+import { BookingStatus, SortField, SortOrder } from "./bookings/types";
 import { BookingsFilter } from "./bookings/BookingsFilter";
 import { BookingsTable } from "./bookings/BookingsTable";
 import { useBookings } from "@/hooks/useBookings";
@@ -17,8 +17,8 @@ export const BookingsSection = () => {
   const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortField, setSortField] = useState("created_at");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortField, setSortField] = useState<SortField>("created_at");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0); // Used to trigger a refresh
@@ -54,7 +54,7 @@ export const BookingsSection = () => {
     }
   }, [error, toast]);
 
-  const toggleSort = (field) => {
+  const toggleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
