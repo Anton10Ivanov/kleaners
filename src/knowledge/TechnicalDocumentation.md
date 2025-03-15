@@ -62,6 +62,63 @@ The authentication flow is managed across:
 - `src/pages/auth/`: Authentication pages
 - `src/hooks/useAuthState.ts`: Custom hook for auth state management
 
+## Import Path Management
+
+This project uses the `@/` path alias for imports, which is configured in both the `vite.config.ts` and `tsconfig.json` files. This approach offers several benefits:
+
+### Benefits of Path Aliases
+
+1. **Simplified Imports**: No need for complex relative paths (`../../../../components/Button`)
+2. **Easier Refactoring**: Moving files doesn't break import paths
+3. **Better Readability**: Clear indication of where modules come from
+
+### Configuration
+
+The path alias is configured in:
+
+1. **TypeScript Configuration**:
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+2. **Vite Configuration**:
+```typescript
+// vite.config.ts
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+})
+```
+
+### Deployment Considerations
+
+When deploying to various platforms:
+
+1. **Vercel/Netlify**: These platforms automatically handle path aliases based on the build configuration.
+
+2. **Static Hosting**: The built JavaScript files will have resolved imports, so no additional configuration is needed.
+
+3. **Custom Servers**: If using a custom build process, ensure both TypeScript and Vite configurations are properly set up.
+
+### Troubleshooting Import Issues
+
+If you encounter import errors during build or deployment:
+
+1. Check that the path alias is properly configured in both `tsconfig.json` and `vite.config.ts`
+2. Verify that all imports use the correct case (imports are case-sensitive)
+3. Ensure the imported file exists at the specified path
+4. For dynamic imports, use the `@` alias with string concatenation: `import(\`@/components/${componentName}\`)`
+
 ## External Deployment Considerations
 
 To deploy this application outside of the lovable.dev platform, consider the following:
@@ -82,38 +139,29 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-Currently, some of these are hardcoded in `src/integrations/supabase/config.ts` and should be updated for production deployments.
-
 ### 3. Mock Service Worker
 
 The application uses MSW for API mocking in development. For production:
 
-- Ensure it's properly disabled in production builds
-- If seeing "Failed to register ServiceWorker" errors, you can safely ignore these in production
+- It's properly disabled by default in production builds
+- It can be explicitly enabled in production with `VITE_ENABLE_MOCK_API=true`
+- If seeing "Failed to register ServiceWorker" errors in production, this is expected when MSW is disabled
 
-### 4. Vite Configuration
+### 4. SPA Routing
 
-There are two vite.config.ts files:
-- Root `/vite.config.ts`: Main configuration
-- `src/vite.config.ts`: Contains duplicate settings
+Configure your hosting platform to serve `index.html` for 404 errors to support client-side routing. See the Deployment Guide for platform-specific instructions.
 
-For external deployment, standardize to using only the root configuration file.
+### 5. Supabase Edge Functions
 
-### 5. 404 Handling for SPA
-
-Configure your hosting platform to serve `index.html` for 404 errors to support client-side routing.
-
-### 6. Supabase Edge Functions
-
-For Supabase Edge Functions (in `supabase/functions/`), ensure:
+For Supabase Edge Functions, ensure:
 - They're properly deployed to your Supabase instance
-- CORS settings are configured for your domain
+- CORS settings are configured for your domain in `_shared/cors.ts`
 
 ## Performance Considerations
 
 The application includes several performance optimizations:
 
-- Code splitting with React lazy loading (not fully implemented)
+- Code splitting with React lazy loading
 - Asset optimization in build configuration
 - Tailwind purging for CSS size reduction
 - React Query for efficient data fetching and caching
@@ -121,6 +169,6 @@ The application includes several performance optimizations:
 ## Security Considerations
 
 - Authentication is handled through Supabase Auth with JWT
-- API keys should be stored as environment variables
+- API keys are stored as environment variables
 - XSS prevention through React's built-in protections
 - CORS headers for Supabase Edge Functions

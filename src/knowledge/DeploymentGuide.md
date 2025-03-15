@@ -45,7 +45,7 @@ The build output will be in the `dist` directory.
    - Build command: `npm run build`
    - Publish directory: `dist`
 3. Add environment variables in the Netlify dashboard
-4. Configure redirects by creating a `netlify.toml` file:
+4. Configure SPA routing by creating a `netlify.toml` file in your project root:
    ```toml
    [[redirects]]
      from = "/*"
@@ -61,7 +61,12 @@ The build output will be in the `dist` directory.
    - Build command: `npm run build`
    - Output directory: `dist`
 3. Add environment variables in the Vercel dashboard
-4. Vercel handles SPA routing automatically
+4. Vercel handles SPA routing automatically, but you can also create a `vercel.json` file for custom configuration:
+   ```json
+   {
+     "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+   }
+   ```
 
 ### GitHub Pages
 
@@ -75,13 +80,54 @@ The build output will be in the `dist` directory.
    ```
 2. Create a custom 404.html that redirects to index.html
 3. Use the `gh-pages` branch for hosting
-4. For SPA support, consider using a custom domain with a service like Cloudflare
+4. For SPA support with GitHub Pages, create a `404.html` file in your `public` folder with this content:
+   ```html
+   <!DOCTYPE html>
+   <html>
+   <head>
+     <meta charset="utf-8">
+     <title>Redirecting...</title>
+     <script>
+       // Single Page Apps for GitHub Pages
+       // https://github.com/rafgraph/spa-github-pages
+       (function(l) {
+         if (l.search[1] === '/' ) {
+           var decoded = l.search.slice(1).split('&').map(function(s) { 
+             return s.replace(/~and~/g, '&')
+           }).join('?');
+           window.history.replaceState(null, null,
+               l.pathname.slice(0, -1) + decoded + l.hash
+           );
+         }
+       }(window.location))
+       
+       // Redirect to the home page
+       window.location.href = '/';
+     </script>
+   </head>
+   <body>
+     Redirecting...
+   </body>
+   </html>
+   ```
 
-### Custom Server (Nginx)
+### Apache
 
-1. Build the application
-2. Copy the `dist` directory to your server
-3. Configure Nginx:
+1. Configure `.htaccess` file in your `dist` directory:
+   ```apache
+   <IfModule mod_rewrite.c>
+     RewriteEngine On
+     RewriteBase /
+     RewriteRule ^index\.html$ - [L]
+     RewriteCond %{REQUEST_FILENAME} !-f
+     RewriteCond %{REQUEST_FILENAME} !-d
+     RewriteRule . /index.html [L]
+   </IfModule>
+   ```
+
+### Nginx
+
+1. Configure your Nginx server block:
    ```nginx
    server {
        listen 80;

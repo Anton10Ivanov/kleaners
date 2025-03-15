@@ -24,12 +24,20 @@ export default defineConfig(({ mode }) => ({
     // Improve build performance
     target: 'es2015',
     minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: mode === 'production',
+        drop_debugger: true
+      }
+    },
     // Split chunks for better caching
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          auth: ['@supabase/supabase-js'],
+          utils: ['date-fns', 'clsx', 'tailwind-merge']
         }
       }
     },
@@ -37,10 +45,11 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'development',
     // Speed up build process
     reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000,
   },
   // Optimize dev server
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'sonner'],
+    include: ['react', 'react-dom', 'react-router-dom', 'sonner', '@supabase/supabase-js'],
   },
   // Add SPA fallback for production
   preview: {

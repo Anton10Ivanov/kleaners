@@ -14,17 +14,18 @@ const enableMocks = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCK_API 
 
 if (enableMocks) {
   startMockServiceWorker().catch(err => {
-    console.warn('Error starting mock service worker:', err)
+    console.warn('Mock Service Worker initialization error:', err)
   })
 }
 
-// Create a client
+// Create a client with improved defaults for network & cache handling
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
       refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
     },
   },
 })
