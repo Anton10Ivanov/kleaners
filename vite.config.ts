@@ -58,4 +58,8 @@ export default defineConfig(({ mode }) => ({
     host: true,
     cors: true
   },
+  // Enable type checking in build
+  typescript: {
+    tsconfigPath: mode === 'production' ? './tsconfig.strict.json' : './tsconfig.json'
+  }
 }));
