@@ -13,15 +13,11 @@ Before deploying, ensure the following:
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-2. **Supabase Configuration**: Update `src/integrations/supabase/config.ts` to use environment variables:
-   ```typescript
-   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-   ```
+2. **Base URL Configuration**: The application uses a `<base href="/" />` tag in `index.html`. For deployments to non-root paths:
+   - Update this base tag to match your deployment path (e.g., `<base href="/my-app/" />` for a /my-app/ subdirectory)
+   - Make sure your server is configured to handle deep linking for SPA routes
 
-3. **Base URL**: If deploying to a subdirectory, update the `<base>` tag in `index.html`.
-
-4. **Build Configuration**: Review `vite.config.ts` to ensure it's properly configured for production.
+3. **Build Configuration**: Use the root `vite.config.ts` file for your production build
 
 ## Build Process
 
