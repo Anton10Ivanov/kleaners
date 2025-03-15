@@ -2,7 +2,7 @@
 import { Database } from "@/integrations/supabase/types";
 import { BookingStatus as BookingStatusEnum } from "@/types/enums";
 
-// Update BookingStatus to match the application-wide enum
+// Use the application-wide enum directly 
 export type BookingStatus = BookingStatusEnum;
 
 export const statusColors = {

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useBookings } from '@/hooks/useBookings';
 import { DateRange } from 'react-day-picker';
@@ -23,8 +24,6 @@ export const BookingsSection: React.FC = () => {
   // State for managing the assign provider dialog
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  
-  // No need to convert between enums now as they're aligned
   
   // Using the enhanced hook with better error handling and query invalidation
   const {
@@ -150,8 +149,8 @@ export const BookingsSection: React.FC = () => {
         onUpdateStatus={handleUpdateStatus}
         onDeleteBooking={handleDeleteBooking}
         onAssignProvider={handleAssignProviderClick}
-        onViewDetails={(booking) => console.log('View details:', booking)}
-        onContactClient={(booking) => console.log('Contact client:', booking)}
+        onViewDetails={handleViewDetails}
+        onContactClient={handleContactClient}
         isLoading={isLoading || isFetching}
         onFilterChange={handleFilterChange}
       />
