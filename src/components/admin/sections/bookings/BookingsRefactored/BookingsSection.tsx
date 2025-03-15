@@ -8,6 +8,7 @@ import { BookingsContent } from './BookingsContent';
 import { Booking, BookingStatus as AdminBookingStatus } from '@/components/admin/sections/bookings/types';
 import { BookingStatus } from '@/types/enums'; 
 import { toast } from 'sonner';
+import { AssignProviderDialog } from '../AssignProviderDialog';
 
 export const BookingsSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +20,10 @@ export const BookingsSection: React.FC = () => {
   
   // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
+  
+  // State for managing the assign provider dialog
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   
   // Convert AdminBookingStatus to the application BookingStatus enum when needed
   const convertToAppBookingStatus = (status: AdminBookingStatus | null): BookingStatus | null => {
@@ -53,9 +58,19 @@ export const BookingsSection: React.FC = () => {
     dateRange: filters.dateRange,
   });
 
-  // Mock assignProvider function
-  const assignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
+  const handleAssignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
+    
+    // Close assign dialog
+    setIsAssignDialogOpen(false);
+    setSelectedBooking(null);
+    
+    // Update booking status to assigned
+    updateBookingStatus({ 
+      id: bookingId, 
+      status: BookingStatus.Assigned 
+    });
+    
     toast.success(`Provider assigned to booking`);
     
     // Refresh data after assignment
@@ -100,15 +115,20 @@ export const BookingsSection: React.FC = () => {
   };
 
   const handleUpdateStatus = (id: string, status: AdminBookingStatus) => {
-    updateBookingStatus({ id, status });
+    // Convert AdminBookingStatus to BookingStatus
+    const appStatus = convertToAppBookingStatus(status);
+    if (appStatus) {
+      updateBookingStatus({ id, status: appStatus });
+    }
   };
 
   const handleDeleteBooking = (id: string) => {
     deleteBooking(id);
   };
 
-  const handleAssignProvider = (bookingId: string, providerId: string) => {
-    assignProvider({ bookingId, providerId });
+  const handleAssignProviderClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setIsAssignDialogOpen(true);
   };
 
   const handleViewDetails = (booking: Booking) => {
@@ -138,18 +158,29 @@ export const BookingsSection: React.FC = () => {
   }
 
   return (
-    <BookingsContent
-      bookings={bookings}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-      onUpdateStatus={handleUpdateStatus}
-      onDeleteBooking={handleDeleteBooking}
-      onAssignProvider={handleAssignProvider}
-      onViewDetails={handleViewDetails}
-      onContactClient={handleContactClient}
-      isLoading={isLoading || isFetching}
-      onFilterChange={handleFilterChange}
-    />
+    <>
+      <BookingsContent
+        bookings={bookings}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        onUpdateStatus={handleUpdateStatus}
+        onDeleteBooking={handleDeleteBooking}
+        onAssignProvider={handleAssignProviderClick}
+        onViewDetails={handleViewDetails}
+        onContactClient={handleContactClient}
+        isLoading={isLoading || isFetching}
+        onFilterChange={handleFilterChange}
+      />
+      
+      {selectedBooking && (
+        <AssignProviderDialog
+          open={isAssignDialogOpen}
+          onClose={() => setIsAssignDialogOpen(false)}
+          booking={selectedBooking}
+          onAssign={handleAssignProvider}
+        />
+      )}
+    </>
   );
 };

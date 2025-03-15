@@ -1,41 +1,34 @@
 
 import { useApiQuery } from '@/hooks/useApiQuery';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useEffect } from 'react';
 import { UserBooking, UseUserBookingsResult } from '@/types/bookings';
-import { 
-  fetchUserBookings, 
-  cancelUserBooking, 
-  rescheduleUserBooking,
-  checkInvoiceExists,
-  createInvoiceRecord
-} from '@/services/bookingsService';
 import { BookingStatus } from '@/types/enums';
+import { getUserMockBookings, updateMockBooking, deleteMockBooking, addMockNotification } from '@/utils/mock/mockDataService';
 
 /**
  * Custom hook to fetch and manage user bookings
  * 
  * @returns {UseUserBookingsResult} Object containing bookings data and status
- * 
- * @example
- * ```tsx
- * const { bookings, isLoading, error } = useUserBookings();
- * 
- * if (isLoading) return <Loading />;
- * if (error) return <ErrorDisplay message={error.message} />;
- * 
- * return <BookingsList bookings={bookings} />;
- * ```
  */
 export function useUserBookings(): UseUserBookingsResult {
+  // Use mock user ID for demo
+  const mockUserId = 'mock-user-1';
+  
+  const fetchUserBookings = async (): Promise<UserBooking[]> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // Get bookings for this user from mock data service
+    return getUserMockBookings(mockUserId);
+  };
+  
   const {
     data: bookings = [],
     isLoading,
     error,
     refetch
   } = useApiQuery<UserBooking[]>({
-    queryKey: ['userBookings'],
+    queryKey: ['userBookings', mockUserId],
     queryFn: fetchUserBookings,
     onErrorHandler: (error) => {
       toast.error('Failed to load bookings', {
@@ -47,9 +40,17 @@ export function useUserBookings(): UseUserBookingsResult {
   // Cancel a booking
   const cancelBooking = async (bookingId: string): Promise<boolean> => {
     try {
-      const success = await cancelUserBooking(bookingId);
+      // Update booking status in mock data
+      const success = !!updateMockBooking(bookingId, { status: BookingStatus.Cancelled });
       
       if (success) {
+        // Add notification
+        addMockNotification({
+          title: 'Booking Cancelled',
+          message: `Your booking #${bookingId.substring(0, 8)} has been cancelled`,
+          type: 'booking'
+        });
+        
         toast.success('Booking cancelled successfully');
         refetch();
       } else {
@@ -66,9 +67,17 @@ export function useUserBookings(): UseUserBookingsResult {
   // Reschedule a booking
   const rescheduleBooking = async (bookingId: string, newDate: string): Promise<boolean> => {
     try {
-      const success = await rescheduleUserBooking(bookingId, newDate);
+      // Update booking date in mock data
+      const success = !!updateMockBooking(bookingId, { date: newDate });
       
       if (success) {
+        // Add notification
+        addMockNotification({
+          title: 'Booking Rescheduled',
+          message: `Your booking #${bookingId.substring(0, 8)} has been rescheduled`,
+          type: 'booking'
+        });
+        
         toast.success('Booking rescheduled successfully');
         refetch();
       } else {
@@ -85,65 +94,23 @@ export function useUserBookings(): UseUserBookingsResult {
   // Generate an invoice for a completed booking
   const generateInvoice = async (bookingId: string): Promise<boolean> => {
     try {
-      const booking = bookings.find(b => b.id === bookingId);
+      // In a real app, this would create an invoice in the database
+      // For mock purposes, we'll just show a success message
       
-      if (!booking) {
-        toast.error('Booking not found');
-        return false;
-      }
+      addMockNotification({
+        title: 'Invoice Generated',
+        message: `Invoice for booking #${bookingId.substring(0, 8)} has been generated`,
+        type: 'booking'
+      });
       
-      if (booking.status !== BookingStatus.Completed) {
-        toast.error('Can only generate invoices for completed bookings');
-        return false;
-      }
-      
-      const { data: user } = await supabase.auth.getUser();
-      
-      if (!user.user) {
-        toast.error('User not authenticated');
-        return false;
-      }
-      
-      // Check if invoice already exists
-      const exists = await checkInvoiceExists(bookingId);
-      
-      if (exists) {
-        toast.info('Invoice already exists for this booking');
-        return true;
-      }
-      
-      // Create invoice record
-      const success = await createInvoiceRecord(booking, user.user.id);
-      
-      if (success) {
-        toast.success('Invoice generated successfully');
-      } else {
-        toast.error('Failed to generate invoice');
-      }
-      
-      return success;
+      toast.success('Invoice generated successfully');
+      return true;
     } catch (error) {
       console.error('Error generating invoice:', error);
       toast.error('Failed to generate invoice');
       return false;
     }
   };
-
-  // For demonstration purposes, auto-generate invoices for completed bookings
-  useEffect(() => {
-    const createMockInvoices = async () => {
-      if (isLoading || !bookings.length) return;
-      
-      // Find completed bookings and create invoices for them
-      const completedBookings = bookings.filter(b => b.status === BookingStatus.Completed);
-      
-      for (const booking of completedBookings) {
-        await generateInvoice(booking.id);
-      }
-    };
-    
-    createMockInvoices();
-  }, [bookings, isLoading]);
 
   return {
     bookings,
