@@ -85,8 +85,11 @@ let worker: ReturnType<typeof setupWorker> | null = null;
 export const startMockServiceWorker = async () => {
   if (typeof window === 'undefined') return;
   
-  // Don't start the mock service worker in production or preview environments
-  if (import.meta.env.PROD) {
+  // Check environment variable first, then fallback to development check
+  const shouldEnableMocks = import.meta.env.VITE_ENABLE_MOCK_API === 'true' || import.meta.env.DEV;
+  
+  // Don't start the mock service worker in production unless explicitly enabled
+  if (import.meta.env.PROD && import.meta.env.VITE_ENABLE_MOCK_API !== 'true') {
     console.log('Mock Service Worker disabled in production');
     return;
   }
@@ -97,7 +100,7 @@ export const startMockServiceWorker = async () => {
       worker = setupWorker(...handlers);
     }
     
-    if (dev) {
+    if (shouldEnableMocks) {
       await worker.start({
         onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
       });
@@ -106,4 +109,9 @@ export const startMockServiceWorker = async () => {
   } catch (error) {
     console.warn('Could not start MSW worker:', error);
   }
+};
+
+// Public function to check if MSW is running
+export const isMockServiceWorkerActive = () => {
+  return !!worker;
 };
