@@ -20,15 +20,10 @@ const Login = () => {
     }
   }, [location.pathname]);
 
-  // Parse the return URL from query params or use default routes
-  const getReturnUrl = () => {
-    const params = new URLSearchParams(location.search);
-    return params.get('returnUrl') || '/';
-  };
-
   // Store return URL in session storage for persistence through auth flow
   useEffect(() => {
-    const returnUrl = getReturnUrl();
+    const params = new URLSearchParams(location.search);
+    const returnUrl = params.get('returnUrl');
     if (returnUrl) {
       sessionStorage.setItem('authReturnUrl', returnUrl);
     }
