@@ -1,4 +1,6 @@
 
+import { BookingStatus } from "@/types/enums";
+
 /**
  * Interface representing a user booking
  */
@@ -6,8 +8,8 @@ export interface UserBooking {
   /** Unique booking identifier */
   id: string;
   
-  /** Status of the booking (pending, completed, cancelled) */
-  status: 'pending' | 'completed' | 'cancelled';
+  /** Status of the booking */
+  status: BookingStatus;
   
   /** Date and time of the booking */
   date: string;

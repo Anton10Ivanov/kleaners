@@ -1,7 +1,7 @@
 
 import { Database } from "@/integrations/supabase/types";
+import { BookingStatus } from "@/types/enums";
 
-// Include "assigned" in the BookingStatus type to match your app requirements
 export type BookingStatus = "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
 
 export const statusColors = {

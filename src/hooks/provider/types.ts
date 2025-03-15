@@ -1,13 +1,8 @@
 
 import { z } from 'zod';
+import { ApplicationStep } from '@/types/enums';
 
-// Define application steps enum
-export enum ApplicationStep {
-  PERSONAL_INFO = 0,
-  EXPERIENCE = 1,
-  DOCUMENTS = 2,
-  CONFIRMATION = 3
-}
+export { ApplicationStep };
 
 // Define the form schema with Zod
 export const joinTeamSchema = z.object({

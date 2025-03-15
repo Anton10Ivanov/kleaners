@@ -1,52 +1,22 @@
 
 import { z } from "zod";
+import { 
+  Service, 
+  Frequency, 
+  BusinessType, 
+  CleaningOption, 
+  PropertySize, 
+  ErrorSeverity 
+} from "@/types/enums";
 
-export enum Service {
-  Regular = "regular",
-  MoveInOut = "moveInOut",
-  Business = "business",
-  Construction = "construction"
-}
-
-export enum Frequency {
-  OneTime = "oneTime",
-  Weekly = "weekly",
-  BiWeekly = "biWeekly", // Keep this consistent (BiWeekly not Biweekly)
-  Monthly = "monthly",
-  Custom = "custom"
-}
-
-export enum BusinessType {
-  Office = "office",
-  Retail = "retail",
-  Restaurant = "restaurant",
-  Other = "other"
-}
-
-export enum CleaningOption {
-  Dusting = "dusting",
-  Vacuuming = "vacuuming",
-  Mopping = "mopping",
-  RestroomCleaning = "restroomCleaning",
-  TrashRemoval = "trashRemoval"
-}
-
-export enum PropertySize {
-  Small = "small",
-  Medium = "medium",
-  Large = "large"
-}
-
-// Update ErrorSeverity enum to include all needed values
-export enum ErrorSeverity {
-  LOW = "low",
-  MEDIUM = "medium",
-  HIGH = "high",
-  CRITICAL = "critical",
-  INFO = "info",
-  WARNING = "warning",
-  ERROR = "error"
-}
+export { 
+  Service, 
+  Frequency, 
+  BusinessType, 
+  CleaningOption, 
+  PropertySize, 
+  ErrorSeverity 
+};
 
 export interface ProviderOption {
   id: string;
