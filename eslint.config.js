@@ -29,7 +29,11 @@ export default tseslint.config(
         "varsIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
       }],
-      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/consistent-type-imports": ["error", {
+        "prefer": "type-imports",
+        "disallowTypeAnnotations": true,
+        "fixStyle": "separate-type-imports"
+      }],
       "@typescript-eslint/explicit-function-return-type": ["warn", {
         "allowExpressions": true,
         "allowTypedFunctionExpressions": true
@@ -40,6 +44,17 @@ export default tseslint.config(
         "ts-ignore": "allow-with-description",
         "ts-expect-error": "allow-with-description"
       }],
+      "@typescript-eslint/naming-convention": [
+        "warn",
+        {
+          "selector": "typeLike",
+          "format": ["PascalCase"]
+        },
+        {
+          "selector": "enumMember",
+          "format": ["PascalCase"]
+        }
+      ]
     },
   }
 );
