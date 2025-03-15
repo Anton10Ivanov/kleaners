@@ -27,7 +27,7 @@ const updateBookingStatusApi = async ({
     localStorage.setItem('mock-bookings', JSON.stringify(mockBookings));
     
     // If status is assigned, update the provider_id field (in a real app)
-    if (status === BookingStatus.Assigned) {
+    if (status === 'assigned') {
       // This would come from the payload in a real app
       updatedBooking.provider_id = "mock-provider-1";
     }
@@ -39,7 +39,7 @@ const updateBookingStatusApi = async ({
       message: `Booking #${id.substring(0, 8)} has been ${status.toLowerCase()}`,
       createdAt: new Date().toISOString(),
       read: false,
-      type: 'booking'
+      type: 'booking' as const
     };
     
     // Add notification through our central mock data service
@@ -96,7 +96,7 @@ const assignProviderApi = async ({
   if (updatedBooking) {
     // Update provider_id and status to assigned
     updatedBooking.provider_id = providerId;
-    updatedBooking.status = BookingStatus.Assigned;
+    updatedBooking.status = 'assigned';
     localStorage.setItem('mock-bookings', JSON.stringify(mockBookings));
     
     // Trigger a mock notification
@@ -106,7 +106,7 @@ const assignProviderApi = async ({
       message: `Provider has been assigned to booking #${bookingId.substring(0, 8)}`,
       createdAt: new Date().toISOString(),
       read: false,
-      type: 'booking'
+      type: 'booking' as const
     };
     
     // Add notification through our central mock data service
@@ -119,7 +119,7 @@ const assignProviderApi = async ({
   return {
     id: bookingId,
     provider_id: providerId,
-    status: BookingStatus.Assigned,
+    status: 'assigned',
     service_type: "Updated Service",
     date: new Date().toISOString(),
     total_price: 100,

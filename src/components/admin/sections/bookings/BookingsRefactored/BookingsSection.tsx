@@ -6,7 +6,6 @@ import { LoadingState } from './LoadingState';
 import { ErrorState } from './ErrorState';
 import { BookingsContent } from './BookingsContent';
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
-import { BookingStatus as AppBookingStatus } from '@/types/enums'; 
 import { toast } from 'sonner';
 import { AssignProviderDialog } from '../AssignProviderDialog';
 
@@ -54,7 +53,7 @@ export const BookingsSection: React.FC = () => {
     // Update booking status to assigned
     updateBookingStatus({ 
       id: bookingId, 
-      status: AppBookingStatus.Assigned 
+      status: 'assigned'
     });
     
     toast.success(`Provider assigned to booking`);
@@ -160,7 +159,7 @@ export const BookingsSection: React.FC = () => {
           open={isAssignDialogOpen}
           onClose={() => setIsAssignDialogOpen(false)}
           booking={selectedBooking}
-          onAssign={({ bookingId, providerId }) => handleAssignProvider(bookingId, providerId)}
+          onAssign={({bookingId, providerId}) => handleAssignProvider(bookingId, providerId)}
         />
       )}
     </>

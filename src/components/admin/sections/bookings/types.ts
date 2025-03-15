@@ -2,8 +2,13 @@
 import { Database } from "@/integrations/supabase/types";
 import { BookingStatus as BookingStatusEnum } from "@/types/enums";
 
-// Use the application-wide enum directly 
-export type BookingStatus = BookingStatusEnum;
+// Define the enum values that are used throughout the application
+export type BookingStatus = 
+  | 'pending'
+  | 'assigned'
+  | 'confirmed'
+  | 'completed'
+  | 'cancelled';
 
 export const statusColors = {
   pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
@@ -16,8 +21,8 @@ export const statusColors = {
 export type SortField = "date" | "total_price" | "created_at";
 export type SortOrder = "asc" | "desc";
 
-// Define the Booking type to be more flexible for both real and mock data
-export type Booking = Partial<Database["public"]["Tables"]["bookings"]["Row"]> & {
+// Define the Booking type to handle both real and mock data consistently
+export interface Booking {
   id: string;
   status: BookingStatus;
   service_type: string;
@@ -31,4 +36,6 @@ export type Booking = Partial<Database["public"]["Tables"]["bookings"]["Row"]> &
   phone?: string;
   provider_id?: string;
   time_slot?: string;
-};
+  hours?: number;
+  user_id?: string;
+}
