@@ -29,29 +29,47 @@ export function useNotifications() {
         {
           id: '1',
           title: 'Booking Confirmed',
-          message: 'Your booking for May 15th has been confirmed.',
+          message: 'Your cleaning appointment for May 15th has been confirmed.',
           type: 'booking',
           read: false,
-          link: '/user/bookings',
+          link: '/client/bookings',
           createdAt: new Date(Date.now() - 1000 * 60 * 30) // 30 minutes ago
         },
         {
           id: '2',
           title: 'Cleaner Assigned',
-          message: 'Maria has been assigned to your upcoming cleaning.',
+          message: 'Maria has been assigned to your upcoming cleaning appointment.',
           type: 'provider',
           read: true,
-          link: '/user/bookings',
+          link: '/client/bookings',
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2) // 2 hours ago
         },
         {
           id: '3',
-          title: 'New Review Request',
-          message: 'Please rate your recent cleaning service.',
+          title: 'Review Request',
+          message: 'Please rate your recent cleaning service with John.',
           type: 'system',
           read: false,
-          link: '/user/bookings',
+          link: '/client/bookings',
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24) // 1 day ago
+        },
+        {
+          id: '4',
+          title: 'Payment Processed',
+          message: 'Your payment of $120 for the cleaning service has been processed.',
+          type: 'payment',
+          read: true,
+          link: '/client/bookings',
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48) // 2 days ago
+        },
+        {
+          id: '5',
+          title: 'Special Offer',
+          message: 'Get 15% off your next deep cleaning service!',
+          type: 'system',
+          read: false,
+          link: '/client/bookings',
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72) // 3 days ago
         }
       ];
       

@@ -2,8 +2,7 @@
 import React from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useUserProfileData } from '@/hooks/useUserProfileData';
-import { Bell, Mail, Lock, Settings, Shield, Globe } from 'lucide-react';
-import { NotificationsPanel } from '@/components/user/profile/NotificationsPanel';
+import { Settings, Shield } from 'lucide-react';
 import { AccountPreferences } from '@/components/user/profile/AccountPreferences';
 import { SecuritySettings } from '@/components/user/profile/SecuritySettings';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -54,13 +53,9 @@ export default function ClientSettings(): JSX.Element {
     <div className="container mx-auto p-4 pb-16 md:pb-0">
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
       
-      <Tabs defaultValue="notifications" className="w-full">
+      <Tabs defaultValue="preferences" className="w-full">
         <div className="mb-8">
-          <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-3 mb-8">
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              <span className="hidden md:inline">Notifications</span>
-            </TabsTrigger>
+          <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-2 mb-8">
             <TabsTrigger value="preferences" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
               <span className="hidden md:inline">Preferences</span>
@@ -73,20 +68,6 @@ export default function ClientSettings(): JSX.Element {
         </div>
         
         <div className="max-w-3xl mx-auto">
-          <TabsContent value="notifications">
-            <Card>
-              <CardContent className="pt-6">
-                <CardDescription className="mb-4 text-center">
-                  Manage your notification preferences
-                </CardDescription>
-                <NotificationsPanel 
-                  preferences={profile.notificationPreferences}
-                  onSave={(prefs) => updateProfile({ notificationPreferences: prefs })}
-                />
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
           <TabsContent value="preferences">
             <Card>
               <CardContent className="pt-6">
