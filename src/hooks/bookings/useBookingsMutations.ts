@@ -1,8 +1,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Booking, BookingStatus } from "@/components/admin/sections/bookings/types";
+import { Booking } from "@/components/admin/sections/bookings/types";
 import { toast } from "sonner";
 import { BookingsFilterParams, getBookingsQueryKey } from "./bookingsUtils";
+import { BookingStatus } from "@/types/enums";
 
 // This would normally interact with an API
 const updateBookingStatusApi = async ({
