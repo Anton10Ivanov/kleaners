@@ -8,6 +8,12 @@ import { AssignProviderDialog } from './AssignProviderDialog';
 import { DeleteBookingDialog } from './DeleteBookingDialog';
 import { MessageClientDialog } from './MessageClientDialog';
 
+// Define the AssignProviderData interface
+interface AssignProviderData {
+  bookingId: string;
+  providerId: string;
+}
+
 // Define prop types for the BookingsTable component
 export interface BookingsTableProps {
   bookings: Booking[];
@@ -38,9 +44,9 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
 
   // Handler for assigning provider
-  const handleAssignProvider = (bookingId: string, providerId: string) => {
+  const handleAssignProvider = (data: AssignProviderData) => {
     // This would normally call an API to assign the provider
-    console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
+    console.log(`Assigning provider ${data.providerId} to booking ${data.bookingId}`);
     setIsAssignDialogOpen(false);
     refreshData();
   };
