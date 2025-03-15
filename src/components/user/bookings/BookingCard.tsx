@@ -82,6 +82,7 @@ export function BookingCard({
         )}
       </CardContent>
       
+      {/* Only show these actions for pending bookings */}
       {booking.status === 'pending' && (
         <CardFooter className="flex justify-between pt-0 pb-4">
           {/* Reschedule Dialog */}

@@ -76,7 +76,7 @@ export const useProviderMatching = (bookingData: BookingFormData) => {
   const matchProviders = (providers: Provider[], booking: BookingFormData): Provider[] => {
     return providers.filter(provider => {
       // Filter by service type
-      if (provider.services && !provider.services.includes(booking.service || '')) {
+      if (provider.services && booking.service && !provider.services.includes(booking.service)) {
         return false;
       }
       
@@ -105,6 +105,7 @@ export const useProviderMatching = (bookingData: BookingFormData) => {
         provider.availability?.timeSlots &&
         booking.weekdayPreference &&
         provider.availability.timeSlots[booking.weekdayPreference] &&
+        booking.timePreference &&
         !provider.availability.timeSlots[booking.weekdayPreference].includes(booking.timePreference)
       ) {
         return false;
