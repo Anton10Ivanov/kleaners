@@ -9,7 +9,7 @@ export interface UserBooking {
   id: string;
   
   /** Status of the booking */
-  status: "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
+  status: BookingStatus;
   
   /** Date and time of the booking */
   date: string;

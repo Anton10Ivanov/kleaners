@@ -25,7 +25,7 @@ export const ApplicationNavigation = ({
       <Button
         variant="outline"
         onClick={prevStep}
-        disabled={currentStep === ApplicationStep.PERSONAL_INFO || isLoading}
+        disabled={currentStep === ApplicationStep.PersonalInfo || isLoading}
         className="flex items-center gap-1"
       >
         <ArrowLeft className="h-4 w-4" />
@@ -37,7 +37,7 @@ export const ApplicationNavigation = ({
         className="flex items-center gap-1"
       >
         {isLoading ? "Submitting..." : 
-          currentStep === ApplicationStep.CONFIRMATION ? (
+          currentStep === ApplicationStep.Confirmation ? (
             <>Submit Application</>
           ) : (
             <>Next Step<ArrowRight className="h-4 w-4" /></>

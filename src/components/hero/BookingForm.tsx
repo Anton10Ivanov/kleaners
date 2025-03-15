@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useHero } from "./HeroContext";
-import { Service } from "@/schemas/booking";
+import { ServiceType } from "@/schemas/booking";
 
 interface BookingFormProps {
   layout: "mobile" | "desktop";
@@ -26,15 +26,15 @@ export const BookingForm = memo(({
     return (
       <div className="backdrop-blur-xl p-5 border border-white/20 transition-all hover:shadow-[0_10px_40px_-15px_rgba(126,188,230,0.2)] duration-300 bg-white rounded-xl">
         <div className="flex flex-col gap-4">
-          <Select value={selectedService} onValueChange={updateSelectedService} defaultValue={Service.Regular}>
+          <Select value={selectedService} onValueChange={updateSelectedService} defaultValue={ServiceType.Regular}>
             <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-12 rounded-xl ring-offset-0 focus:ring-primary border-white/30 dark:border-gray-700 shadow-sm border-[#08B]">
               <SelectValue placeholder="Select service type" />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
-              <SelectItem value={Service.Regular} className="py-3">Regular Cleaning</SelectItem>
-              <SelectItem value={Service.MoveInOut} className="py-3">Move In/Out Cleaning</SelectItem>
-              <SelectItem value={Service.Business} className="py-3">Business Cleaning</SelectItem>
-              <SelectItem value={Service.Construction} className="py-3">Post-Construction Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Regular} className="py-3">Regular Cleaning</SelectItem>
+              <SelectItem value={ServiceType.MoveInOut} className="py-3">Move In/Out Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Business} className="py-3">Business Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Construction} className="py-3">Post-Construction Cleaning</SelectItem>
             </SelectContent>
           </Select>
           
@@ -62,15 +62,15 @@ export const BookingForm = memo(({
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         <div className="w-full sm:w-1/2">
           <label className="text-sm font-medium text-gray-700 mb-1.5 block">Select Service</label>
-          <Select value={selectedService} onValueChange={updateSelectedService} defaultValue={Service.Regular}>
+          <Select value={selectedService} onValueChange={updateSelectedService} defaultValue={ServiceType.Regular}>
             <SelectTrigger className="w-full bg-white/90 dark:bg-gray-800/90 font-medium h-14 rounded-xl ring-offset-0 focus:ring-primary border border-white/30 dark:border-gray-700 shadow-sm border-[#08B]">
               <SelectValue placeholder="Select service type" />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800 w-full min-w-[240px] z-50 rounded-xl border border-gray-100 dark:border-gray-700">
-              <SelectItem value={Service.Regular} className="py-3">Regular Cleaning</SelectItem>
-              <SelectItem value={Service.MoveInOut} className="py-3">Move In/Out Cleaning</SelectItem>
-              <SelectItem value={Service.Business} className="py-3">Business Cleaning</SelectItem>
-              <SelectItem value={Service.Construction} className="py-3">Post-Construction Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Regular} className="py-3">Regular Cleaning</SelectItem>
+              <SelectItem value={ServiceType.MoveInOut} className="py-3">Move In/Out Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Business} className="py-3">Business Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Construction} className="py-3">Post-Construction Cleaning</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -93,7 +93,7 @@ export const ApplicationForm = ({
     <Card className="border-0 shadow-md w-full">
       <CardHeader className="px-4 sm:px-6 pb-0">
         <CardTitle>Provider Application</CardTitle>
-        <CardDescription>Step {currentStep + 1} of 4</CardDescription>
+        <CardDescription>Step {getStepNumber(currentStep)} of 4</CardDescription>
       </CardHeader>
       
       <div className="px-4 sm:px-6 pt-4 pb-2 overflow-x-auto">
@@ -148,3 +148,14 @@ export const ApplicationForm = ({
     </Card>
   );
 };
+
+// Helper function to convert ApplicationStep enum to number
+function getStepNumber(step: ApplicationStep): number {
+  switch(step) {
+    case ApplicationStep.PersonalInfo: return 1;
+    case ApplicationStep.Experience: return 2;
+    case ApplicationStep.Documents: return 3;
+    case ApplicationStep.Confirmation: return 4;
+    default: return 1;
+  }
+}

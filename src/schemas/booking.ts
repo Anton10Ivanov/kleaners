@@ -1,22 +1,32 @@
 
 import { z } from "zod";
 import { 
-  Service, 
-  Frequency, 
-  BusinessType, 
-  CleaningOption, 
-  PropertySize, 
-  ErrorSeverity 
+  Service as ServiceEnum, 
+  Frequency as FrequencyEnum, 
+  BusinessType as BusinessTypeEnum, 
+  CleaningOption as CleaningOptionEnum, 
+  PropertySize as PropertySizeEnum, 
+  ErrorSeverity as ErrorSeverityEnum 
 } from "@/types/enums";
 
+// Re-export the enums for use throughout the application
 export { 
-  Service, 
-  Frequency, 
-  BusinessType, 
-  CleaningOption, 
-  PropertySize, 
-  ErrorSeverity 
+  ServiceEnum as Service, 
+  FrequencyEnum as Frequency, 
+  BusinessTypeEnum as BusinessType, 
+  CleaningOptionEnum as CleaningOption, 
+  PropertySizeEnum as PropertySize, 
+  ErrorSeverityEnum as ErrorSeverity 
 };
+
+// Add specific service types used in the UI that extend the base enum
+// This helps with backward compatibility with existing code
+export enum ServiceType {
+  Regular = "regular",
+  Business = "business",
+  MoveInOut = "move-in-out",
+  Construction = "post-construction"
+}
 
 export interface ProviderOption {
   id: string;
@@ -26,10 +36,10 @@ export interface ProviderOption {
 
 export const bookingSchema = z.object({
   // Basic booking info
-  service: z.nativeEnum(Service).optional(),
+  service: z.enum([...Object.values(ServiceEnum), ...Object.values(ServiceType)]).optional(),
   postalCode: z.string().min(5, { message: "Postal code must be at least 5 characters." }),
   date: z.date().optional(),
-  frequency: z.nativeEnum(Frequency).optional(),
+  frequency: z.nativeEnum(FrequencyEnum).optional(),
   hours: z.number().min(2).max(8).optional(),
   bedrooms: z.number().min(1).max(5).optional(),
   bathrooms: z.number().min(1).max(5).optional(),
@@ -38,9 +48,9 @@ export const bookingSchema = z.object({
   timeSlots: z.record(z.string(), z.array(z.string())).optional(),
 
   // Business Cleaning
-  businessType: z.nativeEnum(BusinessType).optional(),
-  cleaningOptions: z.array(z.nativeEnum(CleaningOption)).optional(),
-  propertySize: z.nativeEnum(PropertySize).optional(),
+  businessType: z.nativeEnum(BusinessTypeEnum).optional(),
+  cleaningOptions: z.array(z.nativeEnum(CleaningOptionEnum)).optional(),
+  propertySize: z.nativeEnum(PropertySizeEnum).optional(),
   specialRequirements: z.string().optional(),
   providerOptions: z.array(z.custom<ProviderOption>()).optional(),
   specialInstructions: z.string().optional(),

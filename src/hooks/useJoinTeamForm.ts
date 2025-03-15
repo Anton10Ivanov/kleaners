@@ -84,7 +84,7 @@ export const useJoinTeamForm = () => {
   );
   
   const handleSubmit = () => {
-    if (currentStep === ApplicationStep.CONFIRMATION) {
+    if (currentStep === ApplicationStep.Confirmation) {
       onSubmit({
         firstName: name.split(' ')[0] || '',
         lastName: name.split(' ').slice(1).join(' ') || '',
