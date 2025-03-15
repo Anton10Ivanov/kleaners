@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -65,37 +64,19 @@ export function AccountInfoCard({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardDescription className="font-normal text-base text-zinc-800 text-center">
-          Manage your basic account details
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <div className="py-2">{profile.fullName}</div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <div className="py-2">{profile.email}</div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            <div className="py-2">{profile.phone || "Not provided"}</div>
-          </div>
+    <>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="fullName">Full Name</Label>
+          <div className="py-2">{profile.fullName}</div>
         </div>
-      </CardContent>
+      </div>
       
-      <CardFooter className="flex justify-end">
+      <div className="flex justify-end mt-4">
         <Button onClick={handleOpenDialog}>
           Edit Information
         </Button>
-      </CardFooter>
+      </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
@@ -164,6 +145,6 @@ export function AccountInfoCard({
           </form>
         </DialogContent>
       </Dialog>
-    </Card>
+    </>
   );
 }
