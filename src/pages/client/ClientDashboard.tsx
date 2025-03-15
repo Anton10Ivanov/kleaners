@@ -35,9 +35,12 @@ const ClientDashboard = () => {
     markAllAsRead();
   };
 
+  // Extract the first name from the fullName if available
+  const firstName = profile?.fullName ? profile.fullName.split(' ')[0] : '';
+
   return (
     <div className="container mx-auto py-6 px-4">
-      <h1 className="text-2xl font-bold mb-6">Welcome{profile?.firstName ? `, ${profile.firstName}` : ''}!</h1>
+      <h1 className="text-2xl font-bold mb-6">Welcome{firstName ? `, ${firstName}` : ''}!</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card className="bg-white dark:bg-gray-800 shadow">
