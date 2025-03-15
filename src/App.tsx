@@ -1,10 +1,10 @@
 
 import { lazy, Suspense, useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import ClientLayout from '@/components/client/ClientLayout';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { ThemeProvider } from 'next-themes';
+import ProviderLayout from '@/components/provider/ProviderLayout';
+import AdminLayout from '@/components/admin/AdminLayout';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -13,7 +13,6 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
-import AppRoutes from '@/AppRoutes';
 
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
@@ -22,6 +21,7 @@ import { AdminCustomers } from '@/pages/admin/AdminCustomers';
 import { AdminProviders } from '@/pages/admin/AdminProviders';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
 import Dashboard from '@/pages/admin/Dashboard';
+import { AdminPendingBookingsPool } from './pages/admin/PendingBookingsPool';
 
 // Client pages
 import ClientDashboard from '@/pages/client/ClientDashboard';
@@ -53,12 +53,10 @@ import PrivacyPolicy from '@/pages/legal/PrivacyPolicy';
 // Provider pages
 import ProviderDashboard from '@/pages/provider/ProviderDashboard';
 import ProviderProfile from '@/pages/provider/ProviderProfile';
-import ProviderLayout from '@/components/provider/ProviderLayout';
 import ProviderBookings from '@/pages/provider/ProviderBookings';
 import ProviderSettings from '@/pages/provider/ProviderSettings';
 import ProviderAvailability from '@/pages/provider/ProviderAvailability';
 import ProviderMessages from '@/pages/provider/ProviderMessages';
-import AdminLayout from '@/components/admin/AdminLayout';
 
 function App() {
   const location = useLocation();
@@ -86,11 +84,13 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
-          <Route path="/app-routes" element={<AppRoutes />} />
           
+          {/* Auth routes - consolidated here */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<Signup />} />
           <Route path="/auth/verify-provider" element={<VerifyProvider />} />
+          <Route path="/auth/forgot-password" element={<Login />} /> {/* Reuse Login with reset mode */}
+          <Route path="/auth/reset-password" element={<Login />} /> {/* Reuse Login with reset mode */}
           
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
@@ -109,6 +109,7 @@ function App() {
           <Route index element={<AdminPanel />} />
           <Route path="analytics" element={<Dashboard />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="pending-pool" element={<AdminPendingBookingsPool />} />
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="providers" element={<AdminProviders />} />
           <Route path="settings" element={<AdminSettings />} />
@@ -116,6 +117,7 @@ function App() {
         
         {/* Client routes */}
         <Route path="/client" element={<ClientLayout />}>
+          <Route index element={<ClientDashboard />} />
           <Route path="dashboard" element={<ClientDashboard />} />
           <Route path="bookings" element={<ClientBookings />} />
           <Route path="messages" element={<ClientMessages />} />
@@ -133,23 +135,16 @@ function App() {
           <Route path="messages" element={<ProviderMessages />} />
           <Route path="settings" element={<ProviderSettings />} />
           <Route path="availability" element={<ProviderAvailability />} />
+          <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Add pending pool access for providers */}
         </Route>
 
-        {/* Legacy routes for backward compatibility */}
-        <Route path="/user/*" element={<Routes>
-          <Route path="*" element={<ClientLayout />}>
-            <Route path="dashboard" element={<ClientDashboard />} />
-            <Route path="bookings" element={<ClientBookings />} />
-            <Route path="messages" element={<ClientMessages />} />
-            <Route path="invoices" element={<ClientInvoices />} />
-            <Route path="profile" element={<ClientProfile />} />
-            <Route path="settings" element={<ClientSettings />} />
-          </Route>
-        </Routes>} />
-
-        {/* 404 route - must be at the end */}
+        {/* Legacy routes for backward compatibility - redirecting to the new routes */}
+        <Route path="/user/*" element={<Navigate to="/client/*" replace />} />
+        
+        {/* Catch-all route for spa routing - helps with preview in new tabs */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster />
     </>
   );
 }
