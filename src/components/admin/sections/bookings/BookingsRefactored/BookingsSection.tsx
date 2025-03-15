@@ -159,7 +159,7 @@ export const BookingsSection: React.FC = () => {
           open={isAssignDialogOpen}
           onClose={() => setIsAssignDialogOpen(false)}
           booking={selectedBooking}
-          onAssign={({bookingId, providerId}) => handleAssignProvider(bookingId, providerId)}
+          onAssign={(data) => handleAssignProvider(data.bookingId, data.providerId)}
         />
       )}
     </>
