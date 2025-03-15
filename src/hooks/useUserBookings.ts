@@ -3,7 +3,12 @@ import { useApiQuery } from '@/hooks/useApiQuery';
 import { toast } from 'sonner';
 import { UserBooking, UseUserBookingsResult } from '@/types/bookings';
 import { BookingStatus } from '@/types/enums';
-import { getUserMockBookings, updateMockBooking, deleteMockBooking, addMockNotification } from '@/utils/mock/mockDataService';
+import { 
+  getUserMockBookings, 
+  updateMockBooking, 
+  deleteMockBooking, 
+  addMockNotification 
+} from '@/utils/mock/mockDataService';
 
 /**
  * Custom hook to fetch and manage user bookings

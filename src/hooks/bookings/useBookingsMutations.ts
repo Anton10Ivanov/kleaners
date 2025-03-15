@@ -1,9 +1,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Booking } from "@/components/admin/sections/bookings/types";
+import { Booking, BookingStatus } from "@/components/admin/sections/bookings/types";
 import { toast } from "sonner";
 import { BookingsFilterParams, getBookingsQueryKey } from "./bookingsUtils";
-import { BookingStatus } from "@/types/enums";
+import { addMockNotification } from "@/utils/mock/mockDataService";
 
 // This would normally interact with an API
 const updateBookingStatusApi = async ({
@@ -11,7 +11,7 @@ const updateBookingStatusApi = async ({
   status,
 }: {
   id: string;
-  status: BookingStatus; // Using proper enum type
+  status: BookingStatus;
 }): Promise<Booking> => {
   console.log(`Updating booking ${id} status to ${status}`);
   
@@ -42,10 +42,8 @@ const updateBookingStatusApi = async ({
       type: 'booking'
     };
     
-    // Store notification in localStorage for demo purposes
-    const notifications = JSON.parse(localStorage.getItem('mock-notifications') || '[]');
-    notifications.push(mockNotification);
-    localStorage.setItem('mock-notifications', JSON.stringify(notifications));
+    // Add notification through our central mock data service
+    addMockNotification(mockNotification);
     
     return updatedBooking;
   }
@@ -111,10 +109,8 @@ const assignProviderApi = async ({
       type: 'booking'
     };
     
-    // Store notification in localStorage for demo purposes
-    const notifications = JSON.parse(localStorage.getItem('mock-notifications') || '[]');
-    notifications.push(mockNotification);
-    localStorage.setItem('mock-notifications', JSON.stringify(notifications));
+    // Add notification through our central mock data service
+    addMockNotification(mockNotification);
     
     return updatedBooking;
   }
