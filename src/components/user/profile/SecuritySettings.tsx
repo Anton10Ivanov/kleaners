@@ -1,167 +1,140 @@
+
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PasswordStrength } from '@/hooks/useUserProfileData';
 import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
+
 interface SecuritySettingsProps {
-  /** Current password strength */
-  passwordStrength: PasswordStrength;
-
-  /** Function to check password strength */
+  passwordStrength: number;
   onPasswordCheck: (password: string) => void;
-
-  /** Function to change password */
-  onPasswordChange: (currentPassword: string, newPassword: string) => Promise<boolean>;
+  onPasswordChange: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
-/**
- * SecuritySettings Component
- * 
- * Manages password changes and security settings
- * 
- * @param {SecuritySettingsProps} props Component props
- * @returns {JSX.Element} Security settings component
- */
 export function SecuritySettings({
   passwordStrength,
   onPasswordCheck,
-  onPasswordChange
-}: SecuritySettingsProps): JSX.Element {
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-  const getStrengthValue = () => {
-    switch (passwordStrength) {
-      case 'weak':
-        return 33;
-      case 'medium':
-        return 67;
-      case 'strong':
-        return 100;
-      default:
-        return 0;
-    }
+  onPasswordChange,
+}: SecuritySettingsProps) {
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isChanging, setIsChanging] = useState(false);
+  
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength < 30) return 'bg-red-500';
+    if (passwordStrength < 60) return 'bg-yellow-500';
+    return 'bg-green-500';
   };
-  const getStrengthColor = () => {
-    switch (passwordStrength) {
-      case 'weak':
-        return 'bg-red-500';
-      case 'medium':
-        return 'bg-yellow-500';
-      case 'strong':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-200';
-    }
+  
+  const getPasswordStrengthText = () => {
+    if (passwordStrength < 30) return 'Weak';
+    if (passwordStrength < 60) return 'Moderate';
+    return 'Strong';
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (name === 'newPassword') {
-      onPasswordCheck(value);
-    }
-
-    // Clear form error when user types
-    if (formError) {
-      setFormError(null);
-    }
-  };
-  const handleSubmit = async (e: React.FormEvent) => {
+  
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validation
-    if (formData.newPassword !== formData.confirmPassword) {
-      setFormError("New passwords don't match");
+    
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
-    if (formData.newPassword.length < 8) {
-      setFormError("Password must be at least 8 characters");
+    
+    if (passwordStrength < 30) {
+      toast.error('Password is too weak');
       return;
     }
-    setIsSaving(true);
+    
+    setIsChanging(true);
     try {
-      const success = await onPasswordChange(formData.currentPassword, formData.newPassword);
-      if (success) {
-        setIsChangingPassword(false);
-        setFormData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        });
-      } else {
-        setFormError("Failed to change password. Please check your current password and try again.");
-      }
+      await onPasswordChange(currentPassword, newPassword);
+      toast.success('Password changed successfully');
+      // Reset fields
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     } catch (error) {
-      setFormError("An unexpected error occurred. Please try again.");
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Failed to change password');
+      }
     } finally {
-      setIsSaving(false);
+      setIsChanging(false);
     }
   };
-  return <Card>
-      <CardHeader>
+  
+  return (
+    <form onSubmit={handlePasswordChange} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="current-password" className="text-foreground">Current Password</Label>
+        <Input 
+          id="current-password"
+          type="password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          required
+          className="border-input bg-background text-foreground"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="new-password" className="text-foreground">New Password</Label>
+        <Input 
+          id="new-password"
+          type="password"
+          value={newPassword}
+          onChange={(e) => {
+            setNewPassword(e.target.value);
+            onPasswordCheck(e.target.value);
+          }}
+          required
+          className="border-input bg-background text-foreground"
+        />
         
-        <CardDescription className="font-normal text-base text-zinc-800 text-center">
-          Manage your password and account security
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        {isChangingPassword ? <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <Input id="currentPassword" name="currentPassword" type="password" value={formData.currentPassword} onChange={handleChange} required />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input id="newPassword" name="newPassword" type="password" value={formData.newPassword} onChange={handleChange} required />
-                
-                {formData.newPassword && <div className="mt-2">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Password Strength:</span>
-                      <span className="capitalize">{passwordStrength || 'None'}</span>
-                    </div>
-                    <Progress value={getStrengthValue()} className={getStrengthColor()} />
-                  </div>}
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input id="confirmPassword" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} required />
-              </div>
-              
-              {formError && <div className="text-red-500 text-sm mt-2">{formError}</div>}
+        {newPassword && (
+          <div className="space-y-1 mt-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-muted-foreground">Password Strength:</span>
+              <span className="text-xs font-medium">{getPasswordStrengthText()}</span>
             </div>
-          </form> : <div className="py-2">
-            Your password was last changed on {new Date().toLocaleDateString()}.
-          </div>}
-      </CardContent>
+            <Progress 
+              value={passwordStrength} 
+              max={100} 
+              className="h-1.5"
+              indicatorClassName={getPasswordStrengthColor()}
+            />
+          </div>
+        )}
+      </div>
       
-      <CardFooter className="flex justify-end">
-        {isChangingPassword ? <>
-            <Button variant="outline" onClick={() => setIsChangingPassword(false)} className="mr-2" type="button">
-              Cancel
-            </Button>
-            <Button type="submit" onClick={handleSubmit} disabled={isSaving}>
-              {isSaving ? "Changing..." : "Change Password"}
-            </Button>
-          </> : <Button onClick={() => setIsChangingPassword(true)}>
-            Change Password
-          </Button>}
-      </CardFooter>
-    </Card>;
+      <div className="space-y-2">
+        <Label htmlFor="confirm-password" className="text-foreground">Confirm Password</Label>
+        <Input 
+          id="confirm-password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          className="border-input bg-background text-foreground"
+        />
+        
+        {confirmPassword && newPassword !== confirmPassword && (
+          <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+        )}
+      </div>
+      
+      <div className="pt-2">
+        <Button 
+          type="submit" 
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+          disabled={isChanging || !currentPassword || !newPassword || !confirmPassword}
+        >
+          {isChanging ? 'Changing Password...' : 'Change Password'}
+        </Button>
+      </div>
+    </form>
+  );
 }

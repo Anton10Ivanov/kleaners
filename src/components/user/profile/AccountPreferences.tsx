@@ -1,10 +1,13 @@
+
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AccountPreferences as AccountPreferencesType } from '@/hooks/useUserProfileData';
+import { useTheme } from 'next-themes';
+import { useEffect } from 'react';
+
 interface AccountPreferencesProps {
   /** User's account preferences */
   preferences: AccountPreferencesType;
@@ -30,6 +33,17 @@ export function AccountPreferences({
   });
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const { setTheme } = useTheme();
+  
+  // Sync dark mode preference with theme system
+  useEffect(() => {
+    if (formData.darkMode) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  }, [formData.darkMode, setTheme]);
+  
   const handleToggleChange = (key: keyof AccountPreferencesType) => {
     if (typeof formData[key] === 'boolean') {
       setFormData(prev => {
@@ -40,12 +54,15 @@ export function AccountPreferences({
         } as AccountPreferencesType;
 
         // Check if any values differ from original
-        const anyChanges = Object.keys(newData).some(k => newData[k as keyof AccountPreferencesType] !== preferences[k as keyof AccountPreferencesType]);
+        const anyChanges = Object.keys(newData).some(k => 
+          newData[k as keyof AccountPreferencesType] !== preferences[k as keyof AccountPreferencesType]
+        );
         setHasChanges(anyChanges);
         return newData;
       });
     }
   };
+  
   const handleSelectChange = (value: string, key: keyof AccountPreferencesType) => {
     setFormData(prev => {
       const newData = {
@@ -54,11 +71,14 @@ export function AccountPreferences({
       } as AccountPreferencesType;
 
       // Check if any values differ from original
-      const anyChanges = Object.keys(newData).some(k => newData[k as keyof AccountPreferencesType] !== preferences[k as keyof AccountPreferencesType]);
+      const anyChanges = Object.keys(newData).some(k => 
+        newData[k as keyof AccountPreferencesType] !== preferences[k as keyof AccountPreferencesType]
+      );
       setHasChanges(anyChanges);
       return newData;
     });
   };
+  
   const handleSubmit = async () => {
     setIsSaving(true);
     try {
@@ -68,63 +88,75 @@ export function AccountPreferences({
       setIsSaving(false);
     }
   };
-  return <Card>
-      <CardHeader>
-        
-        <CardDescription className="text-center text-zinc-800 font-normal text-base">Customize your User Interface</CardDescription>
-      </CardHeader>
+  
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="language" className="text-foreground">Preferred Language</Label>
+        <Select value={formData.language} onValueChange={value => handleSelectChange(value, 'language')}>
+          <SelectTrigger id="language" className="w-full">
+            <SelectValue placeholder="Select a language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="de">German</SelectItem>
+            <SelectItem value="fr">French</SelectItem>
+            <SelectItem value="es">Spanish</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="language">Preferred Language</Label>
-          <Select value={formData.language} onValueChange={value => handleSelectChange(value, 'language')}>
-            <SelectTrigger id="language" className="w-full">
-              <SelectValue placeholder="Select a language" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="de">German</SelectItem>
-              <SelectItem value="fr">French</SelectItem>
-              <SelectItem value="es">Spanish</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label htmlFor="darkMode">Dark Mode</Label>
-            <div className="text-sm text-muted-foreground">
-              Use dark theme throughout the application
-            </div>
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <Label htmlFor="darkMode" className="text-foreground">Dark Mode</Label>
+          <div className="text-sm text-muted-foreground">
+            Use dark theme throughout the application
           </div>
-          <Switch id="darkMode" checked={formData.darkMode} onCheckedChange={() => handleToggleChange('darkMode')} />
         </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label htmlFor="showEmail">Show Email</Label>
-            <div className="text-sm text-muted-foreground">
-              Make your email visible to service providers
-            </div>
-          </div>
-          <Switch id="showEmail" checked={formData.showEmail} onCheckedChange={() => handleToggleChange('showEmail')} />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label htmlFor="showPhone">Show Phone Number</Label>
-            <div className="text-sm text-muted-foreground">
-              Make your phone number visible to service providers
-            </div>
-          </div>
-          <Switch id="showPhone" checked={formData.showPhone} onCheckedChange={() => handleToggleChange('showPhone')} />
-        </div>
-      </CardContent>
+        <Switch 
+          id="darkMode" 
+          checked={formData.darkMode} 
+          onCheckedChange={() => handleToggleChange('darkMode')} 
+        />
+      </div>
       
-      <CardFooter className="flex justify-end">
-        <Button onClick={handleSubmit} disabled={!hasChanges || isSaving}>
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <Label htmlFor="showEmail" className="text-foreground">Show Email</Label>
+          <div className="text-sm text-muted-foreground">
+            Make your email visible to service providers
+          </div>
+        </div>
+        <Switch 
+          id="showEmail" 
+          checked={formData.showEmail} 
+          onCheckedChange={() => handleToggleChange('showEmail')} 
+        />
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <Label htmlFor="showPhone" className="text-foreground">Show Phone Number</Label>
+          <div className="text-sm text-muted-foreground">
+            Make your phone number visible to service providers
+          </div>
+        </div>
+        <Switch 
+          id="showPhone" 
+          checked={formData.showPhone} 
+          onCheckedChange={() => handleToggleChange('showPhone')} 
+        />
+      </div>
+      
+      <div className="flex justify-end pt-4">
+        <Button 
+          onClick={handleSubmit} 
+          disabled={!hasChanges || isSaving}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
           {isSaving ? "Saving..." : "Save Preferences"}
         </Button>
-      </CardFooter>
-    </Card>;
+      </div>
+    </div>
+  );
 }
