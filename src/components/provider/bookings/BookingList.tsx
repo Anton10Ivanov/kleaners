@@ -44,7 +44,7 @@ const BookingList = ({
           cardProps.actionVariant = 'destructive' as const;
           cardProps.onAction = () => {};
         } else if (type === 'pending') {
-          // Simplified actions for pending jobs
+          // Set up action buttons for pending jobs
           cardProps.actionLabel = 'Accept Job';
           cardProps.actionIcon = <Check className="h-4 w-4 mr-2" />;
           cardProps.actionVariant = 'default' as const;
