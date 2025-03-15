@@ -17,7 +17,9 @@ const ClientLayout = () => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        navigate('/login');
+        // Store the current URL to redirect back after login
+        const returnUrl = window.location.pathname;
+        navigate(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
       }
     };
     

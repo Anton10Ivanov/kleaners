@@ -20,27 +20,29 @@ const LoginForm = ({
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const {
-        data,
-        error
-      } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
+      
       if (error) throw error;
+      
       toast({
         title: "Welcome back!",
         description: "Successfully logged in."
       });
-      navigate('/');
+      
+      // Get the return URL from session storage or default to homepage
+      const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
+      sessionStorage.removeItem('authReturnUrl');
+      
+      navigate(returnUrl);
     } catch (error) {
       console.error('Login error:', error);
       toast({
@@ -53,7 +55,8 @@ const LoginForm = ({
     }
   };
 
-  return <Card className="w-full max-w-md">
+  return (
+    <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
         <CardDescription>
@@ -104,7 +107,8 @@ const LoginForm = ({
           </Button>
         </p>
       </CardFooter>
-    </Card>;
+    </Card>
+  );
 };
 
 export default LoginForm;
