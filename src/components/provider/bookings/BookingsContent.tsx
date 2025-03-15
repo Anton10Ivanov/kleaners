@@ -59,9 +59,9 @@ const BookingsContent: React.FC<BookingsContentProps> = ({
       {/* Left column - Booking lists */}
       <div className="lg:col-span-1 space-y-4">
         <FilterableStatsCards 
+          filterType={selectedTab}
+          setFilterType={setSelectedTab}
           bookingSummary={bookingSummary}
-          activeTab={selectedTab}
-          onTabChange={setSelectedTab}
         />
         
         <Card>
@@ -124,8 +124,23 @@ const BookingsContent: React.FC<BookingsContentProps> = ({
       <div className="lg:col-span-2 space-y-4">
         {selectedBooking ? (
           <>
-            <BookingDetailsCard booking={selectedBooking} />
-            <BookingMap booking={selectedBooking} />
+            <BookingDetailsCard 
+              booking={selectedBooking} 
+              onClose={() => setSelectedBookingId(undefined)} 
+            />
+            
+            {selectedBooking.coordinates && (
+              <BookingMap 
+                locations={[{
+                  id: selectedBooking.id,
+                  address: selectedBooking.address || '',
+                  coordinates: selectedBooking.coordinates,
+                  clientName: `${selectedBooking.first_name || ''} ${selectedBooking.last_name || ''}`.trim(),
+                  service: selectedBooking.service_type?.replace(/_/g, ' ') || ''
+                }]}
+                selectedBookingId={selectedBooking.id}
+              />
+            )}
           </>
         ) : (
           <Card>
