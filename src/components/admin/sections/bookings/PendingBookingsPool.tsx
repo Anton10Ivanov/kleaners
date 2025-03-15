@@ -18,11 +18,13 @@ interface AssignProviderData {
 interface PendingBookingsPoolProps {
   pendingBookings?: Booking[];
   refreshData: () => void;
+  isProviderView?: boolean;
 }
 
 export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   pendingBookings: externalPendingBookings,
-  refreshData
+  refreshData,
+  isProviderView = false
 }) => {
   const [sortField, setSortField] = useState<'date' | 'total_price' | 'created_at'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -70,6 +72,11 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
 
   const handleViewDetails = (booking: Booking) => {
     console.log('View booking details:', booking);
+    
+    // For providers, reveal client information upon viewing details
+    if (isProviderView) {
+      toast.success("Client information is now available");
+    }
   };
 
   const handleContactClient = (booking: Booking) => {
@@ -102,6 +109,24 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
     refreshData();
   };
 
+  const handleAcceptJob = (id: string) => {
+    updateMockBooking(id, { 
+      status: AppBookingStatus.Confirmed,
+      provider_id: "current-provider-id" // In production, this would be the current provider's ID
+    });
+    
+    setPendingBookings(prev => prev.filter(booking => booking.id !== id));
+    toast.success("Job accepted successfully. You can now see client details.");
+    refreshData();
+  };
+
+  const handleRejectJob = (id: string) => {
+    // Just remove from provider's view, not actually deleting or changing status
+    setPendingBookings(prev => prev.filter(booking => booking.id !== id));
+    toast.success("Job rejected successfully");
+    refreshData();
+  };
+
   if (pendingBookings.length === 0) {
     return (
       <Card>
@@ -109,13 +134,79 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
           <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-xl font-medium mb-2">No pending bookings</h3>
           <p className="text-muted-foreground max-w-md">
-            There are currently no bookings waiting for provider assignment. New bookings from clients will appear here.
+            There are currently no bookings waiting for {isProviderView ? 'acceptance' : 'provider assignment'}. 
+            New bookings from clients will appear here.
           </p>
         </CardContent>
       </Card>
     );
   }
 
+  // For provider view, use a simpler layout with just the option to accept or reject
+  if (isProviderView) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Available Jobs</CardTitle>
+          <CardDescription>
+            New booking requests for your service area
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {pendingBookings.map((booking) => (
+              <Card key={booking.id} className="overflow-hidden shadow-sm">
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-medium">{booking.service_type?.replace('_', ' ')}</h3>
+                    <p className="text-sm text-right">${booking.total_price?.toFixed(2)}</p>
+                  </div>
+                  
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm">{new Date(booking.date || '').toLocaleDateString()}</p>
+                    <p className="text-sm text-muted-foreground truncate">{booking.address}</p>
+                  </div>
+                  
+                  <div className="flex justify-between gap-2 mt-4">
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleAcceptJob(booking.id)}
+                    >
+                      <Check className="h-4 w-4 mr-2" />
+                      Accept Job
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleRejectJob(booking.id)}
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Reject Job
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="mt-4 flex justify-end">
+            <Button 
+              variant="outline" 
+              onClick={handleRefreshBookings}
+              className="text-sm"
+            >
+              Refresh List
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  // Admin view with full functionality
   return (
     <>
       <Card>
