@@ -85,28 +85,24 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
           
-          {/* Auth routes - consolidated here */}
+          {/* Auth routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<Login />} />
           <Route path="/reset-password" element={<Login />} />
           <Route path="/verify-provider" element={<VerifyProvider />} />
           
-          {/* Legacy auth routes (redirect to new paths) */}
-          <Route path="/auth/login" element={<Navigate to="/login" replace />} />
-          <Route path="/auth/signup" element={<Navigate to="/signup" replace />} />
-          <Route path="/auth/forgot-password" element={<Navigate to="/forgot-password" replace />} />
-          <Route path="/auth/reset-password" element={<Navigate to="/reset-password" replace />} />
-          <Route path="/auth/verify-provider" element={<Navigate to="/verify-provider" replace />} />
-          
+          {/* About routes */}
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
+          {/* Service routes */}
           <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
           <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
           <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
           
+          {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
           <Route path="/legal/privacy" element={<PrivacyPolicy />} />
         </Route>
@@ -142,13 +138,14 @@ function App() {
           <Route path="messages" element={<ProviderMessages />} />
           <Route path="settings" element={<ProviderSettings />} />
           <Route path="availability" element={<ProviderAvailability />} />
-          <Route path="pending-pool" element={<AdminPendingBookingsPool />} /> {/* Add pending pool access for providers */}
+          <Route path="pending-pool" element={<AdminPendingBookingsPool />} />
         </Route>
 
-        {/* Legacy routes for backward compatibility - redirecting to the new routes */}
-        <Route path="/user/*" element={<Navigate to="/client/*" replace />} />
+        {/* Legacy redirects - properly configured to handle any path after the base */}
+        <Route path="/auth/*" element={<Navigate to="/login" replace />} />
+        <Route path="/user/*" element={<Navigate to="/client" replace />} />
         
-        {/* Catch-all route for spa routing - helps with preview in new tabs */}
+        {/* Catch-all route for SPA routing */}
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />

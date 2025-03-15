@@ -16,8 +16,6 @@ import {
   User, 
   Home 
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 interface UserMenuItemsProps {
   userRole: 'client' | 'provider' | 'admin' | null;
@@ -62,7 +60,7 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       )}
       
       {userRole === 'provider' && (
-        <DropdownMenuItem onClick={() => navigate('/provider/assignments')}>
+        <DropdownMenuItem onClick={() => navigate('/provider/bookings')}>
           <ClipboardList className="mr-2 h-4 w-4" />
           <span>My Assignments</span>
         </DropdownMenuItem>
