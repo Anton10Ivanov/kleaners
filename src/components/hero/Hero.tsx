@@ -6,11 +6,12 @@ import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
-import { Service } from "@/schemas/booking";
+import { Service } from "@/types/enums";
+import { ServiceType } from "@/schemas/booking";
 
 interface HeroProps {
   selectedService: string;
-  setSelectedService: (value: Service) => void;
+  setSelectedService: (value: string) => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
@@ -28,7 +29,7 @@ export const Hero = memo(({
   // Set default service to "regular" when component mounts
   useEffect(() => {
     if (!selectedService) {
-      setSelectedService(Service.Regular);
+      setSelectedService(ServiceType.Regular);
     }
   }, [selectedService, setSelectedService]);
 

@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
-import { Service } from "@/schemas/booking";
+import { ServiceType } from "@/schemas/booking";
 
 type HeroContextType = {
   selectedService: string;
@@ -15,7 +15,7 @@ type HeroProviderProps = {
   initialService: string;
   initialPostalCode: string;
   onNextStep: () => void;
-  onServiceChange: (service: Service) => void;
+  onServiceChange: (service: string) => void;
   onPostalCodeChange: (code: string) => void;
 };
 
@@ -29,7 +29,7 @@ export const HeroProvider = ({
   onServiceChange,
   onPostalCodeChange
 }: HeroProviderProps) => {
-  const [selectedService, setSelectedService] = useState(initialService || Service.Regular);
+  const [selectedService, setSelectedService] = useState(initialService || ServiceType.Regular);
   const [postalCode, setPostalCode] = useState(initialPostalCode || '');
 
   // Sync internal state with parent component
@@ -44,7 +44,7 @@ export const HeroProvider = ({
 
   const updateSelectedService = useCallback((service: string) => {
     setSelectedService(service);
-    onServiceChange(service as Service);
+    onServiceChange(service);
   }, [onServiceChange]);
 
   const updatePostalCode = useCallback((code: string) => {

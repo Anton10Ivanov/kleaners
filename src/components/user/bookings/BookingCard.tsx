@@ -9,6 +9,7 @@ import { BookingDetails } from './BookingDetails';
 import { ReschedulingDialog } from './ReschedulingDialog';
 import { CancellationDialog } from './CancellationDialog';
 import { InvoiceButton } from './InvoiceButton';
+import { BookingStatus } from '@/types/enums';
 
 export interface BookingCardProps {
   /** Booking data with hours field */
@@ -74,7 +75,7 @@ export function BookingCard({
         <BookingDetails booking={booking} />
         
         {/* Show invoice button for completed bookings */}
-        {booking.status === 'completed' && (
+        {booking.status === BookingStatus.Completed && (
           <div className="mt-4 border-t pt-4 border-gray-100 dark:border-gray-800">
             <p className="text-sm mb-2 font-medium text-gray-700 dark:text-gray-300">Booking Documents</p>
             <InvoiceButton bookingId={booking.id} />
@@ -83,7 +84,7 @@ export function BookingCard({
       </CardContent>
       
       {/* Only show these actions for pending bookings */}
-      {booking.status === 'pending' && (
+      {booking.status === BookingStatus.Pending && (
         <CardFooter className="flex justify-between pt-0 pb-4">
           {/* Reschedule Dialog */}
           <Dialog>

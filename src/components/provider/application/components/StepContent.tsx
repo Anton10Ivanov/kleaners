@@ -67,7 +67,7 @@ export const StepContent = ({
   toggleSkill
 }: StepContentProps) => {
   switch (currentStep) {
-    case ApplicationStep.PERSONAL_INFO:
+    case ApplicationStep.PersonalInfo:
       return (
         <PersonalInfoStep
           name={name}
@@ -79,7 +79,7 @@ export const StepContent = ({
         />
       );
       
-    case ApplicationStep.EXPERIENCE:
+    case ApplicationStep.Experience:
       return (
         <ExperienceStep
           position={position}
@@ -93,7 +93,7 @@ export const StepContent = ({
         />
       );
       
-    case ApplicationStep.DOCUMENTS:
+    case ApplicationStep.Documents:
       return (
         <DocumentsStep
           handleFileChange={handleFileChange}
@@ -112,7 +112,7 @@ export const StepContent = ({
         />
       );
       
-    case ApplicationStep.CONFIRMATION:
+    case ApplicationStep.Confirmation:
       return (
         <ConfirmationStep
           name={name}

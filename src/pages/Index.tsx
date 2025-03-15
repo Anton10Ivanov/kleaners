@@ -13,7 +13,8 @@ import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Frequency, Service } from '@/schemas/booking';
+import { Frequency } from '@/types/enums';
+import { ServiceType } from '@/schemas/booking';
 
 const ErrorFallback = () => (
   <div className="text-center py-8">

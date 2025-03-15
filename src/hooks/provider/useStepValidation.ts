@@ -15,10 +15,10 @@ export const useStepValidation = (
   agreeToTraining: boolean
 ) => {
   const [stepValidations, setStepValidations] = useState({
-    [ApplicationStep.PERSONAL_INFO]: false,
-    [ApplicationStep.EXPERIENCE]: false,
-    [ApplicationStep.DOCUMENTS]: false,
-    [ApplicationStep.CONFIRMATION]: true
+    [ApplicationStep.PersonalInfo]: false,
+    [ApplicationStep.Experience]: false,
+    [ApplicationStep.Documents]: false,
+    [ApplicationStep.Confirmation]: true
   });
 
   // Validate Personal Info step
@@ -28,7 +28,7 @@ export const useStepValidation = (
                               email.includes('@') && 
                               phone.trim() !== '';
     
-    setStepValidations(prev => ({...prev, [ApplicationStep.PERSONAL_INFO]: isPersonalInfoValid}));
+    setStepValidations(prev => ({...prev, [ApplicationStep.PersonalInfo]: isPersonalInfoValid}));
   }, [name, email, phone]);
 
   // Validate Experience step
@@ -38,14 +38,14 @@ export const useStepValidation = (
                              availability.length > 0 && 
                              skills.length > 0;
     
-    setStepValidations(prev => ({...prev, [ApplicationStep.EXPERIENCE]: isExperienceValid}));
+    setStepValidations(prev => ({...prev, [ApplicationStep.Experience]: isExperienceValid}));
   }, [position, experience, availability, skills]);
 
   // Validate Documents step
   useEffect(() => {
     const isDocumentsValid = agreeToTerms && agreeToBackgroundCheck && agreeToTraining;
     
-    setStepValidations(prev => ({...prev, [ApplicationStep.DOCUMENTS]: isDocumentsValid}));
+    setStepValidations(prev => ({...prev, [ApplicationStep.Documents]: isDocumentsValid}));
   }, [agreeToTerms, agreeToBackgroundCheck, agreeToTraining]);
 
   const isStepComplete = (step: ApplicationStep) => {
