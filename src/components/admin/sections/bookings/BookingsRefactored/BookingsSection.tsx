@@ -5,19 +5,35 @@ import { DateRange } from 'react-day-picker';
 import { LoadingState } from './LoadingState';
 import { ErrorState } from './ErrorState';
 import { BookingsContent } from './BookingsContent';
-import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
+import { Booking, BookingStatus as AdminBookingStatus } from '@/components/admin/sections/bookings/types';
+import { BookingStatus } from '@/types/enums'; 
 import { toast } from 'sonner';
 
 export const BookingsSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
-    status: 'all' as BookingStatus | 'all',
+    status: 'all' as AdminBookingStatus | 'all',
     search: '',
     dateRange: undefined as DateRange | undefined,
   });
   
   // We need to mock these properties since they don't exist in the hook
   const [totalPages, setTotalPages] = useState(5);
+  
+  // Convert AdminBookingStatus to the application BookingStatus enum when needed
+  const convertToAppBookingStatus = (status: AdminBookingStatus | null): BookingStatus | null => {
+    if (!status) return null;
+    
+    // Map admin booking status to application booking status
+    switch (status) {
+      case "pending": return BookingStatus.Pending;
+      case "assigned": return BookingStatus.Assigned;
+      case "confirmed": return BookingStatus.Confirmed;
+      case "completed": return BookingStatus.Completed;
+      case "cancelled": return BookingStatus.Cancelled;
+      default: return null;
+    }
+  };
   
   // Using the enhanced hook with better error handling and query invalidation
   const {
@@ -69,7 +85,7 @@ export const BookingsSection: React.FC = () => {
   };
 
   const handleFilterChange = (newFilters: {
-    status?: BookingStatus | 'all';
+    status?: AdminBookingStatus | 'all';
     search?: string;
     dateRange?: DateRange | undefined;
   }) => {
@@ -83,7 +99,7 @@ export const BookingsSection: React.FC = () => {
     console.log('Filters changed:', { ...filters, ...newFilters });
   };
 
-  const handleUpdateStatus = (id: string, status: BookingStatus) => {
+  const handleUpdateStatus = (id: string, status: AdminBookingStatus) => {
     updateBookingStatus({ id, status });
   };
 

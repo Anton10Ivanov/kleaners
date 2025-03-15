@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
-import { BookingStatus, SortField, SortOrder } from "./bookings/types";
+import { BookingStatus as AdminBookingStatus, SortField, SortOrder } from "./bookings/types";
 import { BookingsFilter } from "./bookings/BookingsFilter";
 import { BookingsTable } from "./bookings/BookingsTable";
 import { useBookings } from "@/hooks/useBookings";
@@ -9,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { BookingStatus } from "@/types/enums";
 
 export const BookingsSection = () => {
   const { toast } = useToast();
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">("all");
+  const [selectedStatus, setSelectedStatus] = useState<AdminBookingStatus | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
@@ -22,6 +22,19 @@ export const BookingsSection = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const itemsPerPage = isMobile ? 5 : 10;
+
+  const convertToAppBookingStatus = (status: AdminBookingStatus | null): BookingStatus | null => {
+    if (!status) return null;
+    
+    switch (status) {
+      case "pending": return BookingStatus.Pending;
+      case "assigned": return BookingStatus.Assigned;
+      case "confirmed": return BookingStatus.Confirmed;
+      case "completed": return BookingStatus.Completed;
+      case "cancelled": return BookingStatus.Cancelled;
+      default: return null;
+    }
+  };
 
   const { 
     bookings, 
@@ -37,12 +50,10 @@ export const BookingsSection = () => {
     dateRange,
   });
 
-  // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedStatus, searchTerm, dateRange]);
 
-  // Show error toast when there's an error fetching bookings
   useEffect(() => {
     if (error) {
       toast({
@@ -60,7 +71,6 @@ export const BookingsSection = () => {
       setSortField(field);
       setSortOrder('asc');
     }
-    // Reset to first page when sorting changes
     setCurrentPage(1);
   };
 
@@ -68,7 +78,6 @@ export const BookingsSection = () => {
     setRefreshKey(prev => prev + 1);
   };
 
-  // Mock functions for required BookingsTable props
   const handleViewDetails = (booking: any) => {
     console.log("View details:", booking);
   };
@@ -77,7 +86,6 @@ export const BookingsSection = () => {
     console.log("Contact client:", booking);
   };
 
-  // Calculate pagination
   const totalItems = bookings?.length || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -96,7 +104,7 @@ export const BookingsSection = () => {
     }
   };
 
-  const handleStatusChange = (status: BookingStatus | 'all') => {
+  const handleStatusChange = (status: AdminBookingStatus | 'all') => {
     setSelectedStatus(status);
   };
 
@@ -106,6 +114,10 @@ export const BookingsSection = () => {
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);
+  };
+
+  const handleUpdateStatus = (id: string, status: AdminBookingStatus) => {
+    updateBookingStatus({ id, status });
   };
 
   return (
@@ -166,7 +178,7 @@ export const BookingsSection = () => {
                   sortField={sortField}
                   sortOrder={sortOrder}
                   toggleSort={toggleSort}
-                  updateBookingStatus={(id, status) => updateBookingStatus({ id, status })}
+                  updateBookingStatus={handleUpdateStatus}
                   deleteBooking={deleteBooking}
                   refreshData={handleRefresh}
                   viewDetails={handleViewDetails}
@@ -174,7 +186,6 @@ export const BookingsSection = () => {
                 />
               </div>
               
-              {/* Pagination controls */}
               {totalPages > 1 && (
                 <div className="flex items-center justify-between mt-4 flex-wrap gap-y-4">
                   <div className="text-sm text-muted-foreground">

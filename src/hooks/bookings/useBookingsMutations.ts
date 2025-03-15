@@ -11,7 +11,7 @@ const updateBookingStatusApi = async ({
   status,
 }: {
   id: string;
-  status: BookingStatus;
+  status: string; // Using string type to accept both enum types
 }): Promise<Booking> => {
   console.log(`Updating booking ${id} status to ${status}`);
   
@@ -21,7 +21,7 @@ const updateBookingStatusApi = async ({
   // For demo purposes, we're just returning a mock response
   return {
     id,
-    status,
+    status: status as any, // Using 'any' to bridge the type gap for the mock
     service_type: "Updated Service",
     date: new Date().toISOString(),
     total_price: 100,
