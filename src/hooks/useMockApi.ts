@@ -1,11 +1,20 @@
 
+import { useEffect, useState } from 'react';
 import { http } from 'msw';
 import { dev } from '@/lib/utils';
+import { isMockServiceWorkerActive } from '@/mocks/browser';
 
 /**
  * A hook to facilitate working with MSW for API mocking
  */
 export const useMockApi = () => {
+  const [isActive, setIsActive] = useState(false);
+  
+  useEffect(() => {
+    // Check if MSW is active
+    setIsActive(isMockServiceWorkerActive());
+  }, []);
+  
   /**
    * Register a new mock API endpoint
    */
@@ -23,12 +32,14 @@ export const useMockApi = () => {
    * Check if MSW is active
    */
   const isMockActive = () => {
-    return dev && window.location.search.includes('mock=true');
+    return isActive || (dev && window.location.search.includes('mock=true'));
   };
   
   // Extended functionality for DevTools component
-  const isAvailable = () => dev;
+  const isAvailable = () => dev || import.meta.env.VITE_ENABLE_MOCK_API === 'true';
+  
   const isEnabled = () => isMockActive();
+  
   const toggleMockApi = () => {
     if (!dev) return;
     
