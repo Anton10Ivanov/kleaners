@@ -2,6 +2,7 @@
 import { http, HttpResponse } from 'msw'
 import { UserBooking } from '@/types/bookings'
 import { UserData } from '@/hooks/useUserProfileData'
+import { BookingStatus } from '@/types/enums'
 
 /**
  * Handler definitions for the Mock Service Worker
@@ -13,7 +14,7 @@ export const handlers = [
     return HttpResponse.json<UserBooking[]>([
       {
         id: "1",
-        status: "pending" as const,
+        status: BookingStatus.Pending,
         date: "2023-05-15T10:00:00",
         service: "Regular Cleaning",
         address: "123 Main St, Apt 4B",
@@ -23,7 +24,7 @@ export const handlers = [
       },
       {
         id: "2",
-        status: "completed" as const,
+        status: BookingStatus.Completed,
         date: "2023-05-01T14:00:00",
         service: "Deep Cleaning",
         address: "123 Main St, Apt 4B",
@@ -32,7 +33,7 @@ export const handlers = [
       },
       {
         id: "3",
-        status: "cancelled" as const,
+        status: BookingStatus.Cancelled,
         date: "2023-04-22T09:00:00",
         service: "Move In/Out Cleaning",
         address: "456 Park Ave, Suite 203",

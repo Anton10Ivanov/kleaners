@@ -34,9 +34,12 @@ export interface ProviderOption {
   rating?: number;
 }
 
+// Convert enum values to strings for zod validation
+const serviceValues = [...Object.values(ServiceEnum), ...Object.values(ServiceType)].map(v => v.toString());
+
 export const bookingSchema = z.object({
   // Basic booking info
-  service: z.enum([...Object.values(ServiceEnum), ...Object.values(ServiceType)]).optional(),
+  service: z.enum(serviceValues as [string, ...string[]]).optional(),
   postalCode: z.string().min(5, { message: "Postal code must be at least 5 characters." }),
   date: z.date().optional(),
   frequency: z.nativeEnum(FrequencyEnum).optional(),

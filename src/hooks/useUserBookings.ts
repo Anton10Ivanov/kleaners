@@ -11,6 +11,7 @@ import {
   checkInvoiceExists,
   createInvoiceRecord
 } from '@/services/bookingsService';
+import { BookingStatus } from '@/types/enums';
 
 /**
  * Custom hook to fetch and manage user bookings
@@ -91,7 +92,7 @@ export function useUserBookings(): UseUserBookingsResult {
         return false;
       }
       
-      if (booking.status !== 'completed') {
+      if (booking.status !== BookingStatus.Completed) {
         toast.error('Can only generate invoices for completed bookings');
         return false;
       }
@@ -134,7 +135,7 @@ export function useUserBookings(): UseUserBookingsResult {
       if (isLoading || !bookings.length) return;
       
       // Find completed bookings and create invoices for them
-      const completedBookings = bookings.filter(b => b.status === 'completed');
+      const completedBookings = bookings.filter(b => b.status === BookingStatus.Completed);
       
       for (const booking of completedBookings) {
         await generateInvoice(booking.id);

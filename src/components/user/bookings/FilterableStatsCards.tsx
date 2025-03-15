@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar, Clock, AlertCircle } from 'lucide-react';
+import { BookingStatus } from '@/types/enums';
 
 interface FilterableStatsCardsProps {
   filterType: string;

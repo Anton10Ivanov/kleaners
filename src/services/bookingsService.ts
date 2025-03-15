@@ -1,6 +1,7 @@
 
 import { UserBooking } from '@/types/bookings';
 import { supabase } from '@/integrations/supabase/client';
+import { BookingStatus } from '@/types/enums';
 
 /**
  * Fetches user bookings from the database
@@ -18,7 +19,7 @@ export const fetchUserBookings = async (): Promise<UserBooking[]> => {
   const mockBookings: UserBooking[] = [
     {
       id: "1",
-      status: "pending" as const,
+      status: BookingStatus.Pending,
       date: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
       service: "Regular Cleaning",
       address: "123 Main St, Apt 4B",
@@ -28,7 +29,7 @@ export const fetchUserBookings = async (): Promise<UserBooking[]> => {
     },
     {
       id: "2",
-      status: "completed" as const,
+      status: BookingStatus.Completed,
       date: "2023-05-01T14:00:00",
       service: "Deep Cleaning",
       address: "123 Main St, Apt 4B",
@@ -37,7 +38,7 @@ export const fetchUserBookings = async (): Promise<UserBooking[]> => {
     },
     {
       id: "3",
-      status: "cancelled" as const,
+      status: BookingStatus.Cancelled,
       date: "2023-04-22T09:00:00",
       service: "Move In/Out Cleaning",
       address: "456 Park Ave, Suite 203",

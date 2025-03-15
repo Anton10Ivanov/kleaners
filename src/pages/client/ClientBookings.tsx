@@ -10,6 +10,7 @@ import { FilterableStatsCards } from "@/components/user/bookings/FilterableStats
 import { BookingEmptyState } from "@/components/user/bookings/BookingEmptyState";
 import { BookingActionButton } from "@/components/user/bookings/BookingActionButton";
 import { useSearchParams } from "react-router-dom";
+import { BookingStatus } from "@/types/enums";
 
 /**
  * ClientBookings Page
@@ -50,12 +51,10 @@ export default function ClientBookings(): JSX.Element {
     const calculateSummary = () => {
       if (bookings.length === 0) return;
       
-      // Fix: Convert string dates to Date objects for comparison
-      // and include all pending bookings as upcoming regardless of date
-      const upcoming = bookings.filter(b => b.status === 'pending');
-      
-      const completed = bookings.filter(b => b.status === 'completed');
-      const cancelled = bookings.filter(b => b.status === 'cancelled');
+      // Count bookings by status
+      const upcoming = bookings.filter(b => b.status === BookingStatus.Pending);
+      const completed = bookings.filter(b => b.status === BookingStatus.Completed);
+      const cancelled = bookings.filter(b => b.status === BookingStatus.Cancelled);
       
       setBookingSummary({
         total: bookings.length,
@@ -71,12 +70,11 @@ export default function ClientBookings(): JSX.Element {
   const filteredBookings = bookings
     .filter(booking => {
       if (filterType === "upcoming") {
-        // Fix: Show all pending bookings as upcoming
-        return booking.status === 'pending';
+        return booking.status === BookingStatus.Pending;
       } else if (filterType === "completed") {
-        return booking.status === "completed";
+        return booking.status === BookingStatus.Completed;
       } else if (filterType === "cancelled") {
-        return booking.status === "cancelled";
+        return booking.status === BookingStatus.Cancelled;
       }
       return false;
     })
