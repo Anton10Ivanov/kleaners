@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BookingsTable } from '@/components/admin/sections/bookings/BookingsTable';
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
@@ -8,6 +9,11 @@ import { toast } from 'sonner';
 import { getFilteredMockBookings, updateMockBooking } from '@/utils/mock/mockDataService';
 import { BookingStatus as AppBookingStatus } from '@/types/enums';
 import { AssignProviderDialog } from './AssignProviderDialog';
+
+interface AssignProviderData {
+  bookingId: string;
+  providerId: string;
+}
 
 interface PendingBookingsPoolProps {
   pendingBookings?: Booking[];
@@ -70,13 +76,13 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
     console.log('Contact client for booking:', booking);
   };
 
-  const handleAssignProvider = (bookingId: string, providerId: string) => {
-    updateMockBooking(bookingId, { 
-      provider_id: providerId,
+  const handleAssignProvider = (data: AssignProviderData) => {
+    updateMockBooking(data.bookingId, { 
+      provider_id: data.providerId,
       status: AppBookingStatus.Assigned
     });
     
-    setPendingBookings(prev => prev.filter(booking => booking.id !== bookingId));
+    setPendingBookings(prev => prev.filter(booking => booking.id !== data.bookingId));
     
     setIsAssignDialogOpen(false);
     setSelectedBooking(null);
