@@ -15,7 +15,7 @@ interface BookingsContentProps {
   onPageChange: (page: number) => void;
   onUpdateStatus: (id: string, status: BookingStatus) => void;
   onDeleteBooking: (id: string) => void;
-  onAssignProvider: (bookingId: string, providerId: string) => void;
+  onAssignProvider: (booking: Booking) => void;
   onViewDetails: (booking: Booking) => void;
   onContactClient: (booking: Booking) => void;
   isLoading: boolean;
@@ -71,6 +71,27 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
     });
   };
 
+  // Handle table callbacks correctly
+  const handleViewDetails = (booking: Booking) => {
+    onViewDetails(booking);
+  };
+  
+  const handleContactClient = (booking: Booking) => {
+    onContactClient(booking);
+  };
+  
+  const handleUpdateStatus = (id: string, status: BookingStatus) => {
+    onUpdateStatus(id, status);
+  };
+  
+  const handleDeleteBooking = (id: string) => {
+    onDeleteBooking(id);
+  };
+  
+  const handleAssignProvider = (booking: Booking) => {
+    onAssignProvider(booking);
+  };
+
   // Check if there are any active filters
   const hasFilters = status !== 'all' || searchTerm !== '' || dateRange !== undefined;
   
@@ -107,11 +128,11 @@ export const BookingsContent: React.FC<BookingsContentProps> = ({
           sortField="date"
           sortOrder="desc"
           toggleSort={() => {}} 
-          updateBookingStatus={onUpdateStatus}
-          deleteBooking={onDeleteBooking}
+          updateBookingStatus={handleUpdateStatus}
+          deleteBooking={handleDeleteBooking}
           refreshData={() => {}}
-          viewDetails={onViewDetails}
-          contactClient={onContactClient}
+          viewDetails={handleViewDetails}
+          contactClient={handleContactClient}
         />
       </div>
       

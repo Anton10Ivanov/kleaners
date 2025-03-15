@@ -1,19 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { useBookings } from '@/hooks/useBookings';
 import { DateRange } from 'react-day-picker';
 import { LoadingState } from './LoadingState';
 import { ErrorState } from './ErrorState';
 import { BookingsContent } from './BookingsContent';
-import { Booking, BookingStatus as AdminBookingStatus } from '@/components/admin/sections/bookings/types';
-import { BookingStatus } from '@/types/enums'; 
+import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
+import { BookingStatus as AppBookingStatus } from '@/types/enums'; 
 import { toast } from 'sonner';
 import { AssignProviderDialog } from '../AssignProviderDialog';
 
 export const BookingsSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
-    status: 'all' as AdminBookingStatus | 'all',
+    status: 'all' as BookingStatus | 'all',
     search: '',
     dateRange: undefined as DateRange | undefined,
   });
@@ -25,20 +24,7 @@ export const BookingsSection: React.FC = () => {
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   
-  // Convert AdminBookingStatus to the application BookingStatus enum when needed
-  const convertToAppBookingStatus = (status: AdminBookingStatus | null): BookingStatus | null => {
-    if (!status) return null;
-    
-    // Map admin booking status to application booking status
-    switch (status) {
-      case "pending": return BookingStatus.Pending;
-      case "assigned": return BookingStatus.Assigned;
-      case "confirmed": return BookingStatus.Confirmed;
-      case "completed": return BookingStatus.Completed;
-      case "cancelled": return BookingStatus.Cancelled;
-      default: return null;
-    }
-  };
+  // No need to convert between enums now as they're aligned
   
   // Using the enhanced hook with better error handling and query invalidation
   const {
@@ -58,7 +44,8 @@ export const BookingsSection: React.FC = () => {
     dateRange: filters.dateRange,
   });
 
-  const handleAssignProvider = ({ bookingId, providerId }: { bookingId: string, providerId: string }) => {
+  // Update the handler to fix the type error
+  const handleAssignProvider = (bookingId: string, providerId: string) => {
     console.log(`Assigning provider ${providerId} to booking ${bookingId}`);
     
     // Close assign dialog
@@ -68,7 +55,7 @@ export const BookingsSection: React.FC = () => {
     // Update booking status to assigned
     updateBookingStatus({ 
       id: bookingId, 
-      status: BookingStatus.Assigned 
+      status: AppBookingStatus.Assigned 
     });
     
     toast.success(`Provider assigned to booking`);
@@ -100,7 +87,7 @@ export const BookingsSection: React.FC = () => {
   };
 
   const handleFilterChange = (newFilters: {
-    status?: AdminBookingStatus | 'all';
+    status?: BookingStatus | 'all';
     search?: string;
     dateRange?: DateRange | undefined;
   }) => {
@@ -114,12 +101,8 @@ export const BookingsSection: React.FC = () => {
     console.log('Filters changed:', { ...filters, ...newFilters });
   };
 
-  const handleUpdateStatus = (id: string, status: AdminBookingStatus) => {
-    // Convert AdminBookingStatus to BookingStatus
-    const appStatus = convertToAppBookingStatus(status);
-    if (appStatus) {
-      updateBookingStatus({ id, status: appStatus });
-    }
+  const handleUpdateStatus = (id: string, status: BookingStatus) => {
+    updateBookingStatus({ id, status });
   };
 
   const handleDeleteBooking = (id: string) => {
@@ -167,8 +150,8 @@ export const BookingsSection: React.FC = () => {
         onUpdateStatus={handleUpdateStatus}
         onDeleteBooking={handleDeleteBooking}
         onAssignProvider={handleAssignProviderClick}
-        onViewDetails={handleViewDetails}
-        onContactClient={handleContactClient}
+        onViewDetails={(booking) => console.log('View details:', booking)}
+        onContactClient={(booking) => console.log('Contact client:', booking)}
         isLoading={isLoading || isFetching}
         onFilterChange={handleFilterChange}
       />
@@ -178,7 +161,7 @@ export const BookingsSection: React.FC = () => {
           open={isAssignDialogOpen}
           onClose={() => setIsAssignDialogOpen(false)}
           booking={selectedBooking}
-          onAssign={handleAssignProvider}
+          onAssign={({ bookingId, providerId }) => handleAssignProvider(bookingId, providerId)}
         />
       )}
     </>

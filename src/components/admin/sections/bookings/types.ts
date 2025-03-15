@@ -2,8 +2,8 @@
 import { Database } from "@/integrations/supabase/types";
 import { BookingStatus as BookingStatusEnum } from "@/types/enums";
 
-// Use the full booking status type for compatibility with the enum
-export type BookingStatus = "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
+// Update BookingStatus to match the application-wide enum
+export type BookingStatus = BookingStatusEnum;
 
 export const statusColors = {
   pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",

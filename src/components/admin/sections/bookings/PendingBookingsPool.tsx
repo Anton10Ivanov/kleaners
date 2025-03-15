@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BookingsTable } from '@/components/admin/sections/bookings/BookingsTable';
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
@@ -25,12 +24,10 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
-  // Load pending bookings from mock data service if not provided externally
   useEffect(() => {
     if (externalPendingBookings) {
       setPendingBookings(externalPendingBookings);
     } else {
-      // Use our mock data service to get pending bookings
       const bookings = getFilteredMockBookings(AppBookingStatus.Pending);
       setPendingBookings(bookings);
     }
@@ -48,17 +45,9 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   const handleUpdateBookingStatus = (id: string, status: BookingStatus) => {
     console.log(`Updating booking ${id} status to ${status}`);
     
-    // Update in mock data service
-    const appStatus = status === 'pending' ? AppBookingStatus.Pending : 
-                     status === 'assigned' ? AppBookingStatus.Assigned :
-                     status === 'confirmed' ? AppBookingStatus.Confirmed :
-                     status === 'completed' ? AppBookingStatus.Completed :
-                     AppBookingStatus.Cancelled;
-                     
-    updateMockBooking(id, { status: appStatus });
+    updateMockBooking(id, { status });
     
-    // Remove from local state if changing from pending
-    if (status !== 'pending') {
+    if (status !== AppBookingStatus.Pending) {
       setPendingBookings(prev => prev.filter(booking => booking.id !== id));
     }
     
@@ -82,13 +71,11 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   };
 
   const handleAssignProvider = (bookingId: string, providerId: string) => {
-    // Update in mock data service
     updateMockBooking(bookingId, { 
       provider_id: providerId,
       status: AppBookingStatus.Assigned
     });
     
-    // Remove from pending pool
     setPendingBookings(prev => prev.filter(booking => booking.id !== bookingId));
     
     setIsAssignDialogOpen(false);
@@ -104,7 +91,6 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   };
 
   const handleRefreshBookings = () => {
-    // Use our mock data service to get fresh pending bookings
     const bookings = getFilteredMockBookings(AppBookingStatus.Pending);
     setPendingBookings(bookings);
     refreshData();

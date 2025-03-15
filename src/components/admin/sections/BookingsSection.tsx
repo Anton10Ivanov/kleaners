@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
-import { BookingStatus as AdminBookingStatus, SortField, SortOrder } from "./bookings/types";
+import { BookingStatus, SortField, SortOrder } from "./bookings/types";
 import { BookingsFilter } from "./bookings/BookingsFilter";
 import { BookingsTable } from "./bookings/BookingsTable";
 import { useBookings } from "@/hooks/useBookings";
@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { BookingStatus } from "@/types/enums";
+import { BookingStatus as AppBookingStatus } from "@/types/enums";
 
 export const BookingsSection = () => {
   const { toast } = useToast();
-  const [selectedStatus, setSelectedStatus] = useState<AdminBookingStatus | "all">("all");
+  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
@@ -22,19 +22,6 @@ export const BookingsSection = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const itemsPerPage = isMobile ? 5 : 10;
-
-  const convertToAppBookingStatus = (status: AdminBookingStatus | null): BookingStatus | null => {
-    if (!status) return null;
-    
-    switch (status) {
-      case "pending": return BookingStatus.Pending;
-      case "assigned": return BookingStatus.Assigned;
-      case "confirmed": return BookingStatus.Confirmed;
-      case "completed": return BookingStatus.Completed;
-      case "cancelled": return BookingStatus.Cancelled;
-      default: return null;
-    }
-  };
 
   const { 
     bookings, 
@@ -104,7 +91,7 @@ export const BookingsSection = () => {
     }
   };
 
-  const handleStatusChange = (status: AdminBookingStatus | 'all') => {
+  const handleStatusChange = (status: BookingStatus | 'all') => {
     setSelectedStatus(status);
   };
 
@@ -116,7 +103,7 @@ export const BookingsSection = () => {
     setDateRange(range);
   };
 
-  const handleUpdateStatus = (id: string, status: AdminBookingStatus) => {
+  const handleUpdateStatus = (id: string, status: BookingStatus) => {
     updateBookingStatus({ id, status });
   };
 
