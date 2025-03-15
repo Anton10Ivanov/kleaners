@@ -4,12 +4,21 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import LoginForm from "@/components/auth/LoginForm";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const Login = () => {
   const [isResetMode, setIsResetMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Changed to false for faster initial load
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Check if the path indicates password reset mode
+  useEffect(() => {
+    if (location.pathname.includes('forgot-password') || location.pathname.includes('reset-password')) {
+      setIsResetMode(true);
+    }
+  }, [location.pathname]);
 
   // Parse the return URL from query params or use default routes
   const getReturnUrl = () => {
@@ -68,6 +77,7 @@ const Login = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Navbar />
         <div className="flex-grow flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 mt-16">
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
             <div className="flex flex-col items-center justify-center">
@@ -76,12 +86,14 @@ const Login = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Navbar />
       <div className="flex-grow flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 mt-16">
         {isResetMode ? (
           <ResetPasswordForm onBackToLogin={() => setIsResetMode(false)} />
@@ -89,6 +101,7 @@ const Login = () => {
           <LoginForm onResetMode={() => setIsResetMode(true)} />
         )}
       </div>
+      <Footer />
     </div>
   );
 };
