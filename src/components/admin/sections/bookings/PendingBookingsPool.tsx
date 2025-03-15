@@ -1,23 +1,40 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookingsTable } from '@/components/admin/sections/bookings/BookingsTable';
 import { Booking, BookingStatus } from '@/components/admin/sections/bookings/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFilteredMockBookings, updateMockBooking } from '@/utils/mock/mockDataService';
+import { BookingStatus as AppBookingStatus } from '@/types/enums';
+import { AssignProviderDialog } from './AssignProviderDialog';
 
 interface PendingBookingsPoolProps {
-  pendingBookings: Booking[];
+  pendingBookings?: Booking[];
   refreshData: () => void;
 }
 
 export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
-  pendingBookings,
+  pendingBookings: externalPendingBookings,
   refreshData
 }) => {
   const [sortField, setSortField] = useState<'date' | 'total_price' | 'created_at'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+
+  // Load pending bookings from mock data service if not provided externally
+  useEffect(() => {
+    if (externalPendingBookings) {
+      setPendingBookings(externalPendingBookings);
+    } else {
+      // Use our mock data service to get pending bookings
+      const bookings = getFilteredMockBookings(AppBookingStatus.Pending);
+      setPendingBookings(bookings);
+    }
+  }, [externalPendingBookings]);
 
   const handleToggleSort = (field: 'date' | 'total_price' | 'created_at') => {
     if (field === sortField) {
@@ -30,12 +47,28 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
 
   const handleUpdateBookingStatus = (id: string, status: BookingStatus) => {
     console.log(`Updating booking ${id} status to ${status}`);
+    
+    // Update in mock data service
+    const appStatus = status === 'pending' ? AppBookingStatus.Pending : 
+                     status === 'assigned' ? AppBookingStatus.Assigned :
+                     status === 'confirmed' ? AppBookingStatus.Confirmed :
+                     status === 'completed' ? AppBookingStatus.Completed :
+                     AppBookingStatus.Cancelled;
+                     
+    updateMockBooking(id, { status: appStatus });
+    
+    // Remove from local state if changing from pending
+    if (status !== 'pending') {
+      setPendingBookings(prev => prev.filter(booking => booking.id !== id));
+    }
+    
     toast.success(`Booking status updated to ${status}`);
     refreshData();
   };
 
   const handleDeleteBooking = (id: string) => {
     console.log(`Deleting booking ${id}`);
+    setPendingBookings(prev => prev.filter(booking => booking.id !== id));
     toast.success("Booking deleted successfully");
     refreshData();
   };
@@ -46,6 +79,35 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
 
   const handleContactClient = (booking: Booking) => {
     console.log('Contact client for booking:', booking);
+  };
+
+  const handleAssignProvider = (bookingId: string, providerId: string) => {
+    // Update in mock data service
+    updateMockBooking(bookingId, { 
+      provider_id: providerId,
+      status: AppBookingStatus.Assigned
+    });
+    
+    // Remove from pending pool
+    setPendingBookings(prev => prev.filter(booking => booking.id !== bookingId));
+    
+    setIsAssignDialogOpen(false);
+    setSelectedBooking(null);
+    
+    toast.success("Provider assigned successfully");
+    refreshData();
+  };
+
+  const handleAssignClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setIsAssignDialogOpen(true);
+  };
+
+  const handleRefreshBookings = () => {
+    // Use our mock data service to get fresh pending bookings
+    const bookings = getFilteredMockBookings(AppBookingStatus.Pending);
+    setPendingBookings(bookings);
+    refreshData();
   };
 
   if (pendingBookings.length === 0) {
@@ -63,38 +125,49 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Pending Bookings Pool</CardTitle>
-        <CardDescription>
-          New bookings from clients waiting for provider assignment
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="rounded-md border">
-          <BookingsTable
-            bookings={pendingBookings}
-            sortField={sortField}
-            sortOrder={sortOrder}
-            toggleSort={handleToggleSort}
-            updateBookingStatus={handleUpdateBookingStatus}
-            deleteBooking={handleDeleteBooking}
-            refreshData={refreshData}
-            viewDetails={handleViewDetails}
-            contactClient={handleContactClient}
-          />
-        </div>
-        
-        <div className="mt-4 flex justify-end">
-          <Button 
-            variant="outline" 
-            onClick={refreshData}
-            className="text-sm"
-          >
-            Refresh List
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Pending Bookings Pool</CardTitle>
+          <CardDescription>
+            New bookings from clients waiting for provider assignment
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <BookingsTable
+              bookings={pendingBookings}
+              sortField={sortField}
+              sortOrder={sortOrder}
+              toggleSort={handleToggleSort}
+              updateBookingStatus={handleUpdateBookingStatus}
+              deleteBooking={handleDeleteBooking}
+              refreshData={handleRefreshBookings}
+              viewDetails={handleViewDetails}
+              contactClient={handleContactClient}
+            />
+          </div>
+          
+          <div className="mt-4 flex justify-end">
+            <Button 
+              variant="outline" 
+              onClick={handleRefreshBookings}
+              className="text-sm"
+            >
+              Refresh List
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {selectedBooking && (
+        <AssignProviderDialog
+          open={isAssignDialogOpen}
+          onClose={() => setIsAssignDialogOpen(false)}
+          booking={selectedBooking}
+          onAssign={handleAssignProvider}
+        />
+      )}
+    </>
   );
 };
