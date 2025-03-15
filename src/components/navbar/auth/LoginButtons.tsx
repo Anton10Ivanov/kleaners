@@ -11,14 +11,14 @@ const LoginButtons: React.FC = () => {
       <Button 
         variant="ghost" 
         size="sm" 
-        onClick={() => navigate('/auth/login')}
+        onClick={() => navigate('/login')}
       >
         Login
       </Button>
       <Button 
         variant="default" 
         size="sm" 
-        onClick={() => navigate('/auth/signup')} 
+        onClick={() => navigate('/signup')} 
         className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50"
       >
         Sign up

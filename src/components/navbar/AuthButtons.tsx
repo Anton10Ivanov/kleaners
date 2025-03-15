@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Loader2, UserCircle, LogOut, Settings, LayoutDashboard, Calendar, ClipboardList, ShieldCheck, User, Home } from 'lucide-react';
+
 export const AuthButtons = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -14,6 +15,7 @@ export const AuthButtons = () => {
   const {
     toast
   } = useToast();
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -98,6 +100,7 @@ export const AuthButtons = () => {
       subscription.unsubscribe();
     };
   }, []);
+
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -118,11 +121,13 @@ export const AuthButtons = () => {
       setLoading(false);
     }
   };
+
   if (loading) {
     return <Button variant="ghost" size="sm" disabled>
         <Loader2 className="h-4 w-4 animate-spin" />
       </Button>;
   }
+
   if (user) {
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -147,7 +152,7 @@ export const AuthButtons = () => {
           </DropdownMenuItem>
           
           {/* Dashboard based on role */}
-          {userRole === 'client' && <DropdownMenuItem onClick={() => navigate('/user/dashboard')}>
+          {userRole === 'client' && <DropdownMenuItem onClick={() => navigate('/client/dashboard')}>
               <LayoutDashboard className="mr-2 h-4 w-4" />
               <span>Client Dashboard</span>
             </DropdownMenuItem>}
@@ -158,7 +163,7 @@ export const AuthButtons = () => {
             </DropdownMenuItem>}
           
           {/* Role-specific functionality */}
-          {userRole === 'client' && <DropdownMenuItem onClick={() => navigate('/user/bookings')}>
+          {userRole === 'client' && <DropdownMenuItem onClick={() => navigate('/client/bookings')}>
               <Calendar className="mr-2 h-4 w-4" />
               <span>My Bookings</span>
             </DropdownMenuItem>}
@@ -175,12 +180,12 @@ export const AuthButtons = () => {
             </DropdownMenuItem>}
           
           {/* Common functionality for all users */}
-          <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/profile' : '/user/profile')}>
+          <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/profile' : '/client/profile')}>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </DropdownMenuItem>
           
-          <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/settings' : '/user/settings')}>
+          <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/settings' : '/client/settings')}>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
@@ -193,11 +198,12 @@ export const AuthButtons = () => {
         </DropdownMenuContent>
       </DropdownMenu>;
   }
+
   return <div className="flex items-center gap-2">
-      <Button variant="ghost" size="sm" onClick={() => navigate('/auth/login')}>
+      <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
         Login
       </Button>
-      <Button variant="default" size="sm" onClick={() => navigate('/auth/signup')} className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50">
+      <Button variant="default" size="sm" onClick={() => navigate('/signup')} className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50">
         Sign up
       </Button>
     </div>;
