@@ -25,27 +25,32 @@ interface UserMenuItemsProps {
 const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => {
   const navigate = useNavigate();
   
+  // Handle navigation with proper client-side routing
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+  
   return (
     <>
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
       
       {/* Home Link for everyone */}
-      <DropdownMenuItem onClick={() => navigate('/')}>
+      <DropdownMenuItem onClick={() => handleNavigation('/')}>
         <Home className="mr-2 h-4 w-4" />
         <span>Homepage</span>
       </DropdownMenuItem>
       
       {/* Dashboard based on role */}
       {userRole === 'client' && (
-        <DropdownMenuItem onClick={() => navigate('/client/dashboard')}>
+        <DropdownMenuItem onClick={() => handleNavigation('/client/dashboard')}>
           <LayoutDashboard className="mr-2 h-4 w-4" />
           <span>Client Dashboard</span>
         </DropdownMenuItem>
       )}
       
       {userRole === 'provider' && (
-        <DropdownMenuItem onClick={() => navigate('/provider/dashboard')}>
+        <DropdownMenuItem onClick={() => handleNavigation('/provider/dashboard')}>
           <LayoutDashboard className="mr-2 h-4 w-4" />
           <span>Provider Dashboard</span>
         </DropdownMenuItem>
@@ -53,14 +58,14 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       
       {/* Role-specific functionality */}
       {userRole === 'client' && (
-        <DropdownMenuItem onClick={() => navigate('/client/bookings')}>
+        <DropdownMenuItem onClick={() => handleNavigation('/client/bookings')}>
           <Calendar className="mr-2 h-4 w-4" />
           <span>My Bookings</span>
         </DropdownMenuItem>
       )}
       
       {userRole === 'provider' && (
-        <DropdownMenuItem onClick={() => navigate('/provider/bookings')}>
+        <DropdownMenuItem onClick={() => handleNavigation('/provider/bookings')}>
           <ClipboardList className="mr-2 h-4 w-4" />
           <span>My Assignments</span>
         </DropdownMenuItem>
@@ -68,19 +73,19 @@ const UserMenuItems: React.FC<UserMenuItemsProps> = ({ userRole, onLogout }) => 
       
       {/* Admin panel access */}
       {userRole === 'admin' && (
-        <DropdownMenuItem onClick={() => navigate('/admin')}>
+        <DropdownMenuItem onClick={() => handleNavigation('/admin')}>
           <ShieldCheck className="mr-2 h-4 w-4" />
           <span>Admin Panel</span>
         </DropdownMenuItem>
       )}
       
       {/* Common functionality for all users */}
-      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/profile' : '/client/profile')}>
+      <DropdownMenuItem onClick={() => handleNavigation(userRole === 'provider' ? '/provider/profile' : '/client/profile')}>
         <User className="mr-2 h-4 w-4" />
         <span>Profile</span>
       </DropdownMenuItem>
       
-      <DropdownMenuItem onClick={() => navigate(userRole === 'provider' ? '/provider/settings' : '/client/settings')}>
+      <DropdownMenuItem onClick={() => handleNavigation(userRole === 'provider' ? '/provider/settings' : '/client/settings')}>
         <Settings className="mr-2 h-4 w-4" />
         <span>Settings</span>
       </DropdownMenuItem>
