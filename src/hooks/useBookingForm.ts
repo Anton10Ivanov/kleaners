@@ -61,8 +61,8 @@ export const useBookingForm = () => {
     // Save to local storage, handling Date objects
     const serializedFormData = {
       ...formData,
-      date: formData.date?.toISOString(),
-      selectedDates: formData.selectedDates?.map(date => date.toISOString()),
+      date: formData.date ? formData.date.toISOString() : undefined,
+      selectedDates: formData.selectedDates ? formData.selectedDates.map(date => date.toISOString()) : undefined,
     };
     
     localStorage.setItem('bookingProgress', JSON.stringify({

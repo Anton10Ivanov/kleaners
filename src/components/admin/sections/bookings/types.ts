@@ -2,7 +2,7 @@
 import { Database } from "@/integrations/supabase/types";
 import { BookingStatus as BookingStatusEnum } from "@/types/enums";
 
-// Use the string literal union type for compatibility with existing code
+// Use the full booking status type for compatibility with the enum
 export type BookingStatus = "pending" | "assigned" | "confirmed" | "completed" | "cancelled";
 
 export const statusColors = {
