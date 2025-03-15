@@ -20,11 +20,16 @@ const MOCK_PROVIDERS = [
   { id: "3", name: "Robert Johnson" },
 ];
 
+interface AssignProviderData {
+  bookingId: string;
+  providerId: string;
+}
+
 export interface AssignProviderDialogProps {
   open: boolean;
   onClose: () => void;
   booking: Booking;
-  onAssign: (bookingId: string, providerId: string) => void;
+  onAssign: (data: AssignProviderData) => void;
 }
 
 export const AssignProviderDialog: React.FC<AssignProviderDialogProps> = ({
@@ -37,7 +42,10 @@ export const AssignProviderDialog: React.FC<AssignProviderDialogProps> = ({
 
   const handleAssign = () => {
     if (selectedProviderId) {
-      onAssign(booking.id, selectedProviderId);
+      onAssign({
+        bookingId: booking.id,
+        providerId: selectedProviderId
+      });
       setSelectedProviderId("");
     }
   };
