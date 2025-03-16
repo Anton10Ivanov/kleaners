@@ -44,7 +44,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="service" className="block text-sm font-medium text-subtext dark:text-gray-300 mb-1">
             Service Type
           </label>
           <Select
@@ -64,7 +64,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
         </div>
         
         <div>
-          <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="postal-code" className="block text-sm font-medium text-subtext dark:text-gray-300 mb-1">
             City or Postal Code
           </label>
           <Input
@@ -80,7 +80,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
         
         <Button 
           type="submit" 
-          className="w-full bg-[#F97316] hover:bg-[#F97316]/90 dark:bg-[#F97316] dark:hover:bg-[#F97316]/80 text-white font-medium py-2.5 h-12 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
+          className="w-full bg-theme-cta hover:bg-theme-cta/90 dark:bg-theme-cta dark:hover:bg-theme-cta/80 text-white font-medium py-2.5 h-12 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
         >
           Get Started <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
