@@ -24,12 +24,12 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({
         <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
           Admin Dashboard
         </h2>
-        <div className="space-y-1">
+        <div className="flex flex-row overflow-x-auto pb-2">
           {navItems.map((item) => (
             <Button
               key={item.title}
               variant={activeItem === item.title.toLowerCase() ? "secondary" : "ghost"}
-              className="w-full justify-start"
+              className="mr-1"
               onClick={() => handleNavClick(item.href)}
             >
               {item.icon}
