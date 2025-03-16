@@ -24,7 +24,7 @@ export const Logo = () => {
         className="h-6 w-6 object-contain"
         style={{ filter: 'brightness(0) saturate(100%) invert(65%) sepia(23%) saturate(1351%) hue-rotate(170deg) brightness(92%) contrast(87%)' }}
       />
-      <span className="font-raleway font-bold text-xl text-primary dark:text-primary hover:opacity-90 transition-opacity">
+      <span className="font-raleway font-bold text-xl text-[#7ebce6] hover:opacity-90 transition-opacity">
         Kleaners.de
       </span>
     </div>
