@@ -34,6 +34,36 @@ export const Hero = memo(({
     }
   }, [selectedService, setSelectedService]);
 
+  // Preload hero images
+  useEffect(() => {
+    // Images to preload
+    const imagesToPreload = [
+      '/lovable-uploads/a967d512-a0c9-457b-97d8-9ea49e5e2f5f.png',
+      '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'
+    ];
+    
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'image';
+    preloadLink.href = imagesToPreload[0]; // Preload the primary image first
+    document.head.appendChild(preloadLink);
+    
+    // Preload remaining images
+    imagesToPreload.slice(1).forEach(imageUrl => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'image';
+      link.href = imageUrl;
+      document.head.appendChild(link);
+    });
+    
+    return () => {
+      // Clean up preload links when component unmounts
+      document.head.querySelectorAll('link[rel="preload"][as="image"], link[rel="prefetch"][as="image"]')
+        .forEach(link => document.head.removeChild(link));
+    };
+  }, []);
+
   const handleValidatedNextStep = () => {
     if (!selectedService) {
       toast.error("Please select a service type");

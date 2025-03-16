@@ -1,35 +1,65 @@
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  const loadAttemptedRef = useRef(false);
   
-  // Using the most recent image
-  const imagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
+  // New optimized image path - this will be uploaded
+  const imagePath = '/lovable-uploads/a967d512-a0c9-457b-97d8-9ea49e5e2f5f.png';
+  const fallbackImagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
   
-  // Check if image exists and can be loaded - with improved error handling
+  // Load image with improved error handling and caching strategy
   useEffect(() => {
+    // Only attempt to load once to prevent loops
+    if (loadAttemptedRef.current) return;
+    loadAttemptedRef.current = true;
+    
     console.log("Attempting to load hero image from:", imagePath);
     
-    // Use a local variable to track component mount state
+    // Track component mount state
     let isMounted = true;
     
     const img = new Image();
+    
+    // Enable cache-first loading
+    img.fetchPriority = "high";
+    img.decoding = "async";
+    
     img.onload = () => {
       if (isMounted) {
         console.log("Hero background image loaded successfully");
         setImageLoaded(true);
+        setImageFailed(false);
       }
     };
     
     img.onerror = (error) => {
-      console.error("Failed to load hero background image:", imagePath, error);
-      // Fall back to a default image or placeholder
+      console.error("Failed to load primary hero image:", error);
       if (isMounted) {
-        setImageLoaded(false);
+        // Try the fallback image if the main one fails
+        setImageFailed(true);
+        
+        // Load fallback image
+        const fallbackImg = new Image();
+        fallbackImg.src = fallbackImagePath;
+        fallbackImg.onload = () => {
+          if (isMounted) {
+            console.log("Fallback hero image loaded successfully");
+            setImageLoaded(true);
+          }
+        };
+        fallbackImg.onerror = () => {
+          if (isMounted) {
+            console.error("Failed to load fallback image");
+            setImageLoaded(false);
+          }
+        };
       }
     };
     
+    // Start loading the image
     img.src = imagePath;
     
     // Cleanup function to prevent state updates if component unmounts
@@ -38,7 +68,10 @@ export const BackgroundElements = memo(() => {
       img.onload = null;
       img.onerror = null;
     };
-  }, [imagePath]);
+  }, [imagePath, fallbackImagePath]);
+
+  // Choose which image to display
+  const displayImagePath = imageFailed ? fallbackImagePath : imagePath;
 
   return (
     <>
@@ -51,7 +84,7 @@ export const BackgroundElements = memo(() => {
         <div className="absolute inset-0 z-0 hidden md:flex justify-end items-center pr-8">
           {imageLoaded ? (
             <img 
-              src={imagePath}
+              src={displayImagePath}
               alt="Professional cleaner with cleaning supplies"
               width="600"
               height="500"
@@ -62,6 +95,8 @@ export const BackgroundElements = memo(() => {
                 opacity: 0.95
               }}
               loading="eager" // Load with high priority
+              fetchpriority="high"
+              decoding="async"
             />
           ) : (
             <div className="w-[45%] h-[80%] bg-gray-100 bg-opacity-10 rounded-lg flex items-center justify-center">
@@ -74,12 +109,14 @@ export const BackgroundElements = memo(() => {
         <div className="absolute inset-0 z-0 flex md:hidden justify-center items-center">
           {imageLoaded ? (
             <img 
-              src={imagePath}
+              src={displayImagePath}
               alt="Professional cleaner with cleaning supplies"
               width="300"
               height="200"
               className="object-contain max-w-[90%] max-h-[45%] opacity-50"
               loading="eager" // Load with high priority
+              fetchpriority="high"
+              decoding="async"
             />
           ) : (
             <div className="w-[80%] h-[30%] bg-gray-100 bg-opacity-10 rounded-lg flex items-center justify-center">
