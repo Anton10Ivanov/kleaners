@@ -47,9 +47,13 @@ export const Hero = memo(({
 
   return (
     <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center py-12 bg-theme-lightblue transition-colors duration-300 overflow-hidden">
-      <BackgroundElements />
+      {/* Background elements with z-index to ensure proper layering */}
+      <div className="absolute inset-0 z-0">
+        <BackgroundElements />
+      </div>
       
-      <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Content with higher z-index to appear above background */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <HeroProvider 
           initialService={selectedService}
           initialPostalCode={postalCode}
