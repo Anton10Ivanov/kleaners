@@ -25,8 +25,9 @@
     --spacing7: 160px;
     
     /* Light mode - Updated with specified colors */
-    --background: 0 0% 100%; /* White #FFFFFF */
+    --background: 195 100% 92%; /* Light blue #D6EFFF */
     --foreground: 0 0% 20%; /* #333333 */
+    --heading-color: 0 0% 11%; /* #1C1C1C for headings */
     --secondary-text: 35 35% 35%; /* Warmer text color */
     --surface: 122 65% 84%; /* Light green #bfedc1 */
     --card: 0 0% 100%;
@@ -95,15 +96,15 @@
     line-height: 1.5em;
   }
 
-  /* Apply the new typography values */
+  /* Apply the new typography values with heading color */
   h1 {
     font: var(--h1);
-    @apply text-gray-900 dark:text-white;
+    @apply text-[#1C1C1C] dark:text-white;
   }
 
   h2 {
     font: var(--h2);
-    @apply text-gray-900 dark:text-white;
+    @apply text-[#1C1C1C] dark:text-white;
   }
 
   h3 {
