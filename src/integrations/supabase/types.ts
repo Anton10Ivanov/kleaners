@@ -177,6 +177,42 @@ export type Database = {
         }
         Relationships: []
       }
+      client_questions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          ip_address: string | null
+          is_spam: boolean | null
+          name: string
+          question: string
+          status: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean | null
+          name: string
+          question: string
+          status?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          ip_address?: string | null
+          is_spam?: boolean | null
+          name?: string
+          question?: string
+          status?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           address: string | null
