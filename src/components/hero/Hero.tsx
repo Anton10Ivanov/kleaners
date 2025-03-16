@@ -6,7 +6,6 @@ import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
-import { Service } from "@/types/enums";
 import { ServiceType } from "@/schemas/booking";
 
 interface HeroProps {
@@ -34,7 +33,7 @@ export const Hero = memo(({
     }
   }, [selectedService, setSelectedService]);
 
-  // Preload hero images
+  // Preload hero images with higher browser priority
   useEffect(() => {
     // Images to preload
     const imagesToPreload = [
@@ -42,19 +41,18 @@ export const Hero = memo(({
       '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'
     ];
     
-    const preloadLink = document.createElement('link');
-    preloadLink.rel = 'preload';
-    preloadLink.as = 'image';
-    preloadLink.href = imagesToPreload[0]; // Preload the primary image first
-    document.head.appendChild(preloadLink);
-    
-    // Preload remaining images
-    imagesToPreload.slice(1).forEach(imageUrl => {
+    // Create preload links with high priority
+    imagesToPreload.forEach((imageUrl, index) => {
       const link = document.createElement('link');
-      link.rel = 'prefetch';
+      link.rel = index === 0 ? 'preload' : 'prefetch'; // First image gets higher priority
       link.as = 'image';
       link.href = imageUrl;
+      link.fetchPriority = index === 0 ? 'high' : 'low';
       document.head.appendChild(link);
+      
+      // Also manually preload with Image object
+      const img = new Image();
+      img.src = imageUrl;
     });
     
     return () => {
