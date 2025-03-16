@@ -1,36 +1,44 @@
+
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 const Footer = () => {
-  return <footer className="pt-16 pb-8 bg-white dark:bg-gray-800">
+  return (
+    <footer className="pt-16 pb-8 bg-gray-900 text-theme-blue dark:bg-gray-900 dark:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <img src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" alt="Kleaners.de Logo" className="h-8 w-8 object-contain" style={{
-              filter: 'brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(1000%) hue-rotate(200deg) brightness(100%) contrast(100%)'
-            }} />
-              <h3 className="font-bold text-2xl text-primary">
+              <img 
+                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
+                alt="Kleaners.de Logo" 
+                className="h-8 w-8 object-contain" 
+                style={{
+                  filter: 'brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(1000%) hue-rotate(190deg) brightness(100%) contrast(100%)'
+                }} 
+              />
+              <h3 className="font-bold text-2xl text-theme-blue">
                 Kleaners.de
               </h3>
             </Link>
-            <p className="text-sm text-[#8E9196] dark:text-gray-400 md:text-xs font-medium text-left">Cleanliness creates trust.</p>
+            <p className="text-sm text-theme-blue md:text-xs font-medium text-left opacity-80">Cleanliness creates trust.</p>
           </div>
           
           <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Services</h4>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Services</h4>
             <ul className="space-y-2 text-sm md:text-base">
               <li>
-                <Link to="/services/regular-cleaning" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <Link to="/services/regular-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Regular Cleaning
                 </Link>
               </li>
               <li>
-                <Link to="/services/move-in-out" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <Link to="/services/move-in-out" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Move In/Out
                 </Link>
               </li>
               <li>
-                <Link to="/services/business-cleaning" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <Link to="/services/business-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Business Cleaning
                 </Link>
               </li>
@@ -38,15 +46,15 @@ const Footer = () => {
           </div>
           
           <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Legal</h4>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Legal</h4>
             <ul className="space-y-2 text-sm md:text-base">
               <li>
-                <Link to="/legal/terms" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <Link to="/legal/terms" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/legal/privacy" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <Link to="/legal/privacy" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
@@ -54,32 +62,32 @@ const Footer = () => {
           </div>
           
           <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-gray-900 dark:text-white">Contact</h4>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Contact</h4>
             <ul className="space-y-2 text-sm md:text-base">
-              <li className="flex items-center gap-1 text-[#8E9196] dark:text-gray-400">
+              <li className="flex items-center gap-1 text-theme-blue opacity-80">
                 <Phone size={14} />
                 <span>+49 123 456 789</span>
               </li>
-              <li className="flex items-center gap-1 text-[#8E9196] dark:text-gray-400">
+              <li className="flex items-center gap-1 text-theme-blue opacity-80">
                 <Mail size={14} />
                 <span>info@kleaners.de</span>
               </li>
-              <li className="flex items-center gap-1 text-[#8E9196] dark:text-gray-400">
+              <li className="flex items-center gap-1 text-theme-blue opacity-80">
                 <MapPin size={14} />
                 <span>Berlin, Germany</span>
               </li>
             </ul>
 
             <div className="mt-4">
-              <h5 className="font-semibold text-sm mb-2 text-gray-900 dark:text-white">Follow Us</h5>
+              <h5 className="font-semibold text-sm mb-2 text-theme-blue">Follow Us</h5>
               <div className="flex space-x-3">
-                <a href="#" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <a href="#" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   <Facebook size={20} />
                 </a>
-                <a href="#" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <a href="#" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   <Instagram size={20} />
                 </a>
-                <a href="#" className="text-[#8E9196] dark:text-gray-400 hover:text-primary transition-colors">
+                <a href="#" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   <Twitter size={20} />
                 </a>
               </div>
@@ -87,12 +95,14 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-[#8E9196]/20 dark:border-gray-800 pt-4 md:pt-8">
-          <div className="text-center text-sm text-[#8E9196] dark:text-gray-400">
+        <div className="border-t border-theme-blue/20 pt-4 md:pt-8">
+          <div className="text-center text-sm text-theme-blue opacity-80">
             <p>&copy; {new Date().getFullYear()} Kleaners.de. All rights reserved.</p>
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;

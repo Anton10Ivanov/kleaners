@@ -3,7 +3,7 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Hero from '../components/hero';
 import OurOptions from '../components/options/OurOptions';
-import SlickWhyChooseUs from '../components/SlickWhyChooseUs';
+import WhyChooseUs from '../components/WhyChooseUs';
 import { Testimonials } from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
 import BookingSummary from '../components/booking/BookingSummary';
@@ -71,6 +71,7 @@ const Index = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
+            className="bg-theme-lightblue"
           >
             <Hero 
               selectedService={selectedService || ''}
@@ -86,7 +87,7 @@ const Index = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            <SlickWhyChooseUs />
+            <WhyChooseUs />
             <OurOptions />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Testimonials />
