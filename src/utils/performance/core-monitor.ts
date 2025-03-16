@@ -1,111 +1,124 @@
 
-import { TimingThresholds, OperationType } from './types';
+import { TimingThresholds, PerformanceResult, OperationType } from './types';
 import { getOperationType } from './operation-utils';
+import { PerformanceReporter } from './reporting';
 
 /**
- * Core timing and monitoring functionality
+ * Core performance monitoring functionality
  */
-export class CoreMonitor {
-  private timers: Record<string, number> = {};
+export class PerformanceMonitor {
+  private timings: Map<string, number> = new Map();
   private results: Record<string, number> = {};
-  private enabled: boolean = false;
   private thresholds: TimingThresholds = {
-    import: 300, // milliseconds
-    render: 100,
-    interaction: 50
+    import: 300,  // 300ms threshold for imports
+    render: 50,   // 50ms threshold for renders
+    interaction: 100, // 100ms threshold for user interactions
+    default: 100  // 100ms default threshold
   };
-
+  private enabled: boolean = true;
+  private reporter: PerformanceReporter = new PerformanceReporter();
+  
   /**
-   * Enable or disable performance monitoring
-   */
-  public setEnabled(enabled: boolean): void {
-    this.enabled = enabled;
-    
-    if (enabled) {
-      console.info('Performance monitoring enabled');
-    }
-  }
-
-  /**
-   * Set performance thresholds for different operations
-   */
-  public setThresholds(thresholds: Partial<TimingThresholds>): void {
-    this.thresholds = { ...this.thresholds, ...thresholds };
-  }
-
-  /**
-   * Start timing a component or operation
+   * Start timing an operation
+   * @param key - Unique identifier for the operation
    */
   public startTiming(key: string): void {
     if (!this.enabled) return;
-    this.timers[key] = performance.now();
-  }
-
-  /**
-   * End timing a component or operation and record the result
-   */
-  public endTiming(key: string): number | undefined {
-    if (!this.enabled || this.timers[key] === undefined) return;
     
+    this.timings.set(key, performance.now());
+  }
+  
+  /**
+   * End timing an operation and record the result
+   * @param key - Unique identifier for the operation
+   * @returns Duration in milliseconds
+   */
+  public endTiming(key: string): number {
+    if (!this.enabled || !this.timings.has(key)) return 0;
+    
+    const startTime = this.timings.get(key) as number;
     const endTime = performance.now();
-    const duration = endTime - this.timers[key];
+    const duration = endTime - startTime;
+    
+    // Store the result
     this.results[key] = duration;
     
-    // Check against thresholds
-    const operationType = getOperationType(key);
-    const threshold = this.getThresholdForKey(key);
+    // Remove the timing
+    this.timings.delete(key);
     
-    if (duration > threshold) {
-      console.warn(`⚠️ Performance warning: ${key} took ${duration.toFixed(2)}ms (threshold: ${threshold}ms)`);
-    } else {
-      console.info(`✅ ${key} - ${duration.toFixed(2)}ms`);
-    }
+    // Log performance issues
+    this.checkPerformance(key, duration);
     
-    delete this.timers[key];
     return duration;
   }
-
+  
   /**
-   * Get the appropriate threshold for a given key
+   * Check if an operation's duration exceeds its threshold
+   * @param key - Unique identifier for the operation
+   * @param duration - Duration in milliseconds
    */
-  private getThresholdForKey(key: string): number {
-    const type = getOperationType(key);
-    return this.thresholds[type] || 100;
+  private checkPerformance(key: string, duration: number): void {
+    const operationType = getOperationType(key);
+    const threshold = this.getThreshold(operationType);
+    
+    if (duration > threshold) {
+      console.warn(`Performance issue: ${key} took ${duration.toFixed(2)}ms (threshold: ${threshold}ms)`);
+    }
   }
-
+  
   /**
-   * Get the timing result for a specific component or operation
+   * Get threshold for an operation type
+   * @param type - Type of operation
+   * @returns Threshold in milliseconds
    */
-  public getResult(key: string): number | undefined {
-    return this.results[key];
+  public getThreshold(type: string): number {
+    return this.thresholds[type] || this.thresholds.default;
   }
-
+  
   /**
-   * Get all timing results
+   * Set threshold for an operation type
+   * @param type - Type of operation
+   * @param threshold - Threshold in milliseconds
    */
-  public getAllResults(): Record<string, number> {
-    return { ...this.results };
+  public setThreshold(type: string, threshold: number): void {
+    this.thresholds[type] = threshold;
   }
-
+  
   /**
-   * Clear all timing data
+   * Enable or disable performance monitoring
+   * @param enabled - Whether monitoring is enabled
    */
-  public clearAll(): void {
-    this.timers = {};
-    this.results = {};
+  public setEnabled(enabled: boolean): void {
+    this.enabled = enabled;
   }
-
+  
   /**
-   * Get current thresholds
+   * Log all recorded timing results to the console
    */
-  public getThresholds(): TimingThresholds {
-    return { ...this.thresholds };
+  public logResults(): void {
+    this.reporter.logResults(this.results, this.getThreshold.bind(this), this.enabled);
   }
-
+  
   /**
-   * Check if monitoring is enabled
+   * Get all recorded timing results
+   * @returns Record of timing results
    */
-  public isEnabled(): boolean {
-    return this.enabled;
+  public getResults(): Record<string, PerformanceResult> {
+    const results: Record<string, PerformanceResult> = {};
+    
+    Object.entries(this.results).forEach(([key, duration]) => {
+      const operationType = getOperationType(key) as OperationType;
+      const threshold = this.getThreshold(operationType);
+      
+      results[key] = {
+        key,
+        duration,
+        threshold,
+        operationType,
+        timestamp: Date.now()
+      };
+    });
+    
+    return results;
   }
 }
