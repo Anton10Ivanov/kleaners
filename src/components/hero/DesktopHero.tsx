@@ -19,11 +19,11 @@ export const DesktopHero = memo(() => {
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5, delay: 0.1 }} 
-            className="text-4xl sm:text-5xl leading-tight mb-4 text-left font-extrabold text-zinc-950 dark:text-white lg:text-5xl"
+            className="text-4xl sm:text-5xl leading-tight mb-4 text-left font-extrabold text-[#1c1c1c] lg:text-5xl"
           >
             Book your cleaning in 2 minutes
           </motion.h1>
-          <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl max-w-md">
+          <p className="text-gray-600 text-lg md:text-xl max-w-md">
             Professional local cleaners with transparent, fair pricing
           </p>
         </motion.div>
