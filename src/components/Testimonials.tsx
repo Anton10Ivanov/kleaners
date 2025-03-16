@@ -31,7 +31,7 @@ export const Testimonials = () => {
   ];
 
   return (
-    <section className={`py-10 ${isMobile ? 'px-4' : 'px-8'} bg-slate-50 dark:bg-gray-900`}>
+    <section className={`py-10 ${isMobile ? 'px-4' : 'px-8'} bg-[#F2FCE2] dark:bg-gray-900`}>
       <div className="container mx-auto">
         <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold text-center mb-4`}>
           What Our Customers Say
