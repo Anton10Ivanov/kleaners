@@ -25,7 +25,7 @@ const HoursSelection = ({ hours, setHours }: HoursSelectionProps) => {
       <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">Cleaning Hours</h3>
       
       <div className="space-y-3">
-        <p className="text-subtext dark:text-gray-400">
+        <p className="text-gray-600 dark:text-gray-400">
           Select how many hours you need for your cleaning
         </p>
         
@@ -58,7 +58,7 @@ const HoursSelection = ({ hours, setHours }: HoursSelectionProps) => {
           </Button>
         </div>
         
-        <div className="text-center text-sm mt-3 text-subtext dark:text-gray-400">
+        <div className="text-center text-sm mt-3 text-gray-600 dark:text-gray-400">
           {hours === 2 && "Recommended for a small apartment (1 bedroom)"}
           {hours === 3 && "Recommended for a medium apartment (2 bedrooms)"}
           {hours === 4 && "Recommended for a large apartment (3 bedrooms)"}

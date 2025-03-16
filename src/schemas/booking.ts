@@ -81,13 +81,13 @@ export const bookingSchema = z.object({
   password: z.string().optional(),
   confirmPassword: z.string().optional(),
   address: z.string().optional(),
-  city: z.string().optional(), // City field
+  city: z.string().optional(),
   floor: z.string().optional(),
   entryCode: z.string().optional(),
   accessMethod: z.string().optional(),
   accessInstructions: z.string().optional(),
   promoCode: z.string().optional(),
-  agreeToTerms: z.boolean().optional(), // Terms agreement checkbox
+  agreeToTerms: z.boolean().optional(),
   
   // Provider selection
   selectedProviderId: z.string().optional(),
