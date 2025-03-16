@@ -73,7 +73,7 @@ export const bookingSchema = z.object({
   weekdayPreference: z.string().optional(),
   timePreference: z.string().optional(),
   
-  // Personal information for booking
+  // Personal information for booking - updated to include city
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   email: z.string().email().optional(),
@@ -81,13 +81,14 @@ export const bookingSchema = z.object({
   password: z.string().optional(),
   confirmPassword: z.string().optional(),
   address: z.string().optional(),
-  city: z.string().optional(),
+  city: z.string().optional(), // Added city field
+  postalCode: z.string().optional(),
   floor: z.string().optional(),
   entryCode: z.string().optional(),
   accessMethod: z.string().optional(),
   accessInstructions: z.string().optional(),
   promoCode: z.string().optional(),
-  agreeToTerms: z.boolean().optional(),
+  agreeToTerms: z.boolean().optional(), // Added agreement checkbox
   
   // Provider selection
   selectedProviderId: z.string().optional(),

@@ -19,7 +19,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">First Name</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">First Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your first name" {...field} />
               </FormControl>
@@ -33,7 +33,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">Last Name</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">Last Name</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your last name" {...field} />
               </FormControl>
@@ -47,7 +47,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">Email</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">Email</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="Enter your email" {...field} />
               </FormControl>
@@ -61,7 +61,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">Phone Number</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">Phone Number</FormLabel>
               <FormControl>
                 <Input type="tel" placeholder="Enter your phone number" {...field} />
               </FormControl>
@@ -77,7 +77,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">Address</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">Address</FormLabel>
               <FormControl>
                 <Input placeholder="Enter your street address" {...field} />
               </FormControl>
@@ -92,7 +92,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-600 dark:text-gray-400">City</FormLabel>
+                <FormLabel className="text-subtext dark:text-gray-400">City</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your city" {...field} />
                 </FormControl>
@@ -106,7 +106,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
             name="postalCode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-600 dark:text-gray-400">Postal Code</FormLabel>
+                <FormLabel className="text-subtext dark:text-gray-400">Postal Code</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your postal code" {...field} />
                 </FormControl>
@@ -121,7 +121,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
           name="specialInstructions"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-600 dark:text-gray-400">Special Instructions (Optional)</FormLabel>
+              <FormLabel className="text-subtext dark:text-gray-400">Special Instructions (Optional)</FormLabel>
               <FormControl>
                 <Textarea 
                   placeholder="Any special instructions for our cleaners?" 
@@ -145,7 +145,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className="text-sm font-normal text-gray-600 dark:text-gray-400">
+              <FormLabel className="text-sm font-normal text-subtext dark:text-gray-400">
                 I agree to the <a href="/terms" className="text-primary hover:underline">Terms and Conditions</a> and <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
               </FormLabel>
               <FormMessage />

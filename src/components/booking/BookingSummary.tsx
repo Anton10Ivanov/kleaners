@@ -48,30 +48,30 @@ const BookingSummary = memo(({
         
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400 text-sm">Service:</span>
+            <span className="text-subtext dark:text-gray-400 text-sm">Service:</span>
             <span className="font-medium text-right">{formatServiceName(selectedService)}</span>
           </div>
           
           {frequency && (
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400 text-sm">Frequency:</span>
+              <span className="text-subtext dark:text-gray-400 text-sm">Frequency:</span>
               <span className="font-medium text-right">{frequency}</span>
             </div>
           )}
           
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400 text-sm">Hours:</span>
+            <span className="text-subtext dark:text-gray-400 text-sm">Hours:</span>
             <span className="font-medium text-right">{hours} hours</span>
           </div>
           
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400 text-sm">Rate:</span>
+            <span className="text-subtext dark:text-gray-400 text-sm">Rate:</span>
             <span className="font-medium text-right">${currentPrice}/hour</span>
           </div>
           
           {selectedExtras.length > 0 && (
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400 text-sm">Extras:</span>
+              <span className="text-subtext dark:text-gray-400 text-sm">Extras:</span>
               <span className="font-medium text-right">${extrasPrice}</span>
             </div>
           )}
@@ -94,7 +94,7 @@ const BookingSummary = memo(({
             Book Now
           </Button>
           
-          <div className="text-xs text-gray-600 dark:text-gray-400 flex items-start">
+          <div className="text-xs text-subtext dark:text-gray-400 flex items-start">
             <Check className="h-4 w-4 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
             <span>Price includes all taxes and fees. No hidden charges.</span>
           </div>
