@@ -19,35 +19,36 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({
   handleLogout,
 }) => {
   return (
-    <div className="flex h-full flex-col bg-background">
-      <div className="px-3 py-4">
-        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-          Admin Dashboard
-        </h2>
-        <div className="flex flex-row overflow-x-auto pb-2">
-          {navItems.map((item) => (
-            <Button
-              key={item.title}
-              variant={activeItem === item.title.toLowerCase() ? "secondary" : "ghost"}
-              className="mr-1"
-              onClick={() => handleNavClick(item.href)}
-            >
-              {item.icon}
-              <span className="ml-2">{item.title}</span>
-            </Button>
-          ))}
+    <div className="w-full bg-background py-2 border-b">
+      <div className="container mx-auto">
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="mr-4 text-lg font-semibold tracking-tight">
+              Admin Dashboard
+            </h2>
+            <div className="flex flex-row overflow-x-auto">
+              {navItems.map((item) => (
+                <Button
+                  key={item.title}
+                  variant={activeItem === item.title.toLowerCase() ? "secondary" : "ghost"}
+                  className="mr-1"
+                  onClick={() => handleNavClick(item.href)}
+                >
+                  {item.icon}
+                  <span className="ml-2">{item.title}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            className="text-red-500 hover:bg-red-500/10 hover:text-red-500"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="ml-2">Logout</span>
+          </Button>
         </div>
-      </div>
-      <div className="mt-auto px-3 py-4">
-        <Separator className="mb-4" />
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-red-500 hover:bg-red-500/10 hover:text-red-500"
-          onClick={handleLogout}
-        >
-          <LogOut className="h-5 w-5" />
-          <span className="ml-2">Logout</span>
-        </Button>
       </div>
     </div>
   );
