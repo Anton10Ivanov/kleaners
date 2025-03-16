@@ -76,20 +76,16 @@ const AdminLayout = () => {
   };
   
   return (
-    <div className="flex h-screen overflow-hidden bg-theme-lightblue dark:bg-gray-900">
-      {/* Desktop Sidebar */}
-      {!isMobile && (
-        <div className="hidden w-64 border-r bg-white md:block">
-          <SidebarContent
-            navItems={navItems}
-            activeItem={activeItem}
-            handleNavClick={handleNavClick}
-            handleLogout={handleLogout}
-          />
-        </div>
-      )}
+    <div className="flex flex-col h-screen overflow-hidden bg-theme-lightblue dark:bg-gray-900">
+      {/* Top Navigation Bar - Replaces the sidebar */}
+      <SidebarContent
+        navItems={navItems}
+        activeItem={activeItem}
+        handleNavClick={handleNavClick}
+        handleLogout={handleLogout}
+      />
       
-      {/* Mobile Sidebar */}
+      {/* Mobile Sidebar - Only shown on mobile */}
       {isMobile && (
         <MobileSidebar
           navItems={navItems}
@@ -102,18 +98,9 @@ const AdminLayout = () => {
       )}
       
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Main content header */}
-        <header className="border-b bg-white p-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-theme-darkheading">
-              {navItems.find(item => item.title.toLowerCase() === activeItem)?.title || 'Dashboard'}
-            </h1>
-          </div>
-        </header>
-        
+      <div className="flex-1 overflow-hidden">
         {/* Main content area with scrolling */}
-        <main className="flex-1 overflow-auto bg-theme-lightblue">
+        <main className="flex-1 overflow-auto bg-theme-lightblue h-full">
           <Outlet />
         </main>
       </div>
