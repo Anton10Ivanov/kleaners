@@ -1,13 +1,9 @@
 
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Suspense, lazy } from 'react';
 import Hero from '../components/hero';
-import OurOptions from '../components/options/OurOptions';
-import WhyChooseUs from '../components/WhyChooseUs';
-import { Testimonials } from '../components/Testimonials';
 import ProgressBar from '../components/booking/ProgressBar';
-import BookingSummary from '../components/booking/BookingSummary';
-import BookingContent from '../components/booking/BookingContent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
@@ -15,6 +11,20 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency } from '@/types/enums';
 import { ServiceType } from '@/schemas/booking';
+
+// Lazy load components that aren't needed immediately
+const OurOptions = lazy(() => import('../components/options/OurOptions'));
+const WhyChooseUs = lazy(() => import('../components/WhyChooseUs'));
+const Testimonials = lazy(() => import('../components/Testimonials'));
+const BookingSummary = lazy(() => import('../components/booking/BookingSummary'));
+const BookingContent = lazy(() => import('../components/booking/BookingContent'));
+
+// Loading fallback components
+const LoadingFallback = () => (
+  <div className="py-12 flex justify-center items-center">
+    <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const ErrorFallback = () => (
   <div className="text-center py-8">
@@ -85,16 +95,22 @@ const Index = () => {
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
-            <WhyChooseUs />
+            <Suspense fallback={<LoadingFallback />}>
+              <WhyChooseUs />
+            </Suspense>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
-            <OurOptions />
+            <Suspense fallback={<LoadingFallback />}>
+              <OurOptions />
+            </Suspense>
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Testimonials />
+              <Suspense fallback={<LoadingFallback />}>
+                <Testimonials />
+              </Suspense>
             </ErrorBoundary>
           </motion.div>
         ) : (
@@ -109,24 +125,28 @@ const Index = () => {
               <ProgressBar currentStep={currentStep} />
               
               <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
-                <BookingContent 
-                  currentStep={currentStep}
-                  selectedService={selectedService || ''}
-                  form={form}
-                />
+                <Suspense fallback={<LoadingFallback />}>
+                  <BookingContent 
+                    currentStep={currentStep}
+                    selectedService={selectedService || ''}
+                    form={form}
+                  />
+                </Suspense>
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
                   className={`w-full md:w-[20%] ${isMobile ? 'fixed bottom-0 left-0 right-0 z-20' : 'relative'}`}
                 >
-                  <BookingSummary 
-                    selectedService={selectedService || ''}
-                    frequency={frequency || ''}
-                    hours={hours}
-                    currentPrice={currentPrice}
-                    selectedExtras={selectedExtras}
-                  />
+                  <Suspense fallback={<div className="animate-pulse bg-gray-200 h-40 rounded-lg"></div>}>
+                    <BookingSummary 
+                      selectedService={selectedService || ''}
+                      frequency={frequency || ''}
+                      hours={hours}
+                      currentPrice={currentPrice}
+                      selectedExtras={selectedExtras}
+                    />
+                  </Suspense>
                 </motion.div>
               </div>
 
