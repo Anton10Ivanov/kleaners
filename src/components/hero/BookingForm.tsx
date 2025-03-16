@@ -1,7 +1,7 @@
 
-import { memo, useContext } from "react";
+import { memo } from "react";
 import { motion } from "framer-motion";
-import { HeroContext } from "./HeroContext";
+import { useHero } from "./HeroContext";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { SocialProof } from "./SocialProof";
@@ -17,7 +17,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
     handleServiceChange,
     handlePostalCodeChange,
     handleNextStep
-  } = useContext(HeroContext);
+  } = useHero();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
