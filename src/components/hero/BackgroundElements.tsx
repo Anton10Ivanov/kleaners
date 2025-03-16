@@ -3,18 +3,22 @@ import { memo, useEffect, useState } from "react";
 
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const imagePath = '/lovable-uploads/d6c1d213-92bc-42b1-bd21-3789664c3faf.png';
+  
+  // Changed to use a verified existing image from the project
+  const imagePath = '/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png';
   
   // Check if image exists and can be loaded
   useEffect(() => {
+    console.log("Attempting to load hero image from:", imagePath);
     const img = new Image();
     img.src = imagePath;
     img.onload = () => {
       console.log("Hero background image loaded successfully");
       setImageLoaded(true);
     };
-    img.onerror = () => {
-      console.error("Failed to load hero background image:", imagePath);
+    img.onerror = (error) => {
+      console.error("Failed to load hero background image:", imagePath, error);
+      // Try alternative approach with direct import if available
     };
   }, [imagePath]);
 
@@ -23,7 +27,7 @@ export const BackgroundElements = memo(() => {
       {/* Noise texture overlay */}
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
       
-      {/* Background container with direct image instead of background-image */}
+      {/* Background container with fallback color */}
       <div className="absolute inset-0 overflow-hidden bg-theme-lightblue">
         {/* Desktop image */}
         <div className="absolute inset-0 z-0 hidden md:flex justify-end items-center pr-8">
@@ -34,11 +38,16 @@ export const BackgroundElements = memo(() => {
               className="object-contain max-w-[45%] max-h-[80%]"
               style={{ 
                 filter: "saturate(1.1)",
-                transform: "translateX(-5%) translateY(-5%)"
+                transform: "translateX(-5%) translateY(-5%)",
+                opacity: 0.9 // Slightly adjust opacity for better visibility
               }}
             />
           ) : (
-            <div className="w-[45%] h-[80%] bg-opacity-10 animate-pulse rounded-lg"></div>
+            <div className="w-[45%] h-[80%] bg-gray-100 bg-opacity-10 animate-pulse rounded-lg">
+              <div className="h-full w-full flex items-center justify-center text-gray-400">
+                Loading image...
+              </div>
+            </div>
           )}
         </div>
         
@@ -48,10 +57,14 @@ export const BackgroundElements = memo(() => {
             <img 
               src={imagePath}
               alt="Background illustration"
-              className="object-contain max-w-[90%] max-h-[40%] opacity-30"
+              className="object-contain max-w-[90%] max-h-[40%] opacity-40" // Increased opacity
             />
           ) : (
-            <div className="w-[80%] h-[30%] bg-opacity-10 animate-pulse rounded-lg"></div>
+            <div className="w-[80%] h-[30%] bg-gray-100 bg-opacity-10 animate-pulse rounded-lg">
+              <div className="h-full w-full flex items-center justify-center text-gray-400 text-sm">
+                Loading image...
+              </div>
+            </div>
           )}
         </div>
       </div>
