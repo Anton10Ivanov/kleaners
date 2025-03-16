@@ -94,8 +94,8 @@ export const BackgroundElements = memo(() => {
                 transform: "translateX(-5%) translateY(-5%)",
                 opacity: 0.95
               }}
-              loading="eager" // Load with high priority
-              fetchpriority="high"
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
             />
           ) : (
@@ -114,8 +114,8 @@ export const BackgroundElements = memo(() => {
               width="300"
               height="200"
               className="object-contain max-w-[90%] max-h-[45%] opacity-50"
-              loading="eager" // Load with high priority
-              fetchpriority="high"
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
             />
           ) : (
