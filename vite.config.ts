@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return 'assets/[name]-[hash][extname]';
           
-          const extType = assetInfo.name.split('.').at(1) || '';
+          const extType = (assetInfo.name.split('.')[1] || '').toLowerCase();
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             return `assets/img/[name]-[hash][extname]`;
           }
