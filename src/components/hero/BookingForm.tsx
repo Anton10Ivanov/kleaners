@@ -51,7 +51,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
             value={selectedService}
             onValueChange={handleServiceChange}
           >
-            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 h-10 rounded-lg text-gray-900 dark:text-white">
+            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 h-11 rounded-lg text-gray-900 dark:text-white">
               <SelectValue placeholder="Select a service" />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
@@ -73,14 +73,14 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
             placeholder="e.g., Berlin or 10115"
             value={postalCode}
             onChange={(e) => handlePostalCodeChange(e.target.value)}
-            className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
+            className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 h-11 text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
             required
           />
         </div>
         
         <Button 
           type="submit" 
-          className="w-full bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
+          className="w-full bg-[#F97316] hover:bg-[#F97316]/90 dark:bg-[#F97316] dark:hover:bg-[#F97316]/80 text-white font-medium py-2.5 h-12 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
         >
           Get Started <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
