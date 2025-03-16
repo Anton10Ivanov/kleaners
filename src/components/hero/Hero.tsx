@@ -44,36 +44,29 @@ export const Hero = memo(({
     endTimer('serviceInitialization');
   }, [selectedService, setSelectedService, startTimer, endTimer]);
 
-  // Preload hero images with higher browser priority
+  // Preload only the one hero image with higher browser priority
   useEffect(() => {
     if (imagesLoadedRef.current) return;
     
     startTimer('imagePreloading');
-    // Images to preload - updated to include new image
-    const imagesToPreload = [
-      '/lovable-uploads/4f87521c-24ee-4059-9510-314bc2c98d1e.png',
-      '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'
-    ];
+    // Only one image to preload
+    const imageToPreload = '/lovable-uploads/opciya1 (1) 2.png';
     
-    // Create preload links with high priority
-    imagesToPreload.forEach((imageUrl, index) => {
-      const link = document.createElement('link');
-      link.rel = index === 0 ? 'preload' : 'prefetch'; // First image gets higher priority
-      link.as = 'image';
-      link.href = imageUrl;
-      link.fetchPriority = index === 0 ? 'high' : 'low';
-      document.head.appendChild(link);
-      
-      // Also manually preload with Image object
-      const img = new Image();
-      img.src = imageUrl;
-      img.onload = () => {
-        if (index === imagesToPreload.length - 1) {
-          endTimer('imagePreloading');
-          imagesLoadedRef.current = true;
-        }
-      };
-    });
+    // Create preload link with high priority
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = imageToPreload;
+    link.fetchPriority = 'high';
+    document.head.appendChild(link);
+    
+    // Also manually preload with Image object
+    const img = new Image();
+    img.src = imageToPreload;
+    img.onload = () => {
+      endTimer('imagePreloading');
+      imagesLoadedRef.current = true;
+    };
     
     return () => {
       // Clean up preload links when component unmounts
