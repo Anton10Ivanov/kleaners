@@ -11,7 +11,7 @@ export const SocialProof = memo(() => {
       transition={{ duration: 0.5, delay: 0.3 }}
       className="flex flex-col items-center justify-center text-center"
     >
-      <div className="inline-flex items-center gap-1.5 text-white border border-white/20 px-4 py-2.5 rounded-full text-sm font-medium">
+      <div className="inline-flex items-center gap-1.5 text-[#1c1c1c] font-medium px-4 py-2.5 rounded-full text-sm">
         <div className="flex mr-1">
           {[1, 2, 3, 4, 5].map((i) => (
             <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />

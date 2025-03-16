@@ -19,6 +19,7 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
       } ${
         scrolled ? 'bg-gray-900 text-white shadow-lg' : 'bg-gray-900 text-white'
       }`}
+      style={{ height: '64px' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 my-[3px] py-[8px] bg-transparent">

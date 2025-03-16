@@ -91,7 +91,7 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center pt-28 pb-12 bg-[#0f172a] text-white transition-colors duration-300 overflow-hidden">
+    <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center pt-28 pb-12 bg-[#D3E4FD] text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-16">
       {/* Background elements with improved z-index layering */}
       <div className="absolute inset-0 z-0">
         <BackgroundElements />
