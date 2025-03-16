@@ -29,6 +29,7 @@ export const Hero = memo(({
   // Set default service to "regular" when component mounts
   useEffect(() => {
     if (!selectedService) {
+      console.log("Setting service to: regular");
       setSelectedService(ServiceType.Regular);
     }
   }, [selectedService, setSelectedService]);
