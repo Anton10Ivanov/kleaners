@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookingsTable } from '../BookingsTable';
 import { Booking, BookingStatus } from '../types';
@@ -32,9 +32,6 @@ export const AdminBookingsList: React.FC<AdminBookingsListProps> = ({
     <Card>
       <CardHeader>
         <CardTitle>Pending Bookings Pool</CardTitle>
-        <CardDescription>
-          New bookings from clients waiting for provider assignment
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
