@@ -38,11 +38,11 @@ export const ThemeToggle = () => {
       variant="ghost"
       size="sm"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="rounded-md p-2 h-9 w-9 flex items-center justify-center"
+      className="rounded-md p-2 h-9 w-9 flex items-center justify-center hover:bg-primary/10"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (
-        <Sun className="h-4 w-4" />
+        <Sun className="h-4 w-4 text-theme-blue" />
       ) : (
         <Moon className="h-4 w-4" />
       )}
