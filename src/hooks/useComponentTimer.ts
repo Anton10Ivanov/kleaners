@@ -1,6 +1,5 @@
-
 import { useEffect, useRef } from 'react';
-import { performanceMonitor } from '@/utils/performance-monitor';
+import { performanceMonitor } from '@/utils/performance';
 
 /**
  * Hook to measure component render and mount times

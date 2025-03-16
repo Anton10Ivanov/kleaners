@@ -1,7 +1,6 @@
-
 import { lazy, ComponentType, Suspense, useEffect, useRef } from 'react';
 import { SectionLoading } from '@/components/ui/section-loading';
-import { performanceMonitor } from '@/utils/performance-monitor';
+import { performanceMonitor } from '@/utils/performance';
 
 /**
  * Custom hook that combines lazy loading with performance monitoring
