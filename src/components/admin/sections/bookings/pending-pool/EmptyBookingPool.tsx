@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LayoutDashboard } from 'lucide-react';
 
 interface EmptyBookingPoolProps {
   isProviderView?: boolean;
@@ -9,14 +9,38 @@ interface EmptyBookingPoolProps {
 
 export const EmptyBookingPool: React.FC<EmptyBookingPoolProps> = ({ isProviderView = false }) => {
   return (
-    <Card className="bg-theme-lightblue border-gray-200">
-      <CardContent className="pt-6 flex flex-col items-center justify-center min-h-[300px] text-center">
-        <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-xl font-medium mb-2 text-theme-darkheading">No pending bookings</h3>
-        <p className="text-muted-foreground max-w-md">
-          There are currently no bookings waiting for {isProviderView ? 'acceptance' : 'provider assignment'}. 
-          New bookings from clients will appear here.
-        </p>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {isProviderView ? 'No Available Jobs' : 'No Pending Bookings'}
+        </CardTitle>
+        <CardDescription>
+          {isProviderView 
+            ? 'There are currently no new jobs available for you to accept'
+            : 'There are no bookings waiting for provider assignment'
+          }
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col items-center justify-center text-center py-8">
+          <div className="mx-auto bg-muted/50 rounded-full p-6 mb-4">
+            <LayoutDashboard className="h-10 w-10 text-muted-foreground" />
+          </div>
+          
+          <h3 className="text-lg font-semibold mb-2">
+            {isProviderView 
+              ? 'Check Back Later' 
+              : 'Booking Pool is Empty'
+            }
+          </h3>
+          
+          <p className="text-muted-foreground max-w-md">
+            {isProviderView
+              ? 'New booking requests will appear here when they become available'
+              : 'All bookings have been assigned to providers'
+            }
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
