@@ -39,7 +39,19 @@ export default defineConfig(({ mode }) => ({
           auth: ['@supabase/supabase-js'],
           utils: ['date-fns', 'clsx', 'tailwind-merge'],
           framer: ['framer-motion']
-        }
+        },
+        // Improve asset caching
+        assetFileNames: (assetInfo) => {
+          let extType = assetInfo.name.split('.').at(1);
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            extType = 'img';
+            return `assets/${extType}/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+        // Chunk naming for better cache management
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
       }
     },
     // Reduce build output for faster debugging
@@ -47,6 +59,8 @@ export default defineConfig(({ mode }) => ({
     // Speed up build process
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
+    // Add image optimization options
+    assetsInlineLimit: 0, // Don't inline images to allow proper caching
   },
   // Optimize dev server
   optimizeDeps: {
@@ -73,5 +87,7 @@ export default defineConfig(({ mode }) => ({
         additionalData: '@import "@/styles/variables.scss";',
       },
     },
-  }
+  },
+  // Add asset optimization
+  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
 }));
