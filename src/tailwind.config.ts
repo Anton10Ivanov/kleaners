@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -21,7 +22,6 @@ export default {
         foreground: "hsl(var(--foreground))",
         "heading-color": "hsl(var(--heading-color))",
         "secondary-text": "hsl(var(--secondary-text))",
-        "subtext": "#363636",
         surface: "hsl(var(--surface))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -57,7 +57,6 @@ export default {
           green: "hsl(122, 65%, 84%)",
           lightblue: "#D6EFFF",
           darkheading: "#1C1C1C",
-          cta: "#F97316",
         },
         dark: {
           background: "#1A1F2C",

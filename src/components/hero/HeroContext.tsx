@@ -8,8 +8,6 @@ type HeroContextType = {
   updateSelectedService: (service: string) => void;
   updatePostalCode: (code: string) => void;
   handleNextStep: () => void;
-  handleServiceChange: (service: string) => void;
-  handlePostalCodeChange: (code: string) => void;
 };
 
 type HeroProviderProps = {
@@ -21,8 +19,7 @@ type HeroProviderProps = {
   onPostalCodeChange: (code: string) => void;
 };
 
-// Export the context so it can be imported in other files
-export const HeroContext = createContext<HeroContextType | undefined>(undefined);
+const HeroContext = createContext<HeroContextType | undefined>(undefined);
 
 export const HeroProvider = ({ 
   children, 
@@ -59,26 +56,13 @@ export const HeroProvider = ({
     onNextStep();
   }, [onNextStep]);
 
-  // Add these handler methods for direct compatibility with BookingForm
-  const handleServiceChange = useCallback((service: string) => {
-    setSelectedService(service);
-    onServiceChange(service);
-  }, [onServiceChange]);
-
-  const handlePostalCodeChange = useCallback((code: string) => {
-    setPostalCode(code);
-    onPostalCodeChange(code);
-  }, [onPostalCodeChange]);
-
   return (
     <HeroContext.Provider value={{
       selectedService,
       postalCode,
       updateSelectedService,
       updatePostalCode,
-      handleNextStep,
-      handleServiceChange,
-      handlePostalCodeChange
+      handleNextStep
     }}>
       {children}
     </HeroContext.Provider>

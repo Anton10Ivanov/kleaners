@@ -71,7 +71,7 @@ const Index = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="bg-theme-lightblue dark:bg-gray-900"
+            className="bg-theme-lightblue"
           >
             <Hero 
               selectedService={selectedService || ''}
@@ -130,14 +130,14 @@ const Index = () => {
                 <Button 
                   onClick={handleBack}
                   variant="outline"
-                  className="rounded-xl h-10 md:h-12 hover:bg-white/50 hover:text-primary dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                  className="rounded-xl h-10 md:h-12 hover:bg-white/50 hover:text-primary"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < 3 && (
                   <Button 
                     onClick={handleNext}
-                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-10 md:h-12 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)] dark:bg-primary dark:text-white dark:hover:bg-primary/90"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-xl h-10 md:h-12 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)]"
                   >
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
