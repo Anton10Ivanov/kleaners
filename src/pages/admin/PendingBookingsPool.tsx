@@ -4,11 +4,42 @@ import { PendingBookingsPool } from '@/components/admin/sections/bookings/Pendin
 import { Booking } from '@/components/admin/sections/bookings/types';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
+import { UserRole } from '@/integrations/supabase/types/roles';
+import { hasRole } from '@/integrations/supabase/auth';
 
 export const AdminPendingBookingsPool = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isProviderView, setIsProviderView] = useState<boolean>(false);
+  const location = useLocation();
+  
+  // Check if we're on the provider route
+  useEffect(() => {
+    const isProviderRoute = location.pathname.includes('/provider');
+    setIsProviderView(isProviderRoute);
+    
+    // In a real app, we would check the user's role here
+    // For now, we'll just use the route as a proxy
+    // This is a simplified version of what would happen in a real app
+    const checkUserRole = async () => {
+      if (!isProviderRoute) {
+        // No need to check roles for admin routes
+        return;
+      }
+      
+      try {
+        // This is where we would check if the user has the provider role
+        // const isProvider = await hasRole(UserRole.PROVIDER);
+        // setIsProviderView(isProvider);
+      } catch (error) {
+        console.error('Error checking user role:', error);
+      }
+    };
+    
+    checkUserRole();
+  }, [location.pathname]);
   
   // Function to fetch pending bookings from mock data
   const fetchPendingBookings = () => {
@@ -81,10 +112,13 @@ export const AdminPendingBookingsPool = () => {
     <div className="container mx-auto py-2 px-2 md:py-8 md:px-4">
       <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 md:p-6">
         <h1 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold mb-4 md:mb-6`}>
-          Pending Bookings Pool
+          {isProviderView ? 'Available Jobs' : 'Pending Bookings Pool'}
         </h1>
         <p className="text-muted-foreground mb-6">
-          New bookings from clients waiting for provider assignment. Assign providers to bookings to move them out of the pool.
+          {isProviderView 
+            ? 'New booking requests available in your service area' 
+            : 'New bookings from clients waiting for provider assignment. Assign providers to bookings to move them out of the pool.'
+          }
         </p>
         
         {isLoading ? (
@@ -95,6 +129,7 @@ export const AdminPendingBookingsPool = () => {
           <PendingBookingsPool 
             pendingBookings={pendingBookings} 
             refreshData={handleRefresh} 
+            isProviderView={isProviderView}
           />
         )}
       </div>
