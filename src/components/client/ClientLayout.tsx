@@ -28,7 +28,7 @@ const ClientLayout = () => {
   }, [navigate]);
   
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-theme-lightblue dark:bg-gray-900 flex">
       {isMobile ? (
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="left" className="p-0">

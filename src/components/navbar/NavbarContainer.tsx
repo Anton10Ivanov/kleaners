@@ -17,7 +17,7 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
       className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       } ${
-        scrolled ? 'backdrop-blur-md bg-white/80 dark:bg-dark-background/80 shadow-lg' : 'bg-transparent'
+        scrolled ? 'backdrop-blur-md bg-white/80 dark:bg-dark-background/80 shadow-lg' : 'bg-theme-lightblue dark:bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

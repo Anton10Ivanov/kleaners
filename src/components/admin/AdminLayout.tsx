@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -75,10 +76,10 @@ const AdminLayout = () => {
   };
   
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen overflow-hidden bg-theme-lightblue dark:bg-gray-900">
       {/* Desktop Sidebar */}
       {!isMobile && (
-        <div className="hidden w-64 border-r bg-background md:block">
+        <div className="hidden w-64 border-r bg-white md:block">
           <SidebarContent
             navItems={navItems}
             activeItem={activeItem}
@@ -103,16 +104,16 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Main content header */}
-        <header className="border-b bg-background p-4">
+        <header className="border-b bg-white p-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold">
+            <h1 className="text-xl font-semibold text-theme-darkheading">
               {navItems.find(item => item.title.toLowerCase() === activeItem)?.title || 'Dashboard'}
             </h1>
           </div>
         </header>
         
         {/* Main content area with scrolling */}
-        <main className="flex-1 overflow-auto bg-muted/40">
+        <main className="flex-1 overflow-auto bg-theme-lightblue">
           <Outlet />
         </main>
       </div>

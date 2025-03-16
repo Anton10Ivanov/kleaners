@@ -7,7 +7,7 @@ import CookiePolicy from "./CookiePolicy";
 
 const RootLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-theme-lightblue dark:bg-gray-900">
       <Navbar />
       <main className="flex-grow">
         <Outlet />

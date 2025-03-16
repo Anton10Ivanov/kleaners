@@ -63,7 +63,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen font-raleway bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen font-raleway bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
@@ -94,7 +94,7 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-white dark:from-gray-800 dark:to-gray-900"
+            className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-theme-lightblue dark:bg-gray-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}

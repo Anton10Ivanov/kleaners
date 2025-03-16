@@ -30,7 +30,7 @@ const ProviderLayout = () => {
   }, [navigate]);
 
   return (
-    <div className="flex h-full min-h-screen flex-col bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-full min-h-screen flex-col bg-theme-lightblue dark:bg-gray-900">
       {/* Top navigation for desktop */}
       <TopNav />
       
