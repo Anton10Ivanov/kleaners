@@ -4,21 +4,39 @@ import { memo, useEffect, useState } from "react";
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // Changed to use the newly uploaded cleaner image
+  // Using the most recent image
   const imagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
   
-  // Check if image exists and can be loaded
+  // Check if image exists and can be loaded - with improved error handling
   useEffect(() => {
     console.log("Attempting to load hero image from:", imagePath);
+    
+    // Use a local variable to track component mount state
+    let isMounted = true;
+    
     const img = new Image();
-    img.src = imagePath;
     img.onload = () => {
-      console.log("Hero background image loaded successfully");
-      setImageLoaded(true);
+      if (isMounted) {
+        console.log("Hero background image loaded successfully");
+        setImageLoaded(true);
+      }
     };
+    
     img.onerror = (error) => {
       console.error("Failed to load hero background image:", imagePath, error);
-      // Try alternative approach with direct import if available
+      // Fall back to a default image or placeholder
+      if (isMounted) {
+        setImageLoaded(false);
+      }
+    };
+    
+    img.src = imagePath;
+    
+    // Cleanup function to prevent state updates if component unmounts
+    return () => {
+      isMounted = false;
+      img.onload = null;
+      img.onerror = null;
     };
   }, [imagePath]);
 
@@ -29,41 +47,43 @@ export const BackgroundElements = memo(() => {
       
       {/* Background container with fallback color */}
       <div className="absolute inset-0 overflow-hidden bg-theme-lightblue">
-        {/* Desktop image */}
+        {/* Desktop image - optimized with width/height to prevent layout shifts */}
         <div className="absolute inset-0 z-0 hidden md:flex justify-end items-center pr-8">
           {imageLoaded ? (
             <img 
               src={imagePath}
               alt="Professional cleaner with cleaning supplies"
+              width="600"
+              height="500"
               className="object-contain max-w-[50%] max-h-[85%]"
               style={{ 
                 filter: "saturate(1.05)",
                 transform: "translateX(-5%) translateY(-5%)",
-                opacity: 0.95 // Slightly increased opacity for better visibility
+                opacity: 0.95
               }}
+              loading="eager" // Load with high priority
             />
           ) : (
-            <div className="w-[45%] h-[80%] bg-gray-100 bg-opacity-10 animate-pulse rounded-lg">
-              <div className="h-full w-full flex items-center justify-center text-gray-400">
-                Loading image...
-              </div>
+            <div className="w-[45%] h-[80%] bg-gray-100 bg-opacity-10 rounded-lg flex items-center justify-center">
+              <div className="h-16 w-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
         </div>
         
-        {/* Mobile image */}
+        {/* Mobile image - optimized */}
         <div className="absolute inset-0 z-0 flex md:hidden justify-center items-center">
           {imageLoaded ? (
             <img 
               src={imagePath}
               alt="Professional cleaner with cleaning supplies"
-              className="object-contain max-w-[90%] max-h-[45%] opacity-50" // Increased opacity and size
+              width="300"
+              height="200"
+              className="object-contain max-w-[90%] max-h-[45%] opacity-50"
+              loading="eager" // Load with high priority
             />
           ) : (
-            <div className="w-[80%] h-[30%] bg-gray-100 bg-opacity-10 animate-pulse rounded-lg">
-              <div className="h-full w-full flex items-center justify-center text-gray-400 text-sm">
-                Loading image...
-              </div>
+            <div className="w-[80%] h-[30%] bg-gray-100 bg-opacity-10 rounded-lg flex items-center justify-center">
+              <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
         </div>

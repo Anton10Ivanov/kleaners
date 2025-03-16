@@ -37,7 +37,8 @@ export default defineConfig(({ mode }) => ({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
           auth: ['@supabase/supabase-js'],
-          utils: ['date-fns', 'clsx', 'tailwind-merge']
+          utils: ['date-fns', 'clsx', 'tailwind-merge'],
+          framer: ['framer-motion']
         }
       }
     },
@@ -49,7 +50,8 @@ export default defineConfig(({ mode }) => ({
   },
   // Optimize dev server
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'sonner', '@supabase/supabase-js'],
+    include: ['react', 'react-dom', 'react-router-dom', 'sonner', '@supabase/supabase-js', 'framer-motion', 'date-fns'],
+    exclude: []
   },
   // Add SPA fallback for production
   preview: {
@@ -62,5 +64,14 @@ export default defineConfig(({ mode }) => ({
   typescript: {
     tsconfigPath: mode === 'production' ? './tsconfig.strict.json' : './tsconfig.json',
     typeCheck: true
+  },
+  // Add performance optimizations
+  css: {
+    devSourcemap: true,
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/styles/variables.scss";',
+      },
+    },
   }
 }));
