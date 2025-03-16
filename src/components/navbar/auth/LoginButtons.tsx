@@ -12,15 +12,15 @@ const LoginButtons: React.FC = () => {
         variant="ghost" 
         size="sm" 
         onClick={() => navigate('/login')}
-        className="text-white hover:text-primary"
+        className="text-slate-700 hover:text-primary dark:text-slate-200"
       >
         Login
       </Button>
       <Button 
-        variant="link" 
+        variant="outline" 
         size="sm" 
         onClick={() => navigate('/signup')} 
-        className="text-primary font-medium text-sm hover:text-primary/80"
+        className="border-primary text-primary font-medium text-sm hover:bg-primary/10"
       >
         Sign up
       </Button>
