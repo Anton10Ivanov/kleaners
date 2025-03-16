@@ -4,8 +4,11 @@ import { useLazyComponentTimer } from '@/hooks/useLazyComponentTimer';
 import { SectionLoading } from '@/components/ui/section-loading';
 
 // Use the performance-optimized lazy loading hook
+// Fix import path to ensure we're importing a component with a default export
 export const LazyWhyChooseUs = useLazyComponentTimer(
-  () => import('./why-choose-us/WhyChooseUsContent'),
+  () => import('./why-choose-us/WhyChooseUsContent').then(module => ({
+    default: module.default || module.whyChooseUsContent || module
+  })),
   'WhyChooseUs'
 );
 
