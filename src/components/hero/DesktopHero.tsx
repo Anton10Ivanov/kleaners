@@ -3,6 +3,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { FeatureList } from "./FeatureList";
 import { BookingForm } from "./BookingForm";
+import { SocialProof } from "./SocialProof";
 
 export const DesktopHero = memo(() => {
   return (
@@ -39,6 +40,11 @@ export const DesktopHero = memo(() => {
         >
           <BookingForm layout="desktop" />
         </motion.div>
+        
+        {/* Social proof positioned below the form */}
+        <div className="mt-2 flex">
+          <SocialProof />
+        </div>
       </div>
       
       {/* The HeroImage component is removed as its functionality has been integrated into BackgroundElements */}

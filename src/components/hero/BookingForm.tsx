@@ -3,8 +3,15 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { useHero } from "./HeroContext";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { SocialProof } from "./SocialProof";
+import { ArrowRight, CheckCircle } from "lucide-react";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface BookingFormProps {
   layout: "desktop" | "mobile";
@@ -25,8 +32,8 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
   };
 
   const containerClassName = layout === "desktop"
-    ? "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg"
-    : "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-lg";
+    ? "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg"
+    : "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-lg";
 
   return (
     <motion.div
@@ -40,26 +47,27 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
           <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Service Type
           </label>
-          <select
-            id="service"
+          <Select
             value={selectedService}
-            onChange={(e) => handleServiceChange(e.target.value)}
-            className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm transition-colors"
-            required
+            onValueChange={handleServiceChange}
           >
-            <option value="" disabled>Select a service</option>
-            <option value="regular">Regular Cleaning</option>
-            <option value="deep">Deep Cleaning</option>
-            <option value="move">Move In/Out</option>
-            <option value="business">Business Cleaning</option>
-          </select>
+            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 h-10 rounded-lg text-gray-900 dark:text-white">
+              <SelectValue placeholder="Select a service" />
+            </SelectTrigger>
+            <SelectContent className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+              <SelectItem value="regular" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">Regular Cleaning</SelectItem>
+              <SelectItem value="deep" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">Deep Cleaning</SelectItem>
+              <SelectItem value="move" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">Move In/Out</SelectItem>
+              <SelectItem value="business" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">Business Cleaning</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             City or Postal Code
           </label>
-          <input
+          <Input
             type="text"
             id="postal-code"
             placeholder="e.g., Berlin or 10115"
@@ -72,16 +80,11 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
         
         <Button 
           type="submit" 
-          className="w-full bg-primary hover:bg-primary/90 text-white dark:text-white shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)] rounded-lg py-2.5 transition-all duration-200 flex items-center justify-center"
+          className="w-full bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
         >
           Get Started <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </form>
-      
-      {/* Social proof is now positioned below the form */}
-      <div className="mt-4 flex justify-center">
-        <SocialProof />
-      </div>
     </motion.div>
   );
 });
