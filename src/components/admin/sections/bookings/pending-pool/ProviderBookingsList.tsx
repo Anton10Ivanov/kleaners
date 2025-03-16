@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Booking } from '../types';
 import { ProviderJobCard } from './ProviderJobCard';
@@ -22,9 +22,6 @@ export const ProviderBookingsList: React.FC<ProviderBookingsListProps> = ({
     <Card>
       <CardHeader>
         <CardTitle>Available Jobs</CardTitle>
-        <CardDescription>
-          New booking requests for your service area
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

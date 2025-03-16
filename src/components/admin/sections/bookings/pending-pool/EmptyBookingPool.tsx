@@ -14,12 +14,6 @@ export const EmptyBookingPool: React.FC<EmptyBookingPoolProps> = ({ isProviderVi
         <CardTitle>
           {isProviderView ? 'No Available Jobs' : 'No Pending Bookings'}
         </CardTitle>
-        <CardDescription>
-          {isProviderView 
-            ? 'There are currently no new jobs available for you to accept'
-            : 'There are no bookings waiting for provider assignment'
-          }
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center justify-center text-center py-8">
