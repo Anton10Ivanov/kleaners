@@ -125,7 +125,7 @@
 
   p {
     font: var(--p);
-    @apply text-gray-700 dark:text-gray-300;
+    @apply text-gray-600 dark:text-gray-300;
   }
 
   a {
@@ -200,6 +200,24 @@
   .text-gradient-primary {
     @apply bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent;
   }
+  
+  /* Section dividers */
+  .wave-divider {
+    position: relative;
+    margin-top: -2rem;
+    height: 4rem;
+  }
+  
+  .wave-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
 }
 
 .animate-fadeIn {
@@ -215,4 +233,15 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Custom animations for the landing page */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }

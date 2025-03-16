@@ -3,7 +3,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { useHero } from "./HeroContext";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { 
   Select,
   SelectContent,
@@ -32,8 +32,8 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
   };
 
   const containerClassName = layout === "desktop"
-    ? "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg"
-    : "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-lg";
+    ? "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg"
+    : "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-lg";
 
   return (
     <motion.div
