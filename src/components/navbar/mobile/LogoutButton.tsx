@@ -4,6 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 interface LogoutButtonProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +12,7 @@ interface LogoutButtonProps {
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ setIsOpen }) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -20,7 +22,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ setIsOpen }) => {
         title: "Logged Out",
         description: "You have been successfully logged out",
       });
-      // Redirect happens via auth state change
+      navigate('/');
     } catch (error) {
       console.error("Error signing out:", error);
       toast({
