@@ -1,7 +1,6 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { bookingFormSchema, BookingFormData } from '@/schemas/booking';
+import { bookingSchema, BookingFormData } from '@/schemas/booking';
 import useBookingStore from '@/store/useBookingStore';
 import { useEffect } from 'react';
 
@@ -17,7 +16,7 @@ export const useBookingForm = () => {
 
   // Initialize form with react-hook-form
   const form = useForm<BookingFormData>({
-    resolver: zodResolver(bookingFormSchema),
+    resolver: zodResolver(bookingSchema),
     defaultValues: formData as BookingFormData,
   });
 
