@@ -6,11 +6,11 @@ export const BackgroundElements = memo(() => {
   const [imageFailed, setImageFailed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Image paths - primary is now the new uploaded image
-  const imagePath = '/lovable-uploads/4f87521c-24ee-4059-9510-314bc2c98d1e.png';
-  const fallbackImagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
+  // Updated image paths - using more reliable paths
+  const imagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'; // Using the fallback as primary for reliability
+  const fallbackImagePath = '/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png'; // Alternative backup
   
-  // Load image with improved background strategy
+  // Load image with improved error handling
   useEffect(() => {
     // Track component mount state
     let isMounted = true;
@@ -36,17 +36,25 @@ export const BackgroundElements = memo(() => {
     };
     
     img.onerror = () => {
-      console.error("Failed to load primary hero image");
+      console.log("Attempting to load fallback hero image");
       if (isMounted) {
         clearTimeout(timeoutId);
         setImageFailed(true);
         
-        // Load fallback image
+        // Load fallback image immediately
         const fallbackImg = new Image();
         fallbackImg.src = fallbackImagePath;
         fallbackImg.onload = () => {
           if (isMounted) {
             console.log("Fallback hero image loaded successfully");
+            setImageLoaded(true);
+          }
+        };
+        
+        fallbackImg.onerror = () => {
+          if (isMounted) {
+            console.error("All hero images failed to load");
+            // Setting loaded to true anyway to remove spinner
             setImageLoaded(true);
           }
         };
