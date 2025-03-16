@@ -4,8 +4,8 @@ import { memo, useEffect, useState } from "react";
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // Changed to use a verified existing image from the project
-  const imagePath = '/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png';
+  // Changed to use the newly uploaded cleaner image
+  const imagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
   
   // Check if image exists and can be loaded
   useEffect(() => {
@@ -34,12 +34,12 @@ export const BackgroundElements = memo(() => {
           {imageLoaded ? (
             <img 
               src={imagePath}
-              alt="Background illustration"
-              className="object-contain max-w-[45%] max-h-[80%]"
+              alt="Professional cleaner with cleaning supplies"
+              className="object-contain max-w-[50%] max-h-[85%]"
               style={{ 
-                filter: "saturate(1.1)",
+                filter: "saturate(1.05)",
                 transform: "translateX(-5%) translateY(-5%)",
-                opacity: 0.9 // Slightly adjust opacity for better visibility
+                opacity: 0.95 // Slightly increased opacity for better visibility
               }}
             />
           ) : (
@@ -56,8 +56,8 @@ export const BackgroundElements = memo(() => {
           {imageLoaded ? (
             <img 
               src={imagePath}
-              alt="Background illustration"
-              className="object-contain max-w-[90%] max-h-[40%] opacity-40" // Increased opacity
+              alt="Professional cleaner with cleaning supplies"
+              className="object-contain max-w-[90%] max-h-[45%] opacity-50" // Increased opacity and size
             />
           ) : (
             <div className="w-[80%] h-[30%] bg-gray-100 bg-opacity-10 animate-pulse rounded-lg">
