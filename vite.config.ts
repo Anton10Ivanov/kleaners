@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     // Add image optimization options
-    assetsInlineLimit: 0, // Don't inline images to allow proper caching
+    assetsInlineLimit: 4096, // Inline small images for better performance
   },
   // Optimize dev server
   optimizeDeps: {
@@ -78,17 +78,11 @@ export default defineConfig(({ mode }) => ({
   // Enable type checking in build
   typescript: {
     tsconfigPath: mode === 'production' ? './tsconfig.strict.json' : './tsconfig.json',
-    typeCheck: true
   },
   // Add performance optimizations
   css: {
     devSourcemap: true,
-    preprocessorOptions: {
-      scss: {
-        additionalData: '@import "@/styles/variables.scss";',
-      },
-    },
   },
-  // Add asset optimization
+  // Configure asset handling
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
 }));
