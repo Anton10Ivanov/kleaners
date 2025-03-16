@@ -32,7 +32,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
   };
 
   const containerClassName = layout === "desktop"
-    ? "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg"
+    ? "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-lg max-w-3xl mx-auto"
     : "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-lg";
 
   return (

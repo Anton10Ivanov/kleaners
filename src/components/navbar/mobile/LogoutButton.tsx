@@ -39,7 +39,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ setIsOpen }) => {
         variant="destructive"
         size="sm"
         onClick={handleLogout}
-        className="w-full flex items-center justify-center py-2"
+        className="w-full flex items-center justify-center py-2 bg-red-600 hover:bg-red-700"
       >
         <LogOut className="mr-2 h-4 w-4" />
         <span>Log Out</span>

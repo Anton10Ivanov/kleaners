@@ -17,20 +17,22 @@ const FEATURES: Feature[] = [
 
 export const FeatureList = memo(() => {
   return (
-    <ul className="grid grid-cols-1 gap-3 w-full mx-0 md:mx-0">
-      {FEATURES.map((feature, index) => (
-        <motion.li 
-          key={index}
-          initial={{ opacity: 0, x: -10 }} 
-          animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.3, delay: feature.delay }} 
-          className="flex items-center justify-start gap-3 text-gray-600 dark:text-gray-300 font-medium"
-        >
-          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-          <span>{feature.text}</span>
-        </motion.li>
-      ))}
-    </ul>
+    <div className="w-full max-w-3xl mx-auto mt-4">
+      <ul className="grid grid-cols-1 md:grid-cols-4 gap-3 w-full">
+        {FEATURES.map((feature, index) => (
+          <motion.li 
+            key={index}
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.3, delay: feature.delay }} 
+            className="flex items-center justify-start md:justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 font-medium bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-2 shadow-sm"
+          >
+            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+            <span className="text-xs md:text-sm truncate">{feature.text}</span>
+          </motion.li>
+        ))}
+      </ul>
+    </div>
   );
 });
 
