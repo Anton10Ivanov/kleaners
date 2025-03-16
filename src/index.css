@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -125,7 +124,7 @@
 
   p {
     font: var(--p);
-    @apply text-gray-600 dark:text-gray-300;
+    @apply text-subtext dark:text-gray-300;
   }
 
   a {
@@ -139,15 +138,11 @@
   }
   
   label, .text-secondary-text {
-    @apply text-gray-600 dark:text-gray-400;
+    @apply text-subtext dark:text-gray-400;
   }
 }
 
 @layer utilities {
-  .text-subtext {
-    @apply text-gray-600 dark:text-gray-400;
-  }
-
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
