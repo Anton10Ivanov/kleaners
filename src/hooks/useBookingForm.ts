@@ -1,119 +1,73 @@
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
-import { bookingSchema, type BookingFormData, Frequency } from '../schemas/booking';
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { bookingFormSchema, BookingFormData } from '@/schemas/booking';
+import useBookingStore from '@/store/useBookingStore';
+import { useEffect } from 'react';
 
 export const useBookingForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  // Get state and actions from our Zustand store
+  const { 
+    currentStep, 
+    formData, 
+    setCurrentStep, 
+    updateFormData, 
+    resetForm 
+  } = useBookingStore();
 
+  // Initialize form with react-hook-form
   const form = useForm<BookingFormData>({
-    resolver: zodResolver(bookingSchema) as any, // Type assertion to bypass complex type resolution
-    defaultValues: {
-      service: undefined,
-      postalCode: '',
-      frequency: Frequency.OneTime,
-      hours: 2,
-      bedrooms: 1,
-      bathrooms: 1,
-      extras: [],
-      businessType: undefined,
-      selectedDates: [],
-      timeSlots: {},
-      cleaningOptions: [],
-      propertySize: undefined,
-      specialRequirements: '',
-      providerOptions: [],
-      specialInstructions: '',
-      totalAmount: 0,
-    }
+    resolver: zodResolver(bookingFormSchema),
+    defaultValues: formData as BookingFormData,
   });
 
-  const { handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
-
-  const handleNextStep = () => {
-    if (currentStep === 2 && 
-        watch('service') === 'business' && 
-        watch('frequency') === Frequency.Custom && 
-        (watch('selectedDates')?.length || 0) < 2) {
-      toast.error("Please select at least 2 days for custom schedule before proceeding");
-      return;
+  // Sync form values with Zustand store
+  useEffect(() => {
+    // Update form with persisted data when mounting
+    if (Object.keys(formData).length > 0) {
+      Object.entries(formData).forEach(([key, value]) => {
+        // Only set values that exist in the form
+        if (value !== undefined) {
+          form.setValue(key as any, value);
+        }
+      });
     }
+  }, []);
+
+  // Watch for form value changes and update store
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      updateFormData(value as Partial<BookingFormData>);
+    });
     
-    setCurrentStep(prevStep => prevStep + 1);
+    return () => subscription.unsubscribe();
+  }, [form.watch, updateFormData]);
+
+  // Step navigation
+  const handleNextStep = () => {
+    setCurrentStep(currentStep + 1);
   };
 
   const handleBackStep = () => {
-    setCurrentStep(prev => Math.max(1, prev - 1));
+    setCurrentStep(Math.max(1, currentStep - 1));
   };
 
-  useEffect(() => {
-    const service = watch('service');
-    if (service === 'business') {
-      setValue('frequency', Frequency.Weekly);
-    }
-  }, [watch('service'), setValue]);
-
-  useEffect(() => {
-    const formData = getValues();
-    
-    // Save to local storage, handling Date objects
-    const serializedFormData = {
-      ...formData,
-      date: formData.date ? formData.date.toISOString() : undefined,
-      selectedDates: formData.selectedDates ? formData.selectedDates.map(date => date.toISOString()) : undefined,
-    };
-    
-    localStorage.setItem('bookingProgress', JSON.stringify({
-      step: currentStep,
-      formData: serializedFormData
-    }));
-  }, [currentStep, getValues]);
-
-  useEffect(() => {
-    const savedProgress = localStorage.getItem('bookingProgress');
-    if (savedProgress) {
-      try {
-        const parsed = JSON.parse(savedProgress) as {
-          step: number;
-          formData: Partial<BookingFormData> & { 
-            date?: string; 
-            selectedDates?: string[];
-          };
-        };
-        
-        if (parsed.formData) {
-          Object.entries(parsed.formData).forEach(([key, value]) => {
-            if (key === 'date' && typeof value === 'string') {
-              setValue(key as keyof BookingFormData, new Date(value));
-            } else if (key === 'selectedDates' && Array.isArray(value)) {
-              setValue(
-                key as keyof BookingFormData, 
-                value.map(dateStr => new Date(dateStr))
-              );
-            } else if (value !== undefined) {
-              setValue(key as keyof BookingFormData, value as any);
-            }
-          });
-        }
-        
-        if (typeof parsed.step === 'number') {
-          setCurrentStep(parsed.step);
-        }
-      } catch (error) {
-        console.error('Error loading saved progress:', error);
-        localStorage.removeItem('bookingProgress');
-      }
-    }
-  }, [setValue]);
+  const handleReset = () => {
+    resetForm();
+    form.reset();
+  };
 
   return {
     form,
     currentStep,
+    formData,
     handleNextStep,
     handleBackStep,
-    watch,
-    setValue
+    handleReset,
+    watch: form.watch,
+    setValue: form.setValue,
+    getValues: form.getValues,
   };
 };
+
+export default useBookingForm;

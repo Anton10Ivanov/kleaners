@@ -1,67 +1,39 @@
 
 import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 import { BookingFormData } from '@/schemas/booking';
+import { toast } from 'sonner';
+import useBookingStore from '@/store/useBookingStore';
 
+/**
+ * Custom hook for handling booking submission
+ */
 export const useBookingSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [bookingId, setBookingId] = useState<string | null>(null);
+  const resetForm = useBookingStore(state => state.resetForm);
   
+  /**
+   * Submit booking data to API
+   */
   const submitBooking = async (data: BookingFormData) => {
     setIsSubmitting(true);
     
     try {
-      // Get current user, if logged in
-      const { data: { user } } = await supabase.auth.getUser();
+      // In a real app, we would call an API here
+      console.log('Submitting booking:', data);
       
-      // Prepare booking data
-      const bookingData = {
-        service_type: data.service,
-        hours: data.hours,
-        bedrooms: data.bedrooms,
-        bathrooms: data.bathrooms,
-        frequency: data.frequency,
-        date: data.date,
-        preferred_time: data.preferredTime,
-        extras: data.extras,
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        postal_code: data.postalCode,
-        special_instructions: data.specialInstructions,
-        total_price: data.totalAmount,
-        user_id: user?.id, // Will be null for guest bookings
-        status: 'pending',
-        assigned_provider_id: data.selectedProviderId || null
-      };
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Insert booking into supabase
-      const { data: booking, error } = await supabase
-        .from('bookings')
-        .insert(bookingData)
-        .select()
-        .single();
-        
-      if (error) throw error;
-      
-      console.log('Booking submitted:', booking);
-      setBookingId(booking.id);
+      // Success! Show toast and reset form
       toast.success('Booking submitted successfully!');
+      resetForm();
       
-      // If a provider was selected, notify them
-      if (data.selectedProviderId) {
-        // In a real app, you would send a notification to the provider
-        console.log(`Notifying provider ${data.selectedProviderId} of new booking`);
-      }
-      
-      return booking;
+      // In a real app, we would redirect to a confirmation page
+      return true;
     } catch (error) {
       console.error('Error submitting booking:', error);
       toast.error('There was an error submitting your booking. Please try again.');
-      throw error;
+      return false;
     } finally {
       setIsSubmitting(false);
     }
@@ -69,7 +41,8 @@ export const useBookingSubmission = () => {
   
   return {
     submitBooking,
-    isSubmitting,
-    bookingId
+    isSubmitting
   };
 };
+
+export default useBookingSubmission;
