@@ -35,9 +35,9 @@ export const Hero = memo(({
 
   // Preload hero images with higher browser priority
   useEffect(() => {
-    // Images to preload
+    // Images to preload - updated to include new image
     const imagesToPreload = [
-      '/lovable-uploads/a967d512-a0c9-457b-97d8-9ea49e5e2f5f.png',
+      '/lovable-uploads/4f87521c-24ee-4059-9510-314bc2c98d1e.png',
       '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'
     ];
     

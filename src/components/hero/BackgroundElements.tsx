@@ -6,14 +6,21 @@ export const BackgroundElements = memo(() => {
   const [imageFailed, setImageFailed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Image paths
-  const imagePath = '/lovable-uploads/a967d512-a0c9-457b-97d8-9ea49e5e2f5f.png';
+  // Image paths - primary is now the new uploaded image
+  const imagePath = '/lovable-uploads/4f87521c-24ee-4059-9510-314bc2c98d1e.png';
   const fallbackImagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png';
   
   // Load image with improved background strategy
   useEffect(() => {
     // Track component mount state
     let isMounted = true;
+    
+    // Set a timeout to show skeleton in case image loading takes too long
+    const timeoutId = setTimeout(() => {
+      if (isMounted && !imageLoaded) {
+        console.log("Image loading timeout - showing skeleton");
+      }
+    }, 500);
     
     // Preload the main image
     const img = new Image();
@@ -22,6 +29,7 @@ export const BackgroundElements = memo(() => {
     img.onload = () => {
       if (isMounted && containerRef.current) {
         console.log("Hero background image loaded successfully");
+        clearTimeout(timeoutId);
         setImageLoaded(true);
         setImageFailed(false);
       }
@@ -30,6 +38,7 @@ export const BackgroundElements = memo(() => {
     img.onerror = () => {
       console.error("Failed to load primary hero image");
       if (isMounted) {
+        clearTimeout(timeoutId);
         setImageFailed(true);
         
         // Load fallback image
@@ -47,6 +56,7 @@ export const BackgroundElements = memo(() => {
     // Cleanup function to prevent state updates if component unmounts
     return () => {
       isMounted = false;
+      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };
@@ -74,6 +84,7 @@ export const BackgroundElements = memo(() => {
             paddingRight: '5%',
             filter: 'saturate(1.05)',
             opacity: 0.95,
+            transition: 'opacity 0.3s ease-in-out',
           }}
         >
           {/* Skeleton loader while image loads */}
@@ -93,6 +104,7 @@ export const BackgroundElements = memo(() => {
             backgroundRepeat: 'no-repeat',
             backgroundSize: '90% auto',
             opacity: 0.5,
+            transition: 'opacity 0.3s ease-in-out',
           }}
         >
           {/* Skeleton loader while image loads */}
