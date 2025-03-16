@@ -85,11 +85,11 @@ export const BackgroundElements = memo(() => {
           className="absolute inset-0 z-0 hidden md:block"
           style={{
             backgroundImage: imageLoaded ? `url(${displayImagePath})` : 'none',
-            backgroundPosition: 'right center',
+            backgroundPosition: 'right -5% center', // Positioned more to the right
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'contain',
             backgroundOrigin: 'content-box',
-            paddingRight: '5%',
+            paddingRight: '0%', // Reduced padding to move the image more to the right
             filter: 'saturate(1.05)',
             opacity: 0.95,
             transition: 'opacity 0.3s ease-in-out',
