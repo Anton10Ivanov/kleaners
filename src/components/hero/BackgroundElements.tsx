@@ -7,8 +7,8 @@ export const BackgroundElements = memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Updated image paths - using more reliable paths
-  const imagePath = '/lovable-uploads/b331c1f0-907f-4c76-8eeb-393ca30e63c7.png'; // Primary image
-  const fallbackImagePath = '/lovable-uploads/opciya1 (1) 2.png'; // Updated fallback image
+  const imagePath = '/lovable-uploads/opciya1 (1) 2.png'; // Primary image
+  const fallbackImagePath = '/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png'; // Fallback image
   
   // Load image with improved error handling
   useEffect(() => {
@@ -85,7 +85,7 @@ export const BackgroundElements = memo(() => {
           className="absolute inset-0 z-0 hidden md:block"
           style={{
             backgroundImage: imageLoaded ? `url(${displayImagePath})` : 'none',
-            backgroundPosition: 'right -5% center', // Positioned more to the right
+            backgroundPosition: 'right 0% center', // Positioned more to the right
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'contain',
             backgroundOrigin: 'content-box',
