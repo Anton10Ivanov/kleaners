@@ -45,7 +45,7 @@ export function PageHeader({
         <div className={cn("flex flex-col gap-2", alignClasses[align])}>
           <div className="flex items-center justify-between gap-4">
             <h1 className={cn(
-              "font-bold text-gray-900 dark:text-white",
+              "font-bold text-theme-darkheading dark:text-white",
               {
                 "text-2xl": size === "sm",
                 "text-3xl": size === "md",

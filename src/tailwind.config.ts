@@ -20,6 +20,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "heading-color": "hsl(var(--heading-color))",
         "secondary-text": "hsl(var(--secondary-text))",
         surface: "hsl(var(--surface))",
         primary: {
@@ -54,6 +55,8 @@ export default {
         theme: {
           blue: "hsl(206, 65%, 70%)",
           green: "hsl(122, 65%, 84%)",
+          lightblue: "#D6EFFF",
+          darkheading: "#1C1C1C",
         },
         dark: {
           background: "#1A1F2C",

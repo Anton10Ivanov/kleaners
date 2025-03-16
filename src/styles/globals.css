@@ -3,11 +3,11 @@
 
 /* Common background gradients */
 .bg-gradient-light {
-  @apply bg-white;
+  @apply bg-theme-lightblue;
 }
 
 .bg-gradient-light-reverse {
-  @apply bg-white;
+  @apply bg-theme-lightblue;
 }
 
 .bg-gradient-light-footer {
@@ -29,6 +29,10 @@
 
 .text-secondary-color {
   @apply text-[#8E9196] dark:text-gray-400;
+}
+
+.text-heading-color {
+  @apply text-theme-darkheading;
 }
 
 /* Card styles */
@@ -95,10 +99,12 @@
 /* Typography utility classes - Updated with the new variables */
 .text-heading-1 {
   font: var(--h1);
+  @apply text-theme-darkheading dark:text-white;
 }
 
 .text-heading-2 {
   font: var(--h2);
+  @apply text-theme-darkheading dark:text-white;
 }
 
 .text-heading-3 {
@@ -106,6 +112,7 @@
   line-height: 1.3em;
   font-weight: 600;
   font-family: var(--ff2);
+  @apply text-theme-darkheading dark:text-white;
 }
 
 .text-body {
@@ -241,7 +248,7 @@
 
 .section-heading {
   font: var(--h1);
-  @apply text-gray-900 dark:text-white mb-4;
+  @apply text-theme-darkheading dark:text-white mb-4;
 }
 
 .section-subheading {
