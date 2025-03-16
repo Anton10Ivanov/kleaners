@@ -1,7 +1,7 @@
 
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useCallback, useMemo } from 'react';
 import Hero from '../components/hero';
 import ProgressBar from '../components/booking/ProgressBar';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,21 +11,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency } from '@/types/enums';
 import { ServiceType } from '@/schemas/booking';
+import { SectionLoading } from '@/components/ui/section-loading';
+import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';
+import { performanceMonitor } from '@/utils/performance-monitor';
+import { useComponentTimer } from '@/hooks/useComponentTimer';
 
-// Lazy load components that aren't needed immediately
-const OurOptions = lazy(() => import('../components/options/OurOptions'));
-const WhyChooseUs = lazy(() => import('../components/WhyChooseUs'));
-const Testimonials = lazy(() => import('../components/Testimonials'));
-const BookingSummary = lazy(() => import('../components/booking/BookingSummary'));
-const BookingContent = lazy(() => import('../components/booking/BookingContent'));
-
-// Loading fallback components
-const LoadingFallback = () => (
-  <div className="py-12 flex justify-center items-center">
-    <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-  </div>
-);
-
+// Simple error fallback component
 const ErrorFallback = () => (
   <div className="text-center py-8">
     <p>Something went wrong loading this section.</p>
@@ -33,9 +24,13 @@ const ErrorFallback = () => (
 );
 
 const Index = () => {
+  // Start performance timer
+  const { startTimer, endTimer } = useComponentTimer('IndexPage');
+  
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  // Memoize watched values to prevent unnecessary re-renders
   const selectedService = watch('service');
   const frequency = watch('frequency');
   const hours = watch('hours');
@@ -45,27 +40,42 @@ const Index = () => {
   const selectedExtras = watch('extras') || [];
   const postalCode = watch('postalCode') || '';
 
-  // Use the proper enum comparison
-  const currentPrice = frequency === Frequency.Weekly ? 27 : 
-                       frequency === Frequency.BiWeekly ? 30 : 35;
+  // Memoize price calculation to prevent unnecessary recalculation
+  const currentPrice = useMemo(() => {
+    startTimer('priceCalculation');
+    const price = frequency === Frequency.Weekly ? 27 : 
+                 frequency === Frequency.BiWeekly ? 30 : 35;
+    endTimer('priceCalculation');
+    return price;
+  }, [frequency, startTimer, endTimer]);
 
-  const handleNext = () => {
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleNext = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     handleNextStep();
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
-  };
+  }, [currentStep, handleNextStep]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     handleBackStep();
-  };
+  }, [handleBackStep]);
 
-  const handleHeroNextStep = () => {
-    console.log("Hero next step clicked");
+  const handleHeroNextStep = useCallback(() => {
     handleNextStep();
-  };
+  }, [handleNextStep]);
+
+  // Memoize service setter to prevent unnecessary re-renders
+  const setSelectedService = useCallback((service) => {
+    setValue('service', service);
+  }, [setValue]);
+
+  // Memoize postal code setter to prevent unnecessary re-renders
+  const setPostalCode = useCallback((code) => {
+    setValue('postalCode', code);
+  }, [setValue]);
 
   return (
     <div className="min-h-screen font-raleway bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
@@ -81,36 +91,28 @@ const Index = () => {
             {/* Landing page content */}
             <Hero 
               selectedService={selectedService || ''}
-              setSelectedService={(service) => {
-                console.log("Setting service to:", service);
-                setValue('service', service);
-              }}
+              setSelectedService={setSelectedService}
               postalCode={postalCode}
-              setPostalCode={(code) => {
-                console.log("Setting postal code to:", code);
-                setValue('postalCode', code);
-              }}
+              setPostalCode={setPostalCode}
               handleNextStep={handleHeroNextStep}
             />
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
-            <Suspense fallback={<LoadingFallback />}>
-              <WhyChooseUs />
-            </Suspense>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <LazyWhyChooseUs />
+            </ErrorBoundary>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
-            <Suspense fallback={<LoadingFallback />}>
-              <OurOptions />
-            </Suspense>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <LazyOurOptions />
+            </ErrorBoundary>
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<LoadingFallback />}>
-                <Testimonials />
-              </Suspense>
+              <LazyTestimonials />
             </ErrorBoundary>
           </motion.div>
         ) : (
@@ -125,28 +127,28 @@ const Index = () => {
               <ProgressBar currentStep={currentStep} />
               
               <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
-                <Suspense fallback={<LoadingFallback />}>
-                  <BookingContent 
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <LazyBookingContent 
                     currentStep={currentStep}
                     selectedService={selectedService || ''}
                     form={form}
                   />
-                </Suspense>
+                </ErrorBoundary>
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
                   className={`w-full md:w-[20%] ${isMobile ? 'fixed bottom-0 left-0 right-0 z-20' : 'relative'}`}
                 >
-                  <Suspense fallback={<div className="animate-pulse bg-gray-200 h-40 rounded-lg"></div>}>
-                    <BookingSummary 
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <LazyBookingSummary 
                       selectedService={selectedService || ''}
                       frequency={frequency || ''}
                       hours={hours}
                       currentPrice={currentPrice}
                       selectedExtras={selectedExtras}
                     />
-                  </Suspense>
+                  </ErrorBoundary>
                 </motion.div>
               </div>
 
