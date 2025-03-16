@@ -66,7 +66,9 @@ const CheckoutStep = ({ form }: CheckoutStepProps) => {
           
           <div className="flex justify-between text-sm">
             <span className="text-subtext dark:text-gray-400">Address:</span>
-            <span className="font-medium text-right">{formValues.address}, {formValues.city} {formValues.postalCode}</span>
+            <span className="font-medium text-right">
+              {formValues.address}{formValues.city ? `, ${formValues.city}` : ''} {formValues.postalCode}
+            </span>
           </div>
           
           <Separator className="my-2" />
