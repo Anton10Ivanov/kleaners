@@ -1,7 +1,6 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Suspense, lazy, useCallback, useMemo } from 'react';
+import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import Hero from '../components/hero';
 import ProgressBar from '../components/booking/ProgressBar';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -13,7 +12,7 @@ import { Frequency } from '@/types/enums';
 import { ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
 import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';
-import { performanceMonitor } from '@/utils/performance'; // Fixed import path
+import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 
 // Simple error fallback component
@@ -26,6 +25,18 @@ const ErrorFallback = () => (
 const Index = () => {
   // Start performance timer
   const { startTimer, endTimer } = useComponentTimer('IndexPage');
+  
+  // Mark this component as important for Core Web Vitals
+  useEffect(() => {
+    performanceMonitor.markAsImportant('IndexPage');
+    startTimer('initialRender');
+    
+    return () => {
+      endTimer('initialRender');
+      // Log performance results when component unmounts
+      performanceMonitor.logResults();
+    };
+  }, [startTimer, endTimer]);
   
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -51,31 +62,41 @@ const Index = () => {
 
   // Memoize handlers to prevent unnecessary re-renders
   const handleNext = useCallback(() => {
+    startTimer('nextStepInteraction');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     handleNextStep();
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
-  }, [currentStep, handleNextStep]);
+    endTimer('nextStepInteraction');
+  }, [currentStep, handleNextStep, startTimer, endTimer]);
 
   const handleBack = useCallback(() => {
+    startTimer('backStepInteraction');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     handleBackStep();
-  }, [handleBackStep]);
+    endTimer('backStepInteraction');
+  }, [handleBackStep, startTimer, endTimer]);
 
   const handleHeroNextStep = useCallback(() => {
+    startTimer('heroNextStepInteraction');
     handleNextStep();
-  }, [handleNextStep]);
+    endTimer('heroNextStepInteraction');
+  }, [handleNextStep, startTimer, endTimer]);
 
   // Memoize service setter to prevent unnecessary re-renders
   const setSelectedService = useCallback((service) => {
+    startTimer('setServiceInteraction');
     setValue('service', service);
-  }, [setValue]);
+    endTimer('setServiceInteraction');
+  }, [setValue, startTimer, endTimer]);
 
   // Memoize postal code setter to prevent unnecessary re-renders
   const setPostalCode = useCallback((code) => {
+    startTimer('setPostalCodeInteraction');
     setValue('postalCode', code);
-  }, [setValue]);
+    endTimer('setPostalCodeInteraction');
+  }, [setValue, startTimer, endTimer]);
 
   return (
     <div className="min-h-screen font-raleway bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">

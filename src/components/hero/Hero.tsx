@@ -1,5 +1,5 @@
 
-import { useEffect, memo } from "react";
+import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
@@ -7,6 +7,8 @@ import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
+import { performanceMonitor } from "@/utils/performance";
+import { useComponentTimer } from "@/hooks/useComponentTimer";
 
 interface HeroProps {
   selectedService: string;
@@ -23,18 +25,30 @@ export const Hero = memo(({
   setPostalCode,
   handleNextStep
 }: HeroProps) => {
+  const { startTimer, endTimer } = useComponentTimer('Hero');
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const imagesLoadedRef = useRef<boolean>(false);
+
+  // Mark Hero as important for Core Web Vitals
+  useEffect(() => {
+    performanceMonitor.markAsImportant('Hero');
+  }, []);
 
   // Set default service to "regular" when component mounts
   useEffect(() => {
+    startTimer('serviceInitialization');
     if (!selectedService) {
       console.log("Setting service to: regular");
       setSelectedService(ServiceType.Regular);
     }
-  }, [selectedService, setSelectedService]);
+    endTimer('serviceInitialization');
+  }, [selectedService, setSelectedService, startTimer, endTimer]);
 
   // Preload hero images with higher browser priority
   useEffect(() => {
+    if (imagesLoadedRef.current) return;
+    
+    startTimer('imagePreloading');
     // Images to preload - updated to include new image
     const imagesToPreload = [
       '/lovable-uploads/4f87521c-24ee-4059-9510-314bc2c98d1e.png',
@@ -53,6 +67,12 @@ export const Hero = memo(({
       // Also manually preload with Image object
       const img = new Image();
       img.src = imageUrl;
+      img.onload = () => {
+        if (index === imagesToPreload.length - 1) {
+          endTimer('imagePreloading');
+          imagesLoadedRef.current = true;
+        }
+      };
     });
     
     return () => {
@@ -60,18 +80,22 @@ export const Hero = memo(({
       document.head.querySelectorAll('link[rel="preload"][as="image"], link[rel="prefetch"][as="image"]')
         .forEach(link => document.head.removeChild(link));
     };
-  }, []);
+  }, [startTimer, endTimer]);
 
   const handleValidatedNextStep = () => {
+    startTimer('validateAndNextStep');
     if (!selectedService) {
       toast.error("Please select a service type");
+      endTimer('validateAndNextStep');
       return;
     }
     if (!postalCode) {
       toast.error("Please enter your city or area code");
+      endTimer('validateAndNextStep');
       return;
     }
     handleNextStep();
+    endTimer('validateAndNextStep');
   };
 
   return (

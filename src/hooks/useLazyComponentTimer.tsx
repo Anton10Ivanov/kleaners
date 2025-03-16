@@ -1,58 +1,44 @@
-import { lazy, ComponentType, Suspense, useEffect, useRef } from 'react';
-import { SectionLoading } from '@/components/ui/section-loading';
+
+import { lazy, ComponentType, Suspense } from 'react';
 import { performanceMonitor } from '@/utils/performance';
+import { SectionLoading } from '@/components/ui/section-loading';
 
 /**
- * Custom hook that combines lazy loading with performance monitoring
+ * Custom hook for lazy loading components with built-in performance tracking
  * 
- * @param componentName - Name of the component for tracking
  * @param importFunc - Dynamic import function for the component
+ * @param componentName - Name of the component for tracking
  * @param fallback - Optional custom loading component
- * @returns The lazy loaded component wrapped in a Suspense with performance tracking
+ * @returns The lazy loaded component wrapped in a Suspense
  */
 export function useLazyComponentTimer<T extends ComponentType<any>>(
-  componentName: string,
   importFunc: () => Promise<{ default: T }>,
+  componentName: string,
   fallback: React.ReactNode = <SectionLoading />
 ) {
-  // Create lazy component
-  const LazyComponent = lazy(() => {
-    // Start timing when import begins
-    performanceMonitor.startTiming(`${componentName}-import`);
-    
-    return importFunc().then(module => {
-      // End timing when import completes
-      performanceMonitor.endTiming(`${componentName}-import`);
-      return module;
-    });
-  });
+  // Track import performance
+  const timerKey = `${componentName}-import`;
   
-  // Return a component that includes Suspense and timing logic
-  return (props: React.ComponentProps<T>) => {
-    const mountedRef = useRef(false);
-    const renderTimerKey = `${componentName}-render`;
-    
-    // Track initial render time
-    useEffect(() => {
-      if (!mountedRef.current) {
-        performanceMonitor.endTiming(renderTimerKey);
-        mountedRef.current = true;
-      }
-      
-      return () => {
-        mountedRef.current = false;
-      };
-    }, [renderTimerKey]);
-    
-    // Start render timer
-    performanceMonitor.startTiming(renderTimerKey);
-    
-    return (
-      <Suspense fallback={fallback}>
-        <LazyComponent {...props} />
-      </Suspense>
-    );
+  // Create a wrapper around the import function to measure performance
+  const timedImport = async () => {
+    performanceMonitor.startTiming(timerKey);
+    try {
+      const module = await importFunc();
+      return module;
+    } finally {
+      performanceMonitor.endTiming(timerKey);
+    }
   };
+  
+  // Create the lazy component with performance tracking
+  const LazyComponent = lazy(timedImport);
+  
+  // Return a component that includes the Suspense boundary
+  return (props: React.ComponentProps<T>) => (
+    <Suspense fallback={fallback}>
+      <LazyComponent {...props} />
+    </Suspense>
+  );
 }
 
 export default useLazyComponentTimer;
