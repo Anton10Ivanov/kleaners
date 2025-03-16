@@ -10,7 +10,7 @@ const WhyChooseUs = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <section id="about" className="py-16 md:py-24 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
+    <section id="about" className="py-16 md:py-24 bg-[#F2FCE2] dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 drop-shadow-sm">
