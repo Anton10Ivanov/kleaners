@@ -6,9 +6,8 @@ export const BackgroundElements = memo(() => {
   const [imageFailed, setImageFailed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Corrected image paths - ensuring we use the right images
-  const imagePath = '/lovable-uploads/opciya1 (1) 2.png'; // Primary image path
-  const fallbackImagePath = '/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png'; // Fallback image path
+  // Using only one image path for both primary and fallback
+  const imagePath = '/lovable-uploads/opciya1 (1) 2.png'; // Only image path to use
   
   // Load image with improved error handling
   useEffect(() => {
@@ -22,7 +21,7 @@ export const BackgroundElements = memo(() => {
       }
     }, 500);
     
-    // Preload the main image
+    // Preload the image
     const img = new Image();
     img.src = imagePath;
     
@@ -36,28 +35,12 @@ export const BackgroundElements = memo(() => {
     };
     
     img.onerror = () => {
-      console.log("Attempting to load fallback hero image");
+      console.log("Hero image failed to load");
       if (isMounted) {
         clearTimeout(timeoutId);
         setImageFailed(true);
-        
-        // Load fallback image immediately
-        const fallbackImg = new Image();
-        fallbackImg.src = fallbackImagePath;
-        fallbackImg.onload = () => {
-          if (isMounted) {
-            console.log("Fallback hero image loaded successfully");
-            setImageLoaded(true);
-          }
-        };
-        
-        fallbackImg.onerror = () => {
-          if (isMounted) {
-            console.error("All hero images failed to load");
-            // Setting loaded to true anyway to remove spinner
-            setImageLoaded(true);
-          }
-        };
+        // Setting loaded to true anyway to remove spinner
+        setImageLoaded(true);
       }
     };
     
@@ -70,9 +53,6 @@ export const BackgroundElements = memo(() => {
     };
   }, []);
 
-  // Choose which image to display
-  const displayImagePath = imageFailed ? fallbackImagePath : imagePath;
-
   return (
     <>
       {/* Noise texture overlay */}
@@ -84,12 +64,12 @@ export const BackgroundElements = memo(() => {
         <div 
           className="absolute inset-0 z-0 hidden md:block"
           style={{
-            backgroundImage: imageLoaded ? `url(${displayImagePath})` : 'none',
-            backgroundPosition: 'right 0% center', // Positioned at the right edge
+            backgroundImage: imageLoaded ? `url(${imagePath})` : 'none',
+            backgroundPosition: 'right 0% center', 
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'contain',
             backgroundOrigin: 'content-box',
-            paddingRight: '0%', // Reduced padding to move the image more to the right
+            paddingRight: '0%',
             filter: 'saturate(1.05)',
             opacity: 0.95,
             transition: 'opacity 0.3s ease-in-out',
@@ -107,7 +87,7 @@ export const BackgroundElements = memo(() => {
         <div 
           className="absolute inset-0 z-0 block md:hidden"
           style={{
-            backgroundImage: imageLoaded ? `url(${displayImagePath})` : 'none',
+            backgroundImage: imageLoaded ? `url(${imagePath})` : 'none',
             backgroundPosition: 'center 75%',
             backgroundRepeat: 'no-repeat',
             backgroundSize: '90% auto',
