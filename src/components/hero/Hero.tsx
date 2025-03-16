@@ -46,10 +46,10 @@ export const Hero = memo(({
   };
 
   return (
-    <div className="relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center py-12 bg-theme-lightblue transition-colors duration-300 overflow-hidden">
+    <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center py-12 bg-theme-lightblue transition-colors duration-300 overflow-hidden">
       <BackgroundElements />
       
-      <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-[10px]">
+      <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <HeroProvider 
           initialService={selectedService}
           initialPostalCode={postalCode}
@@ -60,7 +60,7 @@ export const Hero = memo(({
           {isMobile ? <MobileHero /> : <DesktopHero />}
         </HeroProvider>
       </div>
-    </div>
+    </section>
   );
 });
 

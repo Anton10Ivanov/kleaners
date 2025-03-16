@@ -52,11 +52,6 @@ const Index = () => {
     handleBackStep();
   };
 
-  // Simple helper to log state for debugging
-  console.log("Current step:", currentStep);
-  console.log("Selected service:", selectedService);
-  console.log("Postal code:", postalCode);
-
   const handleHeroNextStep = () => {
     console.log("Hero next step clicked");
     handleNextStep();
@@ -73,6 +68,7 @@ const Index = () => {
             transition={{ duration: 0.4 }}
             className="bg-theme-lightblue dark:bg-gray-900"
           >
+            {/* Landing page content */}
             <Hero 
               selectedService={selectedService || ''}
               setSelectedService={(service) => {
@@ -87,8 +83,16 @@ const Index = () => {
               handleNextStep={handleHeroNextStep}
             />
             
+            <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
+            
             <WhyChooseUs />
+            
+            <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
+            
             <OurOptions />
+            
+            <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
+            
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Testimonials />
             </ErrorBoundary>
