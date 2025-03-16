@@ -1,7 +1,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Star } from "lucide-react";
 
 export const SocialProof = memo(() => {
   return (
@@ -11,8 +11,12 @@ export const SocialProof = memo(() => {
       transition={{ duration: 0.5, delay: 0.3 }}
       className="flex flex-col items-center justify-center text-center"
     >
-      <div className="inline-flex items-center gap-1.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm mb-2">
-        <CheckCircle className="h-3.5 w-3.5 text-green-500" />
+      <div className="inline-flex items-center gap-1.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-white border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex mr-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+          ))}
+        </div>
         <span>Trusted by 2300+ Customers</span>
       </div>
     </motion.div>

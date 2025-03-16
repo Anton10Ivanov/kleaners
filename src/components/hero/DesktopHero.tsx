@@ -8,7 +8,7 @@ import { SocialProof } from "./SocialProof";
 export const DesktopHero = memo(() => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-3 md:py-6">
-      <div className="flex flex-col space-y-6 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
+      <div className="flex flex-col space-y-5 w-full md:w-1/2 order-2 md:order-1 px-0 mx-0">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,12 +42,12 @@ export const DesktopHero = memo(() => {
         </motion.div>
         
         {/* Social proof positioned below the form */}
-        <div className="mt-2 flex">
+        <div className="flex">
           <SocialProof />
         </div>
       </div>
       
-      {/* The HeroImage component is removed as its functionality has been integrated into BackgroundElements */}
+      {/* The right side is intentionally left empty as the image is now in the background */}
       <div className="w-full md:w-1/2 order-1 md:order-2"></div>
     </div>
   );
