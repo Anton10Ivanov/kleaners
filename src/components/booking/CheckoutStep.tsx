@@ -46,26 +46,26 @@ const CheckoutStep = ({ form }: CheckoutStepProps) => {
         
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-subtext dark:text-gray-400">Service:</span>
+            <span className="text-gray-600 dark:text-gray-400">Service:</span>
             <span className="font-medium">{formValues.service || 'Regular Cleaning'}</span>
           </div>
           
           {formValues.frequency && (
             <div className="flex justify-between text-sm">
-              <span className="text-subtext dark:text-gray-400">Frequency:</span>
+              <span className="text-gray-600 dark:text-gray-400">Frequency:</span>
               <span className="font-medium">{formValues.frequency}</span>
             </div>
           )}
           
           {formValues.date && (
             <div className="flex justify-between text-sm">
-              <span className="text-subtext dark:text-gray-400">Date & Time:</span>
+              <span className="text-gray-600 dark:text-gray-400">Date & Time:</span>
               <span className="font-medium">{format(formValues.date, 'PPP p')}</span>
             </div>
           )}
           
           <div className="flex justify-between text-sm">
-            <span className="text-subtext dark:text-gray-400">Address:</span>
+            <span className="text-gray-600 dark:text-gray-400">Address:</span>
             <span className="font-medium text-right">
               {formValues.address}{formValues.city ? `, ${formValues.city}` : ''} {formValues.postalCode}
             </span>
@@ -86,24 +86,24 @@ const CheckoutStep = ({ form }: CheckoutStepProps) => {
         
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="card-number" className="text-subtext dark:text-gray-400">Card Number</Label>
+            <Label htmlFor="card-number" className="text-gray-600 dark:text-gray-400">Card Number</Label>
             <Input id="card-number" placeholder="1234 5678 9012 3456" maxLength={19} />
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="expiry" className="text-subtext dark:text-gray-400">Expiry Date</Label>
+              <Label htmlFor="expiry" className="text-gray-600 dark:text-gray-400">Expiry Date</Label>
               <Input id="expiry" placeholder="MM/YY" maxLength={5} />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="cvc" className="text-subtext dark:text-gray-400">CVC</Label>
+              <Label htmlFor="cvc" className="text-gray-600 dark:text-gray-400">CVC</Label>
               <Input id="cvc" placeholder="123" maxLength={3} />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-subtext dark:text-gray-400">Cardholder Name</Label>
+            <Label htmlFor="name" className="text-gray-600 dark:text-gray-400">Cardholder Name</Label>
             <Input id="name" placeholder="Name on card" />
           </div>
         </div>
@@ -118,13 +118,13 @@ const CheckoutStep = ({ form }: CheckoutStepProps) => {
       </Button>
       
       {/* Security & Guarantee */}
-      <div className="flex items-center justify-center space-x-2 text-sm text-subtext dark:text-gray-400">
+      <div className="flex items-center justify-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
         <Shield className="h-4 w-4" />
         <span>Secure Payment | 100% Satisfaction Guarantee</span>
       </div>
       
       {/* Cancellation Policy */}
-      <div className="text-sm text-subtext dark:text-gray-400 flex items-start">
+      <div className="text-sm text-gray-600 dark:text-gray-400 flex items-start">
         <Check className="h-4 w-4 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
         <span>Free cancellation up to 24 hours before your appointment</span>
       </div>
