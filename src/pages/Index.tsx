@@ -13,7 +13,7 @@ import { Frequency } from '@/types/enums';
 import { ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
 import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';
-import { performanceMonitor } from '@/utils/performance-monitor';
+import { performanceMonitor } from '@/utils/performance'; // Fixed import path
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 
 // Simple error fallback component
