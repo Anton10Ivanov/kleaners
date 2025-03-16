@@ -3,6 +3,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { FeatureBadges } from "./FeatureBadges";
 import { BookingForm } from "./BookingForm";
+import { SocialProof } from "./SocialProof";
 
 export const MobileHero = memo(() => {
   return (
@@ -40,6 +41,11 @@ export const MobileHero = memo(() => {
       >
         <BookingForm layout="mobile" />
       </motion.div>
+      
+      {/* Social proof positioned below the form */}
+      <div className="mt-3 w-full flex justify-center">
+        <SocialProof />
+      </div>
     </div>
   );
 });
