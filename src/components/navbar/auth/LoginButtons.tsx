@@ -16,10 +16,10 @@ const LoginButtons: React.FC = () => {
         Login
       </Button>
       <Button 
-        variant="default" 
+        variant="ghost" 
         size="sm" 
         onClick={() => navigate('/signup')} 
-        className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50"
+        className="text-primary font-medium text-sm"
       >
         Sign up
       </Button>

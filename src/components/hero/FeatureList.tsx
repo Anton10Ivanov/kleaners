@@ -25,7 +25,7 @@ export const FeatureList = memo(() => {
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.3, delay: feature.delay }} 
-            className="flex items-center justify-start md:justify-center gap-2 text-sm text-gray-300 dark:text-gray-300 font-medium backdrop-blur-sm rounded-lg p-2"
+            className="flex items-center justify-start md:justify-center gap-2 text-sm text-gray-300 dark:text-gray-300 font-medium p-2"
           >
             <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
             <span className="text-xs md:text-sm truncate">{feature.text}</span>
