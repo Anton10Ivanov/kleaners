@@ -33,13 +33,34 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/services/business-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Business Cleaning
+                </Link>
+              </li>
+              <li>
                 <Link to="/services/move-in-out" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Move In/Out
                 </Link>
               </li>
               <li>
-                <Link to="/services/business-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Business Cleaning
+                <Link to="/services/post-construction-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Post Construction
+                </Link>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">About</h4>
+            <ul className="space-y-2 text-sm md:text-base">
+              <li>
+                <Link to="/about/values" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Company Values
+                </Link>
+              </li>
+              <li>
+                <Link to="/about/faq" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  FAQ
                 </Link>
               </li>
             </ul>
@@ -64,7 +85,17 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Contact</h4>
             <ul className="space-y-2 text-sm md:text-base">
-              <li className="flex items-center gap-1 text-theme-blue opacity-80">
+              <li>
+                <Link to="/contact" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Get in Touch
+                </Link>
+              </li>
+              <li>
+                <Link to="/join-team" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Join Our Team
+                </Link>
+              </li>
+              <li className="flex items-center gap-1 text-theme-blue opacity-80 mt-3">
                 <Phone size={14} />
                 <span>+49 123 456 789</span>
               </li>
