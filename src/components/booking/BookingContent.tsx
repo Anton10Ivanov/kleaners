@@ -2,12 +2,12 @@
 import { Fragment } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { BookingFormData, ServiceType } from "@/schemas/booking";
-import { RegularStep } from "./regular/RegularStep";
-import { DeepCleaningStep } from "./deepCleaning/DeepCleaningStep";
-import { MoveInOutStep } from "./moveInOut/MoveInOutStep";
-import { BusinessStep } from "./business/BusinessStep";
-import { CustomerDetailsStep } from "./CustomerDetailsStep";
-import { CheckoutStep } from "./CheckoutStep";
+import RegularStep from "./regular/RegularStep";
+import DeepCleaningStep from "./deepCleaning/DeepCleaningStep";
+import MoveInOutStep from "./moveInOut/MoveInOutStep";
+import BusinessStep from "./business/BusinessStep";
+import CustomerDetailsStep from "./CustomerDetailsStep";
+import CheckoutStep from "./CheckoutStep";
 
 interface BookingContentProps {
   currentStep: number;

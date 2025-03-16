@@ -141,7 +141,7 @@ const CustomerDetailsStep = ({ form }: CustomerDetailsStepProps) => {
             <FormItem className="flex items-start space-x-2 space-y-0">
               <FormControl>
                 <Checkbox 
-                  checked={field.value}
+                  checked={field.value as boolean}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
