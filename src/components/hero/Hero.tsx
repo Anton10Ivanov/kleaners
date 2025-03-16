@@ -44,34 +44,33 @@ export const Hero = memo(({
     endTimer('serviceInitialization');
   }, [selectedService, setSelectedService, startTimer, endTimer]);
 
-  // Preload only the one hero image with higher browser priority
+  // Simplified preloading of the hero image
   useEffect(() => {
     if (imagesLoadedRef.current) return;
     
     startTimer('imagePreloading');
-    // Only one image to preload
     const imageToPreload = '/lovable-uploads/opciya1 (1) 2.png';
     
-    // Create preload link with high priority
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = imageToPreload;
-    link.fetchPriority = 'high';
-    document.head.appendChild(link);
-    
-    // Also manually preload with Image object
+    // Create an image element to preload the background
     const img = new Image();
     img.src = imageToPreload;
+    // Use high fetchPriority
+    img.fetchPriority = 'high';
+    
     img.onload = () => {
       endTimer('imagePreloading');
       imagesLoadedRef.current = true;
+      console.log("Hero background image preloaded successfully");
+    };
+    
+    img.onerror = () => {
+      endTimer('imagePreloading');
+      console.error("Failed to preload hero image:", imageToPreload);
     };
     
     return () => {
-      // Clean up preload links when component unmounts
-      document.head.querySelectorAll('link[rel="preload"][as="image"], link[rel="prefetch"][as="image"]')
-        .forEach(link => document.head.removeChild(link));
+      img.onload = null;
+      img.onerror = null;
     };
   }, [startTimer, endTimer]);
 
