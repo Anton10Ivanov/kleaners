@@ -85,7 +85,7 @@ export const OurOptions = () => {
   const [activeTab, setActiveTab] = React.useState("Cleaning Types");
   
   return (
-    <section id="options" className="py-16 bg-theme-lightblue dark:bg-gray-900">
+    <section id="options" className="py-16 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -94,7 +94,7 @@ export const OurOptions = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-serif">Our Options</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-serif text-[#1C1C1C] dark:text-white">Our Options</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Explore our variety of cleaning options to find the perfect match for your specific needs.
           </p>
@@ -107,12 +107,12 @@ export const OurOptions = () => {
           className="w-full"
         >
           <div className="flex justify-center mb-8">
-            <TabsList className={`${isMobile ? 'w-full' : 'w-auto'}`}>
+            <TabsList className={`${isMobile ? 'w-full' : 'w-auto'} bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm`}>
               {optionsData.map((category) => (
                 <TabsTrigger 
                   key={category.category} 
                   value={category.category}
-                  className="px-4 py-2"
+                  className="px-4 py-2 text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary"
                 >
                   {category.category}
                 </TabsTrigger>
@@ -134,15 +134,15 @@ export const OurOptions = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <Card className="h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow duration-300">
+                    <Card className="h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-xl font-serif">{option.title}</CardTitle>
-                        <CardDescription>{option.description}</CardDescription>
+                        <CardTitle className="text-xl font-serif text-[#1C1C1C] dark:text-white">{option.title}</CardTitle>
+                        <CardDescription className="dark:text-gray-400">{option.description}</CardDescription>
                       </CardHeader>
                       <CardContent className="flex-grow pt-0">
                         <ul className="space-y-2">
                           {option.features.map((feature, idx) => (
-                            <li key={idx} className="flex items-start text-sm">
+                            <li key={idx} className="flex items-start text-sm text-gray-700 dark:text-gray-300">
                               <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                               <span>{feature}</span>
                             </li>
@@ -151,7 +151,7 @@ export const OurOptions = () => {
                       </CardContent>
                       <CardFooter>
                         <Link to={option.path} className="w-full">
-                          <Button variant="outline" className="w-full">Learn More</Button>
+                          <Button variant="outline" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">Learn More</Button>
                         </Link>
                       </CardFooter>
                     </Card>
