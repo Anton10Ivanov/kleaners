@@ -19,7 +19,13 @@ const WhyChooseUsComponent = () => {
               <h3 className="text-xl font-semibold">{categoryDisplayNames[category] || category}</h3>
               <div className="space-y-4">
                 {items.map((item: AdvantageItem) => (
-                  <AdvantageCard key={item.title} advantage={item} />
+                  <AdvantageCard 
+                    key={item.title} 
+                    title={item.title}
+                    icon={item.icon}
+                    description={item.description}
+                    color={item.color}
+                  />
                 ))}
               </div>
             </div>
