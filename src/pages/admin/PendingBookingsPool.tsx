@@ -109,30 +109,18 @@ export const AdminPendingBookingsPool = () => {
   };
   
   return (
-    <div className="container mx-auto py-2 px-2 md:py-8 md:px-4">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 md:p-6">
-        <h1 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold mb-4 md:mb-6`}>
-          {isProviderView ? 'Available Jobs' : 'Pending Bookings Pool'}
-        </h1>
-        <p className="text-muted-foreground mb-6">
-          {isProviderView 
-            ? 'New booking requests available in your service area' 
-            : 'New bookings from clients waiting for provider assignment. Assign providers to bookings to move them out of the pool.'
-          }
-        </p>
-        
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
-        ) : (
-          <PendingBookingsPool 
-            pendingBookings={pendingBookings} 
-            refreshData={handleRefresh} 
-            isProviderView={isProviderView}
-          />
-        )}
-      </div>
+    <div className="container mx-auto px-4 py-6">
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <PendingBookingsPool 
+          pendingBookings={pendingBookings} 
+          refreshData={handleRefresh} 
+          isProviderView={isProviderView}
+        />
+      )}
     </div>
   );
 };

@@ -6,6 +6,8 @@ import { EmptyBookingPool } from './pending-pool/EmptyBookingPool';
 import { ProviderBookingsList } from './pending-pool/ProviderBookingsList';
 import { AdminBookingsList } from './pending-pool/AdminBookingsList';
 import { AssignProviderDialog } from './AssignProviderDialog';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Dashboard } from '@/components/admin/Dashboard';
 
 interface PendingBookingsPoolProps {
   pendingBookings?: Booking[];
@@ -59,20 +61,33 @@ export const PendingBookingsPool: React.FC<PendingBookingsPoolProps> = ({
     );
   }
   
-  // Admin view with full functionality
+  // Admin view with tabs for dashboard and pending bookings
   return (
     <>
-      <AdminBookingsList
-        bookings={pendingBookings}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        toggleSort={handleToggleSort}
-        updateBookingStatus={handleUpdateBookingStatus}
-        deleteBooking={handleDeleteBooking}
-        refreshData={handleRefreshBookings}
-        viewDetails={handleViewDetails}
-        contactClient={handleContactClient}
-      />
+      <Tabs defaultValue="pending" className="w-full">
+        <TabsList className="mb-4">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="pending">Pending Bookings</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="dashboard" className="space-y-4">
+          <Dashboard />
+        </TabsContent>
+        
+        <TabsContent value="pending" className="space-y-4">
+          <AdminBookingsList
+            bookings={pendingBookings}
+            sortField={sortField}
+            sortOrder={sortOrder}
+            toggleSort={handleToggleSort}
+            updateBookingStatus={handleUpdateBookingStatus}
+            deleteBooking={handleDeleteBooking}
+            refreshData={handleRefreshBookings}
+            viewDetails={handleViewDetails}
+            contactClient={handleContactClient}
+          />
+        </TabsContent>
+      </Tabs>
       
       {selectedBooking && (
         <AssignProviderDialog
