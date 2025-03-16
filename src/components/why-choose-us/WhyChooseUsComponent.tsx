@@ -3,7 +3,6 @@ import React from 'react';
 import { whyChooseUsContent, getAdvantagesByCategories, categoryDisplayNames } from './WhyChooseUsContent';
 import { AdvantageCard } from './AdvantageCard';
 import { AdvantageItem } from './WhyChooseUsTypes';
-import { Grid } from '../layout/Grid';
 
 // Create a component that will use the content from WhyChooseUsContent
 const WhyChooseUsComponent = () => {
@@ -14,7 +13,7 @@ const WhyChooseUsComponent = () => {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">Why Choose Us</h2>
         
-        <Grid cols={3} gap="lg" responsive={true} className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {Object.entries(categories).map(([category, items]) => (
             <div key={category} className="space-y-6">
               <h3 className="text-xl font-semibold">{categoryDisplayNames[category] || category}</h3>
@@ -31,7 +30,7 @@ const WhyChooseUsComponent = () => {
               </div>
             </div>
           ))}
-        </Grid>
+        </div>
       </div>
     </section>
   );
