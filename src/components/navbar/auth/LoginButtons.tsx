@@ -12,7 +12,7 @@ const LoginButtons: React.FC = () => {
         variant="ghost" 
         size="sm" 
         onClick={() => navigate('/login')}
-        className="text-slate-700 hover:text-primary dark:text-slate-200"
+        className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
       >
         Login
       </Button>
@@ -20,7 +20,7 @@ const LoginButtons: React.FC = () => {
         variant="outline" 
         size="sm" 
         onClick={() => navigate('/signup')} 
-        className="border-primary text-primary font-medium text-sm hover:bg-primary/10"
+        className="border-gray-300 text-gray-500 font-medium text-sm hover:bg-primary/10 hover:text-primary dark:border-gray-700 dark:text-gray-400 dark:hover:text-primary"
       >
         Sign up
       </Button>
