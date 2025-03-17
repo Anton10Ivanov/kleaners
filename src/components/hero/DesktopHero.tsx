@@ -24,9 +24,7 @@ export const DesktopHero = memo(() => {
           y: 0
         }} transition={{
           duration: 0.3
-        }} className="inline-block text-primary font-medium text-sm md:text-base mb-2">
-            Professional Cleaning Services
-          </motion.span>
+        }} className="inline-block text-primary font-medium text-sm md:text-base mb-2">Rated 5* on Google.</motion.span>
           
           <motion.h1 initial={{
           opacity: 0,
@@ -37,14 +35,12 @@ export const DesktopHero = memo(() => {
         }} transition={{
           duration: 0.5,
           delay: 0.1
-        }} className="text-4xl sm:text-5xl leading-tight mb-4 text-left font-extrabold text-[#1c1c1c] lg:text-5xl">
+        }} className="text-4xl sm:text-5xl leading-tight mb-4 text-left font-extrabold text-[#1c1c1c] lg:text-6xl">
             Book your cleaning <br className="hidden md:block" />
-            <span className="text-primary">in just 2 minutes</span>
+            <span className="text-primary">with one of the most transparent companies in the industry.</span>
           </motion.h1>
           
-          <p className="text-lg md:text-xl max-w-md text-slate-600 mb-6">
-            Professional local cleaners with transparent, fair pricing and guaranteed satisfaction.
-          </p>
+          <p className="text-lg md:text-xl max-w-md text-slate-600 mb-6">Professional Kleaners, transparent conditions, fair pricing and guaranteed satisfaction.</p>
           
           
         </motion.div>
