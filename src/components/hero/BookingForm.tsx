@@ -82,7 +82,7 @@ export const BookingForm = memo(({ layout }: BookingFormProps) => {
           <div className={`${layout === "mobile" ? "w-full" : "w-auto"}`}>
             <Button 
               type="submit" 
-              className="w-full bg-[#F97316] hover:bg-[#F97316]/90 dark:bg-[#F97316] dark:hover:bg-[#F97316]/80 text-white font-medium py-2.5 h-11 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
+              className="w-full bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-xl flex items-center justify-center shadow-[0_8px_15px_rgba(251,146,60,0.2)] hover:shadow-[0_8px_15px_rgba(251,146,60,0.4)] transform hover:-translate-y-0.5 transition-all"
             >
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
