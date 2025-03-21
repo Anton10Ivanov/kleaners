@@ -21,7 +21,7 @@ Before deploying, ensure the following:
 
 ## Build Process
 
-To build the application for production:
+To build the application for production with static pre-rendering:
 
 ```bash
 # Install dependencies
@@ -30,11 +30,14 @@ npm install
 # Build for production
 npm run build
 
+# Run react-snap to pre-render pages to static HTML
+node src/utils/seo/postBuildScript.js
+
 # Preview the production build locally
 npm run preview
 ```
 
-The build output will be in the `dist` directory.
+The build output will be in the `dist` directory, with pre-rendered HTML files for improved SEO.
 
 ## Deployment Options
 
@@ -42,7 +45,7 @@ The build output will be in the `dist` directory.
 
 1. Connect your GitHub repository to Netlify
 2. Configure build settings:
-   - Build command: `npm run build`
+   - Build command: `npm run build && node src/utils/seo/postBuildScript.js`
    - Publish directory: `dist`
 3. Add environment variables in the Netlify dashboard
 4. Configure SPA routing by creating a `netlify.toml` file in your project root:
@@ -58,7 +61,7 @@ The build output will be in the `dist` directory.
 1. Import your GitHub repository to Vercel
 2. Configure build settings:
    - Framework preset: Vite
-   - Build command: `npm run build`
+   - Build command: `npm run build && node src/utils/seo/postBuildScript.js`
    - Output directory: `dist`
 3. Add environment variables in the Vercel dashboard
 4. Vercel handles SPA routing automatically, but you can also create a `vercel.json` file for custom configuration:
@@ -76,7 +79,7 @@ The build output will be in the `dist` directory.
    npm install --save-dev gh-pages
    
    # Add deploy script to package.json
-   # "deploy": "gh-pages -d dist"
+   # "deploy": "npm run build && node src/utils/seo/postBuildScript.js && gh-pages -d dist"
    ```
 2. Create a custom 404.html that redirects to index.html
 3. Use the `gh-pages` branch for hosting
@@ -142,6 +145,24 @@ The build output will be in the `dist` directory.
    }
    ```
 
+## SEO Benefits of Static Pre-rendering
+
+The application now uses react-snap to pre-render pages to static HTML, which provides several SEO benefits:
+
+1. **Improved Crawlability**: Search engines can now see the full content of your pages without executing JavaScript
+2. **Faster Initial Load**: Users see content immediately, improving Core Web Vitals metrics
+3. **Better Indexing**: Pre-rendered content is more reliably indexed by search engines
+4. **Social Media Sharing**: Open Graph tags are properly read when pages are shared on social platforms
+
+### React-Snap Configuration
+
+The pre-rendering process is configured in `src/utils/seo/postBuildScript.js`. You can customize the following options:
+
+- **Routes to Pre-render**: Add additional routes to the `include` array
+- **Minification**: Adjust HTML minification settings
+- **Third-party Requests**: Enable/disable skipping third-party requests during pre-rendering
+- **Debugging**: Uncomment headless/puppeteerArgs options for debugging
+
 ## Supabase Edge Functions
 
 If your application uses Supabase Edge Functions:
@@ -169,6 +190,8 @@ After deploying:
 3. Test client-side routing
 4. Check for console errors related to MSW or other development tools
 5. Verify that environment variables are properly loaded
+6. Check if pre-rendered pages are correctly indexed by search engines (use Google Search Console)
+7. Verify social sharing by testing Open Graph tags with Facebook/Twitter validators
 
 ## Troubleshooting
 
@@ -184,9 +207,15 @@ After deploying:
 
 5. **CORS Issues**: Check that Supabase functions have proper CORS configuration for your domain.
 
+6. **Pre-rendering Failures**: If react-snap fails, check for:
+   - Network requests that fail during pre-rendering
+   - Dynamic content that relies on window/document before mount
+   - Ensure puppeteer has necessary permissions in CI/CD environments
+
 ### Debugging Tips
 
 1. Check browser console for errors
 2. Verify network requests in the browser developer tools
 3. Test API endpoints directly to isolate front-end vs back-end issues
 4. Review build logs for compilation errors
+5. Use "View Source" in the browser to confirm pages are properly pre-rendered

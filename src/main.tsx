@@ -1,45 +1,27 @@
-
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { hydrateRoot, createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { startMockServiceWorker } from './mocks/browser'
-import { ThemeProvider } from 'next-themes'
-import { Toaster } from '@/components/ui/toaster'
 
-// Initialize mock service worker in development or if enabled via env var
-const enableMocks = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCK_API === 'true';
+const rootElement = document.getElementById('root')
 
-if (enableMocks) {
-  startMockServiceWorker().catch(err => {
-    console.warn('Mock Service Worker initialization error:', err)
-  })
+if (!rootElement) throw new Error('Failed to find the root element')
+
+// Check if the app has been pre-rendered with react-snap
+const isPrerendered = rootElement.hasChildNodes()
+
+if (isPrerendered) {
+  // If the app was pre-rendered, hydrate it
+  hydrateRoot(rootElement, 
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  )
+} else {
+  // Otherwise, render it normally
+  createRoot(rootElement).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  )
 }
-
-// Create a client with improved defaults for network & cache handling
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: true,
-    },
-  },
-})
-
-// Using basename ensures proper routing in deployed environments
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL || "/"}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="cleanly-theme">
-          <App />
-          <Toaster />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-)
