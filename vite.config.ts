@@ -24,7 +24,6 @@ export default defineConfig(({ mode }) => ({
     // Improve build performance
     target: 'es2015',
     minify: 'esbuild', // Changed from 'terser' to 'esbuild' which is included by default
-    // Removed terserOptions since we're using esbuild
     // Split chunks for better caching
     rollupOptions: {
       output: {
@@ -57,6 +56,8 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1000,
     // Add image optimization options
     assetsInlineLimit: 4096, // Inline small images for better performance
+    // Enable SSR-friendly approach for better static generation
+    ssrManifest: true,
   },
   // Optimize dev server
   optimizeDeps: {
