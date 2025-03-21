@@ -23,13 +23,8 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Improve build performance
     target: 'es2015',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: true
-      }
-    },
+    minify: 'esbuild', // Changed from 'terser' to 'esbuild' which is included by default
+    // Removed terserOptions since we're using esbuild
     // Split chunks for better caching
     rollupOptions: {
       output: {
