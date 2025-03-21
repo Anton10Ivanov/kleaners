@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +20,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "heading-color": "hsl(var(--heading-color))",
         "secondary-text": "hsl(var(--secondary-text))",
         surface: "hsl(var(--surface))",
         primary: {
@@ -53,6 +55,8 @@ export default {
         theme: {
           blue: "hsl(206, 65%, 70%)",
           green: "hsl(122, 65%, 84%)",
+          lightblue: "#D6EFFF",
+          darkheading: "#1C1C1C",
         },
         dark: {
           background: "#1A1F2C",
@@ -62,6 +66,7 @@ export default {
           tertiary: "#6E59A5",
           surface: "#F1F0FB",
         },
+        success: "hsl(var(--success))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,6 +75,15 @@ export default {
       },
       fontFamily: {
         raleway: ["var(--ff)"],
+      },
+      spacing: {
+        '1': 'var(--spacing1)',
+        '2': 'var(--spacing2)',
+        '3': 'var(--spacing3)',
+        '4': 'var(--spacing4)',
+        '5': 'var(--spacing5)',
+        '6': 'var(--spacing6)',
+        '7': 'var(--spacing7)',
       },
       keyframes: {
         "accordion-down": {
@@ -88,12 +102,24 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        float: {
+          "0%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+          "100%": { transform: "translateY(0px)" },
+        },
+        pulse: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         fadeIn: "fadeIn 0.5s ease-out",
         slideIn: "slideIn 0.5s ease-out",
+        float: "float 6s ease-in-out infinite",
+        pulse: "pulse 3s ease-in-out infinite",
       },
     },
   },
