@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "./styles/globals.css";
+@import "./styles/animations.css";
 
 @layer base {
   :root {
@@ -10,12 +11,12 @@
     --ff: 'Raleway', sans-serif;
     --ff2: 'Raleway', sans-serif;
     
-    /* Typography values from the provided image */
+    /* Typography values */
     --p: 1rem/1.5em var(--ff);
     --h1: 600 3rem/1.2em var(--ff2);
     --h2: 600 2rem/1.2em var(--ff2);
     
-    /* Spacing values from the provided image */
+    /* Spacing scale */
     --spacing1: 4px;
     --spacing2: 8px;
     --spacing3: 16px;
@@ -24,7 +25,7 @@
     --spacing6: 80px;
     --spacing7: 160px;
     
-    /* Light mode - Updated with specified colors */
+    /* Light mode colors */
     --background: 195 100% 92%; /* Light blue #D6EFFF */
     --foreground: 0 0% 20%; /* #333333 */
     --heading-color: 0 0% 11%; /* #1C1C1C for headings */
@@ -53,7 +54,7 @@
   }
 
   .dark {
-    /* Dark mode colors remain the same */
+    /* Dark mode colors */
     --background: 229 19% 13%; /* #1A1F2C */
     --foreground: 220 6% 57%; /* #8E9196 */
     --secondary-text: 220 6% 57%; /* #8E9196 */
@@ -96,7 +97,7 @@
     line-height: 1.5em;
   }
 
-  /* Apply the new typography values with heading color */
+  /* Typography styles */
   h1 {
     font: var(--h1);
     @apply text-[#1C1C1C] dark:text-white;
@@ -139,7 +140,9 @@
   }
 }
 
+/* Utility classes */
 @layer utilities {
+  /* Scrollbar utilities */
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -149,42 +152,7 @@
     display: none;
   }
 
-  /* Add spacing utilities based on the provided values */
-  .space-1 {
-    margin: var(--spacing1);
-    padding: var(--spacing1);
-  }
-  
-  .space-2 {
-    margin: var(--spacing2);
-    padding: var(--spacing2);
-  }
-  
-  .space-3 {
-    margin: var(--spacing3);
-    padding: var(--spacing3);
-  }
-  
-  .space-4 {
-    margin: var(--spacing4);
-    padding: var(--spacing4);
-  }
-  
-  .space-5 {
-    margin: var(--spacing5);
-    padding: var(--spacing5);
-  }
-  
-  .space-6 {
-    margin: var(--spacing6);
-    padding: var(--spacing6);
-  }
-  
-  .space-7 {
-    margin: var(--spacing7);
-    padding: var(--spacing7);
-  }
-
+  /* Visual effects */
   .glass-morphism {
     @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)];
   }
@@ -218,30 +186,4 @@
     background-position: center;
     background-size: cover;
   }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Custom animations for the landing page */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
 }
