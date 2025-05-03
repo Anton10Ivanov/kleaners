@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect } from 'react';
+
+import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate, BrowserRouter } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import ClientLayout from '@/components/client/ClientLayout';
@@ -60,19 +61,18 @@ import ProviderMessages from '@/pages/provider/ProviderMessages';
 function App() {
   const location = useLocation();
 
-  useEffect(() => {
-    const path = location.pathname.split('/')[1] || 'root';
-    document.body.className = ''; // Clear previous classes
-    document.body.classList.add(`${path}-route`);
+  // Effect for setting body classes based on route
+  const path = location.pathname.split('/')[1] || 'root';
+  document.body.className = ''; // Clear previous classes
+  document.body.classList.add(`${path}-route`);
 
-    const rootElement = document.getElementById('root');
-    if (rootElement) {
-      rootElement.className = '';
-      if (['admin', 'client', 'provider'].includes(path)) {
-        rootElement.classList.add('admin-panel-container');
-      }
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.className = '';
+    if (['admin', 'client', 'provider'].includes(path)) {
+      rootElement.classList.add('admin-panel-container');
     }
-  }, [location]);
+  }
 
   return (
     <>
