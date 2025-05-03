@@ -1,6 +1,7 @@
 
 import React from 'react'
 import { hydrateRoot, createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 
@@ -17,7 +18,9 @@ if (isPrerendered) {
   hydrateRoot(
     rootElement, 
     <React.StrictMode>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </React.StrictMode>
   )
   console.log('App hydrated from pre-rendered content')
@@ -25,7 +28,9 @@ if (isPrerendered) {
   // Otherwise, render it normally
   createRoot(rootElement).render(
     <React.StrictMode>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </React.StrictMode>
   )
   console.log('App rendered normally')
