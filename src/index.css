@@ -1,9 +1,9 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./styles/globals.css";
+@import "./styles/spacing.css";
 @import "./styles/animations.css";
+@import "./styles/globals.css";
 
 @layer base {
   :root {
