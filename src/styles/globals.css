@@ -145,3 +145,33 @@
   font: var(--p);
   @apply text-[#8E9196] dark:text-gray-400 max-w-2xl mx-auto;
 }
+
+/* Form element styling */
+[data-radix-select-trigger] {
+  @apply h-12 px-4 py-0 flex items-center;
+}
+
+.form-grid {
+  @apply grid gap-5;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+}
+
+/* Golden ratio spacing utilities */
+.golden-small {
+  margin-bottom: 0.618rem;
+}
+
+.golden-medium {
+  margin-bottom: 1rem;
+}
+
+.golden-large {
+  margin-bottom: 1.618rem;
+}
