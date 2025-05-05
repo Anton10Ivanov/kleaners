@@ -25,3 +25,9 @@ React Router's hooks (like `useLocation`, `useNavigate`, `useParams`, etc.) must
 
 ## May 2025 Update:
 Fixed Router context error in the application by wrapping the App component with BrowserRouter in main.tsx. This ensures that useLocation() and other router hooks have access to the router context throughout the application.
+
+## Common Router Issues:
+- Double-wrapping components with BrowserRouter can cause strange behavior
+- Using Router hooks outside of Router context causes errors
+- Inconsistent router versions can lead to compatibility issues
+- Navigation components need Router context to function properly

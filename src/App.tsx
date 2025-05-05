@@ -1,6 +1,6 @@
 
 import { lazy, Suspense } from 'react';
-import { Routes, Route, useLocation, Navigate, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
 import ClientLayout from '@/components/client/ClientLayout';
 import ProviderLayout from '@/components/provider/ProviderLayout';
