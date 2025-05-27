@@ -19,7 +19,7 @@ export const BookingSection = memo(({
   handleNextStep
 }: BookingSectionProps) => {
   return (
-    <section className="relative w-full py-16 bg-gray-50">
+    <section className="relative w-full py-12 bg-gray-50">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -32,16 +32,16 @@ export const BookingSection = memo(({
         <div className="absolute inset-0 bg-white/60"></div>
       </div>
       
-      {/* Content */}
+      {/* Content - More compact design */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8"
+          className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
         >
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Get your instant quote</h2>
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Get your instant quote</h2>
             <p className="text-gray-600">Fill out the form below to receive your personalized cleaning quote</p>
           </div>
           
