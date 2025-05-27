@@ -1,4 +1,3 @@
-
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { useHero } from "./HeroContext";
