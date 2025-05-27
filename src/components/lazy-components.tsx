@@ -3,19 +3,19 @@ import { lazy, Suspense } from 'react';
 import { useLazyComponentTimer } from '@/hooks/useLazyComponentTimer';
 import { SectionLoading } from '@/components/ui/section-loading';
 
-// Use the performance-optimized lazy loading hook
+// Use the performance-optimized lazy loading hook with optimized components
 export const LazyWhyChooseUs = useLazyComponentTimer(
-  () => import('./why-choose-us/WhyChooseUsComponent'),
+  () => import('./why-choose-us/ModernWhyChooseUs'),
   'WhyChooseUs'
 );
 
 export const LazyOurOptions = useLazyComponentTimer(
-  () => import('./options/OurOptions'),
+  () => import('./options/OptimizedOurOptions'),
   'OurOptions'
 );
 
 export const LazyTestimonials = useLazyComponentTimer(
-  () => import('./Testimonials'),
+  () => import('./testimonials/CompactTestimonials'),
   'Testimonials'
 );
 
