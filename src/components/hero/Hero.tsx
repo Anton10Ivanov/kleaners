@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
+import environmentUtils from "@/utils/environment";
 
 interface HeroProps {
   selectedService: string;
@@ -28,11 +29,17 @@ export const Hero = memo(({
   const { startTimer, endTimer } = useComponentTimer('Hero');
   const isMobile = useMediaQuery("(max-width: 768px)");
   const imagesLoadedRef = useRef<boolean>(false);
+  const isPreviewWindow = environmentUtils.isPreviewWindow();
 
   // Mark Hero as important for Core Web Vitals
   useEffect(() => {
     performanceMonitor.markAsImportant('Hero');
-  }, []);
+    
+    // Add debug info for preview windows
+    if (isPreviewWindow) {
+      console.log("Hero: Running in preview window mode");
+    }
+  }, [isPreviewWindow]);
 
   // Set default service to "regular" when component mounts
   useEffect(() => {
@@ -43,36 +50,6 @@ export const Hero = memo(({
     }
     endTimer('serviceInitialization');
   }, [selectedService, setSelectedService, startTimer, endTimer]);
-
-  // Simplified preloading of the hero image
-  useEffect(() => {
-    if (imagesLoadedRef.current) return;
-    
-    startTimer('imagePreloading');
-    const imageToPreload = '/lovable-uploads/opciya1 (1) 2.png';
-    
-    // Create an image element to preload the background
-    const img = new Image();
-    img.src = imageToPreload;
-    // Use high fetchPriority
-    img.fetchPriority = 'high';
-    
-    img.onload = () => {
-      endTimer('imagePreloading');
-      imagesLoadedRef.current = true;
-      console.log("Hero background image preloaded successfully");
-    };
-    
-    img.onerror = () => {
-      endTimer('imagePreloading');
-      console.error("Failed to preload hero image:", imageToPreload);
-    };
-    
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [startTimer, endTimer]);
 
   const handleValidatedNextStep = () => {
     startTimer('validateAndNextStep');
@@ -92,7 +69,7 @@ export const Hero = memo(({
 
   return (
     <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center pt-28 pb-12 bg-[#D3E4FD] text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-16">
-      {/* Background elements with improved z-index layering */}
+      {/* Background elements with improved reliability */}
       <div className="absolute inset-0 z-0">
         <BackgroundElements />
       </div>

@@ -1,62 +1,79 @@
+import { environmentUtils } from "@/utils/environment";
 
-import { PerformanceMonitor } from './core-monitor';
-import { WebVitalsMonitor } from './web-vitals';
+// Performance monitoring utilities
+type OperationName = string;
 
-/**
- * Main performance monitoring system
- * Provides a centralized way to track and report performance metrics
- */
+interface PerformanceEntry {
+  startTime: number;
+  duration: number;
+}
 
-// Create singleton instances
-const monitor = new PerformanceMonitor();
-const webVitals = new WebVitalsMonitor();
+interface PerformanceMetrics {
+  [key: string]: PerformanceEntry[];
+}
 
-// Export the performance monitor instance
 export const performanceMonitor = {
-  /**
-   * Start timing an operation
-   * @param key - Unique identifier for the operation
-   */
-  startTiming: (key: string) => monitor.startTiming(key),
-  
-  /**
-   * End timing an operation and record the result
-   * @param key - Unique identifier for the operation
-   * @returns Duration in milliseconds
-   */
-  endTiming: (key: string) => monitor.endTiming(key),
-  
-  /**
-   * Set a threshold for a specific operation type
-   * @param type - Type of operation
-   * @param threshold - Threshold in milliseconds
-   */
-  setThreshold: (type: string, threshold: number) => monitor.setThreshold(type, threshold),
-  
-  /**
-   * Enable or disable performance monitoring
-   * @param enabled - Whether monitoring is enabled
-   */
-  setEnabled: (enabled: boolean) => {
-    monitor.setEnabled(enabled);
-    webVitals.setEnabled(enabled);
-  },
-  
-  /**
-   * Mark a component as important for Core Web Vitals
-   * @param componentName - Name of the component
-   */
-  markAsImportant: (componentName: string) => 
-    webVitals.markAsImportant(componentName, monitor.startTiming.bind(monitor)),
-  
-  /**
-   * Log all recorded timing results to the console
-   */
-  logResults: () => monitor.logResults(),
+  importantMarks: new Set<string>(),
+  metrics: {} as PerformanceMetrics,
 
-  /**
-   * Get all recorded timing results
-   * @returns Record of timing results
-   */
-  getResults: () => monitor.getResults()
+  markAsImportant: (markName: string) => {
+    performanceMonitor.importantMarks.add(markName);
+    console.log(`Marked ${markName} as important for performance monitoring.`);
+  },
+
+  measureOperation: (operationName: OperationName, operation: () => void) => {
+    const startTime = performance.now();
+    operation();
+    const duration = performance.now() - startTime;
+
+    if (!performanceMonitor.metrics[operationName]) {
+      performanceMonitor.metrics[operationName] = [];
+    }
+
+    performanceMonitor.metrics[operationName]?.push({ startTime, duration });
+    console.debug(`Operation ${operationName} took ${duration.toFixed(2)} ms`);
+  },
+
+  reportMetrics: () => {
+    console.groupCollapsed('Performance Metrics Report');
+    Object.keys(performanceMonitor.metrics).forEach(key => {
+      const entries = performanceMonitor.metrics[key];
+      const totalTime = entries.reduce((sum, entry) => sum + entry.duration, 0);
+      const averageTime = totalTime / entries.length;
+      console.log(`${key}: ${entries.length} calls, avg: ${averageTime.toFixed(2)}ms, total: ${totalTime.toFixed(2)}ms`);
+    });
+    console.groupEnd();
+  },
+
+  // Enhanced environment-aware initialization
+  init: () => {
+    if (typeof window === 'undefined') return;
+    
+    // Add environment context to performance reporting
+    const environmentContext = {
+      isLovableSandbox: window.location.hostname.includes('lovable'),
+      isPreviewWindow: window.opener !== null,
+      hostname: window.location.hostname,
+      userAgent: navigator.userAgent
+    };
+    
+    console.log('Performance Monitor initialized with context:', environmentContext);
+    
+    // Monitor hydration issues specific to preview windows
+    if (environmentContext.isPreviewWindow) {
+      console.log('Preview window detected - enabling enhanced monitoring');
+      
+      // Check for hydration mismatches
+      window.addEventListener('error', (event) => {
+        if (event.message.includes('hydrat')) {
+          console.error('Hydration error detected in preview window:', event);
+        }
+      });
+    }
+  }
 };
+
+// Auto-initialize when imported
+if (typeof window !== 'undefined') {
+  performanceMonitor.init();
+}

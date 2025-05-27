@@ -1,39 +1,38 @@
 
 import { memo, useEffect, useState, useRef } from "react";
+import { useImageLoader } from "@/hooks/useImageLoader";
+import environmentUtils from "@/utils/environment";
 
 export const BackgroundElements = memo(() => {
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [shouldShowImage, setShouldShowImage] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Direct reference to the image - no complex path handling
-  const imagePath = '/lovable-uploads/opciya1 (1) 2.png';
-  
-  // Simplified image loading
-  useEffect(() => {
-    let isMounted = true;
-    
-    const img = new Image();
-    img.src = imagePath;
-    
-    img.onload = () => {
-      if (isMounted) {
+  // Use the image loader hook for better reliability
+  const { src: imageSrc, isLoaded: imageLoaded, hasError: imageError, retry } = useImageLoader(
+    '/lovable-uploads/opciya1 (1) 2.png',
+    {
+      preload: environmentUtils.features.enablePreloading(),
+      onLoad: () => {
         console.log("Hero background image loaded successfully");
-        setImageLoaded(true);
+        setShouldShowImage(true);
+      },
+      onError: (error) => {
+        console.error("Failed to load hero image:", error);
       }
-    };
-    
-    img.onerror = () => {
-      if (isMounted) {
-        console.error("Failed to load hero image:", imagePath);
+    }
+  );
+
+  // Fallback visibility timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!imageLoaded && !imageError) {
+        console.warn("Image loading timeout, showing fallback");
+        setShouldShowImage(true);
       }
-    };
-    
-    return () => {
-      isMounted = false;
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, []);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [imageLoaded, imageError]);
 
   return (
     <>
@@ -42,44 +41,48 @@ export const BackgroundElements = memo(() => {
       
       {/* Background container */}
       <div className="absolute inset-0 overflow-hidden bg-[#D3E4FD]" ref={containerRef}>
-        {/* Desktop background image as actual IMG element for better reliability */}
+        {/* Desktop background image */}
         <div className="absolute inset-0 z-0 hidden md:block">
-          <img 
-            src={imagePath}
-            alt="Background decoration" 
-            className="absolute right-0 h-full object-contain object-right"
-            style={{
-              opacity: imageLoaded ? 0.95 : 0,
-              transition: 'opacity 0.3s ease-in-out',
-              filter: 'saturate(1.05)',
-              maxWidth: '70%'
-            }}
-            onLoad={() => setImageLoaded(true)}
-          />
+          {shouldShowImage && (
+            <img 
+              src={imageSrc}
+              alt="Background decoration" 
+              className="absolute right-0 h-full object-contain object-right transition-opacity duration-300"
+              style={{
+                opacity: imageLoaded ? 0.95 : 0.3,
+                filter: 'saturate(1.05)',
+                maxWidth: '70%'
+              }}
+              onLoad={() => setShouldShowImage(true)}
+              onError={retry}
+            />
+          )}
           
-          {!imageLoaded && (
+          {!shouldShowImage && !imageError && (
             <div className="absolute right-0 top-0 bottom-0 w-[40%] flex items-center justify-center">
-              <div className="h-16 w-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="h-16 w-16 border-4 border-primary border-t-transparent rounded-full animate-spin opacity-30"></div>
             </div>
           )}
         </div>
         
-        {/* Mobile background image as actual IMG element */}
+        {/* Mobile background image */}
         <div className="absolute inset-0 z-0 block md:hidden">
-          <img 
-            src={imagePath}
-            alt="Background decoration" 
-            className="absolute inset-0 w-full h-full object-contain object-center opacity-50"
-            style={{
-              opacity: imageLoaded ? 0.5 : 0,
-              transition: 'opacity 0.3s ease-in-out'
-            }}
-            onLoad={() => setImageLoaded(true)}
-          />
+          {shouldShowImage && (
+            <img 
+              src={imageSrc}
+              alt="Background decoration" 
+              className="absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-300"
+              style={{
+                opacity: imageLoaded ? 0.5 : 0.2
+              }}
+              onLoad={() => setShouldShowImage(true)}
+              onError={retry}
+            />
+          )}
           
-          {!imageLoaded && (
+          {!shouldShowImage && !imageError && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full animate-spin opacity-20"></div>
             </div>
           )}
         </div>
