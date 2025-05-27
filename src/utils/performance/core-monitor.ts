@@ -9,6 +9,7 @@ import { PerformanceReporter } from './reporting';
 export class PerformanceMonitor {
   private timings: Map<string, number> = new Map();
   private results: Record<string, number> = {};
+  private importantMarks: Set<string> = new Set();
   private thresholds: TimingThresholds = {
     import: 300,  // 300ms threshold for imports
     render: 50,   // 50ms threshold for renders
@@ -17,6 +18,15 @@ export class PerformanceMonitor {
   };
   private enabled: boolean = true;
   private reporter: PerformanceReporter = new PerformanceReporter();
+  
+  /**
+   * Mark a component or operation as important for performance monitoring
+   * @param markName - Name of the mark to track as important
+   */
+  public markAsImportant(markName: string): void {
+    this.importantMarks.add(markName);
+    console.log(`Marked ${markName} as important for performance monitoring.`);
+  }
   
   /**
    * Start timing an operation
