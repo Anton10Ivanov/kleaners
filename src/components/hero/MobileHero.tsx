@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import { BookingForm } from "./BookingForm";
 
-export const MobileHero = memo(() => {
+interface MobileHeroProps {
+  hideForm?: boolean;
+}
+
+export const MobileHero = memo(({ hideForm = false }: MobileHeroProps) => {
   const benefits = [
     "Liability insurance",
     "Simple booking",
@@ -55,19 +59,21 @@ export const MobileHero = memo(() => {
         </motion.div>
       </motion.div>
       
-      {/* Booking Form */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }} 
-        animate={{ opacity: 1, scale: 1 }} 
-        transition={{ duration: 0.6, delay: 0.4 }} 
-        className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
-      >
-        <div className="mb-6 text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Get your quote</h2>
-          <p className="text-gray-600 text-sm">Fill out the form below</p>
-        </div>
-        <BookingForm layout="mobile" />
-      </motion.div>
+      {/* Booking Form - conditionally rendered */}
+      {!hideForm && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          transition={{ duration: 0.6, delay: 0.4 }} 
+          className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
+        >
+          <div className="mb-6 text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Get your quote</h2>
+            <p className="text-gray-600 text-sm">Fill out the form below</p>
+          </div>
+          <BookingForm layout="mobile" />
+        </motion.div>
+      )}
     </div>
   );
 });

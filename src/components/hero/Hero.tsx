@@ -3,8 +3,8 @@ import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
+import { BookingSection } from "./BookingSection";
 import { HeroProvider } from "./HeroContext";
-import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
@@ -68,25 +68,31 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative min-h-[90vh] md:min-h-[85vh] flex items-center justify-center pt-28 pb-12 bg-white text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-16">
-      {/* Background elements with lifestyle image */}
-      <div className="absolute inset-0 z-0">
-        <BackgroundElements />
-      </div>
-      
-      {/* Content with higher z-index to appear above background */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <HeroProvider 
-          initialService={selectedService}
-          initialPostalCode={postalCode}
-          onNextStep={handleValidatedNextStep}
-          onServiceChange={setSelectedService}
-          onPostalCodeChange={setPostalCode}
-        >
-          {isMobile ? <MobileHero /> : <DesktopHero />}
-        </HeroProvider>
-      </div>
-    </section>
+    <>
+      {/* Hero Text Section */}
+      <section className="relative min-h-[70vh] md:min-h-[65vh] flex items-center justify-center pt-28 pb-12 bg-gradient-to-br from-orange-50 via-white to-blue-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-16">
+        <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <HeroProvider 
+            initialService={selectedService}
+            initialPostalCode={postalCode}
+            onNextStep={handleValidatedNextStep}
+            onServiceChange={setSelectedService}
+            onPostalCodeChange={setPostalCode}
+          >
+            {isMobile ? <MobileHero hideForm={true} /> : <DesktopHero hideForm={true} />}
+          </HeroProvider>
+        </div>
+      </section>
+
+      {/* Booking Form Section */}
+      <BookingSection
+        selectedService={selectedService}
+        setSelectedService={setSelectedService}
+        postalCode={postalCode}
+        setPostalCode={setPostalCode}
+        handleNextStep={handleValidatedNextStep}
+      />
+    </>
   );
 });
 
