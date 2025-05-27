@@ -17,46 +17,44 @@ export const MobileHero = memo(({ hideForm = false }: MobileHeroProps) => {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-6 py-4 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full max-w-7xl mx-auto flex flex-col items-center gap-4 py-2 text-center"
+    >
+      <motion.h1 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, delay: 0.1 }} 
+        className="text-3xl md:text-4xl font-bold leading-tight text-gray-900 mb-2"
       >
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6, delay: 0.1 }} 
-          className="text-3xl md:text-4xl font-bold leading-tight text-gray-900 mb-3"
-        >
-          Book your cleaning service{" "}
-          <span className="text-orange-600">online</span>
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg text-gray-600 mb-4 max-w-md mx-auto"
-        >
-          Professional house cleaning with transparent pricing and guaranteed satisfaction.
-        </motion.p>
+        Book your cleaning service{" "}
+        <span className="text-orange-600">online</span>
+      </motion.h1>
+      
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="text-lg text-gray-600 mb-3 max-w-md mx-auto"
+      >
+        Professional house cleaning with transparent pricing and guaranteed satisfaction.
+      </motion.p>
 
-        {/* Benefits List - More compact spacing */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-2 gap-2 mb-4 max-w-sm mx-auto"
-        >
-          {benefits.map((benefit, index) => (
-            <div key={index} className="flex items-center gap-2 text-left">
-              <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-              <span className="text-sm text-gray-700 font-medium">{benefit}</span>
-            </div>
-          ))}
-        </motion.div>
+      {/* Benefits List - More compact spacing */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="grid grid-cols-2 gap-2 mb-3 max-w-sm mx-auto"
+      >
+        {benefits.map((benefit, index) => (
+          <div key={index} className="flex items-center gap-2 text-left">
+            <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+            <span className="text-sm text-gray-700 font-medium">{benefit}</span>
+          </div>
+        ))}
       </motion.div>
       
       {/* Booking Form - conditionally rendered */}
@@ -74,7 +72,7 @@ export const MobileHero = memo(({ hideForm = false }: MobileHeroProps) => {
           <BookingForm layout="mobile" />
         </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 });
 
