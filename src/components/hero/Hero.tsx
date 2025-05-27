@@ -69,19 +69,17 @@ export const Hero = memo(({
 
   return (
     <>
-      {/* Hero Text Section - Reduced height by half */}
-      <section className="relative min-h-[35vh] md:min-h-[32vh] flex items-center justify-center pt-16 pb-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-12">
-        <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <HeroProvider 
-            initialService={selectedService}
-            initialPostalCode={postalCode}
-            onNextStep={handleValidatedNextStep}
-            onServiceChange={setSelectedService}
-            onPostalCodeChange={setPostalCode}
-          >
-            {isMobile ? <MobileHero hideForm={true} /> : <DesktopHero hideForm={true} />}
-          </HeroProvider>
-        </div>
+      {/* Hero Text Section - Optimized structure with full width */}
+      <section className="relative min-h-[35vh] md:min-h-[32vh] flex items-center justify-center pt-16 pb-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-12 px-4 sm:px-6 lg:px-8">
+        <HeroProvider 
+          initialService={selectedService}
+          initialPostalCode={postalCode}
+          onNextStep={handleValidatedNextStep}
+          onServiceChange={setSelectedService}
+          onPostalCodeChange={setPostalCode}
+        >
+          {isMobile ? <MobileHero hideForm={true} /> : <DesktopHero hideForm={true} />}
+        </HeroProvider>
       </section>
 
       {/* Booking Form Section */}

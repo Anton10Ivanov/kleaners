@@ -17,48 +17,46 @@ export const DesktopHero = memo(({ hideForm = false }: DesktopHeroProps) => {
   ];
 
   return (
-    <div className={`flex flex-col items-center gap-8 py-4 ${hideForm ? 'text-center' : 'lg:flex-row'}`}>
-      {/* Left Content - More compact spacing */}
-      <div className={`${hideForm ? 'max-w-4xl' : 'flex-1 max-w-2xl'}`}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.6 }}
+      className={`w-full max-w-7xl mx-auto flex flex-col items-center gap-6 py-2 ${hideForm ? 'text-center' : 'lg:flex-row'}`}
+    >
+      {/* Content - More compact spacing */}
+      <div className={`${hideForm ? 'max-w-5xl' : 'flex-1 max-w-2xl'}`}>
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className={`${hideForm ? 'text-4xl lg:text-6xl' : 'text-4xl lg:text-5xl'} font-bold leading-tight mb-3 text-gray-900`}
+        >
+          Book your cleaning service{" "}
+          <span className="text-orange-600">online</span>
+        </motion.h1>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className={`${hideForm ? 'text-xl' : 'text-lg'} text-gray-600 mb-4 leading-relaxed ${hideForm ? 'max-w-3xl mx-auto' : ''}`}
+        >
+          Professional house cleaning with transparent pricing and guaranteed satisfaction. Book in just 2 minutes.
+        </motion.p>
+
+        {/* Benefits List - More compact spacing */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6 }}
-          className="mb-6"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className={`grid grid-cols-2 gap-2 mb-3 ${hideForm ? 'max-w-2xl mx-auto' : ''}`}
         >
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className={`${hideForm ? 'text-4xl lg:text-6xl' : 'text-4xl lg:text-5xl'} font-bold leading-tight mb-4 text-gray-900`}
-          >
-            Book your cleaning service{" "}
-            <span className="text-orange-600">online</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className={`${hideForm ? 'text-xl' : 'text-lg'} text-gray-600 mb-5 leading-relaxed ${hideForm ? 'max-w-3xl mx-auto' : ''}`}
-          >
-            Professional house cleaning with transparent pricing and guaranteed satisfaction. Book in just 2 minutes.
-          </motion.p>
-
-          {/* Benefits List - More compact spacing */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className={`grid grid-cols-2 gap-3 mb-4 ${hideForm ? 'max-w-2xl mx-auto' : ''}`}
-          >
-            {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-gray-700 font-medium">{benefit}</span>
-              </div>
-            ))}
-          </motion.div>
+          {benefits.map((benefit, index) => (
+            <div key={index} className="flex items-center gap-3">
+              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+              <span className="text-gray-700 font-medium">{benefit}</span>
+            </div>
+          ))}
         </motion.div>
       </div>
       
@@ -79,7 +77,7 @@ export const DesktopHero = memo(({ hideForm = false }: DesktopHeroProps) => {
           </motion.div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 });
 
