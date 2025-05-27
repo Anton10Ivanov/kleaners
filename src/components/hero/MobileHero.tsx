@@ -44,7 +44,7 @@ export const MobileHero = memo(({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-md mx-auto flex flex-col items-center gap-6 py-2 text-center"
+      className="w-full max-w-md mx-auto flex flex-col items-center gap-4 py-2 text-center"
     >
       {/* Hero Text */}
       <motion.h1 
@@ -61,7 +61,7 @@ export const MobileHero = memo(({
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="text-lg text-gray-600 mb-3 max-w-md mx-auto"
+        className="text-lg text-gray-600 mb-2 max-w-md mx-auto"
       >
         Professional house cleaning with transparent pricing and guaranteed satisfaction.
       </motion.p>
@@ -88,7 +88,7 @@ export const MobileHero = memo(({
         transition={{ duration: 0.6, delay: 0.4 }} 
         className="w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Postal Code */}
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-orange-600 z-10" />
@@ -97,7 +97,7 @@ export const MobileHero = memo(({
               placeholder="Enter your city or postal code"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
+              className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
               required
             />
           </div>
@@ -106,7 +106,7 @@ export const MobileHero = memo(({
           <div className="relative">
             <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-orange-600 z-10" />
             <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
+              <SelectTrigger className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
                 <SelectValue placeholder="Select cleaning service" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
@@ -141,12 +141,12 @@ export const MobileHero = memo(({
           {/* CTA Button */}
           <Button 
             type="submit" 
-            className="w-full h-12 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
           >
             Let's Go <ArrowRight className="h-4 w-4" />
           </Button>
 
-          <p className="text-xs text-gray-500 text-center mt-4">
+          <p className="text-xs text-gray-500 text-center mt-3">
             Free quote • No commitment • Instant booking
           </p>
         </form>

@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 
 interface DesktopHeroProps {
   selectedService: string;
@@ -41,7 +40,7 @@ export const DesktopHero = memo(({
   };
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-6">
       {/* Hero Text Section */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
@@ -63,7 +62,7 @@ export const DesktopHero = memo(({
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-xl text-gray-600 mb-6 leading-relaxed max-w-3xl mx-auto"
+          className="text-xl text-gray-600 mb-4 leading-relaxed max-w-3xl mx-auto"
         >
           Professional house cleaning with transparent pricing and guaranteed satisfaction. Book in just 2 minutes.
         </motion.p>
@@ -73,7 +72,7 @@ export const DesktopHero = memo(({
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-2 gap-3 mb-8 max-w-2xl mx-auto"
+          className="grid grid-cols-2 gap-3 mb-4 max-w-2xl mx-auto"
         >
           {benefits.map((benefit, index) => (
             <div key={index} className="flex items-center gap-3 justify-center">
@@ -100,7 +99,7 @@ export const DesktopHero = memo(({
               placeholder="Enter your city or postal code"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
+              className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
               required
             />
           </div>
@@ -109,7 +108,7 @@ export const DesktopHero = memo(({
           <div className="relative">
             <Ruler className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-orange-600 z-10" />
             <Select>
-              <SelectTrigger className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
+              <SelectTrigger className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
                 <SelectValue placeholder="Property size (m²)" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
@@ -130,7 +129,7 @@ export const DesktopHero = memo(({
             <Input
               type="date"
               placeholder="Select date"
-              className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
+              className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400"
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
@@ -139,7 +138,7 @@ export const DesktopHero = memo(({
           <div className="relative">
             <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-orange-600 z-10" />
             <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger className="pl-12 h-12 rounded-lg border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
+              <SelectTrigger className="pl-12 rounded-lg border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors hover:border-gray-400">
                 <SelectValue placeholder="Select cleaning service" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
@@ -174,7 +173,7 @@ export const DesktopHero = memo(({
           {/* CTA Button */}
           <Button 
             type="submit" 
-            className="h-12 px-8 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+            className="px-8 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
           >
             Let's Go <ArrowRight className="h-4 w-4" />
           </Button>
