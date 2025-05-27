@@ -36,55 +36,40 @@ export const BackgroundElements = memo(() => {
 
   return (
     <>
-      {/* Noise texture overlay */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgc3RpdGNoVGlsZXM9InN0aXRjaCIgbnVtT2N0YXZlcz0iNCIgc2VlZD0iMiIgcmVzdWx0PSJ0dXJidWxlbmNlIj48L2ZlVHVyYnVsZW5jZT48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIiByZXN1bHQ9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSI+PC9mZUNvbG9yTWF0cml4PjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImRlc2F0dXJhdGVkVHVyYnVsZW5jZSIgbW9kZT0ib3ZlcmxheSIgcmVzdWx0PSJub2lzZUJsZW5kIj48L2ZlQmxlbmQ+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMiI+PC9yZWN0Pjwvc3ZnPg==')]"></div>
-      
-      {/* Background container */}
-      <div className="absolute inset-0 overflow-hidden bg-[#D3E4FD]" ref={containerRef}>
+      {/* Background container with gradient overlay */}
+      <div className="absolute inset-0 overflow-hidden bg-gradient-to-br from-orange-50 via-white to-blue-50" ref={containerRef}>
         {/* Desktop background image */}
-        <div className="absolute inset-0 z-0 hidden md:block">
+        <div className="absolute inset-0 z-0 hidden lg:block">
           {shouldShowImage && (
-            <img 
-              src={imageSrc}
-              alt="Background decoration" 
-              className="absolute right-0 h-full object-contain object-right transition-opacity duration-300"
-              style={{
-                opacity: imageLoaded ? 0.95 : 0.3,
-                filter: 'saturate(1.05)',
-                maxWidth: '70%'
-              }}
-              onLoad={() => setShouldShowImage(true)}
-              onError={retry}
-            />
+            <div className="relative w-full h-full">
+              <img 
+                src={imageSrc}
+                alt="Professional cleaning service" 
+                className="absolute right-0 h-full w-auto object-contain object-right opacity-80"
+                style={{
+                  maxWidth: '50%',
+                  filter: 'saturate(1.1) brightness(1.05)'
+                }}
+                onLoad={() => setShouldShowImage(true)}
+                onError={retry}
+              />
+              {/* Subtle overlay to ensure text readability */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
+            </div>
           )}
           
           {!shouldShowImage && !imageError && (
             <div className="absolute right-0 top-0 bottom-0 w-[40%] flex items-center justify-center">
-              <div className="h-16 w-16 border-4 border-primary border-t-transparent rounded-full animate-spin opacity-30"></div>
+              <div className="h-16 w-16 border-4 border-orange-600 border-t-transparent rounded-full animate-spin opacity-30"></div>
             </div>
           )}
         </div>
         
-        {/* Mobile background image */}
-        <div className="absolute inset-0 z-0 block md:hidden">
-          {shouldShowImage && (
-            <img 
-              src={imageSrc}
-              alt="Background decoration" 
-              className="absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-300"
-              style={{
-                opacity: imageLoaded ? 0.5 : 0.2
-              }}
-              onLoad={() => setShouldShowImage(true)}
-              onError={retry}
-            />
-          )}
-          
-          {!shouldShowImage && !imageError && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-10 w-10 border-3 border-primary border-t-transparent rounded-full animate-spin opacity-20"></div>
-            </div>
-          )}
+        {/* Mobile background - subtle pattern */}
+        <div className="absolute inset-0 z-0 block lg:hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-orange-50/50 to-blue-50/50"></div>
+          {/* Subtle geometric pattern for mobile */}
+          <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
         </div>
       </div>
     </>
