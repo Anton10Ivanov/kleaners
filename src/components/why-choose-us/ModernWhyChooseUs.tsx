@@ -1,39 +1,46 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, broom, House } from 'lucide-react';
+import { Shield, Sparkles, House, CheckCircle, Clock, Users } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const advantages = [
   {
     title: "Professional Cleaners",
-    icon: broom,
-    color: "bg-orange-100 text-orange-600"
+    icon: Users,
+    color: "bg-orange-100 text-orange-600",
+    tooltip: "Trained and vetted cleaning professionals"
   },
   {
     title: "Liability Insurance",
     icon: Shield,
-    color: "bg-blue-100 text-blue-600"
+    color: "bg-blue-100 text-blue-600",
+    tooltip: "Full insurance coverage for your peace of mind"
   },
   {
     title: "Home Safety Guaranteed",
     icon: House,
-    color: "bg-green-100 text-green-600"
+    color: "bg-green-100 text-green-600",
+    tooltip: "Your home is safe and secure with us"
   },
   {
-    title: "Simple Booking",
-    icon: broom,
-    color: "bg-purple-100 text-purple-600"
+    title: "Quality Results",
+    icon: Sparkles,
+    color: "bg-purple-100 text-purple-600",
+    tooltip: "Spotless cleaning with attention to detail"
   },
   {
     title: "Satisfaction Guaranteed",
-    icon: Shield,
-    color: "bg-red-100 text-red-600"
+    icon: CheckCircle,
+    color: "bg-red-100 text-red-600",
+    tooltip: "100% satisfaction or we'll make it right"
   },
   {
-    title: "Trusted Service",
-    icon: House,
-    color: "bg-yellow-100 text-yellow-600"
+    title: "Flexible Scheduling",
+    icon: Clock,
+    color: "bg-yellow-100 text-yellow-600",
+    tooltip: "Book at your convenience, when you need us"
   }
 ];
 
@@ -58,31 +65,40 @@ export const ModernWhyChooseUs = () => {
           </p>
         </motion.div>
 
-        <div className={`grid ${
-          isMobile 
-            ? 'grid-cols-2 gap-3' 
-            : 'md:grid-cols-3 lg:grid-cols-6 gap-4'
-        }`}>
-          {advantages.map((advantage, index) => (
-            <motion.div
-              key={advantage.title}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="group"
-            >
-              <div className="p-3 rounded-xl shadow-sm flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-md border border-gray-100">
-                <div className={`p-2 ${advantage.color} rounded-full mb-2`}>
-                  <advantage.icon className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <h3 className="text-xs md:text-sm font-semibold text-gray-900 leading-tight">
-                  {advantage.title}
-                </h3>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <TooltipProvider>
+          <div className={`grid ${
+            isMobile 
+              ? 'grid-cols-2 gap-2' 
+              : 'grid-cols-3 lg:grid-cols-6 gap-3'
+          }`}>
+            {advantages.map((advantage, index) => (
+              <motion.div
+                key={advantage.title}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="p-3 rounded-xl shadow-sm flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 bg-white hover:shadow-md border border-gray-100 cursor-pointer">
+                      <div className={`p-2 ${advantage.color} rounded-full mb-2`}>
+                        <advantage.icon className="w-5 h-5 md:w-6 md:h-6" />
+                      </div>
+                      <h3 className="text-xs md:text-sm font-semibold text-gray-900 leading-tight">
+                        {advantage.title}
+                      </h3>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{advantage.tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+            ))}
+          </div>
+        </TooltipProvider>
       </div>
     </section>
   );

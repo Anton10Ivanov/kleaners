@@ -6,12 +6,21 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { motion } from 'framer-motion';
-import { CheckCircle, Clock, DollarSign } from 'lucide-react';
+import { CheckCircle, Clock, DollarSign, Star } from 'lucide-react';
 
 const optionsData = [
   {
     category: "Service Frequency",
     options: [
+      {
+        title: "One-Time Deep Clean",
+        description: "Perfect for special occasions, seasonal cleaning, or first-time service.",
+        features: ["Interior window cleaning", "Inside cabinet cleaning", "Appliance deep clean", "Detailed surface cleaning"],
+        pricing: "From €35/visit",
+        duration: "3-5 hours",
+        path: "/services/regular-cleaning",
+        recommended: false
+      },
       {
         title: "Regular Cleaning",
         description: "Weekly, bi-weekly, or monthly recurring service to maintain your home's cleanliness.",
@@ -20,14 +29,6 @@ const optionsData = [
         duration: "1-3 hours",
         path: "/services/regular-cleaning",
         recommended: true
-      },
-      {
-        title: "One-Time Deep Clean",
-        description: "Comprehensive cleaning service for special occasions or seasonal deep cleaning.",
-        features: ["Interior window cleaning", "Inside cabinet cleaning", "Appliance deep clean", "Detailed surface cleaning"],
-        pricing: "From €35/visit",
-        duration: "3-5 hours",
-        path: "/services/regular-cleaning"
       },
       {
         title: "Emergency Cleaning",
@@ -51,8 +52,8 @@ const optionsData = [
         path: "/services/regular-cleaning"
       },
       {
-        title: "Office Spaces",
-        description: "Professional cleaning solutions for offices, coworking spaces, and small businesses.",
+        title: "Office & Commercial",
+        description: "Professional cleaning solutions for offices, coworking spaces, and businesses.",
         features: ["After-hours cleaning", "Restroom sanitization", "Common area maintenance", "Supply restocking"],
         pricing: "From €40/visit",
         duration: "2-6 hours",
@@ -104,17 +105,17 @@ export const OptimizedOurOptions = () => {
   const [activeTab, setActiveTab] = React.useState("Service Frequency");
   
   return (
-    <section id="options" className="py-12 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
+    <section id="options" className="py-8 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center mb-6"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-serif text-[#1C1C1C] dark:text-white">Our Cleaning Services</h2>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 font-serif text-[#1C1C1C] dark:text-white">Our Cleaning Services</h2>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
             Choose the perfect cleaning solution based on your schedule, property type, and cleaning needs.
           </p>
         </motion.div>
@@ -125,13 +126,13 @@ export const OptimizedOurOptions = () => {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-4">
             <TabsList className={`${isMobile ? 'w-full' : 'w-auto'} bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm`}>
               {optionsData.map((category) => (
                 <TabsTrigger 
                   key={category.category} 
                   value={category.category}
-                  className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary"
+                  className="px-2 py-1.5 text-xs md:text-sm text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary"
                 >
                   {category.category}
                 </TabsTrigger>
@@ -143,9 +144,9 @@ export const OptimizedOurOptions = () => {
             <TabsContent 
               key={category.category} 
               value={category.category}
-              className="mt-4"
+              className="mt-3"
             >
-              <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'md:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
+              <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'md:grid-cols-2 lg:grid-cols-3 gap-4'}`}>
                 {category.options.map((option, index) => (
                   <motion.div
                     key={option.title}
@@ -155,39 +156,40 @@ export const OptimizedOurOptions = () => {
                   >
                     <Card className={`h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm ${option.recommended ? 'ring-2 ring-orange-500' : ''}`}>
                       {option.recommended && (
-                        <div className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 text-center">
+                        <div className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 text-center flex items-center justify-center gap-1">
+                          <Star className="w-3 h-3 fill-current" />
                           Most Popular
                         </div>
                       )}
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-lg font-serif text-[#1C1C1C] dark:text-white flex items-center justify-between">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base md:text-lg font-serif text-[#1C1C1C] dark:text-white">
                           {option.title}
                         </CardTitle>
-                        <CardDescription className="dark:text-gray-400 text-sm">{option.description}</CardDescription>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        <CardDescription className="dark:text-gray-400 text-xs md:text-sm">{option.description}</CardDescription>
+                        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 mt-2">
                           <div className="flex items-center gap-1">
-                            <DollarSign className="w-4 h-4" />
+                            <DollarSign className="w-3 h-3" />
                             <span>{option.pricing}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
+                            <Clock className="w-3 h-3" />
                             <span>{option.duration}</span>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent className="flex-grow pt-0">
-                        <ul className="space-y-2">
+                        <ul className="space-y-1.5">
                           {option.features.slice(0, 3).map((feature, idx) => (
-                            <li key={idx} className="flex items-start text-sm text-gray-700 dark:text-gray-300">
-                              <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                            <li key={idx} className="flex items-start text-xs text-gray-700 dark:text-gray-300">
+                              <CheckCircle className="w-3 h-3 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                               <span>{feature}</span>
                             </li>
                           ))}
                         </ul>
                       </CardContent>
-                      <CardFooter className="pt-2">
+                      <CardFooter className="pt-1 pb-3">
                         <Link to={option.path} className="w-full">
-                          <Button variant={option.recommended ? "default" : "outline"} className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                          <Button variant={option.recommended ? "default" : "outline"} size="sm" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
                             Book Now
                           </Button>
                         </Link>
