@@ -109,7 +109,7 @@ const Index = () => {
             transition={{ duration: 0.4 }}
             className="bg-theme-lightblue dark:bg-gray-900"
           >
-            {/* Landing page content */}
+            {/* Landing page content - Hero now includes the booking form */}
             <Hero 
               selectedService={selectedService || ''}
               setSelectedService={setSelectedService}
