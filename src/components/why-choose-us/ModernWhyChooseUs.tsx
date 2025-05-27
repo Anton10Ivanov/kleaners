@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Broom, House } from 'lucide-react';
+import { Shield, broom, House } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 const advantages = [
   {
     title: "Professional Cleaners",
-    icon: Broom,
+    icon: broom,
     color: "bg-orange-100 text-orange-600"
   },
   {
@@ -22,7 +22,7 @@ const advantages = [
   },
   {
     title: "Simple Booking",
-    icon: Broom,
+    icon: broom,
     color: "bg-purple-100 text-purple-600"
   },
   {
