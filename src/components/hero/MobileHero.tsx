@@ -1,71 +1,73 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { FeatureBadges } from "./FeatureBadges";
+import { CheckCircle } from "lucide-react";
 import { BookingForm } from "./BookingForm";
-import { SocialProof } from "./SocialProof";
 
 export const MobileHero = memo(() => {
+  const benefits = [
+    "Liability insurance",
+    "Simple booking",
+    "Professional cleaners",
+    "Satisfaction guaranteed"
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-between gap-5 py-8 relative">
+    <div className="flex flex-col items-center gap-8 py-8 text-center">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="relative z-10 w-full text-center mb-4"
+        transition={{ duration: 0.6 }}
+        className="w-full"
       >
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="inline-block text-primary font-medium text-sm mb-3"
-        >
-          Professional Cleaning Services
-        </motion.span>
-        
         <motion.h1 
-          initial={{ opacity: 0, y: 10 }} 
+          initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.5, delay: 0.1 }} 
-          className="text-3xl md:text-4xl font-bold leading-tight text-[#1c1c1c] mb-4"
+          transition={{ duration: 0.6, delay: 0.1 }} 
+          className="text-4xl font-bold leading-tight text-gray-900 mb-4"
         >
-          Book your cleaning <span className="text-primary">in 2 minutes</span>
+          Book your cleaning service{" "}
+          <span className="text-orange-600">online</span>
         </motion.h1>
         
-        <p className="text-gray-600 text-base max-w-md mx-auto mb-6">
-          Professional local cleaners with transparent, fair pricing
-        </p>
-        
-        <motion.button
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          onClick={() => document.getElementById('mobile-booking-form')?.scrollIntoView({ behavior: 'smooth' })}
-          className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 h-12 rounded-xl flex items-center mx-auto mb-8 shadow-[0_8px_15px_rgba(251,146,60,0.2)] hover:shadow-[0_8px_15px_rgba(251,146,60,0.4)]"
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-lg text-gray-600 mb-6 max-w-md mx-auto"
         >
-          Get Started Today <ArrowRight className="ml-2 h-4 w-4" />
-        </motion.button>
+          Professional house cleaning with transparent pricing and guaranteed satisfaction.
+        </motion.p>
+
+        {/* Benefits List */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="grid grid-cols-2 gap-3 mb-8 max-w-sm mx-auto"
+        >
+          {benefits.map((benefit, index) => (
+            <div key={index} className="flex items-center gap-2 text-left">
+              <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+              <span className="text-sm text-gray-700 font-medium">{benefit}</span>
+            </div>
+          ))}
+        </motion.div>
       </motion.div>
       
-      <div className="w-full mb-6 relative z-10">
-        <FeatureBadges />
-      </div>
-      
+      {/* Booking Form */}
       <motion.div 
-        id="mobile-booking-form"
         initial={{ opacity: 0, scale: 0.95 }} 
         animate={{ opacity: 1, scale: 1 }} 
-        transition={{ duration: 0.5, delay: 0.2 }} 
-        className="w-full relative z-10 px-4"
+        transition={{ duration: 0.6, delay: 0.4 }} 
+        className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
       >
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Get your quote</h2>
+          <p className="text-gray-600 text-sm">Fill out the form below</p>
+        </div>
         <BookingForm layout="mobile" />
       </motion.div>
-      
-      {/* Social proof positioned below the form with more spacing */}
-      <div className="mt-6 w-full flex justify-center">
-        <SocialProof />
-      </div>
     </div>
   );
 });
