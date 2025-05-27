@@ -69,8 +69,8 @@ export const Hero = memo(({
 
   return (
     <>
-      {/* Hero Text Section */}
-      <section className="relative min-h-[70vh] md:min-h-[65vh] flex items-center justify-center pt-28 pb-12 bg-gradient-to-br from-orange-50 via-white to-blue-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-16">
+      {/* Hero Text Section - Reduced height by half */}
+      <section className="relative min-h-[35vh] md:min-h-[32vh] flex items-center justify-center pt-16 pb-6 bg-gradient-to-br from-orange-50 via-white to-blue-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-12">
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
           <HeroProvider 
             initialService={selectedService}
