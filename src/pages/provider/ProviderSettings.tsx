@@ -230,11 +230,13 @@ const paymentSchema = z.object({
   paypalEmail: z.string().email().optional(),
 });
 
+type PaymentFormData = z.infer<typeof paymentSchema>;
+
 const PaymentSettings = () => {
-  const form = useForm({
+  const form = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      paymentMethod: 'bank_transfer' as const,
+      paymentMethod: 'bank_transfer',
       bankName: '',
       accountName: '',
       iban: '',
@@ -245,7 +247,7 @@ const PaymentSettings = () => {
 
   const watchPaymentMethod = form.watch('paymentMethod');
 
-  const onSubmit = (data: z.infer<typeof paymentSchema>) => {
+  const onSubmit = (data: PaymentFormData) => {
     toast.success("Payment settings updated");
     console.log(data);
   };
