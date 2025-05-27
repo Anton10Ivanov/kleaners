@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { Button } from '@/components/ui/button';
