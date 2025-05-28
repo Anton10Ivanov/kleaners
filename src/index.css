@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,6 +11,8 @@
     /* Font family variables */
     --ff: 'Raleway', sans-serif;
     --ff2: 'Raleway', sans-serif;
+    --ff-heading: 'Inter', sans-serif;
+    --ff-label: 'Open Sans', sans-serif;
     
     /* Typography values */
     --p: 1rem/1.5em var(--ff);
@@ -98,7 +100,7 @@
     line-height: 1.5em;
   }
 
-  /* Typography styles */
+  /* Enhanced typography styles */
   h1 {
     font: var(--h1);
     @apply text-[#1C1C1C] dark:text-white;
