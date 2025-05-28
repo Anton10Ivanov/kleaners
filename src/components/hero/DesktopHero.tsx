@@ -1,7 +1,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, Sparkles } from "lucide-react";
+import { CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -30,30 +30,30 @@ export const DesktopHero = memo(({
   };
 
   return (
-    <div className="w-full space-y-4">
-      {/* Hero Text Section */}
+    <div className="w-full space-y-6">
+      {/* Hero Text Section with reduced spacing */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6 }} 
-        className="text-center max-w-5xl mx-auto mb-6"
+        className="text-center max-w-6xl mx-auto mb-8"
       >
         <motion.h1 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.1 }} 
-          className="text-4xl lg:text-6xl font-bold leading-tight mb-4 text-gray-900"
+          className="text-4xl lg:text-6xl font-black leading-tight mb-6 text-gray-900 font-['Inter']"
         >
           Book your cleaning service{" "}
-          <span className="text-primary">online</span>
+          <span className="text-primary font-extrabold">online</span>
         </motion.h1>
 
-        {/* Benefits List */}
+        {/* Benefits List with improved typography */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.3 }} 
-          className="grid grid-cols-2 gap-3 mb-6 max-w-2xl mx-auto"
+          className="grid grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto"
         >
           {benefits.map((benefit, index) => (
             <motion.div 
@@ -64,49 +64,39 @@ export const DesktopHero = memo(({
               className="flex items-center gap-3 justify-center"
             >
               <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-              <span className="text-gray-700 font-medium">{benefit}</span>
+              <span className="text-gray-700 font-semibold text-base">{benefit}</span>
             </motion.div>
           ))}
         </motion.div>
       </motion.div>
 
-      {/* Full-width form section with background */}
+      {/* Enhanced form section with better visual connection */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }} 
+        initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.5 }} 
         className="w-full relative"
       >
-        {/* Background with subtle pattern and color */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 via-white to-orange-50 rounded-3xl opacity-60"></div>
-        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-3xl"></div>
+        {/* Full-width background section */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-blue-50/50 to-white rounded-3xl shadow-2xl"></div>
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl border border-gray-100/50"></div>
         
-        {/* Floating animation element */}
-        <motion.div
-          animate={{ 
-            y: [0, -10, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-4 right-8 text-primary/30 hidden lg:block"
-        >
-          <Sparkles className="h-8 w-8" />
-        </motion.div>
-
-        {/* Form container */}
-        <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 max-w-6xl mx-auto">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Location */}
+        {/* Form container with prominent styling */}
+        <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-10 max-w-6xl mx-auto backdrop-blur-sm">
+          <motion.form 
+            onSubmit={handleSubmit} 
+            className="grid grid-cols-1 lg:grid-cols-5 gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+          >
+            {/* Location with enhanced typography */}
             <motion.div 
               className="space-y-4"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="postal-code" className="text-base font-bold text-gray-900 tracking-wide">
+              <Label htmlFor="postal-code" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Location
               </Label>
               <Input
@@ -115,24 +105,24 @@ export const DesktopHero = memo(({
                 placeholder="Enter your city or postal code"
                 value={postalCode}
                 onChange={e => setPostalCode(e.target.value)}
-                className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
                 required
               />
             </motion.div>
 
-            {/* Property Size */}
+            {/* Property Size with enhanced typography */}
             <motion.div 
               className="space-y-4"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="property-size" className="text-base font-bold text-gray-900 tracking-wide">
+              <Label htmlFor="property-size" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Property Size
               </Label>
               <Select>
                 <SelectTrigger 
                   id="property-size"
-                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                  className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
                 >
                   <SelectValue placeholder="Select size (m²)" />
                 </SelectTrigger>
@@ -148,36 +138,36 @@ export const DesktopHero = memo(({
               </Select>
             </motion.div>
 
-            {/* Date */}
+            {/* Date with enhanced typography */}
             <motion.div 
               className="space-y-4"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="cleaning-date" className="text-base font-bold text-gray-900 tracking-wide">
+              <Label htmlFor="cleaning-date" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Preferred Date
               </Label>
               <Input
                 id="cleaning-date"
                 type="date"
-                className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
                 min={new Date().toISOString().split('T')[0]}
               />
             </motion.div>
 
-            {/* Service Type */}
+            {/* Service Type with enhanced typography */}
             <motion.div 
               className="space-y-4"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="service-type" className="text-base font-bold text-gray-900 tracking-wide">
+              <Label htmlFor="service-type" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Service Type
               </Label>
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger 
                   id="service-type"
-                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                  className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
                 >
                   <SelectValue placeholder="Select service" />
                 </SelectTrigger>
@@ -210,22 +200,22 @@ export const DesktopHero = memo(({
               </Select>
             </motion.div>
             
-            {/* CTA Button */}
+            {/* Enhanced CTA Button with bold styling */}
             <div className="flex items-end">
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 className="w-full"
               >
                 <Button 
                   type="submit" 
-                  className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1"
+                  className="w-full h-16 bg-primary hover:bg-primary/90 text-white font-black text-xl rounded-xl flex items-center justify-center gap-4 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border-2 border-primary/20"
                 >
-                  Let's Go <ArrowRight className="h-5 w-5" />
+                  Let's Go <ArrowRight className="h-6 w-6" />
                 </Button>
               </motion.div>
             </div>
-          </form>
+          </motion.form>
         </div>
       </motion.div>
     </div>

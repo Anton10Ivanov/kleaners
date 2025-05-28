@@ -1,9 +1,9 @@
-
 import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
+import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
@@ -67,18 +67,8 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-center pt-16 pb-12 bg-gradient-to-br from-blue-50 via-white to-orange-50 text-[#1c1c1c] transition-colors duration-300 overflow-hidden mt-12">
-      {/* Background image with enhanced overlay */}
-      <div className="absolute inset-0 z-0 hidden lg:block">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-15"
-          style={{
-            backgroundImage: "url('/lovable-uploads/opciya1 (1) 2.png')",
-            filter: 'blur(0.5px) brightness(1.1)'
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/80"></div>
-      </div>
+    <section className="relative min-h-[70vh] flex flex-col justify-center pt-20 pb-8 overflow-hidden mt-8">
+      <BackgroundElements />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <HeroProvider 
