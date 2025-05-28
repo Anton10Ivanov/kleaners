@@ -72,10 +72,10 @@ export const DesktopHero = memo(({
         className="w-full"
       >
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-w-6xl mx-auto">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-            {/* Postal Code */}
-            <div className="space-y-2">
-              <Label htmlFor="postal-code" className="text-sm font-medium text-gray-700">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Location */}
+            <div className="space-y-3">
+              <Label htmlFor="postal-code" className="text-sm font-semibold text-gray-800">
                 Location
               </Label>
               <Input
@@ -84,20 +84,20 @@ export const DesktopHero = memo(({
                 placeholder="Enter your city or postal code"
                 value={postalCode}
                 onChange={e => setPostalCode(e.target.value)}
-                className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+                className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
                 required
               />
             </div>
 
             {/* Property Size */}
-            <div className="space-y-2">
-              <Label htmlFor="property-size" className="text-sm font-medium text-gray-700">
+            <div className="space-y-3">
+              <Label htmlFor="property-size" className="text-sm font-semibold text-gray-800">
                 Property Size
               </Label>
               <Select>
                 <SelectTrigger 
                   id="property-size"
-                  className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+                  className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
                 >
                   <SelectValue placeholder="Select size (m²)" />
                 </SelectTrigger>
@@ -114,27 +114,27 @@ export const DesktopHero = memo(({
             </div>
 
             {/* Date */}
-            <div className="space-y-2">
-              <Label htmlFor="cleaning-date" className="text-sm font-medium text-gray-700">
+            <div className="space-y-3">
+              <Label htmlFor="cleaning-date" className="text-sm font-semibold text-gray-800">
                 Preferred Date
               </Label>
               <Input
                 id="cleaning-date"
                 type="date"
-                className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+                className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
                 min={new Date().toISOString().split('T')[0]}
               />
             </div>
 
             {/* Service Type */}
-            <div className="space-y-2">
-              <Label htmlFor="service-type" className="text-sm font-medium text-gray-700">
+            <div className="space-y-3">
+              <Label htmlFor="service-type" className="text-sm font-semibold text-gray-800">
                 Service Type
               </Label>
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger 
                   id="service-type"
-                  className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+                  className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
                 >
                   <SelectValue placeholder="Select service" />
                 </SelectTrigger>

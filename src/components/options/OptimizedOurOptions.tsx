@@ -105,7 +105,7 @@ export const OptimizedOurOptions = () => {
   const [activeTab, setActiveTab] = React.useState("Service Frequency");
   
   return (
-    <section id="options" className="py-8 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
+    <section id="options" className="py-8 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -127,12 +127,12 @@ export const OptimizedOurOptions = () => {
           className="w-full"
         >
           <div className="flex justify-center mb-4">
-            <TabsList className={`${isMobile ? 'w-full' : 'w-auto'} bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm`}>
+            <TabsList className={`${isMobile ? 'w-full' : 'w-auto'} bg-gray-100 dark:bg-gray-800`}>
               {optionsData.map((category) => (
                 <TabsTrigger 
                   key={category.category} 
                   value={category.category}
-                  className="px-2 py-1.5 text-xs md:text-sm text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary"
+                  className="px-2 py-1.5 text-xs md:text-sm text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary data-[state=active]:bg-white data-[state=active]:dark:bg-gray-700"
                 >
                   {category.category}
                 </TabsTrigger>
@@ -154,9 +154,9 @@ export const OptimizedOurOptions = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <Card className={`h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm ${option.recommended ? 'ring-2 ring-orange-500' : ''}`}>
+                    <Card className={`h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-800 ${option.recommended ? 'ring-2 ring-primary' : ''}`}>
                       {option.recommended && (
-                        <div className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 text-center flex items-center justify-center gap-1">
+                        <div className="bg-primary text-white text-xs font-semibold px-3 py-1 text-center flex items-center justify-center gap-1">
                           <Star className="w-3 h-3 fill-current" />
                           Most Popular
                         </div>
@@ -189,7 +189,7 @@ export const OptimizedOurOptions = () => {
                       </CardContent>
                       <CardFooter className="pt-1 pb-3">
                         <Link to={option.path} className="w-full">
-                          <Button variant={option.recommended ? "default" : "outline"} size="sm" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                          <Button variant={option.recommended ? "default" : "outline"} size="sm" className="w-full">
                             Book Now
                           </Button>
                         </Link>

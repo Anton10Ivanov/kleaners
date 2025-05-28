@@ -89,10 +89,10 @@ export const MobileHero = memo(({
         transition={{ duration: 0.6, delay: 0.4 }} 
         className="w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Postal Code */}
-          <div className="space-y-2">
-            <Label htmlFor="mobile-postal-code" className="text-sm font-medium text-gray-700">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Location */}
+          <div className="space-y-3">
+            <Label htmlFor="mobile-postal-code" className="text-sm font-semibold text-gray-800">
               Your Location
             </Label>
             <Input
@@ -101,20 +101,20 @@ export const MobileHero = memo(({
               placeholder="Enter your city or postal code"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+              className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
               required
             />
           </div>
 
           {/* Service Type */}
-          <div className="space-y-2">
-            <Label htmlFor="mobile-service-type" className="text-sm font-medium text-gray-700">
+          <div className="space-y-3">
+            <Label htmlFor="mobile-service-type" className="text-sm font-semibold text-gray-800">
               Service Type
             </Label>
             <Select value={selectedService} onValueChange={setSelectedService}>
               <SelectTrigger 
                 id="mobile-service-type"
-                className="rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors hover:border-gray-400"
+                className="h-12 rounded-lg border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:border-gray-400"
               >
                 <SelectValue placeholder="Select cleaning service" />
               </SelectTrigger>
@@ -150,12 +150,12 @@ export const MobileHero = memo(({
           {/* CTA Button */}
           <Button 
             type="submit" 
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+            className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 mt-6"
           >
             Let's Go <ArrowRight className="h-4 w-4" />
           </Button>
 
-          <p className="text-xs text-gray-500 text-center mt-3">
+          <p className="text-xs text-gray-500 text-center mt-4">
             Free quote • No commitment • Instant booking
           </p>
         </form>
