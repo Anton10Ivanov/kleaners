@@ -1,7 +1,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { Shield, CreditCard, UserCheck, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,11 @@ export const DesktopHero = memo(({
   setPostalCode,
   handleNextStep
 }: DesktopHeroProps) => {
-  const benefits = ["Liability insurance included", "Simple online booking", "Professional cleaners", "Satisfaction guaranteed"];
+  const benefits = [
+    { icon: Shield, text: "Liability insurance up to 5M€ included" },
+    { icon: CreditCard, text: "Payment after work completion" },
+    { icon: UserCheck, text: "Customer protection program" }
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,12 +52,12 @@ export const DesktopHero = memo(({
           <span className="text-primary font-extrabold">online</span>
         </motion.h1>
 
-        {/* Benefits List with improved typography */}
+        {/* Benefits List with left alignment and reduced visual prominence */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.3 }} 
-          className="grid grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto"
+          className="flex flex-col gap-2 mb-8 max-w-lg mx-auto"
         >
           {benefits.map((benefit, index) => (
             <motion.div 
@@ -61,10 +65,10 @@ export const DesktopHero = memo(({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-              className="flex items-center gap-3 justify-center"
+              className="flex items-center gap-3 justify-start text-left"
             >
-              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-              <span className="text-gray-700 font-semibold text-base">{benefit}</span>
+              <benefit.icon className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="text-gray-600 font-medium text-sm">{benefit.text}</span>
             </motion.div>
           ))}
         </motion.div>
