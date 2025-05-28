@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
@@ -138,7 +139,7 @@ const Index = () => {
           </motion.div>
         ) : (
           <motion.div
-            className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-theme-lightblue dark:bg-gray-900"
+            className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-white dark:bg-gray-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
