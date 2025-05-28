@@ -52,12 +52,12 @@ export const DesktopHero = memo(({
           <span className="text-primary font-extrabold">online</span>
         </motion.h1>
 
-        {/* Benefits List with left alignment and reduced visual prominence */}
+        {/* Benefits List aligned with "Book" text and increased font size */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.3 }} 
-          className="flex flex-col gap-2 mb-8 max-w-lg mx-auto"
+          className="flex flex-col gap-2 mb-8 max-w-6xl text-left"
         >
           {benefits.map((benefit, index) => (
             <motion.div 
@@ -68,7 +68,7 @@ export const DesktopHero = memo(({
               className="flex items-center gap-3 justify-start text-left"
             >
               <benefit.icon className="h-4 w-4 text-primary flex-shrink-0" />
-              <span className="text-gray-600 font-medium text-sm">{benefit.text}</span>
+              <span className="text-gray-600 font-medium text-[15px]">{benefit.text}</span>
             </motion.div>
           ))}
         </motion.div>
