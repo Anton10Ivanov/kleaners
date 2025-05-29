@@ -43,9 +43,10 @@ interface ServicePageData {
 
 interface ModernServiceTemplateProps {
   data: ServicePageData;
+  showTestimonials?: boolean;
 }
 
-const ModernServiceTemplate = ({ data }: ModernServiceTemplateProps) => {
+const ModernServiceTemplate = ({ data, showTestimonials = false }: ModernServiceTemplateProps) => {
   const navigate = useNavigate();
 
   return (
@@ -162,46 +163,48 @@ const ModernServiceTemplate = ({ data }: ModernServiceTemplateProps) => {
         </div>
       </section>
 
-      {/* Social Proof / Testimonials */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-            What Our Customers Say
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {data.testimonials.map((testimonial, index) => (
-              <Card key={index} className="p-6">
-                <CardContent className="pt-6">
-                  <div className="flex items-center mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < testimonial.rating 
-                            ? 'fill-yellow-400 text-yellow-400' 
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300 mb-4 italic">
-                    "{testimonial.text}"
-                  </p>
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {testimonial.name}
+      {/* Social Proof / Testimonials - Only show if showTestimonials is true */}
+      {showTestimonials && (
+        <section className="py-16 bg-gray-50 dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+              What Our Customers Say
+            </h2>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {data.testimonials.map((testimonial, index) => (
+                <Card key={index} className="p-6">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < testimonial.rating 
+                              ? 'fill-yellow-400 text-yellow-400' 
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4 italic">
+                      "{testimonial.text}"
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {testimonial.service}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {testimonial.service}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Pricing & Booking Section */}
       <section className="py-16 bg-primary/5">
