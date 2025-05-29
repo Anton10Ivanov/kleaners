@@ -7,7 +7,6 @@ import { AdditionalFields } from "./components/AdditionalFields";
 import ServiceOptions from "../ServiceOptions";
 import { FrequencyTimeSelector } from "./components/FrequencyTimeSelector";
 import Calendar from "../Calendar";
-import { Card } from "@/components/ui/card";
 
 interface BusinessStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -21,56 +20,55 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
   const showCalendar = frequency && frequency !== Frequency.Custom;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Service Options */}
-      <ServiceOptions 
-        frequency={frequency}
-        setFrequency={(freq) => form.setValue('frequency', freq)} 
-      />
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <ServiceOptions 
+          frequency={frequency}
+          setFrequency={(freq) => form.setValue('frequency', freq)} 
+        />
+      </div>
       
       {/* Calendar */}
       {showCalendar && (
-        <Card className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <h3 className="text-xl text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
-            Select Date & Time
-          </h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <Calendar form={form} />
-        </Card>
+        </div>
       )}
       
       {/* Frequency Time Selector for Custom Schedule */}
       {showFrequencyTimeSelector && (
-        <Card className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <h3 className="text-xl text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-lg text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
             Custom Schedule
           </h3>
           <FrequencyTimeSelector form={form} />
-        </Card>
+        </div>
       )}
       
       {/* Business Type */}
-      <Card className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="text-xl text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
           Business Type
         </h3>
         <BusinessTypeSelector form={form} />
-      </Card>
+      </div>
       
       {/* Cleaning Options */}
-      <Card className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="text-xl text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
           Cleaning Options
         </h3>
         <CleaningOptionsSelector form={form} businessType={businessType} />
-      </Card>
+      </div>
       
       {/* Additional Fields */}
-      <Card className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <h3 className="text-xl text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg text-center md:text-left text-zinc-900 dark:text-white font-medium mb-4">
           Additional Details
         </h3>
         <AdditionalFields form={form} businessType={businessType} />
-      </Card>
+      </div>
     </div>
   );
 };

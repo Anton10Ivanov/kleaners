@@ -124,13 +124,31 @@ const Calendar = ({
     setWeekStart(prevWeek => addDays(prevWeek, 7));
   };
 
-  return <div className="bg-white dark:bg-dark-background p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors duration-200">
-      <h3 className={`text-lg ${isMobile ? 'text-center' : 'text-xl'} font-semibold mb-4 md:mb-6 text-gray-900 dark:text-white`}>Find a date and time that fits your schedule</h3>
+  return (
+    <div className="p-4 transition-colors duration-200">
+      <h3 className={`text-lg ${isMobile ? 'text-center' : ''} font-semibold mb-4 text-gray-900 dark:text-white`}>
+        Find a date and time that fits your schedule
+      </h3>
 
-      <div className="space-y-4 md:space-y-6">
-        <DatePicker weekDates={weekDates} date={date} nowInBerlin={nowInBerlin} futureLimit={futureLimit} weekStart={weekStart} onDateSelect={handleDateSelect} onPreviousWeek={handlePreviousWeek} onNextWeek={handleNextWeek} />
+      <div className="space-y-4">
+        <DatePicker 
+          weekDates={weekDates} 
+          date={date} 
+          nowInBerlin={nowInBerlin} 
+          futureLimit={futureLimit} 
+          weekStart={weekStart} 
+          onDateSelect={handleDateSelect} 
+          onPreviousWeek={handlePreviousWeek} 
+          onNextWeek={handleNextWeek} 
+        />
 
-        <TimeSlots selectedTimeSlot={selectedTimeSlot} date={date} nowInBerlin={nowInBerlin} onTimeSlotSelect={handleTimeSlotSelect} selectedHours={hours} />
+        <TimeSlots 
+          selectedTimeSlot={selectedTimeSlot} 
+          date={date} 
+          nowInBerlin={nowInBerlin} 
+          onTimeSlotSelect={handleTimeSlotSelect} 
+          selectedHours={hours} 
+        />
         
         {selectedTimeSlot && availableProviders.length > 0 && (
           <div className="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/30 p-3 rounded-md">
@@ -149,13 +167,16 @@ const Calendar = ({
         )}
       </div>
       
-      {!selectedTimeSlot && <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-4 text-center md:text-left">
+      {!selectedTimeSlot && (
+        <p className="text-xs text-gray-600 dark:text-gray-400 mt-4 text-center md:text-left">
           If there are no preferred time slots available, please select another date or{" "}
           <Link to="/contact" className="text-primary hover:underline">
             contact us
           </Link>
-        </p>}
-    </div>;
+        </p>
+      )}
+    </div>
+  );
 };
 
 export default Calendar;

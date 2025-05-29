@@ -6,6 +6,7 @@ import Calendar from './Calendar';
 import Extras from './Extras';
 import MoveInOutStep from './MoveInOutStep';
 import BusinessStep from './business/BusinessStep';
+import DeepCleaningStep from './DeepCleaningStep';
 import FinalStep from './FinalStep';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { useForm } from 'react-hook-form';
@@ -58,22 +59,45 @@ const BookingContent = ({
               initial="hidden" 
               animate="visible" 
               variants={fadeVariant} 
-              className="space-y-6 bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
+              className="space-y-4"
             >
-              <h3 className="font-semibold mb-4 md:mb-6 text-center text-zinc-950 text-sm">Regular Cleaning</h3>
-              <ServiceOptions 
-                frequency={frequency} 
-                setFrequency={freq => form.setValue('frequency', freq)} 
-                isRegularCleaning={true} 
-              />
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 className="font-semibold mb-4 text-center text-zinc-950 text-sm">Regular Cleaning</h3>
+                <ServiceOptions 
+                  frequency={frequency} 
+                  setFrequency={freq => form.setValue('frequency', freq)} 
+                  isRegularCleaning={true} 
+                />
+              </div>
               
               {frequency !== Frequency.Custom && (
-                <div className="space-y-4 md:space-y-6">
-                  <HoursSelection form={form} />
-                  {showCalendar && <Calendar form={form} />}
-                  <Extras form={form} />
-                </div>
+                <>
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <HoursSelection form={form} />
+                  </div>
+                  
+                  {showCalendar && (
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                      <Calendar form={form} />
+                    </div>
+                  )}
+                  
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <Extras form={form} />
+                  </div>
+                </>
               )}
+            </motion.div>
+          )}
+          
+          {currentStep === 2 && selectedService === 'deep' && (
+            <motion.div 
+              initial="hidden" 
+              animate="visible" 
+              variants={fadeVariant} 
+              key="deep-cleaning-step"
+            >
+              <DeepCleaningStep form={form} />
             </motion.div>
           )}
           
@@ -82,8 +106,7 @@ const BookingContent = ({
               initial="hidden" 
               animate="visible" 
               variants={fadeVariant} 
-              key="moveinout-step" 
-              className="space-y-4 md:space-y-6"
+              key="moveinout-step"
             >
               <MoveInOutStep form={form} />
             </motion.div>
