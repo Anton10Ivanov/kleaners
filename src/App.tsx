@@ -13,6 +13,7 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
+import Services from '@/pages/Services';
 
 // Auth pages
 import Login from '@/pages/auth/Login';
@@ -113,6 +114,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
+          <Route path="/services" element={<Services />} />
           
           {/* Auth routes - consolidated */}
           <Route path="/login" element={<Login />} />
@@ -125,7 +127,7 @@ function App() {
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
-          {/* Service routes - removed duplicates */}
+          {/* Service routes */}
           <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
           <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
