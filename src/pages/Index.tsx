@@ -3,7 +3,6 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import Hero from '../components/hero';
-import ProgressBar from '../components/booking/ProgressBar';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
@@ -146,8 +145,6 @@ const Index = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="max-w-7xl mx-auto">
-              <ProgressBar currentStep={currentStep} />
-              
               <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <LazyBookingContent 

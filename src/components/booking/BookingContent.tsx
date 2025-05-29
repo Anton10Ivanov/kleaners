@@ -1,6 +1,5 @@
 
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
@@ -15,7 +14,6 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
-import { useNavigate } from 'react-router-dom';
 
 interface BookingContentProps {
   currentStep: number;
@@ -43,7 +41,6 @@ const BookingContent = ({
   form
 }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
-  const navigate = useNavigate();
   const frequency = form.watch('frequency') as Frequency | undefined;
   const postalCode = form.watch('postalCode') || '';
   const showCalendar = frequency && frequency !== Frequency.Custom;
@@ -53,31 +50,9 @@ const BookingContent = ({
     e.preventDefault();
     e.stopPropagation();
   };
-
-  const handleGoHome = () => {
-    navigate('/');
-  };
   
   return (
     <div className={`w-full ${isMobile ? 'px-2' : 'md:w-[80%]'}`} onClick={handleFormClick}>
-      {/* Back to Home Button - only show on step 2 */}
-      {currentStep === 2 && (
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-4"
-        >
-          <Button
-            variant="ghost"
-            onClick={handleGoHome}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Button>
-        </motion.div>
-      )}
-
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
           {currentStep === 2 && selectedService === 'regular' && (
