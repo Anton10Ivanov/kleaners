@@ -216,7 +216,7 @@ const Navbar = () => {
 
   const handleBookingsClick = () => {
     console.log("Bookings button clicked, navigating to bookings");
-    navigate('/user/bookings');
+    navigate('/client/bookings');
     toast({
       title: "My Bookings",
       description: "Navigating to your bookings"
