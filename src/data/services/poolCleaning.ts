@@ -1,5 +1,5 @@
 
-import { Pool, CheckCircle, Factory, Brush } from "lucide-react";
+import { Waves, CheckCircle, Factory, Brush } from "lucide-react";
 
 export const poolCleaningData = {
   title: "Swimming Pool Cleaning",
@@ -10,7 +10,7 @@ export const poolCleaningData = {
   solutionStatement: "Our certified pool technicians provide complete cleaning, chemical balancing, and equipment maintenance to keep your pool safe and sparkling year-round.",
   features: [
     {
-      icon: Pool,
+      icon: Waves,
       title: "Complete Pool Service",
       description: "Full pool cleaning including skimming, vacuuming, brushing walls, and equipment maintenance."
     },
