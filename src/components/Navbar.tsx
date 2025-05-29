@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './navbar/Logo';
@@ -18,31 +17,8 @@ import { Icons } from './navbar/navigationData';
 const navItems = [
   {
     id: 1,
-    label: "Services",
-    subMenus: [{
-      title: "Cleaning Services",
-      items: [{
-        label: "Regular Cleaning",
-        description: "Professional home cleaning service",
-        icon: Icons.regular,
-        path: "/services/regular-cleaning"
-      }, {
-        label: "Business Cleaning",
-        description: "Commercial cleaning solutions",
-        icon: Icons.business,
-        path: "/services/business-cleaning"
-      }, {
-        label: "Move In/Out",
-        description: "Thorough cleaning for transitions",
-        icon: Icons.moveInOut,
-        path: "/services/move-in-out"
-      }, {
-        label: "Post Construction",
-        description: "Clean-up after construction work",
-        icon: Icons.postConstruction,
-        path: "/services/post-construction-cleaning"
-      }]
-    }]
+    label: "Services"
+    // Services will be handled specially in DropdownNavigation
   }, {
     id: 2,
     label: "About",
