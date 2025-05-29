@@ -2,7 +2,7 @@
 import { useState } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { Icons, serviceCategories } from "./navigationData";
 
@@ -29,9 +29,22 @@ type Props = {
 export function DropdownNavigation({ navItems }: Props) {
   const [openMenu, setOpenMenu] = React.useState<string | null>(null);
   const [isHover, setIsHover] = useState<number | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
   const handleHover = (menuLabel: string | null) => {
     setOpenMenu(menuLabel);
+    // Reset expanded categories when opening a new menu
+    if (menuLabel === "Services") {
+      setExpandedCategories([]);
+    }
+  };
+
+  const toggleCategory = (categoryTitle: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(categoryTitle) 
+        ? prev.filter(cat => cat !== categoryTitle)
+        : [...prev, categoryTitle]
+    );
   };
 
   return (
@@ -96,40 +109,81 @@ export function DropdownNavigation({ navItems }: Props) {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {/* Special handling for Services menu */}
+                    {/* Special handling for Services menu with categorization */}
                     {navItem.label === "Services" ? (
-                      <div className="max-w-4xl p-6">
-                        <div className="grid grid-cols-3 gap-8">
+                      <div className="max-w-md p-4">
+                        <div className="space-y-2">
                           {serviceCategories.map(category => {
                             const Icon = category.icon;
+                            const isExpanded = expandedCategories.includes(category.title);
+                            
                             return (
-                              <div key={category.title} className="space-y-4">
-                                <div className="flex items-center space-x-2 pb-2 border-b border-border">
-                                  <Icon className="h-5 w-5 text-primary" />
-                                  <h3 className="text-sm font-semibold text-foreground">
-                                    {category.title}
-                                  </h3>
-                                </div>
-                                <ul className="space-y-3">
-                                  {category.services.map(service => (
-                                    <li key={service.title}>
-                                      <Link 
-                                        to={service.href} 
-                                        className="block group hover:bg-accent rounded-lg p-2 transition-colors duration-200"
-                                      >
-                                        <p className="text-sm font-medium text-foreground group-hover:text-primary">
-                                          {service.title}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground group-hover:text-foreground mt-1">
-                                          {service.description}
-                                        </p>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
+                              <div key={category.title} className="border border-border rounded-lg">
+                                <button
+                                  onClick={() => toggleCategory(category.title)}
+                                  className="w-full flex items-center justify-between p-3 hover:bg-accent rounded-lg transition-colors duration-200"
+                                >
+                                  <div className="flex items-center space-x-3">
+                                    <Icon className="h-5 w-5 text-primary" />
+                                    <span className="text-sm font-semibold text-foreground">
+                                      {category.title}
+                                    </span>
+                                  </div>
+                                  <ChevronRight 
+                                    className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
+                                      isExpanded ? 'rotate-90' : ''
+                                    }`} 
+                                  />
+                                </button>
+                                
+                                <AnimatePresence>
+                                  {isExpanded && (
+                                    <motion.div
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: "auto", opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.2 }}
+                                      className="overflow-hidden"
+                                    >
+                                      <div className="px-3 pb-3 space-y-1">
+                                        {category.services.slice(0, 6).map(service => (
+                                          <Link 
+                                            key={service.title}
+                                            to={service.href} 
+                                            className="block group hover:bg-accent rounded-md p-2 transition-colors duration-200"
+                                          >
+                                            <p className="text-xs font-medium text-foreground group-hover:text-primary">
+                                              {service.title}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground group-hover:text-foreground mt-0.5">
+                                              {service.description}
+                                            </p>
+                                          </Link>
+                                        ))}
+                                        {category.services.length > 6 && (
+                                          <Link 
+                                            to="/services" 
+                                            className="block text-xs text-primary hover:text-primary/80 p-2 font-medium"
+                                          >
+                                            +{category.services.length - 6} more services →
+                                          </Link>
+                                        )}
+                                      </div>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
                               </div>
                             );
                           })}
+                          
+                          <div className="pt-2 border-t border-border">
+                            <Link 
+                              to="/services" 
+                              className="block text-center text-sm font-medium text-primary hover:text-primary/80 p-2"
+                            >
+                              View All Services →
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     ) : navItem.subMenus ? (
