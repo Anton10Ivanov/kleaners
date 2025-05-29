@@ -1,3 +1,4 @@
+
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -73,6 +74,9 @@ import MoldRemoval from '@/pages/services/MoldRemoval';
 import FacadeCleaning from '@/pages/services/FacadeCleaning';
 import KindergartenCleaning from '@/pages/services/KindergartenCleaning';
 import CarpetCleaning from '@/pages/services/CarpetCleaning';
+import UpholsteryCleaning from '@/pages/services/UpholsteryCleaning';
+import SidewalkCleaning from '@/pages/services/SidewalkCleaning';
+import CrimeSceneCleaning from '@/pages/services/CrimeSceneCleaning';
 
 // Legal pages
 import TermsOfService from '@/pages/legal/TermsOfService';
@@ -157,6 +161,9 @@ function App() {
           <Route path="/services/facade-cleaning" element={<FacadeCleaning />} />
           <Route path="/services/kindergarten-cleaning" element={<KindergartenCleaning />} />
           <Route path="/services/carpet-cleaning" element={<CarpetCleaning />} />
+          <Route path="/services/upholstery-cleaning" element={<UpholsteryCleaning />} />
+          <Route path="/services/sidewalk-cleaning" element={<SidewalkCleaning />} />
+          <Route path="/services/crime-scene-cleaning" element={<CrimeSceneCleaning />} />
           
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
