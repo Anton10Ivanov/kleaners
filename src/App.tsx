@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -50,6 +49,10 @@ import StairwellCleaning from '@/pages/services/StairwellCleaning';
 import IndustrialCleaning from '@/pages/services/IndustrialCleaning';
 import IntensiveCleaning from '@/pages/services/IntensiveCleaning';
 import VentilationCleaning from '@/pages/services/VentilationCleaning';
+import DisinfectionCleaning from '@/pages/services/DisinfectionCleaning';
+import MoveOutCleaning from '@/pages/services/MoveOutCleaning';
+import ConstructionCleaning from '@/pages/services/ConstructionCleaning';
+import CareFacilityCleaning from '@/pages/services/CareFacilityCleaning';
 
 // Legal pages
 import TermsOfService from '@/pages/legal/TermsOfService';
@@ -110,6 +113,10 @@ function App() {
           <Route path="/services/industrial-cleaning" element={<IndustrialCleaning />} />
           <Route path="/services/intensive-cleaning" element={<IntensiveCleaning />} />
           <Route path="/services/ventilation-cleaning" element={<VentilationCleaning />} />
+          <Route path="/services/disinfection-cleaning" element={<DisinfectionCleaning />} />
+          <Route path="/services/move-out-cleaning" element={<MoveOutCleaning />} />
+          <Route path="/services/construction-cleaning" element={<ConstructionCleaning />} />
+          <Route path="/services/care-facility-cleaning" element={<CareFacilityCleaning />} />
           
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
