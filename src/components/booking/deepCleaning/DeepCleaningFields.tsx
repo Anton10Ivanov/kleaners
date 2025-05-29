@@ -44,7 +44,7 @@ const DeepCleaningFields = ({
   setAdditionalNotes = () => {},
 }: DeepCleaningFieldsProps) => {
   return (
-    <div className="space-y-12">
+    <div className="space-y-6">
       <PropertyDetails
         squareMeters={squareMeters}
         setSquareMeters={setSquareMeters}
@@ -71,13 +71,13 @@ const DeepCleaningFields = ({
         setSpecialConditions={setSpecialConditions}
       />
 
-      <div className="space-y-4 animate-fadeIn">
+      <div className="space-y-3 animate-fadeIn">
         <Label className="text-secondary-text">Additional Notes</Label>
         <Textarea
           placeholder="Is there anything else we should know about your property?"
           value={additionalNotes}
           onChange={(e) => setAdditionalNotes(e.target.value)}
-          className="min-h-[100px] resize-y transition-colors focus:border-primary"
+          className="min-h-[80px] resize-y transition-colors focus:border-primary"
         />
       </div>
     </div>
