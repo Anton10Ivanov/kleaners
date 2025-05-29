@@ -2,7 +2,7 @@
 import ServiceLayout from "@/components/services/ServiceLayout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Stairs, Shield, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Check, Navigation, Shield, Calendar, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const StairwellCleaning = () => {
@@ -54,7 +54,7 @@ const StairwellCleaning = () => {
                 </h2>
                 <div className="space-y-4">
                   {[
-                    { icon: Stairs, text: "Specialized equipment for multi-level cleaning" },
+                    { icon: Navigation, text: "Specialized equipment for multi-level cleaning" },
                     { icon: Shield, text: "Safety-focused cleaning procedures" },
                     { icon: Check, text: "Regular maintenance schedules available" },
                     { icon: Calendar, text: "Flexible timing to minimize disruption" },
