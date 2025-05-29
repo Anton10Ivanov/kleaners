@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -69,6 +68,11 @@ import StoneSurfaceCleaning from '@/pages/services/StoneSurfaceCleaning';
 import PipeCleaning from '@/pages/services/PipeCleaning';
 import GraffitiRemoval from '@/pages/services/GraffitiRemoval';
 import RoofCleaning from '@/pages/services/RoofCleaning';
+import HouseholdClearance from '@/pages/services/HouseholdClearance';
+import MoldRemoval from '@/pages/services/MoldRemoval';
+import FacadeCleaning from '@/pages/services/FacadeCleaning';
+import KindergartenCleaning from '@/pages/services/KindergartenCleaning';
+import CarpetCleaning from '@/pages/services/CarpetCleaning';
 
 // Legal pages
 import TermsOfService from '@/pages/legal/TermsOfService';
@@ -148,6 +152,11 @@ function App() {
           <Route path="/services/pipe-cleaning" element={<PipeCleaning />} />
           <Route path="/services/graffiti-removal" element={<GraffitiRemoval />} />
           <Route path="/services/roof-cleaning" element={<RoofCleaning />} />
+          <Route path="/services/household-clearance" element={<HouseholdClearance />} />
+          <Route path="/services/mold-removal" element={<MoldRemoval />} />
+          <Route path="/services/facade-cleaning" element={<FacadeCleaning />} />
+          <Route path="/services/kindergarten-cleaning" element={<KindergartenCleaning />} />
+          <Route path="/services/carpet-cleaning" element={<CarpetCleaning />} />
           
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
