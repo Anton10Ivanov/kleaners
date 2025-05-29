@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TrustBadges } from "./TrustBadges";
+import { HeroTestimonials } from "./HeroTestimonials";
 
 interface DesktopHeroProps {
   selectedService: string;
@@ -72,6 +74,9 @@ export const DesktopHero = memo(({
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Trust Badges */}
+        <TrustBadges />
       </motion.div>
 
       {/* Enhanced form section with better visual connection */}
@@ -222,6 +227,9 @@ export const DesktopHero = memo(({
           </motion.form>
         </div>
       </motion.div>
+
+      {/* Testimonials Carousel placed below the booking form */}
+      <HeroTestimonials />
     </div>
   );
 });
