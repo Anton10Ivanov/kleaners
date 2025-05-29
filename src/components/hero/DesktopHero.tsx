@@ -1,7 +1,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Shield, CreditCard, UserCheck, ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -24,84 +24,74 @@ export const DesktopHero = memo(({
   setPostalCode,
   handleNextStep
 }: DesktopHeroProps) => {
-  const benefits = [
-    { icon: Shield, text: "Liability insurance up to 5M€ included" },
-    { icon: CreditCard, text: "Payment after work completion" },
-    { icon: UserCheck, text: "Customer protection program" }
-  ];
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleNextStep();
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {/* Hero Text Section with reduced spacing */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6 }} 
-        className="text-center max-w-6xl mx-auto mb-8"
+        className="text-center max-w-6xl mx-auto mb-6"
       >
         <motion.h1 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.1 }} 
-          className="text-4xl lg:text-6xl font-black leading-tight mb-6 text-gray-900 font-['Inter']"
+          className="text-4xl lg:text-6xl font-black leading-tight mb-4 text-gray-900 font-['Inter']"
         >
           Book your cleaning service{" "}
           <span className="text-primary font-extrabold">online</span>
         </motion.h1>
 
-        {/* Benefits List aligned with "Book" text and increased font size */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6, delay: 0.3 }} 
-          className="flex flex-col gap-2 mb-8 max-w-6xl text-left"
-        >
-          {benefits.map((benefit, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-              className="flex items-center gap-3 justify-start text-left"
-            >
-              <benefit.icon className="h-4 w-4 text-primary flex-shrink-0" />
-              <span className="text-gray-600 font-medium text-[15px]">{benefit.text}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-
         {/* Trust Badges */}
         <TrustBadges />
       </motion.div>
 
-      {/* Enhanced form section with better visual connection */}
+      {/* Trust Stats positioned above form and aligned right */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, delay: 0.4 }} 
+        className="flex justify-end mb-3"
+      >
+        <div className="flex items-center justify-end gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+            <span className="font-semibold">4.9/5</span>
+            <span>Average Rating</span>
+          </div>
+          <div className="h-3 w-px bg-gray-300"></div>
+          <div>
+            <span className="font-semibold">2,500+</span>
+            <span> Happy Customers</span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Enhanced form section - removed double nesting */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.5 }} 
-        className="w-full relative"
+        className="w-full"
       >
-        {/* Full-width background section */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-blue-50/50 to-white rounded-3xl shadow-2xl"></div>
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl border border-gray-100/50"></div>
-        
-        {/* Form container with prominent styling */}
-        <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-10 max-w-6xl mx-auto backdrop-blur-sm">
+        {/* Form container with full width and reduced padding */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-6 backdrop-blur-sm">
           <motion.form 
             onSubmit={handleSubmit} 
-            className="grid grid-cols-1 lg:grid-cols-5 gap-8"
+            className="grid grid-cols-1 lg:grid-cols-5 gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.6 }}
           >
             {/* Location with enhanced typography */}
             <motion.div 
-              className="space-y-4"
+              className="space-y-3"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
@@ -121,7 +111,7 @@ export const DesktopHero = memo(({
 
             {/* Property Size with enhanced typography */}
             <motion.div 
-              className="space-y-4"
+              className="space-y-3"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
@@ -149,7 +139,7 @@ export const DesktopHero = memo(({
 
             {/* Date with enhanced typography */}
             <motion.div 
-              className="space-y-4"
+              className="space-y-3"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
@@ -166,7 +156,7 @@ export const DesktopHero = memo(({
 
             {/* Service Type with enhanced typography */}
             <motion.div 
-              className="space-y-4"
+              className="space-y-3"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >

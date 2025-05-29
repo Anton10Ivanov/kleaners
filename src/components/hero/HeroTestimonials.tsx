@@ -47,7 +47,7 @@ export const HeroTestimonials = memo(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-      }, 4000);
+      }, 2000); // Changed from 4000 to 2000 (2 seconds)
       return () => clearInterval(interval);
     }
   }, [isPaused]);
@@ -69,21 +69,6 @@ export const HeroTestimonials = memo(() => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="text-center mb-4">
-        <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-            <span className="font-semibold">4.9/5</span>
-            <span>Average Rating</span>
-          </div>
-          <div className="h-3 w-px bg-gray-300"></div>
-          <div>
-            <span className="font-semibold">2,500+</span>
-            <span> Happy Customers</span>
-          </div>
-        </div>
-      </div>
-
       <div className="relative">
         <div className="h-32 relative overflow-hidden">
           <AnimatePresence mode="wait">
