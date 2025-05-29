@@ -1,5 +1,5 @@
 
-import { HardHat, Broom, Shield, CheckCircle } from "lucide-react";
+import { HardHat, Brush, Shield, CheckCircle } from "lucide-react";
 
 export const constructionCleaningData = {
   title: "Construction Site Cleaning",
@@ -15,7 +15,7 @@ export const constructionCleaningData = {
       description: "All cleaning follows OSHA safety standards and construction site protocols."
     },
     {
-      icon: Broom,
+      icon: Brush,
       title: "Daily Site Maintenance",
       description: "Regular debris removal and cleaning to maintain safe working conditions."
     },
