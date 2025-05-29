@@ -1,5 +1,5 @@
 
-import { HardHat, Wrench, Broom, CheckCircle } from "lucide-react";
+import { HardHat, Wrench, Brush, CheckCircle } from "lucide-react";
 
 export const postConstructionData = {
   title: "Post-Construction Cleanup",
@@ -20,7 +20,7 @@ export const postConstructionData = {
       description: "Heavy-duty vacuum systems and equipment designed for construction cleanup."
     },
     {
-      icon: Broom,
+      icon: Brush,
       title: "Complete Debris Removal",
       description: "All construction materials, dust, and debris professionally removed and disposed of."
     },
