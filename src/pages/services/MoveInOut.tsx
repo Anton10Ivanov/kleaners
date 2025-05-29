@@ -1,9 +1,15 @@
 
 import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import ServiceBreadcrumb from "@/components/ui/service-breadcrumb";
 import { moveInOutData } from "@/data/services/moveInOut";
 
 const MoveInOut = () => {
-  return <ModernServiceTemplate data={moveInOutData} />;
+  return (
+    <>
+      <ServiceBreadcrumb serviceName="Move In/Out Cleaning" />
+      <ModernServiceTemplate data={moveInOutData} />
+    </>
+  );
 };
 
 export default MoveInOut;
