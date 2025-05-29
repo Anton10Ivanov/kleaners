@@ -44,14 +44,12 @@ import FAQ from '@/pages/about/FAQ';
 import RegularCleaning from '@/pages/services/RegularCleaning';
 import BusinessCleaning from '@/pages/services/BusinessCleaning';
 import MoveInOut from '@/pages/services/MoveInOut';
-import PostConstructionCleaning from '@/pages/services/PostConstructionCleaning';
 import WindowCleaning from '@/pages/services/WindowCleaning';
 import StairwellCleaning from '@/pages/services/StairwellCleaning';
 import IndustrialCleaning from '@/pages/services/IndustrialCleaning';
 import IntensiveCleaning from '@/pages/services/IntensiveCleaning';
 import VentilationCleaning from '@/pages/services/VentilationCleaning';
 import DisinfectionCleaning from '@/pages/services/DisinfectionCleaning';
-import MoveOutCleaning from '@/pages/services/MoveOutCleaning';
 import ConstructionCleaning from '@/pages/services/ConstructionCleaning';
 import CareFacilityCleaning from '@/pages/services/CareFacilityCleaning';
 import TradeFairCleaning from '@/pages/services/TradeFairCleaning';
@@ -127,18 +125,16 @@ function App() {
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
-          {/* Service routes */}
+          {/* Service routes - removed duplicates */}
           <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
           <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
-          <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
           <Route path="/services/window-cleaning" element={<WindowCleaning />} />
           <Route path="/services/stairwell-cleaning" element={<StairwellCleaning />} />
           <Route path="/services/industrial-cleaning" element={<IndustrialCleaning />} />
           <Route path="/services/intensive-cleaning" element={<IntensiveCleaning />} />
           <Route path="/services/ventilation-cleaning" element={<VentilationCleaning />} />
           <Route path="/services/disinfection-cleaning" element={<DisinfectionCleaning />} />
-          <Route path="/services/move-out-cleaning" element={<MoveOutCleaning />} />
           <Route path="/services/construction-cleaning" element={<ConstructionCleaning />} />
           <Route path="/services/care-facility-cleaning" element={<CareFacilityCleaning />} />
           <Route path="/services/trade-fair-cleaning" element={<TradeFairCleaning />} />
