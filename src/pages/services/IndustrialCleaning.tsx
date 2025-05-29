@@ -2,7 +2,7 @@
 import ServiceLayout from "@/components/services/ServiceLayout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Industry, Shield, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Check, Factory, Shield, Calendar, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const IndustrialCleaning = () => {
@@ -54,7 +54,7 @@ const IndustrialCleaning = () => {
                 </h2>
                 <div className="space-y-4">
                   {[
-                    { icon: Industry, text: "Specialized industrial cleaning equipment" },
+                    { icon: Factory, text: "Specialized industrial cleaning equipment" },
                     { icon: Shield, text: "OSHA compliance and safety protocols" },
                     { icon: Check, text: "Certified hazardous material handling" },
                     { icon: Calendar, text: "Scheduled maintenance programs" },

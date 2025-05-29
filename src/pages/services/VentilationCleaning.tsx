@@ -2,7 +2,7 @@
 import ServiceLayout from "@/components/services/ServiceLayout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Ventilation, Shield, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Check, AirVent, Shield, Calendar, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const VentilationCleaning = () => {
@@ -54,7 +54,7 @@ const VentilationCleaning = () => {
                 </h2>
                 <div className="space-y-4">
                   {[
-                    { icon: Ventilation, text: "Specialized ventilation cleaning equipment" },
+                    { icon: AirVent, text: "Specialized ventilation cleaning equipment" },
                     { icon: Shield, text: "Certified technicians and safety protocols" },
                     { icon: Check, text: "Improved air quality and system efficiency" },
                     { icon: Calendar, text: "Regular maintenance programs available" },
