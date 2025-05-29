@@ -45,6 +45,11 @@ import RegularCleaning from '@/pages/services/RegularCleaning';
 import BusinessCleaning from '@/pages/services/BusinessCleaning';
 import MoveInOut from '@/pages/services/MoveInOut';
 import PostConstructionCleaning from '@/pages/services/PostConstructionCleaning';
+import WindowCleaning from '@/pages/services/WindowCleaning';
+import StairwellCleaning from '@/pages/services/StairwellCleaning';
+import IndustrialCleaning from '@/pages/services/IndustrialCleaning';
+import IntensiveCleaning from '@/pages/services/IntensiveCleaning';
+import VentilationCleaning from '@/pages/services/VentilationCleaning';
 
 // Legal pages
 import TermsOfService from '@/pages/legal/TermsOfService';
@@ -100,6 +105,11 @@ function App() {
           <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
           <Route path="/services/post-construction-cleaning" element={<PostConstructionCleaning />} />
+          <Route path="/services/window-cleaning" element={<WindowCleaning />} />
+          <Route path="/services/stairwell-cleaning" element={<StairwellCleaning />} />
+          <Route path="/services/industrial-cleaning" element={<IndustrialCleaning />} />
+          <Route path="/services/intensive-cleaning" element={<IntensiveCleaning />} />
+          <Route path="/services/ventilation-cleaning" element={<VentilationCleaning />} />
           
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
