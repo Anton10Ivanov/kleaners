@@ -1,5 +1,5 @@
 
-import { Pipe, Wrench, CheckCircle, Droplets } from "lucide-react";
+import { Wrench, CheckCircle, Droplets, Settings } from "lucide-react";
 
 export const pipeCleaningData = {
   title: "Pipe Cleaning Service",
@@ -10,7 +10,7 @@ export const pipeCleaningData = {
   solutionStatement: "Our certified plumbing specialists use advanced equipment and proven techniques to clear blockages, prevent clogs, and maintain optimal water flow.",
   features: [
     {
-      icon: Pipe,
+      icon: Settings,
       title: "Complete Pipe Service",
       description: "Comprehensive cleaning of all pipe types including sewer lines, storm drains, and interior plumbing."
     },
