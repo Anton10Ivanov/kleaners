@@ -1,9 +1,11 @@
+
 import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
+import { LiveBookingNotifications } from "./LiveBookingNotifications";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
