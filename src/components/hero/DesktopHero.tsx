@@ -73,29 +73,28 @@ export const DesktopHero = memo(({
         </div>
       </motion.div>
 
-      {/* Enhanced form section - removed double nesting */}
+      {/* Enhanced form section with optimized spacing */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.5 }} 
         className="w-full"
       >
-        {/* Form container with full width and reduced padding */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-6 backdrop-blur-sm">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-4 backdrop-blur-sm">
           <motion.form 
             onSubmit={handleSubmit} 
-            className="grid grid-cols-1 lg:grid-cols-5 gap-6"
+            className="grid grid-cols-1 lg:grid-cols-4 gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.6 }}
           >
             {/* Location with enhanced typography */}
             <motion.div 
-              className="space-y-3"
+              className="space-y-2"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="postal-code" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              <Label htmlFor="postal-code" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Location
               </Label>
               <Input
@@ -104,69 +103,24 @@ export const DesktopHero = memo(({
                 placeholder="Enter your city or postal code"
                 value={postalCode}
                 onChange={e => setPostalCode(e.target.value)}
-                className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
+                className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium hover:shadow-md focus:shadow-lg"
                 required
-              />
-            </motion.div>
-
-            {/* Property Size with enhanced typography */}
-            <motion.div 
-              className="space-y-3"
-              whileFocus={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Label htmlFor="property-size" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-                Property Size
-              </Label>
-              <Select>
-                <SelectTrigger 
-                  id="property-size"
-                  className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
-                >
-                  <SelectValue placeholder="Select size (m²)" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
-                  <SelectItem value="30-50">30-50 m²</SelectItem>
-                  <SelectItem value="51-80">51-80 m²</SelectItem>
-                  <SelectItem value="81-120">81-120 m²</SelectItem>
-                  <SelectItem value="121-160">121-160 m²</SelectItem>
-                  <SelectItem value="161-200">161-200 m²</SelectItem>
-                  <SelectItem value="201-250">201-250 m²</SelectItem>
-                  <SelectItem value="251-300">251-300 m²</SelectItem>
-                </SelectContent>
-              </Select>
-            </motion.div>
-
-            {/* Date with enhanced typography */}
-            <motion.div 
-              className="space-y-3"
-              whileFocus={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Label htmlFor="cleaning-date" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-                Preferred Date
-              </Label>
-              <Input
-                id="cleaning-date"
-                type="date"
-                className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
-                min={new Date().toISOString().split('T')[0]}
               />
             </motion.div>
 
             {/* Service Type with enhanced typography */}
             <motion.div 
-              className="space-y-3"
+              className="space-y-2"
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Label htmlFor="service-type" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              <Label htmlFor="service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Service Type
               </Label>
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger 
                   id="service-type"
-                  className="h-16 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-lg font-medium hover:shadow-md focus:shadow-lg"
+                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium hover:shadow-md focus:shadow-lg"
                 >
                   <SelectValue placeholder="Select service" />
                 </SelectTrigger>
@@ -198,6 +152,34 @@ export const DesktopHero = memo(({
                 </SelectContent>
               </Select>
             </motion.div>
+
+            {/* Property Size with enhanced typography */}
+            <motion.div 
+              className="space-y-2"
+              whileFocus={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Label htmlFor="property-size" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+                Property Size
+              </Label>
+              <Select>
+                <SelectTrigger 
+                  id="property-size"
+                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium hover:shadow-md focus:shadow-lg"
+                >
+                  <SelectValue placeholder="Select size (m²)" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
+                  <SelectItem value="30-50">30-50 m²</SelectItem>
+                  <SelectItem value="51-80">51-80 m²</SelectItem>
+                  <SelectItem value="81-120">81-120 m²</SelectItem>
+                  <SelectItem value="121-160">121-160 m²</SelectItem>
+                  <SelectItem value="161-200">161-200 m²</SelectItem>
+                  <SelectItem value="201-250">201-250 m²</SelectItem>
+                  <SelectItem value="251-300">251-300 m²</SelectItem>
+                </SelectContent>
+              </Select>
+            </motion.div>
             
             {/* Enhanced CTA Button with bold styling */}
             <div className="flex items-end">
@@ -208,9 +190,9 @@ export const DesktopHero = memo(({
               >
                 <Button 
                   type="submit" 
-                  className="w-full h-16 bg-primary hover:bg-primary/90 text-white font-black text-xl rounded-xl flex items-center justify-center gap-4 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border-2 border-primary/20"
+                  className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border-2 border-primary/20"
                 >
-                  Let's Go <ArrowRight className="h-6 w-6" />
+                  Let's Go <ArrowRight className="h-5 w-5" />
                 </Button>
               </motion.div>
             </div>
