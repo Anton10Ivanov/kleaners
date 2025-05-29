@@ -59,6 +59,11 @@ import HoarderCleaning from '@/pages/services/HoarderCleaning';
 import MultiSurfaceCleaning from '@/pages/services/MultiSurfaceCleaning';
 import PoolCleaning from '@/pages/services/PoolCleaning';
 import PetHairRemoval from '@/pages/services/PetHairRemoval';
+import UndergroundGarageCleaning from '@/pages/services/UndergroundGarageCleaning';
+import VehicleCleaning from '@/pages/services/VehicleCleaning';
+import HolidayApartmentCleaning from '@/pages/services/HolidayApartmentCleaning';
+import GlassCleaningWinterGarden from '@/pages/services/GlassCleaningWinterGarden';
+import Gardening from '@/pages/services/Gardening';
 
 // Legal pages
 import TermsOfService from '@/pages/legal/TermsOfService';
@@ -128,6 +133,11 @@ function App() {
           <Route path="/services/multi-surface-cleaning" element={<MultiSurfaceCleaning />} />
           <Route path="/services/pool-cleaning" element={<PoolCleaning />} />
           <Route path="/services/pet-hair-removal" element={<PetHairRemoval />} />
+          <Route path="/services/underground-garage-cleaning" element={<UndergroundGarageCleaning />} />
+          <Route path="/services/vehicle-cleaning" element={<VehicleCleaning />} />
+          <Route path="/services/holiday-apartment-cleaning" element={<HolidayApartmentCleaning />} />
+          <Route path="/services/glass-cleaning-winter-garden" element={<GlassCleaningWinterGarden />} />
+          <Route path="/services/gardening" element={<Gardening />} />
           
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
