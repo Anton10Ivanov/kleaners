@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
-import { ServiceType } from "@/schemas/booking";
+import { ServiceType } from "@/types/enums";
 
 type HeroContextType = {
   selectedService: string;
@@ -32,7 +32,7 @@ export const HeroProvider = ({
   onServiceChange,
   onPostalCodeChange
 }: HeroProviderProps) => {
-  const [selectedService, setSelectedService] = useState(initialService || ServiceType.Regular);
+  const [selectedService, setSelectedService] = useState(initialService || ServiceType.Home);
   const [postalCode, setPostalCode] = useState(initialPostalCode || '');
 
   // Sync internal state with parent component

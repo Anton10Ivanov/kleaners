@@ -7,7 +7,7 @@ import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { LiveBookingNotifications } from "./LiveBookingNotifications";
 import { toast } from "sonner";
-import { ServiceType } from "@/schemas/booking";
+import { ServiceType } from "@/types/enums";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";
@@ -42,12 +42,12 @@ export const Hero = memo(({
     }
   }, [isPreviewWindow]);
 
-  // Set default service to "regular" when component mounts
+  // Set default service to "home" when component mounts
   useEffect(() => {
     startTimer('serviceInitialization');
     if (!selectedService) {
-      console.log("Setting service to: regular");
-      setSelectedService(ServiceType.Regular);
+      console.log("Setting service to: home");
+      setSelectedService(ServiceType.Home);
     }
     endTimer('serviceInitialization');
   }, [selectedService, setSelectedService, startTimer, endTimer]);

@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -41,9 +40,9 @@ import ClientMessages from '@/pages/client/ClientMessages';
 import CompanyValues from '@/pages/about/CompanyValues';
 import FAQ from '@/pages/about/FAQ';
 
-// Service pages
-import RegularCleaning from '@/pages/services/RegularCleaning';
-import BusinessCleaning from '@/pages/services/BusinessCleaning';
+// Service pages - updated imports
+import HomeCleaning from '@/pages/services/HomeCleaning';
+import OfficeCleaning from '@/pages/services/OfficeCleaning';
 import MoveInOut from '@/pages/services/MoveInOut';
 import WindowCleaning from '@/pages/services/WindowCleaning';
 import StairwellCleaning from '@/pages/services/StairwellCleaning';
@@ -127,10 +126,16 @@ function App() {
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
-          {/* Service routes */}
-          <Route path="/services/regular-cleaning" element={<RegularCleaning />} />
-          <Route path="/services/business-cleaning" element={<BusinessCleaning />} />
+          {/* Service routes - updated paths */}
+          <Route path="/services/home-cleaning" element={<HomeCleaning />} />
+          <Route path="/services/office-cleaning" element={<OfficeCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
+          
+          {/* Redirect old service URLs to new ones */}
+          <Route path="/services/regular-cleaning" element={<Navigate to="/services/home-cleaning" replace />} />
+          <Route path="/services/business-cleaning" element={<Navigate to="/services/office-cleaning" replace />} />
+          
+          {/* ... keep existing code (other service routes) */}
           <Route path="/services/window-cleaning" element={<WindowCleaning />} />
           <Route path="/services/stairwell-cleaning" element={<StairwellCleaning />} />
           <Route path="/services/industrial-cleaning" element={<IndustrialCleaning />} />

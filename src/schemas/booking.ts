@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 import { 
-  Service as ServiceEnum, 
+  ServiceType,
   Frequency as FrequencyEnum, 
   BusinessType as BusinessTypeEnum, 
   CleaningOption as CleaningOptionEnum, 
@@ -11,22 +11,13 @@ import {
 
 // Re-export the enums for use throughout the application
 export { 
-  ServiceEnum as Service, 
+  ServiceType,
   FrequencyEnum as Frequency, 
   BusinessTypeEnum as BusinessType, 
   CleaningOptionEnum as CleaningOption, 
   PropertySizeEnum as PropertySize, 
   ErrorSeverityEnum as ErrorSeverity 
 };
-
-// Add specific service types used in the UI that extend the base enum
-// This helps with backward compatibility with existing code
-export enum ServiceType {
-  Regular = "regular",
-  Business = "business",
-  MoveInOut = "move-in-out",
-  Construction = "post-construction"
-}
 
 export interface ProviderOption {
   id: string;
@@ -35,7 +26,7 @@ export interface ProviderOption {
 }
 
 // Convert enum values to strings for zod validation
-const serviceValues = [...Object.values(ServiceEnum), ...Object.values(ServiceType)].map(v => v.toString());
+const serviceValues = Object.values(ServiceType).map(v => v.toString());
 
 export const bookingSchema = z.object({
   // Basic booking info
