@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ServiceType } from "@/types/enums";
 
 interface MobileHeroProps {
   selectedService: string;
@@ -145,27 +146,27 @@ export const MobileHero = memo(({
                   <SelectValue placeholder="Select cleaning service" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
-                  <SelectItem value="regular">
+                  <SelectItem value={ServiceType.Home}>
                     <div>
-                      <div className="font-semibold">Regular Cleaning</div>
+                      <div className="font-semibold">Home Cleaning</div>
                       <div className="text-sm text-gray-500">Weekly, bi-weekly or monthly</div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="deep">
+                  <SelectItem value={ServiceType.DeepCleaning}>
                     <div>
                       <div className="font-semibold">Deep Cleaning</div>
                       <div className="text-sm text-gray-500">Thorough one-time cleaning</div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="move">
+                  <SelectItem value={ServiceType.MoveInOut}>
                     <div>
                       <div className="font-semibold">Move In/Out</div>
                       <div className="text-sm text-gray-500">Moving preparation cleaning</div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="business">
+                  <SelectItem value={ServiceType.Office}>
                     <div>
-                      <div className="font-semibold">Business Cleaning</div>
+                      <div className="font-semibold">Office Cleaning</div>
                       <div className="text-sm text-gray-500">Office and commercial spaces</div>
                     </div>
                   </SelectItem>
