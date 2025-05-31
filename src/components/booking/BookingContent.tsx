@@ -10,6 +10,7 @@ import BusinessStep from './business/BusinessStep';
 import DeepCleaningStep from './DeepCleaningStep';
 import FinalStep from './FinalStep';
 import { BookingFormData, Frequency } from '@/schemas/booking';
+import { ServiceType } from '@/types/enums';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -55,7 +56,7 @@ const BookingContent = ({
     <div className={`w-full ${isMobile ? 'px-2' : 'md:w-[80%]'}`} onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
-          {currentStep === 2 && selectedService === 'regular' && (
+          {currentStep === 2 && selectedService === ServiceType.Home && (
             <motion.div 
               initial="hidden" 
               animate="visible" 
@@ -63,7 +64,7 @@ const BookingContent = ({
               className="space-y-3"
             >
               <div className="bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h3 className="font-semibold mb-3 text-center text-zinc-950 text-sm">Regular Cleaning</h3>
+                <h3 className="font-semibold mb-3 text-center text-zinc-950 text-sm">Home Cleaning</h3>
                 <ServiceOptions 
                   frequency={frequency} 
                   setFrequency={freq => form.setValue('frequency', freq)} 
@@ -113,7 +114,7 @@ const BookingContent = ({
             </motion.div>
           )}
           
-          {currentStep === 2 && selectedService === 'business' && (
+          {currentStep === 2 && selectedService === ServiceType.Office && (
             <motion.div 
               initial="hidden" 
               animate="visible" 

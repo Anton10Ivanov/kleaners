@@ -1,11 +1,11 @@
 
 import { Sparkles, Clock, Shield, CheckCircle } from "lucide-react";
 
-export const regularCleaningData = {
-  title: "Regular House Cleaning",
+export const homeCleaningData = {
+  title: "Home Cleaning",
   subtitle: "Reliable Weekly & Bi-Weekly Cleaning",
   heroImage: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-  valueProposition: "Enjoy a consistently clean home with our trusted regular cleaning service that fits your schedule and budget.",
+  valueProposition: "Enjoy a consistently clean home with our trusted home cleaning service that fits your schedule and budget.",
   problemStatement: "Keeping up with regular house cleaning is exhausting and time-consuming, leaving you with less time for what matters most in your life.",
   solutionStatement: "Our professional cleaners provide consistent, reliable service on your schedule, so you can come home to a spotless house every time without lifting a finger.",
   features: [
@@ -37,13 +37,13 @@ export const regularCleaningData = {
       name: "Maria Rodriguez",
       rating: 5,
       text: "Having my house cleaned every two weeks has been life-changing. I actually have time for my family now!",
-      service: "Bi-weekly House Cleaning"
+      service: "Bi-weekly Home Cleaning"
     },
     {
       name: "James Wilson",
       rating: 5,
       text: "Consistent, reliable, and thorough. They've been cleaning my home for over a year and never disappoint.",
-      service: "Weekly House Cleaning"
+      service: "Weekly Home Cleaning"
     },
     {
       name: "Sophie Chen",
@@ -56,8 +56,8 @@ export const regularCleaningData = {
   averageRating: 4.9,
   faqs: [
     {
-      question: "What's included in regular cleaning?",
-      answer: "Our regular cleaning includes all common areas: kitchen, bathrooms, living areas, and bedrooms. We dust, vacuum, mop, clean surfaces, and sanitize high-touch areas."
+      question: "What's included in home cleaning?",
+      answer: "Our home cleaning includes all common areas: kitchen, bathrooms, living areas, and bedrooms. We dust, vacuum, mop, clean surfaces, and sanitize high-touch areas."
     },
     {
       question: "Do I need to be home during cleaning?",
@@ -68,5 +68,5 @@ export const regularCleaningData = {
       answer: "We understand life happens! Just give us 24 hours notice and we'll reschedule your cleaning at no extra charge."
     }
   ],
-  ctaText: "Start Regular Cleaning"
+  ctaText: "Start Home Cleaning"
 };

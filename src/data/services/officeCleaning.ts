@@ -1,13 +1,13 @@
 
 import { Building, Users, Clock, Shield } from "lucide-react";
 
-export const businessCleaningData = {
-  title: "Professional Business Cleaning",
+export const officeCleaningData = {
+  title: "Professional Office Cleaning",
   subtitle: "Commercial Cleaning Solutions",
   heroImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-  valueProposition: "Create a professional, healthy workspace that impresses clients and boosts employee productivity with our comprehensive commercial cleaning services.",
+  valueProposition: "Create a professional, healthy workspace that impresses clients and boosts employee productivity with our comprehensive office cleaning services.",
   problemStatement: "A dirty office creates poor impressions, reduces employee morale, and can spread illness, ultimately hurting your business reputation and productivity.",
-  solutionStatement: "Our commercial cleaning experts maintain pristine business environments with flexible scheduling and industry-specific protocols that keep your workplace professional and healthy.",
+  solutionStatement: "Our office cleaning experts maintain pristine business environments with flexible scheduling and industry-specific protocols that keep your workplace professional and healthy.",
   features: [
     {
       icon: Building,
@@ -49,7 +49,7 @@ export const businessCleaningData = {
       name: "Creative Agency Co.",
       rating: 5,
       text: "Flexible service that adapts to our changing needs. Great communication and reliable results.",
-      service: "Weekly Commercial Cleaning"
+      service: "Weekly Office Cleaning"
     }
   ],
   completedJobs: 3400,
@@ -68,5 +68,5 @@ export const businessCleaningData = {
       answer: "We serve offices, retail stores, medical facilities, restaurants, warehouses, and more. Our services are customized to meet industry-specific requirements."
     }
   ],
-  ctaText: "Get Business Quote"
+  ctaText: "Get Office Quote"
 };

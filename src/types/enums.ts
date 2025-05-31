@@ -11,11 +11,11 @@ export enum BookingStatus {
 }
 
 /**
- * Enum for service types
+ * Unified Service Type enum - replaces both Service and ServiceType
  */
-export enum Service {
-  Residential = "residential",
-  Business = "business",
+export enum ServiceType {
+  Home = "home",
+  Office = "office",
   DeepCleaning = "deep-cleaning",
   MoveInOut = "move-in-out",
   PostConstruction = "post-construction"
