@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
@@ -13,6 +14,7 @@ import { SectionLoading } from '@/components/ui/section-loading';
 import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
+import MobileBookingSummary from '../components/booking/MobileBookingSummary';
 
 // Simple error fallback component
 const ErrorFallback = () => (
