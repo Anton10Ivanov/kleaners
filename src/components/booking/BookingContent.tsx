@@ -47,6 +47,10 @@ const BookingContent = ({
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
   
+  // Add debugging for service type
+  console.log('BookingContent - selectedService:', selectedService);
+  console.log('BookingContent - currentStep:', currentStep);
+  
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -92,7 +96,7 @@ const BookingContent = ({
             </motion.div>
           )}
           
-          {currentStep === 2 && selectedService === 'deep' && (
+          {currentStep === 2 && selectedService === ServiceType.DeepCleaning && (
             <motion.div 
               initial="hidden" 
               animate="visible" 
@@ -103,7 +107,7 @@ const BookingContent = ({
             </motion.div>
           )}
           
-          {currentStep === 2 && selectedService === 'moveInOut' && (
+          {currentStep === 2 && selectedService === ServiceType.MoveInOut && (
             <motion.div 
               initial="hidden" 
               animate="visible" 
@@ -138,6 +142,13 @@ const BookingContent = ({
                 form={form} 
               />
             </motion.div>
+          )}
+          
+          {/* Debug information */}
+          {currentStep === 2 && (
+            <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-600">
+              Debug: Step {currentStep}, Service: {selectedService}
+            </div>
           )}
         </form>
       </Form>
