@@ -1,12 +1,18 @@
 
 import { Link, useNavigate } from "react-router-dom";
+import useBookingStore from "@/store/useBookingStore";
 
 export const Logo = () => {
   const navigate = useNavigate();
+  const { resetForm } = useBookingStore();
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Reset booking form when navigating to homepage
+    resetForm();
+    
     navigate('/');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

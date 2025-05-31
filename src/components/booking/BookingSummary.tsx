@@ -1,8 +1,8 @@
-
 import { Info, Check, Clock } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import MobileBookingSummary from './MobileBookingSummary';
 
 interface BookingSummaryProps {
   selectedService: string;
@@ -64,6 +64,19 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
+  // Use mobile component for mobile devices
+  if (isMobile) {
+    return (
+      <MobileBookingSummary 
+        selectedService={selectedService}
+        frequency={frequency}
+        hours={hours}
+        currentPrice={currentPrice}
+        selectedExtras={selectedExtras}
+      />
+    );
+  }
+
   const translateServiceName = (service: string) => {
     switch (service) {
       case 'regular': return 'Regular Cleaning';
@@ -74,7 +87,6 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
     }
   };
 
-  // Only show relevant items based on what's selected
   const hasRelevantData = selectedService || (frequency && hours > 0) || selectedExtras.length > 0;
   
   if (!hasRelevantData) {
@@ -82,7 +94,7 @@ const BookingSummary = ({ selectedService, frequency, hours, currentPrice, selec
   }
 
   return (
-    <div className={`${isMobile ? 'fixed bottom-0 left-0 w-full z-50' : 'sticky top-20'}`}>
+    <div className="sticky top-20">
       <motion.div 
         initial={{ y: isMobile ? 20 : 0, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
