@@ -71,22 +71,22 @@ const MobileBookingSummary = ({ selectedService, frequency, hours, currentPrice,
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-200 shadow-lg">
-      {/* Collapsed Header */}
+      {/* Collapsed Header - Centered Total */}
       <Button
         variant="ghost"
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between h-auto rounded-none border-none"
+        className="w-full p-4 flex items-center justify-center h-auto rounded-none border-none"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2 flex-1">
           <span className="text-lg font-bold text-gray-900">Total:</span>
           <span className="text-lg font-bold text-primary tabular-nums">
             {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
           </span>
         </div>
         {isExpanded ? (
-          <ChevronDown className="h-5 w-5 text-gray-600" />
+          <ChevronDown className="h-5 w-5 text-gray-600 ml-2" />
         ) : (
-          <ChevronUp className="h-5 w-5 text-gray-600" />
+          <ChevronUp className="h-5 w-5 text-gray-600 ml-2" />
         )}
       </Button>
 

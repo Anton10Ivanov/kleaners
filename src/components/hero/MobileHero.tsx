@@ -1,4 +1,3 @@
-
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, Home, Building } from "lucide-react";
@@ -131,7 +130,7 @@ export const MobileHero = memo(({
               />
             </div>
 
-            {/* Service Type */}
+            {/* Service Type - No icons */}
             <div className="space-y-2">
               <Label htmlFor="mobile-service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Service Type
@@ -145,28 +144,16 @@ export const MobileHero = memo(({
                 </SelectTrigger>
                 <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-xl z-50">
                   <SelectItem value={ServiceType.Home} className="cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Home className="h-4 w-4 text-blue-600" />
-                      <span className="font-semibold text-gray-800">Home Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Home Cleaning</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-green-600" />
-                      <span className="font-semibold text-gray-800">Deep Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Deep Cleaning</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-purple-600" />
-                      <span className="font-semibold text-gray-800">Move In/Out</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Move In/Out</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.Office} className="cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-orange-600" />
-                      <span className="font-semibold text-gray-800">Office Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Office Cleaning</span>
                   </SelectItem>
                 </SelectContent>
               </Select>
