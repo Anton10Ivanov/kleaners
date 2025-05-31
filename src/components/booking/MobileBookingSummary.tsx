@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Info, Check, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
@@ -77,17 +77,17 @@ const MobileBookingSummary = ({ selectedService, frequency, hours, currentPrice,
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full p-4 flex items-center justify-center h-auto rounded-none border-none"
       >
-        <div className="flex items-center justify-center gap-2 flex-1">
+        <div className="flex items-center justify-center gap-3 flex-1">
           <span className="text-lg font-bold text-gray-900">Total:</span>
           <span className="text-lg font-bold text-primary tabular-nums">
             {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
           </span>
+          {isExpanded ? (
+            <ChevronDown className="h-5 w-5 text-gray-600" />
+          ) : (
+            <ChevronUp className="h-5 w-5 text-gray-600" />
+          )}
         </div>
-        {isExpanded ? (
-          <ChevronDown className="h-5 w-5 text-gray-600 ml-2" />
-        ) : (
-          <ChevronUp className="h-5 w-5 text-gray-600 ml-2" />
-        )}
       </Button>
 
       {/* Expandable Content */}
@@ -160,19 +160,6 @@ const MobileBookingSummary = ({ selectedService, frequency, hours, currentPrice,
                   </div>
                 );
               })}
-
-              <div className="pt-2 border-t border-gray-200">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base font-bold text-gray-900">Total</span>
-                    <Info className="h-4 w-4 text-gray-400" />
-                  </div>
-                  <span className="text-base font-bold text-primary tabular-nums">
-                    {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Price per cleaning session</p>
-              </div>
             </div>
           </motion.div>
         )}
