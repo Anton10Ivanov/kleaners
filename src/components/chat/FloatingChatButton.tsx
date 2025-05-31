@@ -59,7 +59,7 @@ const FloatingChatButton = ({ userId = "guest123" }: FloatingChatButtonProps) =>
   };
   
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 z-50">
       {isOpen ? (
         <div className="bg-background border rounded-lg shadow-xl w-[350px] h-[500px] flex flex-col overflow-hidden animate-in slide-in-from-bottom-10 duration-300">
           <div className="p-3 border-b bg-muted/30 flex justify-between items-center">
@@ -89,7 +89,7 @@ const FloatingChatButton = ({ userId = "guest123" }: FloatingChatButtonProps) =>
           onClick={handleOpenChat}
           className={cn(
             "h-14 w-14 rounded-full shadow-lg",
-            "bg-primary hover:bg-primary/90 text-white",
+            "bg-white hover:bg-gray-50 text-primary border-2 border-primary",
             "flex items-center justify-center relative"
           )}
           data-floating-chat-button
