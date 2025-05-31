@@ -1,4 +1,3 @@
-
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, Home, Building } from "lucide-react";
@@ -108,7 +107,7 @@ export const DesktopHero = memo(({
         transition={{ duration: 0.8, delay: 0.6 }} 
         className="w-full max-w-6xl mx-auto"
       >
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-8 lg:p-12">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200/50 p-6 lg:p-8">
           <motion.form 
             onSubmit={handleSubmit} 
             className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end"
@@ -127,7 +126,7 @@ export const DesktopHero = memo(({
                 placeholder="Enter your city or postal code"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
                 required
               />
             </div>
@@ -140,84 +139,56 @@ export const DesktopHero = memo(({
               <Select value={selectedService} onValueChange={setSelectedService}>
                 <SelectTrigger 
                   id="desktop-service-type"
-                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+                  className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
                 >
                   <SelectValue placeholder="Select cleaning service" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
                   <SelectItem value={ServiceType.Home} className="cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <Home className="h-5 w-5 text-blue-600" />
-                      <span className="font-semibold text-gray-800">Home Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Home Cleaning</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <Building className="h-5 w-5 text-green-600" />
-                      <span className="font-semibold text-gray-800">Deep Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Deep Cleaning</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <Building className="h-5 w-5 text-purple-600" />
-                      <span className="font-semibold text-gray-800">Move In/Out</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Move In/Out</span>
                   </SelectItem>
                   <SelectItem value={ServiceType.Office} className="cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <Building className="h-5 w-5 text-orange-600" />
-                      <span className="font-semibold text-gray-800">Office Cleaning</span>
-                    </div>
+                    <span className="font-semibold text-gray-800">Office Cleaning</span>
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Property Size Field */}
+            {/* Property Size Field - No arrows */}
             <div className="space-y-3">
               <Label htmlFor="desktop-property-size" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
                 Property Size (m²)
               </Label>
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={decrementSize}
-                  className="h-14 w-12 rounded-xl border-2 border-gray-200 hover:border-primary"
-                >
-                  -
-                </Button>
-                <Input
-                  id="desktop-property-size"
-                  type="number"
-                  value={propertySize}
-                  onChange={(e) => setPropertySize(Number(e.target.value))}
-                  className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium flex-1"
-                  min="20"
-                  max="200"
-                  step="5"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={incrementSize}
-                  className="h-14 w-12 rounded-xl border-2 border-gray-200 hover:border-primary"
-                >
-                  +
-                </Button>
-              </div>
+              <Input
+                id="desktop-property-size"
+                type="number"
+                value={propertySize}
+                onChange={(e) => setPropertySize(Number(e.target.value))}
+                className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium"
+                min="20"
+                max="200"
+                step="5"
+              />
             </div>
             
-            {/* CTA Button */}
+            {/* CTA Button with green border */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <Button 
                 type="submit" 
-                className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border border-green-500"
+                style={{ 
+                  textShadow: '0 0 1px rgba(34, 197, 94, 0.8)', 
+                  boxShadow: '0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 15px rgba(126,188,230,0.2)' 
+                }}
               >
                 Let's Go <ArrowRight className="h-5 w-5" />
               </Button>

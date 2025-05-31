@@ -1,4 +1,3 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
@@ -153,23 +152,39 @@ const Index = () => {
                     form={form}
                   />
                 </ErrorBoundary>
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className={`w-full md:w-[20%] ${isMobile ? 'fixed bottom-0 left-0 right-0 z-20' : 'relative'}`}
-                >
-                  <ErrorBoundary FallbackComponent={ErrorFallback}>
-                    <LazyBookingSummary 
-                      selectedService={selectedService || ''}
-                      frequency={frequency || ''}
-                      hours={hours}
-                      currentPrice={currentPrice}
-                      selectedExtras={selectedExtras}
-                    />
-                  </ErrorBoundary>
-                </motion.div>
+                {/* Only show booking summary on desktop */}
+                {!isMobile && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="w-full md:w-[20%] relative"
+                  >
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <LazyBookingSummary 
+                        selectedService={selectedService || ''}
+                        frequency={frequency || ''}
+                        hours={hours}
+                        currentPrice={currentPrice}
+                        selectedExtras={selectedExtras}
+                      />
+                    </ErrorBoundary>
+                  </motion.div>
+                )}
               </div>
+
+              {/* Mobile booking summary */}
+              {isMobile && (
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <MobileBookingSummary 
+                    selectedService={selectedService || ''}
+                    frequency={frequency || ''}
+                    hours={hours}
+                    currentPrice={currentPrice}
+                    selectedExtras={selectedExtras}
+                  />
+                </ErrorBoundary>
+              )}
 
               <div className="flex justify-between mt-8 pb-20 md:pb-0">
                 <Button 
