@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { format, addDays, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
@@ -38,18 +37,28 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     end: endOfWeek(weekStart, { weekStartsOn: 1 })
   });
 
-  // Time slots with filters
+  // Updated time slots for 08:00-20:00 with 30-minute intervals
   const timeSlots = [
     { time: '08:00-10:00', period: 'morning', label: '8:00 AM' },
+    { time: '08:30-10:30', period: 'morning', label: '8:30 AM' },
     { time: '09:00-11:00', period: 'morning', label: '9:00 AM' },
+    { time: '09:30-11:30', period: 'morning', label: '9:30 AM' },
     { time: '10:00-12:00', period: 'morning', label: '10:00 AM' },
+    { time: '10:30-12:30', period: 'morning', label: '10:30 AM' },
     { time: '11:00-13:00', period: 'morning', label: '11:00 AM' },
+    { time: '11:30-13:30', period: 'morning', label: '11:30 AM' },
     { time: '12:00-14:00', period: 'afternoon', label: '12:00 PM' },
+    { time: '12:30-14:30', period: 'afternoon', label: '12:30 PM' },
     { time: '13:00-15:00', period: 'afternoon', label: '1:00 PM' },
+    { time: '13:30-15:30', period: 'afternoon', label: '1:30 PM' },
     { time: '14:00-16:00', period: 'afternoon', label: '2:00 PM' },
+    { time: '14:30-16:30', period: 'afternoon', label: '2:30 PM' },
     { time: '15:00-17:00', period: 'afternoon', label: '3:00 PM' },
+    { time: '15:30-17:30', period: 'afternoon', label: '3:30 PM' },
     { time: '16:00-18:00', period: 'afternoon', label: '4:00 PM' },
+    { time: '16:30-18:30', period: 'afternoon', label: '4:30 PM' },
     { time: '17:00-19:00', period: 'evening', label: '5:00 PM' },
+    { time: '17:30-19:30', period: 'evening', label: '5:30 PM' },
     { time: '18:00-20:00', period: 'evening', label: '6:00 PM' },
   ];
 
@@ -219,11 +228,11 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
       {date && (
         <div className="flex gap-2 overflow-x-auto pb-2">
           {[
-            { key: 'all', label: 'All Day', icon: Clock },
-            { key: 'morning', label: 'Morning', icon: Clock },
-            { key: 'afternoon', label: 'Afternoon', icon: Clock },
-            { key: 'evening', label: 'Evening', icon: Clock },
-          ].map(({ key, label, icon: Icon }) => (
+            { key: 'all', label: 'All Day' },
+            { key: 'morning', label: 'Morning' },
+            { key: 'afternoon', label: 'Afternoon' },
+            { key: 'evening', label: 'Evening' },
+          ].map(({ key, label }) => (
             <Button
               key={key}
               variant={timeFilter === key ? 'default' : 'outline'}
@@ -231,7 +240,6 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
               onClick={() => setTimeFilter(key as any)}
               className="flex-shrink-0"
             >
-              <Icon className="h-3 w-3 mr-1" />
               {label}
             </Button>
           ))}

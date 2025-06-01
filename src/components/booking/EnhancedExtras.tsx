@@ -2,6 +2,8 @@
 import { Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { useState, useCallback } from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
@@ -101,6 +103,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [windowCount, setWindowCount] = useState(1);
   const [ironingTime, setIroningTime] = useState(30);
+  const [framesIncluding, setFramesIncluding] = useState(false);
   
   const selectedExtras = form.watch('extras') || [];
   const frequency = form.watch('frequency') || 'onetime';
@@ -139,10 +142,11 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         localStorage.setItem('ironingTime', ironingTime.toString());
       } else if (extraId === 'windows') {
         localStorage.setItem('windowCount', windowCount.toString());
+        localStorage.setItem('framesIncluding', framesIncluding.toString());
       }
     }
     setOpenDialog(null);
-  }, [selectedExtras, setSelectedExtras, ironingTime, windowCount]);
+  }, [selectedExtras, setSelectedExtras, ironingTime, windowCount, framesIncluding]);
 
   const handleCloseDialog = useCallback(() => {
     setOpenDialog(null);
@@ -156,6 +160,11 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
     return extra.basePrice || 0;
   };
 
+  const calculateWindowPrice = () => {
+    const basePrice = windowCount * 5;
+    return framesIncluding ? basePrice * 2 : basePrice;
+  };
+
   const totalExtrasPrice = selectedExtras.reduce((total, extraId) => {
     const extra = AVAILABLE_EXTRAS.find(e => e.id === extraId);
     if (!extra) return total;
@@ -164,6 +173,10 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
       const savedTime = localStorage.getItem('ironingTime');
       const time = savedTime ? parseInt(savedTime) : 30;
       return total + (time / 60) * hourlyRate;
+    }
+    
+    if (extraId === 'windows') {
+      return total + calculateWindowPrice();
     }
     
     return total + calculateExtraPrice(extra);
@@ -185,7 +198,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <AnimatePresence>
           {AVAILABLE_EXTRAS.map((extra) => {
-            const Icon = extra.icon;
             const isSelected = selectedExtras.includes(extra.id);
             const price = calculateExtraPrice(extra);
             
@@ -202,7 +214,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                 <Button
                   variant="outline"
                   className={`
-                    h-auto p-3 transition-all duration-200 relative
+                    h-auto p-4 transition-all duration-200 relative w-full
                     ${isSelected 
                       ? 'border-primary bg-primary/5 border-2 shadow-md' 
                       : 'hover:border-primary/50 hover:bg-primary/5'
@@ -220,10 +232,9 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                     </motion.div>
                   )}
                   
-                  <div className="text-center space-y-2 w-full">
-                    <div className="flex flex-col items-center gap-1">
-                      <Icon className={`h-5 w-5 ${isSelected ? 'text-primary' : 'text-gray-600'}`} />
-                      <span className="text-xs font-semibold text-gray-900 dark:text-white leading-tight">
+                  <div className="text-center space-y-3 w-full">
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
                         {extra.title}
                       </span>
                     </div>
@@ -234,7 +245,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                           {extra.time}
                         </div>
                       )}
-                      <div className="text-xs font-medium text-primary">
+                      <div className="text-sm font-medium text-primary">
                         +{price.toFixed(0)} €
                       </div>
                     </div>
@@ -246,7 +257,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         </AnimatePresence>
       </div>
 
-      {/* Window Cleaning Dialog */}
+      {/* Window Cleaning Dialog with Frames Including toggle */}
       <Dialog open={openDialog === 'windows'} onOpenChange={handleCloseDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -280,8 +291,22 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                 +
               </Button>
             </div>
+            
+            {/* Frames Including Toggle */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <Label htmlFor="frames-toggle" className="text-sm font-medium">
+                Frames including
+              </Label>
+              <Switch
+                id="frames-toggle"
+                checked={framesIncluding}
+                onCheckedChange={setFramesIncluding}
+              />
+            </div>
+            
             <div className="text-center text-sm text-gray-600">
-              Price: <span className="font-semibold text-primary">{(windowCount * 5).toFixed(0)} €</span>
+              Price: <span className="font-semibold text-primary">{calculateWindowPrice().toFixed(0)} €</span>
+              {framesIncluding && <span className="text-xs text-gray-500 block">(doubled for frames)</span>}
             </div>
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={handleCloseDialog} className="flex-1">
