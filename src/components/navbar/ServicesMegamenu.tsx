@@ -53,20 +53,17 @@ export const ServicesMegamenu: React.FC = () => {
                         <button
                           key={service.href}
                           onClick={() => navigate(service.href)}
-                          className="group flex flex-col items-start p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors w-full text-left"
+                          className="group flex items-center p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors w-full text-left"
                         >
-                          <h5 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-primary">
+                          <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-primary">
                             {service.title}
-                          </h5>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
-                            {service.description}
-                          </p>
+                          </span>
                         </button>
                       ))}
                       {category.services.length > 3 && (
                         <button
                           onClick={() => navigate('/services')}
-                          className="text-sm text-primary hover:text-primary/80 font-semibold mt-2 block"
+                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold mt-2 block transition-colors"
                         >
                           View all {category.services.length} services →
                         </button>
@@ -78,7 +75,7 @@ export const ServicesMegamenu: React.FC = () => {
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                 <button
                   onClick={() => navigate('/services')}
-                  className="text-sm text-primary hover:text-primary/80 font-medium"
+                  className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors"
                 >
                   Browse all cleaning services →
                 </button>
