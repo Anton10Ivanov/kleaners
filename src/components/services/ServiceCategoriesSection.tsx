@@ -24,42 +24,16 @@ interface ServiceCategoriesSectionProps {
   className?: string;
 }
 
-// Organize categories by actual service types instead of generic groups
-const organizeCategories = (categories: ServiceCategory[]) => {
-  // Group categories into meaningful service types
-  const residential = categories.filter(cat => 
-    cat.title.includes('Residential') || 
-    ['Regular Cleaning', 'Move In/Out', 'Carpet Cleaning'].some(service => 
-      cat.services.some(s => s.title.includes(service.split(' ')[0]))
-    )
-  ).slice(0, 2);
-
-  const commercial = categories.filter(cat => 
-    cat.title.includes('Commercial') || cat.title.includes('Business') ||
-    cat.title.includes('Industrial') || cat.title.includes('Construction')
-  ).slice(0, 2);
-
-  const specialized = categories.filter(cat => 
-    cat.title.includes('Specialized') || cat.title.includes('Exterior') ||
-    cat.title.includes('Hospitality')
-  ).slice(0, 2);
-
-  return [
-    { name: 'Residential', categories: residential.length > 0 ? residential : categories.slice(0, 2) },
-    { name: 'Commercial', categories: commercial.length > 0 ? commercial : categories.slice(2, 4) },
-    { name: 'Specialized', categories: specialized.length > 0 ? specialized : categories.slice(4, 6) }
-  ].filter(group => group.categories.length > 0);
-};
-
 export const ServiceCategoriesSection = ({ 
   serviceCategories, 
   showHeader = true, 
   className = "" 
 }: ServiceCategoriesSectionProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [activeTab, setActiveTab] = React.useState("Residential");
+  const [activeTab, setActiveTab] = React.useState(serviceCategories[0]?.title || "");
   
-  const categoryGroups = organizeCategories(serviceCategories);
+  // Use the actual 6 service categories from the data
+  const displayCategories = serviceCategories.slice(0, 6);
   
   return (
     <section className={`py-16 bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300 ${className}`}>
@@ -80,78 +54,70 @@ export const ServiceCategoriesSection = ({
         )}
         
         <Tabs 
-          defaultValue="Residential" 
+          defaultValue={displayCategories[0]?.title || ""} 
           value={activeTab}
           onValueChange={setActiveTab}
           className="w-full"
         >
           <div className="flex justify-center mb-8">
-            <TabsList className={`${isMobile ? 'w-full' : 'w-auto'} bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm`}>
-              {categoryGroups.map((group) => (
+            <TabsList className={`${isMobile ? 'w-full grid grid-cols-2 gap-1' : 'w-auto'} bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm`}>
+              {displayCategories.map((category) => (
                 <TabsTrigger 
-                  key={group.name} 
-                  value={group.name}
-                  className="px-4 py-2 text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary"
+                  key={category.title} 
+                  value={category.title}
+                  className={`${isMobile ? 'px-2 py-2 text-xs' : 'px-4 py-2'} text-gray-700 dark:text-gray-300 data-[state=active]:text-primary data-[state=active]:dark:text-primary`}
                 >
-                  {group.name}
+                  {isMobile ? category.title.split(' ')[0] : category.title}
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
           
-          {categoryGroups.map((group) => (
+          {displayCategories.map((category) => (
             <TabsContent 
-              key={group.name} 
-              value={group.name}
-              className="mt-6 space-y-4"
+              key={category.title} 
+              value={category.title}
+              className="mt-6"
             >
-              <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'md:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
-                {group.categories.map((category, index) => (
-                  <motion.div
-                    key={category.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                  >
-                    <Card className="h-full flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <div className="p-2 bg-primary/10 rounded-lg">
-                            <category.icon className="h-6 w-6 text-primary" />
-                          </div>
-                          <CardTitle className="text-xl font-serif text-[#1C1C1C] dark:text-white">{category.title}</CardTitle>
+              <div className="max-w-4xl mx-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <div className="p-3 bg-primary/10 rounded-lg">
+                          <category.icon className="h-8 w-8 text-primary" />
                         </div>
-                      </CardHeader>
-                      <CardContent className="flex-grow pt-0">
-                        <ul className="space-y-2">
-                          {category.services.slice(0, 4).map((service, idx) => (
-                            <li key={idx} className="flex items-start text-sm text-gray-700 dark:text-gray-300">
-                              <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                              <Link 
-                                to={service.href}
-                                className="hover:text-primary transition-colors"
-                              >
-                                {service.title}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                        {category.services.length > 4 && (
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
-                            +{category.services.length - 4} more services
-                          </p>
-                        )}
-                      </CardContent>
-                      <CardFooter>
-                        <Link to="/services" className="w-full">
-                          <Button variant="outline" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
-                            View All {category.title}
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                ))}
+                        <CardTitle className="text-2xl font-serif text-[#1C1C1C] dark:text-white">{category.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'md:grid-cols-2 lg:grid-cols-3 gap-4'}`}>
+                        {category.services.map((service, idx) => (
+                          <div key={idx} className="flex items-start text-sm text-gray-700 dark:text-gray-300 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                            <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                            <Link 
+                              to={service.href}
+                              className="hover:text-primary transition-colors font-medium"
+                            >
+                              {service.title}
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Link to="/services" className="w-full">
+                        <Button variant="outline" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                          View All {category.title}
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                </motion.div>
               </div>
             </TabsContent>
           ))}
