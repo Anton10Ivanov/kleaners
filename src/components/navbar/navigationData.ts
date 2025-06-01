@@ -4,7 +4,7 @@ import {
   Building2, 
   Briefcase, 
   Scissors, 
-  Spray,
+  Sparkles,
   Car,
   TreePine,
   Hammer,
@@ -12,7 +12,6 @@ import {
   ShoppingCart,
   Zap,
   Users,
-  Sparkles,
   Factory,
   GraduationCap,
   Shield,
@@ -27,7 +26,8 @@ import {
   HelpCircle,
   Phone,
   FileText,
-  Award
+  Award,
+  LucideIcon
 } from "lucide-react";
 
 export const serviceCategories = [
@@ -111,7 +111,7 @@ export const serviceCategories = [
         title: "Intensive Cleaning",
         href: "/services/intensive-cleaning",
         description: "Deep and thorough cleaning solutions",
-        icon: Spray
+        icon: Sparkles
       },
       {
         title: "Disinfection Cleaning",
@@ -182,3 +182,42 @@ export const contactItems = [
     path: "/join-team"
   }
 ];
+
+// Navigation data for navbar
+export const navigationData = [
+  { title: "Services", href: "/services" },
+  { title: "Business Solutions", href: "/business-solutions" },
+  { title: "About", href: "/about/values" },
+  { title: "Contact", href: "/contact" }
+];
+
+// Export Icons for backward compatibility
+export const Icons = {
+  Home,
+  Building2,
+  Briefcase,
+  Scissors,
+  Sparkles,
+  Car,
+  TreePine,
+  Hammer,
+  Building,
+  ShoppingCart,
+  Zap,
+  Users,
+  Factory,
+  GraduationCap,
+  Shield,
+  Truck,
+  Palette,
+  ClipboardList,
+  FlameKindling,
+  Search,
+  Waves,
+  Trash2,
+  Heart,
+  HelpCircle,
+  Phone,
+  FileText,
+  Award
+};
