@@ -7,7 +7,7 @@ import {
   DialogTitle 
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Sparkles, X } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface DeepCleaningPopupProps {
   isOpen: boolean;
@@ -41,10 +41,10 @@ export const DeepCleaningPopup = ({
           </DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-400 space-y-3 mt-4">
             <p>
-              Based on the size and number of bathrooms in your home, we suggest a Deep Cleaning for the best results.
+              Your home may need a Deep Cleaning for best results, especially due to its size or number of bathrooms.
             </p>
             <p>
-              This includes extra attention to kitchens, bathrooms, and hard-to-reach areas.
+              This includes extra attention to bathrooms, kitchen, and details.
             </p>
           </DialogDescription>
         </DialogHeader>
