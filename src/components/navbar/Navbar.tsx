@@ -5,46 +5,18 @@ import { ThemeToggle } from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
 import { MobileMenu } from './MobileMenu';
 import { AuthButtons } from './auth';
-import { DropdownNavigation } from './DropdownNavigation';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import NavbarContainer from './NavbarContainer';
 import UserControls from './UserControls';
 import MobileUserControls from './MobileUserControls';
 import MobileMenuToggle from './MobileMenuToggle';
-import { Icons } from './navigationData';
 import FeaturedServices from './FeaturedServices';
 import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
+import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
 
 const navItems = [
   {
-    id: 1,
-    label: "Services",
-    subMenus: [{
-      title: "Cleaning Services",
-      items: [{
-        label: "Regular Cleaning",
-        description: "Professional home cleaning service",
-        icon: Icons.regular,
-        path: "/services/regular-cleaning"
-      }, {
-        label: "Business Cleaning",
-        description: "Commercial cleaning solutions",
-        icon: Icons.business,
-        path: "/services/business-cleaning"
-      }, {
-        label: "Move In/Out",
-        description: "Thorough cleaning for transitions",
-        icon: Icons.moveInOut,
-        path: "/services/move-in-out"
-      }, {
-        label: "Post Construction",
-        description: "Clean-up after construction work",
-        icon: Icons.postConstruction,
-        path: "/services/post-construction-cleaning"
-      }]
-    }]
-  }, {
     id: 2,
     label: "About",
     subMenus: [{
@@ -52,12 +24,12 @@ const navItems = [
       items: [{
         label: "Company's Values",
         description: "Our principles and what we stand for",
-        icon: Icons.regular,
+        icon: <Heart className="h-4 w-4" />,
         path: "/about/values"
       }, {
         label: "FAQ",
         description: "Frequently asked questions",
-        icon: Icons.regular,
+        icon: <HelpCircle className="h-4 w-4" />,
         path: "/about/faq"
       }]
     }]
@@ -69,12 +41,12 @@ const navItems = [
       items: [{
         label: "Get in Touch",
         description: "Contact our customer service team",
-        icon: Icons.regular,
+        icon: <Phone className="h-4 w-4" />,
         path: "/contact"
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        icon: Icons.regular,
+        icon: <Users className="h-4 w-4" />,
         path: "/join-team"
       }]
     }]
@@ -86,12 +58,12 @@ const navItems = [
       items: [{
         label: "Terms of Service",
         description: "Our terms and conditions",
-        icon: Icons.regular,
+        icon: <FileText className="h-4 w-4" />,
         path: "/legal/terms"
       }, {
         label: "Privacy Policy",
         description: "How we handle your data",
-        icon: Icons.regular,
+        icon: <Shield className="h-4 w-4" />,
         path: "/legal/privacy"
       }]
     }]

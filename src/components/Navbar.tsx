@@ -5,7 +5,6 @@ import { ThemeToggle } from './navbar/ThemeToggle';
 import LanguageSelector from './navbar/LanguageSelector';
 import { MobileMenu } from './navbar/MobileMenu';
 import { AuthButtons } from './navbar/auth';
-import { DropdownNavigation } from './navbar/DropdownNavigation';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import NavbarContainer from './navbar/NavbarContainer';
@@ -15,13 +14,10 @@ import MobileMenuToggle from './navbar/MobileMenuToggle';
 import { Icons } from './navbar/navigationData';
 import FeaturedServices from './navbar/FeaturedServices';
 import { EnhancedDropdownNavigation } from './navbar/EnhancedDropdownNavigation';
+import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
 
 const navItems = [
   {
-    id: 1,
-    label: "Services"
-    // Services will be handled specially in DropdownNavigation
-  }, {
     id: 2,
     label: "About",
     subMenus: [{
@@ -29,12 +25,12 @@ const navItems = [
       items: [{
         label: "Company's Values",
         description: "Our principles and what we stand for",
-        icon: Icons.regular,
+        icon: <Heart className="h-4 w-4" />,
         path: "/about/values"
       }, {
         label: "FAQ",
         description: "Frequently asked questions",
-        icon: Icons.regular,
+        icon: <HelpCircle className="h-4 w-4" />,
         path: "/about/faq"
       }]
     }]
@@ -46,12 +42,12 @@ const navItems = [
       items: [{
         label: "Get in Touch",
         description: "Contact our customer service team",
-        icon: Icons.regular,
+        icon: <Phone className="h-4 w-4" />,
         path: "/contact"
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        icon: Icons.regular,
+        icon: <Users className="h-4 w-4" />,
         path: "/join-team"
       }]
     }]
@@ -63,12 +59,12 @@ const navItems = [
       items: [{
         label: "Terms of Service",
         description: "Our terms and conditions",
-        icon: Icons.regular,
+        icon: <FileText className="h-4 w-4" />,
         path: "/legal/terms"
       }, {
         label: "Privacy Policy",
         description: "How we handle your data",
-        icon: Icons.regular,
+        icon: <Shield className="h-4 w-4" />,
         path: "/legal/privacy"
       }]
     }]
