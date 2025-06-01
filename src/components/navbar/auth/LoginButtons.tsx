@@ -5,22 +5,22 @@ import { Button } from '@/components/ui/button';
 
 const LoginButtons: React.FC = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="flex items-center gap-2">
       <Button 
         variant="ghost" 
         size="sm" 
         onClick={() => navigate('/login')}
-        className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary"
+        className="min-h-[44px] px-4"
       >
         Login
       </Button>
       <Button 
-        variant="outline" 
+        variant="default" 
         size="sm" 
-        onClick={() => navigate('/signup')} 
-        className="border-gray-300 text-gray-500 font-medium text-sm hover:bg-primary/10 hover:text-primary dark:border-gray-700 dark:text-gray-400 dark:hover:text-primary"
+        onClick={() => navigate('/signup')}
+        className="min-h-[44px] px-4 bg-primary hover:bg-primary/90"
       >
         Sign up
       </Button>

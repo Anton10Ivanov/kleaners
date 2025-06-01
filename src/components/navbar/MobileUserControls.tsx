@@ -1,21 +1,26 @@
 
 import React from 'react';
-import { CalendarDays } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Calendar } from 'lucide-react';
 
 interface MobileUserControlsProps {
   user: any;
   handleBookingsClick: () => void;
 }
 
-const MobileUserControls: React.FC<MobileUserControlsProps> = ({ user, handleBookingsClick }) => {
-  if (!user) return null;
-
+const MobileUserControls: React.FC<MobileUserControlsProps> = ({ 
+  user, 
+  handleBookingsClick 
+}) => {
   return (
-    <Button variant="outline" size="icon" onClick={handleBookingsClick} className="text-primary border-primary p-1 h-8 w-8">
-      <CalendarDays className="h-4 w-4" />
+    <Button 
+      variant="ghost" 
+      size="sm" 
+      onClick={handleBookingsClick}
+      className="p-2 min-h-[44px] min-w-[44px]"
+      aria-label="My Bookings"
+    >
+      <Calendar className="h-5 w-5" />
     </Button>
   );
 };

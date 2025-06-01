@@ -1,9 +1,9 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { SheetClose } from '@/components/ui/sheet';
-import { Home } from 'lucide-react';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavigationItem {
   title: string;
@@ -19,48 +19,78 @@ interface NavigationSectionProps {
 }
 
 const NavigationSection: React.FC<NavigationSectionProps> = ({ navigationData }) => {
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const navigate = useNavigate();
+
+  const toggleExpanded = (title: string) => {
+    const newExpanded = new Set(expandedItems);
+    if (newExpanded.has(title)) {
+      newExpanded.delete(title);
+    } else {
+      newExpanded.add(title);
+    }
+    setExpandedItems(newExpanded);
+  };
+
+  const handleNavigation = (href: string) => {
+    navigate(href);
+  };
+
   return (
-    <div className="rounded-lg border border-border p-4 bg-card shadow-sm">
-      <h3 className="text-sm font-semibold text-primary mb-3 flex items-center">
-        <Home className="mr-2 h-4 w-4" />
-        Main Navigation
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+        Navigation
       </h3>
-      <div className="space-y-1">
-        {navigationData.map((item, index) => (
-          item.children ? (
-            <Accordion type="single" collapsible key={index} className="border-none">
-              <AccordionItem value={item.title} className="border-b-0">
-                <AccordionTrigger className="py-2 px-1 hover:no-underline text-sm">
-                  {item.title}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col space-y-1 pl-2">
-                    {item.children.map((child, childIndex) => (
-                      <SheetClose asChild key={childIndex}>
-                        <Link
-                          to={child.href}
-                          className="py-2 px-3 text-sm rounded-md hover:bg-accent transition-colors"
-                        >
-                          {child.title}
-                        </Link>
-                      </SheetClose>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          ) : (
-            <SheetClose asChild key={index}>
-              <Link
-                to={item.href}
-                className="block py-2 px-3 rounded-md hover:bg-accent text-sm transition-colors"
+      
+      {navigationData.map((item) => (
+        <div key={item.title} className="space-y-1">
+          <Button
+            variant="ghost"
+            className="w-full justify-between min-h-[44px] px-3"
+            onClick={() => {
+              if (item.children) {
+                toggleExpanded(item.title);
+              } else {
+                handleNavigation(item.href);
+              }
+            }}
+          >
+            <span>{item.title}</span>
+            {item.children && (
+              <motion.div
+                animate={{ rotate: expandedItems.has(item.title) ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
               >
-                {item.title}
-              </Link>
-            </SheetClose>
-          )
-        ))}
-      </div>
+                <ChevronRight className="h-4 w-4" />
+              </motion.div>
+            )}
+          </Button>
+          
+          <AnimatePresence>
+            {item.children && expandedItems.has(item.title) && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="pl-4 space-y-1"
+              >
+                {item.children.map((child) => (
+                  <Button
+                    key={child.title}
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start min-h-[40px] text-sm"
+                    onClick={() => handleNavigation(child.href)}
+                  >
+                    {child.title}
+                  </Button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
     </div>
   );
 };
