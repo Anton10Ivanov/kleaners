@@ -1,4 +1,6 @@
 
+import { UseFormReturn } from "react-hook-form";
+import { DeepCleaningFormData } from "@/schemas/booking";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import PropertyDetails from './PropertyDetails';
@@ -7,68 +9,45 @@ import CleaningPersonnel from './CleaningPersonnel';
 import SpecialConditions from './SpecialConditions';
 
 interface DeepCleaningFieldsProps {
-  squareMeters: number;
-  setSquareMeters: (value: number) => void;
-  bathrooms: number;
-  setBathrooms: (value: number) => void;
-  bedrooms: number;
-  setBedrooms: (value: number) => void;
-  dirtinessLevel: number;
-  setDirtinessLevel: (value: number) => void;
-  lastCleaned: number;
-  setLastCleaned: (value: number) => void;
-  cleaningPersonnel: 'normal' | 'experienced';
-  setCleaningPersonnel: (value: 'normal' | 'experienced') => void;
-  specialConditions: string[];
-  setSpecialConditions: (value: string[]) => void;
-  additionalNotes?: string;
-  setAdditionalNotes?: (value: string) => void;
+  form: UseFormReturn<DeepCleaningFormData>;
 }
 
-const DeepCleaningFields = ({
-  squareMeters,
-  setSquareMeters,
-  bathrooms,
-  setBathrooms,
-  bedrooms,
-  setBedrooms,
-  dirtinessLevel,
-  setDirtinessLevel,
-  lastCleaned,
-  setLastCleaned,
-  cleaningPersonnel,
-  setCleaningPersonnel,
-  specialConditions,
-  setSpecialConditions,
-  additionalNotes = '',
-  setAdditionalNotes = () => {},
-}: DeepCleaningFieldsProps) => {
+const DeepCleaningFields = ({ form }: DeepCleaningFieldsProps) => {
+  const squareMeters = form.watch('squareMeters') || 50;
+  const bedrooms = form.watch('bedrooms') || 1;
+  const bathrooms = form.watch('bathrooms') || 1;
+  const dirtinessLevel = form.watch('dirtinessLevel') || 3;
+  const lastCleaned = form.watch('lastCleaned') || 3;
+  const cleaningPersonnel = form.watch('cleaningPersonnel') || 'normal';
+  const specialConditions = form.watch('specialConditions') || [];
+  const additionalNotes = form.watch('additionalNotes') || '';
+
   return (
     <div className="space-y-6">
       <PropertyDetails
         squareMeters={squareMeters}
-        setSquareMeters={setSquareMeters}
+        setSquareMeters={(value) => form.setValue('squareMeters', value)}
         bathrooms={bathrooms}
-        setBathrooms={setBathrooms}
+        setBathrooms={(value) => form.setValue('bathrooms', value)}
         bedrooms={bedrooms}
-        setBedrooms={setBedrooms}
+        setBedrooms={(value) => form.setValue('bedrooms', value)}
       />
 
       <PropertyCondition
         dirtinessLevel={dirtinessLevel}
-        setDirtinessLevel={setDirtinessLevel}
+        setDirtinessLevel={(value) => form.setValue('dirtinessLevel', value)}
         lastCleaned={lastCleaned}
-        setLastCleaned={setLastCleaned}
+        setLastCleaned={(value) => form.setValue('lastCleaned', value)}
       />
 
       <CleaningPersonnel
         cleaningPersonnel={cleaningPersonnel}
-        setCleaningPersonnel={setCleaningPersonnel}
+        setCleaningPersonnel={(value) => form.setValue('cleaningPersonnel', value)}
       />
 
       <SpecialConditions
         specialConditions={specialConditions}
-        setSpecialConditions={setSpecialConditions}
+        setSpecialConditions={(value) => form.setValue('specialConditions', value)}
       />
 
       <div className="space-y-3 animate-fadeIn">
@@ -76,7 +55,7 @@ const DeepCleaningFields = ({
         <Textarea
           placeholder="Is there anything else we should know about your property?"
           value={additionalNotes}
-          onChange={(e) => setAdditionalNotes(e.target.value)}
+          onChange={(e) => form.setValue('additionalNotes', e.target.value)}
           className="min-h-[80px] resize-y transition-colors focus:border-primary"
         />
       </div>
