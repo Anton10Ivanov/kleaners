@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { UseFormReturn } from 'react-hook-form';
-import { BookingFormData } from '@/schemas/booking';
+import { BookingFormData, Frequency } from '@/schemas/booking';
 import { Calendar, Clock, MapPin, Euro, Edit } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -33,8 +33,8 @@ const EnhancedBookingSummary = ({ form, onEditStep }: EnhancedBookingSummaryProp
   // Calculate prices
   const getHourlyRate = () => {
     switch (frequency) {
-      case 'weekly': return 27;
-      case 'biweekly': return 30;
+      case Frequency.Weekly: return 27;
+      case Frequency.BiWeekly: return 30;
       default: return 35;
     }
   };
@@ -91,10 +91,10 @@ const EnhancedBookingSummary = ({ form, onEditStep }: EnhancedBookingSummaryProp
 
   const getFrequencyDisplayName = () => {
     switch (frequency) {
-      case 'weekly': return 'Weekly';
-      case 'biweekly': return 'Bi-weekly';
-      case 'monthly': return 'Monthly';
-      case 'onetime': return 'One-time';
+      case Frequency.Weekly: return 'Weekly';
+      case Frequency.BiWeekly: return 'Bi-weekly';
+      case Frequency.Monthly: return 'Monthly';
+      case Frequency.OneTime: return 'One-time';
       default: return 'Custom';
     }
   };
