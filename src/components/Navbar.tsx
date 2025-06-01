@@ -13,6 +13,8 @@ import UserControls from './navbar/UserControls';
 import MobileUserControls from './navbar/MobileUserControls';
 import MobileMenuToggle from './navbar/MobileMenuToggle';
 import { Icons } from './navbar/navigationData';
+import FeaturedServices from './navbar/FeaturedServices';
+import { EnhancedDropdownNavigation } from './navbar/EnhancedDropdownNavigation';
 
 const navItems = [
   {
@@ -203,7 +205,9 @@ const Navbar = () => {
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
       <Logo />
       
-      <DropdownNavigation navItems={navItems} />
+      <FeaturedServices />
+      
+      <EnhancedDropdownNavigation navItems={navItems} />
 
       <div className="hidden md:flex items-center space-x-3">
         {user && <UserControls user={user} />}
