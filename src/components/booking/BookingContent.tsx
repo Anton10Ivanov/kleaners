@@ -8,6 +8,7 @@ import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { PropertySizeField } from './PropertySizeField';
+import { HomeDetailsSection } from './HomeDetailsSection';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
 import { useForm } from 'react-hook-form';
@@ -43,7 +44,6 @@ const BookingContent = ({
   const { submitBooking } = useBookingSubmission();
   const frequency = form.watch('frequency') as Frequency | undefined;
   const postalCode = form.watch('postalCode') || '';
-  const propertySize = form.watch('propertySize') || 70;
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
   
@@ -53,6 +53,14 @@ const BookingContent = ({
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+  };
+
+  const handleSuggestedTimeSelect = (hours: number) => {
+    // Scroll to the hours selection section
+    const hoursSection = document.querySelector('[data-hours-selection]');
+    if (hoursSection) {
+      hoursSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
   
   return (
@@ -66,6 +74,12 @@ const BookingContent = ({
               variants={fadeVariant} 
               className="space-y-4"
             >
+              {/* Home Details Section */}
+              <HomeDetailsSection 
+                form={form} 
+                onSuggestedTimeSelect={handleSuggestedTimeSelect}
+              />
+
               <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <h3 className="font-semibold mb-4 text-center text-zinc-950 dark:text-white text-lg">
                   Home Cleaning
@@ -76,18 +90,13 @@ const BookingContent = ({
                   isRegularCleaning={true} 
                 />
               </div>
-
-              {/* Property Size Field for Home Cleaning */}
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <PropertySizeField
-                  value={propertySize}
-                  onChange={(value) => form.setValue('propertySize', value)}
-                />
-              </div>
               
               {frequency !== Frequency.Custom && (
                 <>
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div 
+                    className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
+                    data-hours-selection
+                  >
                     <HoursSelection form={form} />
                   </div>
                   
