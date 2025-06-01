@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { format, addDays, subDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
@@ -9,8 +10,9 @@ import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Users } from "lucide-react";
 import { motion } from "framer-motion";
+import { TimeSlider } from "@/components/ui/time-slider";
 
 interface OptimizedCalendarProps {
   form: UseFormReturn<BookingFormData>;
@@ -23,7 +25,6 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     const today = new Date();
     return startOfWeek(today, { weekStartsOn: 1 });
   });
-  const [timeFilter, setTimeFilter] = useState<'all' | 'morning' | 'afternoon' | 'evening'>('all');
 
   const date = form.watch('date');
   const hours = form.watch('hours') || 2;
@@ -36,35 +37,6 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     start: weekStart,
     end: endOfWeek(weekStart, { weekStartsOn: 1 })
   });
-
-  // Updated time slots for 08:00-20:00 with 30-minute intervals
-  const timeSlots = [
-    { time: '08:00-10:00', period: 'morning', label: '8:00 AM' },
-    { time: '08:30-10:30', period: 'morning', label: '8:30 AM' },
-    { time: '09:00-11:00', period: 'morning', label: '9:00 AM' },
-    { time: '09:30-11:30', period: 'morning', label: '9:30 AM' },
-    { time: '10:00-12:00', period: 'morning', label: '10:00 AM' },
-    { time: '10:30-12:30', period: 'morning', label: '10:30 AM' },
-    { time: '11:00-13:00', period: 'morning', label: '11:00 AM' },
-    { time: '11:30-13:30', period: 'morning', label: '11:30 AM' },
-    { time: '12:00-14:00', period: 'afternoon', label: '12:00 PM' },
-    { time: '12:30-14:30', period: 'afternoon', label: '12:30 PM' },
-    { time: '13:00-15:00', period: 'afternoon', label: '1:00 PM' },
-    { time: '13:30-15:30', period: 'afternoon', label: '1:30 PM' },
-    { time: '14:00-16:00', period: 'afternoon', label: '2:00 PM' },
-    { time: '14:30-16:30', period: 'afternoon', label: '2:30 PM' },
-    { time: '15:00-17:00', period: 'afternoon', label: '3:00 PM' },
-    { time: '15:30-17:30', period: 'afternoon', label: '3:30 PM' },
-    { time: '16:00-18:00', period: 'afternoon', label: '4:00 PM' },
-    { time: '16:30-18:30', period: 'afternoon', label: '4:30 PM' },
-    { time: '17:00-19:00', period: 'evening', label: '5:00 PM' },
-    { time: '17:30-19:30', period: 'evening', label: '5:30 PM' },
-    { time: '18:00-20:00', period: 'evening', label: '6:00 PM' },
-  ];
-
-  const filteredTimeSlots = timeSlots.filter(slot => 
-    timeFilter === 'all' || slot.period === timeFilter
-  );
 
   // Fetch providers for selected date and time
   useEffect(() => {
@@ -128,8 +100,17 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     form.setValue('providerOptions', []);
   };
 
-  const handleTimeSlotSelect = async (timeSlot: string) => {
+  const handleTimeSlotSelect = async (startTime: string) => {
     if (!date) return;
+    
+    // Calculate end time based on selected hours
+    const [hour, minute] = startTime.split(':').map(Number);
+    const startDate = new Date();
+    startDate.setHours(hour, minute);
+    const endDate = new Date(startDate.getTime() + hours * 60 * 60 * 1000);
+    const endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+    
+    const timeSlot = `${startTime}-${endTime}`;
     setSelectedTimeSlot(timeSlot);
     form.setValue('preferredTime', timeSlot);
     
@@ -153,6 +134,8 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     const futureLimit = addDays(nowInBerlin, 31);
     return dateToCheck < oneWeekAgo || dateToCheck > futureLimit;
   };
+
+  const currentStartTime = selectedTimeSlot ? selectedTimeSlot.split('-')[0] : '08:00';
 
   return (
     <div className="space-y-4">
@@ -224,55 +207,17 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
         </div>
       </div>
 
-      {/* Time Filter */}
-      {date && (
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {[
-            { key: 'all', label: 'All Day' },
-            { key: 'morning', label: 'Morning' },
-            { key: 'afternoon', label: 'Afternoon' },
-            { key: 'evening', label: 'Evening' },
-          ].map(({ key, label }) => (
-            <Button
-              key={key}
-              variant={timeFilter === key ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setTimeFilter(key as any)}
-              className="flex-shrink-0"
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-      )}
-
-      {/* Time Slots */}
+      {/* Time Slider */}
       {date && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
         >
-          {filteredTimeSlots.map((slot) => {
-            const isSelected = selectedTimeSlot === slot.time;
-            
-            return (
-              <Button
-                key={slot.time}
-                variant={isSelected ? 'default' : 'outline'}
-                onClick={() => handleTimeSlotSelect(slot.time)}
-                className={`
-                  h-12 flex flex-col items-center justify-center transition-all
-                  ${isSelected ? 'bg-primary text-white shadow-lg' : 'hover:border-primary/50'}
-                `}
-              >
-                <span className="font-medium">{slot.label}</span>
-                <span className={`text-xs ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
-                  {slot.period}
-                </span>
-              </Button>
-            );
-          })}
+          <TimeSlider
+            value={currentStartTime}
+            onChange={handleTimeSlotSelect}
+          />
         </motion.div>
       )}
 
@@ -306,9 +251,9 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
         </motion.div>
       )}
 
-      {!selectedTimeSlot && (
+      {!selectedTimeSlot && date && (
         <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-          If no preferred time slots are available, please select another date or{" "}
+          Select a time using the slider above, or{" "}
           <Link to="/contact" className="text-primary hover:underline">
             contact us
           </Link>
