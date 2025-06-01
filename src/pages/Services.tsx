@@ -155,24 +155,25 @@ const Services = () => {
                 </motion.div>
               );
             })}
-          </filteredServices.length === 0 && (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                No services found matching your criteria.
-              </p>
-              <Button 
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory('all');
-                }}
-                variant="outline"
-                className="mt-4"
-              >
-                Clear Filters
-              </Button>
-            </div>
-          )}
-        </motion.div>
+            {filteredServices.length === 0 && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                  No services found matching your criteria.
+                </p>
+                <Button 
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedCategory('all');
+                  }}
+                  variant="outline"
+                  className="mt-4"
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            )}
+          </motion.div>
+        </div>
       </section>
 
       {/* CTA Section */}
