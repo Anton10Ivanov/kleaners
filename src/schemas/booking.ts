@@ -1,20 +1,8 @@
 
 import { z } from "zod";
+import { ServiceType, Frequency } from "@/types/enums";
 
-export enum ServiceType {
-  Home = "home",
-  DeepCleaning = "deep-cleaning", 
-  MoveInOut = "move-in-out",
-  Office = "office"
-}
-
-export enum Frequency {
-  OneTime = "onetime",
-  Weekly = "weekly", 
-  BiWeekly = "biweekly",
-  Monthly = "monthly",
-  Custom = "custom"
-}
+export { ServiceType, Frequency } from "@/types/enums";
 
 export interface ProviderOption {
   id: string;
