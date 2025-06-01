@@ -29,7 +29,6 @@ export const MobileHero = memo(({
   setPostalCode,
   handleNextStep
 }: MobileHeroProps) => {
-  const [propertySize, setPropertySize] = useState(70);
 
   const benefits = [
     "Liability insurance",
@@ -41,14 +40,6 @@ export const MobileHero = memo(({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleNextStep();
-  };
-
-  const incrementSize = () => {
-    setPropertySize(prev => Math.min(prev + 5, 200));
-  };
-
-  const decrementSize = () => {
-    setPropertySize(prev => Math.max(prev - 5, 20));
   };
 
   return (
@@ -68,6 +59,15 @@ export const MobileHero = memo(({
         Book your cleaning service{" "}
         <span className="text-primary font-extrabold">online</span>
       </motion.h1>
+
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6, delay: 0.2 }} 
+        className="text-sm text-gray-600 font-medium mb-2"
+      >
+        Get instant price quote in 3 easy steps
+      </motion.p>
 
       {/* Benefits List with improved mobile spacing */}
       <motion.div 
@@ -120,7 +120,7 @@ export const MobileHero = memo(({
             />
           </div>
 
-          {/* Service Type - No icons */}
+          {/* Service Type */}
           <div className="space-y-2">
             <Label htmlFor="mobile-service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
               Service Type
@@ -148,43 +148,6 @@ export const MobileHero = memo(({
               </SelectContent>
             </Select>
           </div>
-
-          {/* Property Size Field */}
-          <div className="space-y-2">
-            <Label htmlFor="mobile-property-size" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-              Property Size (m²)
-            </Label>
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={decrementSize}
-                className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
-              >
-                -
-              </Button>
-              <Input
-                id="mobile-property-size"
-                type="number"
-                value={propertySize}
-                onChange={(e) => setPropertySize(Number(e.target.value))}
-                className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium flex-1"
-                min="20"
-                max="200"
-                step="5"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={incrementSize}
-                className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
-              >
-                +
-              </Button>
-            </div>
-          </div>
           
           {/* Enhanced CTA Button with mobile optimization */}
           <motion.div
@@ -195,14 +158,37 @@ export const MobileHero = memo(({
               type="submit" 
               className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-lg flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:-translate-y-1 mt-6"
             >
-              Let's Go <ArrowRight className="h-5 w-5" />
+              Get Instant Quote <ArrowRight className="h-5 w-5" />
             </Button>
           </motion.div>
 
           <p className="text-xs text-gray-500 text-center mt-4 font-medium">
-            Free quote • No commitment • Instant booking
+            Direct price estimation on final step • No commitment
           </p>
         </motion.form>
+      </motion.div>
+
+      {/* Step Indicators for Mobile */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="flex justify-center items-center gap-2 mt-4"
+      >
+        <div className="flex items-center gap-1">
+          <div className="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+          <span className="text-xs text-gray-600 font-medium">Info</span>
+        </div>
+        <ArrowRight className="h-3 w-3 text-gray-400" />
+        <div className="flex items-center gap-1">
+          <div className="w-5 h-5 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">2</div>
+          <span className="text-xs text-gray-600 font-medium">Details</span>
+        </div>
+        <ArrowRight className="h-3 w-3 text-gray-400" />
+        <div className="flex items-center gap-1">
+          <div className="w-5 h-5 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+          <span className="text-xs text-gray-600 font-medium">Price</span>
+        </div>
       </motion.div>
     </motion.div>
   );

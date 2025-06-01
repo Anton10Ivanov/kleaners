@@ -69,6 +69,7 @@ export const homeCleaningSchema = baseBookingSchema.extend({
   hours: z.number().min(2).max(12),
   bedrooms: z.number().min(1).max(10),
   bathrooms: z.number().min(1).max(10),
+  propertySize: z.number().min(20).max(500).optional(),
   extras: z.array(z.string()).default([]),
   windowConfig: z.object({
     count: z.number(),
@@ -121,6 +122,7 @@ export const bookingSchema = baseBookingSchema.extend({
   hours: z.number().min(2).max(12).optional(),
   bedrooms: z.number().min(1).max(10).optional(),
   bathrooms: z.number().min(1).max(10).optional(),
+  propertySize: z.number().min(20).max(500).optional(),
   extras: z.array(z.string()).default([]),
   windowConfig: z.object({
     count: z.number(),
@@ -136,7 +138,6 @@ export const bookingSchema = baseBookingSchema.extend({
   specialConditions: z.array(z.string()).optional(),
   additionalNotes: z.string().optional(),
   businessType: z.string().optional(),
-  propertySize: z.number().optional(),
   specialRequirements: z.string().optional(),
   cleaningOptions: z.array(z.string()).optional(),
   weekdayPreference: z.string().optional(),
