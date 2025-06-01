@@ -1,3 +1,4 @@
+
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, Home, Building } from "lucide-react";
@@ -67,15 +68,6 @@ export const MobileHero = memo(({
         Book your cleaning service{" "}
         <span className="text-primary font-extrabold">online</span>
       </motion.h1>
-      
-      <motion.p 
-        initial={{ opacity: 0, y: 20 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="text-base text-gray-600 mb-3 max-w-md mx-auto font-medium"
-      >
-        Professional house cleaning with transparent pricing and guaranteed satisfaction.
-      </motion.p>
 
       {/* Benefits List with improved mobile spacing */}
       <motion.div 
@@ -98,122 +90,119 @@ export const MobileHero = memo(({
         ))}
       </motion.div>
       
-      {/* Enhanced form section with mobile optimization */}
+      {/* Form container with mobile-optimized styling */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }} 
         animate={{ opacity: 1, scale: 1 }} 
         transition={{ duration: 0.6, delay: 0.4 }} 
-        className="w-full relative"
+        className="w-full bg-white rounded-xl shadow-lg border border-gray-200/50 p-4"
       >
-        {/* Form container with mobile-optimized styling */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200/50 p-4">
-          <motion.form 
-            onSubmit={handleSubmit} 
-            className="space-y-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.5 }}
-          >
-            {/* Location with mobile optimization */}
-            <div className="space-y-2">
-              <Label htmlFor="mobile-postal-code" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-                Your Location
-              </Label>
-              <Input
-                id="mobile-postal-code"
-                type="text"
-                placeholder="Enter your city or postal code"
-                value={postalCode}
-                onChange={(e) => setPostalCode(e.target.value)}
+        <motion.form 
+          onSubmit={handleSubmit} 
+          className="space-y-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          {/* Location with mobile optimization */}
+          <div className="space-y-2">
+            <Label htmlFor="mobile-postal-code" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              Your Location
+            </Label>
+            <Input
+              id="mobile-postal-code"
+              type="text"
+              placeholder="Enter your city or postal code"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+              required
+            />
+          </div>
+
+          {/* Service Type - No icons */}
+          <div className="space-y-2">
+            <Label htmlFor="mobile-service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              Service Type
+            </Label>
+            <Select value={selectedService} onValueChange={setSelectedService}>
+              <SelectTrigger 
+                id="mobile-service-type"
                 className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
-                required
-              />
-            </div>
-
-            {/* Service Type - No icons */}
-            <div className="space-y-2">
-              <Label htmlFor="mobile-service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-                Service Type
-              </Label>
-              <Select value={selectedService} onValueChange={setSelectedService}>
-                <SelectTrigger 
-                  id="mobile-service-type"
-                  className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
-                >
-                  <SelectValue placeholder="Select cleaning service" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-xl z-50">
-                  <SelectItem value={ServiceType.Home} className="cursor-pointer">
-                    <span className="font-semibold text-gray-800">Home Cleaning</span>
-                  </SelectItem>
-                  <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
-                    <span className="font-semibold text-gray-800">Deep Cleaning</span>
-                  </SelectItem>
-                  <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
-                    <span className="font-semibold text-gray-800">Move In/Out</span>
-                  </SelectItem>
-                  <SelectItem value={ServiceType.Office} className="cursor-pointer">
-                    <span className="font-semibold text-gray-800">Office Cleaning</span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Property Size Field */}
-            <div className="space-y-2">
-              <Label htmlFor="mobile-property-size" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-                Property Size (m²)
-              </Label>
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={decrementSize}
-                  className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
-                >
-                  -
-                </Button>
-                <Input
-                  id="mobile-property-size"
-                  type="number"
-                  value={propertySize}
-                  onChange={(e) => setPropertySize(Number(e.target.value))}
-                  className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium flex-1"
-                  min="20"
-                  max="200"
-                  step="5"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={incrementSize}
-                  className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
-                >
-                  +
-                </Button>
-              </div>
-            </div>
-            
-            {/* Enhanced CTA Button with mobile optimization */}
-            <motion.div
-              whileHover={{ scale: 1.02, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button 
-                type="submit" 
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-lg flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:-translate-y-1 mt-6"
               >
-                Let's Go <ArrowRight className="h-5 w-5" />
-              </Button>
-            </motion.div>
+                <SelectValue placeholder="Select cleaning service" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-xl z-50">
+                <SelectItem value={ServiceType.Home} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Home Cleaning</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Deep Cleaning</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Move In/Out</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.Office} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Office Cleaning</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <p className="text-xs text-gray-500 text-center mt-4 font-medium">
-              Free quote • No commitment • Instant booking
-            </p>
-          </motion.form>
-        </div>
+          {/* Property Size Field */}
+          <div className="space-y-2">
+            <Label htmlFor="mobile-property-size" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              Property Size (m²)
+            </Label>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={decrementSize}
+                className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
+              >
+                -
+              </Button>
+              <Input
+                id="mobile-property-size"
+                type="number"
+                value={propertySize}
+                onChange={(e) => setPropertySize(Number(e.target.value))}
+                className="h-12 rounded-lg border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium flex-1"
+                min="20"
+                max="200"
+                step="5"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={incrementSize}
+                className="h-12 w-12 rounded-lg border-2 border-gray-200 hover:border-primary"
+              >
+                +
+              </Button>
+            </div>
+          </div>
+          
+          {/* Enhanced CTA Button with mobile optimization */}
+          <motion.div
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-lg flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:-translate-y-1 mt-6"
+            >
+              Let's Go <ArrowRight className="h-5 w-5" />
+            </Button>
+          </motion.div>
+
+          <p className="text-xs text-gray-500 text-center mt-4 font-medium">
+            Free quote • No commitment • Instant booking
+          </p>
+        </motion.form>
       </motion.div>
     </motion.div>
   );
