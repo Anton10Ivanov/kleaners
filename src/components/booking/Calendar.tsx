@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { startOfMonth, endOfMonth, addDays, subDays } from "date-fns";
 import { toZonedTime } from 'date-fns-tz';
 import { Link } from "react-router-dom";
-import { addToGoogleCalendar } from "@/utils/googleCalendar";
-import { toast } from "sonner";
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -95,21 +93,11 @@ const Calendar = ({
     form.setValue('providerOptions', []);
   };
 
-  const handleTimeSlotSelect = async (timeSlot: string) => {
+  const handleTimeSlotSelect = (timeSlot: string) => {
     if (!date) return;
-    const [startTime] = timeSlot.split('-');
     setSelectedTimeSlot(timeSlot);
     form.setValue('preferredTime', timeSlot);
-    
-    try {
-      const service = form.watch('service');
-      const serviceString = service ? String(service) : "Regular Cleaning";
-      await addToGoogleCalendar(date, serviceString, hours, "Address will be provided");
-      toast.success("Event added to Google Calendar!");
-    } catch (error) {
-      console.error("Failed to add event to Google Calendar:", error);
-      toast.error("Failed to add event to Google Calendar. Please try again.");
-    }
+    // Removed Google Calendar integration to prevent redirections
   };
 
   return (

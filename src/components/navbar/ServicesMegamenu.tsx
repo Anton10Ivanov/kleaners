@@ -13,8 +13,12 @@ import { serviceCategories } from './navigationData';
 export const ServicesMegamenu: React.FC = () => {
   const navigate = useNavigate();
 
-  // Calculate grid columns based on number of categories
-  const categoriesCount = serviceCategories.length;
+  // Limit to maximum 6 categories for the megamenu
+  const displayCategories = serviceCategories.slice(0, 6);
+  const hasMoreCategories = serviceCategories.length > 6;
+
+  // Calculate grid columns based on number of displayed categories
+  const categoriesCount = displayCategories.length;
   const getGridCols = () => {
     if (categoriesCount <= 3) return 'grid-cols-3';
     if (categoriesCount <= 4) return 'grid-cols-4';
@@ -22,7 +26,7 @@ export const ServicesMegamenu: React.FC = () => {
     return 'grid-cols-3 lg:grid-cols-4 xl:grid-cols-6';
   };
 
-  // Calculate width based on number of categories
+  // Calculate width based on number of displayed categories
   const getWidth = () => {
     if (categoriesCount <= 3) return 'w-[600px]';
     if (categoriesCount <= 4) return 'w-[800px]';
@@ -40,7 +44,7 @@ export const ServicesMegamenu: React.FC = () => {
           <NavigationMenuContent>
             <div className={`fixed left-1/2 transform -translate-x-1/2 ${getWidth()} p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg border z-50`}>
               <div className={`grid ${getGridCols()} gap-6`}>
-                {serviceCategories.map((category) => (
+                {displayCategories.map((category) => (
                   <div key={category.title} className="space-y-3">
                     <div className="flex items-center gap-2 mb-3">
                       <category.icon className="h-5 w-5 text-primary" />
@@ -63,7 +67,7 @@ export const ServicesMegamenu: React.FC = () => {
                       {category.services.length > 3 && (
                         <button
                           onClick={() => navigate('/services')}
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold mt-2 block transition-colors"
+                          className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 font-semibold mt-2 block transition-colors"
                         >
                           View all {category.services.length} services →
                         </button>
@@ -75,9 +79,12 @@ export const ServicesMegamenu: React.FC = () => {
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                 <button
                   onClick={() => navigate('/services')}
-                  className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors"
+                  className="text-sm text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80 font-semibold transition-colors"
                 >
-                  Browse all cleaning services →
+                  {hasMoreCategories 
+                    ? `Browse all ${serviceCategories.length} service categories →`
+                    : 'Browse all cleaning services →'
+                  }
                 </button>
               </div>
             </div>
