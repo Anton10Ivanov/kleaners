@@ -22,7 +22,7 @@ export const ServicesMegamenu: React.FC = () => {
             Services
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="w-[800px] p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg border">
+            <div className="fixed left-1/2 transform -translate-x-1/2 w-[800px] p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg border z-50">
               <div className="grid grid-cols-3 gap-6">
                 {serviceCategories.slice(0, 6).map((category) => (
                   <div key={category.title} className="space-y-3">

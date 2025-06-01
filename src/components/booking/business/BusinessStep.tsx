@@ -6,7 +6,7 @@ import { CleaningOptionsSelector } from "./components/CleaningOptionsSelector";
 import { AdditionalFields } from "./components/AdditionalFields";
 import ServiceOptions from "../ServiceOptions";
 import { FrequencyTimeSelector } from "./components/FrequencyTimeSelector";
-import Calendar from "../Calendar";
+import OptimizedCalendar from "../OptimizedCalendar";
 
 interface BusinessStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -29,10 +29,10 @@ const BusinessStep = ({ form }: BusinessStepProps) => {
         />
       </div>
       
-      {/* Calendar */}
+      {/* Calendar - Using OptimizedCalendar to match home cleaning */}
       {showCalendar && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <Calendar form={form} />
+          <OptimizedCalendar form={form} />
         </div>
       )}
       
