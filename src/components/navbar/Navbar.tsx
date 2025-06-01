@@ -12,13 +12,14 @@ import UserControls from './UserControls';
 import MobileUserControls from './MobileUserControls';
 import MobileMenuToggle from './MobileMenuToggle';
 import FeaturedServices from './FeaturedServices';
+import { ServicesMegamenu } from './ServicesMegamenu';
 import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
 
 const navItems = [
   {
     id: 2,
-    label: "About",
+    label: "About Us",
     subMenus: [{
       title: "About Us",
       items: [{
@@ -31,6 +32,16 @@ const navItems = [
         description: "Frequently asked questions",
         icon: <HelpCircle className="h-4 w-4" />,
         path: "/about/faq"
+      }, {
+        label: "Terms of Service",
+        description: "Our terms and conditions",
+        icon: <FileText className="h-4 w-4" />,
+        path: "/legal/terms"
+      }, {
+        label: "Privacy Policy",
+        description: "How we handle your data",
+        icon: <Shield className="h-4 w-4" />,
+        path: "/legal/privacy"
       }]
     }]
   }, {
@@ -48,23 +59,6 @@ const navItems = [
         description: "Apply to work with us",
         icon: <Users className="h-4 w-4" />,
         path: "/join-team"
-      }]
-    }]
-  }, {
-    id: 4,
-    label: "Legal",
-    subMenus: [{
-      title: "Legal Information",
-      items: [{
-        label: "Terms of Service",
-        description: "Our terms and conditions",
-        icon: <FileText className="h-4 w-4" />,
-        path: "/legal/terms"
-      }, {
-        label: "Privacy Policy",
-        description: "How we handle your data",
-        icon: <Shield className="h-4 w-4" />,
-        path: "/legal/privacy"
       }]
     }]
   }
@@ -201,6 +195,8 @@ const Navbar = () => {
       <Logo />
       
       <FeaturedServices />
+      
+      <ServicesMegamenu />
       
       <EnhancedDropdownNavigation navItems={navItems} />
 
