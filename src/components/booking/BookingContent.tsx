@@ -5,9 +5,7 @@ import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
 import OptimizedCalendar from './OptimizedCalendar';
 import EnhancedExtras from './EnhancedExtras';
-import MoveInOutStep from './MoveInOutStep';
 import BusinessStep from './business/BusinessStep';
-import DeepCleaningStep from './DeepCleaningStep';
 import FinalStep from './FinalStep';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
@@ -47,7 +45,6 @@ const BookingContent = ({
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
   
-  // Add debugging for service type
   console.log('BookingContent - selectedService:', selectedService);
   console.log('BookingContent - currentStep:', currentStep);
   
@@ -57,7 +54,6 @@ const BookingContent = ({
   };
   
   return (
-    // Full width container for all steps now that sidebar is removed
     <div className="w-full" onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
@@ -68,7 +64,6 @@ const BookingContent = ({
               variants={fadeVariant} 
               className="space-y-4"
             >
-              {/* Service Options */}
               <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <h3 className="font-semibold mb-4 text-center text-zinc-950 dark:text-white text-lg">
                   Home Cleaning
@@ -82,46 +77,21 @@ const BookingContent = ({
               
               {frequency !== Frequency.Custom && (
                 <>
-                  {/* Duration Selection */}
                   <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <HoursSelection form={form} />
                   </div>
                   
-                  {/* Calendar */}
                   {showCalendar && (
                     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                       <OptimizedCalendar form={form} />
                     </div>
                   )}
                   
-                  {/* Additional Services */}
                   <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <EnhancedExtras form={form} />
                   </div>
                 </>
               )}
-            </motion.div>
-          )}
-          
-          {currentStep === 2 && selectedService === ServiceType.DeepCleaning && (
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={fadeVariant} 
-              key="deep-cleaning-step"
-            >
-              <DeepCleaningStep form={form} />
-            </motion.div>
-          )}
-          
-          {currentStep === 2 && selectedService === ServiceType.MoveInOut && (
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={fadeVariant} 
-              key="moveinout-step"
-            >
-              <MoveInOutStep form={form} />
             </motion.div>
           )}
           
