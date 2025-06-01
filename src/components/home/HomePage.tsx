@@ -1,4 +1,3 @@
-
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -18,6 +17,7 @@ import { ServiceCategoriesSection } from '../services/ServiceCategoriesSection';
 import { serviceCategories } from '@/components/navbar/navigationData';
 import { HomeSections } from './HomeSections';
 import { BookingSteps } from './BookingSteps';
+import BusinessSolutionsSection from './BusinessSolutionsSection';
 
 // Optimized lazy loading
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
@@ -118,13 +118,21 @@ const HomePage = () => {
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
-            {/* Reordered sections - Service Categories before Why Choose Us */}
+            {/* Service Categories Section */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <ServiceCategoriesSection serviceCategories={serviceCategories} />
             </ErrorBoundary>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
+            {/* Business Solutions Section - New Addition */}
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <BusinessSolutionsSection />
+            </ErrorBoundary>
+            
+            <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
+            
+            {/* Why Choose Us and other sections */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <HomeSections />
             </ErrorBoundary>

@@ -1,7 +1,9 @@
 
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { popularServices } from '@/components/navbar/navigationData';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -26,30 +28,45 @@ const Footer = () => {
                 Kleaners.de
               </h3>
             </Link>
-            <p className="text-sm text-theme-blue md:text-xs font-medium text-left opacity-80">Cleanliness creates trust.</p>
+            <p className="text-sm text-theme-blue md:text-xs font-medium text-left opacity-80 mb-4">
+              Cleanliness creates trust.
+            </p>
+            
+            {/* Business Solutions Promotion */}
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Star className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">Business Partners</span>
+              </div>
+              <p className="text-xs text-theme-blue opacity-90 mb-2">
+                Exclusive corporate partnerships with up to 25% savings
+              </p>
+              <Link to="/business-solutions">
+                <Button size="sm" className="text-xs h-7">
+                  Learn More
+                </Button>
+              </Link>
+            </div>
           </div>
           
           <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Services</h4>
+            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Popular Services</h4>
             <ul className="space-y-2 text-sm md:text-base">
-              <li>
-                <Link to="/services/home-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Home Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/office-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Office Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/move-in-out" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Move In/Out
-                </Link>
-              </li>
-              <li>
-                <Link to="/business-solutions" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Business Solutions
+              {popularServices.map((service, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <Link to={service.href} className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors flex-1">
+                    {service.title}
+                  </Link>
+                  {service.badge && (
+                    <Badge variant="secondary" className="text-xs px-1 py-0">
+                      {service.badge}
+                    </Badge>
+                  )}
+                </li>
+              ))}
+              <li className="pt-2 border-t border-theme-blue/20">
+                <Link to="/services" className="text-primary hover:text-primary/80 transition-colors font-medium text-sm">
+                  View All Services →
                 </Link>
               </li>
             </ul>
