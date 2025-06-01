@@ -14,6 +14,8 @@ import { SectionLoading } from '@/components/ui/section-loading';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 import MobileBookingSummary from '../components/booking/MobileBookingSummary';
+import { ServiceCategoriesSection } from '../components/services/ServiceCategoriesSection';
+import { serviceCategories } from '@/components/navbar/navigationData';
 
 // Optimized lazy loading - only for non-critical components
 const LazyWhyChooseUs = lazy(() => import('../components/WhyChooseUs'));
@@ -129,6 +131,13 @@ const Index = () => {
               <Suspense fallback={<SectionLoading />}>
                 <LazyWhyChooseUs />
               </Suspense>
+            </ErrorBoundary>
+            
+            <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
+            
+            {/* Service Categories Section */}
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <ServiceCategoriesSection serviceCategories={serviceCategories} />
             </ErrorBoundary>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
