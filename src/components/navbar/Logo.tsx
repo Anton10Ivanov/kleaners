@@ -1,38 +1,21 @@
 
-import { Link, useNavigate } from "react-router-dom";
-import useBookingStore from "@/store/useBookingStore";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export const Logo = () => {
-  const navigate = useNavigate();
-  const { resetForm } = useBookingStore();
-
-  const handleLogoClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Reset booking form when navigating to homepage
-    resetForm();
-    
-    navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <div 
-      className="flex-shrink-0 flex items-center gap-1 cursor-pointer" 
-      onClick={handleLogoClick}
-      role="button"
-      tabIndex={0}
+    <Button
+      variant="home"
+      navigateHome={true}
+      className={cn(
+        "flex items-center gap-2 text-[#7ebce6]/80 hover:text-[#7ebce6] transition-colors",
+        "text-lg font-bold tracking-wide"
+      )}
     >
-      <img
-        src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
-        alt="Kleaners.de Logo"
-        className="h-6 w-6 object-contain"
-        style={{ filter: 'brightness(0) saturate(100%) invert(65%) sepia(23%) saturate(1351%) hue-rotate(170deg) brightness(92%) contrast(87%)' }}
-      />
-      <span className="font-raleway font-bold text-xl text-[#7ebce6] hover:opacity-90 transition-opacity">
-        Kleaners.de
-      </span>
-    </div>
+      <div className="w-8 h-8 bg-gradient-to-br from-[#7ebce6] to-[#5a9fd4] rounded-lg flex items-center justify-center">
+        <span className="text-white font-bold text-sm">K</span>
+      </div>
+      Kleaners
+    </Button>
   );
 };
