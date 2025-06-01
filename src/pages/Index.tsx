@@ -1,3 +1,4 @@
+
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { useBookingForm } from '../hooks/useBookingForm';
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Frequency } from '@/types/enums';
+import { Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
 import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';

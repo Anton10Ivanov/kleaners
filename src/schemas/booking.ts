@@ -31,23 +31,12 @@ export interface IroningConfig {
   time: number;
 }
 
-export const bookingSchema = z.object({
+// Base booking schema with common fields
+const baseBookingSchema = z.object({
   service: z.nativeEnum(ServiceType),
   postalCode: z.string().min(1, "Postal code is required"),
-  frequency: z.nativeEnum(Frequency),
-  hours: z.number().min(2).max(12),
-  bedrooms: z.number().min(1).max(10),
-  bathrooms: z.number().min(1).max(10),
   date: z.date().optional(),
   preferredTime: z.string().optional(),
-  extras: z.array(z.string()).default([]),
-  windowConfig: z.object({
-    count: z.number(),
-    framesIncluding: z.boolean()
-  }).optional(),
-  ironingConfig: z.object({
-    time: z.number()
-  }).optional(),
   totalAmount: z.number().optional(),
   providerOptions: z.array(z.object({
     id: z.string(),
@@ -74,25 +63,91 @@ export const bookingSchema = z.object({
   
   // Promo code
   promoCode: z.string().optional(),
-  
-  // Move In/Out and Deep Cleaning fields
+});
+
+// Home cleaning specific schema
+export const homeCleaningSchema = baseBookingSchema.extend({
+  frequency: z.nativeEnum(Frequency),
+  hours: z.number().min(2).max(12),
+  bedrooms: z.number().min(1).max(10),
+  bathrooms: z.number().min(1).max(10),
+  extras: z.array(z.string()).default([]),
+  windowConfig: z.object({
+    count: z.number(),
+    framesIncluding: z.boolean()
+  }).optional(),
+  ironingConfig: z.object({
+    time: z.number()
+  }).optional(),
+});
+
+// Deep cleaning specific schema
+export const deepCleaningSchema = baseBookingSchema.extend({
+  squareMeters: z.number().min(10).max(1000),
+  bedrooms: z.number().min(1).max(10),
+  bathrooms: z.number().min(1).max(10),
+  dirtinessLevel: z.number().min(1).max(5),
+  lastCleaned: z.number().min(0).max(12),
+  cleaningPersonnel: z.enum(['normal', 'experienced']),
+  specialConditions: z.array(z.string()).optional(),
+  additionalNotes: z.string().optional(),
+});
+
+// Move in/out specific schema
+export const moveInOutSchema = baseBookingSchema.extend({
+  squareMeters: z.number().min(10).max(1000),
+  bedrooms: z.number().min(1).max(10),
+  bathrooms: z.number().min(1).max(10),
+  dirtinessLevel: z.number().min(1).max(5),
+  lastCleaned: z.number().min(0).max(12),
+  cleaningPersonnel: z.enum(['normal', 'experienced']),
+  specialConditions: z.array(z.string()).optional(),
+  additionalNotes: z.string().optional(),
+});
+
+// Business/office cleaning specific schema
+export const businessCleaningSchema = baseBookingSchema.extend({
+  frequency: z.nativeEnum(Frequency),
+  businessType: z.string(),
+  propertySize: z.number().min(10).max(10000),
+  specialRequirements: z.string().optional(),
+  cleaningOptions: z.array(z.string()).default([]),
+  weekdayPreference: z.string().optional(),
+  timePreference: z.string().optional(),
+  selectedDates: z.array(z.date()).optional(),
+});
+
+// Legacy combined schema for backward compatibility
+export const bookingSchema = baseBookingSchema.extend({
+  frequency: z.nativeEnum(Frequency).optional(),
+  hours: z.number().min(2).max(12).optional(),
+  bedrooms: z.number().min(1).max(10).optional(),
+  bathrooms: z.number().min(1).max(10).optional(),
+  extras: z.array(z.string()).default([]),
+  windowConfig: z.object({
+    count: z.number(),
+    framesIncluding: z.boolean()
+  }).optional(),
+  ironingConfig: z.object({
+    time: z.number()
+  }).optional(),
   squareMeters: z.number().optional(),
   dirtinessLevel: z.number().optional(),
   lastCleaned: z.number().optional(),
   cleaningPersonnel: z.enum(['normal', 'experienced']).optional(),
   specialConditions: z.array(z.string()).optional(),
   additionalNotes: z.string().optional(),
-  
-  // Business cleaning fields
   businessType: z.string().optional(),
   propertySize: z.number().optional(),
   specialRequirements: z.string().optional(),
   cleaningOptions: z.array(z.string()).optional(),
-  
-  // Business scheduling fields
   weekdayPreference: z.string().optional(),
   timePreference: z.string().optional(),
   selectedDates: z.array(z.date()).optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
+export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
+export type DeepCleaningFormData = z.infer<typeof deepCleaningSchema>;
+export type MoveInOutFormData = z.infer<typeof moveInOutSchema>;
+export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
