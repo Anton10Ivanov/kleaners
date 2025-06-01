@@ -9,10 +9,26 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useNavigate } from 'react-router-dom';
 import { serviceCategories } from './navigationData';
-import { cn } from '@/lib/utils';
 
 export const ServicesMegamenu: React.FC = () => {
   const navigate = useNavigate();
+
+  // Calculate grid columns based on number of categories
+  const categoriesCount = serviceCategories.length;
+  const getGridCols = () => {
+    if (categoriesCount <= 3) return 'grid-cols-3';
+    if (categoriesCount <= 4) return 'grid-cols-4';
+    if (categoriesCount <= 6) return 'grid-cols-3 lg:grid-cols-6';
+    return 'grid-cols-3 lg:grid-cols-4 xl:grid-cols-6';
+  };
+
+  // Calculate width based on number of categories
+  const getWidth = () => {
+    if (categoriesCount <= 3) return 'w-[600px]';
+    if (categoriesCount <= 4) return 'w-[800px]';
+    if (categoriesCount <= 6) return 'w-[900px] lg:w-[1200px]';
+    return 'w-[900px] lg:w-[1000px] xl:w-[1200px]';
+  };
 
   return (
     <NavigationMenu className="hidden md:flex">
@@ -22,9 +38,9 @@ export const ServicesMegamenu: React.FC = () => {
             Services
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="fixed left-1/2 transform -translate-x-1/2 w-[800px] p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg border z-50">
-              <div className="grid grid-cols-3 gap-6">
-                {serviceCategories.slice(0, 6).map((category) => (
+            <div className={`fixed left-1/2 transform -translate-x-1/2 ${getWidth()} p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg border z-50`}>
+              <div className={`grid ${getGridCols()} gap-6`}>
+                {serviceCategories.map((category) => (
                   <div key={category.title} className="space-y-3">
                     <div className="flex items-center gap-2 mb-3">
                       <category.icon className="h-5 w-5 text-primary" />
@@ -33,7 +49,7 @@ export const ServicesMegamenu: React.FC = () => {
                       </h4>
                     </div>
                     <div className="space-y-1">
-                      {category.services.slice(0, 4).map((service) => (
+                      {category.services.slice(0, 3).map((service) => (
                         <button
                           key={service.href}
                           onClick={() => navigate(service.href)}
@@ -47,10 +63,10 @@ export const ServicesMegamenu: React.FC = () => {
                           </p>
                         </button>
                       ))}
-                      {category.services.length > 4 && (
+                      {category.services.length > 3 && (
                         <button
                           onClick={() => navigate('/services')}
-                          className="text-xs text-primary hover:text-primary/80 font-medium mt-2"
+                          className="text-sm text-primary hover:text-primary/80 font-semibold mt-2 block"
                         >
                           View all {category.services.length} services →
                         </button>
