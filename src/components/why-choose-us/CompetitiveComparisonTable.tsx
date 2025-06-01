@@ -3,6 +3,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface ComparisonFeature {
   feature: string;
@@ -158,15 +166,21 @@ export const CompetitiveComparisonTable = () => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{category}</h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-4 px-6 font-medium text-gray-900 dark:text-white">Feature</th>
-                  <th className="text-center py-4 px-6 font-medium text-green-700 dark:text-green-400">Kleaners.de</th>
-                  <th className="text-center py-4 px-6 font-medium text-red-700 dark:text-red-400">Typical Companies</th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table className="bg-transparent">
+              <TableHeader>
+                <TableRow className="border-b border-gray-200 dark:border-gray-700 hover:bg-transparent">
+                  <TableHead className="text-left py-4 px-6 font-medium text-gray-900 dark:text-white w-1/3">
+                    Feature
+                  </TableHead>
+                  <TableHead className="text-center py-4 px-6 font-medium text-green-700 dark:text-green-400 w-1/3">
+                    Kleaners.de
+                  </TableHead>
+                  <TableHead className="text-center py-4 px-6 font-medium text-red-700 dark:text-red-400 w-1/3">
+                    Typical Companies
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {comparisonFeatures
                   .filter(feature => feature.category === category)
                   .map((feature, index) => (
@@ -178,33 +192,33 @@ export const CompetitiveComparisonTable = () => {
                       viewport={{ once: true }}
                       className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="py-4 px-6 font-medium text-gray-900 dark:text-white">
+                      <TableCell className="py-4 px-6 font-medium text-gray-900 dark:text-white align-top">
                         {feature.feature}
-                      </td>
-                      <td className="py-4 px-6 text-center">
-                        <div className="flex items-center justify-center space-x-2">
+                      </TableCell>
+                      <TableCell className="py-4 px-6 text-center align-top">
+                        <div className="flex flex-col items-center space-y-2">
                           <div className="flex items-center justify-center w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full">
                             <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                           </div>
+                          <div className="text-sm text-green-700 dark:text-green-300 text-center">
+                            {feature.ourBenefit}
+                          </div>
                         </div>
-                        <div className="text-sm text-green-700 dark:text-green-300 mt-2">
-                          {feature.ourBenefit}
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 text-center">
-                        <div className="flex items-center justify-center space-x-2">
+                      </TableCell>
+                      <TableCell className="py-4 px-6 text-center align-top">
+                        <div className="flex flex-col items-center space-y-2">
                           <div className="flex items-center justify-center w-6 h-6 bg-red-100 dark:bg-red-900/30 rounded-full">
                             <X className="h-4 w-4 text-red-600 dark:text-red-400" />
                           </div>
+                          <div className="text-sm text-red-700 dark:text-red-300 text-center">
+                            {feature.theirLimitation}
+                          </div>
                         </div>
-                        <div className="text-sm text-red-700 dark:text-red-300 mt-2">
-                          {feature.theirLimitation}
-                        </div>
-                      </td>
+                      </TableCell>
                     </motion.tr>
                   ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </motion.div>
       ))}
