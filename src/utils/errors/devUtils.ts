@@ -1,36 +1,37 @@
 
-/**
- * Developer debugging utility - logs debug information during development
- */
-export const devDebug = (context: string, data: unknown, type: 'log' | 'info' | 'warn' | 'error' = 'log') => {
-  if (import.meta.env.DEV) {
-    const prefix = `[DEV-DEBUG][${context}]`;
-    switch (type) {
-      case 'info':
-        console.info(prefix, data);
-        break;
-      case 'warn':
-        console.warn(prefix, data);
-        break;
-      case 'error':
-        console.error(prefix, data);
-        break;
-      case 'log':
-      default:
-        console.log(prefix, data);
-    }
-  }
-};
+import environmentUtils from '@/utils/environment';
 
 /**
- * Utility for measuring performance of operations during development
+ * Development utilities for error debugging
  */
-export const measurePerformance = (name: string, operation: () => any) => {
-  if (import.meta.env.DEV) {
-    console.time(`[PERF][${name}]`);
-    const result = operation();
-    console.timeEnd(`[PERF][${name}]`);
-    return result;
+export const devUtils = {
+  /**
+   * Enhanced console logging for development
+   */
+  logError: (error: unknown, context?: string) => {
+    if (environmentUtils.isPreviewWindow() || process.env.NODE_ENV === 'development') {
+      console.group(`🔴 Error${context ? ` in ${context}` : ''}`);
+      console.error(error);
+      console.trace('Stack trace');
+      console.groupEnd();
+    }
+  },
+
+  /**
+   * Log performance warnings
+   */
+  logPerformanceWarning: (message: string, data?: any) => {
+    if (environmentUtils.isPreviewWindow() || process.env.NODE_ENV === 'development') {
+      console.warn(`⚠️ Performance Warning: ${message}`, data);
+    }
+  },
+
+  /**
+   * Log component lifecycle events for debugging
+   */
+  logComponentEvent: (component: string, event: string, data?: any) => {
+    if (environmentUtils.isPreviewWindow() || process.env.NODE_ENV === 'development') {
+      console.log(`🔧 ${component}: ${event}`, data);
+    }
   }
-  return operation();
 };
