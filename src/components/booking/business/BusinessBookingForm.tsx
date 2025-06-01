@@ -1,17 +1,18 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from "@/schemas/booking";
+import { BusinessCleaningFormData } from "@/schemas/booking";
 import PersonalInformation from "../final/PersonalInformation";
 import CleaningAddress from "../final/CleaningAddress";
 import SpecialInstructions from "../final/SpecialInstructions";
 import PromoCode from "../final/PromoCode";
 
 interface BusinessBookingFormProps {
-  form: UseFormReturn<BookingFormData>;
-  postalCode: string;
+  form: UseFormReturn<BusinessCleaningFormData>;
 }
 
-const BusinessBookingForm = ({ form, postalCode }: BusinessBookingFormProps) => {
+const BusinessBookingForm = ({ form }: BusinessBookingFormProps) => {
+  const postalCode = form.watch('postalCode') || '';
+  
   return (
     <div className="space-y-8">
       <PersonalInformation form={form} />
