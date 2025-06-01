@@ -74,6 +74,19 @@ export const bookingSchema = z.object({
   
   // Promo code
   promoCode: z.string().optional(),
+  
+  // Move In/Out and Deep Cleaning fields
+  squareMeters: z.number().optional(),
+  dirtinessLevel: z.number().optional(),
+  lastCleaned: z.number().optional(),
+  cleaningPersonnel: z.enum(['normal', 'experienced']).optional(),
+  specialConditions: z.array(z.string()).optional(),
+  additionalNotes: z.string().optional(),
+  
+  // Business cleaning fields
+  businessType: z.string().optional(),
+  propertySize: z.number().optional(),
+  specialRequirements: z.string().optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;

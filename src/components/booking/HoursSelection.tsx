@@ -18,16 +18,16 @@ const HoursSelection = ({ form }: HoursSelectionProps) => {
   const selectedHours = form.watch('hours') || 2;
   const bedrooms = form.watch('bedrooms') || 1;
   const bathrooms = form.watch('bathrooms') || 1;
-  const frequency = form.watch('frequency') || 'onetime';
+  const frequency = form.watch('frequency') || Frequency.OneTime;
   
   const [showCalculator, setShowCalculator] = useState(false);
   const [tempBedrooms, setTempBedrooms] = useState(bedrooms);
   const [tempBathrooms, setTempBathrooms] = useState(bathrooms);
 
-  // Fix frequency comparison to handle both enum and string values
+  // Fix frequency comparison to use enum values
   const getHourlyRate = () => {
-    if (frequency === Frequency.Weekly || frequency === 'weekly') return 27;
-    if (frequency === Frequency.BiWeekly || frequency === 'biweekly') return 30;
+    if (frequency === Frequency.Weekly) return 27;
+    if (frequency === Frequency.BiWeekly) return 30;
     return 35;
   };
 
