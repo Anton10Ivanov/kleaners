@@ -1,5 +1,4 @@
-
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp, Star } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp, Star, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,20 +31,40 @@ const Footer = () => {
               Cleanliness creates trust.
             </p>
             
-            {/* Business Solutions Promotion */}
-            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Star className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-primary">Business Partners</span>
+            {/* Enhanced Business Solutions Promotion */}
+            <div className="bg-gradient-to-br from-primary/15 via-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 mb-4 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="p-1.5 bg-primary/20 rounded-lg">
+                  <Star className="h-4 w-4 text-primary" />
+                </div>
+                <span className="text-sm font-bold text-primary">Business Partners</span>
+                <Badge variant="secondary" className="bg-primary/20 text-primary border-0 text-xs px-2 py-0.5">
+                  Save 25%
+                </Badge>
               </div>
-              <p className="text-xs text-theme-blue opacity-90 mb-2">
-                Exclusive corporate partnerships with up to 25% savings
+              <p className="text-xs text-theme-blue opacity-90 mb-3 leading-relaxed">
+                Join our exclusive corporate partnership program and unlock premium benefits for your business
               </p>
-              <Link to="/business-solutions">
-                <Button size="sm" className="text-xs h-7">
-                  Learn More
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Link to="/business-solutions" className="flex-1">
+                  <Button 
+                    size="sm" 
+                    className="w-full h-8 text-xs bg-primary hover:bg-primary/90 text-white shadow-sm hover:shadow-md transition-all duration-200 group"
+                  >
+                    Explore Benefits
+                    <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  </Button>
+                </Link>
+                <Link to="/contact" className="flex-1">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full h-8 text-xs border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 transition-all duration-200"
+                  >
+                    Get Quote
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
           
