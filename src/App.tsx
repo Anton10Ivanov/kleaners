@@ -1,3 +1,4 @@
+
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import RootLayout from '@/components/RootLayout';
@@ -13,6 +14,7 @@ import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
 import JoinTeam from '@/pages/JoinTeam';
 import Services from '@/pages/Services';
+import BusinessSolutions from '@/pages/BusinessSolutions';
 
 // Auth pages
 import Login from '@/pages/auth/Login';
@@ -117,6 +119,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/business-solutions" element={<BusinessSolutions />} />
           
           {/* Booking routes */}
           <Route path="/booking/*" element={<BookingRoutes />} />
