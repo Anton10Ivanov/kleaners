@@ -1,10 +1,9 @@
-
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
 import HoursSelection from './HoursSelection';
-import Calendar from './Calendar';
-import Extras from './Extras';
+import OptimizedCalendar from './OptimizedCalendar';
+import EnhancedExtras from './EnhancedExtras';
 import MoveInOutStep from './MoveInOutStep';
 import BusinessStep from './business/BusinessStep';
 import DeepCleaningStep from './DeepCleaningStep';
@@ -65,10 +64,13 @@ const BookingContent = ({
               initial="hidden" 
               animate="visible" 
               variants={fadeVariant} 
-              className="space-y-3"
+              className="space-y-4"
             >
-              <div className="bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h3 className="font-semibold mb-3 text-center text-zinc-950 text-sm">Home Cleaning</h3>
+              {/* Service Options */}
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 className="font-semibold mb-4 text-center text-zinc-950 dark:text-white text-lg">
+                  Home Cleaning
+                </h3>
                 <ServiceOptions 
                   frequency={frequency} 
                   setFrequency={freq => form.setValue('frequency', freq)} 
@@ -78,18 +80,21 @@ const BookingContent = ({
               
               {frequency !== Frequency.Custom && (
                 <>
-                  <div className="bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                  {/* Duration Selection */}
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <HoursSelection form={form} />
                   </div>
                   
+                  {/* Calendar */}
                   {showCalendar && (
-                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                      <Calendar form={form} />
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                      <OptimizedCalendar form={form} />
                     </div>
                   )}
                   
-                  <div className="bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                    <Extras form={form} />
+                  {/* Additional Services */}
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <EnhancedExtras form={form} />
                   </div>
                 </>
               )}
