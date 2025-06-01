@@ -15,6 +15,7 @@ interface ServiceCategory {
     title: string;
     href: string;
     description: string;
+    icon: LucideIcon;
   }>;
 }
 
@@ -110,46 +111,50 @@ export const ServiceCategoriesSection = ({
                   className={`grid gap-4 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'} mb-6`}
                   variants={containerVariants}
                 >
-                  {category.services.map((service, idx) => (
-                    <motion.div 
-                      key={idx} 
-                      variants={cardVariants}
-                      whileHover={{ 
-                        scale: 1.02,
-                        y: -2,
-                        transition: { duration: 0.2 }
-                      }}
-                    >
-                      <Card className="h-full hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm group hover:border-primary/30 overflow-hidden">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-lg font-semibold text-[#1C1C1C] dark:text-white group-hover:text-primary transition-colors leading-tight">
-                            {service.title}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0 pb-3 flex-1">
-                          <CardDescription className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
-                            {service.description}
-                          </CardDescription>
-                        </CardContent>
-                        <CardFooter className="pt-2">
-                          <Link to={service.href} className="w-full">
-                            <Button 
-                              variant="outline" 
-                              className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 text-sm py-2"
-                            >
-                              Learn More
-                              <motion.div
-                                whileHover={{ x: 2 }}
-                                transition={{ duration: 0.2 }}
+                  {category.services.map((service, idx) => {
+                    const ServiceIcon = service.icon;
+                    return (
+                      <motion.div 
+                        key={idx} 
+                        variants={cardVariants}
+                        whileHover={{ 
+                          scale: 1.02,
+                          y: -2,
+                          transition: { duration: 0.2 }
+                        }}
+                      >
+                        <Card className="h-full hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm group hover:border-primary/30 overflow-hidden">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-lg font-semibold text-[#1C1C1C] dark:text-white group-hover:text-primary transition-colors leading-tight flex items-center gap-2">
+                              <ServiceIcon className="h-5 w-5" />
+                              {service.title}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="pt-0 pb-3 flex-1">
+                            <CardDescription className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
+                              {service.description}
+                            </CardDescription>
+                          </CardContent>
+                          <CardFooter className="pt-2">
+                            <Link to={service.href} className="w-full">
+                              <Button 
+                                variant="outline" 
+                                className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 text-sm py-2"
                               >
-                                <ArrowRight className="ml-2 w-4 h-4" />
-                              </motion.div>
-                            </Button>
-                          </Link>
-                        </CardFooter>
-                      </Card>
-                    </motion.div>
-                  ))}
+                                Learn More
+                                <motion.div
+                                  whileHover={{ x: 2 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <ArrowRight className="ml-2 w-4 h-4" />
+                                </motion.div>
+                              </Button>
+                            </Link>
+                          </CardFooter>
+                        </Card>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
 
                 {/* Category CTA with Wave Animation */}
