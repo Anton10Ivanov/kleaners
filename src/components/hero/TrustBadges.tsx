@@ -1,28 +1,27 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Shield, CreditCard, Clock, Award } from "lucide-react";
 
 const badges = [
   {
-    icon: Shield,
-    text: "5M€ Insurance",
-    subtext: "Fully covered"
+    alt: "5M€ Insurance Coverage",
+    placeholder: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=120&h=80&fit=crop&crop=center",
+    text: "5M€ Insurance"
   },
   {
-    icon: Award,
-    text: "Licensed & Certified",
-    subtext: "Professional team"
+    alt: "Licensed & Certified Professionals",
+    placeholder: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=120&h=80&fit=crop&crop=center",
+    text: "Licensed & Certified"
   },
   {
-    icon: Clock,
-    text: "24/7 Support",
-    subtext: "Always available"
+    alt: "24/7 Customer Support",
+    placeholder: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=120&h=80&fit=crop&crop=center",
+    text: "24/7 Support"
   },
   {
-    icon: CreditCard,
-    text: "Secure Payment",
-    subtext: "Pay after completion"
+    alt: "Secure Payment Processing",
+    placeholder: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=120&h=80&fit=crop&crop=center",
+    text: "Secure Payment"
   }
 ];
 
@@ -40,13 +39,16 @@ export const TrustBadges = memo(() => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-          className="flex items-center gap-2 bg-white/90 rounded-lg px-3 py-2 shadow-sm border border-gray-200/50"
+          className="flex flex-col items-center gap-2 bg-white/90 rounded-lg p-3 shadow-sm border border-gray-200/50"
         >
-          <badge.icon className="h-4 w-4 text-primary flex-shrink-0" />
-          <div className="text-left">
-            <p className="text-xs font-semibold text-gray-800">{badge.text}</p>
-            <p className="text-xs text-gray-500">{badge.subtext}</p>
+          <div className="w-16 h-10 bg-gray-200 rounded-md overflow-hidden">
+            <img 
+              src={badge.placeholder}
+              alt={badge.alt}
+              className="w-full h-full object-cover opacity-50"
+            />
           </div>
+          <p className="text-xs font-semibold text-gray-800 text-center">{badge.text}</p>
         </motion.div>
       ))}
     </motion.div>

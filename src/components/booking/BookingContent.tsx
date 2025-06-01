@@ -7,6 +7,7 @@ import OptimizedCalendar from './OptimizedCalendar';
 import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
+import { PropertySizeField } from './PropertySizeField';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
 import { useForm } from 'react-hook-form';
@@ -42,6 +43,7 @@ const BookingContent = ({
   const { submitBooking } = useBookingSubmission();
   const frequency = form.watch('frequency') as Frequency | undefined;
   const postalCode = form.watch('postalCode') || '';
+  const propertySize = form.watch('propertySize') || 70;
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
   
@@ -72,6 +74,14 @@ const BookingContent = ({
                   frequency={frequency} 
                   setFrequency={freq => form.setValue('frequency', freq)} 
                   isRegularCleaning={true} 
+                />
+              </div>
+
+              {/* Property Size Field for Home Cleaning */}
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <PropertySizeField
+                  value={propertySize}
+                  onChange={(value) => form.setValue('propertySize', value)}
                 />
               </div>
               

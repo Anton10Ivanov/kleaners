@@ -1,7 +1,6 @@
-
 import { UseFormReturn } from "react-hook-form";
 import { MoveInOutFormData } from "@/schemas/booking";
-import PropertyDetails from './PropertyDetails';
+import { PropertySizeField } from '../PropertySizeField';
 import PropertyCondition from './PropertyCondition';
 import CleaningPersonnel from './CleaningPersonnel';
 import SpecialConditions from './SpecialConditions';
@@ -25,14 +24,39 @@ const MoveInOutFields = ({ form }: MoveInOutFieldsProps) => {
   
   return (
     <div className="space-y-6">
-      <PropertyDetails
-        squareMeters={squareMeters}
-        setSquareMeters={(value) => form.setValue('squareMeters', value)}
-        bathrooms={bathrooms}
-        setBathrooms={(value) => form.setValue('bathrooms', value)}
-        bedrooms={bedrooms}
-        setBedrooms={(value) => form.setValue('bedrooms', value)}
+      <PropertySizeField
+        value={squareMeters}
+        onChange={(value) => form.setValue('squareMeters', value)}
+        label="Property Size (m²)"
       />
+
+      {/* Keep existing bedrooms/bathrooms in PropertyDetails */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">Bedrooms</label>
+          <select 
+            value={bedrooms}
+            onChange={(e) => form.setValue('bedrooms', Number(e.target.value))}
+            className="w-full p-2 border rounded-lg"
+          >
+            {[1, 2, 3, 4, 5].map(num => (
+              <option key={num} value={num}>{num}</option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">Bathrooms</label>
+          <select 
+            value={bathrooms}
+            onChange={(e) => form.setValue('bathrooms', Number(e.target.value))}
+            className="w-full p-2 border rounded-lg"
+          >
+            {[1, 2, 3, 4, 5].map(num => (
+              <option key={num} value={num}>{num}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <PropertyCondition
         dirtinessLevel={dirtinessLevel}

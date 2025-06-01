@@ -23,20 +23,11 @@ export const DesktopHero = memo(({
   setPostalCode,
   handleNextStep
 }: DesktopHeroProps) => {
-  const [propertySize, setPropertySize] = useState(70);
   const benefits = ["Liability insurance", "Simple booking", "Professional cleaners", "Satisfaction guaranteed"];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleNextStep();
-  };
-
-  const incrementSize = () => {
-    setPropertySize(prev => Math.min(prev + 5, 200));
-  };
-
-  const decrementSize = () => {
-    setPropertySize(prev => Math.max(prev - 5, 20));
   };
 
   return (
@@ -64,6 +55,19 @@ export const DesktopHero = memo(({
           Book your cleaning service{" "}
           <span className="text-primary font-extrabold">online</span>
         </motion.h1>
+
+        <motion.p initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6,
+          delay: 0.3
+        }} className="text-xl text-gray-600 font-medium">
+          Get instant price quote in 3 easy steps • Direct price estimation on final step
+        </motion.p>
 
         {/* Benefits Grid */}
         <motion.div initial={{
@@ -94,7 +98,7 @@ export const DesktopHero = memo(({
         </motion.div>
       </motion.div>
 
-      {/* Horizontal Booking Form */}
+      {/* Simplified Booking Form */}
       <motion.div initial={{
         opacity: 0,
         y: 20
@@ -104,8 +108,8 @@ export const DesktopHero = memo(({
       }} transition={{
         duration: 0.8,
         delay: 0.6
-      }} className="w-full max-w-6xl mx-auto">
-        <motion.form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end" initial={{
+      }} className="w-full max-w-4xl mx-auto">
+        <motion.form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end" initial={{
           opacity: 0
         }} animate={{
           opacity: 1
@@ -146,45 +150,8 @@ export const DesktopHero = memo(({
               </SelectContent>
             </Select>
           </div>
-
-          {/* Property Size Field with +/- buttons like mobile */}
-          <div className="space-y-3">
-            <Label htmlFor="desktop-property-size" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-              Property Size (m²)
-            </Label>
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={decrementSize}
-                className="h-12 w-12 rounded-xl border-2 border-gray-200 hover:border-primary"
-              >
-                -
-              </Button>
-              <Input
-                id="desktop-property-size"
-                type="number"
-                value={propertySize}
-                onChange={(e) => setPropertySize(Number(e.target.value))}
-                className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-center text-base font-medium flex-1"
-                min="20"
-                max="200"
-                step="5"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={incrementSize}
-                className="h-12 w-12 rounded-xl border-2 border-gray-200 hover:border-primary"
-              >
-                +
-              </Button>
-            </div>
-          </div>
           
-          {/* CTA Button with green border */}
+          {/* CTA Button */}
           <motion.div whileHover={{
             scale: 1.02,
             y: -2
@@ -195,10 +162,37 @@ export const DesktopHero = memo(({
               textShadow: '0 0 1px rgba(34, 197, 94, 0.8)',
               boxShadow: '0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 15px rgba(126,188,230,0.2)'
             }}>
-              Let's Go <ArrowRight className="h-5 w-5" />
+              Get Instant Quote <ArrowRight className="h-5 w-5" />
             </Button>
           </motion.div>
         </motion.form>
+
+        {/* Step Indicators */}
+        <motion.div initial={{
+          opacity: 0,
+          y: 10
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6,
+          delay: 1
+        }} className="flex justify-center items-center gap-4 mt-6">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+            <span className="text-sm text-gray-600 font-medium">Service Info</span>
+          </div>
+          <ArrowRight className="h-4 w-4 text-gray-400" />
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">2</div>
+            <span className="text-sm text-gray-600 font-medium">Details</span>
+          </div>
+          <ArrowRight className="h-4 w-4 text-gray-400" />
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+            <span className="text-sm text-gray-600 font-medium">Price & Book</span>
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );
