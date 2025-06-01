@@ -24,17 +24,31 @@ interface ServiceCategoriesSectionProps {
   className?: string;
 }
 
-// Group categories into tabs for better organization
+// Organize categories by actual service types instead of generic groups
 const organizeCategories = (categories: ServiceCategory[]) => {
-  // Split categories into groups of 3 for better tab organization
-  const groups = [];
-  for (let i = 0; i < categories.length; i += 3) {
-    groups.push({
-      name: `Services ${Math.floor(i / 3) + 1}`,
-      categories: categories.slice(i, i + 3)
-    });
-  }
-  return groups;
+  // Group categories into meaningful service types
+  const residential = categories.filter(cat => 
+    cat.title.includes('Residential') || 
+    ['Regular Cleaning', 'Move In/Out', 'Carpet Cleaning'].some(service => 
+      cat.services.some(s => s.title.includes(service.split(' ')[0]))
+    )
+  ).slice(0, 2);
+
+  const commercial = categories.filter(cat => 
+    cat.title.includes('Commercial') || cat.title.includes('Business') ||
+    cat.title.includes('Industrial') || cat.title.includes('Construction')
+  ).slice(0, 2);
+
+  const specialized = categories.filter(cat => 
+    cat.title.includes('Specialized') || cat.title.includes('Exterior') ||
+    cat.title.includes('Hospitality')
+  ).slice(0, 2);
+
+  return [
+    { name: 'Residential', categories: residential.length > 0 ? residential : categories.slice(0, 2) },
+    { name: 'Commercial', categories: commercial.length > 0 ? commercial : categories.slice(2, 4) },
+    { name: 'Specialized', categories: specialized.length > 0 ? specialized : categories.slice(4, 6) }
+  ].filter(group => group.categories.length > 0);
 };
 
 export const ServiceCategoriesSection = ({ 
@@ -43,7 +57,7 @@ export const ServiceCategoriesSection = ({
   className = "" 
 }: ServiceCategoriesSectionProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [activeTab, setActiveTab] = React.useState("Services 1");
+  const [activeTab, setActiveTab] = React.useState("Residential");
   
   const categoryGroups = organizeCategories(serviceCategories);
   
@@ -66,7 +80,7 @@ export const ServiceCategoriesSection = ({
         )}
         
         <Tabs 
-          defaultValue="Services 1" 
+          defaultValue="Residential" 
           value={activeTab}
           onValueChange={setActiveTab}
           className="w-full"
