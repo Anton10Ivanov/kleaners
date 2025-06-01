@@ -1,5 +1,5 @@
+
 import { toast } from 'sonner';
-import { ErrorSeverity } from '@/schemas/booking';
 
 /**
  * Handles form submission errors and displays appropriate messages

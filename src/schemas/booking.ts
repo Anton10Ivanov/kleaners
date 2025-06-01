@@ -58,11 +58,21 @@ const baseBookingSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
   
+  // Authentication fields
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
+  
   // Special instructions
   specialInstructions: z.string().optional(),
   
   // Promo code
   promoCode: z.string().optional(),
+  
+  // Business cleaning specific fields
+  cleaningOptions: z.array(z.string()).optional(),
+  weekdayPreference: z.string().optional(),
+  timePreference: z.string().optional(),
+  selectedDates: z.array(z.date()).optional(),
 });
 
 // Home cleaning specific schema
