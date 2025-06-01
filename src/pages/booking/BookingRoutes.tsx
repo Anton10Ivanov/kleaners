@@ -2,6 +2,9 @@
 import { Routes, Route } from 'react-router-dom';
 import BookingServiceSelector from '@/components/booking/BookingServiceSelector';
 import HomeCleaningBooking from './HomeCleaningBooking';
+import DeepCleaningBooking from './DeepCleaningBooking';
+import MoveInOutBooking from './MoveInOutBooking';
+import OfficeCleaningBooking from './OfficeCleaningBooking';
 import { ServiceType } from '@/schemas/booking';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,18 +40,17 @@ const BookingRoutes = () => {
         path="home-cleaning" 
         element={<HomeCleaningBooking />} 
       />
-      {/* Placeholder routes - will be implemented next */}
       <Route 
         path="office-cleaning" 
-        element={<div className="p-8 text-center">Office Cleaning Booking - Coming Soon</div>} 
+        element={<OfficeCleaningBooking />} 
       />
       <Route 
         path="deep-cleaning" 
-        element={<div className="p-8 text-center">Deep Cleaning Booking - Coming Soon</div>} 
+        element={<DeepCleaningBooking />} 
       />
       <Route 
         path="move-in-out" 
-        element={<div className="p-8 text-center">Move In/Out Booking - Coming Soon</div>} 
+        element={<MoveInOutBooking />} 
       />
     </Routes>
   );
