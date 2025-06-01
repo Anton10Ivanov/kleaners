@@ -17,9 +17,14 @@ export const Logo = () => {
         "text-lg font-bold tracking-wide cursor-pointer"
       )}
     >
-      <div className="w-8 h-8 bg-gradient-to-br from-[#7ebce6] to-[#5a9fd4] rounded-lg flex items-center justify-center">
-        <span className="text-white font-bold text-sm">K</span>
-      </div>
+      <img 
+        src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
+        alt="Kleaners.de Logo" 
+        className="h-8 w-8 object-contain" 
+        style={{
+          filter: 'brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(1000%) hue-rotate(190deg) brightness(100%) contrast(100%)'
+        }} 
+      />
       Kleaners
     </button>
   );

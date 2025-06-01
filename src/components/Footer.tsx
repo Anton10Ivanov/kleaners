@@ -1,10 +1,15 @@
 
-import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="pt-16 pb-8 bg-gray-900 text-theme-blue dark:bg-gray-900 dark:text-theme-blue">
+    <footer className="pt-16 pb-8 bg-gray-900 text-theme-blue dark:bg-gray-900 dark:text-theme-blue relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
@@ -28,13 +33,13 @@ const Footer = () => {
             <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Services</h4>
             <ul className="space-y-2 text-sm md:text-base">
               <li>
-                <Link to="/services/regular-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Regular Cleaning
+                <Link to="/services/home-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Home Cleaning
                 </Link>
               </li>
               <li>
-                <Link to="/services/business-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Business Cleaning
+                <Link to="/services/office-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Office Cleaning
                 </Link>
               </li>
               <li>
@@ -43,8 +48,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/services/post-construction-cleaning" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
-                  Post Construction
+                <Link to="/business-solutions" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
+                  Business Solutions
                 </Link>
               </li>
             </ul>
@@ -63,12 +68,6 @@ const Footer = () => {
                   FAQ
                 </Link>
               </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold text-base md:text-lg mb-3 text-theme-blue">Legal</h4>
-            <ul className="space-y-2 text-sm md:text-base">
               <li>
                 <Link to="/legal/terms" className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors">
                   Terms of Service
@@ -132,6 +131,16 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
+      {/* Back to Top Arrow */}
+      <Button
+        onClick={scrollToTop}
+        size="sm"
+        className="absolute bottom-4 right-4 bg-primary hover:bg-primary/90 text-white rounded-full w-12 h-12 shadow-lg hover:shadow-xl transition-all duration-300 group"
+        aria-label="Back to top"
+      >
+        <ArrowUp className="h-5 w-5 group-hover:scale-110 transition-transform" />
+      </Button>
     </footer>
   );
 };
