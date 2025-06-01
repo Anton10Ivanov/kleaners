@@ -11,7 +11,7 @@ import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
-import { DeepCleaningFields } from '@/components/booking/deepCleaning/DeepCleaningFields';
+import DeepCleaningFields from '@/components/booking/deepCleaning/DeepCleaningFields';
 
 const DeepCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
