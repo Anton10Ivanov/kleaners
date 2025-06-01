@@ -87,6 +87,12 @@ export const bookingSchema = z.object({
   businessType: z.string().optional(),
   propertySize: z.number().optional(),
   specialRequirements: z.string().optional(),
+  cleaningOptions: z.array(z.string()).optional(),
+  
+  // Business scheduling fields
+  weekdayPreference: z.string().optional(),
+  timePreference: z.string().optional(),
+  selectedDates: z.array(z.date()).optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
