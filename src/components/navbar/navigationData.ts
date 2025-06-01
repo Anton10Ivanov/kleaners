@@ -141,6 +141,37 @@ export const serviceCategories = [
   }
 ];
 
+// Most popular services for footer display
+export const popularServices = [
+  {
+    title: "Home Cleaning",
+    href: "/services/home-cleaning",
+    badge: "Most Popular"
+  },
+  {
+    title: "Office Cleaning", 
+    href: "/services/office-cleaning",
+    badge: "Business Favorite"
+  },
+  {
+    title: "Move In/Out",
+    href: "/services/move-in-out",
+    badge: "High Demand"
+  },
+  {
+    title: "Window Cleaning",
+    href: "/services/window-cleaning"
+  },
+  {
+    title: "Carpet Cleaning",
+    href: "/services/carpet-cleaning"
+  },
+  {
+    title: "Industrial Cleaning",
+    href: "/services/industrial-cleaning"
+  }
+];
+
 export const aboutItems = [
   {
     label: "Company's Values",
@@ -183,10 +214,10 @@ export const contactItems = [
   }
 ];
 
-// Navigation data for navbar
+// Enhanced navigation data for navbar with Business Solutions prominently placed
 export const navigationData = [
   { title: "Services", href: "/services" },
-  { title: "Business Solutions", href: "/business-solutions" },
+  { title: "Business Solutions", href: "/business-solutions", highlighted: true },
   { title: "About", href: "/about/values" },
   { title: "Contact", href: "/contact" }
 ];
