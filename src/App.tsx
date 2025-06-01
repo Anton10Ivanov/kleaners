@@ -19,6 +19,9 @@ import Login from '@/pages/auth/Login';
 import Signup from '@/pages/auth/Signup';
 import VerifyProvider from "@/pages/auth/VerifyProvider";
 
+// Booking pages
+import BookingRoutes from '@/pages/booking/BookingRoutes';
+
 // Admin pages
 import AdminPanel from '@/pages/admin/AdminPanel';
 import { AdminBookings } from '@/pages/admin/AdminBookings';
@@ -114,6 +117,9 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/join-team" element={<JoinTeam />} />
           <Route path="/services" element={<Services />} />
+          
+          {/* Booking routes */}
+          <Route path="/booking/*" element={<BookingRoutes />} />
           
           {/* Auth routes - consolidated */}
           <Route path="/login" element={<Login />} />
