@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
-import { BusinessBookingForm } from '@/components/booking/business/BusinessBookingForm';
+import BusinessBookingForm from '@/components/booking/business/BusinessBookingForm';
 
 const OfficeCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);

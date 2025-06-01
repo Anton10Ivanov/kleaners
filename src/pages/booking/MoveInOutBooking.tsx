@@ -11,7 +11,7 @@ import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
-import { MoveInOutFields } from '@/components/booking/moveInOut/MoveInOutFields';
+import MoveInOutFields from '@/components/booking/moveInOut/MoveInOutFields';
 
 const MoveInOutBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
