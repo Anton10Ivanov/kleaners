@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { motion } from 'framer-motion';
-import { CheckCircle, LucideIcon } from 'lucide-react';
+import { CheckCircle, LucideIcon, ArrowRight } from 'lucide-react';
 
 interface ServiceCategory {
   title: string;
@@ -79,46 +79,96 @@ export const ServiceCategoriesSection = ({
               value={category.title}
               className="mt-6"
             >
-              <div className="max-w-4xl mx-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Card className="overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <div className="p-3 bg-primary/10 rounded-lg">
-                          <category.icon className="h-8 w-8 text-primary" />
-                        </div>
-                        <CardTitle className="text-2xl font-serif text-[#1C1C1C] dark:text-white">{category.title}</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'md:grid-cols-2 lg:grid-cols-3 gap-4'}`}>
-                        {category.services.map((service, idx) => (
-                          <div key={idx} className="flex items-start text-sm text-gray-700 dark:text-gray-300 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                            <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                            <Link 
-                              to={service.href}
-                              className="hover:text-primary transition-colors font-medium"
-                            >
-                              {service.title}
-                            </Link>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="max-w-7xl mx-auto"
+              >
+                {/* Category Header */}
+                <div className="text-center mb-8">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="p-3 bg-primary/10 rounded-lg">
+                      <category.icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1C1C1C] dark:text-white font-serif">
+                      {category.title}
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Professional {category.title.toLowerCase()} solutions designed to meet your specific needs with exceptional quality and reliability.
+                  </p>
+                </div>
+
+                {/* Services Grid */}
+                <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'} mb-8`}>
+                  {category.services.map((service, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: idx * 0.1 }}
+                    >
+                      <Card className="h-full hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm group hover:border-primary/30">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-2 mb-2">
+                              <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                              <CardTitle className="text-lg font-semibold text-[#1C1C1C] dark:text-white group-hover:text-primary transition-colors">
+                                {service.title}
+                              </CardTitle>
+                            </div>
+                            <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100 transform translate-x-1 group-hover:translate-x-0" />
                           </div>
-                        ))}
+                        </CardHeader>
+                        <CardContent className="pt-0 flex-1">
+                          <CardDescription className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {service.description}
+                          </CardDescription>
+                        </CardContent>
+                        <CardFooter className="pt-4">
+                          <Link to={service.href} className="w-full">
+                            <Button 
+                              variant="outline" 
+                              className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300"
+                            >
+                              Learn More
+                              <ArrowRight className="ml-2 w-4 h-4" />
+                            </Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Category CTA */}
+                <div className="text-center">
+                  <Card className="inline-block bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+                    <CardContent className="p-6">
+                      <h4 className="text-xl font-semibold mb-2 text-[#1C1C1C] dark:text-white">
+                        Need a Custom {category.title} Solution?
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Our experts can create a tailored cleaning plan that perfectly fits your specific requirements.
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <Link to="/contact">
+                          <Button className="bg-primary hover:bg-primary/90 text-white">
+                            Get Free Quote
+                            <ArrowRight className="ml-2 w-4 h-4" />
+                          </Button>
+                        </Link>
+                        <Link to="/services">
+                          <Button variant="outline">
+                            View All Services
+                          </Button>
+                        </Link>
                       </div>
                     </CardContent>
-                    <CardFooter>
-                      <Link to="/services" className="w-full">
-                        <Button variant="outline" className="w-full dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
-                          View All {category.title}
-                        </Button>
-                      </Link>
-                    </CardFooter>
                   </Card>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
             </TabsContent>
           ))}
         </Tabs>
