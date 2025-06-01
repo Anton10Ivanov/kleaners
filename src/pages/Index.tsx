@@ -1,4 +1,3 @@
-
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
@@ -146,37 +145,17 @@ const Index = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="max-w-7xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-6 md:gap-8 relative">
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <LazyBookingContent 
-                    currentStep={currentStep}
-                    selectedService={selectedService || ''}
-                    form={form}
-                  />
-                </ErrorBoundary>
-                {/* Only show booking summary on desktop */}
-                {!isMobile && (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                    className="w-full md:w-[20%] relative"
-                  >
-                    <ErrorBoundary FallbackComponent={ErrorFallback}>
-                      <LazyBookingSummary 
-                        selectedService={selectedService || ''}
-                        frequency={frequency || ''}
-                        hours={hours}
-                        currentPrice={currentPrice}
-                        selectedExtras={selectedExtras}
-                      />
-                    </ErrorBoundary>
-                  </motion.div>
-                )}
-              </div>
+              {/* Full width booking content - no sidebar for Step 2 */}
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <LazyBookingContent 
+                  currentStep={currentStep}
+                  selectedService={selectedService || ''}
+                  form={form}
+                />
+              </ErrorBoundary>
 
-              {/* Mobile booking summary */}
-              {isMobile && (
+              {/* Only show mobile booking summary for Step 3 when price is revealed */}
+              {isMobile && currentStep === 3 && (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <MobileBookingSummary 
                     selectedService={selectedService || ''}

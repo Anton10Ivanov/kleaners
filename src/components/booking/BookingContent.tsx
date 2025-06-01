@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
@@ -56,7 +57,8 @@ const BookingContent = ({
   };
   
   return (
-    <div className={`w-full ${isMobile ? 'px-2' : 'md:w-[80%]'}`} onClick={handleFormClick}>
+    // Full width container for all steps now that sidebar is removed
+    <div className="w-full" onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
           {currentStep === 2 && selectedService === ServiceType.Home && (
@@ -147,13 +149,6 @@ const BookingContent = ({
                 form={form} 
               />
             </motion.div>
-          )}
-          
-          {/* Debug information */}
-          {currentStep === 2 && (
-            <div className="mt-4 p-2 bg-gray-100 rounded text-xs text-gray-600">
-              Debug: Step {currentStep}, Service: {selectedService}
-            </div>
           )}
         </form>
       </Form>
