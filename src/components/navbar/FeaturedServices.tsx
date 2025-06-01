@@ -13,16 +13,16 @@ const FeaturedServices: React.FC = () => {
       price: "from €45",
       icon: <Home className="h-4 w-4" />,
       path: "/services/regular-cleaning",
-      gradient: "from-blue-500 to-blue-600",
-      hoverGradient: "from-blue-600 to-blue-700"
+      bgColor: "bg-primary/10 hover:bg-primary/20",
+      textColor: "text-primary"
     },
     {
       title: "Office Cleaning", 
       price: "from €85",
       icon: <Building2 className="h-4 w-4" />,
       path: "/services/business-cleaning",
-      gradient: "from-emerald-500 to-emerald-600",
-      hoverGradient: "from-emerald-600 to-emerald-700"
+      bgColor: "bg-secondary/10 hover:bg-secondary/20", 
+      textColor: "text-secondary"
     }
   ];
 
@@ -33,29 +33,23 @@ const FeaturedServices: React.FC = () => {
           key={service.title}
           onClick={() => navigate(service.path)}
           className={cn(
-            "group relative overflow-hidden rounded-xl px-4 py-2.5",
-            "bg-gradient-to-r transition-all duration-300 transform",
-            "hover:scale-105 hover:shadow-lg active:scale-95",
-            "min-h-[44px] flex items-center gap-2",
-            service.gradient,
-            `hover:bg-gradient-to-r hover:${service.hoverGradient}`
+            "group relative overflow-hidden rounded-lg px-3 py-2",
+            "transition-all duration-300 border border-transparent",
+            "hover:border-gray-200 dark:hover:border-gray-600",
+            "h-10 flex items-center gap-2",
+            service.bgColor
           )}
         >
-          <div className="flex items-center gap-2 text-white">
+          <div className={cn("flex items-center gap-2", service.textColor)}>
             {service.icon}
             <div className="flex flex-col items-start">
-              <span className="text-sm font-semibold leading-tight">
+              <span className="text-sm font-medium leading-tight">
                 {service.title}
               </span>
-              <span className="text-xs opacity-90 leading-tight">
+              <span className="text-xs opacity-75 leading-tight">
                 {service.price}
               </span>
             </div>
-          </div>
-          
-          {/* Shine effect on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
           </div>
         </button>
       ))}
