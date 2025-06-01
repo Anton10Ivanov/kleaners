@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import DeepCleaningFields from '@/components/booking/deepCleaning/DeepCleaningFields';
+import DeepCleaningStep2 from './DeepCleaningStep2';
 
 const DeepCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -94,9 +94,7 @@ const DeepCleaningBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <OptimizedCalendar form={form} />
-                  </div>
+                  <DeepCleaningStep2 form={form} />
                 </motion.div>
               )}
 

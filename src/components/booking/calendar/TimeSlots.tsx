@@ -2,7 +2,8 @@
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
+import { TimeSlider } from "@/components/ui/time-slider";
 
 interface TimeSlotsProps {
   selectedTimeSlot: string | undefined;
@@ -22,27 +23,6 @@ export const TimeSlots = ({
   const [availableSlots, setAvailableSlots] = useState<{[key: string]: boolean}>({});
   const [isLoading, setIsLoading] = useState(false);
   
-  // Generate time slots using useMemo to avoid recalculation
-  const timeSlots = useMemo(() => {
-    const slots = [];
-    for (let hour = 7; hour < 20; hour++) {
-      for (let minute = 0; minute <= 30; minute += 30) {
-        const formattedHour = hour.toString().padStart(2, '0');
-        const formattedMinute = minute.toString().padStart(2, '0');
-        const timeSlot = `${formattedHour}:${formattedMinute}`;
-        
-        // Calculate end time
-        const endDate = new Date();
-        endDate.setHours(hour, minute);
-        endDate.setTime(endDate.getTime() + selectedHours * 60 * 60 * 1000);
-        const endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
-        
-        slots.push(`${timeSlot}-${endTime}`);
-      }
-    }
-    return slots;
-  }, [selectedHours]);
-  
   useEffect(() => {
     const fetchAvailability = async () => {
       if (!date) return;
@@ -56,11 +36,15 @@ export const TimeSlots = ({
           .gte('start_time', format(date, 'yyyy-MM-dd'))
           .lt('start_time', format(new Date(date.getTime() + 24 * 60 * 60 * 1000), 'yyyy-MM-dd'));
 
-        const slots = timeSlots.reduce((acc, slot) => {
-          const [startTime] = slot.split('-');
-          acc[startTime] = true; // Initially set all slots as available
-          return acc;
-        }, {} as {[key: string]: boolean});
+        // Generate all possible time slots
+        const slots: {[key: string]: boolean} = {};
+        for (let hour = 8; hour <= 20; hour++) {
+          for (let minute = 0; minute <= 30; minute += 30) {
+            if (hour === 20 && minute > 0) break; // Stop at 20:00
+            const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+            slots[timeStr] = true; // Initially all available
+          }
+        }
 
         // Mark slots as unavailable if they overlap with existing bookings
         if (availability) {
@@ -95,7 +79,7 @@ export const TimeSlots = ({
     };
 
     fetchAvailability();
-  }, [date, selectedHours, timeSlots]);
+  }, [date, selectedHours]);
 
   if (!date) {
     return null;
@@ -104,11 +88,25 @@ export const TimeSlots = ({
   const isPastDate = date < nowInBerlin;
   const formattedDate = format(date, "EEEE, MMMM d");
 
+  const handleTimeChange = (startTime: string) => {
+    // Calculate end time based on selected hours
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const startDate = new Date();
+    startDate.setHours(hours, minutes);
+    const endDate = new Date(startDate.getTime() + selectedHours * 60 * 60 * 1000);
+    const endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+    
+    const timeSlot = `${startTime}-${endTime}`;
+    onTimeSlotSelect(timeSlot);
+  };
+
+  const currentStartTime = selectedTimeSlot ? selectedTimeSlot.split('-')[0] : '08:00';
+
   return (
     <div className="mt-6">
       <h4 className="text-lg font-medium mb-4 flex items-center gap-2">
         <Calendar className="h-5 w-5 text-primary" />
-        Available time slots for {formattedDate}
+        Available time for {formattedDate}
       </h4>
       
       {isLoading ? (
@@ -116,28 +114,19 @@ export const TimeSlots = ({
           <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {timeSlots.map((slot) => {
-            const [startTime] = slot.split('-');
-            const isAvailable = availableSlots[startTime];
-            
-            return (
-              <button
-                key={slot}
-                onClick={() => isAvailable && onTimeSlotSelect(slot)}
-                disabled={isPastDate || !isAvailable}
-                className={`p-3 rounded-lg border text-sm transition-colors ${
-                  selectedTimeSlot === slot
-                    ? "border-primary bg-primary/5"
-                    : isAvailable 
-                      ? "border-gray-200 hover:border-primary/50"
-                      : "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
-                }`}
-              >
-                {slot}
-              </button>
-            );
-          })}
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <TimeSlider
+            value={currentStartTime}
+            onChange={handleTimeChange}
+          />
+          
+          {selectedTimeSlot && (
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Selected booking time: <span className="font-medium text-primary">{selectedTimeSlot}</span>
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
