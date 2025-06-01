@@ -18,20 +18,33 @@ const mockBookings: BookingNotification[] = [
   { id: 5, city: "Frankfurt", timeAgo: "15 minutes ago", service: "Home Cleaning" },
 ];
 
+// Generate random interval between 1-3 minutes (60000-180000ms)
+const getRandomInterval = () => {
+  return Math.floor(Math.random() * (180000 - 60000 + 1)) + 60000;
+};
+
 export const LiveBookingIndicators = memo(() => {
   const [currentBooking, setCurrentBooking] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsVisible(false);
+    const scheduleNextUpdate = () => {
+      const randomInterval = getRandomInterval();
+      
       setTimeout(() => {
-        setCurrentBooking((prev) => (prev + 1) % mockBookings.length);
-        setIsVisible(true);
-      }, 300);
-    }, 4000);
+        setIsVisible(false);
+        setTimeout(() => {
+          setCurrentBooking((prev) => (prev + 1) % mockBookings.length);
+          setIsVisible(true);
+          scheduleNextUpdate(); // Schedule the next update
+        }, 300);
+      }, randomInterval);
+    };
 
-    return () => clearInterval(interval);
+    // Start the first update
+    scheduleNextUpdate();
+
+    // No cleanup needed as setTimeout will handle its own lifecycle
   }, []);
 
   const booking = mockBookings[currentBooking];

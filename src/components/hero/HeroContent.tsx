@@ -2,6 +2,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import { TrustBadges } from "./TrustBadges";
 
 interface HeroContentProps {
   isMobile: boolean;
@@ -23,8 +24,9 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className={`${isMobile ? 'text-2xl md:text-4xl' : 'text-5xl xl:text-6xl'} font-black leading-tight text-gray-900 font-['Inter'] ${isMobile ? 'mb-2' : ''}`}
       >
-        Book your cleaning service{" "}
-        <span className="text-primary font-extrabold">online</span>
+        Get{" "}
+        <span className="text-primary font-extrabold">instant price</span>{" "}
+        quote in 3 easy steps
       </motion.h1>
 
       <motion.p 
@@ -33,7 +35,7 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         transition={{ duration: 0.6, delay: 0.3 }}
         className={`${isMobile ? 'text-sm' : 'text-xl'} text-gray-600 font-medium ${isMobile ? 'mb-2' : ''}`}
       >
-        Get instant price quote in 3 easy steps • Direct price estimation on final step
+        Professional cleaning services • Direct price estimation on final step
       </motion.p>
 
       {!isMobile && (
@@ -79,6 +81,9 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
           ))}
         </motion.div>
       )}
+
+      {/* Trust Badges */}
+      <TrustBadges />
     </motion.div>
   );
 });
