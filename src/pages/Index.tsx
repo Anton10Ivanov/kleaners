@@ -11,10 +11,15 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import { Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
-import { LazyOurOptions, LazyWhyChooseUs, LazyTestimonials, LazyBookingSummary, LazyBookingContent } from '../components/lazy-components';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 import MobileBookingSummary from '../components/booking/MobileBookingSummary';
+
+// Optimized lazy loading - only for non-critical components
+const LazyWhyChooseUs = lazy(() => import('../components/WhyChooseUs'));
+const LazyOurOptions = lazy(() => import('../components/options/OurOptions'));
+const LazyTestimonials = lazy(() => import('../components/Testimonials'));
+const LazyBookingContent = lazy(() => import('../components/booking/BookingContent'));
 
 // Simple error fallback component
 const ErrorFallback = () => (
@@ -34,7 +39,6 @@ const Index = () => {
     
     return () => {
       endTimer('initialRender');
-      // Log performance results when component unmounts
       performanceMonitor.logResults();
     };
   }, [startTimer, endTimer]);
@@ -122,19 +126,25 @@ const Index = () => {
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <LazyWhyChooseUs />
+              <Suspense fallback={<SectionLoading />}>
+                <LazyWhyChooseUs />
+              </Suspense>
             </ErrorBoundary>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <LazyOurOptions />
+              <Suspense fallback={<SectionLoading />}>
+                <LazyOurOptions />
+              </Suspense>
             </ErrorBoundary>
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <LazyTestimonials />
+              <Suspense fallback={<SectionLoading />}>
+                <LazyTestimonials />
+              </Suspense>
             </ErrorBoundary>
           </motion.div>
         ) : (
@@ -148,11 +158,13 @@ const Index = () => {
             <div className="max-w-7xl mx-auto">
               {/* Full width booking content - no sidebar for Step 2 */}
               <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <LazyBookingContent 
-                  currentStep={currentStep}
-                  selectedService={selectedService || ''}
-                  form={form}
-                />
+                <Suspense fallback={<SectionLoading />}>
+                  <LazyBookingContent 
+                    currentStep={currentStep}
+                    selectedService={selectedService || ''}
+                    form={form}
+                  />
+                </Suspense>
               </ErrorBoundary>
 
               {/* Only show mobile booking summary for Step 3 when price is revealed */}

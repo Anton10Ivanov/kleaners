@@ -1,4 +1,3 @@
-
 /**
  * Design System Components
  * Standardized components using the design tokens
@@ -16,8 +15,6 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
 }
 
 export const Heading: React.FC<HeadingProps> = ({ level, children, className, ...props }) => {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-  
   const baseClasses = 'font-semibold text-gray-900 dark:text-white';
   const sizeClasses = {
     1: 'text-3xl md:text-4xl font-bold leading-tight mb-4',
@@ -28,14 +25,24 @@ export const Heading: React.FC<HeadingProps> = ({ level, children, className, ..
     6: 'text-sm md:text-base leading-normal mb-2',
   };
   
-  return (
-    <Tag 
-      className={cn(baseClasses, sizeClasses[level], className)} 
-      {...props}
-    >
-      {children}
-    </Tag>
-  );
+  const combinedClassName = cn(baseClasses, sizeClasses[level], className);
+  
+  switch (level) {
+    case 1:
+      return <h1 className={combinedClassName} {...props}>{children}</h1>;
+    case 2:
+      return <h2 className={combinedClassName} {...props}>{children}</h2>;
+    case 3:
+      return <h3 className={combinedClassName} {...props}>{children}</h3>;
+    case 4:
+      return <h4 className={combinedClassName} {...props}>{children}</h4>;
+    case 5:
+      return <h5 className={combinedClassName} {...props}>{children}</h5>;
+    case 6:
+      return <h6 className={combinedClassName} {...props}>{children}</h6>;
+    default:
+      return <h1 className={combinedClassName} {...props}>{children}</h1>;
+  }
 };
 
 interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
