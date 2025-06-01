@@ -33,109 +33,109 @@ import {
 export const serviceCategories = [
   {
     title: "Residential Services",
-    icon: <Home className="h-5 w-5" />,
+    icon: Home,
     services: [
       {
         title: "Home Cleaning",
         href: "/services/home-cleaning",
         description: "Regular home maintenance and cleaning",
-        icon: <Home className="h-4 w-4" />
+        icon: Home
       },
       {
         title: "Move In/Out Cleaning",
         href: "/services/move-in-out", 
         description: "Deep cleaning for moving transitions",
-        icon: <Truck className="h-4 w-4" />
+        icon: Truck
       },
       {
         title: "Window Cleaning",
         href: "/services/window-cleaning",
         description: "Crystal clear window cleaning services",
-        icon: <Sparkles className="h-4 w-4" />
+        icon: Sparkles
       },
       {
         title: "Carpet Cleaning",
         href: "/services/carpet-cleaning",
         description: "Professional carpet and rug cleaning",
-        icon: <Scissors className="h-4 w-4" />
+        icon: Scissors
       },
       {
         title: "Upholstery Cleaning",
         href: "/services/upholstery-cleaning",
         description: "Furniture and fabric deep cleaning",
-        icon: <Sparkles className="h-4 w-4" />
+        icon: Sparkles
       }
     ]
   },
   {
     title: "Commercial Services",
-    icon: <Building2 className="h-5 w-5" />,
+    icon: Building2,
     services: [
       {
         title: "Office Cleaning",
         href: "/services/office-cleaning",
         description: "Professional office maintenance",
-        icon: <Building2 className="h-4 w-4" />
+        icon: Building2
       },
       {
         title: "Business Solutions",
         href: "/business-solutions",
         description: "Corporate partnerships and programs",
-        icon: <Award className="h-4 w-4" />
+        icon: Award
       },
       {
         title: "Industrial Cleaning",
         href: "/services/industrial-cleaning",
         description: "Heavy-duty industrial cleaning",
-        icon: <Factory className="h-4 w-4" />
+        icon: Factory
       },
       {
         title: "Medical Practice Cleaning",
         href: "/services/medical-practice-cleaning",
         description: "Sterile medical facility cleaning",
-        icon: <Heart className="h-4 w-4" />
+        icon: Heart
       },
       {
         title: "Kindergarten Cleaning",
         href: "/services/kindergarten-cleaning",
         description: "Child-safe educational facility cleaning",
-        icon: <GraduationCap className="h-4 w-4" />
+        icon: GraduationCap
       }
     ]
   },
   {
     title: "Specialized Services",
-    icon: <Briefcase className="h-5 w-5" />,
+    icon: Briefcase,
     services: [
       {
         title: "Intensive Cleaning",
         href: "/services/intensive-cleaning",
         description: "Deep and thorough cleaning solutions",
-        icon: <Spray className="h-4 w-4" />
+        icon: Spray
       },
       {
         title: "Disinfection Cleaning",
         href: "/services/disinfection-cleaning",
         description: "Professional sanitization services",
-        icon: <Shield className="h-4 w-4" />
+        icon: Shield
       },
       {
         title: "Construction Cleaning",
         href: "/services/construction-cleaning",
         description: "Post-construction cleanup",
-        icon: <Hammer className="h-4 w-4" />
+        icon: Hammer
       },
       {
         title: "Crime Scene Cleaning",
         href: "/services/crime-scene-cleaning",
         description: "Specialized trauma scene cleanup",
-        icon: <Shield className="h-4 w-4" />
+        icon: Shield
       },
       {
         title: "Hoarder Cleaning",
         href: "/services/hoarder-cleaning",
         description: "Compassionate hoarding cleanup",
-        icon: <ClipboardList className="h-4 w-4" />
+        icon: ClipboardList
       }
     ]
   }
@@ -145,25 +145,25 @@ export const aboutItems = [
   {
     label: "Company's Values",
     description: "Our principles and what we stand for",
-    icon: <Heart className="h-4 w-4" />,
+    icon: Heart,
     path: "/about/values"
   },
   {
     label: "FAQ",
     description: "Frequently asked questions",
-    icon: <HelpCircle className="h-4 w-4" />,
+    icon: HelpCircle,
     path: "/about/faq"
   },
   {
     label: "Terms of Service",
     description: "Our terms and conditions",
-    icon: <FileText className="h-4 w-4" />,
+    icon: FileText,
     path: "/legal/terms"
   },
   {
     label: "Privacy Policy",
     description: "How we handle your data",
-    icon: <Shield className="h-4 w-4" />,
+    icon: Shield,
     path: "/legal/privacy"
   }
 ];
@@ -172,13 +172,13 @@ export const contactItems = [
   {
     label: "Get in Touch",
     description: "Contact our customer service team",
-    icon: <Phone className="h-4 w-4" />,
+    icon: Phone,
     path: "/contact"
   },
   {
     label: "Join Our Team",
     description: "Apply to work with us",
-    icon: <Users className="h-4 w-4" />,
+    icon: Users,
     path: "/join-team"
   }
 ];
