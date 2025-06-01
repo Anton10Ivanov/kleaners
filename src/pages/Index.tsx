@@ -19,7 +19,6 @@ import { serviceCategories } from '@/components/navbar/navigationData';
 
 // Optimized lazy loading - only for non-critical components
 const LazyWhyChooseUs = lazy(() => import('../components/WhyChooseUs'));
-const LazyOurOptions = lazy(() => import('../components/options/OurOptions'));
 const LazyTestimonials = lazy(() => import('../components/Testimonials'));
 const LazyBookingContent = lazy(() => import('../components/booking/BookingContent'));
 
@@ -138,14 +137,6 @@ const Index = () => {
             {/* Service Categories Section */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <ServiceCategoriesSection serviceCategories={serviceCategories} />
-            </ErrorBoundary>
-            
-            <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
-            
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<SectionLoading />}>
-                <LazyOurOptions />
-              </Suspense>
             </ErrorBoundary>
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
