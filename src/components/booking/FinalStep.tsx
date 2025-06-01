@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
 import PromoCode from "./final/PromoCode";
+import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -44,27 +44,39 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <CleaningAddress form={form} postalCode={postalCode} />
-      <PersonalInformation form={form} />
-      
-      {hasProviderOptions && (
-        <ProviderSelection 
-          providers={providerOptions} 
-          selectedProvider={selectedProvider}
-          onSelectProvider={setSelectedProvider}
-        />
-      )}
-      
-      <SpecialInstructions form={form} />
-      <PromoCode form={form} />
-      
-      <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-          {isSubmitting ? "Submitting..." : "Complete Booking"}
-        </Button>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Left Column - Form Fields */}
+      <div className="lg:col-span-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <CleaningAddress form={form} postalCode={postalCode} />
+          <PersonalInformation form={form} />
+          
+          {hasProviderOptions && (
+            <ProviderSelection 
+              providers={providerOptions} 
+              selectedProvider={selectedProvider}
+              onSelectProvider={setSelectedProvider}
+            />
+          )}
+          
+          <SpecialInstructions form={form} />
+          <PromoCode form={form} />
+          
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+              {isSubmitting ? "Submitting..." : "Complete Booking"}
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+
+      {/* Right Column - Booking Summary */}
+      <div className="lg:col-span-1">
+        <div className="sticky top-6">
+          <EnhancedBookingSummary form={form} />
+        </div>
+      </div>
+    </div>
   );
 };
 

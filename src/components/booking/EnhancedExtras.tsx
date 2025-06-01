@@ -1,5 +1,4 @@
 
-import { Shirt, WashingMachine, Bed, Wrench, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
@@ -7,14 +6,12 @@ import { Label } from "@/components/ui/label";
 import { useState, useCallback } from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
-import { LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ExtraService {
   id: string;
   title: string;
   hasPopup?: boolean;
-  icon: LucideIcon;
   time?: string;
   description?: string;
   basePrice?: number;
@@ -29,7 +26,6 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
     id: 'windows',
     title: 'Window Cleaning',
     hasPopup: true,
-    icon: WashingMachine,
     description: 'Interior window cleaning',
     basePrice: 5
   },
@@ -37,28 +33,24 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
     id: 'ironing',
     title: 'Ironing',
     hasPopup: true,
-    icon: Shirt,
     description: 'Professional ironing service',
     basePrice: 20
   },
   {
     id: 'carpet',
     title: 'Carpet Washing',
-    icon: WashingMachine,
     description: 'Deep carpet cleaning',
     basePrice: 15
   },
   {
     id: 'mattress',
     title: 'Mattress Washing',
-    icon: Bed,
     description: 'Mattress deep cleaning',
     basePrice: 25
   },
   {
     id: 'repair',
     title: 'Small Repair',
-    icon: Wrench,
     description: 'Minor household repairs',
     basePrice: 30
   },
@@ -66,7 +58,6 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
     id: 'cabinets',
     title: 'Inside Cabinets',
     time: '30 min',
-    icon: Archive,
     description: 'Interior cabinet cleaning',
     basePrice: 13.5
   },
@@ -74,7 +65,6 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
     id: 'fridge',
     title: 'Inside Fridge',
     time: '30 min',
-    icon: Archive,
     description: 'Deep fridge cleaning',
     basePrice: 13.5
   },
@@ -82,7 +72,6 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
     id: 'oven',
     title: 'Inside Oven',
     time: '60 min',
-    icon: Wrench,
     description: 'Deep oven cleaning',
     basePrice: 27
   }
@@ -108,6 +97,10 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
   const selectedExtras = form.watch('extras') || [];
   const frequency = form.watch('frequency') || 'onetime';
   const hourlyRate = getHourlyRate(frequency);
+
+  // Store window cleaning config in form state
+  const windowConfig = form.watch('windowConfig') || { count: 1, framesIncluding: false };
+  const ironingConfig = form.watch('ironingConfig') || { time: 30 };
 
   const setSelectedExtras = useCallback((extras: string[]) => {
     form.setValue('extras', extras);
@@ -137,16 +130,15 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
     if (!selectedExtras.includes(extraId)) {
       setSelectedExtras([...selectedExtras, extraId]);
       
-      // Store configuration in localStorage for persistence
+      // Store configuration in form state
       if (extraId === 'ironing') {
-        localStorage.setItem('ironingTime', ironingTime.toString());
+        form.setValue('ironingConfig', { time: ironingTime });
       } else if (extraId === 'windows') {
-        localStorage.setItem('windowCount', windowCount.toString());
-        localStorage.setItem('framesIncluding', framesIncluding.toString());
+        form.setValue('windowConfig', { count: windowCount, framesIncluding });
       }
     }
     setOpenDialog(null);
-  }, [selectedExtras, setSelectedExtras, ironingTime, windowCount, framesIncluding]);
+  }, [selectedExtras, setSelectedExtras, ironingTime, windowCount, framesIncluding, form]);
 
   const handleCloseDialog = useCallback(() => {
     setOpenDialog(null);
@@ -161,8 +153,14 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
   };
 
   const calculateWindowPrice = () => {
-    const basePrice = windowCount * 5;
-    return framesIncluding ? basePrice * 2 : basePrice;
+    const config = selectedExtras.includes('windows') ? windowConfig : { count: windowCount, framesIncluding };
+    const basePrice = config.count * 5;
+    return config.framesIncluding ? basePrice * 2 : basePrice;
+  };
+
+  const calculateIroningPrice = () => {
+    const config = selectedExtras.includes('ironing') ? ironingConfig : { time: ironingTime };
+    return (config.time / 60) * hourlyRate;
   };
 
   const totalExtrasPrice = selectedExtras.reduce((total, extraId) => {
@@ -170,9 +168,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
     if (!extra) return total;
     
     if (extraId === 'ironing') {
-      const savedTime = localStorage.getItem('ironingTime');
-      const time = savedTime ? parseInt(savedTime) : 30;
-      return total + (time / 60) * hourlyRate;
+      return total + calculateIroningPrice();
     }
     
     if (extraId === 'windows') {
@@ -183,7 +179,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
   }, 0);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Additional Services
@@ -195,11 +191,18 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <AnimatePresence>
           {AVAILABLE_EXTRAS.map((extra) => {
             const isSelected = selectedExtras.includes(extra.id);
-            const price = calculateExtraPrice(extra);
+            let price = calculateExtraPrice(extra);
+            
+            // Override price calculation for special cases
+            if (extra.id === 'windows') {
+              price = calculateWindowPrice();
+            } else if (extra.id === 'ironing') {
+              price = calculateIroningPrice();
+            }
             
             return (
               <motion.div
@@ -262,7 +265,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <WashingMachine className="h-5 w-5 text-primary" />
               Window Cleaning
             </DialogTitle>
           </DialogHeader>
@@ -325,7 +327,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Shirt className="h-5 w-5 text-primary" />
               Ironing Service
             </DialogTitle>
           </DialogHeader>
@@ -356,7 +357,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
               </Button>
             </div>
             <div className="text-center text-sm text-gray-600">
-              Price: <span className="font-semibold text-primary">{((ironingTime / 60) * hourlyRate).toFixed(0)} €</span>
+              Price: <span className="font-semibold text-primary">{calculateIroningPrice().toFixed(0)} €</span>
             </div>
             <div className="flex gap-3 pt-2">
               <Button variant="outline" onClick={handleCloseDialog} className="flex-1">

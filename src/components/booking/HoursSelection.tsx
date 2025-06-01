@@ -27,7 +27,7 @@ const HoursSelection = ({ form }: HoursSelectionProps) => {
   // Fix frequency comparison to handle both enum and string values
   const getHourlyRate = () => {
     if (frequency === Frequency.Weekly || frequency === 'weekly') return 27;
-    if (frequency === Frequency.BiWeekly || frequency === 'bi-weekly') return 30;
+    if (frequency === Frequency.BiWeekly || frequency === 'biweekly') return 30;
     return 35;
   };
 
