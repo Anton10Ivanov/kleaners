@@ -10,7 +10,7 @@ import { Frequency, ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
-import { useBookingForm } from '../hooks/useBookingForm';
+import { useBookingForm } from '@/hooks/useBookingForm';
 
 import Hero from '../hero';
 import MobileBookingSummary from '../booking/MobileBookingSummary';
