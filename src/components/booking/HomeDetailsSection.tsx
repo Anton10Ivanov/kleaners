@@ -198,7 +198,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
             </div>
             <Select 
               value={cleaningPace || 'standard'} 
-              onValueChange={(value) => form.setValue('cleaningPace', value)}
+              onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}
             >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select cleaning pace" />

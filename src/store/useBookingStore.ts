@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { BookingFormData, Frequency } from '@/schemas/booking';
-import { ServiceType } from '@/schemas/booking';
+import { ServiceType } from '@/types/enums';
 
 interface BookingState {
   currentStep: number;
@@ -15,14 +15,13 @@ interface BookingState {
 }
 
 const initialFormData: Partial<BookingFormData> = {
-  service: ServiceType.Home,
+  serviceType: ServiceType.Home,
   postalCode: '',
   frequency: Frequency.OneTime,
   hours: 2,
   bedrooms: 1,
   bathrooms: 1,
   extras: [],
-  totalAmount: 0,
 };
 
 /**
@@ -59,7 +58,7 @@ const useBookingStore = create<BookingState>()(
             ...state.formData, 
             ...data,
             // Migrate service value if needed
-            service: data.service ? migrateServiceValue(data.service as string) : state.formData.service
+            serviceType: data.serviceType ? migrateServiceValue(data.serviceType as string) : state.formData.serviceType
           } 
         })),
       
@@ -74,7 +73,7 @@ const useBookingStore = create<BookingState>()(
       partialize: (state) => ({
         formData: {
           ...state.formData,
-          service: migrateServiceValue(state.formData.service as string)
+          serviceType: migrateServiceValue(state.formData.serviceType as string)
         },
         currentStep: state.currentStep,
       }),
