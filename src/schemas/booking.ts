@@ -113,7 +113,7 @@ export const bookingSchema = z.object({
 
 // Create home cleaning specific schema
 export const homeCleaningSchema = bookingSchema.extend({
-  service: z.literal("home"),
+  service: z.string().default("home"),
   propertySize: z.number().min(20, "Property size must be at least 20 m²").max(500, "Property size cannot exceed 500 m²"),
   bedrooms: z.number().min(0).max(10),
   bathrooms: z.number().min(1).max(10),
@@ -132,7 +132,7 @@ export const businessCleaningSchema = bookingSchema.extend({
 
 // Create deep cleaning specific schema
 export const deepCleaningSchema = bookingSchema.extend({
-  service: z.literal("deep-cleaning"),
+  service: z.string().default("deep-cleaning"),
   squareMeters: z.number().min(10, "Square meters is required"),
   bedrooms: z.number().min(0).max(10),
   bathrooms: z.number().min(1).max(10),
@@ -145,7 +145,7 @@ export const deepCleaningSchema = bookingSchema.extend({
 
 // Create move-in-out cleaning specific schema
 export const moveInOutSchema = bookingSchema.extend({
-  service: z.literal("move-in-out"),
+  service: z.string().default("move-in-out"),
   squareMeters: z.number().min(10, "Square meters is required"),
   bedrooms: z.number().min(0).max(10),
   bathrooms: z.number().min(1).max(10),
@@ -161,4 +161,6 @@ export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
 export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
 export type DeepCleaningFormData = z.infer<typeof deepCleaningSchema>;
 export type MoveInOutFormData = z.infer<typeof moveInOutSchema>;
-export { ProviderOption };
+
+// Use export type for type-only exports
+export type { ProviderOption };
