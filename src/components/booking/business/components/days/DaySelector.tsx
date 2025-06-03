@@ -14,7 +14,7 @@ interface DaySelectorProps {
 
 export function DaySelector({ form }: DaySelectorProps) {
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const selectedDates = form.watch("selectedDates") || [];
+  const selectedDates = (form.watch("selectedDates") as Date[]) || [];
 
   const handleSelect = (day: Date | undefined) => {
     if (!day) return;

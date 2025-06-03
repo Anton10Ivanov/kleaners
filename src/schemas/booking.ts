@@ -42,6 +42,9 @@ export const bookingSchema = z.object({
   weekdayPreference: z.string().optional(),
   timePreference: z.string().optional(),
   
+  // Date selection for business/custom schedules
+  selectedDates: z.array(z.date()).default([]).optional(),
+  
   // Extras and configurations
   extras: z.array(z.string()).default([]).optional(),
   windowConfig: z.object({
@@ -76,14 +79,26 @@ export const bookingSchema = z.object({
   email: z.string().email("Please enter a valid email address").optional(),
   phone: z.string().min(10, "Please enter a valid phone number").optional(),
   
-  // Address
+  // Address fields
+  address: z.string().optional(),
   street: z.string().min(5, "Street address is required").optional(),
   houseNumber: z.string().min(1, "House number is required").optional(),
   city: z.string().min(2, "City is required").optional(),
+  floor: z.string().optional(),
+  entryCode: z.string().optional(),
+  accessMethod: z.string().optional(),
+  accessInstructions: z.string().optional(),
   
   // Additional
   specialInstructions: z.string().optional(),
   promoCode: z.string().optional(),
+  
+  // Deep cleaning specific fields
+  dirtinessLevel: z.number().min(1).max(5).optional(),
+  lastCleaned: z.number().min(1).max(5).optional(),
+  cleaningPersonnel: z.string().optional(),
+  specialConditions: z.array(z.string()).default([]).optional(),
+  additionalNotes: z.string().optional(),
 });
 
 // Create home cleaning specific schema
@@ -105,7 +120,21 @@ export const businessCleaningSchema = bookingSchema.extend({
   specialRequirements: z.string().optional(),
 });
 
+// Create deep cleaning specific schema
+export const deepCleaningSchema = bookingSchema.extend({
+  service: z.literal("deep-cleaning"),
+  squareMeters: z.number().min(10, "Square meters is required"),
+  bedrooms: z.number().min(0).max(10),
+  bathrooms: z.number().min(1).max(10),
+  dirtinessLevel: z.number().min(1).max(5),
+  lastCleaned: z.number().min(1).max(5),
+  cleaningPersonnel: z.string().min(1, "Please select cleaning personnel"),
+  specialConditions: z.array(z.string()).default([]),
+  additionalNotes: z.string().optional(),
+});
+
 export type BookingFormData = z.infer<typeof bookingSchema>;
 export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
 export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
+export type DeepCleaningFormData = z.infer<typeof deepCleaningSchema>;
 export { ProviderOption };
