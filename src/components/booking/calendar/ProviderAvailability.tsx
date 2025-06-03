@@ -62,7 +62,9 @@ export const ProviderAvailability = ({
         if (available.length > 0) {
           const providerOptions: ProviderOption[] = available.map(p => ({
             id: p.id,
-            name: `${p.first_name} ${p.last_name}`
+            name: `${p.first_name} ${p.last_name}`,
+            rating: 4.5, // Default rating
+            price: 25 // Default hourly rate
           }));
           form.setValue('providerOptions', providerOptions);
         } else {
