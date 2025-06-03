@@ -1,7 +1,8 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { homeCleaningSchema, HomeCleaningFormData, ServiceType } from '@/schemas/booking';
+import { homeCleaningSchema, HomeCleaningFormData } from '@/schemas/booking';
+import { ServiceType } from '@/types/enums';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -12,6 +13,7 @@ import HoursSelection from '@/components/booking/HoursSelection';
 import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import EnhancedExtras from '@/components/booking/EnhancedExtras';
 import FinalStep from '@/components/booking/FinalStep';
+import { HomeDetailsSection } from '@/components/booking/HomeDetailsSection';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,10 +25,12 @@ const HomeCleaningBooking = () => {
   const form = useForm<HomeCleaningFormData>({
     resolver: zodResolver(homeCleaningSchema),
     defaultValues: {
-      service: ServiceType.Home,
+      service: "home" as const,
       hours: 2,
       bedrooms: 1,
       bathrooms: 1,
+      propertySize: 70,
+      cleaningPace: 'standard',
       extras: [],
     },
   });
@@ -48,6 +52,14 @@ const HomeCleaningBooking = () => {
 
   const handleSubmit = async (data: HomeCleaningFormData) => {
     await submitBooking(data as any);
+  };
+
+  const handleSuggestedTimeSelect = (hours: number) => {
+    form.setValue('hours', hours);
+    const hoursSection = document.querySelector('[data-hours-selection]');
+    if (hoursSection) {
+      hoursSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   return (
@@ -83,6 +95,11 @@ const HomeCleaningBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
+                  <HomeDetailsSection 
+                    form={form} 
+                    onSuggestedTimeSelect={handleSuggestedTimeSelect}
+                  />
+                  
                   <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
                     <ServiceOptions
                       frequency={frequency}
@@ -91,7 +108,10 @@ const HomeCleaningBooking = () => {
                     />
                   </div>
                   
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <div 
+                    className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border"
+                    data-hours-selection
+                  >
                     <HoursSelection form={form} />
                   </div>
                 </motion.div>

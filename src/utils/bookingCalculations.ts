@@ -6,42 +6,37 @@ const roundToNearestHalf = (num: number): number => {
   return Math.floor(num) + 0.5;
 };
 
-export const calculateRecommendedTime = (bedrooms: number, bathrooms: number): number => {
+export const calculateRecommendedTime = (
+  propertySize: number, 
+  bedrooms: number, 
+  bathrooms: number, 
+  pace: 'standard' | 'quick' = 'standard'
+): number => {
   const BASE_TIME = 2;
   let totalTime = BASE_TIME;
  
-  // Limit Bedrooms and Bathrooms to a maximum of 10
+  // Limit values to reasonable ranges
+  propertySize = Math.min(Math.max(propertySize, 20), 500);
   bedrooms = Math.min(bedrooms, 10);
   bathrooms = Math.min(bathrooms, 10);
 
-  // Case 1: Both bedrooms and bathrooms = 1
-  if (bedrooms === 1 && bathrooms === 1) {
-    return BASE_TIME;
+  // Base calculation on property size
+  if (propertySize > 60) {
+    totalTime += Math.ceil((propertySize - 60) / 20) * 0.5;
   }
 
-  // Calculate extra rooms (subtract 1 from each as the first room is included in base time)
-  const extraBedrooms = Math.max(0, bedrooms - 1);
-  const extraBathrooms = Math.max(0, bathrooms - 1);
+  // Add time for extra bedrooms and bathrooms
+  if (bedrooms > 1) totalTime += (bedrooms - 1) * 0.3;
+  if (bathrooms > 1) totalTime += (bathrooms - 1) * 0.5;
 
-  // Case 2: >1 & <= 3 rooms
-  if (Math.max(bedrooms, bathrooms) <= 3) {
-    totalTime += extraBedrooms * 0.5;  // +0.5h per extra bedroom
-    totalTime += extraBathrooms * 0.75; // +0.75h per extra bathroom
-  }
-  // Case 3: >3 & <= 6 rooms
-  else if (Math.max(bedrooms, bathrooms) <= 6) {
-    totalTime += extraBedrooms * 0.4;  // +0.4h per extra bedroom
-    totalTime += extraBathrooms * 0.6; // +0.6h per extra bathroom
-  }
-  // Case 4: >6 & <= 10 rooms
-  else if (Math.max(bedrooms, bathrooms) <= 10) {
-    totalTime = Math.max(
-      7, // minimum 6 hours for large properties
-      BASE_TIME + (extraBedrooms * 0.3) + (extraBathrooms * 0.5)
-    );
+  // Cap at maximum
+  totalTime = Math.min(totalTime, 8);
+  
+  // Apply quick pace reduction (20% off, but not below 2 hours)
+  if (pace === 'quick') {
+    totalTime = Math.max(2, totalTime * 0.8);
   }
 
-  // Apply rounding rules
   return roundToNearestHalf(totalTime);
 };
 

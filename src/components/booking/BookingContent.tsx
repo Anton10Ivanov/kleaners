@@ -7,7 +7,6 @@ import OptimizedCalendar from './OptimizedCalendar';
 import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
-import { PropertySizeField } from './PropertySizeField';
 import { HomeDetailsSection } from './HomeDetailsSection';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
