@@ -24,7 +24,7 @@ export const mockData = {
   earnings: mockEarnings
 };
 
-// Generate function
+// Generate function - explicitly export
 export const generateMockAppData = () => mockData;
 
 // Re-export types

@@ -39,7 +39,7 @@ export const generateMockBookings = (
     return {
       id: `book-${i + 1}`,
       clientId: client.id,
-      clientName: `${client.firstName} ${client.lastName}`,
+      clientName: client.name,
       service,
       date: format(bookingDate, 'yyyy-MM-dd'),
       time: `${Math.floor(Math.random() * 9) + 8}:00`, // Between 8:00 and 17:00
@@ -47,7 +47,7 @@ export const generateMockBookings = (
       status,
       paymentStatus,
       providerId: provider?.id,
-      providerName: provider ? `${provider.firstName} ${provider.lastName}` : undefined,
+      providerName: provider?.name,
       address: client.address,
       totalPrice: Math.floor((duration * 50 + Math.random() * 50) * 100) / 100 // Random price based on duration
     };
@@ -59,7 +59,7 @@ export const generateSpecificDeepCleaningBooking = (client: MockClient, provider
   return {
     id: 'book-deep-clean-test',
     clientId: client.id,
-    clientName: `${client.firstName} ${client.lastName}`,
+    clientName: client.name,
     service: 'Deep Cleaning',
     date: format(subDays(new Date(), 7), 'yyyy-MM-dd'),
     time: '10:00',
@@ -67,7 +67,7 @@ export const generateSpecificDeepCleaningBooking = (client: MockClient, provider
     status: 'completed',
     paymentStatus: 'paid',
     providerId: provider.id,
-    providerName: `${provider.firstName} ${provider.lastName}`,
+    providerName: provider.name,
     address: client.address,
     totalPrice: 250.00
   };

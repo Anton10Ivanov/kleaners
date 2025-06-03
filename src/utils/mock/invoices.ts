@@ -1,43 +1,25 @@
 
-import { MockBooking, MockInvoice } from './types';
+import { MockInvoice, MockBooking } from './types';
+import { format, addDays } from 'date-fns';
 
-// Generate mock invoices for completed bookings
-export const generateMockInvoices = (bookings: MockBooking[]): MockInvoice[] => {
-  // Filter completed bookings
-  const completedBookings = bookings.filter(booking => booking.status === 'completed');
+// Generate mock invoices based on bookings
+export const generateMockInvoices = (bookings: MockBooking[], count: number = 10): MockInvoice[] => {
+  const completedBookings = bookings.filter(b => b.status === 'completed');
   
-  return completedBookings.map((booking, index) => {
+  return Array.from({ length: Math.min(count, completedBookings.length) }, (_, i) => {
+    const booking = completedBookings[i];
     const issueDate = new Date(booking.date);
-    const dueDate = new Date(issueDate);
-    dueDate.setDate(dueDate.getDate() + 30); // Due 30 days after issue
+    const dueDate = addDays(issueDate, 30);
     
     return {
-      id: `inv-${index + 1}`,
+      id: `inv-${i + 1}`,
       bookingId: booking.id,
-      invoiceNumber: `INV-${new Date().getFullYear()}-${1000 + index}`,
+      invoiceNumber: `INV-2024-${String(i + 1).padStart(3, '0')}`,
       amount: booking.totalPrice,
-      issueDate: issueDate.toISOString(),
-      dueDate: dueDate.toISOString(),
-      status: 'paid',
-      filePath: `/invoices/${booking.id}.pdf`
+      issueDate: format(issueDate, 'yyyy-MM-dd'),
+      dueDate: format(dueDate, 'yyyy-MM-dd'),
+      status: booking.paymentStatus === 'paid' ? 'paid' : 'pending',
+      filePath: `/invoices/INV-2024-${String(i + 1).padStart(3, '0')}.pdf`
     };
   });
-};
-
-// Create specific invoice for Deep Cleaning test booking
-export const generateSpecificInvoice = (bookingId: string, amount: number): MockInvoice => {
-  const issueDate = new Date();
-  const dueDate = new Date(issueDate);
-  dueDate.setDate(dueDate.getDate() + 30);
-  
-  return {
-    id: 'inv-deep-clean-test',
-    bookingId,
-    invoiceNumber: `INV-${new Date().getFullYear()}-DEEP-TEST`,
-    amount,
-    issueDate: issueDate.toISOString(),
-    dueDate: dueDate.toISOString(),
-    status: 'paid',
-    filePath: `/invoices/${bookingId}.pdf`
-  };
 };
