@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { hydrateRoot, createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
@@ -9,29 +9,13 @@ const rootElement = document.getElementById('root')
 
 if (!rootElement) throw new Error('Failed to find the root element')
 
-// Check if the app has been pre-rendered with react-snap
-const isPrerendered = rootElement.hasChildNodes() && 
-  !(rootElement.firstChild instanceof Comment)
+// Render the app normally
+createRoot(rootElement).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+)
 
-if (isPrerendered) {
-  // If the app was pre-rendered, hydrate it
-  hydrateRoot(
-    rootElement, 
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  )
-  console.log('App hydrated from pre-rendered content')
-} else {
-  // Otherwise, render it normally
-  createRoot(rootElement).render(
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  )
-  console.log('App rendered normally')
-}
+console.log('App rendered')

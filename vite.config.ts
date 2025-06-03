@@ -51,7 +51,6 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     assetsInlineLimit: 4096,
-    ssrManifest: true,
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'sonner', '@supabase/supabase-js', 'framer-motion', 'date-fns'],
