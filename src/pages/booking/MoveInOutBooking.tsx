@@ -1,7 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { moveInOutSchema, MoveInOutFormData, ServiceType } from '@/schemas/booking';
+import { moveInOutSchema, BookingFormData } from '@/schemas/booking';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -18,10 +18,10 @@ const MoveInOutBooking = () => {
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
   
-  const form = useForm<MoveInOutFormData>({
+  const form = useForm<BookingFormData>({
     resolver: zodResolver(moveInOutSchema),
     defaultValues: {
-      service: ServiceType.MoveInOut,
+      service: "move-in-out",
       squareMeters: 60,
       bedrooms: 2,
       bathrooms: 1,
@@ -43,8 +43,8 @@ const MoveInOutBooking = () => {
     }
   };
 
-  const handleSubmit = async (data: MoveInOutFormData) => {
-    await submitBooking(data as any);
+  const handleSubmit = async (data: BookingFormData) => {
+    await submitBooking(data);
   };
 
   return (
