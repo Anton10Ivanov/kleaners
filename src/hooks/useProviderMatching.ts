@@ -1,127 +1,83 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { BookingFormData, Frequency, ProviderOption } from '@/schemas/booking';
-import { toast } from 'sonner';
 
 interface Provider {
   id: string;
-  name: string;
-  rating?: number;
-  services?: string[];
-  skills?: string[];
-  availability?: {
-    days: string[];
-    timeSlots: Record<string, string[]>;
-  };
-  location?: {
-    postalCodes: string[];
-    radius: number;
-  };
-  price_per_hour?: number;
+  first_name: string;
+  last_name: string;
+  provider_service_areas: { postal_code: string[] }[];
+  provider_availability: { start_time: string; end_time: string }[];
 }
 
-export const useProviderMatching = (bookingData: BookingFormData) => {
-  const [providers, setProviders] = useState<ProviderOption[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+interface UseProviderMatchingProps {
+  date: Date | undefined;
+  selectedTimeSlot: string | undefined;
+  postalCode: string;
+}
+
+export const useProviderMatching = ({ date, selectedTimeSlot, postalCode }: UseProviderMatchingProps) => {
+  const [availableProviders, setAvailableProviders] = useState<
+    { id: string; name: string; rating: number; price: number }[]
+  >([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchProviders = async () => {
-      if (!bookingData.service) return;
+    const fetchAvailableProviders = async () => {
+      if (!date || !selectedTimeSlot || !postalCode) {
+        setAvailableProviders([]);
+        return;
+      }
 
-      setIsLoading(true);
+      setLoading(true);
       setError(null);
 
       try {
-        // Fetch all active providers from database
-        const { data, error } = await supabase
-          .from('providers')
-          .select('*')
-          .eq('status', 'active');
+        const [startTime] = selectedTimeSlot.split('-');
+        const selectedDateTime = new Date(date);
+        const [hours, minutes] = startTime.split(':').map(Number);
+        selectedDateTime.setHours(hours, minutes);
 
-        if (error) throw error;
+        const { data: providers, error: fetchError } = await supabase
+          .from('service_providers')
+          .select(`
+            id,
+            first_name,
+            last_name,
+            provider_service_areas(postal_code),
+            provider_availability(start_time, end_time)
+          `)
+          .eq('status', 'approved')
+          .contains('provider_service_areas.postal_code', [postalCode]);
 
-        if (!data || data.length === 0) {
-          setProviders([]);
+        if (fetchError) {
+          setError(fetchError);
           return;
         }
 
-        // Apply matching algorithm
-        const matchedProviders = matchProviders(data as Provider[], bookingData);
-        
-        // Convert to ProviderOption format
-        const providerOptions: ProviderOption[] = matchedProviders.map(provider => ({
-          id: provider.id,
-          name: provider.name,
-          rating: provider.rating
-        }));
+        const available = (providers as Provider[]).filter(provider => {
+          return provider.provider_availability.some(slot => {
+            const slotStart = new Date(slot.start_time);
+            const slotEnd = new Date(slot.end_time);
+            return selectedDateTime >= slotStart && selectedDateTime <= slotEnd;
+          });
+        });
 
-        setProviders(providerOptions);
-        
-        // Set in form
-        // bookingData.providerOptions = providerOptions;
+        setAvailableProviders(available.map(p => ({
+          id: p.id,
+          name: `${p.first_name} ${p.last_name}`,
+          rating: 4.5,
+          price: 25 // Add default price
+        })));
       } catch (err) {
-        console.error('Error fetching providers:', err);
-        setError(err as Error);
-        toast.error('Failed to load providers. Please try again.');
+        setError(err instanceof Error ? err : new Error('An unexpected error occurred'));
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchProviders();
-  }, [bookingData.service, bookingData.postalCode]);
+    fetchAvailableProviders();
+  }, [date, selectedTimeSlot, postalCode]);
 
-  const matchProviders = (providers: Provider[], booking: BookingFormData): Provider[] => {
-    return providers.filter(provider => {
-      // Filter by service type
-      if (provider.services && booking.service && !provider.services.includes(booking.service)) {
-        return false;
-      }
-      
-      // Filter by location
-      if (
-        booking.postalCode && 
-        provider.location?.postalCodes && 
-        !provider.location.postalCodes.includes(booking.postalCode)
-      ) {
-        return false;
-      }
-      
-      // Filter by day availability for recurring bookings
-      if (
-        booking.frequency !== Frequency.OneTime && 
-        booking.weekdayPreference &&
-        provider.availability?.days &&
-        !provider.availability.days.includes(booking.weekdayPreference)
-      ) {
-        return false;
-      }
-      
-      // Filter by time slot availability
-      if (
-        booking.timePreference &&
-        provider.availability?.timeSlots &&
-        booking.weekdayPreference &&
-        provider.availability.timeSlots[booking.weekdayPreference] &&
-        booking.timePreference &&
-        !provider.availability.timeSlots[booking.weekdayPreference].includes(booking.timePreference)
-      ) {
-        return false;
-      }
-      
-      // Additional matching criteria can be added here
-      
-      return true;
-    });
-  };
-
-  return {
-    providers,
-    isLoading,
-    error
-  };
+  return { availableProviders, loading, error };
 };
-
-export default useProviderMatching;

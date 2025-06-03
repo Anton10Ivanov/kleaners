@@ -18,7 +18,7 @@ const DeepCleaningFields = ({ form }: DeepCleaningFieldsProps) => {
   const bathrooms = form.watch('bathrooms') || 1;
   const dirtinessLevel = form.watch('dirtinessLevel') || 3;
   const lastCleaned = form.watch('lastCleaned') || 3;
-  const cleaningPersonnel = form.watch('cleaningPersonnel') || 'normal';
+  const cleaningPersonnel = (form.watch('cleaningPersonnel') as 'normal' | 'experienced') || 'normal';
   const specialConditions = form.watch('specialConditions') || [];
   const additionalNotes = form.watch('additionalNotes') || '';
 

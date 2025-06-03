@@ -9,6 +9,14 @@ export enum Frequency {
   Custom = "custom"
 }
 
+export enum ServiceType {
+  Home = "home",
+  Office = "office",
+  DeepCleaning = "deep-cleaning",
+  MoveInOut = "move-in-out",
+  PostConstruction = "post-construction"
+}
+
 export interface ProviderOption {
   id: string;
   name: string;
@@ -26,6 +34,7 @@ export const bookingSchema = z.object({
   
   // Property details - standardized naming
   propertySize: z.number().min(20, "Property size must be at least 20 m²").max(500, "Property size cannot exceed 500 m²").optional(),
+  squareMeters: z.number().optional(), // Keep for backward compatibility
   bedrooms: z.number().min(0).max(10).optional(),
   bathrooms: z.number().min(1).max(10).optional(),
   cleaningPace: z.enum(['standard', 'quick']).default('standard').optional(),
@@ -70,7 +79,6 @@ export const bookingSchema = z.object({
   // Business specific
   businessType: z.string().optional(),
   cleaningOptions: z.array(z.string()).default([]).optional(),
-  squareMeters: z.number().optional(), // Keep for backward compatibility
   specialRequirements: z.string().optional(),
   
   // Personal information
@@ -78,6 +86,8 @@ export const bookingSchema = z.object({
   lastName: z.string().min(2, "Last name must be at least 2 characters").optional(),
   email: z.string().email("Please enter a valid email address").optional(),
   phone: z.string().min(10, "Please enter a valid phone number").optional(),
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
   
   // Address fields
   address: z.string().optional(),
@@ -133,8 +143,22 @@ export const deepCleaningSchema = bookingSchema.extend({
   additionalNotes: z.string().optional(),
 });
 
+// Create move-in-out cleaning specific schema
+export const moveInOutSchema = bookingSchema.extend({
+  service: z.literal("move-in-out"),
+  squareMeters: z.number().min(10, "Square meters is required"),
+  bedrooms: z.number().min(0).max(10),
+  bathrooms: z.number().min(1).max(10),
+  dirtinessLevel: z.number().min(1).max(5),
+  lastCleaned: z.number().min(1).max(5),
+  cleaningPersonnel: z.string().min(1, "Please select cleaning personnel"),
+  specialConditions: z.array(z.string()).default([]),
+  additionalNotes: z.string().optional(),
+});
+
 export type BookingFormData = z.infer<typeof bookingSchema>;
 export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
 export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
 export type DeepCleaningFormData = z.infer<typeof deepCleaningSchema>;
+export type MoveInOutFormData = z.infer<typeof moveInOutSchema>;
 export { ProviderOption };

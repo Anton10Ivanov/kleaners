@@ -1,46 +1,26 @@
 
-const roundToNearestHalf = (num: number): number => {
-  const decimal = num - Math.floor(num);
-  if (decimal < 0.25) return Math.floor(num);
-  if (decimal >= 0.75) return Math.ceil(num);
-  return Math.floor(num) + 0.5;
-};
-
-export const calculateRecommendedTime = (
-  propertySize: number, 
-  bedrooms: number, 
-  bathrooms: number, 
-  pace: 'standard' | 'quick' = 'standard'
-): number => {
-  const BASE_TIME = 2;
-  let totalTime = BASE_TIME;
- 
-  // Limit values to reasonable ranges
-  propertySize = Math.min(Math.max(propertySize, 20), 500);
-  bedrooms = Math.min(bedrooms, 10);
-  bathrooms = Math.min(bathrooms, 10);
-
-  // Base calculation on property size
-  if (propertySize > 60) {
-    totalTime += Math.ceil((propertySize - 60) / 20) * 0.5;
-  }
-
-  // Add time for extra bedrooms and bathrooms
-  if (bedrooms > 1) totalTime += (bedrooms - 1) * 0.3;
-  if (bathrooms > 1) totalTime += (bathrooms - 1) * 0.5;
-
-  // Cap at maximum
-  totalTime = Math.min(totalTime, 8);
+export const calculateRecommendedTime = (bedrooms: number, bathrooms: number, cleaningPace: string = 'standard'): number => {
+  // Base time calculation
+  let baseTime = 2; // minimum 2 hours
   
-  // Apply quick pace reduction (20% off, but not below 2 hours)
-  if (pace === 'quick') {
-    totalTime = Math.max(2, totalTime * 0.8);
+  // Add time based on bedrooms
+  baseTime += bedrooms * 0.5;
+  
+  // Add time based on bathrooms
+  baseTime += bathrooms * 0.5;
+  
+  // Adjust for cleaning pace
+  if (cleaningPace === 'quick') {
+    baseTime *= 0.8; // 20% faster
   }
-
-  return roundToNearestHalf(totalTime);
+  
+  // Round to nearest 0.5 hour and ensure minimum 2 hours
+  return Math.max(2, Math.round(baseTime * 2) / 2);
 };
 
-export const calculatePrice = (frequency: string, basePrice: number) => {
-  // Return the base price directly without any discounts
-  return basePrice;
+export const calculatePrice = (hours: number, frequency: string): number => {
+  const baseRate = frequency === 'weekly' ? 27 : 
+                  frequency === 'bi-weekly' ? 30 : 35;
+  
+  return hours * baseRate;
 };
