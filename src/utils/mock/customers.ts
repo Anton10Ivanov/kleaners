@@ -14,6 +14,7 @@ export const generateMockCustomers = (count: number = 10): MockClient[] => {
     
     return {
       id: `cust-${i + 1}`,
+      name: `${firstName} ${lastName}`,
       firstName,
       lastName,
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,

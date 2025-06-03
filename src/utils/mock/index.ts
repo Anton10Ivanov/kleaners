@@ -27,8 +27,10 @@ export const mockData = {
 // Generate function
 export const generateMockAppData = () => mockData;
 
-// Re-export types (create empty types file to prevent errors)
-export interface MockClient {}
-export interface MockProvider {}
-export interface MockBooking {}
-export interface MockInvoice {}
+// Re-export types
+export * from './types';
+export * from './clients';
+export * from './customers';
+export * from './providers';
+export * from './bookings';
+export * from './invoices';

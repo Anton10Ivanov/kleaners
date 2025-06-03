@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export enum Frequency {
@@ -160,6 +161,3 @@ export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
 export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
 export type DeepCleaningFormData = z.infer<typeof deepCleaningSchema>;
 export type MoveInOutFormData = z.infer<typeof moveInOutSchema>;
-
-// Use export type for type-only exports
-export type { ProviderOption };
