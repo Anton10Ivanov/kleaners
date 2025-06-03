@@ -16,7 +16,7 @@ export const bookingSchema = z.object({
   // Location
   postalCode: z.string().min(1, "Postal code is required"),
   
-  // Property details
+  // Property details - standardized naming
   propertySize: z.number().min(20, "Property size must be at least 20 m²").max(500, "Property size cannot exceed 500 m²").optional(),
   bedrooms: z.number().min(0).max(10).optional(),
   bathrooms: z.number().min(1).max(10).optional(),
@@ -34,7 +34,7 @@ export const bookingSchema = z.object({
   // Business specific
   businessType: z.string().optional(),
   cleaningOptions: z.array(z.string()).default([]).optional(),
-  squareMeters: z.number().optional(),
+  squareMeters: z.number().optional(), // Keep for backward compatibility
   
   // Personal information
   firstName: z.string().min(2, "First name must be at least 2 characters").optional(),
@@ -52,4 +52,16 @@ export const bookingSchema = z.object({
   promoCode: z.string().optional(),
 });
 
+// Create home cleaning specific schema
+export const homeCleaningSchema = bookingSchema.extend({
+  service: z.literal("home"),
+  propertySize: z.number().min(20, "Property size must be at least 20 m²").max(500, "Property size cannot exceed 500 m²"),
+  bedrooms: z.number().min(0).max(10),
+  bathrooms: z.number().min(1).max(10),
+  cleaningPace: z.enum(['standard', 'quick']).default('standard'),
+  frequency: z.nativeEnum(Frequency),
+  hours: z.number().min(1).max(12),
+});
+
 export type BookingFormData = z.infer<typeof bookingSchema>;
+export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
