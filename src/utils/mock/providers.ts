@@ -33,6 +33,7 @@ export const generateMockProviders = (count: number = 5): MockProvider[] => {
     
     return {
       id: `prov-${i + 1}`,
+      name: `${firstName} ${lastName}`,
       firstName,
       lastName,
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
