@@ -37,10 +37,17 @@ function estimateDuration(size: number, bedrooms: number, bathrooms: number, pac
 export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsSectionProps) => {
   const [showDeepCleaningPopup, setShowDeepCleaningPopup] = useState(false);
   
-  const propertySize = form.watch('propertySize') || 0;
+  const propertySize = form.watch('propertySize') || 70; // Default to 70
   const bedrooms = form.watch('bedrooms') || 0;
   const bathrooms = form.watch('bathrooms') || 0;
   const cleaningPace = form.watch('cleaningPace') || 'standard';
+
+  // Set default property size on mount
+  useEffect(() => {
+    if (!form.watch('propertySize')) {
+      form.setValue('propertySize', 70);
+    }
+  }, [form]);
 
   const allFieldsFilled = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
   
@@ -64,6 +71,14 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
     }
   };
 
+  const handleManualAdjust = () => {
+    // Scroll to hours selection section
+    const hoursSection = document.querySelector('[data-hours-selection]');
+    if (hoursSection) {
+      hoursSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   const getCleanTypeText = (duration: number, pace: string) => {
     if (pace === 'quick') return "Quick Clean";
     if (duration <= 3) return "Quick Clean";
@@ -72,7 +87,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
   };
 
   const handleSizeIncrement = (increment: number) => {
-    const currentSize = propertySize || 0;
+    const currentSize = propertySize || 70;
     const newSize = Math.max(0, currentSize + increment);
     form.setValue('propertySize', newSize);
   };
@@ -109,7 +124,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                 id="property-size"
                 type="number"
                 placeholder="70"
-                value={propertySize || ''}
+                value={propertySize || 70}
                 onChange={(e) => form.setValue('propertySize', Number(e.target.value))}
                 className="h-12 text-center"
                 min="20"
@@ -249,6 +264,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                     
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button 
+                        type="button"
                         onClick={handleUseSuggestedDuration}
                         className="flex items-center gap-2 bg-primary hover:bg-primary/90"
                       >
@@ -256,7 +272,9 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                         Use This Duration
                       </Button>
                       <Button 
+                        type="button"
                         variant="outline" 
+                        onClick={handleManualAdjust}
                         className="flex items-center gap-2"
                       >
                         <Settings className="h-4 w-4" />

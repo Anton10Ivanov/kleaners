@@ -31,8 +31,8 @@ export const mockData = {
   earnings: mockEarnings
 };
 
-// Generate function - explicitly export
-export const generateMockAppData = () => {
+// Generate function - properly export this function
+export function generateMockAppData() {
   const clients = generateMockClients(10);
   const customers = generateMockCustomers(10);
   const providers = generateMockProviders(5);
@@ -53,7 +53,7 @@ export const generateMockAppData = () => {
     },
     earnings: []
   };
-};
+}
 
 // Re-export types
 export * from './types';

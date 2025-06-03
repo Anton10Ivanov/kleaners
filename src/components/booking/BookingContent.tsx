@@ -2,12 +2,12 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
-import HoursSelection from './HoursSelection';
 import OptimizedCalendar from './OptimizedCalendar';
 import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { HomeDetailsSection } from './HomeDetailsSection';
+import SimpleDurationInput from './hours/SimpleDurationInput';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
 import { useForm } from 'react-hook-form';
@@ -42,6 +42,7 @@ const BookingContent = ({
 }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
   const frequency = form.watch('frequency') as Frequency | undefined;
+  const hours = form.watch('hours') || 2;
   const postalCode = form.watch('postalCode') || '';
   const showCalendar = frequency && frequency !== Frequency.Custom;
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -54,13 +55,26 @@ const BookingContent = ({
     e.stopPropagation();
   };
 
-  const handleSuggestedTimeSelect = (hours: number) => {
-    // Scroll to the hours selection section
-    const hoursSection = document.querySelector('[data-hours-selection]');
-    if (hoursSection) {
-      hoursSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const handleSuggestedTimeSelect = (suggestedHours: number) => {
+    form.setValue('hours', suggestedHours);
+    // Scroll to the duration section
+    const durationSection = document.querySelector('[data-duration-section]');
+    if (durationSection) {
+      durationSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  // Calculate savings percentage
+  const calculateSavings = (freq: Frequency | undefined) => {
+    if (!freq || freq === Frequency.OneTime) return 0;
+    
+    const oneTimePrice = hours * 35; // One-time rate
+    const recurringPrice = hours * (freq === Frequency.Weekly ? 27 : 30); // Recurring rates
+    
+    return Math.round(((oneTimePrice - recurringPrice) / oneTimePrice) * 100);
+  };
+
+  const savingsPercentage = calculateSavings(frequency);
   
   return (
     <div className="w-full" onClick={handleFormClick}>
@@ -79,10 +93,20 @@ const BookingContent = ({
                 onSuggestedTimeSelect={handleSuggestedTimeSelect}
               />
 
+              {/* 1. Cleaning Interval - MOVED TO POSITION 1 */}
               <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h3 className="font-semibold mb-4 text-center text-zinc-950 dark:text-white text-lg">
-                  Home Cleaning
-                </h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-center text-zinc-950 dark:text-white text-lg">
+                    Cleaning Interval
+                  </h3>
+                  {savingsPercentage > 0 && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-1">
+                      <span className="text-red-600 font-bold text-sm">
+                        Save {savingsPercentage}% vs one-time
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <ServiceOptions 
                   frequency={frequency} 
                   setFrequency={freq => form.setValue('frequency', freq)} 
@@ -92,19 +116,22 @@ const BookingContent = ({
               
               {frequency !== Frequency.Custom && (
                 <>
+                  {/* 2. Duration - SIMPLIFIED INPUT */}
                   <div 
                     className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
-                    data-hours-selection
+                    data-duration-section
                   >
-                    <HoursSelection form={form} />
+                    <SimpleDurationInput form={form} />
                   </div>
                   
+                  {/* 3. Calendar */}
                   {showCalendar && (
                     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                       <OptimizedCalendar form={form} />
                     </div>
                   )}
                   
+                  {/* 4. Extras */}
                   <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                     <EnhancedExtras form={form} />
                   </div>
