@@ -3,7 +3,6 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { HeroContent } from "./HeroContent";
 import { HeroForm } from "./HeroForm";
-import { StepIndicators } from "./StepIndicators";
 
 interface MobileHeroProps {
   selectedService: string;
@@ -37,8 +36,6 @@ export const MobileHero = memo(({
         handleNextStep={handleNextStep}
         isMobile={true}
       />
-
-      <StepIndicators isMobile={true} />
     </motion.div>
   );
 });

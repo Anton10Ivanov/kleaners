@@ -1,15 +1,16 @@
+
 import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
-import { LiveBookingNotifications } from "./LiveBookingNotifications";
 import { toast } from "sonner";
 import { ServiceType } from "@/types/enums";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";
+
 interface HeroProps {
   selectedService: string;
   setSelectedService: (value: string) => void;
@@ -17,6 +18,7 @@ interface HeroProps {
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
+
 export const Hero = memo(({
   selectedService,
   setSelectedService,
@@ -51,6 +53,7 @@ export const Hero = memo(({
     }
     endTimer('serviceInitialization');
   }, [selectedService, setSelectedService, startTimer, endTimer]);
+
   const handleValidatedNextStep = () => {
     startTimer('validateAndNextStep');
     if (!selectedService) {
@@ -66,15 +69,41 @@ export const Hero = memo(({
     handleNextStep();
     endTimer('validateAndNextStep');
   };
-  return <section className="relative min-h-[70vh] flex flex-col justify-center pt-20 pb-8 overflow-hidden mt-8">
+
+  return (
+    <section className="relative min-h-[70vh] flex flex-col justify-center pt-20 pb-8 overflow-hidden mt-8">
       <BackgroundElements />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-transparent">
-        <HeroProvider initialService={selectedService} initialPostalCode={postalCode} onNextStep={handleValidatedNextStep} onServiceChange={setSelectedService} onPostalCodeChange={setPostalCode}>
-          {isMobile ? <MobileHero selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleValidatedNextStep} /> : <DesktopHero selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleValidatedNextStep} />}
+        <HeroProvider 
+          initialService={selectedService} 
+          initialPostalCode={postalCode} 
+          onNextStep={handleValidatedNextStep} 
+          onServiceChange={setSelectedService} 
+          onPostalCodeChange={setPostalCode}
+        >
+          {isMobile ? (
+            <MobileHero 
+              selectedService={selectedService} 
+              setSelectedService={setSelectedService} 
+              postalCode={postalCode} 
+              setPostalCode={setPostalCode} 
+              handleNextStep={handleValidatedNextStep} 
+            />
+          ) : (
+            <DesktopHero 
+              selectedService={selectedService} 
+              setSelectedService={setSelectedService} 
+              postalCode={postalCode} 
+              setPostalCode={setPostalCode} 
+              handleNextStep={handleValidatedNextStep} 
+            />
+          )}
         </HeroProvider>
       </div>
-    </section>;
+    </section>
+  );
 });
+
 Hero.displayName = "Hero";
 export default Hero;
