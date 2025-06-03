@@ -2,8 +2,6 @@
 import { memo } from "react";
 import { HeroContent } from "./HeroContent";
 import { HeroForm } from "./HeroForm";
-import { StepIndicators } from "./StepIndicators";
-import { LiveBookingIndicators } from "./LiveBookingIndicators";
 
 interface DesktopHeroProps {
   selectedService: string;
@@ -22,8 +20,6 @@ export const DesktopHero = memo(({
 }: DesktopHeroProps) => {
   return (
     <div className="flex flex-col items-center text-center space-y-12 relative">
-      <LiveBookingIndicators />
-      
       <HeroContent isMobile={false} />
       
       <HeroForm
@@ -34,8 +30,6 @@ export const DesktopHero = memo(({
         handleNextStep={handleNextStep}
         isMobile={false}
       />
-
-      <StepIndicators isMobile={false} />
     </div>
   );
 });

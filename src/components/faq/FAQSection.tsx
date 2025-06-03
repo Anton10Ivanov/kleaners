@@ -58,6 +58,48 @@ const faqData: FAQItem[] = [
     question: "What areas do you serve?",
     answer: "We provide cleaning services in major German cities including Berlin, Munich, Hamburg, Cologne, Frankfurt, and surrounding areas. Enter your postal code to check availability in your location.",
     category: "Coverage"
+  },
+  {
+    id: 9,
+    question: "What services do you offer?",
+    answer: "We offer various cleaning services including regular home cleaning, deep cleaning, move-in/out cleaning, post-construction cleaning, and office cleaning. Each service is tailored to your specific needs and requirements.",
+    category: "Service"
+  },
+  {
+    id: 10,
+    question: "How do you ensure quality cleaning?",
+    answer: "We maintain quality through rigorous cleaner training, standardized checklists, customer feedback systems, and regular quality inspections. All our cleaners are experienced professionals who follow our detailed cleaning protocols.",
+    category: "Service"
+  },
+  {
+    id: 11,
+    question: "What is your cancellation policy?",
+    answer: "You can cancel your booking up to 24 hours before the scheduled time without any penalty. Cancellations within 24 hours may incur a fee of 50% of the service cost. Emergency cancellations are handled case by case.",
+    category: "Booking"
+  },
+  {
+    id: 12,
+    question: "Do you provide cleaning supplies?",
+    answer: "Yes, our cleaners come fully equipped with all necessary cleaning supplies and equipment. We use professional-grade, eco-friendly products. If you prefer us to use your own supplies, please mention this during booking.",
+    category: "Service"
+  },
+  {
+    id: 13,
+    question: "What are your payment methods?",
+    answer: "We accept various payment methods including credit cards, debit cards, PayPal, and bank transfers. Payment is processed securely through our platform after the service is completed to your satisfaction.",
+    category: "Pricing"
+  },
+  {
+    id: 14,
+    question: "How long does a typical cleaning take?",
+    answer: "Cleaning duration depends on your property size and service type. Regular cleaning typically takes 2-4 hours, while deep cleaning may take 4-8 hours. You can specify your preferred duration during booking.",
+    category: "Service"
+  },
+  {
+    id: 15,
+    question: "Can I request the same cleaner for regular service?",
+    answer: "Absolutely! We try to assign the same cleaner for recurring bookings to ensure consistency and familiarity. If your regular cleaner is unavailable, we'll assign a qualified substitute and notify you in advance.",
+    category: "Service"
   }
 ];
 

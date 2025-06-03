@@ -1,4 +1,11 @@
 
+// Import all mock generators
+import { generateMockClients } from './clients';
+import { generateMockCustomers } from './customers';
+import { generateMockProviders } from './providers';
+import { generateMockBookings } from './bookings';
+import { generateMockInvoices } from './invoices';
+
 // Simple mock data structure
 const mockClients = [];
 const mockCustomers = [];
@@ -25,7 +32,28 @@ export const mockData = {
 };
 
 // Generate function - explicitly export
-export const generateMockAppData = () => mockData;
+export const generateMockAppData = () => {
+  const clients = generateMockClients(10);
+  const customers = generateMockCustomers(10);
+  const providers = generateMockProviders(5);
+  const bookings = generateMockBookings(clients, providers, 20);
+  const invoices = generateMockInvoices(bookings, 10);
+  
+  return {
+    clients,
+    customers,
+    providers,
+    bookings,
+    invoices,
+    dashboard: {
+      totalBookings: bookings.length,
+      totalRevenue: bookings.reduce((sum, booking) => sum + booking.totalPrice, 0),
+      activeProviders: providers.filter(p => p.active).length,
+      completionRate: bookings.filter(b => b.status === 'completed').length / bookings.length * 100
+    },
+    earnings: []
+  };
+};
 
 // Re-export types
 export * from './types';
