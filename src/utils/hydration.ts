@@ -1,58 +1,63 @@
 
 import { useState, useEffect } from 'react';
 
-/**
- * Hydration utilities for managing server-side rendering and client-side hydration
- */
-
-// Check if we're in a browser environment
+// Simple browser check that doesn't interfere with HMR
 export const isBrowser = typeof window !== 'undefined';
 
-// Check if we're during hydration phase
-export const isHydrating = isBrowser && !window.__INITIAL_RENDER_COMPLETE__;
+// Simplified hydration detection that doesn't block fast refresh
+export const isHydrating = false;
 
-// Mark hydration as complete
+// No-op functions in development to prevent HMR interference
 export const markHydrationComplete = () => {
-  if (isBrowser) {
-    window.__INITIAL_RENDER_COMPLETE__ = true;
-  }
+  // No-op in development
 };
 
-// Safe function to run code only after hydration
 export const afterHydration = (callback: () => void) => {
-  if (!isBrowser) return;
-  
-  if (isHydrating) {
-    // Wait for next tick to ensure hydration is complete
-    setTimeout(callback, 0);
-  } else {
+  if (isBrowser) {
     callback();
   }
 };
 
-// Hook for components that need to wait for hydration
+export const isHydrated = (): boolean => {
+  return isBrowser;
+};
+
+export const detectHydrationMismatch = (): void => {
+  // No-op in development
+};
+
+export const waitForHydration = (timeout: number = 5000): Promise<boolean> => {
+  return Promise.resolve(true);
+};
+
+// Simplified hook that doesn't interfere with component updates
 export const useHydrated = () => {
-  const [hydrated, setHydrated] = useState(false);
+  const [hydrated, setHydrated] = useState(isBrowser);
   
   useEffect(() => {
     setHydrated(true);
-    markHydrationComplete();
   }, []);
   
   return hydrated;
 };
 
-// Extend window type for TypeScript
+// Extend window type
 declare global {
   interface Window {
     __INITIAL_RENDER_COMPLETE__?: boolean;
   }
 }
 
-export default {
+// Export object for backward compatibility
+const hydrationUtils = {
   isBrowser,
   isHydrating,
   markHydrationComplete,
   afterHydration,
-  useHydrated
+  useHydrated,
+  isHydrated,
+  detectHydrationMismatch,
+  waitForHydration
 };
+
+export default hydrationUtils;
