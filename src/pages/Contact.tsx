@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -5,13 +6,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ColorSchemeTest from '@/components/contact/ColorSchemeTest';
+
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission here
@@ -23,7 +25,9 @@ const Contact = () => {
     setEmail('');
     setMessage('');
   };
-  return <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
+
+  return (
+    <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -67,7 +71,6 @@ const Contact = () => {
               <CardDescription>Other ways to reach us</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Email</h3>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -91,7 +94,22 @@ const Contact = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Color Scheme Test Section */}
+        <div className="mt-12">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              New Color Scheme Preview
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Testing ground for the proposed website color palette
+            </p>
+          </div>
+          <ColorSchemeTest />
+        </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Contact;

@@ -8,7 +8,6 @@ export * from './mock/customers';
 export * from './mock/providers';
 export * from './mock/bookings';
 export * from './mock/invoices';
-export * from './mock/dashboard';
 export { generateMockAppData };
 export { mockData };
 
