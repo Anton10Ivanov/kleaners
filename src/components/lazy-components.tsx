@@ -16,9 +16,9 @@ const lazyWithDefault = <T extends ComponentType<any>>(
   );
 };
 
-// Lazy load admin components
-export const LazyAdminDashboard = lazyWithDefault(() => import('@/components/admin/Dashboard'));
-export const LazyBookingsSection = lazyWithDefault(() => import('@/components/admin/sections/BookingsSection'));
+// Lazy load admin components with proper default export handling
+export const LazyAdminDashboard = lazy(() => import('@/components/admin/Dashboard').then(m => ({ default: m.Dashboard })));
+export const LazyBookingsSection = lazy(() => import('@/components/admin/sections/BookingsSection').then(m => ({ default: m.default || m })));
 
 // Export all lazy components
 export {

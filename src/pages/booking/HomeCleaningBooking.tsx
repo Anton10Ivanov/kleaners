@@ -1,7 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { homeCleaningSchema, HomeCleaningFormData } from '@/schemas/booking';
+import { homeCleaningSchema, BookingFormData } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -22,10 +22,10 @@ const HomeCleaningBooking = () => {
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
   
-  const form = useForm<HomeCleaningFormData>({
+  const form = useForm<BookingFormData>({
     resolver: zodResolver(homeCleaningSchema),
     defaultValues: {
-      service: "home" as const,
+      service: "home",
       hours: 2,
       bedrooms: 1,
       bathrooms: 1,
@@ -50,8 +50,8 @@ const HomeCleaningBooking = () => {
     }
   };
 
-  const handleSubmit = async (data: HomeCleaningFormData) => {
-    await submitBooking(data as any);
+  const handleSubmit = async (data: BookingFormData) => {
+    await submitBooking(data);
   };
 
   const handleSuggestedTimeSelect = (hours: number) => {
