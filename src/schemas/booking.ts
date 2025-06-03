@@ -38,6 +38,10 @@ export const bookingSchema = z.object({
   selectedTime: z.string().optional(),
   preferredTime: z.string().optional(), // Legacy field for compatibility
   
+  // Business frequency preferences
+  weekdayPreference: z.string().optional(),
+  timePreference: z.string().optional(),
+  
   // Extras and configurations
   extras: z.array(z.string()).default([]).optional(),
   windowConfig: z.object({
