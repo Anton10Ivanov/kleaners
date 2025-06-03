@@ -9,9 +9,17 @@ export enum Frequency {
   Custom = "custom"
 }
 
+export interface ProviderOption {
+  id: string;
+  name: string;
+  rating: number;
+  price: number;
+}
+
 export const bookingSchema = z.object({
   // Service selection
   serviceType: z.string().min(1, "Please select a service type"),
+  service: z.string().optional(), // Legacy field for compatibility
   
   // Location
   postalCode: z.string().min(1, "Postal code is required"),
@@ -26,10 +34,28 @@ export const bookingSchema = z.object({
   frequency: z.nativeEnum(Frequency).optional(),
   hours: z.number().min(1).max(12).optional(),
   selectedDate: z.date().optional(),
+  date: z.date().optional(), // Legacy field for compatibility
   selectedTime: z.string().optional(),
+  preferredTime: z.string().optional(), // Legacy field for compatibility
   
-  // Extras
+  // Extras and configurations
   extras: z.array(z.string()).default([]).optional(),
+  windowConfig: z.object({
+    count: z.number(),
+    type: z.string()
+  }).optional(),
+  ironingConfig: z.object({
+    enabled: z.boolean(),
+    items: z.number()
+  }).optional(),
+  
+  // Provider selection
+  providerOptions: z.array(z.object({
+    id: z.string(),
+    name: z.string(),
+    rating: z.number(),
+    price: z.number()
+  })).optional(),
   
   // Business specific
   businessType: z.string().optional(),
@@ -65,3 +91,4 @@ export const homeCleaningSchema = bookingSchema.extend({
 
 export type BookingFormData = z.infer<typeof bookingSchema>;
 export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
+export { ProviderOption };

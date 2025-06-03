@@ -1,30 +1,31 @@
 
-import { lazy, Suspense } from 'react';
-import { useLazyComponentTimer } from '@/hooks/useLazyComponentTimer';
-import { SectionLoading } from '@/components/ui/section-loading';
+import { lazy } from 'react';
 
-// Use the performance-optimized lazy loading hook with optimized components
-export const LazyWhyChooseUs = useLazyComponentTimer(
-  () => import('./why-choose-us/ModernWhyChooseUs'),
-  'WhyChooseUs'
-);
+// Lazy load components for better performance
+export const LazyTestimonials = lazy(() => import('./Testimonials'));
+export const LazyWhyChooseUs = lazy(() => import('./WhyChooseUs'));
+export const LazyFAQSection = lazy(() => import('./faq/FAQSection'));
+export const LazyContactForm = lazy(() => import('./contact/ContactForm'));
 
-export const LazyOurOptions = useLazyComponentTimer(
-  () => import('./options/OptimizedOurOptions'),
-  'OurOptions'
-);
+// Admin components
+export const LazyAdminDashboard = lazy(() => import('./admin/Dashboard'));
+export const LazyAdminBookings = lazy(() => import('./admin/sections/BookingsSection'));
 
-export const LazyTestimonials = useLazyComponentTimer(
-  () => import('./testimonials/CompactTestimonials'),
-  'Testimonials'
-);
+// Booking components
+export const LazyBookingContent = lazy(() => import('./booking/BookingContent'));
+export const LazyOptimizedCalendar = lazy(() => import('./booking/OptimizedCalendar'));
 
-export const LazyBookingContent = useLazyComponentTimer(
-  () => import('./booking/BookingContent'),
-  'BookingContent'
-);
+// Chat components
+export const LazyChatInterface = lazy(() => import('./chat/ChatInterface'));
 
-export const LazyBookingSummary = useLazyComponentTimer(
-  () => import('./booking/BookingSummary'),
-  'BookingSummary'
-);
+export default {
+  LazyTestimonials,
+  LazyWhyChooseUs,
+  LazyFAQSection,
+  LazyContactForm,
+  LazyAdminDashboard,
+  LazyAdminBookings,
+  LazyBookingContent,
+  LazyOptimizedCalendar,
+  LazyChatInterface,
+};
