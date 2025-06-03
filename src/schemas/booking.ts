@@ -42,11 +42,13 @@ export const bookingSchema = z.object({
   extras: z.array(z.string()).default([]).optional(),
   windowConfig: z.object({
     count: z.number(),
-    type: z.string()
+    type: z.string(),
+    framesIncluding: z.boolean().optional()
   }).optional(),
   ironingConfig: z.object({
     enabled: z.boolean(),
-    items: z.number()
+    items: z.number(),
+    time: z.number().optional()
   }).optional(),
   
   // Provider selection
@@ -56,11 +58,13 @@ export const bookingSchema = z.object({
     rating: z.number(),
     price: z.number()
   })).optional(),
+  selectedProviderId: z.string().optional(),
   
   // Business specific
   businessType: z.string().optional(),
   cleaningOptions: z.array(z.string()).default([]).optional(),
   squareMeters: z.number().optional(), // Keep for backward compatibility
+  specialRequirements: z.string().optional(),
   
   // Personal information
   firstName: z.string().min(2, "First name must be at least 2 characters").optional(),
@@ -89,6 +93,15 @@ export const homeCleaningSchema = bookingSchema.extend({
   hours: z.number().min(1).max(12),
 });
 
+// Create business cleaning specific schema
+export const businessCleaningSchema = bookingSchema.extend({
+  businessType: z.string().min(1, "Business type is required"),
+  cleaningOptions: z.array(z.string()).min(1, "At least one cleaning option is required"),
+  squareMeters: z.number().min(10, "Square meters is required"),
+  specialRequirements: z.string().optional(),
+});
+
 export type BookingFormData = z.infer<typeof bookingSchema>;
 export type HomeCleaningFormData = z.infer<typeof homeCleaningSchema>;
+export type BusinessCleaningFormData = z.infer<typeof businessCleaningSchema>;
 export { ProviderOption };
