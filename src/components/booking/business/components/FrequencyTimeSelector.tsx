@@ -15,8 +15,8 @@ interface FrequencyTimeSelectorProps {
 
 export function FrequencyTimeSelector({ form }: FrequencyTimeSelectorProps) {
   const frequency = form.watch("frequency");
-  const weekdayPreference = form.watch("weekdayPreference");
-  const timePreference = form.watch("timePreference");
+  const weekdayPreference = form.watch("weekdayPreference") as string;
+  const timePreference = form.watch("timePreference") as string;
   
   const [showAdditionalOptions, setShowAdditionalOptions] = useState(false);
 
