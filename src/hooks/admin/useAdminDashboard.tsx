@@ -1,29 +1,52 @@
 
-import { useAdminProfile } from "./useAdminProfile";
-import { useAdminStats } from "./useAdminStats";
-import { useAdminRefresh } from "./useAdminRefresh";
-import { mockData } from "@/utils/mock";
-import { useEffect } from "react";
+import { useState, useEffect } from 'react';
+
+interface DashboardData {
+  invoices: Array<{
+    id: string;
+    bookingId: string;
+    invoiceNumber: string;
+    amount: number;
+    issueDate: string;
+    dueDate: string;
+    status: string;
+  }>;
+  bookings: Array<{
+    id: string;
+    service: string;
+    date: string;
+    status: string;
+    hours: number;
+    price: number;
+  }>;
+  monthlyBookingData: Array<{
+    month: string;
+    bookings: number;
+    revenue: number;
+  }>;
+}
 
 export const useAdminDashboard = () => {
-  const { userName } = useAdminProfile();
-  const { isLoading, error, stats, fetchStats } = useAdminStats();
-  const { handleRefresh } = useAdminRefresh(fetchStats);
-
-  // Sample data for the booking chart from our mock data
-  const sampleBookingData = mockData.monthlyBookingData;
+  const [data, setData] = useState<DashboardData>({
+    invoices: [],
+    bookings: [],
+    monthlyBookingData: []
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Admin Dashboard component mounted");
-    fetchStats();
+    // Mock data for now
+    setData({
+      invoices: [],
+      bookings: [],
+      monthlyBookingData: [
+        { month: 'Jan', bookings: 25, revenue: 2500 },
+        { month: 'Feb', bookings: 30, revenue: 3000 },
+        { month: 'Mar', bookings: 35, revenue: 3500 }
+      ]
+    });
   }, []);
 
-  return {
-    isLoading,
-    userName,
-    error,
-    stats,
-    sampleBookingData,
-    handleRefresh
-  };
+  return { data, loading, error };
 };

@@ -1,31 +1,27 @@
+import { lazy, ComponentType } from 'react';
 
-import { lazy } from 'react';
+// Helper function to wrap imports that might not have default exports
+const lazyWithDefault = <T extends ComponentType<any>>(
+  importFn: () => Promise<{ default: T } | T>
+): React.LazyExoticComponent<T> => {
+  return lazy(() => 
+    importFn().then((module) => {
+      // If the module already has a default export, use it
+      if ('default' in module) {
+        return module as { default: T };
+      }
+      // Otherwise, wrap the module as the default export
+      return { default: module as T };
+    })
+  );
+};
 
-// Lazy load components for better performance
-export const LazyTestimonials = lazy(() => import('./Testimonials'));
-export const LazyWhyChooseUs = lazy(() => import('./WhyChooseUs'));
-export const LazyFAQSection = lazy(() => import('./faq/FAQSection'));
-export const LazyContactForm = lazy(() => import('./contact/ContactForm'));
+// Lazy load admin components
+export const LazyAdminDashboard = lazyWithDefault(() => import('@/components/admin/Dashboard'));
+export const LazyBookingsSection = lazyWithDefault(() => import('@/components/admin/sections/BookingsSection'));
 
-// Admin components
-export const LazyAdminDashboard = lazy(() => import('./admin/Dashboard'));
-export const LazyAdminBookings = lazy(() => import('./admin/sections/BookingsSection'));
-
-// Booking components
-export const LazyBookingContent = lazy(() => import('./booking/BookingContent'));
-export const LazyOptimizedCalendar = lazy(() => import('./booking/OptimizedCalendar'));
-
-// Chat components
-export const LazyChatInterface = lazy(() => import('./chat/ChatInterface'));
-
-export default {
-  LazyTestimonials,
-  LazyWhyChooseUs,
-  LazyFAQSection,
-  LazyContactForm,
+// Export all lazy components
+export {
   LazyAdminDashboard,
-  LazyAdminBookings,
-  LazyBookingContent,
-  LazyOptimizedCalendar,
-  LazyChatInterface,
+  LazyBookingsSection
 };

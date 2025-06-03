@@ -1,6 +1,7 @@
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { deepCleaningSchema, DeepCleaningFormData, ServiceType } from '@/schemas/booking';
+import { deepCleaningSchema, DeepCleaningFormData } from '@/schemas/booking';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -20,7 +21,7 @@ const DeepCleaningBooking = () => {
   const form = useForm<DeepCleaningFormData>({
     resolver: zodResolver(deepCleaningSchema),
     defaultValues: {
-      service: ServiceType.DeepCleaning,
+      service: "deep-cleaning" as const,
       squareMeters: 50,
       bedrooms: 1,
       bathrooms: 1,
@@ -105,7 +106,7 @@ const DeepCleaningBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                 >
                   <FinalStep
-                    form={form}
+                    form={form as any}
                     postalCode={form.watch('postalCode') || ''}
                     onSubmit={handleSubmit}
                   />
