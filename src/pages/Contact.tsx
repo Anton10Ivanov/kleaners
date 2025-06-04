@@ -6,24 +6,82 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import ColorSchemeTest from '@/components/contact/ColorSchemeTest';
+import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    toast({
-      title: "Message Sent",
-      description: "We'll get back to you soon!"
-    });
-    setName('');
-    setEmail('');
-    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      // Get user agent for spam detection
+      const userAgent = navigator.userAgent;
+      
+      // Insert the question
+      const { data: insertedData, error } = await supabase
+        .from('customer_questions')
+        .insert({
+          name,
+          email,
+          question: message,
+          user_agent: userAgent,
+        })
+        .select('id')
+        .single();
+
+      if (error) {
+        // Check if it's a spam-related error
+        if (error.message?.includes('spam') || error.message?.includes('rate limit')) {
+          toast({
+            title: 'Too many submissions',
+            description: 'You can only submit 2 messages per week. Please wait before submitting another message.',
+            variant: 'destructive',
+          });
+          return;
+        }
+        throw error;
+      }
+
+      // If the question was successfully inserted, call the edge function to capture IP
+      if (insertedData?.id) {
+        // Call edge function to capture IP address
+        await supabase.functions.invoke('capture-question-metadata', {
+          body: { questionId: insertedData.id }
+        });
+      }
+
+      // Show success message
+      toast({
+        title: 'Message Sent',
+        description: "We'll get back to you soon!"
+      });
+
+      // Reset form
+      setName('');
+      setEmail('');
+      setMessage('');
+    } catch (error) {
+      console.error('Error submitting message:', error);
+      
+      // Show error message with appropriate message based on the error
+      const errorMessage = error.message?.includes('rate limit') 
+        ? 'Too many submissions. You can only submit 2 messages per week.'
+        : 'There was an error sending your message. Please try again later.';
+        
+      toast({
+        title: 'Submission Failed',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,8 +116,17 @@ const Contact = () => {
                   <Label htmlFor="message">Message</Label>
                   <Textarea id="message" placeholder="Your message" value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px]" />
                 </div>
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-                  Send Message
+
+                <div className="text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
+                  <strong>Note:</strong> To prevent spam, we limit submissions to 2 messages per week per user.
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-primary hover:bg-primary/90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>
@@ -93,19 +160,6 @@ const Contact = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Color Scheme Test Section */}
-        <div className="mt-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              New Color Scheme Preview
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Testing ground for the proposed website color palette
-            </p>
-          </div>
-          <ColorSchemeTest />
         </div>
       </div>
     </div>
