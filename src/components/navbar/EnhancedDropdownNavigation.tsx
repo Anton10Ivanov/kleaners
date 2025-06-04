@@ -10,25 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-
-interface NavItem {
-  id: number;
-  label: string;
-  subMenus?: Array<{
-    title: string;
-    items: Array<{
-      label: string;
-      description: string;
-      icon: React.ReactNode;
-      path: string;
-      price?: string;
-    }>;
-  }>;
-}
-
-interface EnhancedDropdownNavigationProps {
-  navItems: NavItem[];
-}
+import { EnhancedDropdownNavigationProps } from '@/types/navigation';
 
 export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProps> = ({ navItems }) => {
   const navigate = useNavigate();
