@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, CheckCircle, Settings, Info, Clock, Minus, Plus } from 'lucide-react';
@@ -12,12 +11,10 @@ import { Switch } from '@/components/ui/switch';
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
 import { DeepCleaningPopup } from './DeepCleaningPopup';
-
 interface HomeDetailsSectionProps {
   form: UseFormReturn<BookingFormData>;
   onSuggestedTimeSelect?: (hours: number) => void;
 }
-
 function estimateDuration(size: number, bedrooms: number, bathrooms: number, pace: 'standard' | 'quick' = 'standard'): number {
   let duration = 2; // Base
 
@@ -32,7 +29,6 @@ function estimateDuration(size: number, bedrooms: number, bathrooms: number, pac
   }
   return Math.round(finalDuration * 2) / 2; // Round to nearest 0.5
 }
-
 export const HomeDetailsSection = ({
   form,
   onSuggestedTimeSelect
@@ -50,7 +46,6 @@ export const HomeDetailsSection = ({
       form.setValue('propertySize', 70);
     }
   }, [form]);
-
   const allFieldsFilled = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
 
   // Calculate duration with standard pace for popup trigger
@@ -59,50 +54,52 @@ export const HomeDetailsSection = ({
 
   // Check if deep cleaning should be suggested (based on standard duration before quick adjustment)
   const shouldSuggestDeepCleaning = standardDuration >= 6 || bathrooms >= 3;
-  
   useEffect(() => {
     if (allFieldsFilled && shouldSuggestDeepCleaning) {
       setShowDeepCleaningPopup(true);
     }
   }, [allFieldsFilled, shouldSuggestDeepCleaning]);
-
   const handleUseSuggestedDuration = () => {
     if (onSuggestedTimeSelect && suggestedDuration > 0) {
       form.setValue('hours', suggestedDuration);
       onSuggestedTimeSelect(suggestedDuration);
     }
   };
-
   const handleSizeIncrement = (increment: number) => {
     const currentSize = propertySize || 70;
     const newSize = Math.max(0, currentSize + increment);
     form.setValue('propertySize', newSize);
   };
-
   const handleHoursChange = (newHours: number) => {
     const adjustedHours = Math.max(2, Math.min(8, newHours));
     form.setValue('hours', adjustedHours);
   };
-
   const incrementHours = () => {
     handleHoursChange(hours + 0.5);
   };
-
   const decrementHours = () => {
     handleHoursChange(hours - 0.5);
   };
-
   const getServiceType = (duration: number) => {
-    if (duration <= 2.5) return { text: "Quick clean", color: "text-blue-600" };
-    if (duration <= 4) return { text: "Standard clean", color: "text-green-600" };
-    if (duration <= 6) return { text: "Deep clean", color: "text-orange-600" };
-    return { text: "Extensive clean", color: "text-purple-600" };
+    if (duration <= 2.5) return {
+      text: "Quick clean",
+      color: "text-blue-600"
+    };
+    if (duration <= 4) return {
+      text: "Standard clean",
+      color: "text-green-600"
+    };
+    if (duration <= 6) return {
+      text: "Deep clean",
+      color: "text-orange-600"
+    };
+    return {
+      text: "Extensive clean",
+      color: "text-purple-600"
+    };
   };
-
   const serviceType = getServiceType(hours);
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="space-y-6">
         {/* Home Size */}
         <div className="space-y-2">
@@ -113,17 +110,7 @@ export const HomeDetailsSection = ({
             <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(-5)} className="h-12 w-12 p-0">
               -
             </Button>
-            <Input 
-              id="property-size" 
-              type="number" 
-              placeholder="70" 
-              value={propertySize || 70} 
-              onChange={e => form.setValue('propertySize', Number(e.target.value))} 
-              className="h-12 text-center" 
-              min="20" 
-              max="500" 
-              step="5" 
-            />
+            <Input id="property-size" type="number" placeholder="70" value={propertySize || 70} onChange={e => form.setValue('propertySize', Number(e.target.value))} className="h-12 text-center" min="20" max="500" step="5" />
             <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(5)} className="h-12 w-12 p-0">
               +
             </Button>
@@ -197,33 +184,31 @@ export const HomeDetailsSection = ({
             <div className={`text-sm font-medium transition-colors ${cleaningPace === 'quick' ? 'text-red-600' : 'text-gray-500'}`}>
               Quick
             </div>
-            <Switch
-              checked={cleaningPace === 'standard'}
-              onCheckedChange={(checked) => form.setValue('cleaningPace', checked ? 'standard' : 'quick')}
-              className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-500"
-            />
+            <Switch checked={cleaningPace === 'standard'} onCheckedChange={checked => form.setValue('cleaningPace', checked ? 'standard' : 'quick')} className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-500 mx-[5px] px-[36px] text-base" />
             <div className={`text-sm font-medium transition-colors ${cleaningPace === 'standard' ? 'text-green-600' : 'text-gray-500'}`}>
               Standard
             </div>
           </div>
           <p className="text-xs text-gray-500 text-center">
-            {cleaningPace === 'quick' 
-              ? 'Faster and lighter – reduces estimated duration by 20%' 
-              : 'Thorough and well-paced cleaning'
-            }
+            {cleaningPace === 'quick' ? 'Faster and lighter – reduces estimated duration by 20%' : 'Thorough and well-paced cleaning'}
           </p>
         </div>
       </div>
 
       {/* Estimation Display */}
       <AnimatePresence>
-        {allFieldsFilled && suggestedDuration > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -20 }} 
-            transition={{ duration: 0.4 }}
-          >
+        {allFieldsFilled && suggestedDuration > 0 && <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} exit={{
+        opacity: 0,
+        y: -20
+      }} transition={{
+        duration: 0.4
+      }}>
             <Alert className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-primary/20 rounded-full mt-1">
@@ -251,38 +236,24 @@ export const HomeDetailsSection = ({
                     </div>
                     
                     <div className="flex items-center justify-center gap-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={decrementHours}
-                        disabled={hours <= 2}
-                        className="h-10 w-10 p-0 rounded-full disabled:opacity-30"
-                      >
+                      <Button type="button" variant="outline" size="sm" onClick={decrementHours} disabled={hours <= 2} className="h-10 w-10 p-0 rounded-full disabled:opacity-30">
                         <Minus className="h-4 w-4" />
                       </Button>
                       
-                      <motion.div 
-                        className="text-center"
-                        key={hours}
-                        initial={{ scale: 1.05 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                      >
+                      <motion.div className="text-center" key={hours} initial={{
+                    scale: 1.05
+                  }} animate={{
+                    scale: 1
+                  }} transition={{
+                    duration: 0.2
+                  }}>
                         <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border rounded-lg px-4 py-2">
                           <span className="text-xl font-bold text-primary">{hours}</span>
                           <span className="text-sm text-gray-600 dark:text-gray-400">hours</span>
                         </div>
                       </motion.div>
                       
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={incrementHours}
-                        disabled={hours >= 8}
-                        className="h-10 w-10 p-0 rounded-full disabled:opacity-30"
-                      >
+                      <Button type="button" variant="outline" size="sm" onClick={incrementHours} disabled={hours >= 8} className="h-10 w-10 p-0 rounded-full disabled:opacity-30">
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>
@@ -297,30 +268,19 @@ export const HomeDetailsSection = ({
                     </div>
                   </div>
                   
-                  <Button 
-                    type="button" 
-                    onClick={handleUseSuggestedDuration} 
-                    className="w-full bg-primary hover:bg-primary/90"
-                  >
+                  <Button type="button" onClick={handleUseSuggestedDuration} className="w-full bg-primary hover:bg-primary/90">
                     Use Suggested Duration ({suggestedDuration} hours)
                   </Button>
                 </div>
               </div>
             </Alert>
-          </motion.div>
-        )}
+          </motion.div>}
       </AnimatePresence>
 
       {/* Deep Cleaning Popup */}
-      <DeepCleaningPopup 
-        isOpen={showDeepCleaningPopup} 
-        onClose={() => setShowDeepCleaningPopup(false)} 
-        onSwitchToDeepCleaning={() => {
-          // This would redirect to deep cleaning booking
-          window.location.href = '/deep-cleaning';
-        }} 
-        onContinueStandard={() => setShowDeepCleaningPopup(false)} 
-      />
-    </div>
-  );
+      <DeepCleaningPopup isOpen={showDeepCleaningPopup} onClose={() => setShowDeepCleaningPopup(false)} onSwitchToDeepCleaning={() => {
+      // This would redirect to deep cleaning booking
+      window.location.href = '/deep-cleaning';
+    }} onContinueStandard={() => setShowDeepCleaningPopup(false)} />
+    </div>;
 };
