@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
 import { ResponsiveGrid } from "@/components/layout/ResponsiveGrid";
 import { ServiceCategoryCardDS } from "./ServiceCategoryCardDS";
+import { Home, Building, Sparkles } from "lucide-react";
 
 interface ServiceCategory {
   id: string;
@@ -14,6 +15,7 @@ interface ServiceCategory {
   popular?: boolean;
   href: string;
   features?: string[];
+  category?: string;
 }
 
 interface ServiceCategoriesGridProps {
@@ -32,6 +34,18 @@ export function ServiceCategoriesGrid({
   className
 }: ServiceCategoriesGridProps) {
   const { getMobileSpacing } = useMobileOptimizations();
+
+  // Helper function to get appropriate icon for service category
+  const getServiceIcon = (category: ServiceCategory) => {
+    if (category.title.toLowerCase().includes('home')) return <Home className="w-full h-full" />;
+    if (category.title.toLowerCase().includes('office')) return <Building className="w-full h-full" />;
+    return <Sparkles className="w-full h-full" />;
+  };
+
+  // Helper function to extract services from features
+  const getServices = (category: ServiceCategory) => {
+    return category.features?.slice(0, 5) || ['Professional cleaning', 'Quality service', 'Reliable staff'];
+  };
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -57,9 +71,12 @@ export function ServiceCategoriesGrid({
             title={category.title}
             description={category.description}
             image={category.image}
+            icon={getServiceIcon(category)}
+            services={getServices(category)}
             popular={category.popular}
             href={category.href}
             features={category.features}
+            onExploreClick={() => window.location.href = category.href}
           />
         ))}
       </ResponsiveGrid>
