@@ -15,5 +15,5 @@ export { MobileEstimationDisplay } from './MobileEstimationDisplay';
 export { default as MobileBookingSummaryOptimized } from './MobileBookingSummaryOptimized';
 export { default as ProgressiveBookingForm } from './ProgressiveBookingForm';
 
-// Add alias for compatibility
-export { MobileBookingSummaryOptimized as MobileBookingSummary } from './MobileBookingSummaryOptimized';
+// Add alias for compatibility - using default export
+export { default as MobileBookingSummary } from './MobileBookingSummaryOptimized';
