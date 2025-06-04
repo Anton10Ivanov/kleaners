@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, CheckCircle, Settings, Info } from 'lucide-react';
@@ -11,32 +10,29 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
 import { DeepCleaningPopup } from './DeepCleaningPopup';
-
 interface HomeDetailsSectionProps {
   form: UseFormReturn<BookingFormData>;
   onSuggestedTimeSelect?: (hours: number) => void;
 }
-
 function estimateDuration(size: number, bedrooms: number, bathrooms: number, pace: 'standard' | 'quick' = 'standard'): number {
   let duration = 2; // Base
 
   if (size > 60) duration += Math.ceil((size - 60) / 20) * 0.5;
   if (bedrooms > 1) duration += (bedrooms - 1) * 0.3;
   if (bathrooms > 1) duration += (bathrooms - 1) * 0.5;
-
   let finalDuration = Math.min(duration, 8);
-  
+
   // Apply quick pace reduction (20% off, but not below 2 hours)
   if (pace === 'quick') {
     finalDuration = Math.max(2, finalDuration * 0.8);
   }
-
   return Math.round(finalDuration * 2) / 2; // Round to nearest 0.5
 }
-
-export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsSectionProps) => {
+export const HomeDetailsSection = ({
+  form,
+  onSuggestedTimeSelect
+}: HomeDetailsSectionProps) => {
   const [showDeepCleaningPopup, setShowDeepCleaningPopup] = useState(false);
-  
   const propertySize = form.watch('propertySize') || 70; // Default to 70
   const bedrooms = form.watch('bedrooms') || 0;
   const bathrooms = form.watch('bathrooms') || 0;
@@ -48,61 +44,49 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
       form.setValue('propertySize', 70);
     }
   }, [form]);
-
   const allFieldsFilled = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
-  
+
   // Calculate duration with standard pace for popup trigger
   const standardDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms, bathrooms, 'standard') : 0;
   const suggestedDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms, bathrooms, cleaningPace as 'standard' | 'quick') : 0;
-  
+
   // Check if deep cleaning should be suggested (based on standard duration before quick adjustment)
   const shouldSuggestDeepCleaning = standardDuration >= 6 || bathrooms >= 3;
-
   useEffect(() => {
     if (allFieldsFilled && shouldSuggestDeepCleaning) {
       setShowDeepCleaningPopup(true);
     }
   }, [allFieldsFilled, shouldSuggestDeepCleaning]);
-
   const handleUseSuggestedDuration = () => {
     if (onSuggestedTimeSelect && suggestedDuration > 0) {
       form.setValue('hours', suggestedDuration);
       onSuggestedTimeSelect(suggestedDuration);
     }
   };
-
   const handleManualAdjust = () => {
     // Scroll to hours selection section
     const hoursSection = document.querySelector('[data-hours-selection]');
     if (hoursSection) {
-      hoursSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      hoursSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
     }
   };
-
   const getCleanTypeText = (duration: number, pace: string) => {
     if (pace === 'quick') return "Quick Clean";
     if (duration <= 3) return "Quick Clean";
     if (duration <= 5) return "Standard Clean";
     return "Thorough Clean";
   };
-
   const handleSizeIncrement = (increment: number) => {
     const currentSize = propertySize || 70;
     const newSize = Math.max(0, currentSize + increment);
     form.setValue('propertySize', newSize);
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Home className="h-5 w-5 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-            🏠 Tell us about your home
-          </h3>
-        </div>
+        
 
         <div className="space-y-6">
           {/* Home Size */}
@@ -111,33 +95,11 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
               Home size (m²)
             </Label>
             <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => handleSizeIncrement(-5)}
-                className="h-12 w-12 p-0"
-              >
+              <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(-5)} className="h-12 w-12 p-0">
                 -
               </Button>
-              <Input
-                id="property-size"
-                type="number"
-                placeholder="70"
-                value={propertySize || 70}
-                onChange={(e) => form.setValue('propertySize', Number(e.target.value))}
-                className="h-12 text-center"
-                min="20"
-                max="500"
-                step="5"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => handleSizeIncrement(5)}
-                className="h-12 w-12 p-0"
-              >
+              <Input id="property-size" type="number" placeholder="70" value={propertySize || 70} onChange={e => form.setValue('propertySize', Number(e.target.value))} className="h-12 text-center" min="20" max="500" step="5" />
+              <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(5)} className="h-12 w-12 p-0">
                 +
               </Button>
             </div>
@@ -152,10 +114,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
               <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Number of bedrooms
               </Label>
-              <Select 
-                value={bedrooms?.toString()} 
-                onValueChange={(value) => form.setValue('bedrooms', Number(value))}
-              >
+              <Select value={bedrooms?.toString()} onValueChange={value => form.setValue('bedrooms', Number(value))}>
                 <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select bedrooms" />
                 </SelectTrigger>
@@ -174,10 +133,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
               <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Number of bathrooms
               </Label>
-              <Select 
-                value={bathrooms?.toString()} 
-                onValueChange={(value) => form.setValue('bathrooms', Number(value))}
-              >
+              <Select value={bathrooms?.toString()} onValueChange={value => form.setValue('bathrooms', Number(value))}>
                 <SelectTrigger className="h-12">
                   <SelectValue placeholder="Select bathrooms" />
                 </SelectTrigger>
@@ -211,10 +167,7 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <Select 
-              value={cleaningPace || 'standard'} 
-              onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}
-            >
+            <Select value={cleaningPace || 'standard'} onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}>
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select cleaning pace" />
               </SelectTrigger>
@@ -239,13 +192,18 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
 
       {/* Estimation Display */}
       <AnimatePresence>
-        {allFieldsFilled && suggestedDuration > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-          >
+        {allFieldsFilled && suggestedDuration > 0 && <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} exit={{
+        opacity: 0,
+        y: -20
+      }} transition={{
+        duration: 0.4
+      }}>
             <Alert className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-primary/20 rounded-full mt-1">
@@ -263,20 +221,11 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Button 
-                        type="button"
-                        onClick={handleUseSuggestedDuration}
-                        className="flex items-center gap-2 bg-primary hover:bg-primary/90"
-                      >
+                      <Button type="button" onClick={handleUseSuggestedDuration} className="flex items-center gap-2 bg-primary hover:bg-primary/90">
                         <CheckCircle className="h-4 w-4" />
                         Use This Duration
                       </Button>
-                      <Button 
-                        type="button"
-                        variant="outline" 
-                        onClick={handleManualAdjust}
-                        className="flex items-center gap-2"
-                      >
+                      <Button type="button" variant="outline" onClick={handleManualAdjust} className="flex items-center gap-2">
                         <Settings className="h-4 w-4" />
                         Adjust Manually Below
                       </Button>
@@ -285,20 +234,13 @@ export const HomeDetailsSection = ({ form, onSuggestedTimeSelect }: HomeDetailsS
                 </div>
               </div>
             </Alert>
-          </motion.div>
-        )}
+          </motion.div>}
       </AnimatePresence>
 
       {/* Deep Cleaning Popup */}
-      <DeepCleaningPopup 
-        isOpen={showDeepCleaningPopup}
-        onClose={() => setShowDeepCleaningPopup(false)}
-        onSwitchToDeepCleaning={() => {
-          // This would redirect to deep cleaning booking
-          window.location.href = '/deep-cleaning';
-        }}
-        onContinueStandard={() => setShowDeepCleaningPopup(false)}
-      />
-    </div>
-  );
+      <DeepCleaningPopup isOpen={showDeepCleaningPopup} onClose={() => setShowDeepCleaningPopup(false)} onSwitchToDeepCleaning={() => {
+      // This would redirect to deep cleaning booking
+      window.location.href = '/deep-cleaning';
+    }} onContinueStandard={() => setShowDeepCleaningPopup(false)} />
+    </div>;
 };
