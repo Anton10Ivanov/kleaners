@@ -1,7 +1,6 @@
 
 import { cn } from '@/lib/utils';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-import { DesktopMegaMenu } from './DesktopMegaMenu';
 import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { ContextualMenus } from '../smart/ContextualMenus';
 import { navItems } from '../navigationData';
@@ -20,11 +19,10 @@ export const DesktopNavigation = () => {
         "flex items-center",
         isMobile ? "space-x-4" : "space-x-6"
       )}>
-        <DesktopMegaMenu />
         <EnhancedDropdownNavigation navItems={navItems} />
       </div>
       
-      {/* Smart navigation features - removed SearchIntegration */}
+      {/* Smart navigation features */}
       <div className="flex items-center space-x-4">
         <ContextualMenus userRole={userRole} />
       </div>

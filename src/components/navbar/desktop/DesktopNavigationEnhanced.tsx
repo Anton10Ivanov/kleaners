@@ -2,7 +2,6 @@
 import React, { Suspense } from 'react';
 import { cn } from '@/lib/utils';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-import { DesktopMegaMenu } from './DesktopMegaMenu';
 import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { NavigationLoadingState } from './NavigationLoadingState';
 import { navItems } from '../navigationData';
@@ -25,7 +24,6 @@ export const DesktopNavigationEnhanced = () => {
           isMobile ? "space-x-4" : "space-x-6"
         )}>
           <Suspense fallback={<NavigationLoadingState />}>
-            <DesktopMegaMenu />
             <EnhancedDropdownNavigation navItems={navItems} />
           </Suspense>
         </div>
