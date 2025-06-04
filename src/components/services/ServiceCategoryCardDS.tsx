@@ -14,6 +14,9 @@ interface ServiceCategoryCardDSProps {
   icon: React.ReactNode;
   services: string[];
   badge?: string;
+  popular?: boolean;
+  href: string;
+  features?: string[];
   onExploreClick: () => void;
   className?: string;
 }
@@ -29,6 +32,9 @@ export function ServiceCategoryCardDS({
   icon,
   services,
   badge,
+  popular,
+  href,
+  features,
   onExploreClick,
   className,
 }: ServiceCategoryCardDSProps) {
@@ -38,16 +44,17 @@ export function ServiceCategoryCardDS({
     <Card className={cn(
       "card-primary group hover:card-elevated transition-all duration-300",
       "hover:transform hover:scale-[1.02] cursor-pointer",
+      popular && "ring-2 ring-primary",
       className
     )}>
       {/* Header with image/icon */}
       <CardHeader className={cn("relative", getMobileSpacing('md'))}>
-        {badge && (
+        {(badge || popular) && (
           <Badge 
             variant="secondary" 
             className="absolute top-3 right-3 bg-primary/10 text-primary"
           >
-            {badge}
+            {badge || (popular ? "Popular" : "")}
           </Badge>
         )}
         

@@ -38,10 +38,18 @@ export function ServiceComparison({
   const { isMobile, getMobileSpacing, getMobileButtonSize } = useMobileOptimizations();
 
   // Calculate responsive columns based on number of services
-  const getResponsiveCols = () => {
+  const getResponsiveCols = (): { 
+    mobile: 1 | 2; 
+    tablet: 1 | 2 | 3 | 4; 
+    desktop: 1 | 2 | 3 | 4 | 5 | 6; 
+  } => {
     const serviceCount = services.length;
     if (serviceCount <= 3) {
-      return { mobile: 1, tablet: 2, desktop: serviceCount as 1 | 2 | 3 };
+      return { 
+        mobile: 1, 
+        tablet: 2, 
+        desktop: Math.min(serviceCount, 3) as 1 | 2 | 3 
+      };
     }
     return { mobile: 1, tablet: 2, desktop: 3 };
   };
