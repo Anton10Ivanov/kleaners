@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 
 interface NavItem {
   id: number;
@@ -31,20 +32,35 @@ interface EnhancedDropdownNavigationProps {
 
 export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProps> = ({ navItems }) => {
   const navigate = useNavigate();
+  const { isMobile } = useMobileOptimizations();
 
   return (
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList className="space-x-2">
         {navItems.map((item) => (
           <NavigationMenuItem key={item.id}>
-            <NavigationMenuTrigger className="group h-10 px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+            <NavigationMenuTrigger className={cn(
+              "group transition-colors duration-200 focus:outline-none",
+              "hover:bg-accent hover:text-accent-foreground",
+              "focus:bg-accent focus:text-accent-foreground", 
+              "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+              isMobile ? "h-12 px-4 py-3 text-base" : "h-10 px-4 py-2 text-sm",
+              "font-medium touch-comfortable"
+            )}>
               {item.label}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="w-[300px] p-4 bg-white dark:bg-gray-800 shadow-xl rounded-lg border">
+              <div className={cn(
+                "bg-white dark:bg-gray-800 shadow-xl rounded-xl border",
+                "border-border/50 backdrop-blur-sm",
+                isMobile ? "w-[320px] p-4" : "w-[300px] p-4"
+              )}>
                 {item.subMenus?.map((subMenu) => (
                   <div key={subMenu.title} className="space-y-2">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                    <h4 className={cn(
+                      "font-semibold text-foreground mb-3",
+                      isMobile ? "text-base" : "text-sm"
+                    )}>
                       {subMenu.title}
                     </h4>
                     <div className="space-y-1">
@@ -52,16 +68,28 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                         <button
                           key={subItem.path}
                           onClick={() => navigate(subItem.path)}
-                          className="group flex items-start gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors w-full text-left"
+                          className={cn(
+                            "group flex items-start gap-3 w-full text-left rounded-lg",
+                            "hover:bg-accent/50 dark:hover:bg-gray-700/50",
+                            "transition-colors duration-200 touch-comfortable",
+                            isMobile ? "p-3" : "p-2"
+                          )}
                         >
-                          <div className="flex-shrink-0 mt-0.5 text-primary">
+                          <div className="flex-shrink-0 mt-0.5 text-primary transition-colors">
                             {subItem.icon}
                           </div>
-                          <div>
-                            <h5 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-primary">
+                          <div className="flex-1 min-w-0">
+                            <h5 className={cn(
+                              "font-medium text-foreground group-hover:text-primary",
+                              "transition-colors duration-200",
+                              isMobile ? "text-base" : "text-sm"
+                            )}>
                               {subItem.label}
                             </h5>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                            <p className={cn(
+                              "text-muted-foreground leading-relaxed",
+                              isMobile ? "text-sm mt-1" : "text-xs"
+                            )}>
                               {subItem.description}
                             </p>
                           </div>

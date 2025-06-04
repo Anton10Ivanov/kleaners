@@ -15,6 +15,8 @@ import FeaturedServices from './FeaturedServices';
 import { ServicesMegamenu } from './ServicesMegamenu';
 import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   {
@@ -77,6 +79,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { isMobile } = useMobileOptimizations();
 
   useEffect(() => {
     setMounted(true);
@@ -194,29 +197,69 @@ const Navbar = () => {
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
       <Logo />
       
-      {/* Mobile-optimized FeaturedServices */}
       <FeaturedServices />
       
-      {/* Desktop-only components */}
+      {/* Desktop navigation with design token styling */}
       <div className="hidden lg:flex items-center space-x-6">
-        <ServicesMegamenu />
-        <EnhancedDropdownNavigation navItems={navItems} />
+        <div className={cn(
+          "flex items-center",
+          isMobile ? "space-x-4" : "space-x-6"
+        )}>
+          <ServicesMegamenu />
+          <EnhancedDropdownNavigation navItems={navItems} />
+        </div>
       </div>
 
-      {/* Desktop controls - keep language selector here */}
-      <div className="hidden md:flex items-center space-x-3">
-        {user && <UserControls user={user} />}
+      {/* Desktop controls with mobile-responsive spacing */}
+      <div className={cn(
+        "hidden md:flex items-center",
+        isMobile ? "space-x-2" : "space-x-3"
+      )}>
+        {user && (
+          <div className="touch-comfortable">
+            <UserControls user={user} />
+          </div>
+        )}
         
-        <ThemeToggle />
-        <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
-        {!user && <AuthButtons />}
+        <div className="flex items-center space-x-2">
+          <div className="touch-comfortable">
+            <ThemeToggle />
+          </div>
+          <div className="touch-comfortable">
+            <LanguageSelector 
+              currentLanguage={currentLanguage} 
+              onLanguageChange={toggleLanguage} 
+            />
+          </div>
+        </div>
+        
+        {!user && (
+          <div className="touch-comfortable">
+            <AuthButtons />
+          </div>
+        )}
       </div>
 
-      {/* Mobile controls - simplified, language moved to menu */}
-      <div className="md:hidden flex items-center gap-2">
-        {user && <MobileUserControls user={user} handleBookingsClick={handleBookingsClick} />}
+      {/* Mobile controls with enhanced touch targets */}
+      <div className={cn(
+        "md:hidden flex items-center",
+        "gap-2 min-h-[48px]" // Ensure mobile touch target height
+      )}>
+        {user && (
+          <div className="touch-comfortable">
+            <MobileUserControls 
+              user={user} 
+              handleBookingsClick={handleBookingsClick} 
+            />
+          </div>
+        )}
         
-        <MobileMenuToggle isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        <div className="touch-comfortable">
+          <MobileMenuToggle 
+            isMenuOpen={isMenuOpen} 
+            setIsMenuOpen={setIsMenuOpen} 
+          />
+        </div>
       </div>
 
       <MobileMenu 

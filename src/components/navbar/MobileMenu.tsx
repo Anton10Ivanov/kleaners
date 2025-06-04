@@ -11,6 +11,8 @@ import {
   HeaderControls,
   BusinessSolutionsSection
 } from './mobile';
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 
 const navigationData = [
   {
@@ -70,40 +72,72 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   onLanguageChange = () => {},
   userRole = null
 }) => {
+  const { isMobile, getMobileSpacing } = useMobileOptimizations();
   const isAdmin = userRole === 'admin';
   const isProvider = userRole === 'provider';
   const isClient = userRole === 'client' || (!userRole && isOpen);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="right" className="w-[320px] sm:w-[350px] overflow-y-auto p-4">
-        <SheetHeader className="mb-6 text-left">
-          <SheetTitle>
+      <SheetContent 
+        side="right" 
+        className={cn(
+          "overflow-y-auto safe-area-right",
+          isMobile ? "w-[320px] p-4" : "w-[350px] p-4"
+        )}
+      >
+        <SheetHeader className={cn(
+          "mb-6 text-left",
+          getMobileSpacing('md')
+        )}>
+          <SheetTitle className="text-foreground">
             <Logo />
           </SheetTitle>
-          <SheetDescription className="text-left">
+          <SheetDescription className="text-left text-muted-foreground">
             Expert Cleaning Services
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col gap-6">
+        <div className="mobile-stack space-y-6">
           <HeaderControls 
             currentLanguage={currentLanguage}
             onLanguageChange={onLanguageChange}
           />
 
-          {/* Role-based sections */}
-          <div className="space-y-6">
-            {isClient && <ClientSection />}
-            {isProvider && <ProviderSection />}
-            {isAdmin && <AdminSection setIsOpen={setIsOpen} />}
+          {/* Role-based sections with design token spacing */}
+          <div className="mobile-stack space-y-6">
+            {isClient && (
+              <div className="mobile-section">
+                <ClientSection />
+              </div>
+            )}
             
-            {/* Business Solutions - Always visible */}
-            <BusinessSolutionsSection />
+            {isProvider && (
+              <div className="mobile-section">
+                <ProviderSection />
+              </div>
+            )}
             
-            <NavigationSection navigationData={navigationData} />
+            {isAdmin && (
+              <div className="mobile-section">
+                <AdminSection setIsOpen={setIsOpen} />
+              </div>
+            )}
             
-            {(isClient || isProvider || isAdmin) && <LogoutButton setIsOpen={setIsOpen} />}
+            {/* Business Solutions - Always visible with design tokens */}
+            <div className="mobile-section">
+              <BusinessSolutionsSection />
+            </div>
+            
+            <div className="mobile-section">
+              <NavigationSection navigationData={navigationData} />
+            </div>
+            
+            {(isClient || isProvider || isAdmin) && (
+              <div className="mobile-section border-t border-border pt-4">
+                <LogoutButton setIsOpen={setIsOpen} />
+              </div>
+            )}
           </div>
         </div>
       </SheetContent>
