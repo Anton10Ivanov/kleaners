@@ -9,7 +9,6 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ServiceOptions from '@/components/booking/ServiceOptions';
-import HoursSelection from '@/components/booking/HoursSelection';
 import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import EnhancedExtras from '@/components/booking/EnhancedExtras';
 import FinalStep from '@/components/booking/FinalStep';
@@ -106,13 +105,6 @@ const HomeCleaningBooking = () => {
                       setFrequency={(freq) => form.setValue('frequency', freq)}
                       isRegularCleaning={true}
                     />
-                  </div>
-                  
-                  <div 
-                    className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border"
-                    data-hours-selection
-                  >
-                    <HoursSelection form={form} />
                   </div>
                 </motion.div>
               )}
