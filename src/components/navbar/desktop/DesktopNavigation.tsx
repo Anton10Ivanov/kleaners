@@ -13,7 +13,7 @@ export const DesktopNavigation = () => {
   const { user } = useAuth();
 
   // Determine user role (this would typically come from your auth system)
-  const userRole = user?.user_metadata?.role || null;
+  const userRole = user?.role || null;
 
   return (
     <div className="hidden lg:flex items-center space-x-6">
