@@ -57,7 +57,6 @@ export function ServiceCategoriesGrid({
             title={category.title}
             description={category.description}
             image={category.image}
-            price={category.price}
             popular={category.popular}
             href={category.href}
             features={category.features}
