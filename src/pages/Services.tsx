@@ -16,14 +16,50 @@ const Services = () => {
   const [showAllServices, setShowAllServices] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Flatten all services from categories
-  const allServices = serviceCategories.flatMap(category => 
-    category.services.map(service => ({
-      ...service,
-      category: category.title,
-      isPopular: popularServices.some(pop => pop.href === service.href)
-    }))
-  );
+  // All services from App.tsx routes - expanded list
+  const allServicesFromRoutes = [
+    { title: 'Home Cleaning', href: '/services/home-cleaning', description: 'Regular residential cleaning services', category: 'Residential' },
+    { title: 'Office Cleaning', href: '/services/office-cleaning', description: 'Professional office cleaning services', category: 'Commercial' },
+    { title: 'Move In/Out Cleaning', href: '/services/move-in-out', description: 'Deep cleaning for moving transitions', category: 'Specialized' },
+    { title: 'Window Cleaning', href: '/services/window-cleaning', description: 'Professional window cleaning services', category: 'Specialized' },
+    { title: 'Stairwell Cleaning', href: '/services/stairwell-cleaning', description: 'Common area stairwell maintenance', category: 'Commercial' },
+    { title: 'Industrial Cleaning', href: '/services/industrial-cleaning', description: 'Heavy-duty industrial facility cleaning', category: 'Industrial' },
+    { title: 'Intensive Cleaning', href: '/services/intensive-cleaning', description: 'Deep intensive cleaning services', category: 'Specialized' },
+    { title: 'Ventilation Cleaning', href: '/services/ventilation-cleaning', description: 'HVAC and ventilation system cleaning', category: 'Specialized' },
+    { title: 'Disinfection Cleaning', href: '/services/disinfection-cleaning', description: 'Professional disinfection services', category: 'Health & Safety' },
+    { title: 'Construction Cleaning', href: '/services/construction-cleaning', description: 'Post-construction cleanup services', category: 'Specialized' },
+    { title: 'Care Facility Cleaning', href: '/services/care-facility-cleaning', description: 'Healthcare facility cleaning', category: 'Health & Safety' },
+    { title: 'Trade Fair Cleaning', href: '/services/trade-fair-cleaning', description: 'Event and trade fair cleaning', category: 'Event' },
+    { title: 'Hoarder Cleaning', href: '/services/hoarder-cleaning', description: 'Specialized hoarding cleanup services', category: 'Specialized' },
+    { title: 'Multi Surface Cleaning', href: '/services/multi-surface-cleaning', description: 'Comprehensive surface cleaning', category: 'Residential' },
+    { title: 'Pool Cleaning', href: '/services/pool-cleaning', description: 'Swimming pool maintenance and cleaning', category: 'Outdoor' },
+    { title: 'Pet Hair Removal', href: '/services/pet-hair-removal', description: 'Specialized pet hair cleaning services', category: 'Specialized' },
+    { title: 'Underground Garage Cleaning', href: '/services/underground-garage-cleaning', description: 'Parking garage cleaning services', category: 'Commercial' },
+    { title: 'Vehicle Cleaning', href: '/services/vehicle-cleaning', description: 'Professional vehicle cleaning', category: 'Automotive' },
+    { title: 'Holiday Apartment Cleaning', href: '/services/holiday-apartment-cleaning', description: 'Vacation rental cleaning services', category: 'Hospitality' },
+    { title: 'Glass Cleaning Winter Garden', href: '/services/glass-cleaning-winter-garden', description: 'Specialized glass cleaning for conservatories', category: 'Specialized' },
+    { title: 'Gardening', href: '/services/gardening', description: 'Garden maintenance and landscaping', category: 'Outdoor' },
+    { title: 'Medical Practice Cleaning', href: '/services/medical-practice-cleaning', description: 'Medical facility cleaning services', category: 'Health & Safety' },
+    { title: 'Stone Surface Cleaning', href: '/services/stone-surface-cleaning', description: 'Natural stone cleaning and maintenance', category: 'Specialized' },
+    { title: 'Pipe Cleaning', href: '/services/pipe-cleaning', description: 'Drain and pipe cleaning services', category: 'Maintenance' },
+    { title: 'Graffiti Removal', href: '/services/graffiti-removal', description: 'Professional graffiti removal services', category: 'Specialized' },
+    { title: 'Roof Cleaning', href: '/services/roof-cleaning', description: 'Roof maintenance and cleaning', category: 'Outdoor' },
+    { title: 'Household Clearance', href: '/services/household-clearance', description: 'Complete household clearance services', category: 'Specialized' },
+    { title: 'Mold Removal', href: '/services/mold-removal', description: 'Professional mold remediation', category: 'Health & Safety' },
+    { title: 'Facade Cleaning', href: '/services/facade-cleaning', description: 'Building exterior cleaning', category: 'Commercial' },
+    { title: 'Kindergarten Cleaning', href: '/services/kindergarten-cleaning', description: 'Childcare facility cleaning', category: 'Educational' },
+    { title: 'Carpet Cleaning', href: '/services/carpet-cleaning', description: 'Professional carpet cleaning services', category: 'Residential' },
+    { title: 'Upholstery Cleaning', href: '/services/upholstery-cleaning', description: 'Furniture and upholstery cleaning', category: 'Residential' },
+    { title: 'Sidewalk Cleaning', href: '/services/sidewalk-cleaning', description: 'Pavement and sidewalk cleaning', category: 'Outdoor' },
+    { title: 'Crime Scene Cleaning', href: '/services/crime-scene-cleaning', description: 'Specialized biohazard cleanup', category: 'Specialized' },
+  ];
+
+  // Add popular flag to services
+  const allServices = allServicesFromRoutes.map(service => ({
+    ...service,
+    isPopular: popularServices.some(pop => pop.href === service.href),
+    icon: popularServices.find(pop => pop.href === service.href)?.icon || Star
+  }));
 
   // Filter services based on search and category
   const filteredServices = allServices.filter(service => {
@@ -36,10 +72,10 @@ const Services = () => {
 
   // For mobile, show limited services initially
   const displayedServices = isMobile && !showAllServices 
-    ? filteredServices.slice(0, 6) 
+    ? filteredServices.slice(0, 8) 
     : filteredServices;
 
-  const categories = ['all', ...serviceCategories.map(cat => cat.title)];
+  const categories = ['all', ...Array.from(new Set(allServices.map(service => service.category)))];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 pt-20">
@@ -178,7 +214,7 @@ const Services = () => {
           </motion.div>
 
           {/* Mobile Show More Button */}
-          {isMobile && filteredServices.length > 6 && (
+          {isMobile && filteredServices.length > 8 && (
             <div className="text-center mt-6">
               <Button
                 variant="outline"
@@ -192,7 +228,7 @@ const Services = () => {
                   </>
                 ) : (
                   <>
-                    See {filteredServices.length - 6} More Services
+                    See {filteredServices.length - 8} More Services
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </>
                 )}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
@@ -134,18 +133,18 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     });
   }, [visibleSections]);
 
-  // Auto-advancement logic - improved
+  // Auto-advancement logic - fixed for better disclosure
   useEffect(() => {
     const currentSectionData = visibleSections[currentSection];
     if (currentSectionData && currentSectionData.isComplete(formData)) {
       setCompletedSections(prev => new Set([...prev, currentSection]));
       
-      // Auto-advance after completion with shorter delay
+      // Auto-advance after completion - improved timing
       const timer = setTimeout(() => {
         if (currentSection < visibleSections.length - 1) {
           handleSectionComplete();
         }
-      }, 400); // Reduced from 600ms
+      }, 800); // Increased delay for better UX
 
       return () => clearTimeout(timer);
     }
@@ -159,13 +158,13 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       // Load next sections proactively
       setLoadedSections(prev => new Set([...prev, nextSection, nextSection + 1, nextSection + 2]));
       
-      // Smooth scroll to next section
+      // Smooth scroll to next section with delay for better disclosure
       setTimeout(() => {
         sectionRefs.current[nextSection]?.scrollIntoView({ 
-          behavior: prefersReducedMotion ? 'auto' : 'smooth', 
+          behavior: 'smooth', 
           block: 'start' 
         });
-      }, 100);
+      }, 200);
     }
   };
 
@@ -174,33 +173,32 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     setLoadedSections(prev => new Set([...prev, index, index + 1]));
     
     sectionRefs.current[index]?.scrollIntoView({ 
-      behavior: prefersReducedMotion ? 'auto' : 'smooth', 
+      behavior: 'smooth', 
       block: 'start' 
     });
   };
 
   const getAnimationProps = (index: number) => {
-    if (prefersReducedMotion) return {};
-    
     return {
-      initial: { opacity: 0, y: 15 },
+      initial: { opacity: 0, y: 20, scale: 0.95 },
       animate: { 
-        opacity: index <= currentSection ? 1 : 0.4, 
-        y: index <= currentSection ? 0 : 15,
-        scale: index <= currentSection ? 1 : 0.98
+        opacity: index <= currentSection ? 1 : 0.6, 
+        y: index <= currentSection ? 0 : 20,
+        scale: index <= currentSection ? 1 : 0.95
       },
-      transition: { duration: 0.2, delay: Math.min(index * 0.05, 0.15) }
+      transition: { duration: 0.4, delay: Math.min(index * 0.1, 0.3) }
     };
   };
 
   return (
-    <div className="space-y-2 px-1">
-      <div className="space-y-2">
+    <div className="space-y-3 px-1">
+      <div className="space-y-3">
         {visibleSections.map((section, index) => {
           const Component = section.component;
           const isActive = index <= currentSection;
           const isCompleted = completedSections.has(index);
           const isLoaded = loadedSections.has(index);
+          const isCurrent = index === currentSection;
 
           return (
             <motion.div
@@ -210,28 +208,31 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
               className={`relative ${!isActive ? 'pointer-events-none' : ''}`}
             >
               <Card className={`
-                p-2 transition-all duration-200 
-                ${isCompleted ? 'ring-1 ring-green-200 bg-green-50/20 dark:bg-green-900/5' : ''}
-                ${index === currentSection ? 'ring-1 ring-primary/20 shadow-sm' : ''}
+                p-4 transition-all duration-300 
+                ${isCompleted ? 'ring-2 ring-green-200 bg-green-50/30 dark:bg-green-900/10' : ''}
+                ${isCurrent ? 'ring-2 ring-primary/30 shadow-lg' : 'shadow-sm'}
+                ${!isActive ? 'opacity-60' : 'opacity-100'}
               `}>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    {isCompleted && <CheckCircle className="h-3 w-3 text-green-600" />}
-                    <span className="text-base mr-1">{section.icon}</span>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold flex items-center gap-2">
+                    {isCompleted && <CheckCircle className="h-4 w-4 text-green-600" />}
+                    <span className="text-lg mr-1">{section.icon}</span>
                     {section.title}
                   </h3>
-                  {index === currentSection && (
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                  {isCurrent && (
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                   )}
                 </div>
 
                 <AnimatePresence mode="wait">
                   {isActive && (
                     <motion.div
-                      initial={prefersReducedMotion ? {} : { opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
+                      key={`section-${index}-content`}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
                     >
                       {isLoaded ? (
                         <Suspense fallback={<LoadingFallback title={section.title} />}>
