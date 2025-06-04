@@ -65,6 +65,14 @@ export const HomeDetailsSection = ({
   // Check if deep cleaning should be suggested (based on standard duration before quick adjustment)
   const shouldSuggestDeepCleaning = standardDuration >= 6 || (bathrooms !== undefined && bathrooms >= 3);
   
+  // Update form hours when pace changes and duration is already calculated
+  useEffect(() => {
+    if (allFieldsFilled && durationChoiceMade) {
+      const newDuration = estimateDuration(propertySize, bedrooms!, bathrooms!, cleaningPace as 'standard' | 'quick');
+      form.setValue('hours', newDuration);
+    }
+  }, [cleaningPace, allFieldsFilled, durationChoiceMade, propertySize, bedrooms, bathrooms, form]);
+  
   useEffect(() => {
     if (allFieldsFilled && shouldSuggestDeepCleaning && !durationChoiceMade) {
       setShowDeepCleaningPopup(true);

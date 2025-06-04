@@ -90,7 +90,7 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
                 className={`
                   p-4 cursor-pointer transition-all duration-200 border-2
                   ${isSelected 
-                    ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/20' 
+                    ? 'border-primary bg-primary/20 shadow-lg ring-4 ring-primary/30 dark:bg-primary/30' 
                     : 'border-gray-200 hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:hover:border-gray-600'
                   }
                 `}
@@ -101,7 +101,7 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
                     <div className={`
                       text-2xl p-2 rounded-lg transition-colors
                       ${isSelected 
-                        ? 'bg-primary/20' 
+                        ? 'bg-primary/30 ring-2 ring-primary/50' 
                         : 'bg-gray-100 dark:bg-gray-800'
                       }
                     `}>
@@ -111,17 +111,29 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
                       <h4 className={`
                         text-sm font-semibold transition-colors
                         ${isSelected 
-                          ? 'text-primary' 
+                          ? 'text-primary font-bold' 
                           : 'text-gray-900 dark:text-white'
                         }
                       `}>
                         {extra.title}
                       </h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className={`
+                        text-xs transition-colors
+                        ${isSelected
+                          ? 'text-primary/80 dark:text-primary/90'
+                          : 'text-gray-500 dark:text-gray-400'
+                        }
+                      `}>
                         {extra.description}
                       </p>
                       <div className="flex items-center gap-1 mt-1">
-                        <span className="text-xs text-gray-500">
+                        <span className={`
+                          text-xs transition-colors
+                          ${isSelected
+                            ? 'text-primary/80 font-medium'
+                            : 'text-gray-500'
+                          }
+                        `}>
                           {extra.duration} min • +{cost.toFixed(2)} €
                         </span>
                       </div>
@@ -131,12 +143,12 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
                   <div className={`
                     w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all
                     ${isSelected 
-                      ? 'bg-primary border-primary shadow-sm' 
+                      ? 'bg-primary border-primary shadow-lg ring-2 ring-primary/30' 
                       : 'border-gray-300 dark:border-gray-600 hover:border-primary/50'
                     }
                   `}>
                     {isSelected ? (
-                      <Check className="h-4 w-4 text-white" />
+                      <Check className="h-4 w-4 text-white font-bold" />
                     ) : (
                       <Plus className="h-4 w-4 text-gray-400" />
                     )}

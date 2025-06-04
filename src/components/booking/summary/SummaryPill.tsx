@@ -55,11 +55,12 @@ export const SummaryPill = ({ form, currentStep }: SummaryPillProps) => {
 
   const hasRelevantData = frequency && hours > 0;
   
-  if (!hasRelevantData) return null;
+  // Don't show on final step (step 3)
+  if (!hasRelevantData || currentStep === 3) return null;
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 z-40">
+      <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsDrawerOpen(true)}
           className="h-12 px-4 bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-full flex items-center gap-2"
