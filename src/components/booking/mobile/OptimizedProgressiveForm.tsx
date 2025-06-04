@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { UseFormReturn } from "react-hook-form";
 import { BookingFormData, Frequency } from "@/schemas/booking";
@@ -42,6 +43,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0, 1])); // Load first two sections
+  const [hoursConfirmed, setHoursConfirmed] = useState(false); // Track hours confirmation
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const intersectionObserver = useRef<IntersectionObserver | null>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -71,7 +73,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       id: 'hours',
       title: 'Duration',
       component: EnhancedMobileHours,
-      isComplete: (data) => data.hours > 0,
+      isComplete: (data) => data.hours > 0 && hoursConfirmed, // Now requires confirmation
       required: true,
       icon: '⏰'
     },
@@ -148,7 +150,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
 
       return () => clearTimeout(timer);
     }
-  }, [formData, currentSection, visibleSections]);
+  }, [formData, currentSection, visibleSections, hoursConfirmed]);
 
   const handleSectionComplete = () => {
     if (currentSection < visibleSections.length - 1) {
@@ -166,6 +168,12 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
         });
       }, 200);
     }
+  };
+
+  // Handle hours completion specifically
+  const handleHoursComplete = () => {
+    setHoursConfirmed(true);
+    handleSectionComplete();
   };
 
   const scrollToSection = (index: number) => {
@@ -241,7 +249,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
                             frequency={frequency}
                             setFrequency={(freq: any) => form.setValue('frequency', freq)}
                             isRegularCleaning={true}
-                            onComplete={handleSectionComplete}
+                            onComplete={section.id === 'hours' ? handleHoursComplete : handleSectionComplete}
                             onSuggestedTimeSelect={(hours: number) => form.setValue('hours', hours)}
                           />
                         </Suspense>
