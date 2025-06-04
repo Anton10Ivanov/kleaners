@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
+import { useState } from 'react';
 
 interface EstimationDisplayProps {
   form: UseFormReturn<BookingFormData>;
@@ -28,6 +29,7 @@ export const EstimationDisplay = ({
   onSuggestedTimeSelect
 }: EstimationDisplayProps) => {
   const hours = form.watch('hours') || 2;
+  const [hasSuggestedTimeUsed, setHasSuggestedTimeUsed] = useState(false);
 
   const handleHoursChange = (newHours: number) => {
     const adjustedHours = Math.max(2, Math.min(8, newHours));
@@ -40,6 +42,7 @@ export const EstimationDisplay = ({
   const handleUseSuggestedDuration = () => {
     if (onSuggestedTimeSelect && suggestedDuration > 0) {
       form.setValue('hours', suggestedDuration);
+      setHasSuggestedTimeUsed(true);
       onSuggestedTimeSelect(suggestedDuration);
     }
   };
@@ -80,9 +83,23 @@ export const EstimationDisplay = ({
                     <Button 
                       type="button" 
                       onClick={handleUseSuggestedDuration} 
-                      className="w-full bg-primary hover:bg-primary/90 mt-3"
+                      className={`
+                        w-full mt-3 font-medium transition-all
+                        ${hasSuggestedTimeUsed 
+                          ? 'bg-green-600 hover:bg-green-700 text-white' 
+                          : 'bg-primary hover:bg-primary/90'
+                        }
+                      `}
+                      disabled={hasSuggestedTimeUsed}
                     >
-                      Use Suggested Duration ({suggestedDuration} hours)
+                      {hasSuggestedTimeUsed ? (
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          Suggested Duration Applied ({suggestedDuration} hours)
+                        </div>
+                      ) : (
+                        `Use Suggested Duration (${suggestedDuration} hours)`
+                      )}
                     </Button>
                   </div>
                 </AlertDescription>
