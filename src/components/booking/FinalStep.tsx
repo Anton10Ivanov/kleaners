@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -5,8 +6,6 @@ import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
-import PromoCode from "./final/PromoCode";
-import { GuestOrderOptions } from "./final/GuestOrderOptions";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -60,9 +59,7 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
             />
           )}
           
-          <GuestOrderOptions />
           <SpecialInstructions form={form} />
-          <PromoCode form={form} />
           
           <div className="flex justify-end">
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
@@ -72,12 +69,10 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
         </form>
       </div>
 
-      {/* Right Column - Compact Booking Summary */}
+      {/* Right Column - Booking Summary */}
       <div className="lg:col-span-1">
         <div className="sticky top-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
-            <EnhancedBookingSummary form={form} />
-          </div>
+          <EnhancedBookingSummary form={form} />
         </div>
       </div>
     </div>
