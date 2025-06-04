@@ -31,12 +31,12 @@ export interface ServiceItem {
   icon: React.ReactNode;
 }
 
-// Extended ServiceCategory that supports both navbar and homepage requirements
+// Enhanced ServiceCategory that supports both navbar and homepage requirements
 export interface ServiceCategory {
   id?: string;
   title: string;
   description: string;
-  icon: LucideIcon | React.ComponentType<any>;
+  icon: LucideIcon | React.ComponentType<any> | React.ReactNode;
   services: ServiceItem[];
   // Optional fields for HomePage compatibility
   image?: string;

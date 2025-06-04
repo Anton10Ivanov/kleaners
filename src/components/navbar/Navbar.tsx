@@ -4,6 +4,9 @@ import { useNavbarHandlers } from './core/NavbarHandlers';
 import { DesktopNavigation } from './desktop/DesktopNavigation';
 import { DesktopControls } from './desktop/DesktopControls';
 import { MobileControls } from './mobile/MobileControls';
+import { NavigationProvider } from './context/NavigationContext';
+import { useNavigationEffects } from './hooks/useNavigationState';
+import { navItems } from './navigationData';
 
 // Centralized component imports
 import {
@@ -13,7 +16,7 @@ import {
   FeaturedServices
 } from './';
 
-const Navbar = () => {
+const NavbarContent = () => {
   const {
     isMenuOpen,
     setIsMenuOpen,
@@ -29,6 +32,9 @@ const Navbar = () => {
   } = useNavbarLogic();
 
   const { handleBookingsClick } = useNavbarHandlers();
+
+  // Apply navigation effects (escape key, outside clicks, route changes)
+  useNavigationEffects();
 
   if (!mounted) return null;
 
@@ -58,6 +64,14 @@ const Navbar = () => {
         userRole={userRole}
       />
     </NavbarContainer>
+  );
+};
+
+const Navbar = () => {
+  return (
+    <NavigationProvider navItems={navItems}>
+      <NavbarContent />
+    </NavigationProvider>
   );
 };
 
