@@ -31,11 +31,11 @@ const fadeVariant = {
 
 // Loading fallback for mobile components
 const MobileLoadingFallback = () => (
-  <div className="space-y-4">
+  <div className="space-y-3">
     {[1, 2, 3].map((i) => (
       <div key={i} className="animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-        <div className="h-32 bg-gray-200 rounded"></div>
+        <div className="h-3 bg-gray-200 rounded w-1/4 mb-2"></div>
+        <div className="h-24 bg-gray-200 rounded"></div>
       </div>
     ))}
   </div>
@@ -92,7 +92,7 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
   };
 
   const SectionDivider = () => (
-    <div className="border-t border-gray-100 dark:border-gray-700 my-6"></div>
+    <div className="border-t border-gray-100 dark:border-gray-700 my-4"></div>
   );
   
   return (
@@ -102,18 +102,18 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
           {currentStep === 2 && selectedService === ServiceType.Home && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
               {isMobile ? (
-                // Mobile: Enhanced progressive form with performance optimizations
-                <div className="space-y-6">
+                // Mobile: Enhanced progressive form with reduced padding
+                <div className="space-y-4">
                   <Suspense fallback={<MobileLoadingFallback />}>
                     <OptimizedProgressiveForm 
                       form={form}
                       currentStep={currentStep}
-                      onStepChange={() => {}} // Handle step changes if needed
+                      onStepChange={() => {}}
                     />
                   </Suspense>
                   
                   {/* Mobile summary - optimized floating version */}
-                  <div className="pb-20"> {/* Add padding for floating summary */}
+                  <div className="pb-16">
                     <MobileBookingSummaryOptimized 
                       form={form}
                       currentStep={currentStep}
@@ -196,7 +196,7 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
           {currentStep === 3 && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant} key="final-step">
               {isMobile ? (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <FinalStep 
                     postalCode={postalCode} 
                     onSubmit={submitBooking} 

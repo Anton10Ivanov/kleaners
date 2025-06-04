@@ -5,7 +5,6 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { ErrorBoundary } from 'react-error-boundary';
 import { SectionLoading } from '@/components/ui/section-loading';
-import MobileBookingProgress from '../booking/MobileBookingProgress';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
@@ -43,12 +42,6 @@ export const BookingSteps = ({
 }: BookingStepsProps) => {
   const formData = form?.getValues();
   const isReallyMobile = useMediaQuery("(max-width: 768px)");
-  
-  // Check completion status for mobile progress
-  const hasServiceSelection = !!selectedService;
-  const hasTimeSelection = !!(frequency && hours);
-  const hasPersonalInfo = !!(formData?.firstName && formData?.lastName && formData?.email);
-  const hasAddress = !!(formData?.address && formData?.city);
 
   // Browser back button support for main steps
   useEffect(() => {
@@ -60,7 +53,6 @@ export const BookingSteps = ({
       }
     };
 
-    // Push initial state
     window.history.pushState(null, '', window.location.pathname);
     window.addEventListener('popstate', handlePopState);
 
@@ -71,26 +63,13 @@ export const BookingSteps = ({
 
   return (
     <motion.div
-      className="pt-20 md:pt-24 pb-24 md:pb-32 px-4 md:pt-32 bg-white dark:bg-gray-900 min-h-screen"
+      className="pt-16 md:pt-24 pb-20 md:pb-32 px-2 md:px-4 md:pt-32 bg-white dark:bg-gray-900 min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Mobile Progress Indicator */}
-      {isReallyMobile && (
-        <div className="fixed top-16 left-0 right-0 z-40">
-          <MobileBookingProgress
-            currentStep={currentStep}
-            hasServiceSelection={hasServiceSelection}
-            hasTimeSelection={hasTimeSelection}
-            hasPersonalInfo={hasPersonalInfo}
-            hasAddress={hasAddress}
-          />
-        </div>
-      )}
-
-      <div className={`max-w-7xl mx-auto ${isReallyMobile ? 'pt-16' : ''}`}>
+      <div className={`max-w-7xl mx-auto ${isReallyMobile ? 'pt-4' : ''}`}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<SectionLoading />}>
             <LazyBookingContent 
@@ -103,7 +82,7 @@ export const BookingSteps = ({
 
         {/* Navigation buttons - Only show on desktop or when not in progressive mobile form */}
         {(!isReallyMobile || currentStep === 3) && (
-          <div className={`flex justify-between mt-8 ${isReallyMobile ? 'pb-32' : 'pb-8'}`}>
+          <div className={`flex justify-between mt-6 ${isReallyMobile ? 'pb-20' : 'pb-8'}`}>
             <Button 
               onClick={handleBack}
               variant="outline"
