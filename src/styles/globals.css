@@ -1,6 +1,7 @@
 
 /* Import spacing utilities */
 @import "./spacing.css";
+@import "./mobileOptimizations.css";
 
 /* Theme-specific background gradients */
 .bg-gradient-light {
@@ -174,4 +175,16 @@
 
 .golden-large {
   margin-bottom: 1.618rem;
+}
+
+/* Mobile-first responsive breakpoints */
+@media (max-width: 640px) {
+  .section-padding {
+    padding-top: var(--spacing4);
+    padding-bottom: var(--spacing4);
+  }
+  
+  .section-container {
+    @apply px-3;
+  }
 }
