@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -7,12 +6,16 @@ import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
+import BookingConfirmation from "./BookingConfirmation";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { useBookingSubmission } from "@/hooks/useBookingSubmission";
+import { BookingSubmissionLoader } from "@/components/ui/loading-states";
+import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
+import { displayFormErrors } from "@/utils/errors/formErrors";
 
 interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -22,13 +25,36 @@ interface FinalStepProps {
 
 const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
-  const { isSubmitting } = useBookingSubmission();
+  const { isSubmitting, submitBooking, confirmationData, clearConfirmation } = useBookingSubmission();
   
   const providerOptions = form.watch('providerOptions') as ProviderOption[] || [];
   const hasProviderOptions = providerOptions && providerOptions.length > 0;
   
+  // Show confirmation page if booking was successful
+  if (confirmationData) {
+    return (
+      <BookingConfirmation
+        bookingData={confirmationData.bookingData}
+        referenceNumber={confirmationData.referenceNumber}
+        onNewBooking={clearConfirmation}
+      />
+    );
+  }
+  
+  // Show loading state during submission
+  if (isSubmitting) {
+    return <BookingSubmissionLoader />;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form
+    const isValid = await form.trigger();
+    if (!isValid) {
+      displayFormErrors(form.formState.errors);
+      return;
+    }
     
     // Set the selected provider if one was chosen
     if (selectedProvider) {
@@ -37,45 +63,56 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     
     try {
       const data = form.getValues();
-      await onSubmit(data);
+      const result = await submitBooking(data);
+      
+      if (result.success) {
+        // Confirmation will be shown automatically via confirmationData
+        console.log('Booking submitted successfully:', result.referenceNumber);
+      }
     } catch (error) {
       console.error("Error submitting booking:", error);
     }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Left Column - Form Fields */}
-      <div className="lg:col-span-2">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <CleaningAddress form={form} postalCode={postalCode} />
-          <PersonalInformation form={form} />
-          
-          {hasProviderOptions && (
-            <ProviderSelection 
-              providers={providerOptions} 
-              selectedProvider={selectedProvider}
-              onSelectProvider={setSelectedProvider}
-            />
-          )}
-          
-          <SpecialInstructions form={form} />
-          
-          <div className="flex justify-end">
-            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? "Submitting..." : "Complete Booking"}
-            </Button>
-          </div>
-        </form>
-      </div>
+    <FormErrorBoundary>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Form Fields */}
+        <div className="lg:col-span-2">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <CleaningAddress form={form} postalCode={postalCode} />
+            <PersonalInformation form={form} />
+            
+            {hasProviderOptions && (
+              <ProviderSelection 
+                providers={providerOptions} 
+                selectedProvider={selectedProvider}
+                onSelectProvider={setSelectedProvider}
+              />
+            )}
+            
+            <SpecialInstructions form={form} />
+            
+            <div className="flex justify-end">
+              <Button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full sm:w-auto"
+              >
+                {isSubmitting ? "Processing..." : "Complete Booking"}
+              </Button>
+            </div>
+          </form>
+        </div>
 
-      {/* Right Column - Booking Summary */}
-      <div className="lg:col-span-1">
-        <div className="sticky top-6">
-          <EnhancedBookingSummary form={form} />
+        {/* Right Column - Booking Summary */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-6">
+            <EnhancedBookingSummary form={form} />
+          </div>
         </div>
       </div>
-    </div>
+    </FormErrorBoundary>
   );
 };
 
