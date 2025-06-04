@@ -14,7 +14,6 @@ export { default as NavbarContainer } from './NavbarContainer';
 export { default as UserControls } from './UserControls';
 export { default as MobileUserControls } from './MobileUserControls';
 export { default as MobileMenuToggle } from './MobileMenuToggle';
-export { default as FeaturedServices } from './FeaturedServices';
 
 // Navigation components
 export { ServicesMegamenu } from './ServicesMegamenu';
