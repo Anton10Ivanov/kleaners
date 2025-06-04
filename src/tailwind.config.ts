@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -144,6 +145,9 @@ export default {
         'touch-min': 'var(--touch-minimum)',
         'touch': 'var(--touch-comfortable)',
         'touch-lg': 'var(--touch-large)',
+      },
+      scale: {
+        '98': '0.98',
       },
       boxShadow: {
         'sm': 'var(--shadow-sm)',
