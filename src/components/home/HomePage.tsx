@@ -1,3 +1,4 @@
+
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -120,7 +121,7 @@ const HomePage = () => {
     endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
-  // Convert serviceCategories to the expected format
+  // Convert serviceCategories to the expected format with proper ServiceCategory interface
   const convertedServiceCategories = useMemo(() => {
     return serviceCategories.map(category => ({
       id: category.title.toLowerCase().replace(/\s+/g, '-'),
@@ -130,7 +131,9 @@ const HomePage = () => {
       price: "From €25/hour",
       href: category.services[0]?.href || "/services",
       features: category.services.map(service => service.title),
-      category: category.title.toLowerCase()
+      category: category.title.toLowerCase(),
+      icon: category.icon, // Include the icon property
+      services: category.services // Include the services property
     }));
   }, []);
 
