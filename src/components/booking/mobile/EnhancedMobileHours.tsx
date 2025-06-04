@@ -4,7 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calculator, Clock, Minus, Plus } from 'lucide-react';
+import { Calculator, Clock, Minus, Plus, CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useSwipeGesture, useHapticFeedback, useReducedMotion } from '@/hooks/useMobileInteractions';
 
@@ -16,6 +16,7 @@ interface EnhancedMobileHoursProps {
 const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => {
   const selectedHours = form.watch('hours') || 2;
   const [showCalculator, setShowCalculator] = useState(false);
+  const [hasConfirmedSelection, setHasConfirmedSelection] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
   const prefersReducedMotion = useReducedMotion();
 
@@ -39,20 +40,32 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
   const handleHoursChange = (hours: number) => {
     form.setValue('hours', hours);
     triggerHaptic('light');
-    
-    // Immediate completion signal for progressive form
-    if (onComplete) {
-      onComplete();
-    }
+    // Reset confirmation when hours change
+    setHasConfirmedSelection(false);
   };
 
   const handleSuggestedTime = (hours: number) => {
     form.setValue('hours', hours);
     triggerHaptic('light');
+    setHasConfirmedSelection(true);
     
-    // Immediate completion signal for progressive form
+    // Grant permission to proceed immediately
     if (onComplete) {
-      onComplete();
+      setTimeout(() => {
+        onComplete();
+      }, 300);
+    }
+  };
+
+  const handleUseMyPreference = () => {
+    setHasConfirmedSelection(true);
+    triggerHaptic('medium');
+    
+    // Grant permission to proceed
+    if (onComplete) {
+      setTimeout(() => {
+        onComplete();
+      }, 300);
     }
   };
 
@@ -182,6 +195,28 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
             </motion.div>
           ))}
         </div>
+
+        {/* Use My Preference Button */}
+        <Button
+          onClick={handleUseMyPreference}
+          className={`
+            w-full h-12 font-medium transition-all
+            ${hasConfirmedSelection 
+              ? 'bg-green-600 hover:bg-green-700 text-white' 
+              : 'bg-primary hover:bg-primary/90 text-white'
+            }
+          `}
+          disabled={hasConfirmedSelection}
+        >
+          {hasConfirmedSelection ? (
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4" />
+              Duration Confirmed ({selectedHours} hours)
+            </div>
+          ) : (
+            `Use My Preference (${selectedHours} hours)`
+          )}
+        </Button>
 
         <div className="text-center text-sm text-gray-600 dark:text-gray-400 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
           Selected: <strong>{selectedHours} hours</strong> • {getRecommendation(selectedHours)}
