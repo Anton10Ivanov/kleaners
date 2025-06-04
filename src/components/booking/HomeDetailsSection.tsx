@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, CheckCircle, Settings, Info } from 'lucide-react';
+import { Home, CheckCircle, Settings, Info, Clock, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,10 +11,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
 import { DeepCleaningPopup } from './DeepCleaningPopup';
+
 interface HomeDetailsSectionProps {
   form: UseFormReturn<BookingFormData>;
   onSuggestedTimeSelect?: (hours: number) => void;
 }
+
 function estimateDuration(size: number, bedrooms: number, bathrooms: number, pace: 'standard' | 'quick' = 'standard'): number {
   let duration = 2; // Base
 
@@ -28,15 +31,17 @@ function estimateDuration(size: number, bedrooms: number, bathrooms: number, pac
   }
   return Math.round(finalDuration * 2) / 2; // Round to nearest 0.5
 }
+
 export const HomeDetailsSection = ({
   form,
   onSuggestedTimeSelect
 }: HomeDetailsSectionProps) => {
   const [showDeepCleaningPopup, setShowDeepCleaningPopup] = useState(false);
-  const propertySize = form.watch('propertySize') || 70; // Default to 70
+  const propertySize = form.watch('propertySize') || 70;
   const bedrooms = form.watch('bedrooms') || 0;
   const bathrooms = form.watch('bathrooms') || 0;
   const cleaningPace = form.watch('cleaningPace') || 'standard';
+  const hours = form.watch('hours') || 2;
 
   // Set default property size on mount
   useEffect(() => {
@@ -44,6 +49,7 @@ export const HomeDetailsSection = ({
       form.setValue('propertySize', 70);
     }
   }, [form]);
+
   const allFieldsFilled = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
 
   // Calculate duration with standard pace for popup trigger
@@ -52,165 +58,177 @@ export const HomeDetailsSection = ({
 
   // Check if deep cleaning should be suggested (based on standard duration before quick adjustment)
   const shouldSuggestDeepCleaning = standardDuration >= 6 || bathrooms >= 3;
+  
   useEffect(() => {
     if (allFieldsFilled && shouldSuggestDeepCleaning) {
       setShowDeepCleaningPopup(true);
     }
   }, [allFieldsFilled, shouldSuggestDeepCleaning]);
+
   const handleUseSuggestedDuration = () => {
     if (onSuggestedTimeSelect && suggestedDuration > 0) {
       form.setValue('hours', suggestedDuration);
       onSuggestedTimeSelect(suggestedDuration);
     }
   };
-  const handleManualAdjust = () => {
-    // Scroll to hours selection section
-    const hoursSection = document.querySelector('[data-hours-selection]');
-    if (hoursSection) {
-      hoursSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  };
-  const getCleanTypeText = (duration: number, pace: string) => {
-    if (pace === 'quick') return "Quick Clean";
-    if (duration <= 3) return "Quick Clean";
-    if (duration <= 5) return "Standard Clean";
-    return "Thorough Clean";
-  };
+
   const handleSizeIncrement = (increment: number) => {
     const currentSize = propertySize || 70;
     const newSize = Math.max(0, currentSize + increment);
     form.setValue('propertySize', newSize);
   };
-  return <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        
 
-        <div className="space-y-6">
-          {/* Home Size */}
+  const handleHoursChange = (newHours: number) => {
+    const adjustedHours = Math.max(2, Math.min(8, newHours));
+    form.setValue('hours', adjustedHours);
+  };
+
+  const incrementHours = () => {
+    handleHoursChange(hours + 0.5);
+  };
+
+  const decrementHours = () => {
+    handleHoursChange(hours - 0.5);
+  };
+
+  const getServiceType = (duration: number) => {
+    if (duration <= 2.5) return { text: "Quick clean", color: "text-blue-600" };
+    if (duration <= 4) return { text: "Standard clean", color: "text-green-600" };
+    if (duration <= 6) return { text: "Deep clean", color: "text-orange-600" };
+    return { text: "Extensive clean", color: "text-purple-600" };
+  };
+
+  const serviceType = getServiceType(hours);
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-6">
+        {/* Home Size */}
+        <div className="space-y-2">
+          <Label htmlFor="property-size" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Home size (m²)
+          </Label>
+          <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(-5)} className="h-12 w-12 p-0">
+              -
+            </Button>
+            <Input 
+              id="property-size" 
+              type="number" 
+              placeholder="70" 
+              value={propertySize || 70} 
+              onChange={e => form.setValue('propertySize', Number(e.target.value))} 
+              className="h-12 text-center" 
+              min="20" 
+              max="500" 
+              step="5" 
+            />
+            <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(5)} className="h-12 w-12 p-0">
+              +
+            </Button>
+          </div>
+          <p className="text-xs text-gray-500">
+            A rough estimate is fine. Please include all living areas.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Bedrooms */}
           <div className="space-y-2">
-            <Label htmlFor="property-size" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Home size (m²)
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Number of bedrooms
             </Label>
-            <div className="flex items-center gap-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(-5)} className="h-12 w-12 p-0">
-                -
-              </Button>
-              <Input id="property-size" type="number" placeholder="70" value={propertySize || 70} onChange={e => form.setValue('propertySize', Number(e.target.value))} className="h-12 text-center" min="20" max="500" step="5" />
-              <Button type="button" variant="outline" size="sm" onClick={() => handleSizeIncrement(5)} className="h-12 w-12 p-0">
-                +
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500">
-              A rough estimate is fine. Please include all living areas.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Bedrooms */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Number of bedrooms
-              </Label>
-              <Select value={bedrooms?.toString()} onValueChange={value => form.setValue('bedrooms', Number(value))}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select bedrooms" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">Studio</SelectItem>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Bathrooms */}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Number of bathrooms
-              </Label>
-              <Select value={bathrooms?.toString()} onValueChange={value => form.setValue('bathrooms', Number(value))}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select bathrooms" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="1.5">1.5</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Preferred Cleaning Pace */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Preferred cleaning pace
-              </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-4 w-4 text-gray-400 cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">
-                      Quick cleans are ideal for homes that are already tidy and only need a light refresh. 
-                      Not suitable for first-time or deep cleaning. Used to calculate your recommended duration.
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Select value={cleaningPace || 'standard'} onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}>
+            <Select value={bedrooms?.toString()} onValueChange={value => form.setValue('bedrooms', Number(value))}>
               <SelectTrigger className="h-12">
-                <SelectValue placeholder="Select cleaning pace" />
+                <SelectValue placeholder="Select bedrooms" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="standard">
-                  <div>
-                    <div className="font-medium">Standard</div>
-                    <div className="text-sm text-gray-500">Thorough and well-paced</div>
-                  </div>
-                </SelectItem>
-                <SelectItem value="quick">
-                  <div>
-                    <div className="font-medium">Quick</div>
-                    <div className="text-sm text-gray-500">Faster and lighter – reduces estimated duration by 20%</div>
-                  </div>
-                </SelectItem>
+                <SelectItem value="0">Studio</SelectItem>
+                <SelectItem value="1">1</SelectItem>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3</SelectItem>
+                <SelectItem value="4">4+</SelectItem>
               </SelectContent>
             </Select>
           </div>
+
+          {/* Bathrooms */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Number of bathrooms
+            </Label>
+            <Select value={bathrooms?.toString()} onValueChange={value => form.setValue('bathrooms', Number(value))}>
+              <SelectTrigger className="h-12">
+                <SelectValue placeholder="Select bathrooms" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1</SelectItem>
+                <SelectItem value="1.5">1.5</SelectItem>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3+</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Preferred Cleaning Pace */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Preferred cleaning pace
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-gray-400 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">
+                    Quick cleans are ideal for homes that are already tidy and only need a light refresh. 
+                    Not suitable for first-time or deep cleaning. Used to calculate your recommended duration.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <Select value={cleaningPace || 'standard'} onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}>
+            <SelectTrigger className="h-12">
+              <SelectValue placeholder="Select cleaning pace" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="standard">
+                <div>
+                  <div className="font-medium">Standard</div>
+                  <div className="text-sm text-gray-500">Thorough and well-paced</div>
+                </div>
+              </SelectItem>
+              <SelectItem value="quick">
+                <div>
+                  <div className="font-medium">Quick</div>
+                  <div className="text-sm text-gray-500">Faster and lighter – reduces estimated duration by 20%</div>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       {/* Estimation Display */}
       <AnimatePresence>
-        {allFieldsFilled && suggestedDuration > 0 && <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} exit={{
-        opacity: 0,
-        y: -20
-      }} transition={{
-        duration: 0.4
-      }}>
+        {allFieldsFilled && suggestedDuration > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -20 }} 
+            transition={{ duration: 0.4 }}
+          >
             <Alert className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
               <div className="flex items-start gap-3">
                 <div className="p-1 bg-primary/20 rounded-full mt-1">
                   <CheckCircle className="h-4 w-4 text-primary" />
                 </div>
-                <div className="flex-1">
-                  <AlertDescription className="space-y-3">
+                <div className="flex-1 space-y-4">
+                  <AlertDescription>
                     <div>
                       <p className="font-semibold text-gray-900 dark:text-white text-base">
                         🧹 Estimated cleaning time: {suggestedDuration} hours{cleaningPace === 'quick' ? ' (Quick Clean)' : ''}
@@ -219,28 +237,88 @@ export const HomeDetailsSection = ({
                         Based on {propertySize} m², {bedrooms === 0 ? 'Studio' : `${bedrooms} bedroom${bedrooms !== 1 ? 's' : ''}`}, {bathrooms} bathroom{bathrooms !== 1 ? 's' : ''}{cleaningPace === 'quick' ? ', and a quick pace' : ''}.
                       </p>
                     </div>
+                  </AlertDescription>
+                  
+                  {/* Duration Selector Integrated */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Adjust duration:
+                      </span>
+                    </div>
                     
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Button type="button" onClick={handleUseSuggestedDuration} className="flex items-center gap-2 bg-primary hover:bg-primary/90">
-                        <CheckCircle className="h-4 w-4" />
-                        Use This Duration
+                    <div className="flex items-center justify-center gap-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={decrementHours}
+                        disabled={hours <= 2}
+                        className="h-10 w-10 p-0 rounded-full disabled:opacity-30"
+                      >
+                        <Minus className="h-4 w-4" />
                       </Button>
-                      <Button type="button" variant="outline" onClick={handleManualAdjust} className="flex items-center gap-2">
-                        <Settings className="h-4 w-4" />
-                        Adjust Manually Below
+                      
+                      <motion.div 
+                        className="text-center"
+                        key={hours}
+                        initial={{ scale: 1.05 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border rounded-lg px-4 py-2">
+                          <span className="text-xl font-bold text-primary">{hours}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">hours</span>
+                        </div>
+                      </motion.div>
+                      
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={incrementHours}
+                        disabled={hours >= 8}
+                        className="h-10 w-10 p-0 rounded-full disabled:opacity-30"
+                      >
+                        <Plus className="h-4 w-4" />
                       </Button>
                     </div>
-                  </AlertDescription>
+
+                    <div className="text-center space-y-1">
+                      <div className={`text-sm font-medium ${serviceType.color}`}>
+                        {serviceType.text}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        Estimated cost: €{hours * 30} per session
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    type="button" 
+                    onClick={handleUseSuggestedDuration} 
+                    className="w-full bg-primary hover:bg-primary/90"
+                  >
+                    Use Suggested Duration ({suggestedDuration} hours)
+                  </Button>
                 </div>
               </div>
             </Alert>
-          </motion.div>}
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Deep Cleaning Popup */}
-      <DeepCleaningPopup isOpen={showDeepCleaningPopup} onClose={() => setShowDeepCleaningPopup(false)} onSwitchToDeepCleaning={() => {
-      // This would redirect to deep cleaning booking
-      window.location.href = '/deep-cleaning';
-    }} onContinueStandard={() => setShowDeepCleaningPopup(false)} />
-    </div>;
+      <DeepCleaningPopup 
+        isOpen={showDeepCleaningPopup} 
+        onClose={() => setShowDeepCleaningPopup(false)} 
+        onSwitchToDeepCleaning={() => {
+          // This would redirect to deep cleaning booking
+          window.location.href = '/deep-cleaning';
+        }} 
+        onContinueStandard={() => setShowDeepCleaningPopup(false)} 
+      />
+    </div>
+  );
 };

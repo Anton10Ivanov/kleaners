@@ -7,7 +7,6 @@ import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { HomeDetailsSection } from './HomeDetailsSection';
-import SimpleDurationInput from './hours/SimpleDurationInput';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { ServiceType } from '@/types/enums';
 import { useForm } from 'react-hook-form';
@@ -15,7 +14,7 @@ import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useState, useEffect } from 'react';
-import { Home, Calendar, Clock, Plus } from 'lucide-react';
+import { Calendar, Plus } from 'lucide-react';
 
 interface BookingContentProps {
   currentStep: number;
@@ -24,24 +23,11 @@ interface BookingContentProps {
 }
 
 const fadeVariant = {
-  hidden: {
-    opacity: 0,
-    y: 10
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4
-    }
-  }
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
 };
 
-const BookingContent = ({
-  currentStep,
-  selectedService,
-  form
-}: BookingContentProps) => {
+const BookingContent = ({ currentStep, selectedService, form }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
   const frequency = form.watch('frequency') as Frequency | undefined;
   const hours = form.watch('hours') || 2;
@@ -49,13 +35,14 @@ const BookingContent = ({
   const propertySize = form.watch('propertySize') || 70;
   const bedrooms = form.watch('bedrooms') || 0;
   const bathrooms = form.watch('bathrooms') || 0;
+  const selectedDate = form.watch('date');
+  const preferredTime = form.watch('preferredTime');
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   // Progressive disclosure states
   const [sectionsCompleted, setSectionsCompleted] = useState({
     homeDetails: false,
     frequency: false,
-    duration: false,
     calendar: false
   });
 
@@ -75,10 +62,9 @@ const BookingContent = ({
       ...prev,
       homeDetails: homeDetailsComplete,
       frequency: !!frequency,
-      duration: hours >= 2,
-      calendar: !!form.watch('selectedDate')
+      calendar: !!(selectedDate && preferredTime)
     }));
-  }, [homeDetailsComplete, frequency, hours, form]);
+  }, [homeDetailsComplete, frequency, selectedDate, preferredTime]);
 
   const showCalendar = frequency && frequency !== Frequency.Custom;
   
@@ -91,25 +77,8 @@ const BookingContent = ({
     form.setValue('hours', suggestedHours);
   };
 
-  // Section header component
-  const SectionHeader = ({ 
-    icon: Icon, 
-    title, 
-    stepNumber 
-  }: { 
-    icon: any; 
-    title: string; 
-    stepNumber: number;
-  }) => (
-    <div className="flex items-center gap-3 mb-6">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-medium">
-        {stepNumber}
-      </div>
-      <Icon className="h-5 w-5 text-primary" />
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        {title}
-      </h3>
-    </div>
+  const SectionDivider = () => (
+    <div className="border-t border-gray-100 dark:border-gray-700 my-6"></div>
   );
   
   return (
@@ -117,36 +86,28 @@ const BookingContent = ({
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
           {currentStep === 2 && selectedService === ServiceType.Home && (
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={fadeVariant}
-            >
-              {/* Unified Container */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
+              {/* Single Container */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
                 
                 {/* 1. Home Details Section */}
-                <div className="p-6">
-                  <SectionHeader 
-                    icon={Home} 
-                    title="Home Details" 
-                    stepNumber={1}
-                  />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    About Your Home
+                  </h3>
                   <HomeDetailsSection 
                     form={form} 
                     onSuggestedTimeSelect={handleSuggestedTimeSelect}
                   />
                 </div>
 
-                <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                <SectionDivider />
 
                 {/* 2. Frequency Selection */}
-                <div className="p-6">
-                  <SectionHeader 
-                    icon={Calendar} 
-                    title="Cleaning Frequency" 
-                    stepNumber={2}
-                  />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Cleaning Frequency
+                  </h3>
                   <ServiceOptions 
                     frequency={frequency} 
                     setFrequency={freq => form.setValue('frequency', freq)} 
@@ -154,50 +115,37 @@ const BookingContent = ({
                   />
                 </div>
                 
-                {/* Progressive Disclosure - Show next sections only when previous are complete */}
-                {sectionsCompleted.homeDetails && sectionsCompleted.frequency && frequency !== Frequency.Custom && (
+                {/* Progressive Disclosure - Show calendar only when previous sections are complete */}
+                {sectionsCompleted.homeDetails && sectionsCompleted.frequency && showCalendar && (
                   <>
-                    <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                    <SectionDivider />
                     
-                    {/* 3. Duration Section */}
-                    <div className="p-6">
-                      <SectionHeader 
-                        icon={Clock} 
-                        title="Duration" 
-                        stepNumber={3}
-                      />
-                      <SimpleDurationInput form={form} />
+                    {/* 3. Calendar Section */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Calendar className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          Date & Time
+                        </h3>
+                      </div>
+                      <OptimizedCalendar form={form} />
                     </div>
-                    
-                    {/* 4. Calendar Section */}
-                    {showCalendar && sectionsCompleted.duration && (
-                      <>
-                        <div className="border-t border-gray-100 dark:border-gray-700"></div>
-                        <div className="p-6">
-                          <SectionHeader 
-                            icon={Calendar} 
-                            title="Date & Time" 
-                            stepNumber={4}
-                          />
-                          <OptimizedCalendar form={form} />
-                        </div>
-                      </>
-                    )}
-                    
-                    {/* 5. Extras Section */}
-                    {sectionsCompleted.duration && (
-                      <>
-                        <div className="border-t border-gray-100 dark:border-gray-700"></div>
-                        <div className="p-6">
-                          <SectionHeader 
-                            icon={Plus} 
-                            title="Additional Services" 
-                            stepNumber={5}
-                          />
-                          <EnhancedExtras form={form} />
-                        </div>
-                      </>
-                    )}
+                  </>
+                )}
+                
+                {/* 4. Extras Section - Show when calendar is complete */}
+                {sectionsCompleted.calendar && (
+                  <>
+                    <SectionDivider />
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Plus className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          Additional Services
+                        </h3>
+                      </div>
+                      <EnhancedExtras form={form} />
+                    </div>
                   </>
                 )}
               </div>
@@ -217,23 +165,13 @@ const BookingContent = ({
           )}
           
           {currentStep === 2 && selectedService === ServiceType.Office && (
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={fadeVariant} 
-              key="business-step"
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeVariant} key="business-step">
               <BusinessStep form={form} />
             </motion.div>
           )}
           
           {currentStep === 3 && (
-            <motion.div 
-              initial="hidden" 
-              animate="visible" 
-              variants={fadeVariant} 
-              key="final-step"
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeVariant} key="final-step">
               <FinalStep 
                 postalCode={postalCode} 
                 onSubmit={submitBooking} 
