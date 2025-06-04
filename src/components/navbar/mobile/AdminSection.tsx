@@ -1,77 +1,66 @@
 
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { SheetClose } from '@/components/ui/sheet';
-import { ShieldCheck, CalendarDays, User, UserCog } from 'lucide-react';
+import { Users, Settings, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface AdminSectionProps {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (open: boolean) => void;
 }
 
 const AdminSection: React.FC<AdminSectionProps> = ({ setIsOpen }) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
 
-  const handleAdminClick = () => {
+  const adminItems = [
+    {
+      title: "User Management",
+      description: "Manage users and permissions",
+      icon: <Users className="h-4 w-4" />,
+      href: "/admin/users"
+    },
+    {
+      title: "Analytics",
+      description: "View platform analytics",
+      icon: <BarChart className="h-4 w-4" />,
+      href: "/admin/analytics"
+    },
+    {
+      title: "Settings",
+      description: "Platform configuration",
+      icon: <Settings className="h-4 w-4" />,
+      href: "/admin/settings"
+    }
+  ];
+
+  const handleNavigation = (href: string) => {
+    navigate(href);
     setIsOpen(false);
-    navigate('/admin');
-    toast({
-      title: "Admin Panel",
-      description: "Navigating to the admin panel",
-    });
   };
 
   return (
-    <div className="rounded-lg border border-border p-4 bg-primary/5 shadow-sm">
-      <h3 className="text-sm font-semibold text-primary mb-3 flex items-center">
-        <ShieldCheck className="mr-2 h-4 w-4" />
-        Admin Access
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+        Admin Panel
       </h3>
-      <div className="space-y-2 pl-2">
+      
+      {adminItems.map((item) => (
         <Button
-          variant="default"
-          size="sm"
-          onClick={handleAdminClick}
-          className="w-full flex items-center justify-start py-2 px-3 rounded-md bg-primary/10 hover:bg-primary/20 border-none"
+          key={item.title}
+          variant="ghost"
+          className="w-full justify-start min-h-[44px] px-3"
+          onClick={() => handleNavigation(item.href)}
         >
-          <ShieldCheck className="mr-2 h-4 w-4" />
-          <span className="text-sm">Admin Dashboard</span>
+          <div className="flex items-center gap-3">
+            {item.icon}
+            <div className="text-left">
+              <p className="font-medium">{item.title}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {item.description}
+              </p>
+            </div>
+          </div>
         </Button>
-        
-        <div className="space-y-1 mt-2 pl-1">
-          <SheetClose asChild>
-            <Link
-              to="/admin/bookings"
-              className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors"
-            >
-              <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>Manage Bookings</span>
-            </Link>
-          </SheetClose>
-          
-          <SheetClose asChild>
-            <Link
-              to="/admin/clients"
-              className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors"
-            >
-              <User className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>Manage Clients</span>
-            </Link>
-          </SheetClose>
-          
-          <SheetClose asChild>
-            <Link
-              to="/admin/providers"
-              className="flex items-center py-2 px-2 text-sm rounded-md hover:bg-accent transition-colors"
-            >
-              <UserCog className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>Manage Providers</span>
-            </Link>
-          </SheetClose>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
