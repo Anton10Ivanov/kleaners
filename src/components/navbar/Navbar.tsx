@@ -194,11 +194,14 @@ const Navbar = () => {
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
       <Logo />
       
+      {/* Updated FeaturedServices - now responsive */}
       <FeaturedServices />
       
-      <ServicesMegamenu />
-      
-      <EnhancedDropdownNavigation navItems={navItems} />
+      {/* Desktop-only components */}
+      <div className="hidden lg:flex items-center space-x-6">
+        <ServicesMegamenu />
+        <EnhancedDropdownNavigation navItems={navItems} />
+      </div>
 
       <div className="hidden md:flex items-center space-x-3">
         {user && <UserControls user={user} />}
