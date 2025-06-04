@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 interface BaseFieldProps<TFieldValues extends FieldValues> {
   form: UseFormReturn<TFieldValues>;
@@ -43,6 +44,10 @@ export function TextField<TFieldValues extends FieldValues>({
   className,
   required = false
 }: TextFieldProps<TFieldValues>) {
+  const fieldState = form.getFieldState(name);
+  const hasError = !!fieldState.error;
+  const isValid = fieldState.isDirty && !hasError;
+
   return (
     <FormField
       control={form.control}
@@ -54,12 +59,27 @@ export function TextField<TFieldValues extends FieldValues>({
             {required && <span className="text-red-500 ml-1">*</span>}
           </FormLabel>
           <FormControl>
-            <Input
-              type={type}
-              placeholder={placeholder}
-              {...field}
-              className="h-12"
-            />
+            <div className="relative">
+              <Input
+                type={type}
+                placeholder={placeholder}
+                {...field}
+                className={cn(
+                  "h-12 pr-10",
+                  hasError && "border-red-500 focus:border-red-500",
+                  isValid && "border-green-500 focus:border-green-500"
+                )}
+              />
+              {fieldState.isDirty && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {isValid ? (
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  ) : hasError ? (
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                  ) : null}
+                </div>
+              )}
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -77,6 +97,10 @@ export function TextareaField<TFieldValues extends FieldValues>({
   className,
   required = false
 }: TextareaFieldProps<TFieldValues>) {
+  const fieldState = form.getFieldState(name);
+  const hasError = !!fieldState.error;
+  const isValid = fieldState.isDirty && !hasError;
+
   return (
     <FormField
       control={form.control}
@@ -92,10 +116,25 @@ export function TextareaField<TFieldValues extends FieldValues>({
               placeholder={placeholder}
               rows={rows}
               {...field}
-              className="resize-none"
+              className={cn(
+                "resize-none",
+                hasError && "border-red-500 focus:border-red-500",
+                isValid && "border-green-500 focus:border-green-500"
+              )}
             />
           </FormControl>
           <FormMessage />
+          {field.value && (
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>{field.value.length}/500 characters</span>
+              {isValid && (
+                <span className="text-green-600 flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3" />
+                  Valid
+                </span>
+              )}
+            </div>
+          )}
         </FormItem>
       )}
     />

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
-import SpecialInstructions from "./final/SpecialInstructions";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import BookingConfirmation from "./BookingConfirmation";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,6 +15,7 @@ import { useBookingSubmission } from "@/hooks/useBookingSubmission";
 import { BookingSubmissionLoader } from "@/components/ui/loading-states";
 import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
 import { displayFormErrors } from "@/utils/errors/formErrors";
+import { toast } from "sonner";
 
 interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -49,9 +49,25 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
+    // Validate required fields with detailed error messages
+    const formData = form.getValues();
+    const errors: string[] = [];
+    
+    if (!formData.firstName) errors.push("First name is required");
+    if (!formData.lastName) errors.push("Last name is required");
+    if (!formData.email) errors.push("Email address is required");
+    if (!formData.phone) errors.push("Phone number is required");
+    if (!formData.address) errors.push("Street address is required");
+    if (!formData.city) errors.push("City is required");
+    if (!formData.postalCode) errors.push("Postal code is required");
+    if (!formData.accessMethod) errors.push("Access method is required");
+    
+    // Validate form with react-hook-form
     const isValid = await form.trigger();
-    if (!isValid) {
+    
+    if (!isValid || errors.length > 0) {
+      // Display specific validation errors
+      errors.forEach(error => toast.error(error));
       displayFormErrors(form.formState.errors);
       return;
     }
@@ -63,14 +79,20 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     
     try {
       const data = form.getValues();
+      console.log('Submitting booking data:', data);
+      
       const result = await submitBooking(data);
       
       if (result.success) {
         // Confirmation will be shown automatically via confirmationData
         console.log('Booking submitted successfully:', result.referenceNumber);
+        toast.success('Booking confirmed! Check your email for details.');
+      } else {
+        toast.error(result.error || 'Failed to submit booking');
       }
     } catch (error) {
       console.error("Error submitting booking:", error);
+      toast.error('An unexpected error occurred. Please try again.');
     }
   };
 
@@ -91,15 +113,13 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
               />
             )}
             
-            <SpecialInstructions form={form} />
-            
             <div className="flex justify-end">
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto px-8 py-3"
               >
-                {isSubmitting ? "Processing..." : "Complete Booking"}
+                {isSubmitting ? "Processing Booking..." : "Complete Booking"}
               </Button>
             </div>
           </form>

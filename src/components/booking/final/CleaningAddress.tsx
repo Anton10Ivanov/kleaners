@@ -7,6 +7,7 @@ import { BookingFormData } from "@/schemas/booking";
 import { Card, CardContent } from "@/components/ui/card";
 import { AddressAutocomplete } from "@/components/forms/AddressAutocomplete";
 import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
+import SpecialInstructions from "./SpecialInstructions";
 
 interface CleaningAddressProps {
   form: UseFormReturn<BookingFormData>;
@@ -26,7 +27,6 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               <AddressAutocomplete 
                 form={form}
                 onAddressSelect={(address) => {
-                  // Address details are automatically populated by the component
                   console.log('Address selected:', address);
                 }}
               />
@@ -38,7 +38,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>City *</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="City" />
                   </FormControl>
@@ -53,7 +53,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               name="postalCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Postal Code</FormLabel>
+                  <FormLabel>Postal Code *</FormLabel>
                   <FormControl>
                     <Input 
                       {...field} 
@@ -98,45 +98,27 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
             />
 
             {/* Access Method */}
-            <FormField
-              control={form.control}
-              name="accessMethod"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>How should we access your property?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select access method" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="key_hidden">Key hidden on property</SelectItem>
-                      <SelectItem value="key_pickup">I'll provide key beforehand</SelectItem>
-                      <SelectItem value="present">I'll be present</SelectItem>
-                      <SelectItem value="concierge">Building concierge/management</SelectItem>
-                      <SelectItem value="other">Other (please specify in instructions)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Access Instructions */}
             <div className="md:col-span-2">
               <FormField
                 control={form.control}
-                name="accessInstructions"
+                name="accessMethod"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Access Instructions (optional)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Any specific instructions for accessing your property"
-                      />
-                    </FormControl>
+                    <FormLabel>How should we access your property? *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select access method" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="key_hidden">Key hidden on property</SelectItem>
+                        <SelectItem value="key_pickup">I'll provide key beforehand</SelectItem>
+                        <SelectItem value="present">I'll be present</SelectItem>
+                        <SelectItem value="concierge">Building concierge/management</SelectItem>
+                        <SelectItem value="other">Other (please specify in instructions)</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -145,6 +127,9 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Special Instructions moved here */}
+      <SpecialInstructions form={form} />
     </FormErrorBoundary>
   );
 };
