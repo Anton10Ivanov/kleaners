@@ -1,6 +1,6 @@
 
-import { BookingsSection } from "@/components/admin/sections/bookings/BookingsRefactored";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { BookingsSection } from "@/components/admin";
 
 export const AdminBookings = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");

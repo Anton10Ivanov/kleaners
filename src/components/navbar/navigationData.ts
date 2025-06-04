@@ -1,38 +1,92 @@
 
-import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
+import { Heart, HelpCircle, Phone, Users, FileText, Shield, Home, Building, Sparkles } from 'lucide-react';
 
 export const serviceCategories = [
   {
     title: "Home Cleaning",
     description: "Professional cleaning for your home",
+    icon: Home,
     services: [
       {
         name: "Regular Cleaning",
+        title: "Regular Cleaning",
         description: "Weekly or bi-weekly cleaning service",
         price: "From €25/hour",
-        icon: "🏠"
+        icon: "🏠",
+        href: "/services/home-cleaning"
       },
       {
         name: "Deep Cleaning",
+        title: "Deep Cleaning",
         description: "Thorough one-time cleaning",
         price: "From €35/hour", 
-        icon: "✨"
+        icon: "✨",
+        href: "/services/deep-cleaning"
       }
     ]
   },
   {
     title: "Office Cleaning",
     description: "Commercial cleaning solutions",
+    icon: Building,
     services: [
       {
         name: "Office Maintenance",
+        title: "Office Maintenance",
         description: "Regular office cleaning",
         price: "From €30/hour",
-        icon: "🏢"
+        icon: "🏢",
+        href: "/services/office-cleaning"
       }
     ]
   }
 ];
+
+export const popularServices = [
+  {
+    name: "Regular Cleaning",
+    title: "Regular Cleaning",
+    description: "Weekly or bi-weekly cleaning service",
+    price: "From €25/hour",
+    icon: "🏠",
+    href: "/services/home-cleaning"
+  },
+  {
+    name: "Deep Cleaning",
+    title: "Deep Cleaning", 
+    description: "Thorough one-time cleaning",
+    price: "From €35/hour",
+    icon: "✨",
+    href: "/services/deep-cleaning"
+  },
+  {
+    name: "Office Cleaning",
+    title: "Office Cleaning",
+    description: "Professional office cleaning",
+    price: "From €30/hour",
+    icon: "🏢",
+    href: "/services/office-cleaning"
+  }
+];
+
+export const navigationData = [
+  { href: "/", title: "Home" },
+  { href: "/services", title: "Services" },
+  { href: "/about", title: "About" },
+  { href: "/contact", title: "Contact" }
+];
+
+export const Icons = {
+  Heart,
+  HelpCircle,
+  Phone,
+  Users,
+  FileText,
+  Shield,
+  Home,
+  Building,
+  Sparkles
+};
 
 export const navItems = [
   {

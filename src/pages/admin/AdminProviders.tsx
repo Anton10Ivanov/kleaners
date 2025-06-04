@@ -1,6 +1,6 @@
 
-import { ProvidersSection } from "@/components/admin/sections/ProvidersSection";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { ProvidersSection } from "@/components/admin";
 
 export const AdminProviders = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
