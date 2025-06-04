@@ -1,7 +1,9 @@
 
+import React from 'react';
 import { Heart, HelpCircle, Phone, Users, FileText, Shield, Home, Building, Sparkles } from 'lucide-react';
+import { ServiceCategory, NavItem, PopularService } from '@/types/navigation';
 
-export const serviceCategories = [
+export const serviceCategories: ServiceCategory[] = [
   {
     title: "Home Cleaning",
     description: "Professional cleaning for your home",
@@ -11,13 +13,13 @@ export const serviceCategories = [
         title: "Regular Cleaning",
         description: "Weekly or bi-weekly cleaning service",
         href: "/services/home-cleaning",
-        icon: Home
+        icon: React.createElement(Home, { className: "h-5 w-5" })
       },
       {
         title: "Deep Cleaning", 
         description: "Thorough one-time cleaning",
         href: "/services/deep-cleaning",
-        icon: Sparkles
+        icon: React.createElement(Sparkles, { className: "h-5 w-5" })
       }
     ]
   },
@@ -30,13 +32,13 @@ export const serviceCategories = [
         title: "Office Maintenance",
         description: "Regular office cleaning",
         href: "/services/office-cleaning",
-        icon: Building
+        icon: React.createElement(Building, { className: "h-5 w-5" })
       }
     ]
   }
 ];
 
-export const popularServices = [
+export const popularServices: PopularService[] = [
   {
     name: "Regular Cleaning",
     title: "Regular Cleaning",
@@ -70,19 +72,7 @@ export const navigationData = [
   { href: "/contact", title: "Contact" }
 ];
 
-export const Icons = {
-  Heart,
-  HelpCircle,
-  Phone,
-  Users,
-  FileText,
-  Shield,
-  Home,
-  Building,
-  Sparkles
-};
-
-export const navItems = [
+export const navItems: NavItem[] = [
   {
     id: 2,
     label: "About Us",
@@ -91,22 +81,22 @@ export const navItems = [
       items: [{
         label: "Company's Values",
         description: "Our principles and what we stand for",
-        icon: Heart,
+        icon: React.createElement(Heart, { className: "h-5 w-5" }),
         path: "/about/values"
       }, {
         label: "FAQ",
         description: "Frequently asked questions",
-        icon: HelpCircle,
+        icon: React.createElement(HelpCircle, { className: "h-5 w-5" }),
         path: "/about/faq"
       }, {
         label: "Terms of Service",
         description: "Our terms and conditions",
-        icon: FileText,
+        icon: React.createElement(FileText, { className: "h-5 w-5" }),
         path: "/legal/terms"
       }, {
         label: "Privacy Policy",
         description: "How we handle your data",
-        icon: Shield,
+        icon: React.createElement(Shield, { className: "h-5 w-5" }),
         path: "/legal/privacy"
       }]
     }]
@@ -118,12 +108,12 @@ export const navItems = [
       items: [{
         label: "Get in Touch",
         description: "Contact our customer service team",
-        icon: Phone,
+        icon: React.createElement(Phone, { className: "h-5 w-5" }),
         path: "/contact"
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        icon: Users,
+        icon: React.createElement(Users, { className: "h-5 w-5" }),
         path: "/join-team"
       }]
     }]
