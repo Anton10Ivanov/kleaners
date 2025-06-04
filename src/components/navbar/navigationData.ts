@@ -1,7 +1,15 @@
 
 import React from 'react';
-import { Heart, HelpCircle, Phone, Users, FileText, Shield, Home, Building, Sparkles } from 'lucide-react';
+import { Heart, HelpCircle, Phone, Users, FileText, Shield, Home, Building, Sparkles, LucideIcon, Briefcase, Building2, HardHat } from 'lucide-react';
 import { ServiceCategory, NavItem, PopularService } from '@/types/navigation';
+
+// Icons export for backward compatibility
+export const Icons: Record<string, LucideIcon> = {
+  regular: Sparkles,
+  business: Briefcase,
+  moveInOut: Building2,
+  postConstruction: HardHat,
+};
 
 export const serviceCategories: ServiceCategory[] = [
   {

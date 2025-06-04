@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { LucideIcon } from 'lucide-react';
 
 // Base navigation types
 export interface NavigationItem {
@@ -30,11 +31,19 @@ export interface ServiceItem {
   icon: React.ReactNode;
 }
 
+// Extended ServiceCategory that supports both navbar and homepage requirements
 export interface ServiceCategory {
+  id?: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon | React.ComponentType<any>;
   services: ServiceItem[];
+  // Optional fields for HomePage compatibility
+  image?: string;
+  price?: string;
+  href?: string;
+  features?: string[];
+  category?: string;
 }
 
 // Enhanced dropdown navigation props
