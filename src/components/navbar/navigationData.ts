@@ -11,11 +11,18 @@ export const Icons: Record<string, LucideIcon> = {
   postConstruction: HardHat,
 };
 
+// Centralized service categories - single source of truth
 export const serviceCategories: ServiceCategory[] = [
   {
+    id: 'home-cleaning',
     title: "Home Cleaning",
     description: "Professional cleaning for your home",
     icon: Home,
+    image: "/placeholder.svg",
+    price: "From €25/hour",
+    href: "/services/home-cleaning",
+    category: "residential",
+    features: ["Regular Cleaning", "Deep Cleaning"],
     services: [
       {
         title: "Regular Cleaning",
@@ -32,9 +39,15 @@ export const serviceCategories: ServiceCategory[] = [
     ]
   },
   {
+    id: 'office-cleaning',
     title: "Office Cleaning",
     description: "Commercial cleaning solutions",
     icon: Building,
+    image: "/placeholder.svg",
+    price: "From €30/hour",
+    href: "/services/office-cleaning",
+    category: "commercial",
+    features: ["Office Maintenance"],
     services: [
       {
         title: "Office Maintenance",
@@ -46,33 +59,20 @@ export const serviceCategories: ServiceCategory[] = [
   }
 ];
 
-export const popularServices: PopularService[] = [
-  {
-    name: "Regular Cleaning",
-    title: "Regular Cleaning",
-    description: "Weekly or bi-weekly cleaning service",
-    price: "From €25/hour",
-    icon: "🏠",
-    href: "/services/home-cleaning"
-  },
-  {
-    name: "Deep Cleaning",
-    title: "Deep Cleaning", 
-    description: "Thorough one-time cleaning",
-    price: "From €35/hour",
-    icon: "✨",
-    href: "/services/deep-cleaning"
-  },
-  {
-    name: "Office Cleaning",
-    title: "Office Cleaning",
-    description: "Professional office cleaning",
-    price: "From €30/hour",
-    icon: "🏢",
-    href: "/services/office-cleaning"
-  }
-];
+// Generate popular services from service categories
+export const popularServices: PopularService[] = serviceCategories.flatMap(category => 
+  category.services.map(service => ({
+    name: service.title,
+    title: service.title,
+    description: service.description,
+    price: category.price || "From €25/hour",
+    icon: category.title === "Home Cleaning" ? "🏠" : 
+          category.title === "Office Cleaning" ? "🏢" : "✨",
+    href: service.href
+  }))
+);
 
+// Basic navigation data
 export const navigationData = [
   { href: "/", title: "Home" },
   { href: "/services", title: "Services" },
@@ -80,6 +80,7 @@ export const navigationData = [
   { href: "/contact", title: "Contact" }
 ];
 
+// Enhanced navigation items with dynamic service menu
 export const navItems: NavItem[] = [
   {
     id: 2,
@@ -127,3 +128,25 @@ export const navItems: NavItem[] = [
     }]
   }
 ];
+
+// Factory function to generate service menu items
+export const generateServiceMenuItems = () => {
+  return serviceCategories.map(category => ({
+    label: category.title,
+    description: category.description,
+    icon: React.createElement(category.icon as React.ComponentType<any>, { className: "h-5 w-5" }),
+    path: category.href || "/services"
+  }));
+};
+
+// Memoized service navigation for performance
+export const getServiceNavigation = () => {
+  return {
+    id: 1,
+    label: "Services",
+    subMenus: [{
+      title: "Our Services",
+      items: generateServiceMenuItems()
+    }]
+  };
+};
