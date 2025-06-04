@@ -76,18 +76,19 @@ export const EstimationDisplay = ({
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       Based on {propertySize} m², {bedrooms === 0 ? 'Studio' : `${bedrooms} bedroom${bedrooms !== 1 ? 's' : ''}`}, {bathrooms} bathroom{bathrooms !== 1 ? 's' : ''}{cleaningPace === 'quick' ? ', and a quick pace' : ''}.
                     </p>
+                    
+                    <Button 
+                      type="button" 
+                      onClick={handleUseSuggestedDuration} 
+                      className="w-full bg-primary hover:bg-primary/90 mt-3"
+                    >
+                      Use Suggested Duration ({suggestedDuration} hours)
+                    </Button>
                   </div>
                 </AlertDescription>
                 
                 {/* Duration Selector */}
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Adjust duration:
-                    </span>
-                  </div>
-                  
                   <div className="flex items-center justify-center gap-4">
                     <Button 
                       type="button" 
@@ -125,23 +126,12 @@ export const EstimationDisplay = ({
                     </Button>
                   </div>
 
-                  <div className="text-center space-y-1">
+                  <div className="text-center">
                     <div className={`text-sm font-medium ${serviceType.color}`}>
                       {serviceType.text}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      Estimated cost: €{hours * 30} per session
-                    </div>
                   </div>
                 </div>
-                
-                <Button 
-                  type="button" 
-                  onClick={handleUseSuggestedDuration} 
-                  className="w-full bg-primary hover:bg-primary/90"
-                >
-                  Use Suggested Duration ({suggestedDuration} hours)
-                </Button>
               </div>
             </div>
           </Alert>

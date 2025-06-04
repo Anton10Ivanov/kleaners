@@ -39,10 +39,13 @@ export const HomeDetailsSection = ({
   const bathrooms = form.watch('bathrooms') || 0;
   const cleaningPace = form.watch('cleaningPace') || 'standard';
 
-  // Set default property size on mount
+  // Set default values on mount
   useEffect(() => {
     if (!form.watch('propertySize')) {
       form.setValue('propertySize', 70);
+    }
+    if (!form.watch('cleaningPace')) {
+      form.setValue('cleaningPace', 'standard');
     }
   }, [form]);
 
