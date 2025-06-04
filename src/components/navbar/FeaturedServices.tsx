@@ -9,15 +9,8 @@ const FeaturedServices = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
-    <div className={`${isMobile ? 'flex' : 'hidden lg:flex'} items-center space-x-6`}>
-      <Link 
-        to="/services" 
-        className="text-theme-blue hover:text-primary transition-colors font-medium touch-target"
-      >
-        Services
-      </Link>
-      
-      {/* Highlighted Business Solutions - now shows on mobile too */}
+    <div className={`${isMobile ? 'flex' : 'hidden lg:flex'} items-center`}>
+      {/* Business Solutions - now the main featured item */}
       <Link 
         to="/business-solutions" 
         className={`flex items-center gap-2 px-3 py-2 bg-primary/10 hover:bg-primary/15 rounded-lg transition-all duration-200 group touch-target ${

@@ -194,7 +194,7 @@ const Navbar = () => {
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
       <Logo />
       
-      {/* Updated FeaturedServices - now responsive */}
+      {/* Mobile-optimized FeaturedServices */}
       <FeaturedServices />
       
       {/* Desktop-only components */}
@@ -203,6 +203,7 @@ const Navbar = () => {
         <EnhancedDropdownNavigation navItems={navItems} />
       </div>
 
+      {/* Desktop controls - keep language selector here */}
       <div className="hidden md:flex items-center space-x-3">
         {user && <UserControls user={user} />}
         
@@ -211,9 +212,8 @@ const Navbar = () => {
         {!user && <AuthButtons />}
       </div>
 
+      {/* Mobile controls - simplified, language moved to menu */}
       <div className="md:hidden flex items-center gap-2">
-        <LanguageSelector currentLanguage={currentLanguage} onLanguageChange={toggleLanguage} />
-        
         {user && <MobileUserControls user={user} handleBookingsClick={handleBookingsClick} />}
         
         <MobileMenuToggle isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
