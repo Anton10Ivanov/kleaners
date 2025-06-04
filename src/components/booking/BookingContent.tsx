@@ -15,7 +15,7 @@ import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useState, useEffect } from 'react';
-import { CheckCircle2, Clock, Calendar, Plus } from 'lucide-react';
+import { Home, Calendar, Clock, Plus } from 'lucide-react';
 
 interface BookingContentProps {
   currentStep: number;
@@ -82,9 +82,6 @@ const BookingContent = ({
 
   const showCalendar = frequency && frequency !== Frequency.Custom;
   
-  console.log('BookingContent - selectedService:', selectedService);
-  console.log('BookingContent - currentStep:', currentStep);
-  
   const handleFormClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -94,55 +91,24 @@ const BookingContent = ({
     form.setValue('hours', suggestedHours);
   };
 
-  // Calculate savings percentage
-  const calculateSavings = (freq: Frequency | undefined) => {
-    if (!freq || freq === Frequency.OneTime) return 0;
-    
-    const oneTimePrice = hours * 35; // One-time rate
-    const recurringPrice = hours * (freq === Frequency.Weekly ? 27 : 30); // Recurring rates
-    
-    return Math.round(((oneTimePrice - recurringPrice) / oneTimePrice) * 100);
-  };
-
-  const savingsPercentage = calculateSavings(frequency);
-
   // Section header component
   const SectionHeader = ({ 
     icon: Icon, 
     title, 
-    completed = false, 
     stepNumber 
   }: { 
     icon: any; 
     title: string; 
-    completed?: boolean; 
     stepNumber: number;
   }) => (
-    <div className="flex items-center gap-3 mb-4">
-      <div className={`
-        flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium
-        ${completed 
-          ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300' 
-          : 'bg-primary/10 text-primary dark:bg-primary/20'
-        }
-      `}>
-        {completed ? <CheckCircle2 className="h-4 w-4" /> : stepNumber}
+    <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-medium">
+        {stepNumber}
       </div>
-      <div className={`
-        p-2 rounded-lg
-        ${completed 
-          ? 'bg-green-100 dark:bg-green-900' 
-          : 'bg-primary/10 dark:bg-primary/20'
-        }
-      `}>
-        <Icon className={`h-5 w-5 ${completed ? 'text-green-600 dark:text-green-300' : 'text-primary'}`} />
-      </div>
+      <Icon className="h-5 w-5 text-primary" />
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
         {title}
       </h3>
-      {completed && (
-        <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-300 ml-auto" />
-      )}
     </div>
   );
   
@@ -156,15 +122,14 @@ const BookingContent = ({
               animate="visible" 
               variants={fadeVariant}
             >
-              {/* Unified Container with consistent spacing */}
+              {/* Unified Container */}
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 
                 {/* 1. Home Details Section */}
-                <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+                <div className="p-6">
                   <SectionHeader 
-                    icon={Plus} 
-                    title="Tell us about your home" 
-                    completed={sectionsCompleted.homeDetails}
+                    icon={Home} 
+                    title="Home Details" 
                     stepNumber={1}
                   />
                   <HomeDetailsSection 
@@ -173,23 +138,15 @@ const BookingContent = ({
                   />
                 </div>
 
-                {/* 2. Frequency Selection - Position 1 as requested */}
-                <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center justify-between mb-4">
-                    <SectionHeader 
-                      icon={Calendar} 
-                      title="Cleaning Interval" 
-                      completed={sectionsCompleted.frequency}
-                      stepNumber={2}
-                    />
-                    {savingsPercentage > 0 && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-1">
-                        <span className="text-red-600 font-bold text-sm">
-                          Save {savingsPercentage}% vs one-time
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                <div className="border-t border-gray-100 dark:border-gray-700"></div>
+
+                {/* 2. Frequency Selection */}
+                <div className="p-6">
+                  <SectionHeader 
+                    icon={Calendar} 
+                    title="Cleaning Frequency" 
+                    stepNumber={2}
+                  />
                   <ServiceOptions 
                     frequency={frequency} 
                     setFrequency={freq => form.setValue('frequency', freq)} 
@@ -200,12 +157,13 @@ const BookingContent = ({
                 {/* Progressive Disclosure - Show next sections only when previous are complete */}
                 {sectionsCompleted.homeDetails && sectionsCompleted.frequency && frequency !== Frequency.Custom && (
                   <>
+                    <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                    
                     {/* 3. Duration Section */}
-                    <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+                    <div className="p-6">
                       <SectionHeader 
                         icon={Clock} 
                         title="Duration" 
-                        completed={sectionsCompleted.duration}
                         stepNumber={3}
                       />
                       <SimpleDurationInput form={form} />
@@ -213,27 +171,32 @@ const BookingContent = ({
                     
                     {/* 4. Calendar Section */}
                     {showCalendar && sectionsCompleted.duration && (
-                      <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-                        <SectionHeader 
-                          icon={Calendar} 
-                          title="Select Date & Time" 
-                          completed={sectionsCompleted.calendar}
-                          stepNumber={4}
-                        />
-                        <OptimizedCalendar form={form} />
-                      </div>
+                      <>
+                        <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                        <div className="p-6">
+                          <SectionHeader 
+                            icon={Calendar} 
+                            title="Date & Time" 
+                            stepNumber={4}
+                          />
+                          <OptimizedCalendar form={form} />
+                        </div>
+                      </>
                     )}
                     
                     {/* 5. Extras Section */}
                     {sectionsCompleted.duration && (
-                      <div className="p-6">
-                        <SectionHeader 
-                          icon={Plus} 
-                          title="Additional Services" 
-                          stepNumber={5}
-                        />
-                        <EnhancedExtras form={form} />
-                      </div>
+                      <>
+                        <div className="border-t border-gray-100 dark:border-gray-700"></div>
+                        <div className="p-6">
+                          <SectionHeader 
+                            icon={Plus} 
+                            title="Additional Services" 
+                            stepNumber={5}
+                          />
+                          <EnhancedExtras form={form} />
+                        </div>
+                      </>
                     )}
                   </>
                 )}
@@ -243,7 +206,7 @@ const BookingContent = ({
               {isMobile && (
                 <div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
                   <Button 
-                    className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium"
+                    className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl"
                     disabled={!sectionsCompleted.homeDetails || !sectionsCompleted.frequency}
                   >
                     Continue to Next Step
