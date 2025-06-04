@@ -1,5 +1,6 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Raleway:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
+@import "./styles/designTokens.css";
 @import "./styles/spacing.css";
 @import "./styles/animations.css";
 @import "./styles/globals.css";
@@ -9,18 +10,28 @@
 
 @layer base {
   :root {
-    /* Font family variables */
+    /* Font family variables - Unified */
     --ff: 'Raleway', sans-serif;
     --ff2: 'Raleway', sans-serif;
     --ff-heading: 'Inter', sans-serif;
     --ff-label: 'Open Sans', sans-serif;
     
-    /* Typography values */
+    /* Typography values - Standardized */
     --p: 1rem/1.5em var(--ff);
-    --h1: 600 3rem/1.2em var(--ff2);
-    --h2: 600 2rem/1.2em var(--ff2);
+    --h1: 600 3rem/1.2em var(--ff-heading);
+    --h2: 600 2rem/1.2em var(--ff-heading);
     
-    /* Spacing scale */
+    /* Design System Spacing - From designTokens.ts */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 0.75rem;
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 3rem;
+    --spacing-4xl: 4rem;
+    
+    /* Legacy spacing - Deprecated, use design tokens */
     --spacing1: 4px;
     --spacing2: 8px;
     --spacing3: 16px;
@@ -29,28 +40,35 @@
     --spacing6: 80px;
     --spacing7: 160px;
     
-    /* Light mode colors */
-    --background: 0 0% 100%; /* White background */
-    --foreground: 0 0% 20%; /* #333333 */
-    --heading-color: 0 0% 11%; /* #1C1C1C for headings */
-    --secondary-text: 35 35% 35%; /* Warmer text color */
-    --surface: 0 0% 98%; /* Light neutral surface */
+    /* Design System Colors - Light mode */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
+    --heading-color: 0 0% 11%;
+    --secondary-text: 35 35% 35%;
+    --surface: 0 0% 98%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 20%;
-    --primary: 206 65% 70%; /* Light blue #7ebce6 */
-    --primary-hover: 206 65% 60%; /* Darker blue */
+    
+    /* Primary colors - Blue theme from designTokens */
+    --primary: 206 65% 70%;
+    --primary-hover: 206 65% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 206 20% 94%; /* Light neutral */
+    
+    /* Secondary colors - Green theme */
+    --secondary: 122 65% 84%;
     --secondary-foreground: 30 25% 25%;
+    
+    /* Semantic colors */
+    --success: 122 41% 49%;
+    --destructive: 350 90% 55%;
     --muted: 206 25% 90%;
     --muted-foreground: 35 35% 35%;
     --accent: 206 65% 70%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 350 90% 55%; /* #DC3545 */
-    --destructive-foreground: 0 0% 100%;
-    --success: 135 70% 40%; /* #28A745 */
+    
+    /* UI Colors */
     --border: 206 20% 88%;
     --input: 206 20% 88%;
     --ring: 206 65% 70%;
@@ -58,23 +76,23 @@
   }
 
   .dark {
-    /* Dark mode colors */
-    --background: 229 19% 13%; /* #1A1F2C */
-    --foreground: 220 6% 57%; /* #8E9196 */
-    --secondary-text: 220 6% 57%; /* #8E9196 */
-    --surface: 246 86% 97%; /* #F1F0FB */
+    /* Dark mode colors - Unified */
+    --background: 229 19% 13%;
+    --foreground: 220 6% 57%;
+    --secondary-text: 220 6% 57%;
+    --surface: 246 86% 97%;
     --card: 229 19% 13%;
     --card-foreground: 220 6% 57%;
     --popover: 229 19% 13%;
     --popover-foreground: 220 6% 57%;
-    --primary: 252 82% 74%; /* #9b87f5 */
-    --primary-hover: 261 32% 54%; /* #7E69AB */
+    --primary: 252 82% 74%;
+    --primary-hover: 261 32% 54%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 261 32% 54%; /* #7E69AB */
+    --secondary: 261 32% 54%;
     --secondary-foreground: 220 6% 57%;
     --muted: 229 19% 13%;
     --muted-foreground: 220 6% 57%;
-    --accent: 264 29% 50%; /* #6E59A5 */
+    --accent: 264 29% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 80% 70%;
     --destructive-foreground: 0 0% 100%;
@@ -95,42 +113,42 @@
   }
   
   body {
-    @apply bg-white text-foreground antialiased transition-colors duration-300 scrollbar-none;
+    @apply bg-background text-foreground antialiased transition-colors duration-300 scrollbar-none;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
     font: var(--p);
-    line-height: 1.5em;
+    line-height: 1.5;
   }
 
-  /* Enhanced typography styles */
+  /* Enhanced typography styles - Design System */
   h1 {
     font: var(--h1);
-    @apply text-[#1C1C1C] dark:text-white;
+    @apply text-heading-color dark:text-white;
   }
 
   h2 {
     font: var(--h2);
-    @apply text-[#1C1C1C] dark:text-white;
+    @apply text-heading-color dark:text-white;
   }
 
   h3 {
     font-size: 1.5rem;
     line-height: 1.3em;
     font-weight: 600;
-    font-family: var(--ff2);
-    @apply text-gray-900 dark:text-white;
+    font-family: var(--ff-heading);
+    @apply text-heading-color dark:text-white;
   }
 
   h4, h5, h6 {
     font-size: 1.25rem;
     line-height: 1.3em;
     font-weight: 600;
-    font-family: var(--ff2);
-    @apply text-gray-900 dark:text-white;
+    font-family: var(--ff-heading);
+    @apply text-heading-color dark:text-white;
   }
 
   p {
     font: var(--p);
-    @apply text-gray-600 dark:text-gray-300;
+    @apply text-secondary-text dark:text-gray-300;
   }
 
   a {
@@ -141,53 +159,5 @@
     font-family: var(--ff);
     font-size: 1rem;
     line-height: 1.5em;
-  }
-}
-
-/* Utility classes */
-@layer utilities {
-  /* Scrollbar utilities */
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Visual effects */
-  .glass-morphism {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)];
-  }
-  
-  .neo-blur {
-    @apply backdrop-blur-2xl bg-black/40 border border-white/10;
-  }
-  
-  .text-gradient {
-    @apply bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent;
-  }
-  
-  .text-gradient-primary {
-    @apply bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent;
-  }
-  
-  /* Section dividers */
-  .wave-divider {
-    position: relative;
-    margin-top: -2rem;
-    height: 4rem;
-  }
-  
-  .wave-divider::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
   }
 }

@@ -1,45 +1,28 @@
 
-# Kleaners Design System
+# Style Unification Implementation Plan
 
-## Color Guidelines
+## Phase 1: Foundation Consolidation (Low Risk)
+- Consolidate CSS structure under `src/styles/`
+- Fix font loading and standardization issues
+- Integrate design system colors into Tailwind config
+- Remove duplicate style definitions
 
-### Primary Colors
-- **Primary Blue**: `#7ebce6` - Main brand color, used for primary actions and navigation highlights
-- **Primary Orange**: `#ff6b35` - CTA button color, optimized for maximum conversion
-- **Secondary Green**: `#bfedc1` - Secondary actions and success states
+## Phase 2: Design Token Integration (Medium Risk) 
+- Update Tailwind config with design tokens from `designTokens.ts`
+- Create utility classes based on design patterns
+- Standardize component styling approaches
+- Implement mobile-first design system patterns
 
-### Neutral Colors
-- **Sign-up Button**: `bg-gray-200 hover:bg-gray-300 text-gray-800` - Neutral to not compete with CTA
-- **Logo**: `text-[#7ebce6]/80` - Reduced opacity to avoid competition with CTA
-- **Featured Services**: Subtle theme colors with 50% opacity backgrounds
+## Phase 3: Component Migration (Higher Risk)
+- Gradually migrate components to use standardized styles
+- Replace hardcoded values with design token references
+- Create reusable style guide components
+- Test responsive behavior and accessibility
 
-### Color Usage Hierarchy
-1. **Orange CTA**: Highest priority actions (Book Now, Get Quote)
-2. **Primary Blue**: Navigation highlights, secondary actions
-3. **Neutral Gray**: Sign-up, less important actions
-4. **Subtle Backgrounds**: Featured services, cards
+## Phase 4: Cleanup & Optimization
+- Remove unused styles and dead CSS
+- Optimize CSS loading performance
+- Implement critical CSS strategies
+- Final testing and validation
 
-## Typography Scale
-- **Headings**: Use consistent font weights (600 for main headings, 500 for subheadings)
-- **Body Text**: 14px base, 16px for important content
-- **Small Text**: 12px for labels and secondary information
-
-## Spacing System
-- **Component Padding**: 12px (p-3) for small, 16px (p-4) for medium, 24px (p-6) for large
-- **Gap Spacing**: 8px (gap-2), 12px (gap-3), 16px (gap-4)
-- **Section Margins**: 32px (my-8), 48px (my-12), 64px (my-16)
-
-## Mobile Responsiveness
-- **Touch Targets**: Minimum 44px height for all interactive elements
-- **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
-- **Layout**: Mobile-first approach with progressive enhancement
-
-## Accessibility Standards
-- **Contrast Ratios**: WCAG 2.1 AA compliance (4.5:1 for normal text, 3:1 for large text)
-- **Focus States**: Visible focus indicators on all interactive elements
-- **Semantic HTML**: Proper heading hierarchy and ARIA labels
-
-## Component Design Patterns
-- **Cards**: Rounded corners (rounded-lg), subtle shadows, proper spacing
-- **Buttons**: Consistent height (h-9, h-10), proper padding, hover states
-- **Navigation**: Clear hierarchy, proper grouping, responsive behavior
+This approach minimizes risk by starting with non-breaking changes and gradually migrating components while maintaining the design system standards defined in `designSystem.md`.
