@@ -13,9 +13,9 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Calendar, Plus } from 'lucide-react';
-import ProgressiveBookingForm from './mobile/ProgressiveBookingForm';
+import OptimizedProgressiveForm from './mobile/OptimizedProgressiveForm';
 import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimized';
 
 interface BookingContentProps {
@@ -28,6 +28,18 @@ const fadeVariant = {
   hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
 };
+
+// Loading fallback for mobile components
+const MobileLoadingFallback = () => (
+  <div className="space-y-4">
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="animate-pulse">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
+        <div className="h-32 bg-gray-200 rounded"></div>
+      </div>
+    ))}
+  </div>
+);
 
 const BookingContent = ({ currentStep, selectedService, form }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
@@ -90,15 +102,17 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
           {currentStep === 2 && selectedService === ServiceType.Home && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
               {isMobile ? (
-                // Mobile: Progressive form with auto-advancement
+                // Mobile: Enhanced progressive form with performance optimizations
                 <div className="space-y-6">
-                  <ProgressiveBookingForm 
-                    form={form}
-                    currentStep={currentStep}
-                    onStepChange={() => {}} // Handle step changes if needed
-                  />
+                  <Suspense fallback={<MobileLoadingFallback />}>
+                    <OptimizedProgressiveForm 
+                      form={form}
+                      currentStep={currentStep}
+                      onStepChange={() => {}} // Handle step changes if needed
+                    />
+                  </Suspense>
                   
-                  {/* Mobile summary - compact floating version */}
+                  {/* Mobile summary - optimized floating version */}
                   <div className="pb-20"> {/* Add padding for floating summary */}
                     <MobileBookingSummaryOptimized 
                       form={form}
