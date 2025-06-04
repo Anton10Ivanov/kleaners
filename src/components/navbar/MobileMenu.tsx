@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Logo } from './Logo';
 import { 
   ClientSection, 
@@ -9,10 +8,14 @@ import {
   NavigationSection, 
   LogoutButton,
   HeaderControls,
-  BusinessSolutionsSection
+  BusinessSolutionsSection,
+  EnhancedMobileMenu,
+  TouchOptimizedMenuItem,
+  AccessibleNavigation,
+  SkipLink,
+  KeyboardNavigation
 } from './mobile';
-import { cn } from '@/lib/utils';
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { useNavigation } from './context/NavigationContext';
 
 const navigationData = [
   {
@@ -64,83 +67,74 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({
-  isOpen = false,
-  setIsOpen = () => {},
-  isMobileServicesOpen,
-  setIsMobileServicesOpen,
   currentLanguage = 'en',
   onLanguageChange = () => {},
   userRole = null
 }) => {
-  const { isMobile, getMobileSpacing } = useMobileOptimizations();
+  const { actions } = useNavigation();
   const isAdmin = userRole === 'admin';
   const isProvider = userRole === 'provider';
-  const isClient = userRole === 'client' || (!userRole && isOpen);
+  const isClient = userRole === 'client' || (!userRole);
+
+  const handleKeyboardNavigation = {
+    onEscape: () => actions.closeAllMenus(),
+  };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent 
-        side="right" 
-        className={cn(
-          "overflow-y-auto safe-area-right",
-          isMobile ? "w-[320px] p-4" : "w-[350px] p-4"
-        )}
+    <>
+      <SkipLink href="#main-content">Skip to main content</SkipLink>
+      
+      <EnhancedMobileMenu
+        title="Navigation Menu"
+        description="Expert Cleaning Services"
       >
-        <SheetHeader className={cn(
-          "mb-6 text-left",
-          getMobileSpacing('md')
-        )}>
-          <SheetTitle className="text-foreground">
-            <Logo />
-          </SheetTitle>
-          <SheetDescription className="text-left text-muted-foreground">
-            Expert Cleaning Services
-          </SheetDescription>
-        </SheetHeader>
+        <KeyboardNavigation {...handleKeyboardNavigation}>
+          <AccessibleNavigation ariaLabel="Main navigation menu">
+            <div className="mobile-stack space-y-6">
+              <HeaderControls 
+                currentLanguage={currentLanguage}
+                onLanguageChange={onLanguageChange}
+              />
 
-        <div className="mobile-stack space-y-6">
-          <HeaderControls 
-            currentLanguage={currentLanguage}
-            onLanguageChange={onLanguageChange}
-          />
-
-          {/* Role-based sections with design token spacing */}
-          <div className="mobile-stack space-y-6">
-            {isClient && (
-              <div className="mobile-section">
-                <ClientSection />
+              {/* Role-based sections with enhanced touch optimization */}
+              <div className="mobile-stack space-y-6">
+                {isClient && (
+                  <div className="mobile-section">
+                    <ClientSection />
+                  </div>
+                )}
+                
+                {isProvider && (
+                  <div className="mobile-section">
+                    <ProviderSection />
+                  </div>
+                )}
+                
+                {isAdmin && (
+                  <div className="mobile-section">
+                    <AdminSection setIsOpen={actions.setIsMenuOpen} />
+                  </div>
+                )}
+                
+                {/* Business Solutions - Always visible with enhanced touch controls */}
+                <div className="mobile-section">
+                  <BusinessSolutionsSection />
+                </div>
+                
+                <div className="mobile-section">
+                  <NavigationSection navigationData={navigationData} />
+                </div>
+                
+                {(isClient || isProvider || isAdmin) && (
+                  <div className="mobile-section border-t border-border pt-4">
+                    <LogoutButton setIsOpen={actions.setIsMenuOpen} />
+                  </div>
+                )}
               </div>
-            )}
-            
-            {isProvider && (
-              <div className="mobile-section">
-                <ProviderSection />
-              </div>
-            )}
-            
-            {isAdmin && (
-              <div className="mobile-section">
-                <AdminSection setIsOpen={setIsOpen} />
-              </div>
-            )}
-            
-            {/* Business Solutions - Always visible with design tokens */}
-            <div className="mobile-section">
-              <BusinessSolutionsSection />
             </div>
-            
-            <div className="mobile-section">
-              <NavigationSection navigationData={navigationData} />
-            </div>
-            
-            {(isClient || isProvider || isAdmin) && (
-              <div className="mobile-section border-t border-border pt-4">
-                <LogoutButton setIsOpen={setIsOpen} />
-              </div>
-            )}
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
+          </AccessibleNavigation>
+        </KeyboardNavigation>
+      </EnhancedMobileMenu>
+    </>
   );
 };

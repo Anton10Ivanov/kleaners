@@ -17,7 +17,7 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'home-cleaning',
     title: "Home Cleaning",
     description: "Professional cleaning for your home",
-    icon: Home,
+    icon: Home, // Direct LucideIcon component
     image: "/placeholder.svg",
     price: "From €25/hour",
     href: "/services/home-cleaning",
@@ -42,7 +42,7 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'office-cleaning',
     title: "Office Cleaning",
     description: "Commercial cleaning solutions",
-    icon: Building,
+    icon: Building, // Direct LucideIcon component
     image: "/placeholder.svg",
     price: "From €30/hour",
     href: "/services/office-cleaning",
@@ -134,7 +134,7 @@ export const generateServiceMenuItems = () => {
   return serviceCategories.map(category => ({
     label: category.title,
     description: category.description,
-    icon: React.createElement(category.icon as React.ComponentType<any>, { className: "h-5 w-5" }),
+    icon: React.createElement(category.icon, { className: "h-5 w-5" }),
     path: category.href || "/services"
   }));
 };
