@@ -82,3 +82,6 @@ export const NavigationSection: React.FC<NavigationSectionProps> = ({
     </div>
   );
 };
+
+// Add default export for backward compatibility
+export default NavigationSection;

@@ -1,5 +1,4 @@
-
-import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
+import React, { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
@@ -133,10 +132,7 @@ const HomePage = () => {
       features: category.services.map(service => service.title),
       category: category.title.toLowerCase(),
       icon: category.icon,
-      services: category.services.map(service => ({
-        ...service,
-        icon: React.createElement(service.icon, { className: "h-5 w-5" })
-      }))
+      services: category.services // Keep the original services with LucideIcon types
     }));
   }, []);
 
