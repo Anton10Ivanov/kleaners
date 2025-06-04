@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, ArrowRight, Star, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, Filter, ArrowRight, Star, ChevronDown, ChevronUp, Home, Building2, Sparkles } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,47 +17,46 @@ const Services = () => {
 
   // All services from App.tsx routes - expanded list
   const allServicesFromRoutes = [
-    { title: 'Home Cleaning', href: '/services/home-cleaning', description: 'Regular residential cleaning services', category: 'Residential' },
-    { title: 'Office Cleaning', href: '/services/office-cleaning', description: 'Professional office cleaning services', category: 'Commercial' },
-    { title: 'Move In/Out Cleaning', href: '/services/move-in-out', description: 'Deep cleaning for moving transitions', category: 'Specialized' },
-    { title: 'Window Cleaning', href: '/services/window-cleaning', description: 'Professional window cleaning services', category: 'Specialized' },
-    { title: 'Stairwell Cleaning', href: '/services/stairwell-cleaning', description: 'Common area stairwell maintenance', category: 'Commercial' },
-    { title: 'Industrial Cleaning', href: '/services/industrial-cleaning', description: 'Heavy-duty industrial facility cleaning', category: 'Industrial' },
-    { title: 'Intensive Cleaning', href: '/services/intensive-cleaning', description: 'Deep intensive cleaning services', category: 'Specialized' },
-    { title: 'Ventilation Cleaning', href: '/services/ventilation-cleaning', description: 'HVAC and ventilation system cleaning', category: 'Specialized' },
-    { title: 'Disinfection Cleaning', href: '/services/disinfection-cleaning', description: 'Professional disinfection services', category: 'Health & Safety' },
-    { title: 'Construction Cleaning', href: '/services/construction-cleaning', description: 'Post-construction cleanup services', category: 'Specialized' },
-    { title: 'Care Facility Cleaning', href: '/services/care-facility-cleaning', description: 'Healthcare facility cleaning', category: 'Health & Safety' },
-    { title: 'Trade Fair Cleaning', href: '/services/trade-fair-cleaning', description: 'Event and trade fair cleaning', category: 'Event' },
-    { title: 'Hoarder Cleaning', href: '/services/hoarder-cleaning', description: 'Specialized hoarding cleanup services', category: 'Specialized' },
-    { title: 'Multi Surface Cleaning', href: '/services/multi-surface-cleaning', description: 'Comprehensive surface cleaning', category: 'Residential' },
-    { title: 'Pool Cleaning', href: '/services/pool-cleaning', description: 'Swimming pool maintenance and cleaning', category: 'Outdoor' },
-    { title: 'Pet Hair Removal', href: '/services/pet-hair-removal', description: 'Specialized pet hair cleaning services', category: 'Specialized' },
-    { title: 'Underground Garage Cleaning', href: '/services/underground-garage-cleaning', description: 'Parking garage cleaning services', category: 'Commercial' },
-    { title: 'Vehicle Cleaning', href: '/services/vehicle-cleaning', description: 'Professional vehicle cleaning', category: 'Automotive' },
-    { title: 'Holiday Apartment Cleaning', href: '/services/holiday-apartment-cleaning', description: 'Vacation rental cleaning services', category: 'Hospitality' },
-    { title: 'Glass Cleaning Winter Garden', href: '/services/glass-cleaning-winter-garden', description: 'Specialized glass cleaning for conservatories', category: 'Specialized' },
-    { title: 'Gardening', href: '/services/gardening', description: 'Garden maintenance and landscaping', category: 'Outdoor' },
-    { title: 'Medical Practice Cleaning', href: '/services/medical-practice-cleaning', description: 'Medical facility cleaning services', category: 'Health & Safety' },
-    { title: 'Stone Surface Cleaning', href: '/services/stone-surface-cleaning', description: 'Natural stone cleaning and maintenance', category: 'Specialized' },
-    { title: 'Pipe Cleaning', href: '/services/pipe-cleaning', description: 'Drain and pipe cleaning services', category: 'Maintenance' },
-    { title: 'Graffiti Removal', href: '/services/graffiti-removal', description: 'Professional graffiti removal services', category: 'Specialized' },
-    { title: 'Roof Cleaning', href: '/services/roof-cleaning', description: 'Roof maintenance and cleaning', category: 'Outdoor' },
-    { title: 'Household Clearance', href: '/services/household-clearance', description: 'Complete household clearance services', category: 'Specialized' },
-    { title: 'Mold Removal', href: '/services/mold-removal', description: 'Professional mold remediation', category: 'Health & Safety' },
-    { title: 'Facade Cleaning', href: '/services/facade-cleaning', description: 'Building exterior cleaning', category: 'Commercial' },
-    { title: 'Kindergarten Cleaning', href: '/services/kindergarten-cleaning', description: 'Childcare facility cleaning', category: 'Educational' },
-    { title: 'Carpet Cleaning', href: '/services/carpet-cleaning', description: 'Professional carpet cleaning services', category: 'Residential' },
-    { title: 'Upholstery Cleaning', href: '/services/upholstery-cleaning', description: 'Furniture and upholstery cleaning', category: 'Residential' },
-    { title: 'Sidewalk Cleaning', href: '/services/sidewalk-cleaning', description: 'Pavement and sidewalk cleaning', category: 'Outdoor' },
-    { title: 'Crime Scene Cleaning', href: '/services/crime-scene-cleaning', description: 'Specialized biohazard cleanup', category: 'Specialized' },
+    { title: 'Home Cleaning', href: '/services/home-cleaning', description: 'Regular residential cleaning services', category: 'Residential', icon: Home },
+    { title: 'Office Cleaning', href: '/services/office-cleaning', description: 'Professional office cleaning services', category: 'Commercial', icon: Building2 },
+    { title: 'Move In/Out Cleaning', href: '/services/move-in-out', description: 'Deep cleaning for moving transitions', category: 'Specialized', icon: Sparkles },
+    { title: 'Window Cleaning', href: '/services/window-cleaning', description: 'Professional window cleaning services', category: 'Specialized', icon: Star },
+    { title: 'Stairwell Cleaning', href: '/services/stairwell-cleaning', description: 'Common area stairwell maintenance', category: 'Commercial', icon: Building2 },
+    { title: 'Industrial Cleaning', href: '/services/industrial-cleaning', description: 'Heavy-duty industrial facility cleaning', category: 'Industrial', icon: Building2 },
+    { title: 'Intensive Cleaning', href: '/services/intensive-cleaning', description: 'Deep intensive cleaning services', category: 'Specialized', icon: Sparkles },
+    { title: 'Ventilation Cleaning', href: '/services/ventilation-cleaning', description: 'HVAC and ventilation system cleaning', category: 'Specialized', icon: Star },
+    { title: 'Disinfection Cleaning', href: '/services/disinfection-cleaning', description: 'Professional disinfection services', category: 'Health & Safety', icon: Sparkles },
+    { title: 'Construction Cleaning', href: '/services/construction-cleaning', description: 'Post-construction cleanup services', category: 'Specialized', icon: Building2 },
+    { title: 'Care Facility Cleaning', href: '/services/care-facility-cleaning', description: 'Healthcare facility cleaning', category: 'Health & Safety', icon: Star },
+    { title: 'Trade Fair Cleaning', href: '/services/trade-fair-cleaning', description: 'Event and trade fair cleaning', category: 'Event', icon: Building2 },
+    { title: 'Hoarder Cleaning', href: '/services/hoarder-cleaning', description: 'Specialized hoarding cleanup services', category: 'Specialized', icon: Sparkles },
+    { title: 'Multi Surface Cleaning', href: '/services/multi-surface-cleaning', description: 'Comprehensive surface cleaning', category: 'Residential', icon: Home },
+    { title: 'Pool Cleaning', href: '/services/pool-cleaning', description: 'Swimming pool maintenance and cleaning', category: 'Outdoor', icon: Star },
+    { title: 'Pet Hair Removal', href: '/services/pet-hair-removal', description: 'Specialized pet hair cleaning services', category: 'Specialized', icon: Sparkles },
+    { title: 'Underground Garage Cleaning', href: '/services/underground-garage-cleaning', description: 'Parking garage cleaning services', category: 'Commercial', icon: Building2 },
+    { title: 'Vehicle Cleaning', href: '/services/vehicle-cleaning', description: 'Professional vehicle cleaning', category: 'Automotive', icon: Star },
+    { title: 'Holiday Apartment Cleaning', href: '/services/holiday-apartment-cleaning', description: 'Vacation rental cleaning services', category: 'Hospitality', icon: Home },
+    { title: 'Glass Cleaning Winter Garden', href: '/services/glass-cleaning-winter-garden', description: 'Specialized glass cleaning for conservatories', category: 'Specialized', icon: Star },
+    { title: 'Gardening', href: '/services/gardening', description: 'Garden maintenance and landscaping', category: 'Outdoor', icon: Star },
+    { title: 'Medical Practice Cleaning', href: '/services/medical-practice-cleaning', description: 'Medical facility cleaning services', category: 'Health & Safety', icon: Building2 },
+    { title: 'Stone Surface Cleaning', href: '/services/stone-surface-cleaning', description: 'Natural stone cleaning and maintenance', category: 'Specialized', icon: Sparkles },
+    { title: 'Pipe Cleaning', href: '/services/pipe-cleaning', description: 'Drain and pipe cleaning services', category: 'Maintenance', icon: Star },
+    { title: 'Graffiti Removal', href: '/services/graffiti-removal', description: 'Professional graffiti removal services', category: 'Specialized', icon: Sparkles },
+    { title: 'Roof Cleaning', href: '/services/roof-cleaning', description: 'Roof maintenance and cleaning', category: 'Outdoor', icon: Building2 },
+    { title: 'Household Clearance', href: '/services/household-clearance', description: 'Complete household clearance services', category: 'Specialized', icon: Sparkles },
+    { title: 'Mold Removal', href: '/services/mold-removal', description: 'Professional mold remediation', category: 'Health & Safety', icon: Star },
+    { title: 'Facade Cleaning', href: '/services/facade-cleaning', description: 'Building exterior cleaning', category: 'Commercial', icon: Building2 },
+    { title: 'Kindergarten Cleaning', href: '/services/kindergarten-cleaning', description: 'Childcare facility cleaning', category: 'Educational', icon: Building2 },
+    { title: 'Carpet Cleaning', href: '/services/carpet-cleaning', description: 'Professional carpet cleaning services', category: 'Residential', icon: Home },
+    { title: 'Upholstery Cleaning', href: '/services/upholstery-cleaning', description: 'Furniture and upholstery cleaning', category: 'Residential', icon: Home },
+    { title: 'Sidewalk Cleaning', href: '/services/sidewalk-cleaning', description: 'Pavement and sidewalk cleaning', category: 'Outdoor', icon: Star },
+    { title: 'Crime Scene Cleaning', href: '/services/crime-scene-cleaning', description: 'Specialized biohazard cleanup', category: 'Specialized', icon: Sparkles },
   ];
 
   // Add popular flag to services
   const allServices = allServicesFromRoutes.map(service => ({
     ...service,
-    isPopular: popularServices.some(pop => pop.href === service.href),
-    icon: popularServices.find(pop => pop.href === service.href)?.icon || Star
+    isPopular: popularServices.some(pop => pop.href === service.href)
   }));
 
   // Filter services based on search and category

@@ -1,98 +1,84 @@
 
-import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronRight, Building2, Users, Phone, Heart, HelpCircle, FileText, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { SheetClose } from '@/components/ui/sheet';
 
-interface NavigationItem {
-  title: string;
-  href: string;
-  children?: Array<{
-    title: string;
-    href: string;
-  }>;
-}
+const navigationData = [
+  {
+    title: "About Us",
+    href: "/about",
+    children: [
+      { title: "Company Values", href: "/about/values", icon: Heart, description: "Our principles and what we stand for" },
+      { title: "FAQ", href: "/about/faq", icon: HelpCircle, description: "Frequently asked questions" },
+      { title: "Terms of Service", href: "/legal/terms", icon: FileText, description: "Our terms and conditions" },
+      { title: "Privacy Policy", href: "/legal/privacy", icon: Shield, description: "How we handle your data" }
+    ]
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+    children: [
+      { title: "Get in Touch", href: "/contact", icon: Phone, description: "Contact our customer service team" },
+      { title: "Join Our Team", href: "/join-team", icon: Users, description: "Apply to work with us" }
+    ]
+  }
+];
 
 interface NavigationSectionProps {
-  navigationData: NavigationItem[];
+  navigationData?: any[];
 }
 
-const NavigationSection: React.FC<NavigationSectionProps> = ({ navigationData }) => {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-  const navigate = useNavigate();
-
-  const toggleExpanded = (title: string) => {
-    const newExpanded = new Set(expandedItems);
-    if (newExpanded.has(title)) {
-      newExpanded.delete(title);
-    } else {
-      newExpanded.add(title);
-    }
-    setExpandedItems(newExpanded);
-  };
-
-  const handleNavigation = (href: string) => {
-    navigate(href);
-  };
+export const NavigationSection: React.FC<NavigationSectionProps> = ({ 
+  navigationData: propNavigationData 
+}) => {
+  const navData = propNavigationData || navigationData;
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-        Navigation
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider px-3">
+        Information
       </h3>
       
-      {navigationData.map((item) => (
-        <div key={item.title} className="space-y-1">
-          <Button
-            variant="ghost"
-            className="w-full justify-between min-h-[44px] px-3"
-            onClick={() => {
-              if (item.children) {
-                toggleExpanded(item.title);
-              } else {
-                handleNavigation(item.href);
-              }
-            }}
-          >
-            <span>{item.title}</span>
-            {item.children && (
-              <motion.div
-                animate={{ rotate: expandedItems.has(item.title) ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </motion.div>
+      <div className="space-y-2">
+        {navData.map((section) => (
+          <div key={section.title} className="space-y-2">
+            <div className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              {section.title}
+            </div>
+            
+            {section.children && (
+              <div className="space-y-1 ml-4">
+                {section.children.map((item: any) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <SheetClose asChild key={item.href}>
+                      <Link to={item.href}>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start gap-3 text-left h-auto p-3"
+                        >
+                          {IconComponent && <IconComponent className="h-4 w-4 text-gray-400" />}
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{item.title}</div>
+                            {item.description && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                {item.description}
+                              </div>
+                            )}
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-gray-400" />
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                  );
+                })}
+              </div>
             )}
-          </Button>
-          
-          <AnimatePresence>
-            {item.children && expandedItems.has(item.title) && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="pl-4 space-y-1"
-              >
-                {item.children.map((child) => (
-                  <Button
-                    key={child.title}
-                    variant="ghost"
-                    size="sm"
-                    className="w-full justify-start min-h-[40px] text-sm"
-                    onClick={() => handleNavigation(child.href)}
-                  >
-                    {child.title}
-                  </Button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
-
-export default NavigationSection;

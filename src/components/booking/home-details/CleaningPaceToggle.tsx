@@ -34,14 +34,14 @@ export const CleaningPaceToggle = ({ form }: CleaningPaceToggleProps) => {
         </button>
       </div>
       
-      <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div className="flex items-center justify-center gap-4 p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
         <div className={`text-sm font-medium transition-colors ${cleaningPace === 'quick' ? 'text-red-600' : 'text-gray-500'}`}>
           Quick
         </div>
         <Switch 
           checked={cleaningPace === 'standard'} 
           onCheckedChange={checked => form.setValue('cleaningPace', checked ? 'standard' : 'quick')} 
-          className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-500 h-6 w-16"
+          className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-500"
         />
         <div className={`text-sm font-medium transition-colors ${cleaningPace === 'standard' ? 'text-green-600' : 'text-gray-500'}`}>
           Standard
