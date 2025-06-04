@@ -76,7 +76,7 @@
     min-width: var(--touch-large);
   }
 
-  /* Design System Button Styles */
+  /* Design System Component Styles */
   .btn-primary {
     @apply bg-primary hover:bg-primary-hover text-primary-foreground;
     @apply rounded-lg px-4 py-3 font-medium transition-colors;
@@ -88,6 +88,12 @@
     @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
     @apply rounded-lg px-4 py-3 font-medium transition-colors;
     @apply shadow-sm hover:shadow-md;
+    min-height: var(--touch-comfortable);
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
+    @apply rounded-lg px-4 py-3 font-medium transition-colors;
     min-height: var(--touch-comfortable);
   }
 
