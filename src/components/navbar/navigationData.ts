@@ -43,22 +43,22 @@ export const navItems = [
       items: [{
         label: "Company's Values",
         description: "Our principles and what we stand for",
-        icon: <Heart className="h-4 w-4" />,
+        icon: Heart,
         path: "/about/values"
       }, {
         label: "FAQ",
         description: "Frequently asked questions",
-        icon: <HelpCircle className="h-4 w-4" />,
+        icon: HelpCircle,
         path: "/about/faq"
       }, {
         label: "Terms of Service",
         description: "Our terms and conditions",
-        icon: <FileText className="h-4 w-4" />,
+        icon: FileText,
         path: "/legal/terms"
       }, {
         label: "Privacy Policy",
         description: "How we handle your data",
-        icon: <Shield className="h-4 w-4" />,
+        icon: Shield,
         path: "/legal/privacy"
       }]
     }]
@@ -70,12 +70,12 @@ export const navItems = [
       items: [{
         label: "Get in Touch",
         description: "Contact our customer service team",
-        icon: <Phone className="h-4 w-4" />,
+        icon: Phone,
         path: "/contact"
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        icon: <Users className="h-4 w-4" />,
+        icon: Users,
         path: "/join-team"
       }]
     }]
