@@ -1,3 +1,4 @@
+
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -64,20 +65,43 @@ const HomePage = () => {
   // Memoized handlers
   const handleNext = useCallback(() => {
     startTimer('nextStepInteraction');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Enhanced validation for mobile
+    if (currentStep === 1 && (!selectedService || !postalCode)) {
+      if (!selectedService) toast.error("Please select a service type");
+      if (!postalCode) toast.error("Please enter your postal code");
+      endTimer('nextStepInteraction');
+      return;
+    }
+    
+    if (currentStep === 2 && (!frequency || !hours)) {
+      if (!frequency) toast.error("Please select a frequency");
+      if (!hours) toast.error("Please specify the hours needed");
+      endTimer('nextStepInteraction');
+      return;
+    }
+    
+    // Smooth scroll behavior
+    if (isMobile) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
     handleNextStep();
+    
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
     endTimer('nextStepInteraction');
-  }, [currentStep, handleNextStep, startTimer, endTimer]);
+  }, [currentStep, selectedService, postalCode, frequency, hours, handleNextStep, isMobile, startTimer, endTimer]);
 
   const handleBack = useCallback(() => {
     startTimer('backStepInteraction');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isMobile) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     handleBackStep();
     endTimer('backStepInteraction');
-  }, [handleBackStep, startTimer, endTimer]);
+  }, [handleBackStep, isMobile, startTimer, endTimer]);
 
   const handleHeroNextStep = useCallback(() => {
     startTimer('heroNextStepInteraction');
@@ -125,7 +149,7 @@ const HomePage = () => {
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
-            {/* Business Solutions Section - New Addition */}
+            {/* Business Solutions Section */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <BusinessSolutionsSection />
             </ErrorBoundary>
