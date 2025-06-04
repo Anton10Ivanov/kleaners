@@ -14,5 +14,5 @@ export { DesignSystemContainer } from './DesignSystemContainer';
 export { FlexLayout } from './FlexLayout';
 export { LayoutSection } from './LayoutSection';
 
-// Mobile Components - named export
-export { default as MobileContainer } from './mobile-container';
+// Mobile Components - named exports
+export { MobileContainer, MobileSection, MobileStack } from './mobile-container';
