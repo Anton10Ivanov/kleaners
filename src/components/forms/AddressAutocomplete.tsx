@@ -101,7 +101,7 @@ export const AddressAutocomplete = ({ form, onAddressSelect }: AddressAutocomple
   return (
     <div className="relative">
       <Label htmlFor="address-autocomplete" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Street Address
+        Street Address and Number *
       </Label>
       <div className="relative">
         <Input
@@ -111,7 +111,7 @@ export const AddressAutocomplete = ({ form, onAddressSelect }: AddressAutocomple
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={() => setShowResults(true)}
           onBlur={handleBlur}
-          placeholder="Start typing your address..."
+          placeholder="Start typing your street address and number..."
           className="pr-10"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

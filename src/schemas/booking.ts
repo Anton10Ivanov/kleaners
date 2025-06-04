@@ -30,18 +30,18 @@ export const bookingSchema = z.object({
   service: z.string().optional(), // Legacy field for compatibility
   
   // Location
-  postalCode: z.string().min(1, "Postal code is required"),
+  postalCode: z.string().min(5, "Postal code must be at least 5 characters").max(5, "Postal code must be exactly 5 characters"),
   
   // Property details - standardized naming
   propertySize: z.number().min(20, "Property size must be at least 20 m²").max(500, "Property size cannot exceed 500 m²").optional(),
   squareMeters: z.number().optional(), // Keep for backward compatibility
-  bedrooms: z.number().min(0).max(10).optional(),
-  bathrooms: z.number().min(1).max(10).optional(),
+  bedrooms: z.number().min(0, "Bedrooms cannot be negative").max(10, "Maximum 10 bedrooms allowed").optional(),
+  bathrooms: z.number().min(1, "At least 1 bathroom is required").max(10, "Maximum 10 bathrooms allowed").optional(),
   cleaningPace: z.enum(['standard', 'quick']).default('standard').optional(),
   
   // Booking details
   frequency: z.nativeEnum(Frequency).optional(),
-  hours: z.number().min(1).max(12).optional(),
+  hours: z.number().min(1, "Minimum 1 hour required").max(12, "Maximum 12 hours allowed").optional(),
   selectedDate: z.date().optional(),
   date: z.date().optional(), // Legacy field for compatibility
   selectedTime: z.string().optional(),
@@ -81,26 +81,45 @@ export const bookingSchema = z.object({
   cleaningOptions: z.array(z.string()).default([]).optional(),
   specialRequirements: z.string().optional(),
   
-  // Personal information
-  firstName: z.string().min(2, "First name must be at least 2 characters").optional(),
-  lastName: z.string().min(2, "Last name must be at least 2 characters").optional(),
-  email: z.string().email("Please enter a valid email address").optional(),
-  phone: z.string().min(10, "Please enter a valid phone number").optional(),
+  // Personal information - now required with better validation
+  firstName: z.string()
+    .min(2, "First name must be at least 2 characters")
+    .max(50, "First name cannot exceed 50 characters")
+    .regex(/^[a-zA-ZäöüÄÖÜß\s-]+$/, "First name can only contain letters, spaces, and hyphens"),
+  lastName: z.string()
+    .min(2, "Last name must be at least 2 characters")
+    .max(50, "Last name cannot exceed 50 characters")
+    .regex(/^[a-zA-ZäöüÄÖÜß\s-]+$/, "Last name can only contain letters, spaces, and hyphens"),
+  email: z.string()
+    .email("Please enter a valid email address")
+    .min(5, "Email must be at least 5 characters")
+    .max(100, "Email cannot exceed 100 characters"),
+  phone: z.string()
+    .min(10, "Phone number must be at least 10 digits")
+    .max(20, "Phone number cannot exceed 20 characters")
+    .regex(/^[\+]?[0-9\s\-\(\)]+$/, "Please enter a valid phone number"),
   password: z.string().optional(),
   confirmPassword: z.string().optional(),
   
-  // Address fields
-  address: z.string().optional(),
-  street: z.string().min(5, "Street address is required").optional(),
-  houseNumber: z.string().min(1, "House number is required").optional(),
-  city: z.string().min(2, "City is required").optional(),
-  floor: z.string().optional(),
-  entryCode: z.string().optional(),
-  accessMethod: z.string().optional(),
-  accessInstructions: z.string().optional(),
+  // Address fields - now required with validation
+  address: z.string()
+    .min(5, "Street address must be at least 5 characters")
+    .max(100, "Street address cannot exceed 100 characters"),
+  street: z.string().optional(), // Legacy field
+  houseNumber: z.string().optional(), // Legacy field
+  city: z.string()
+    .min(2, "City name must be at least 2 characters")
+    .max(50, "City name cannot exceed 50 characters")
+    .regex(/^[a-zA-ZäöüÄÖÜß\s-]+$/, "City name can only contain letters, spaces, and hyphens"),
+  floor: z.string().max(20, "Floor description cannot exceed 20 characters").optional(),
+  entryCode: z.string().max(20, "Entry code cannot exceed 20 characters").optional(),
+  accessMethod: z.string().min(1, "Please select an access method"),
+  accessInstructions: z.string().optional(), // Deprecated - replaced by specialInstructions
   
   // Additional
-  specialInstructions: z.string().optional(),
+  specialInstructions: z.string()
+    .max(500, "Special instructions cannot exceed 500 characters")
+    .optional(),
   promoCode: z.string().optional(),
   
   // Deep cleaning specific fields

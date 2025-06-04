@@ -19,3 +19,24 @@ export const displayFormErrors = <T extends FieldValues>(errors: FieldErrors<T>)
     }
   });
 };
+
+/**
+ * Display field-specific validation error
+ */
+export const displayFieldError = (fieldName: string, message: string) => {
+  toast.error(`${fieldName}: ${message}`);
+};
+
+/**
+ * Display success message
+ */
+export const displaySuccessMessage = (message: string) => {
+  toast.success(message);
+};
+
+/**
+ * Display warning message
+ */
+export const displayWarningMessage = (message: string) => {
+  toast.warning(message);
+};
