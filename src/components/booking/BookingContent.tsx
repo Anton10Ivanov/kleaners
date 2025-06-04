@@ -15,6 +15,8 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useState, useEffect } from 'react';
 import { Calendar, Plus } from 'lucide-react';
+import ProgressiveBookingForm from './mobile/ProgressiveBookingForm';
+import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimized';
 
 interface BookingContentProps {
   currentStep: number;
@@ -87,78 +89,85 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
         <form onSubmit={e => e.preventDefault()}>
           {currentStep === 2 && selectedService === ServiceType.Home && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
-              {/* Single Container */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
-                
-                {/* 1. Home Details Section */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    About Your Home
-                  </h3>
-                  <HomeDetailsSection 
-                    form={form} 
-                    onSuggestedTimeSelect={handleSuggestedTimeSelect}
+              {isMobile ? (
+                // Mobile: Progressive form with auto-advancement
+                <div className="space-y-6">
+                  <ProgressiveBookingForm 
+                    form={form}
+                    currentStep={currentStep}
+                    onStepChange={() => {}} // Handle step changes if needed
                   />
+                  
+                  {/* Mobile summary - compact floating version */}
+                  <div className="pb-20"> {/* Add padding for floating summary */}
+                    <MobileBookingSummaryOptimized 
+                      form={form}
+                      currentStep={currentStep}
+                    />
+                  </div>
                 </div>
+              ) : (
+                // Desktop: Original single container layout
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
+                  
+                  {/* 1. Home Details Section */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      About Your Home
+                    </h3>
+                    <HomeDetailsSection 
+                      form={form} 
+                      onSuggestedTimeSelect={handleSuggestedTimeSelect}
+                    />
+                  </div>
 
-                <SectionDivider />
+                  <SectionDivider />
 
-                {/* 2. Frequency Selection */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Cleaning Frequency
-                  </h3>
-                  <ServiceOptions 
-                    frequency={frequency} 
-                    setFrequency={freq => form.setValue('frequency', freq)} 
-                    isRegularCleaning={true} 
-                  />
-                </div>
-                
-                {/* Progressive Disclosure - Show calendar only when previous sections are complete */}
-                {sectionsCompleted.homeDetails && sectionsCompleted.frequency && showCalendar && (
-                  <>
-                    <SectionDivider />
-                    
-                    {/* 3. Calendar Section */}
-                    <div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <Calendar className="h-5 w-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          Date & Time
-                        </h3>
+                  {/* 2. Frequency Selection */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      Cleaning Frequency
+                    </h3>
+                    <ServiceOptions 
+                      frequency={frequency} 
+                      setFrequency={freq => form.setValue('frequency', freq)} 
+                      isRegularCleaning={true} 
+                    />
+                  </div>
+                  
+                  {/* Progressive Disclosure - Show calendar only when previous sections are complete */}
+                  {sectionsCompleted.homeDetails && sectionsCompleted.frequency && showCalendar && (
+                    <>
+                      <SectionDivider />
+                      
+                      {/* 3. Calendar Section */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Calendar className="h-5 w-5 text-primary" />
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Date & Time
+                          </h3>
+                        </div>
+                        <OptimizedCalendar form={form} />
                       </div>
-                      <OptimizedCalendar form={form} />
-                    </div>
-                  </>
-                )}
-                
-                {/* 4. Extras Section - Show when calendar is complete */}
-                {sectionsCompleted.calendar && (
-                  <>
-                    <SectionDivider />
-                    <div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <Plus className="h-5 w-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          Additional Services
-                        </h3>
+                    </>
+                  )}
+                  
+                  {/* 4. Extras Section - Show when calendar is complete */}
+                  {sectionsCompleted.calendar && (
+                    <>
+                      <SectionDivider />
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <Plus className="h-5 w-5 text-primary" />
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Additional Services
+                          </h3>
+                        </div>
+                        <EnhancedExtras form={form} />
                       </div>
-                      <EnhancedExtras form={form} />
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Mobile Sticky Save Button */}
-              {isMobile && (
-                <div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
-                  <Button 
-                    className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium rounded-xl"
-                    disabled={!sectionsCompleted.homeDetails || !sectionsCompleted.frequency}
-                  >
-                    Continue to Next Step
-                  </Button>
+                    </>
+                  )}
                 </div>
               )}
             </motion.div>
@@ -172,11 +181,28 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
           
           {currentStep === 3 && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant} key="final-step">
-              <FinalStep 
-                postalCode={postalCode} 
-                onSubmit={submitBooking} 
-                form={form} 
-              />
+              {isMobile ? (
+                <div className="space-y-6">
+                  <FinalStep 
+                    postalCode={postalCode} 
+                    onSubmit={submitBooking} 
+                    form={form} 
+                  />
+                  
+                  {/* Detailed summary for final step */}
+                  <MobileBookingSummaryOptimized 
+                    form={form}
+                    currentStep={currentStep}
+                    showDetailed={true}
+                  />
+                </div>
+              ) : (
+                <FinalStep 
+                  postalCode={postalCode} 
+                  onSubmit={submitBooking} 
+                  form={form} 
+                />
+              )}
             </motion.div>
           )}
         </form>
