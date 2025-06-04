@@ -20,6 +20,17 @@ export { default as FeaturedServices } from './FeaturedServices';
 export { ServicesMegamenu } from './ServicesMegamenu';
 export { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 
+// Core logic hooks
+export { useNavbarLogic } from './core/NavbarLogic';
+export { useNavbarHandlers } from './core/NavbarHandlers';
+
+// Desktop components
+export { DesktopNavigation } from './desktop/DesktopNavigation';
+export { DesktopControls } from './desktop/DesktopControls';
+
+// Mobile components - updated imports
+export { MobileControls } from './mobile/MobileControls';
+
 // Auth components
 export { AuthButtons } from './auth';
 
