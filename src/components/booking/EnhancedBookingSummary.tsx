@@ -3,7 +3,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { format } from 'date-fns';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { CalendarIcon, Clock, MapPin, Repeat } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon, Clock, MapPin, Repeat, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface EnhancedBookingSummaryProps {
   form: UseFormReturn<BookingFormData>;
@@ -19,7 +22,8 @@ const EnhancedBookingSummary = ({ form }: EnhancedBookingSummaryProps) => {
     extras = [],
     propertySize,
     bedrooms,
-    bathrooms
+    bathrooms,
+    promoCode
   } = formData;
 
   const getHourlyRate = (freq: string) => {
@@ -43,6 +47,17 @@ const EnhancedBookingSummary = ({ form }: EnhancedBookingSummaryProps) => {
       case Frequency.BiWeekly: return 'Every 2 weeks';
       case Frequency.Monthly: return 'Monthly';
       default: return 'One-time';
+    }
+  };
+
+  const removeExtra = (extraToRemove: string) => {
+    const updatedExtras = extras.filter(extra => extra !== extraToRemove);
+    form.setValue('extras', updatedExtras);
+  };
+
+  const handlePromoCodeApply = () => {
+    if (promoCode) {
+      toast.success("Promo code applied!");
     }
   };
 
@@ -87,17 +102,48 @@ const EnhancedBookingSummary = ({ form }: EnhancedBookingSummaryProps) => {
           </div>
         )}
 
-        {/* Extras */}
+        {/* Additional Services (Extras only) */}
         {extras.length > 0 && (
           <div className="border-t pt-3">
             <h4 className="font-medium mb-2">Additional Services</h4>
-            <ul className="space-y-1 text-gray-600 dark:text-gray-400">
+            <ul className="space-y-2">
               {extras.map((extra, index) => (
-                <li key={index} className="capitalize">{extra}</li>
+                <li key={index} className="flex items-center justify-between text-gray-600 dark:text-gray-400">
+                  <span className="capitalize">{extra}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeExtra(extra)}
+                    className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </li>
               ))}
             </ul>
           </div>
         )}
+
+        {/* Promo Code */}
+        <div className="border-t pt-3">
+          <h4 className="font-medium mb-2">Promo Code</h4>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Enter promo code"
+              value={promoCode || ''}
+              onChange={(e) => form.setValue('promoCode', e.target.value)}
+              className="flex-1"
+            />
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="sm"
+              onClick={handlePromoCodeApply}
+            >
+              Apply
+            </Button>
+          </div>
+        </div>
 
         {/* Pricing */}
         <div className="border-t pt-3 space-y-2">
