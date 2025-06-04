@@ -13,7 +13,7 @@ const ServiceOptions = lazy(() => import('../ServiceOptions'));
 const EnhancedMobileHours = lazy(() => import('./EnhancedMobileHours'));
 const AccessibleMobileCalendar = lazy(() => import('./AccessibleMobileCalendar'));
 const MobileTimeSelection = lazy(() => import('./MobileTimeSelection'));
-const EnhancedExtras = lazy(() => import('../EnhancedExtras'));
+const MobileOptimizedExtras = lazy(() => import('./MobileOptimizedExtras'));
 
 interface OptimizedProgressiveFormProps {
   form: UseFormReturn<BookingFormData>;
@@ -95,7 +95,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     {
       id: 'extras',
       title: 'Additional Services',
-      component: EnhancedExtras,
+      component: MobileOptimizedExtras,
       isComplete: () => true,
       required: false,
       icon: '➕'
@@ -194,9 +194,8 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
   };
 
   return (
-    <div className="space-y-2 px-1"> {/* Reduced from space-y-3 px-2 */}
-      {/* Optimized form sections with minimal padding */}
-      <div className="space-y-2"> {/* Reduced from space-y-3 */}
+    <div className="space-y-2 px-1">
+      <div className="space-y-2">
         {visibleSections.map((section, index) => {
           const Component = section.component;
           const isActive = index <= currentSection;
@@ -214,15 +213,15 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
                 p-2 transition-all duration-200 
                 ${isCompleted ? 'ring-1 ring-green-200 bg-green-50/20 dark:bg-green-900/5' : ''}
                 ${index === currentSection ? 'ring-1 ring-primary/20 shadow-sm' : ''}
-              `}> {/* Reduced padding from p-3 to p-2 */}
-                <div className="flex items-center justify-between mb-2"> {/* Reduced from mb-3 to mb-2 */}
-                  <h3 className="text-sm font-semibold flex items-center gap-2"> {/* Reduced from text-base */}
-                    {isCompleted && <CheckCircle className="h-3 w-3 text-green-600" />} {/* Reduced icon size */}
-                    <span className="text-base mr-1">{section.icon}</span> {/* Reduced from text-lg */}
+              `}>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold flex items-center gap-2">
+                    {isCompleted && <CheckCircle className="h-3 w-3 text-green-600" />}
+                    <span className="text-base mr-1">{section.icon}</span>
                     {section.title}
                   </h3>
                   {index === currentSection && (
-                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" /> {/* Reduced indicator size */}
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
                   )}
                 </div>
 
@@ -232,7 +231,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
                       initial={prefersReducedMotion ? {} : { opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }} {/* Faster transition */}
+                      transition={{ duration: 0.15 }}
                     >
                       {isLoaded ? (
                         <Suspense fallback={<LoadingFallback title={section.title} />}>

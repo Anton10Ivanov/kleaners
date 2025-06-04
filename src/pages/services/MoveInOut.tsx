@@ -1,5 +1,5 @@
 
-import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import ResponsiveServiceTemplate from "@/components/services/ResponsiveServiceTemplate";
 import ServiceBreadcrumb from "@/components/ui/service-breadcrumb";
 import { moveInOutData } from "@/data/services/moveInOut";
 
@@ -7,7 +7,7 @@ const MoveInOut = () => {
   return (
     <>
       <ServiceBreadcrumb serviceName="Move In/Out Cleaning" />
-      <ModernServiceTemplate data={moveInOutData} />
+      <ResponsiveServiceTemplate data={moveInOutData} />
     </>
   );
 };
