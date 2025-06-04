@@ -13,7 +13,7 @@ import { useBookingForm } from '@/hooks/useBookingForm';
 
 // Centralized imports
 import { Hero } from '../hero';
-import { MobileBookingSummary } from '../booking/mobile';
+import { MobileBookingSummaryOptimized } from '../booking/mobile';
 import { ServiceCategoriesSection } from '../services/ServiceCategoriesSection';
 import { serviceCategories } from '@/components/navbar/navigationData';
 import { HomeSections } from './HomeSections';
