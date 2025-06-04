@@ -1,7 +1,6 @@
 
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,8 +11,9 @@ import { performanceMonitor } from '@/utils/performance';
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 import { useBookingForm } from '@/hooks/useBookingForm';
 
-import Hero from '../hero';
-import MobileBookingSummary from '../booking/MobileBookingSummary';
+// Centralized imports
+import { Hero } from '../hero';
+import { MobileBookingSummary } from '../booking/mobile';
 import { ServiceCategoriesSection } from '../services/ServiceCategoriesSection';
 import { serviceCategories } from '@/components/navbar/navigationData';
 import { HomeSections } from './HomeSections';

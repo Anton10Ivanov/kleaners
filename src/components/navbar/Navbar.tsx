@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Logo } from './Logo';
-import { ThemeToggle } from './ThemeToggle';
-import LanguageSelector from './LanguageSelector';
-import { MobileMenu } from './MobileMenu';
-import { AuthButtons } from './auth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import NavbarContainer from './NavbarContainer';
-import UserControls from './UserControls';
-import MobileUserControls from './MobileUserControls';
-import MobileMenuToggle from './MobileMenuToggle';
-import FeaturedServices from './FeaturedServices';
-import { ServicesMegamenu } from './ServicesMegamenu';
-import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { Heart, HelpCircle, Phone, Users, FileText, Shield } from 'lucide-react';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 import { cn } from '@/lib/utils';
+
+// Centralized component imports
+import {
+  Logo,
+  ThemeToggle,
+  LanguageSelector,
+  MobileMenu,
+  NavbarContainer,
+  UserControls,
+  MobileUserControls,
+  MobileMenuToggle,
+  FeaturedServices,
+  ServicesMegamenu,
+  EnhancedDropdownNavigation
+} from './';
+import { AuthButtons } from './auth';
 
 const navItems = [
   {
@@ -79,7 +83,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isMobile } = useMobileOptimizations();
+  const { isMobile, getMobileSpacing } = useMobileOptimizations();
 
   useEffect(() => {
     setMounted(true);
@@ -199,7 +203,7 @@ const Navbar = () => {
       
       <FeaturedServices />
       
-      {/* Desktop navigation with design token styling */}
+      {/* Desktop navigation with design system styling */}
       <div className="hidden lg:flex items-center space-x-6">
         <div className={cn(
           "flex items-center",
@@ -213,7 +217,7 @@ const Navbar = () => {
       {/* Desktop controls with mobile-responsive spacing */}
       <div className={cn(
         "hidden md:flex items-center",
-        isMobile ? "space-x-2" : "space-x-3"
+        getMobileSpacing('sm')
       )}>
         {user && (
           <div className="touch-comfortable">
