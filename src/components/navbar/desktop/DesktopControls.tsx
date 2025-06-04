@@ -1,0 +1,46 @@
+
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { ThemeToggle, LanguageSelector, UserControls } from '../';
+import { AuthButtons } from '../auth';
+
+interface DesktopControlsProps {
+  user: any;
+  currentLanguage: 'en' | 'de';
+  onLanguageChange: () => void;
+}
+
+export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: DesktopControlsProps) => {
+  const { getMobileSpacing } = useMobileOptimizations();
+
+  return (
+    <div className={cn(
+      "hidden md:flex items-center",
+      getMobileSpacing('sm')
+    )}>
+      {user && (
+        <div className="touch-comfortable">
+          <UserControls user={user} />
+        </div>
+      )}
+      
+      <div className="flex items-center space-x-2">
+        <div className="touch-comfortable">
+          <ThemeToggle />
+        </div>
+        <div className="touch-comfortable">
+          <LanguageSelector 
+            currentLanguage={currentLanguage} 
+            onLanguageChange={onLanguageChange} 
+          />
+        </div>
+      </div>
+      
+      {!user && (
+        <div className="touch-comfortable">
+          <AuthButtons />
+        </div>
+      )}
+    </div>
+  );
+};

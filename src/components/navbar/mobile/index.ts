@@ -6,3 +6,4 @@ export { NavigationSection } from './NavigationSection';
 export { default as LogoutButton } from './LogoutButton';
 export { default as HeaderControls } from './HeaderControls';
 export { default as BusinessSolutionsSection } from './BusinessSolutionsSection';
+export { MobileControls } from './MobileControls';
