@@ -1,12 +1,12 @@
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { ErrorBoundary } from 'react-error-boundary';
 import { SectionLoading } from '@/components/ui/section-loading';
-import MobileBookingSummary from '../booking/MobileBookingSummary';
 import MobileBookingProgress from '../booking/MobileBookingProgress';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
 
@@ -42,12 +42,32 @@ export const BookingSteps = ({
   selectedExtras
 }: BookingStepsProps) => {
   const formData = form?.getValues();
+  const isReallyMobile = useMediaQuery("(max-width: 768px)");
   
   // Check completion status for mobile progress
   const hasServiceSelection = !!selectedService;
   const hasTimeSelection = !!(frequency && hours);
   const hasPersonalInfo = !!(formData?.firstName && formData?.lastName && formData?.email);
   const hasAddress = !!(formData?.address && formData?.city);
+
+  // Browser back button support for main steps
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (currentStep > 1) {
+        event.preventDefault();
+        handleBack();
+        window.history.pushState(null, '', window.location.pathname);
+      }
+    };
+
+    // Push initial state
+    window.history.pushState(null, '', window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [currentStep, handleBack]);
 
   return (
     <motion.div
@@ -58,7 +78,7 @@ export const BookingSteps = ({
       transition={{ duration: 0.4 }}
     >
       {/* Mobile Progress Indicator */}
-      {isMobile && (
+      {isReallyMobile && (
         <div className="fixed top-16 left-0 right-0 z-40">
           <MobileBookingProgress
             currentStep={currentStep}
@@ -70,7 +90,7 @@ export const BookingSteps = ({
         </div>
       )}
 
-      <div className={`max-w-7xl mx-auto ${isMobile ? 'pt-16' : ''}`}>
+      <div className={`max-w-7xl mx-auto ${isReallyMobile ? 'pt-16' : ''}`}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<SectionLoading />}>
             <LazyBookingContent 
@@ -81,38 +101,26 @@ export const BookingSteps = ({
           </Suspense>
         </ErrorBoundary>
 
-        {/* Mobile booking summary for Step 3 */}
-        {isMobile && currentStep === 3 && (
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <MobileBookingSummary 
-              selectedService={selectedService}
-              frequency={frequency || ''}
-              hours={hours}
-              currentPrice={currentPrice}
-              selectedExtras={selectedExtras}
-              form={form}
-            />
-          </ErrorBoundary>
-        )}
-
-        {/* Navigation buttons */}
-        <div className={`flex justify-between mt-8 ${isMobile ? 'pb-32' : 'pb-8'}`}>
-          <Button 
-            onClick={handleBack}
-            variant="outline"
-            className="rounded-xl h-12 px-6 hover:bg-white/50 hover:text-primary dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-          </Button>
-          {currentStep < 3 && (
+        {/* Navigation buttons - Only show on desktop or when not in progressive mobile form */}
+        {(!isReallyMobile || currentStep === 3) && (
+          <div className={`flex justify-between mt-8 ${isReallyMobile ? 'pb-32' : 'pb-8'}`}>
             <Button 
-              onClick={handleNext}
-              className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 px-6 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)] dark:bg-primary dark:text-white dark:hover:bg-primary/90"
+              onClick={handleBack}
+              variant="outline"
+              className="rounded-xl h-12 px-6 hover:bg-white/50 hover:text-primary dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
             >
-              Next <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
-          )}
-        </div>
+            {currentStep < 3 && (
+              <Button 
+                onClick={handleNext}
+                className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 px-6 shadow-[0_8px_15px_rgba(126,188,230,0.2)] hover:shadow-[0_8px_15px_rgba(126,188,230,0.4)] dark:bg-primary dark:text-white dark:hover:bg-primary/90"
+              >
+                Next <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   );
