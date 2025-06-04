@@ -6,7 +6,7 @@ import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
 import PromoCode from "./final/PromoCode";
-import GuestOrderOptions from "./final/GuestOrderOptions";
+import { GuestOrderOptions } from "./final/GuestOrderOptions";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
