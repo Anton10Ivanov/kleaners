@@ -4,7 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { BookingFormData } from "@/schemas/booking";
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calculator, Clock, Minus, Plus, CheckCircle } from 'lucide-react';
+import { Clock, Minus, Plus, CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useSwipeGesture, useHapticFeedback, useReducedMotion } from '@/hooks/useMobileInteractions';
 import { MobileEstimationDisplay } from './MobileEstimationDisplay';
@@ -36,7 +36,6 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
   const bathrooms = form.watch('bathrooms') || 0;
   const cleaningPace = form.watch('cleaningPace') || 'standard';
   
-  const [showCalculator, setShowCalculator] = useState(false);
   const [hasConfirmedSelection, setHasConfirmedSelection] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
   const prefersReducedMotion = useReducedMotion();
@@ -65,7 +64,6 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
   const handleHoursChange = (hours: number) => {
     form.setValue('hours', hours);
     triggerHaptic('light');
-    // Reset confirmation when hours change
     setHasConfirmedSelection(false);
   };
 
@@ -74,7 +72,6 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
     triggerHaptic('light');
     setHasConfirmedSelection(true);
     
-    // Grant permission to proceed immediately
     if (onComplete) {
       setTimeout(() => {
         onComplete();
@@ -86,7 +83,6 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
     setHasConfirmedSelection(true);
     triggerHaptic('medium');
     
-    // Grant permission to proceed
     if (onComplete) {
       setTimeout(() => {
         onComplete();
@@ -128,28 +124,7 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
           <Clock className="h-5 w-5 text-primary" />
           <h3 className="text-lg font-semibold">Duration</h3>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowCalculator(!showCalculator)}
-          className="h-9 px-3"
-          aria-label="Show cleaning time calculator"
-        >
-          <Calculator className="h-4 w-4 mr-1" />
-          Help
-        </Button>
       </div>
-
-      {showCalculator && (
-        <Card className="p-3 bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-          <p className="text-xs text-blue-800 dark:text-blue-200">
-            <strong>Quick guide:</strong><br />
-            • 1-2 hours: Small apartment, light cleaning<br />
-            • 3-4 hours: Standard home, regular cleaning<br />
-            • 5+ hours: Large home or deep cleaning
-          </p>
-        </Card>
-      )}
 
       {/* Show estimation if available */}
       <MobileEstimationDisplay
