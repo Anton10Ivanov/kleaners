@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Switch } from '@/components/ui/switch';
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
 import { DeepCleaningPopup } from './DeepCleaningPopup';
@@ -171,8 +172,8 @@ export const HomeDetailsSection = ({
           </div>
         </div>
 
-        {/* Preferred Cleaning Pace */}
-        <div className="space-y-2">
+        {/* Preferred Cleaning Pace - Toggle Switch */}
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Preferred cleaning pace
@@ -191,25 +192,26 @@ export const HomeDetailsSection = ({
               </Tooltip>
             </TooltipProvider>
           </div>
-          <Select value={cleaningPace || 'standard'} onValueChange={(value: 'standard' | 'quick') => form.setValue('cleaningPace', value)}>
-            <SelectTrigger className="h-12">
-              <SelectValue placeholder="Select cleaning pace" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="standard">
-                <div>
-                  <div className="font-medium">Standard</div>
-                  <div className="text-sm text-gray-500">Thorough and well-paced</div>
-                </div>
-              </SelectItem>
-              <SelectItem value="quick">
-                <div>
-                  <div className="font-medium">Quick</div>
-                  <div className="text-sm text-gray-500">Faster and lighter – reduces estimated duration by 20%</div>
-                </div>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          
+          <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className={`text-sm font-medium transition-colors ${cleaningPace === 'quick' ? 'text-red-600' : 'text-gray-500'}`}>
+              Quick
+            </div>
+            <Switch
+              checked={cleaningPace === 'standard'}
+              onCheckedChange={(checked) => form.setValue('cleaningPace', checked ? 'standard' : 'quick')}
+              className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-500"
+            />
+            <div className={`text-sm font-medium transition-colors ${cleaningPace === 'standard' ? 'text-green-600' : 'text-gray-500'}`}>
+              Standard
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 text-center">
+            {cleaningPace === 'quick' 
+              ? 'Faster and lighter – reduces estimated duration by 20%' 
+              : 'Thorough and well-paced cleaning'
+            }
+          </p>
         </div>
       </div>
 

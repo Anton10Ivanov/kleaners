@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData } from '@/schemas/booking';
@@ -78,6 +79,7 @@ const AVAILABLE_EXTRAS: ExtraService[] = [
 const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [windowCount, setWindowCount] = useState(1);
+  const [includeFrames, setIncludeFrames] = useState(false);
   const [ironingTime, setIroningTime] = useState(30);
   
   const selectedExtras = form.watch('extras') || [];
@@ -116,7 +118,11 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
       const extra = AVAILABLE_EXTRAS.find(e => e.id === extraId);
       if (!extra) return total;
       
-      if (extraId === 'windows') return total + (windowCount * extra.price);
+      if (extraId === 'windows') {
+        const basePrice = windowCount * extra.price;
+        const framePrice = includeFrames ? windowCount * 2 : 0; // €2 extra per window for frames
+        return total + basePrice + framePrice;
+      }
       if (extraId === 'ironing') return total + Math.ceil(ironingTime / 30) * extra.price;
       return total + extra.price;
     }, 0);
@@ -183,34 +189,68 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
         </motion.div>
       )}
 
-      {/* Window Cleaning Dialog */}
+      {/* Window Cleaning Dialog - Enhanced with frames option */}
       <Dialog open={openDialog === 'windows'} onOpenChange={() => setOpenDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>How many windows?</DialogTitle>
+            <DialogTitle>Window Cleaning Options</DialogTitle>
           </DialogHeader>
-          <div className="py-4 space-y-4">
-            <div className="flex items-center justify-center gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setWindowCount(Math.max(1, windowCount - 1))}
-                disabled={windowCount <= 1}
-                className="h-12 w-12 p-0"
-              >
-                -
-              </Button>
-              <span className="text-2xl font-bold w-16 text-center">{windowCount}</span>
-              <Button 
-                variant="outline" 
-                onClick={() => setWindowCount(windowCount + 1)}
-                className="h-12 w-12 p-0"
-              >
-                +
-              </Button>
+          <div className="py-4 space-y-6">
+            {/* Number of windows */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium">Number of windows</label>
+              <div className="flex items-center justify-center gap-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setWindowCount(Math.max(1, windowCount - 1))}
+                  disabled={windowCount <= 1}
+                  className="h-12 w-12 p-0"
+                >
+                  -
+                </Button>
+                <span className="text-2xl font-bold w-16 text-center">{windowCount}</span>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setWindowCount(windowCount + 1)}
+                  className="h-12 w-12 p-0"
+                >
+                  +
+                </Button>
+              </div>
             </div>
-            <div className="text-center text-sm text-gray-600">
-              €{windowCount * 3} total
+
+            {/* Frame cleaning option */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-sm font-medium">Include window frames</label>
+                  <p className="text-xs text-gray-500">+€2 per window</p>
+                </div>
+                <Switch
+                  checked={includeFrames}
+                  onCheckedChange={setIncludeFrames}
+                />
+              </div>
             </div>
+
+            {/* Pricing summary */}
+            <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Windows ({windowCount}x €3)</span>
+                <span>€{windowCount * 3}</span>
+              </div>
+              {includeFrames && (
+                <div className="flex justify-between text-sm">
+                  <span>Frames ({windowCount}x €2)</span>
+                  <span>€{windowCount * 2}</span>
+                </div>
+              )}
+              <div className="border-t pt-2 flex justify-between font-medium">
+                <span>Total</span>
+                <span>€{windowCount * 3 + (includeFrames ? windowCount * 2 : 0)}</span>
+              </div>
+            </div>
+            
             <Button 
               onClick={() => handleConfirmPopup('windows')}
               className="w-full"
