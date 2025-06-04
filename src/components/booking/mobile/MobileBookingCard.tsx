@@ -83,7 +83,7 @@ export function MobileBookingCard({
             variant={action.variant || "default"}
             className={cn(
               "w-full touch-comfortable",
-              getMobileButtonSize('default')
+              getMobileButtonSize('md')
             )}
           >
             {action.label}
