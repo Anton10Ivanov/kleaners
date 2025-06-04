@@ -21,8 +21,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Improve build performance
-    target: 'es2015',
+    // Improve build performance and support BigInt
+    target: 'es2020',
     minify: 'esbuild',
     // Split chunks for better caching
     rollupOptions: {
