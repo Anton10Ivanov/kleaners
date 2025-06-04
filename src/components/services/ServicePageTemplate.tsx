@@ -102,7 +102,7 @@ export function ServicePageTemplate({
             </p>
           </div>
           
-          <ResponsiveGrid columns={{ mobile: 1, tablet: 2, desktop: 3 }} gap="lg">
+          <ResponsiveGrid cols={{ mobile: 1, tablet: 2, desktop: 3 }} gap="lg">
             {features.map((feature) => (
               <div
                 key={feature.id}
@@ -136,7 +136,7 @@ export function ServicePageTemplate({
           </div>
 
           <ResponsiveGrid 
-            columns={{ mobile: 1, tablet: 2, desktop: 3 }} 
+            cols={{ mobile: 1, tablet: 2, desktop: 3 }} 
             gap="lg"
             className="max-w-5xl mx-auto"
           >
