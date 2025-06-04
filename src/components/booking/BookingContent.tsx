@@ -17,6 +17,8 @@ import { Calendar, Plus } from 'lucide-react';
 import OptimizedProgressiveForm from './mobile/OptimizedProgressiveForm';
 import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimized';
 import { MobileBookingCard, MobileCalendarCard, MobileServiceSelector } from './mobile';
+import { EnhancedExtrasVisual } from './extras/EnhancedExtrasVisual';
+import { SummaryPill } from './summary/SummaryPill';
 
 interface BookingContentProps {
   currentStep: number;
@@ -175,10 +177,10 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
                   </div>
                 </div>
               ) : (
-                // Desktop: Original single container layout
+                // Desktop: Updated single container layout
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
                   
-                  {/* 1. Home Details Section */}
+                  {/* 1. Home Details Section with new flow */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                       About Your Home
@@ -221,23 +223,20 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
                     </>
                   )}
                   
-                  {/* 4. Extras Section - Show when calendar is complete */}
+                  {/* 4. Enhanced Extras Section - Show when calendar is complete */}
                   {sectionsCompleted.calendar && (
                     <>
                       <SectionDivider />
                       <div>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Plus className="h-5 w-5 text-primary" />
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Additional Services
-                          </h3>
-                        </div>
-                        <EnhancedExtras form={form} />
+                        <EnhancedExtrasVisual form={form} />
                       </div>
                     </>
                   )}
                 </div>
               )}
+
+              {/* Summary Pill - replaces sticky summary */}
+              <SummaryPill form={form} currentStep={currentStep} />
             </motion.div>
           )}
           
