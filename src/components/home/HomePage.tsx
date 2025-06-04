@@ -132,8 +132,11 @@ const HomePage = () => {
       href: category.services[0]?.href || "/services",
       features: category.services.map(service => service.title),
       category: category.title.toLowerCase(),
-      icon: category.icon, // Include the icon property
-      services: category.services // Include the services property
+      icon: category.icon,
+      services: category.services.map(service => ({
+        ...service,
+        icon: React.createElement(service.icon, { className: "h-5 w-5" })
+      }))
     }));
   }, []);
 

@@ -23,12 +23,12 @@ export interface NavItem {
   link?: string;
 }
 
-// Service category types
+// Service category types - Updated to fix type conflicts
 export interface ServiceItem {
   title: string;
   description: string;
   href: string;
-  icon: React.ReactNode;
+  icon: LucideIcon; // Changed from React.ReactNode to LucideIcon
 }
 
 // Enhanced ServiceCategory that supports both navbar and homepage requirements
@@ -36,7 +36,7 @@ export interface ServiceCategory {
   id?: string;
   title: string;
   description: string;
-  icon: LucideIcon; // Simplified to only LucideIcon for consistency
+  icon: LucideIcon; // Consistent LucideIcon usage
   services: ServiceItem[];
   // Optional fields for HomePage compatibility
   image?: string;

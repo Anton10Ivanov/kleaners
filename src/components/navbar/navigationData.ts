@@ -17,7 +17,7 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'home-cleaning',
     title: "Home Cleaning",
     description: "Professional cleaning for your home",
-    icon: Home, // Direct LucideIcon component
+    icon: Home,
     image: "/placeholder.svg",
     price: "From €25/hour",
     href: "/services/home-cleaning",
@@ -28,13 +28,13 @@ export const serviceCategories: ServiceCategory[] = [
         title: "Regular Cleaning",
         description: "Weekly or bi-weekly cleaning service",
         href: "/services/home-cleaning",
-        icon: React.createElement(Home, { className: "h-5 w-5" })
+        icon: Home
       },
       {
         title: "Deep Cleaning", 
         description: "Thorough one-time cleaning",
         href: "/services/deep-cleaning",
-        icon: React.createElement(Sparkles, { className: "h-5 w-5" })
+        icon: Sparkles
       }
     ]
   },
@@ -42,7 +42,7 @@ export const serviceCategories: ServiceCategory[] = [
     id: 'office-cleaning',
     title: "Office Cleaning",
     description: "Commercial cleaning solutions",
-    icon: Building, // Direct LucideIcon component
+    icon: Building,
     image: "/placeholder.svg",
     price: "From €30/hour",
     href: "/services/office-cleaning",
@@ -53,7 +53,7 @@ export const serviceCategories: ServiceCategory[] = [
         title: "Office Maintenance",
         description: "Regular office cleaning",
         href: "/services/office-cleaning",
-        icon: React.createElement(Building, { className: "h-5 w-5" })
+        icon: Building
       }
     ]
   }
