@@ -1,0 +1,246 @@
+
+/**
+ * Component Library CSS
+ * Standardized component styles based on design tokens
+ */
+
+/* Button Components */
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-primary-foreground;
+    @apply font-medium px-6 py-3 rounded-lg transition-all duration-200;
+    @apply shadow-sm hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20;
+    min-height: var(--touch-comfortable);
+  }
+
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+    @apply font-medium px-6 py-3 rounded-lg transition-all duration-200;
+    @apply shadow-sm hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-secondary/20;
+    min-height: var(--touch-comfortable);
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
+    @apply font-medium px-6 py-3 rounded-lg transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20;
+    min-height: var(--touch-comfortable);
+  }
+
+  .btn-ghost {
+    @apply text-primary hover:bg-primary/10;
+    @apply font-medium px-6 py-3 rounded-lg transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20;
+    min-height: var(--touch-comfortable);
+  }
+
+  /* Button sizes */
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+    min-height: var(--touch-minimum);
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+    min-height: var(--touch-large);
+  }
+}
+
+/* Card Components */
+@layer components {
+  .card {
+    @apply bg-card text-card-foreground border border-border rounded-xl shadow-sm;
+    @apply transition-shadow duration-200;
+  }
+
+  .card-hover {
+    @apply hover:shadow-md;
+  }
+
+  .card-interactive {
+    @apply cursor-pointer hover:shadow-lg transform hover:-translate-y-1;
+    @apply transition-all duration-200;
+  }
+
+  .card-header {
+    @apply p-6 pb-4;
+  }
+
+  .card-body {
+    @apply p-6 pt-0;
+  }
+
+  .card-footer {
+    @apply p-6 pt-4 border-t border-border;
+  }
+}
+
+/* Form Components */
+@layer components {
+  .form-field {
+    @apply w-full px-4 py-3 text-base bg-background border border-input rounded-lg;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+    @apply placeholder:text-muted-foreground;
+    min-height: var(--touch-comfortable);
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-foreground mb-2;
+  }
+
+  .form-error {
+    @apply text-sm text-destructive mt-1;
+  }
+
+  .form-help {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+
+  .form-group {
+    @apply space-y-2 mb-4;
+  }
+}
+
+/* Layout Components */
+@layer components {
+  .container-xs {
+    @apply max-w-sm mx-auto px-4;
+  }
+
+  .container-sm {
+    @apply max-w-md mx-auto px-4;
+  }
+
+  .container-md {
+    @apply max-w-2xl mx-auto px-4 sm:px-6;
+  }
+
+  .container-lg {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-xl {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  .section-sm {
+    @apply py-8 sm:py-12;
+  }
+
+  .section-lg {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+}
+
+/* Typography Components */
+@layer components {
+  .text-display {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-heading-color dark:text-white;
+  }
+
+  .text-title {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold leading-tight text-heading-color dark:text-white;
+  }
+
+  .text-heading {
+    @apply text-xl sm:text-2xl lg:text-3xl font-semibold leading-normal text-heading-color dark:text-white;
+  }
+
+  .text-subheading {
+    @apply text-lg sm:text-xl font-medium leading-normal text-heading-color dark:text-white;
+  }
+
+  .text-body {
+    @apply text-base leading-relaxed text-secondary-text dark:text-gray-300;
+  }
+
+  .text-caption {
+    @apply text-sm leading-normal text-muted-foreground;
+  }
+
+  .text-small {
+    @apply text-xs leading-normal text-muted-foreground;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .mobile-optimized {
+    @apply touch-manipulation;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col space-y-4;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 gap-4;
+  }
+
+  .mobile-padding {
+    @apply px-4 py-6;
+  }
+
+  .mobile-text {
+    @apply text-base leading-relaxed;
+  }
+
+  .mobile-heading {
+    @apply text-xl font-semibold leading-tight;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+  }
+
+  .animate-slide-up {
+    animation: slideUp var(--duration-normal) var(--ease-out);
+  }
+
+  .animate-scale-in {
+    animation: scaleIn var(--duration-fast) var(--ease-out);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
