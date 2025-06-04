@@ -36,7 +36,7 @@ export interface ServiceCategory {
   id?: string;
   title: string;
   description: string;
-  icon: LucideIcon | React.ComponentType<any> | React.ReactNode;
+  icon: LucideIcon; // Simplified to only LucideIcon for consistency
   services: ServiceItem[];
   // Optional fields for HomePage compatibility
   image?: string;
