@@ -39,11 +39,11 @@ export const HomeDetailsSection = ({
   const [durationChoiceMade, setDurationChoiceMade] = useState(false);
   
   const propertySize = form.watch('propertySize') || 70;
-  const bedrooms = form.watch('bedrooms') || 0;
-  const bathrooms = form.watch('bathrooms') || 0;
+  const bedrooms = form.watch('bedrooms');
+  const bathrooms = form.watch('bathrooms');
   const cleaningPace = form.watch('cleaningPace') || 'standard';
 
-  // Set default values on mount
+  // Set default values on mount (only property size and cleaning pace)
   useEffect(() => {
     if (!form.watch('propertySize')) {
       form.setValue('propertySize', 70);
@@ -53,14 +53,17 @@ export const HomeDetailsSection = ({
     }
   }, [form]);
 
-  const allFieldsFilled = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
+  // Check if all required fields are filled (bedrooms and bathrooms must be explicitly selected)
+  const allFieldsFilled = propertySize > 0 && 
+                          bedrooms !== undefined && bedrooms !== null && 
+                          bathrooms !== undefined && bathrooms !== null;
 
   // Calculate duration with standard pace for popup trigger
-  const standardDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms, bathrooms, 'standard') : 0;
-  const suggestedDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms, bathrooms, cleaningPace as 'standard' | 'quick') : 0;
+  const standardDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms!, bathrooms!, 'standard') : 0;
+  const suggestedDuration = allFieldsFilled ? estimateDuration(propertySize, bedrooms!, bathrooms!, cleaningPace as 'standard' | 'quick') : 0;
 
   // Check if deep cleaning should be suggested (based on standard duration before quick adjustment)
-  const shouldSuggestDeepCleaning = standardDuration >= 6 || bathrooms >= 3;
+  const shouldSuggestDeepCleaning = standardDuration >= 6 || (bathrooms !== undefined && bathrooms >= 3);
   
   useEffect(() => {
     if (allFieldsFilled && shouldSuggestDeepCleaning && !durationChoiceMade) {
@@ -107,8 +110,8 @@ export const HomeDetailsSection = ({
         onChoice={handleDurationChoice}
         suggestedDuration={suggestedDuration}
         propertySize={propertySize}
-        bedrooms={bedrooms}
-        bathrooms={bathrooms}
+        bedrooms={bedrooms || 0}
+        bathrooms={bathrooms || 0}
         cleaningPace={cleaningPace}
       />
 

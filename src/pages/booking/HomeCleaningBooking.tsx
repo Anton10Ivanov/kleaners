@@ -26,8 +26,6 @@ const HomeCleaningBooking = () => {
     defaultValues: {
       service: "home",
       hours: 2,
-      bedrooms: 1,
-      bathrooms: 1,
       propertySize: 70,
       cleaningPace: 'standard',
       extras: [],
