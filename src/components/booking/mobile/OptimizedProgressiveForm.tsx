@@ -10,7 +10,6 @@ import { useReducedMotion } from '@/hooks/useMobileInteractions';
 // Lazy load components for better performance
 const HomeDetailsSection = lazy(() => import('../HomeDetailsSection').then(module => ({ default: module.HomeDetailsSection })));
 const ServiceOptions = lazy(() => import('../ServiceOptions'));
-const EnhancedMobileHours = lazy(() => import('./EnhancedMobileHours'));
 const AccessibleMobileCalendar = lazy(() => import('./AccessibleMobileCalendar'));
 const MobileTimeSelection = lazy(() => import('./MobileTimeSelection'));
 const MobileOptimizedExtras = lazy(() => import('./MobileOptimizedExtras'));
@@ -43,7 +42,6 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0, 1])); // Load first two sections
-  const [hoursConfirmed, setHoursConfirmed] = useState(false); // Track hours confirmation
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const intersectionObserver = useRef<IntersectionObserver | null>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -57,7 +55,10 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       id: 'home-details',
       title: 'About Your Home',
       component: HomeDetailsSection,
-      isComplete: (data) => data.propertySize > 0 && data.bedrooms > 0 && data.bathrooms > 0,
+      isComplete: (data) => data.propertySize > 0 && 
+                           data.bedrooms !== undefined && data.bedrooms !== null &&
+                           data.bathrooms !== undefined && data.bathrooms !== null &&
+                           data.hours > 0,
       required: true,
       icon: '🏠'
     },
@@ -68,14 +69,6 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       isComplete: (data) => !!data.frequency,
       required: true,
       icon: '📅'
-    },
-    {
-      id: 'hours',
-      title: 'Duration',
-      component: EnhancedMobileHours,
-      isComplete: (data) => data.hours > 0 && hoursConfirmed, // Now requires confirmation
-      required: true,
-      icon: '⏰'
     },
     {
       id: 'calendar',
@@ -135,22 +128,22 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     });
   }, [visibleSections]);
 
-  // Auto-advancement logic - fixed for better disclosure
+  // Auto-advancement logic
   useEffect(() => {
     const currentSectionData = visibleSections[currentSection];
     if (currentSectionData && currentSectionData.isComplete(formData)) {
       setCompletedSections(prev => new Set([...prev, currentSection]));
       
-      // Auto-advance after completion - improved timing
+      // Auto-advance after completion
       const timer = setTimeout(() => {
         if (currentSection < visibleSections.length - 1) {
           handleSectionComplete();
         }
-      }, 800); // Increased delay for better UX
+      }, 800);
 
       return () => clearTimeout(timer);
     }
-  }, [formData, currentSection, visibleSections, hoursConfirmed]);
+  }, [formData, currentSection, visibleSections]);
 
   const handleSectionComplete = () => {
     if (currentSection < visibleSections.length - 1) {
@@ -170,10 +163,8 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     }
   };
 
-  // Handle hours completion specifically
-  const handleHoursComplete = () => {
-    setHoursConfirmed(true);
-    handleSectionComplete();
+  const handleSuggestedTimeSelect = (hours: number) => {
+    form.setValue('hours', hours);
   };
 
   const scrollToSection = (index: number) => {
@@ -249,8 +240,8 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
                             frequency={frequency}
                             setFrequency={(freq: any) => form.setValue('frequency', freq)}
                             isRegularCleaning={true}
-                            onComplete={section.id === 'hours' ? handleHoursComplete : handleSectionComplete}
-                            onSuggestedTimeSelect={(hours: number) => form.setValue('hours', hours)}
+                            onComplete={handleSectionComplete}
+                            onSuggestedTimeSelect={handleSuggestedTimeSelect}
                           />
                         </Suspense>
                       ) : (

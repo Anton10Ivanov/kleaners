@@ -95,8 +95,11 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
     }
   }, [form, frequency]);
 
-  // Check if home details are complete
-  const homeDetailsComplete = propertySize > 0 && bedrooms > 0 && bathrooms > 0;
+  // Check if home details are complete (updated to match new required fields)
+  const homeDetailsComplete = propertySize > 0 && 
+                              bedrooms !== undefined && bedrooms !== null && 
+                              bathrooms !== undefined && bathrooms !== null &&
+                              hours > 0;
   
   // Update completion states
   useEffect(() => {
