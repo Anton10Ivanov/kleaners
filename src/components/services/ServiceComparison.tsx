@@ -37,6 +37,15 @@ export function ServiceComparison({
 }: ServiceComparisonProps) {
   const { isMobile, getMobileSpacing, getMobileButtonSize } = useMobileOptimizations();
 
+  // Calculate responsive columns based on number of services
+  const getResponsiveCols = () => {
+    const serviceCount = services.length;
+    if (serviceCount <= 3) {
+      return { mobile: 1, tablet: 2, desktop: serviceCount as 1 | 2 | 3 };
+    }
+    return { mobile: 1, tablet: 2, desktop: 3 };
+  };
+
   return (
     <div className={cn("space-y-6", className)}>
       {title && (
@@ -51,7 +60,7 @@ export function ServiceComparison({
       )}
 
       <ResponsiveGrid 
-        cols={{ mobile: 1, tablet: 2, desktop: services.length <= 3 ? services.length : 3 }} 
+        cols={getResponsiveCols()} 
         gap="md"
       >
         {services.map((service) => (
