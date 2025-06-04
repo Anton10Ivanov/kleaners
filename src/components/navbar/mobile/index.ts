@@ -2,14 +2,14 @@
 // Mobile Navigation Components Index
 // Touch-optimized and accessible mobile navigation components
 
-// Legacy mobile components
-export { ClientSection } from './ClientSection';
-export { ProviderSection } from './ProviderSection';
-export { AdminSection } from './AdminSection';
-export { NavigationSection } from './NavigationSection';
-export { LogoutButton } from './LogoutButton';
-export { HeaderControls } from './HeaderControls';
-export { BusinessSolutionsSection } from './BusinessSolutionsSection';
+// Legacy mobile components - using default imports to fix build errors
+export { default as ClientSection } from './ClientSection';
+export { default as ProviderSection } from './ProviderSection';
+export { default as AdminSection } from './AdminSection';
+export { default as NavigationSection } from './NavigationSection';
+export { default as LogoutButton } from './LogoutButton';
+export { default as HeaderControls } from './HeaderControls';
+export { default as BusinessSolutionsSection } from './BusinessSolutionsSection';
 
 // Enhanced mobile components (Phase 2A)
 export { TouchOptimizedControls, SwipeGestureArea } from './TouchOptimizedControls';

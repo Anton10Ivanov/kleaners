@@ -1,7 +1,8 @@
 
 import { cn } from '@/lib/utils';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-import { ServicesMegamenu, EnhancedDropdownNavigation } from '../';
+import { DesktopMegaMenu } from './DesktopMegaMenu';
+import { EnhancedDropdownNavigation } from './EnhancedDropdownNavigation';
 import { navItems } from '../navigationData';
 
 export const DesktopNavigation = () => {
@@ -13,7 +14,7 @@ export const DesktopNavigation = () => {
         "flex items-center",
         isMobile ? "space-x-4" : "space-x-6"
       )}>
-        <ServicesMegamenu />
+        <DesktopMegaMenu />
         <EnhancedDropdownNavigation navItems={navItems} />
       </div>
     </div>
