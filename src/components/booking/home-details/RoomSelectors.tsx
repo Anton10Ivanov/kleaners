@@ -9,8 +9,8 @@ interface RoomSelectorsProps {
 }
 
 export const RoomSelectors = ({ form }: RoomSelectorsProps) => {
-  const bedrooms = form.watch('bedrooms') || 0;
-  const bathrooms = form.watch('bathrooms') || 0;
+  const bedrooms = form.watch('bedrooms');
+  const bathrooms = form.watch('bathrooms');
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -19,7 +19,10 @@ export const RoomSelectors = ({ form }: RoomSelectorsProps) => {
         <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Number of bedrooms
         </Label>
-        <Select value={bedrooms?.toString()} onValueChange={value => form.setValue('bedrooms', Number(value))}>
+        <Select 
+          value={bedrooms !== undefined ? bedrooms.toString() : ""} 
+          onValueChange={value => form.setValue('bedrooms', Number(value))}
+        >
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Select bedrooms" />
           </SelectTrigger>
@@ -38,7 +41,10 @@ export const RoomSelectors = ({ form }: RoomSelectorsProps) => {
         <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Number of bathrooms
         </Label>
-        <Select value={bathrooms?.toString()} onValueChange={value => form.setValue('bathrooms', Number(value))}>
+        <Select 
+          value={bathrooms !== undefined ? bathrooms.toString() : ""} 
+          onValueChange={value => form.setValue('bathrooms', Number(value))}
+        >
           <SelectTrigger className="h-12">
             <SelectValue placeholder="Select bathrooms" />
           </SelectTrigger>
