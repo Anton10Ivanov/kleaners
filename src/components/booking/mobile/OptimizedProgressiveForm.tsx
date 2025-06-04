@@ -7,8 +7,8 @@ import { Card } from '@/components/ui/card';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useMobileInteractions';
 
-// Lazy load components for better performance
-const HomeDetailsSection = lazy(() => import('../HomeDetailsSection'));
+// Lazy load components for better performance - fix import issues
+const HomeDetailsSection = lazy(() => import('../HomeDetailsSection').then(module => ({ default: module.HomeDetailsSection })));
 const ServiceOptions = lazy(() => import('../ServiceOptions'));
 const EnhancedMobileHours = lazy(() => import('./EnhancedMobileHours'));
 const AccessibleMobileCalendar = lazy(() => import('./AccessibleMobileCalendar'));
@@ -31,10 +31,10 @@ interface FormSection {
 }
 
 const LoadingFallback = ({ title }: { title: string }) => (
-  <div className="flex items-center justify-center py-8">
+  <div className="flex items-center justify-center py-4">
     <div className="flex items-center gap-2 text-gray-500">
       <Loader2 className="h-4 w-4 animate-spin" />
-      <span>Loading {title}...</span>
+      <span className="text-sm">Loading {title}...</span>
     </div>
   </div>
 );
@@ -42,7 +42,7 @@ const LoadingFallback = ({ title }: { title: string }) => (
 const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: OptimizedProgressiveFormProps) => {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
-  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0])); // Preload first section
+  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const intersectionObserver = useRef<IntersectionObserver | null>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -96,7 +96,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       id: 'extras',
       title: 'Additional Services',
       component: EnhancedExtras,
-      isComplete: () => true, // Optional section
+      isComplete: () => true,
       required: false,
       icon: '➕'
     }
@@ -114,11 +114,11 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(entry.target.getAttribute('data-section-index') || '0');
-            setLoadedSections(prev => new Set([...prev, index, index + 1])); // Preload next section
+            setLoadedSections(prev => new Set([...prev, index, index + 1]));
           }
         });
       },
-      { rootMargin: '100px' } // Start loading 100px before section comes into view
+      { rootMargin: '100px' }
     );
 
     return () => intersectionObserver.current?.disconnect();
@@ -134,14 +134,13 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     });
   }, [visibleSections]);
 
-  // Browser back button support with improved UX
+  // Browser back button support
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       event.preventDefault();
       
       if (currentSection > 0) {
         setCurrentSection(prev => Math.max(0, prev - 1));
-        // Smooth scroll to previous section
         setTimeout(() => {
           sectionRefs.current[Math.max(0, currentSection - 1)]?.scrollIntoView({ 
             behavior: 'smooth', 
@@ -152,11 +151,9 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
         onStepChange(currentStep - 1);
       }
       
-      // Maintain history state
       window.history.pushState({ section: currentSection }, '', window.location.pathname);
     };
 
-    // Initialize history state
     window.history.replaceState({ section: currentSection }, '', window.location.pathname);
     window.addEventListener('popstate', handlePopState);
 
@@ -171,12 +168,11 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     if (currentSectionData && currentSectionData.isComplete(formData)) {
       setCompletedSections(prev => new Set([...prev, currentSection]));
       
-      // Auto-advance with optimized timing
       const timer = setTimeout(() => {
         if (currentSection < visibleSections.length - 1) {
           handleSectionComplete();
         }
-      }, 600); // Reduced delay for better UX
+      }, 600);
 
       return () => clearTimeout(timer);
     }
@@ -187,13 +183,10 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       const nextSection = currentSection + 1;
       setCurrentSection(nextSection);
       
-      // Preload next section
       setLoadedSections(prev => new Set([...prev, nextSection, nextSection + 1]));
       
-      // Update history
       window.history.pushState({ section: nextSection }, '', window.location.pathname);
       
-      // Optimized scroll with reduced motion support
       setTimeout(() => {
         sectionRefs.current[nextSection]?.scrollIntoView({ 
           behavior: prefersReducedMotion ? 'auto' : 'smooth', 
@@ -229,38 +222,9 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
   };
 
   return (
-    <div className="space-y-4">
-      {/* Enhanced progress indicators with icons */}
-      <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300">
-        {visibleSections.map((section, index) => (
-          <motion.button
-            key={section.id}
-            onClick={() => scrollToSection(index)}
-            className={`
-              flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap
-              transition-all duration-200 touch-manipulation min-h-[44px]
-              ${index === currentSection 
-                ? 'bg-primary text-white shadow-md' 
-                : completedSections.has(index)
-                ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300'
-                : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
-              }
-            `}
-            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-            aria-label={`${section.title} - ${completedSections.has(index) ? 'Completed' : index === currentSection ? 'Current' : 'Pending'}`}
-          >
-            {completedSections.has(index) ? (
-              <CheckCircle className="h-3 w-3" />
-            ) : (
-              <span className="text-sm">{section.icon}</span>
-            )}
-            <span>{section.title}</span>
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Optimized form sections with lazy loading */}
-      <div className="space-y-6">
+    <div className="space-y-3 px-2">
+      {/* Optimized form sections with reduced padding */}
+      <div className="space-y-3">
         {visibleSections.map((section, index) => {
           const Component = section.component;
           const isActive = index <= currentSection;
@@ -275,18 +239,18 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
               className={`relative ${!isActive ? 'pointer-events-none' : ''}`}
             >
               <Card className={`
-                p-6 transition-all duration-300
-                ${isCompleted ? 'ring-2 ring-green-200 bg-green-50/30 dark:bg-green-900/10' : ''}
-                ${index === currentSection ? 'ring-2 ring-primary/20 shadow-lg' : ''}
+                p-3 transition-all duration-300
+                ${isCompleted ? 'ring-1 ring-green-200 bg-green-50/30 dark:bg-green-900/10' : ''}
+                ${index === currentSection ? 'ring-1 ring-primary/20 shadow-md' : ''}
               `}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    {isCompleted && <CheckCircle className="h-5 w-5 text-green-600" />}
-                    <span className="text-xl mr-2">{section.icon}</span>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-base font-semibold flex items-center gap-2">
+                    {isCompleted && <CheckCircle className="h-4 w-4 text-green-600" />}
+                    <span className="text-lg mr-1">{section.icon}</span>
                     {section.title}
                   </h3>
                   {index === currentSection && (
-                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                   )}
                 </div>
 
