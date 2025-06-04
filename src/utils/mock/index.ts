@@ -55,7 +55,7 @@ export function generateMockAppData() {
   };
 }
 
-// Re-export types
+// Re-export types and individual mock functions
 export * from './types';
 export * from './clients';
 export * from './customers';
