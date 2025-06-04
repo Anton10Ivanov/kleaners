@@ -32,7 +32,7 @@ interface EnhancedDropdownNavigationProps {
 
 export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProps> = ({ navItems }) => {
   const navigate = useNavigate();
-  const { isMobile } = useMobileOptimizations();
+  const { isMobile, getMobileSpacing, getMobileTextSize } = useMobileOptimizations();
 
   return (
     <NavigationMenu className="hidden md:flex">
@@ -44,22 +44,22 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
               "hover:bg-accent hover:text-accent-foreground",
               "focus:bg-accent focus:text-accent-foreground", 
               "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-              isMobile ? "h-12 px-4 py-3 text-base" : "h-10 px-4 py-2 text-sm",
-              "font-medium touch-comfortable"
+              "font-medium touch-comfortable",
+              isMobile ? "h-12 px-4 py-3 text-base" : "h-10 px-4 py-2 text-sm"
             )}>
               {item.label}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className={cn(
                 "bg-white dark:bg-gray-800 shadow-xl rounded-xl border",
-                "border-border/50 backdrop-blur-sm",
+                "border-border/50 backdrop-blur-sm z-50",
                 isMobile ? "w-[320px] p-4" : "w-[300px] p-4"
               )}>
                 {item.subMenus?.map((subMenu) => (
                   <div key={subMenu.title} className="space-y-2">
                     <h4 className={cn(
                       "font-semibold text-foreground mb-3",
-                      isMobile ? "text-base" : "text-sm"
+                      getMobileTextSize('md')
                     )}>
                       {subMenu.title}
                     </h4>
@@ -72,7 +72,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             "group flex items-start gap-3 w-full text-left rounded-lg",
                             "hover:bg-accent/50 dark:hover:bg-gray-700/50",
                             "transition-colors duration-200 touch-comfortable",
-                            isMobile ? "p-3" : "p-2"
+                            getMobileSpacing('sm')
                           )}
                         >
                           <div className="flex-shrink-0 mt-0.5 text-primary transition-colors">
@@ -82,7 +82,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             <h5 className={cn(
                               "font-medium text-foreground group-hover:text-primary",
                               "transition-colors duration-200",
-                              isMobile ? "text-base" : "text-sm"
+                              getMobileTextSize('sm')
                             )}>
                               {subItem.label}
                             </h5>
