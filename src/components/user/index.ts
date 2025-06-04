@@ -29,7 +29,7 @@ export { AccountPreferences } from './profile/AccountPreferences';
 export { AvatarSection } from './profile/AvatarSection';
 export { AvatarUploader } from './profile/AvatarUploader';
 export { NotificationsPanel } from './profile/NotificationsPanel';
-export { PersonalInfoForm } from './profile/PersonalInfoForm';
+export { default as PersonalInfoForm } from './profile/PersonalInfoForm';
 export { ProfileErrorState } from './profile/ProfileErrorState';
 export { ProfileSkeleton } from './profile/ProfileSkeleton';
 export { ProfileTabs } from './profile/ProfileTabs';

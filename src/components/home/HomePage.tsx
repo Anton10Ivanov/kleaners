@@ -1,4 +1,3 @@
-
 import { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -121,6 +120,20 @@ const HomePage = () => {
     endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
+  // Convert serviceCategories to the expected format
+  const convertedServiceCategories = useMemo(() => {
+    return serviceCategories.map(category => ({
+      id: category.title.toLowerCase().replace(/\s+/g, '-'),
+      title: category.title,
+      description: category.description,
+      image: "/placeholder.svg",
+      price: "From €25/hour",
+      href: category.services[0]?.href || "/services",
+      features: category.services.map(service => service.title),
+      category: category.title.toLowerCase()
+    }));
+  }, []);
+
   return (
     <div className="min-h-screen font-raleway bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
       <AnimatePresence mode="wait">
@@ -144,7 +157,7 @@ const HomePage = () => {
             
             {/* Service Categories Section */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <ServiceCategoriesSection serviceCategories={serviceCategories} />
+              <ServiceCategoriesSection serviceCategories={convertedServiceCategories} />
             </ErrorBoundary>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>

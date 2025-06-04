@@ -8,20 +8,16 @@ export const serviceCategories = [
     icon: Home,
     services: [
       {
-        name: "Regular Cleaning",
         title: "Regular Cleaning",
         description: "Weekly or bi-weekly cleaning service",
-        price: "From €25/hour",
-        icon: "🏠",
-        href: "/services/home-cleaning"
+        href: "/services/home-cleaning",
+        icon: Home
       },
       {
-        name: "Deep Cleaning",
-        title: "Deep Cleaning",
+        title: "Deep Cleaning", 
         description: "Thorough one-time cleaning",
-        price: "From €35/hour", 
-        icon: "✨",
-        href: "/services/deep-cleaning"
+        href: "/services/deep-cleaning",
+        icon: Sparkles
       }
     ]
   },
@@ -31,12 +27,10 @@ export const serviceCategories = [
     icon: Building,
     services: [
       {
-        name: "Office Maintenance",
         title: "Office Maintenance",
         description: "Regular office cleaning",
-        price: "From €30/hour",
-        icon: "🏢",
-        href: "/services/office-cleaning"
+        href: "/services/office-cleaning",
+        icon: Building
       }
     ]
   }
