@@ -1,10 +1,18 @@
 
-export * from "./Container";
-export * from "./Section";
-export * from "./Grid";
-export * from "./Stack";
-export * from "./PageHeader";
-export * from "./Box";
+// Layout Components Index
+// Centralized export for all layout components
 
-// Development tools
-export * from "./DevTools";
+export { Box } from './Box';
+export { Container } from './Container';
+export { Section } from './Section';
+export { Stack } from './Stack';
+export { Grid } from './Grid';
+
+// Enhanced Layout Components with Design System Integration
+export { ResponsiveGrid } from './ResponsiveGrid';
+export { DesignSystemContainer } from './DesignSystemContainer';
+export { FlexLayout } from './FlexLayout';
+export { LayoutSection } from './LayoutSection';
+
+// Mobile Components
+export { default as MobileContainer } from './mobile-container';
