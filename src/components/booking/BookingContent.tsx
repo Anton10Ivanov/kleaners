@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
@@ -17,6 +16,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { Calendar, Plus } from 'lucide-react';
 import OptimizedProgressiveForm from './mobile/OptimizedProgressiveForm';
 import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimized';
+import { MobileBookingCard, MobileCalendarCard, MobileServiceSelector } from './mobile';
 
 interface BookingContentProps {
   currentStep: number;
@@ -40,6 +40,32 @@ const MobileLoadingFallback = () => (
     ))}
   </div>
 );
+
+// Sample service options for mobile service selector
+const serviceOptions = [
+  {
+    id: 'home',
+    name: 'Regular Home Cleaning',
+    description: 'Weekly or bi-weekly cleaning for your home',
+    price: 89,
+    duration: '2-3 hours',
+    popular: true,
+  },
+  {
+    id: 'deep',
+    name: 'Deep Cleaning',
+    description: 'Thorough cleaning for move-in/move-out or spring cleaning',
+    price: 149,
+    duration: '4-6 hours',
+  },
+  {
+    id: 'office',
+    name: 'Office Cleaning',
+    description: 'Professional cleaning for office spaces',
+    price: 119,
+    duration: '2-4 hours',
+  },
+];
 
 const BookingContent = ({ currentStep, selectedService, form }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
@@ -91,6 +117,18 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
     form.setValue('hours', suggestedHours);
   };
 
+  const handleServiceSelect = (serviceId: string) => {
+    form.setValue('service', serviceId);
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    form.setValue('date', date);
+  };
+
+  const handleTimeSelect = (time: string) => {
+    form.setValue('preferredTime', time);
+  };
+
   const SectionDivider = () => (
     <div className="border-t border-gray-100 dark:border-gray-700 my-4"></div>
   );
@@ -102,8 +140,24 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
           {currentStep === 2 && selectedService === ServiceType.Home && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
               {isMobile ? (
-                // Mobile: Enhanced progressive form with reduced padding
+                // Mobile: Enhanced with new mobile booking components
                 <div className="space-y-4">
+                  {/* Service Selection with new mobile component */}
+                  <MobileServiceSelector
+                    services={serviceOptions}
+                    selectedService={form.watch('service')}
+                    onServiceSelect={handleServiceSelect}
+                  />
+
+                  {/* Calendar with new mobile component */}
+                  <MobileCalendarCard
+                    selectedDate={selectedDate}
+                    onDateSelect={handleDateSelect}
+                    selectedTime={preferredTime}
+                    onTimeSelect={handleTimeSelect}
+                  />
+
+                  {/* Existing progressive form for remaining fields */}
                   <Suspense fallback={<MobileLoadingFallback />}>
                     <OptimizedProgressiveForm 
                       form={form}
