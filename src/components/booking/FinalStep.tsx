@@ -6,6 +6,7 @@ import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import SpecialInstructions from "./final/SpecialInstructions";
 import PromoCode from "./final/PromoCode";
+import GuestOrderOptions from "./final/GuestOrderOptions";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -59,6 +60,7 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
             />
           )}
           
+          <GuestOrderOptions />
           <SpecialInstructions form={form} />
           <PromoCode form={form} />
           
@@ -70,10 +72,12 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
         </form>
       </div>
 
-      {/* Right Column - Booking Summary */}
+      {/* Right Column - Compact Booking Summary */}
       <div className="lg:col-span-1">
         <div className="sticky top-6">
-          <EnhancedBookingSummary form={form} />
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+            <EnhancedBookingSummary form={form} />
+          </div>
         </div>
       </div>
     </div>
