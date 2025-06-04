@@ -1,3 +1,4 @@
+
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, ArrowUp, Star, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -76,11 +77,6 @@ const Footer = () => {
                   <Link to={service.href} className="text-theme-blue opacity-80 hover:text-primary hover:opacity-100 transition-colors flex-1">
                     {service.title}
                   </Link>
-                  {service.badge && (
-                    <Badge variant="secondary" className="text-xs px-1 py-0">
-                      {service.badge}
-                    </Badge>
-                  )}
                 </li>
               ))}
               <li className="pt-2 border-t border-theme-blue/20">
