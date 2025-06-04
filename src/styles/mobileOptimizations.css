@@ -1,183 +1,103 @@
 
 /**
- * Mobile-specific CSS optimizations
- * Additional styles for enhanced mobile experience
+ * Mobile Optimizations CSS
+ * Mobile-first responsive design patterns and touch-friendly interactions
  */
 
-/* Touch manipulation and smooth scrolling */
+/* Touch Interaction Improvements */
 @layer utilities {
   .touch-manipulation {
     touch-action: manipulation;
   }
+  
+  .touch-pan {
+    touch-action: pan-x pan-y;
+  }
+  
+  .touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+}
 
-  .smooth-scroll {
+/* Mobile-First Layout Patterns */
+@layer components {
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col space-y-4;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 gap-4;
+  }
+
+  .mobile-card {
+    @apply bg-card rounded-xl p-4 shadow-sm;
+    @apply border border-border;
+  }
+
+  /* Mobile Navigation */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50;
+    @apply bg-background border-t border-border;
+    @apply safe-area-inset-bottom;
+  }
+
+  .mobile-nav-item {
+    @apply flex flex-col items-center justify-center;
+    @apply py-2 px-1 text-xs;
+    min-height: var(--touch-comfortable);
+    min-width: var(--touch-comfortable);
+  }
+}
+
+/* Responsive Breakpoint Utilities */
+@layer utilities {
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+  
+  .tablet-up {
+    @apply hidden sm:block;
+  }
+  
+  .desktop-up {
+    @apply hidden lg:block;
+  }
+}
+
+/* Mobile Performance Optimizations */
+@layer utilities {
+  .mobile-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .mobile-smooth-scroll {
+    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
   }
+}
 
-  /* Active state for mobile buttons */
-  .active-scale {
-    transform: scale(0.98);
+/* Safe Area Support */
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
   }
-
-  /* Scale utilities */
-  .scale-98 {
-    transform: scale(0.98);
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
   }
-
-  /* Mobile-specific animation classes */
-  .mobile-fade-in {
-    animation: mobileFadeIn 0.3s ease-out forwards;
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
   }
-
-  .mobile-slide-up {
-    animation: mobileSlideUp 0.4s ease-out forwards;
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
   }
-
-  .mobile-scale-in {
-    animation: mobileScaleIn 0.2s ease-out forwards;
-  }
-}
-
-/* Mobile-optimized keyframes */
-@keyframes mobileFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes mobileSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes mobileScaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Mobile card styles */
-.mobile-card {
-  @apply bg-card text-card-foreground rounded-xl shadow-sm border border-border;
-  @apply transition-all duration-200 p-4;
-  @apply hover:shadow-md;
-}
-
-.mobile-card-interactive {
-  @apply cursor-pointer hover:shadow-lg transform hover:-translate-y-0.5;
-  @apply active:scale-98 transition-all duration-150;
-}
-
-/* Mobile typography styles */
-.mobile-heading-1 {
-  @apply text-2xl font-bold leading-tight text-heading-color dark:text-white mb-3;
-}
-
-.mobile-heading-2 {
-  @apply text-xl font-semibold leading-tight text-heading-color dark:text-white mb-2;
-}
-
-.mobile-heading-3 {
-  @apply text-lg font-semibold leading-normal text-heading-color dark:text-white mb-2;
-}
-
-.mobile-body {
-  @apply text-base leading-relaxed text-secondary-text dark:text-gray-300;
-}
-
-.mobile-body-small {
-  @apply text-sm leading-normal text-secondary-text dark:text-gray-300;
-}
-
-.mobile-caption {
-  @apply text-xs leading-normal text-muted-foreground;
-}
-
-/* Mobile layout utilities */
-.mobile-container {
-  @apply max-w-sm mx-auto px-4;
-}
-
-.mobile-section {
-  @apply py-6 px-4;
-}
-
-.mobile-stack {
-  @apply flex flex-col space-y-4;
-}
-
-.mobile-grid {
-  @apply grid grid-cols-1 gap-4;
-}
-
-/* Safe area handling for mobile devices */
-.safe-area-top {
-  padding-top: env(safe-area-inset-top);
-}
-
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.safe-area-left {
-  padding-left: env(safe-area-inset-left);
-}
-
-.safe-area-right {
-  padding-right: env(safe-area-inset-right);
-}
-
-/* Mobile-specific focus styles */
-.mobile-focus {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-}
-
-/* Improved tap targets for mobile */
-.tap-target {
-  min-height: var(--touch-comfortable);
-  min-width: var(--touch-comfortable);
-}
-
-.tap-target-large {
-  min-height: var(--touch-large);
-  min-width: var(--touch-large);
-}
-
-/* Mobile form optimizations */
-.mobile-input {
-  @apply w-full px-4 py-3 text-base bg-background border border-input rounded-lg;
-  @apply transition-colors duration-200 mobile-focus;
-  @apply placeholder:text-muted-foreground;
-  min-height: var(--touch-comfortable);
-}
-
-.mobile-select {
-  @apply w-full px-4 py-3 text-base bg-background border border-input rounded-lg;
-  @apply transition-colors duration-200 mobile-focus;
-  min-height: var(--touch-comfortable);
-}
-
-/* Responsive text sizing for mobile */
-@media (max-width: 640px) {
-  .responsive-text-sm { @apply text-sm; }
-  .responsive-text-base { @apply text-base; }
-  .responsive-text-lg { @apply text-lg; }
-  .responsive-text-xl { @apply text-xl; }
-  .responsive-text-2xl { @apply text-2xl; }
 }
