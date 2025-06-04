@@ -1,90 +1,64 @@
 
-import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
-import { corsHeaders } from '../_shared/cors.ts'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-interface RequestPayload {
-  questionId: string;
-}
-
-interface MetadataUpdatePayload {
-  ip_address: string;
-  user_agent: string;
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    // Get request info - with type safety
-    const payload = await req.json() as RequestPayload;
-    const { questionId } = payload;
-    
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    const { questionId } = await req.json()
+
     if (!questionId) {
-      throw new Error('Missing required field: questionId');
+      return new Response(
+        JSON.stringify({ error: 'Question ID is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
-    
-    const clientIp = req.headers.get('x-forwarded-for') || 'unknown';
-    const userAgent = req.headers.get('user-agent') || 'unknown';
-    
-    // Create Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing required environment variables for Supabase client');
-    }
-    
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    
-    console.log(`Updating question ${questionId} with metadata: IP=${clientIp}`);
-    
-    // Update the question with the client IP and user agent
-    const updatePayload: MetadataUpdatePayload = {
-      ip_address: clientIp,
-      user_agent: userAgent
-    };
-    
-    const { error } = await supabase
+
+    // Get client IP address from headers
+    const forwarded = req.headers.get('x-forwarded-for')
+    const realIp = req.headers.get('x-real-ip')
+    const clientIp = forwarded?.split(',')[0] || realIp || 'unknown'
+
+    // Update the question record with IP address
+    const { error } = await supabaseClient
       .from('customer_questions')
-      .update(updatePayload)
-      .eq('id', questionId);
-    
+      .update({ 
+        ip_address: clientIp
+      })
+      .eq('id', questionId)
+
     if (error) {
-      console.error('Error updating question metadata:', error);
-      throw error;
+      console.error('Error updating question with IP:', error)
+      return new Response(
+        JSON.stringify({ error: 'Failed to update question metadata' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
-    
-    console.log('Successfully updated question metadata');
-    
-    // Return success response
+
     return new Response(
-      JSON.stringify({ success: true }),
-      { 
-        headers: { 
-          'Content-Type': 'application/json',
-          ...corsHeaders 
-        } 
-      }
-    );
+      JSON.stringify({ success: true, ip_captured: clientIp }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+
   } catch (error) {
-    console.error('Error in capture-question-metadata function:', error);
-    
-    // Return error response with proper type handling
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    
+    console.error('Error in capture-question-metadata function:', error)
     return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { 
-        status: 400, 
-        headers: { 
-          'Content-Type': 'application/json',
-          ...corsHeaders 
-        } 
-      }
-    );
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
   }
 })

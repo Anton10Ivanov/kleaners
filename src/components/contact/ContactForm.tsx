@@ -51,6 +51,15 @@ const ContactForm = () => {
         .single();
 
       if (error) {
+        // Check if it's a spam-related error
+        if (error.message?.includes('spam') || error.message?.includes('rate limit')) {
+          toast({
+            title: 'Too many submissions',
+            description: 'Please wait before submitting another question. If you think this is an error, contact us directly.',
+            variant: 'destructive',
+          });
+          return;
+        }
         throw error;
       }
 
@@ -140,6 +149,10 @@ const ContactForm = () => {
               </FormItem>
             )}
           />
+
+          <div className="text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
+            <strong>Note:</strong> To prevent spam, we limit submissions to 3 per hour and 10 per day per user.
+          </div>
           
           <Button 
             type="submit" 

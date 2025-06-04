@@ -6,9 +6,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Filter } from "lucide-react";
 
 const FAQ = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -16,6 +17,7 @@ const FAQ = () => {
   const [email, setEmail] = useState("");
   const [question, setQuestion] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const { toast } = useToast();
 
   const faqs = [
@@ -93,8 +95,39 @@ const FAQ = () => {
       question: "Can I request the same cleaner for regular service?",
       answer: "Absolutely! We try to assign the same cleaner for recurring bookings to ensure consistency and familiarity. If your regular cleaner is unavailable, we'll assign a qualified substitute and notify you in advance.",
       category: "Service"
+    },
+    {
+      question: "What's included in a standard cleaning?",
+      answer: "Standard cleaning includes dusting, vacuuming, mopping, bathroom cleaning, kitchen cleaning, and tidying up. We follow a comprehensive checklist to ensure consistent quality across all our services.",
+      category: "Service"
+    },
+    {
+      question: "How do I prepare my home for cleaning?",
+      answer: "Simply declutter surfaces and put away personal items. Our cleaners will handle the rest. If you have specific areas you'd like us to focus on, please mention them in your booking notes.",
+      category: "Service"
+    },
+    {
+      question: "Do you offer eco-friendly cleaning options?",
+      answer: "Yes, we use eco-friendly products by default. All our cleaning supplies are environmentally safe and non-toxic. We're committed to protecting both your health and the environment.",
+      category: "Service"
+    },
+    {
+      question: "Can I book recurring cleaning services?",
+      answer: "Yes, we offer flexible recurring schedules including weekly, bi-weekly, and monthly cleaning services. Recurring customers enjoy priority booking and discounted rates.",
+      category: "Booking"
+    },
+    {
+      question: "What happens if something gets damaged during cleaning?",
+      answer: "Our cleaners are fully insured, and we take full responsibility for any accidental damage. We'll work with you to resolve any issues quickly and fairly through our insurance coverage.",
+      category: "Safety"
     }
   ];
+
+  const categories = ["all", ...Array.from(new Set(faqs.map(faq => faq.category))).sort()];
+
+  const filteredFaqs = selectedCategory === "all" 
+    ? faqs 
+    : faqs.filter(faq => faq.category === selectedCategory);
 
   const handleSubmitQuestion = async () => {
     if (!question.trim()) {
@@ -109,6 +142,9 @@ const FAQ = () => {
     setIsSubmitting(true);
 
     try {
+      // Get user agent for spam detection
+      const userAgent = navigator.userAgent;
+      
       // First insert the question to get the ID
       const { data, error } = await supabase
         .from('customer_questions')
@@ -116,12 +152,24 @@ const FAQ = () => {
           name,
           email,
           question,
-          status: 'pending'
+          status: 'pending',
+          user_agent: userAgent
         })
         .select('id')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // Check if it's a spam-related error
+        if (error.message?.includes('spam') || error.message?.includes('rate limit')) {
+          toast({
+            title: "Too many submissions",
+            description: "Please wait before submitting another question. If you think this is an error, contact us directly.",
+            variant: "destructive"
+          });
+          return;
+        }
+        throw error;
+      }
 
       // Call the edge function to capture metadata
       if (data?.id) {
@@ -165,9 +213,30 @@ const FAQ = () => {
           Find answers to the most common questions about our cleaning services, booking process, and policies.
         </p>
       </div>
+
+      {/* Category Filter */}
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <Filter className="h-5 w-5 text-gray-600" />
+          <Label htmlFor="category-filter" className="text-sm font-medium">Filter by topic:</Label>
+        </div>
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-full max-w-xs">
+            <SelectValue placeholder="Select a category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Topics</SelectItem>
+            {categories.slice(1).map((category) => (
+              <SelectItem key={category} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       
       <Accordion type="single" collapsible className="w-full mb-8">
-        {faqs.map((faq, index) => (
+        {filteredFaqs.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger className="font-medium text-left">
               <div className="flex items-center gap-3">
@@ -238,6 +307,10 @@ const FAQ = () => {
                 rows={4}
                 required
               />
+            </div>
+
+            <div className="text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
+              <strong>Note:</strong> To prevent spam, we limit submissions to 3 per hour and 10 per day per user.
             </div>
           </div>
           
