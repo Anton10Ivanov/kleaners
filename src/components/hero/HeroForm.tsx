@@ -1,12 +1,13 @@
-
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ServiceType } from "@/types/enums";
+import { getBookingRoute } from "@/utils/serviceRouteMapping";
 
 interface HeroFormProps {
   selectedService: string;
@@ -25,9 +26,24 @@ export const HeroForm = memo(({
   handleNextStep,
   isMobile
 }: HeroFormProps) => {
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleNextStep();
+    
+    // If a service is selected, navigate to specific booking route
+    if (selectedService && postalCode) {
+      const route = getBookingRoute(selectedService as ServiceType);
+      navigate(route, { 
+        state: { 
+          selectedService,
+          postalCode 
+        }
+      });
+    } else {
+      // Fallback to original step-based flow
+      handleNextStep();
+    }
   };
 
   if (isMobile) {

@@ -80,8 +80,41 @@ export const navigationData = [
   { href: "/contact", title: "Contact" }
 ];
 
-// Enhanced navigation items with dynamic service menu
+// Enhanced navigation items with Services integrated into dropdown pattern
 export const navItems: NavItem[] = [
+  {
+    id: 1,
+    label: "Services",
+    subMenus: [{
+      title: "Our Services",
+      items: [
+        {
+          label: "View All Services",
+          description: "Browse our complete range of cleaning services",
+          icon: React.createElement(Sparkles, { className: "h-5 w-5" }),
+          path: "/services"
+        },
+        {
+          label: "Home Cleaning",
+          description: "Regular and deep cleaning for your home",
+          icon: React.createElement(Home, { className: "h-5 w-5" }),
+          path: "/services/home-cleaning"
+        },
+        {
+          label: "Office Cleaning",
+          description: "Professional commercial cleaning",
+          icon: React.createElement(Building, { className: "h-5 w-5" }),
+          path: "/services/office-cleaning"
+        },
+        {
+          label: "Book Now",
+          description: "Start your booking process",
+          icon: React.createElement(Briefcase, { className: "h-5 w-5" }),
+          path: "/booking"
+        }
+      ]
+    }]
+  },
   {
     id: 2,
     label: "About Us",
