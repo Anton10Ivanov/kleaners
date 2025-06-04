@@ -121,10 +121,16 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/business-solutions" element={<BusinessSolutions />} />
           
+          {/* FIXED: Direct service routes that were causing 404s */}
+          <Route path="/home-cleaning" element={<Navigate to="/services/home-cleaning" replace />} />
+          <Route path="/office-cleaning" element={<Navigate to="/services/office-cleaning" replace />} />
+          <Route path="/deep-cleaning" element={<Navigate to="/services/deep-cleaning" replace />} />
+          <Route path="/move-in-out" element={<Navigate to="/services/move-in-out" replace />} />
+          
           {/* Booking routes */}
           <Route path="/booking/*" element={<BookingRoutes />} />
           
-          {/* Auth routes - consolidated */}
+          {/* Auth routes - consolidated (no individual Navbar/Footer) */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<Login />} />
@@ -135,16 +141,10 @@ function App() {
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
-          {/* Service routes - updated paths */}
+          {/* Service routes - consolidated */}
           <Route path="/services/home-cleaning" element={<HomeCleaning />} />
           <Route path="/services/office-cleaning" element={<OfficeCleaning />} />
           <Route path="/services/move-in-out" element={<MoveInOut />} />
-          
-          {/* Redirect old service URLs to new ones */}
-          <Route path="/services/regular-cleaning" element={<Navigate to="/services/home-cleaning" replace />} />
-          <Route path="/services/business-cleaning" element={<Navigate to="/services/office-cleaning" replace />} />
-          
-          {/* ... keep existing code (other service routes) */}
           <Route path="/services/window-cleaning" element={<WindowCleaning />} />
           <Route path="/services/stairwell-cleaning" element={<StairwellCleaning />} />
           <Route path="/services/industrial-cleaning" element={<IndustrialCleaning />} />
@@ -177,6 +177,10 @@ function App() {
           <Route path="/services/sidewalk-cleaning" element={<SidewalkCleaning />} />
           <Route path="/services/crime-scene-cleaning" element={<CrimeSceneCleaning />} />
           
+          {/* Legacy redirects for old service URLs */}
+          <Route path="/services/regular-cleaning" element={<Navigate to="/services/home-cleaning" replace />} />
+          <Route path="/services/business-cleaning" element={<Navigate to="/services/office-cleaning" replace />} />
+          
           {/* Legal routes */}
           <Route path="/legal/terms" element={<TermsOfService />} />
           <Route path="/legal/privacy" element={<PrivacyPolicy />} />
@@ -193,10 +197,9 @@ function App() {
           <Route path="settings" element={<AdminSettings />} />
         </Route>
         
-        {/* Client routes */}
+        {/* Client routes - cleaned up duplicates */}
         <Route path="/client" element={<ClientLayout />}>
           <Route index element={<ClientDashboard />} />
-          <Route path="dashboard" element={<ClientDashboard />} />
           <Route path="bookings" element={<ClientBookings />} />
           <Route path="messages" element={<ClientMessages />} />
           <Route path="invoices" element={<ClientInvoices />} />
@@ -207,7 +210,6 @@ function App() {
         {/* Provider routes */}
         <Route path="/provider" element={<ProviderLayout />}>
           <Route index element={<ProviderDashboard />} />
-          <Route path="dashboard" element={<ProviderDashboard />} />
           <Route path="profile" element={<ProviderProfile />} />
           <Route path="bookings" element={<ProviderBookings />} />
           <Route path="messages" element={<ProviderMessages />} />
@@ -216,7 +218,7 @@ function App() {
           <Route path="pending-pool" element={<AdminPendingBookingsPool />} />
         </Route>
 
-        {/* Legacy redirects - properly configured to handle any path after the base */}
+        {/* Legacy redirects - cleaned up */}
         <Route path="/auth/*" element={<Navigate to="/login" replace />} />
         <Route path="/user/*" element={<Navigate to="/client" replace />} />
         

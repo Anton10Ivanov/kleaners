@@ -164,11 +164,11 @@ const Footer = () => {
         </div>
       </div>
       
-      {/* Back to Top Arrow */}
+      {/* Back to Top Arrow - moved to LEFT corner */}
       <Button
         onClick={scrollToTop}
         size="sm"
-        className="absolute bottom-4 right-4 bg-primary hover:bg-primary/90 text-white rounded-full w-12 h-12 shadow-lg hover:shadow-xl transition-all duration-300 group"
+        className="absolute bottom-4 left-4 bg-primary hover:bg-primary/90 text-white rounded-full w-12 h-12 shadow-lg hover:shadow-xl transition-all duration-300 group"
         aria-label="Back to top"
       >
         <ArrowUp className="h-5 w-5 group-hover:scale-110 transition-transform" />
