@@ -13,8 +13,8 @@ export const NavigationPreloader: React.FC<NavigationPreloaderProps> = ({
 
     // Preload navigation components on hover intent
     const preloadComponents = () => {
-      // Preload mega menu component
-      import('../desktop/DesktopMegaMenu');
+      // Preload enhanced dropdown navigation component
+      import('../desktop/EnhancedDropdownNavigation');
       
       // Preload service categories data if not already loaded
       import('../navigationData');

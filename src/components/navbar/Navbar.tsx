@@ -12,8 +12,7 @@ import { navItems } from './navigationData';
 import {
   Logo,
   MobileMenu,
-  NavbarContainer,
-  FeaturedServices
+  NavbarContainer
 } from './';
 
 const NavbarContent = () => {
@@ -41,7 +40,6 @@ const NavbarContent = () => {
   return (
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
       <Logo />
-      <FeaturedServices />
       <DesktopNavigation />
       <DesktopControls 
         user={user}
