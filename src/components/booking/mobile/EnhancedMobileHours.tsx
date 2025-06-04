@@ -40,10 +40,20 @@ const EnhancedMobileHours = ({ form, onComplete }: EnhancedMobileHoursProps) => 
     form.setValue('hours', hours);
     triggerHaptic('light');
     
-    // Auto-advance when selection is made
-    setTimeout(() => {
-      onComplete?.();
-    }, 300);
+    // Immediate completion signal for progressive form
+    if (onComplete) {
+      onComplete();
+    }
+  };
+
+  const handleSuggestedTime = (hours: number) => {
+    form.setValue('hours', hours);
+    triggerHaptic('light');
+    
+    // Immediate completion signal for progressive form
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   const incrementHours = () => {
