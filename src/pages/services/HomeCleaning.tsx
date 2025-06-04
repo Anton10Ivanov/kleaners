@@ -1,5 +1,5 @@
 
-import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import ResponsiveServiceTemplate from "@/components/services/ResponsiveServiceTemplate";
 import ServiceBreadcrumb from "@/components/ui/service-breadcrumb";
 import { homeCleaningData } from "@/data/services/homeCleaning";
 
@@ -7,7 +7,7 @@ const HomeCleaning = () => {
   return (
     <>
       <ServiceBreadcrumb serviceName="Home Cleaning" />
-      <ModernServiceTemplate data={homeCleaningData} />
+      <ResponsiveServiceTemplate data={homeCleaningData} />
     </>
   );
 };
