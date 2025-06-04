@@ -1,10 +1,11 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "./styles/spacing.css";
 @import "./styles/animations.css";
 @import "./styles/globals.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
