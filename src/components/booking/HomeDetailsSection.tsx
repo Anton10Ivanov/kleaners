@@ -6,7 +6,8 @@ import { DeepCleaningPopup } from './DeepCleaningPopup';
 import { PropertySizeInput } from './home-details/PropertySizeInput';
 import { RoomSelectors } from './home-details/RoomSelectors';
 import { CleaningPaceToggle } from './home-details/CleaningPaceToggle';
-import { EstimationDisplay } from './home-details/EstimationDisplay';
+import { SuggestedDurationDialog } from './duration/SuggestedDurationDialog';
+import { DurationControls } from './duration/DurationControls';
 
 interface HomeDetailsSectionProps {
   form: UseFormReturn<BookingFormData>;
@@ -33,6 +34,9 @@ export const HomeDetailsSection = ({
   onSuggestedTimeSelect
 }: HomeDetailsSectionProps) => {
   const [showDeepCleaningPopup, setShowDeepCleaningPopup] = useState(false);
+  const [showDurationDialog, setShowDurationDialog] = useState(false);
+  const [showDurationControls, setShowDurationControls] = useState(false);
+  const [durationChoiceMade, setDurationChoiceMade] = useState(false);
   
   const propertySize = form.watch('propertySize') || 70;
   const bedrooms = form.watch('bedrooms') || 0;
@@ -59,10 +63,27 @@ export const HomeDetailsSection = ({
   const shouldSuggestDeepCleaning = standardDuration >= 6 || bathrooms >= 3;
   
   useEffect(() => {
-    if (allFieldsFilled && shouldSuggestDeepCleaning) {
+    if (allFieldsFilled && shouldSuggestDeepCleaning && !durationChoiceMade) {
       setShowDeepCleaningPopup(true);
+    } else if (allFieldsFilled && !shouldSuggestDeepCleaning && !durationChoiceMade) {
+      // Show duration dialog when all fields are filled
+      setShowDurationDialog(true);
     }
-  }, [allFieldsFilled, shouldSuggestDeepCleaning]);
+  }, [allFieldsFilled, shouldSuggestDeepCleaning, durationChoiceMade]);
+
+  const handleDurationChoice = (useSuggested: boolean) => {
+    setShowDurationDialog(false);
+    setDurationChoiceMade(true);
+    
+    if (useSuggested) {
+      form.setValue('hours', suggestedDuration);
+      if (onSuggestedTimeSelect) {
+        onSuggestedTimeSelect(suggestedDuration);
+      }
+    }
+    
+    setShowDurationControls(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -73,20 +94,22 @@ export const HomeDetailsSection = ({
         {/* Bedrooms & Bathrooms */}
         <RoomSelectors form={form} />
 
+        {/* Duration Controls - show after choice is made */}
+        <DurationControls form={form} visible={showDurationControls} />
+
         {/* Preferred Cleaning Pace - Toggle Switch */}
         <CleaningPaceToggle form={form} />
       </div>
 
-      {/* Estimation Display */}
-      <EstimationDisplay
-        form={form}
-        allFieldsFilled={allFieldsFilled}
+      {/* Suggested Duration Dialog */}
+      <SuggestedDurationDialog
+        isOpen={showDurationDialog}
+        onChoice={handleDurationChoice}
         suggestedDuration={suggestedDuration}
         propertySize={propertySize}
         bedrooms={bedrooms}
         bathrooms={bathrooms}
         cleaningPace={cleaningPace}
-        onSuggestedTimeSelect={onSuggestedTimeSelect}
       />
 
       {/* Deep Cleaning Popup */}
@@ -94,10 +117,12 @@ export const HomeDetailsSection = ({
         isOpen={showDeepCleaningPopup} 
         onClose={() => setShowDeepCleaningPopup(false)} 
         onSwitchToDeepCleaning={() => {
-          // This would redirect to deep cleaning booking
           window.location.href = '/deep-cleaning';
         }} 
-        onContinueStandard={() => setShowDeepCleaningPopup(false)} 
+        onContinueStandard={() => {
+          setShowDeepCleaningPopup(false);
+          setShowDurationDialog(true);
+        }} 
       />
     </div>
   );
