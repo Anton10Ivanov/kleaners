@@ -9,7 +9,7 @@ const MobileCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "mobile-card mobile-fade-in",
+      "card bg-card text-card-foreground rounded-xl shadow-sm border border-border transition-all duration-200 p-4",
       className
     )}
     {...props}
@@ -35,7 +35,7 @@ const MobileCardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("mobile-heading-3", className)}
+    className={cn("text-xl font-semibold leading-tight text-heading-color dark:text-white", className)}
     {...props}
   />
 ))
@@ -47,7 +47,7 @@ const MobileCardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("mobile-body-small text-muted-foreground", className)}
+    className={cn("text-sm text-muted-foreground leading-normal", className)}
     {...props}
   />
 ))
