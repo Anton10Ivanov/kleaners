@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { ThemeToggle } from '../ThemeToggle';
-import LanguageSelector from '../LanguageSelector';
 
 interface HeaderControlsProps {
   currentLanguage: 'en' | 'de';
@@ -13,12 +12,14 @@ const HeaderControls: React.FC<HeaderControlsProps> = ({
   onLanguageChange 
 }) => {
   return (
-    <div className="flex justify-between items-center mb-2">
-      <ThemeToggle />
-      <LanguageSelector 
-        currentLanguage={currentLanguage}
-        onLanguageChange={onLanguageChange}
-      />
+    <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div className="flex items-center gap-3">
+        <ThemeToggle />
+      </div>
+      
+      <div className="text-xs text-gray-500 dark:text-gray-400">
+        Language: {currentLanguage.toUpperCase()}
+      </div>
     </div>
   );
 };

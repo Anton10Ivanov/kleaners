@@ -1,48 +1,49 @@
 
 import React from 'react';
-import { useToast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface LogoutButtonProps {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (open: boolean) => void;
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ setIsOpen }) => {
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
+      navigate('/');
       setIsOpen(false);
       toast({
-        title: "Logged Out",
-        description: "You have been successfully logged out",
+        title: "Logged out successfully",
+        description: "You have been logged out of your account."
       });
-      navigate('/');
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.error('Logout error:', error);
       toast({
-        title: "Error",
-        description: "Failed to log out. Please try again.",
+        title: "Logout failed",
+        description: "There was an error logging you out.",
         variant: "destructive"
       });
     }
   };
 
   return (
-    <div className="mt-4">
+    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
       <Button
-        variant="destructive"
-        size="sm"
+        variant="ghost"
+        className="w-full justify-start min-h-[44px] px-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
         onClick={handleLogout}
-        className="w-full flex items-center justify-center py-2 bg-red-600 hover:bg-red-700"
       >
-        <LogOut className="mr-2 h-4 w-4" />
-        <span>Log Out</span>
+        <div className="flex items-center gap-3">
+          <LogOut className="h-4 w-4" />
+          <span className="font-medium">Sign Out</span>
+        </div>
       </Button>
     </div>
   );

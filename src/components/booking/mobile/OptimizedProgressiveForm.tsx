@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useMobileInteractions';
 
-// Lazy load components for better performance - fix import issues
+// Lazy load components for better performance
 const HomeDetailsSection = lazy(() => import('../HomeDetailsSection').then(module => ({ default: module.HomeDetailsSection })));
 const ServiceOptions = lazy(() => import('../ServiceOptions'));
 const EnhancedMobileHours = lazy(() => import('./EnhancedMobileHours'));
@@ -42,7 +42,7 @@ const LoadingFallback = ({ title }: { title: string }) => (
 const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: OptimizedProgressiveFormProps) => {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
-  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
+  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0, 1])); // Load first two sections
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const intersectionObserver = useRef<IntersectionObserver | null>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -50,7 +50,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
   const formData = form.watch();
   const frequency = form.watch('frequency');
 
-  // Form sections configuration with lazy components
+  // Form sections configuration
   const sections: FormSection[] = [
     {
       id: 'home-details',
@@ -107,18 +107,18 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     section.required || section.id === 'extras'
   );
 
-  // Intersection Observer for lazy loading
+  // Intersection Observer for progressive loading
   useEffect(() => {
     intersectionObserver.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(entry.target.getAttribute('data-section-index') || '0');
-            setLoadedSections(prev => new Set([...prev, index, index + 1]));
+            setLoadedSections(prev => new Set([...prev, index, index + 1, index + 2])); // Load current + next 2
           }
         });
       },
-      { rootMargin: '100px' }
+      { rootMargin: '50px' }
     );
 
     return () => intersectionObserver.current?.disconnect();
@@ -134,45 +134,18 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     });
   }, [visibleSections]);
 
-  // Browser back button support
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      event.preventDefault();
-      
-      if (currentSection > 0) {
-        setCurrentSection(prev => Math.max(0, prev - 1));
-        setTimeout(() => {
-          sectionRefs.current[Math.max(0, currentSection - 1)]?.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        }, 100);
-      } else if (currentStep > 1) {
-        onStepChange(currentStep - 1);
-      }
-      
-      window.history.pushState({ section: currentSection }, '', window.location.pathname);
-    };
-
-    window.history.replaceState({ section: currentSection }, '', window.location.pathname);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [currentSection, currentStep, onStepChange]);
-
-  // Smart auto-advancement with completion tracking
+  // Auto-advancement logic - improved
   useEffect(() => {
     const currentSectionData = visibleSections[currentSection];
     if (currentSectionData && currentSectionData.isComplete(formData)) {
       setCompletedSections(prev => new Set([...prev, currentSection]));
       
+      // Auto-advance after completion with shorter delay
       const timer = setTimeout(() => {
         if (currentSection < visibleSections.length - 1) {
           handleSectionComplete();
         }
-      }, 600);
+      }, 400); // Reduced from 600ms
 
       return () => clearTimeout(timer);
     }
@@ -183,10 +156,10 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
       const nextSection = currentSection + 1;
       setCurrentSection(nextSection);
       
-      setLoadedSections(prev => new Set([...prev, nextSection, nextSection + 1]));
+      // Load next sections proactively
+      setLoadedSections(prev => new Set([...prev, nextSection, nextSection + 1, nextSection + 2]));
       
-      window.history.pushState({ section: nextSection }, '', window.location.pathname);
-      
+      // Smooth scroll to next section
       setTimeout(() => {
         sectionRefs.current[nextSection]?.scrollIntoView({ 
           behavior: prefersReducedMotion ? 'auto' : 'smooth', 
@@ -198,8 +171,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
 
   const scrollToSection = (index: number) => {
     setCurrentSection(index);
-    setLoadedSections(prev => new Set([...prev, index]));
-    window.history.pushState({ section: index }, '', window.location.pathname);
+    setLoadedSections(prev => new Set([...prev, index, index + 1]));
     
     sectionRefs.current[index]?.scrollIntoView({ 
       behavior: prefersReducedMotion ? 'auto' : 'smooth', 
@@ -211,20 +183,20 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
     if (prefersReducedMotion) return {};
     
     return {
-      initial: { opacity: 0, y: 20 },
+      initial: { opacity: 0, y: 15 },
       animate: { 
-        opacity: index <= currentSection ? 1 : 0.3, 
-        y: index <= currentSection ? 0 : 20,
-        scale: index <= currentSection ? 1 : 0.95
+        opacity: index <= currentSection ? 1 : 0.4, 
+        y: index <= currentSection ? 0 : 15,
+        scale: index <= currentSection ? 1 : 0.98
       },
-      transition: { duration: 0.3, delay: Math.min(index * 0.1, 0.3) }
+      transition: { duration: 0.2, delay: Math.min(index * 0.05, 0.15) }
     };
   };
 
   return (
-    <div className="space-y-3 px-2">
-      {/* Optimized form sections with reduced padding */}
-      <div className="space-y-3">
+    <div className="space-y-2 px-1"> {/* Reduced from space-y-3 px-2 */}
+      {/* Optimized form sections with minimal padding */}
+      <div className="space-y-2"> {/* Reduced from space-y-3 */}
         {visibleSections.map((section, index) => {
           const Component = section.component;
           const isActive = index <= currentSection;
@@ -239,18 +211,18 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
               className={`relative ${!isActive ? 'pointer-events-none' : ''}`}
             >
               <Card className={`
-                p-3 transition-all duration-300
-                ${isCompleted ? 'ring-1 ring-green-200 bg-green-50/30 dark:bg-green-900/10' : ''}
-                ${index === currentSection ? 'ring-1 ring-primary/20 shadow-md' : ''}
-              `}>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-base font-semibold flex items-center gap-2">
-                    {isCompleted && <CheckCircle className="h-4 w-4 text-green-600" />}
-                    <span className="text-lg mr-1">{section.icon}</span>
+                p-2 transition-all duration-200 
+                ${isCompleted ? 'ring-1 ring-green-200 bg-green-50/20 dark:bg-green-900/5' : ''}
+                ${index === currentSection ? 'ring-1 ring-primary/20 shadow-sm' : ''}
+              `}> {/* Reduced padding from p-3 to p-2 */}
+                <div className="flex items-center justify-between mb-2"> {/* Reduced from mb-3 to mb-2 */}
+                  <h3 className="text-sm font-semibold flex items-center gap-2"> {/* Reduced from text-base */}
+                    {isCompleted && <CheckCircle className="h-3 w-3 text-green-600" />} {/* Reduced icon size */}
+                    <span className="text-base mr-1">{section.icon}</span> {/* Reduced from text-lg */}
                     {section.title}
                   </h3>
                   {index === currentSection && (
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+                    <div className="w-1 h-1 bg-primary rounded-full animate-pulse" /> {/* Reduced indicator size */}
                   )}
                 </div>
 
@@ -260,6 +232,7 @@ const OptimizedProgressiveForm = ({ form, currentStep, onStepChange }: Optimized
                       initial={prefersReducedMotion ? {} : { opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }} {/* Faster transition */}
                     >
                       {isLoaded ? (
                         <Suspense fallback={<LoadingFallback title={section.title} />}>

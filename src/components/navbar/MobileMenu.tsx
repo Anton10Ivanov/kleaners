@@ -8,7 +8,8 @@ import {
   AdminSection, 
   NavigationSection, 
   LogoutButton,
-  HeaderControls
+  HeaderControls,
+  BusinessSolutionsSection
 } from './mobile';
 
 const navigationData = [
@@ -17,7 +18,6 @@ const navigationData = [
     href: "/services",
     children: [
       { title: "Regular Cleaning", href: "/services/regular-cleaning" },
-      { title: "Business Cleaning", href: "/services/business-cleaning" },
       { title: "Move In/Out", href: "/services/move-in-out" },
       { title: "Post Construction Cleaning", href: "/services/post-construction-cleaning" }
     ]
@@ -72,12 +72,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
   const isAdmin = userRole === 'admin';
   const isProvider = userRole === 'provider';
-  const isClient = userRole === 'client' || (!userRole && isOpen); // Default to client if no role
+  const isClient = userRole === 'client' || (!userRole && isOpen);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="right" className="w-[300px] sm:w-[350px] overflow-y-auto p-4">
-        <SheetHeader className="mb-4 text-left">
+      <SheetContent side="right" className="w-[320px] sm:w-[350px] overflow-y-auto p-4">
+        <SheetHeader className="mb-6 text-left">
           <SheetTitle>
             <Logo />
           </SheetTitle>
@@ -86,19 +86,24 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           <HeaderControls 
             currentLanguage={currentLanguage}
             onLanguageChange={onLanguageChange}
           />
 
-          {/* Role-based sections with conditional rendering */}
+          {/* Role-based sections */}
           <div className="space-y-6">
             {isClient && <ClientSection />}
             {isProvider && <ProviderSection />}
             {isAdmin && <AdminSection setIsOpen={setIsOpen} />}
+            
+            {/* Business Solutions - Always visible */}
+            <BusinessSolutionsSection />
+            
             <NavigationSection navigationData={navigationData} />
-            <LogoutButton setIsOpen={setIsOpen} />
+            
+            {(isClient || isProvider || isAdmin) && <LogoutButton setIsOpen={setIsOpen} />}
           </div>
         </div>
       </SheetContent>
