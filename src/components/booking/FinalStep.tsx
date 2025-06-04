@@ -16,6 +16,7 @@ import { BookingSubmissionLoader } from "@/components/ui/loading-states";
 import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
 import { displayFormErrors } from "@/utils/errors/formErrors";
 import { toast } from "sonner";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -26,6 +27,7 @@ interface FinalStepProps {
 const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const { isSubmitting, submitBooking, confirmationData, clearConfirmation } = useBookingSubmission();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   
   const providerOptions = form.watch('providerOptions') as ProviderOption[] || [];
   const hasProviderOptions = providerOptions && providerOptions.length > 0;
@@ -96,6 +98,42 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     }
   };
 
+  // Mobile layout - single column
+  if (isMobile) {
+    return (
+      <FormErrorBoundary>
+        <div className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <CleaningAddress form={form} postalCode={postalCode} />
+            <PersonalInformation form={form} />
+            
+            {hasProviderOptions && (
+              <ProviderSelection 
+                providers={providerOptions} 
+                selectedProvider={selectedProvider}
+                onSelectProvider={setSelectedProvider}
+              />
+            )}
+            
+            <div className="flex justify-end">
+              <Button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full px-8 py-3"
+              >
+                {isSubmitting ? "Processing Booking..." : "Complete Booking"}
+              </Button>
+            </div>
+          </form>
+          
+          {/* Summary shown separately on mobile */}
+          <EnhancedBookingSummary form={form} />
+        </div>
+      </FormErrorBoundary>
+    );
+  }
+
+  // Desktop layout - two columns
   return (
     <FormErrorBoundary>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
