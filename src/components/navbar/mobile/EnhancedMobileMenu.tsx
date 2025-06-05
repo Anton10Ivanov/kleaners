@@ -32,9 +32,8 @@ export const EnhancedMobileMenu: React.FC<EnhancedMobileMenuProps> = ({
       <SheetContent 
         side="right" 
         className={cn(
-          "overflow-y-auto safe-area-right",
-          "bg-background/95 backdrop-blur-sm",
-          "border-l border-border/50",
+          "overflow-y-auto safe-area-right z-[9999]",
+          "bg-background/98 backdrop-blur-md border-l border-border/50 shadow-2xl",
           isMobile ? "w-[320px] p-4" : "w-[350px] p-4"
         )}
       >
@@ -86,27 +85,25 @@ export const TouchOptimizedMenuItem: React.FC<TouchOptimizedMenuItemProps> = ({
   const { isMobile, getMobileSpacing } = useMobileOptimizations();
 
   return (
-    <TouchOptimizedControls
-      variant={active ? "secondary" : "ghost"}
-      size={isMobile ? "lg" : "md"}
+    <div
       className={cn(
-        "w-full justify-start",
-        "transition-colors duration-200",
+        "w-full min-h-[48px] flex items-center touch-manipulation",
+        "transition-colors duration-200 rounded-lg p-3",
         "hover:bg-accent hover:text-accent-foreground",
         "focus:bg-accent focus:text-accent-foreground",
+        "active:scale-[0.98] active:bg-accent/80",
         active && "bg-secondary text-secondary-foreground",
         disabled && "opacity-50 cursor-not-allowed",
-        getMobileSpacing('sm'),
         className
       )}
     >
       <button
         onClick={onClick}
         disabled={disabled}
-        className="w-full h-full flex items-center justify-start"
+        className="w-full h-full flex items-center justify-start text-left"
       >
         {children}
       </button>
-    </TouchOptimizedControls>
+    </div>
   );
 };
