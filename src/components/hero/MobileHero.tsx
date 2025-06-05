@@ -20,25 +20,27 @@ export const MobileHero = memo(({
   handleNextStep
 }: MobileHeroProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="w-full max-w-md mx-auto flex flex-col items-center gap-6 py-4 text-center px-4"
-    >
-      <HeroContent isMobile={true} />
-      
-      <div className="w-full">
-        <HeroForm
-          selectedService={selectedService}
-          setSelectedService={setSelectedService}
-          postalCode={postalCode}
-          setPostalCode={setPostalCode}
-          handleNextStep={handleNextStep}
-          isMobile={true}
-        />
-      </div>
-    </motion.div>
+    <div className="w-full min-h-[60vh] flex flex-col justify-center items-center px-4 py-8 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md mx-auto flex flex-col items-center gap-6 text-center"
+      >
+        <HeroContent isMobile={true} />
+        
+        <div className="w-full">
+          <HeroForm
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            handleNextStep={handleNextStep}
+            isMobile={true}
+          />
+        </div>
+      </motion.div>
+    </div>
   );
 });
 

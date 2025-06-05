@@ -71,10 +71,10 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative min-h-[70vh] flex flex-col justify-center pt-20 pb-8 overflow-hidden mt-8">
+    <section className="relative w-full min-h-[70vh] flex flex-col justify-center overflow-hidden bg-transparent">
       <BackgroundElements />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-transparent">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <HeroProvider 
           initialService={selectedService} 
           initialPostalCode={postalCode} 
