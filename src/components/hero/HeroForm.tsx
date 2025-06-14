@@ -136,7 +136,7 @@ export const HeroForm = memo(({
     duration: 0.8,
     delay: 0.7,
     ease: "easeOut"
-  }} className="absolute top-1/2 left-8 transform -translate-y-1/2 w-96 max-w-sm bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0">
+  }} className="absolute top-1/2 left-8 transform -translate-y-1/2 w-96 max-w-sm backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0 px-[28px] bg-transparent">
       <motion.form onSubmit={handleSubmit} initial={{
       opacity: 0
     }} animate={{
@@ -146,10 +146,7 @@ export const HeroForm = memo(({
       delay: 0.9
     }} className="space-y-6">
         {/* Form header */}
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Quote</h3>
-          <p className="text-sm font-medium text-gray-600">Quick • Easy • Free</p>
-        </div>
+        
 
         {/* Location Input */}
         <div className="space-y-2">
