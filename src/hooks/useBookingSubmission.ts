@@ -5,6 +5,9 @@ import { toast } from 'sonner';
 import useBookingStore from '@/store/useBookingStore';
 import { generateBookingReference } from '@/utils/bookingReference';
 import { formPersistence } from '@/utils/formPersistence';
+import { useAuth } from './useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { getPrice } from '@/utils/pricing';
 
 interface BookingSubmissionResult {
   success: boolean;
@@ -39,6 +42,7 @@ export const useBookingSubmission = () => {
   const [bookingStatus, setBookingStatus] = useState<BookingStatus>(BookingStatus.PENDING);
   
   const resetForm = useBookingStore(state => state.resetForm);
+  const { user } = useAuth();
   
   /**
    * Send confirmation email
@@ -91,6 +95,12 @@ export const useBookingSubmission = () => {
     setIsSubmitting(true);
     updateBookingStatus(BookingStatus.PENDING);
     
+    if (!user) {
+      toast.error("You need to be logged in to complete a booking.");
+      setIsSubmitting(false);
+      return { success: false, error: 'User not authenticated' };
+    }
+
     try {
       // Validate required fields
       if (!data.firstName || !data.lastName || !data.email || !data.phone) {
@@ -110,6 +120,25 @@ export const useBookingSubmission = () => {
       
       console.log('Submitting booking with reference:', referenceNumber, data);
       
+      // Map form data to database schema and insert into Supabase
+      const { error: insertError } = await supabase.from('bookings').insert({
+        client_id: user.id,
+        service_type: data.serviceType === 'home' ? 'regular' : 'business',
+        booking_date: data.date.toISOString(),
+        start_time: data.preferredTime,
+        status: 'pending',
+        total_price: getPrice(data), // Using a utility to calculate price
+        address: `${data.address}, ${data.city} ${data.postalCode}`,
+        notes: data.specialInstructions,
+        frequency: data.frequency,
+        extras: data.extras.map(e => e.name),
+      });
+
+      if (insertError) {
+        console.error('Supabase insert error:', insertError);
+        throw new Error('Could not save your booking. Please try again.');
+      }
+      
       // Create booking with status tracking
       const bookingWithStatus: BookingWithStatus = {
         ...data,
@@ -120,7 +149,8 @@ export const useBookingSubmission = () => {
       };
       
       // Simulate API call with realistic delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // This part can be removed if there's no other async operation after DB insert
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       // Update status to confirmed
       updateBookingStatus(BookingStatus.CONFIRMED);
