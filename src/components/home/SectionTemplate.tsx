@@ -30,27 +30,29 @@ export const SectionTemplate: React.FC<SectionTemplateProps> = ({
     id={id}
     className={cn(
       background,
-      "py-16 md:py-24 transition-colors duration-300",
+      "py-12 md:py-20 lg:py-24",
+      "transition-all duration-300",
+      "rounded-none md:rounded-xl shadow-none md:shadow-lg",
       className
     )}
   >
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, delay: 0.02 }}
         viewport={{ once: true }}
         className={cn(
-          "mb-12 text-center flex flex-col items-center",
+          "mb-10 md:mb-14 text-center flex flex-col items-center",
           icon && "gap-3"
         )}
       >
         {icon && (
-          <div className="mx-auto mb-2 p-3 bg-primary/10 rounded-full w-fit">{icon}</div>
+          <div className="mx-auto mb-2 p-3 bg-primary/10 rounded-full w-fit shadow-sm">{icon}</div>
         )}
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">{title}</h2>
+        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 font-sans">{title}</h2>
         {description && (
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto font-medium leading-relaxed">{description}</p>
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-medium leading-relaxed">{description}</p>
         )}
         {actions && <div className="mt-4">{actions}</div>}
       </motion.div>
