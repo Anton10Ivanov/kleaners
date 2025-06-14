@@ -1,9 +1,8 @@
-
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Home, Building, Sparkles, ArrowRightLeft } from 'lucide-react';
-import { ServiceType } from '@/types/enums';
+import { ServiceType } from '@/schemas/booking';
 
 interface BookingServiceSelectorProps {
   onServiceSelect: (service: ServiceType) => void;

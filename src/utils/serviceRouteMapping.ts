@@ -1,5 +1,4 @@
-
-import { ServiceType } from '@/types/enums';
+import { ServiceType } from '@/schemas/booking';
 
 // Route-to-Enum mapping for converting URLs to enum values
 export const routeToServiceType: Record<string, ServiceType> = {

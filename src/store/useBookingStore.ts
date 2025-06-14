@@ -1,8 +1,6 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { BookingFormData, Frequency } from '@/schemas/booking';
-import { ServiceType } from '@/types/enums';
+import { BookingFormData, Frequency, ServiceType } from '@/schemas/booking';
 import { formPersistence } from '@/utils/formPersistence';
 
 interface BookingState {
