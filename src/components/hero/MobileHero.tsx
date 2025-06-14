@@ -35,10 +35,10 @@ export const MobileHero = memo(({
       {/* Full-width background image for mobile */}
       {imageLoaded && (
         <div 
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full bg-gray-100"
           style={{
             backgroundImage: `url(${heroImageSrc})`,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat'
           }}
