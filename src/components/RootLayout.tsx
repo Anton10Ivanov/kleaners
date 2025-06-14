@@ -1,10 +1,9 @@
-
 import UnifiedNavbar from "./navbar/UnifiedNavbar";
 import Footer from "./Footer";
 import FloatingChatButton from "./chat/FloatingChatButton";
 import CookiePolicy from "./CookiePolicy";
 import HeroCTA from "./HeroCTA";
-import { useLocation } from "react-router-dom";
+import { useLocation, Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -26,4 +25,3 @@ const RootLayout = () => {
 };
 
 export default RootLayout;
-
