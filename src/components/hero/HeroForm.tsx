@@ -1,12 +1,12 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Home, Building, Sparkles, ArrowRightLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ServiceType } from "@/schemas/booking";
 import { getBookingRoute } from "@/utils/serviceRouteMapping";
+import { ServiceTypeGrid } from "./ServiceTypeGrid";
+import { PostalCodeInput } from "./PostalCodeInput";
+import { SubmitButton } from "./SubmitButton";
 
 interface HeroFormProps {
   selectedService: string;
@@ -16,13 +16,6 @@ interface HeroFormProps {
   handleNextStep: () => void;
   isMobile: boolean;
 }
-
-const serviceOptions = [
-  { type: ServiceType.Home, label: 'Home', icon: Home },
-  { type: ServiceType.Office, label: 'Office', icon: Building },
-  { type: ServiceType.DeepCleaning, label: 'Deep', icon: Sparkles },
-  { type: ServiceType.MoveInOut, label: 'Move', icon: ArrowRightLeft },
-];
 
 export const HeroForm = memo(({
   selectedService,
@@ -74,61 +67,21 @@ export const HeroForm = memo(({
           </div>
 
           {/* Location Input */}
-          <div>
-            <Input 
-              type="text" 
-              placeholder="City name or Postal code" 
-              value={postalCode} 
-              onChange={e => setPostalCode(e.target.value)} 
-              className="h-16 px-4 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
-              required 
-            />
-          </div>
+          <PostalCodeInput 
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            isMobile={true}
+          />
 
           {/* Service Type Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            {serviceOptions.map((service) => {
-              const IconComponent = service.icon;
-              const isSelected = selectedService === service.type;
-              
-              return (
-                <button
-                  key={service.type}
-                  type="button"
-                  onClick={() => setSelectedService(service.type)}
-                  className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
-                    isSelected 
-                      ? 'bg-primary text-white border-primary shadow-lg' 
-                      : 'bg-white border-gray-200 hover:bg-primary hover:text-white hover:border-primary shadow-sm hover:shadow-md'
-                  }`}
-                >
-                  <IconComponent className={`h-6 w-6 ${isSelected ? 'text-white' : 'text-gray-600 hover:text-white'}`} />
-                  <span className={`text-sm font-medium ${isSelected ? 'text-white' : 'text-gray-800 hover:text-white'}`}>
-                    {service.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          <ServiceTypeGrid 
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            isMobile={true}
+          />
           
           {/* Enhanced CTA Button */}
-          <motion.div 
-            whileHover={{ scale: 1.02, y: -2 }} 
-            whileTap={{ scale: 0.98 }} 
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            <Button 
-              type="submit" 
-              className="w-full h-16 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1"
-            >
-              Instant Quote. Fixed Price
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </motion.div>
-
-          <p className="text-sm text-gray-500 text-center font-medium">
-            No commitment • Free quotes • Instant booking
-          </p>
+          <SubmitButton isMobile={true} />
         </motion.form>
       </motion.div>
     );
@@ -149,60 +102,21 @@ export const HeroForm = memo(({
         className="space-y-4"
       >
         {/* Location Input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2 text-center">
-            Your Postal code
-          </label>
-          <Input 
-            type="text" 
-            placeholder="City name or Postal code" 
-            value={postalCode} 
-            onChange={e => setPostalCode(e.target.value)} 
-            required 
-            className="h-14 px-4 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
-          />
-        </div>
+        <PostalCodeInput 
+          postalCode={postalCode}
+          setPostalCode={setPostalCode}
+          isMobile={false}
+        />
 
         {/* Service Type Grid */}
-        <div className="grid grid-cols-2 gap-2">
-          {serviceOptions.map((service) => {
-            const IconComponent = service.icon;
-            const isSelected = selectedService === service.type;
-            
-            return (
-              <button
-                key={service.type}
-                type="button"
-                onClick={() => setSelectedService(service.type)}
-                className={`p-3 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-1 ${
-                  isSelected 
-                    ? 'bg-primary text-white border-primary shadow-lg' 
-                    : 'bg-white border-gray-200 hover:bg-primary hover:text-white hover:border-primary shadow-sm hover:shadow-md'
-                }`}
-              >
-                <IconComponent className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-600 hover:text-white'}`} />
-                <span className={`text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-800 hover:text-white'}`}>
-                  {service.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <ServiceTypeGrid 
+          selectedService={selectedService}
+          setSelectedService={setSelectedService}
+          isMobile={false}
+        />
         
         {/* CTA Button */}
-        <motion.div 
-          whileHover={{ scale: 1.02, y: -2 }} 
-          whileTap={{ scale: 0.98 }} 
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          <Button 
-            type="submit" 
-            className="w-full h-14 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 group"
-          >
-            Instant Quote. Fixed Price
-            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </motion.div>
+        <SubmitButton isMobile={false} />
       </motion.form>
     </motion.div>
   );
