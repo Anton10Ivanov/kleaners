@@ -1,4 +1,3 @@
-
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -92,7 +91,7 @@ export const HeroForm = memo(({
       initial={{ opacity: 0, y: 30 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }} 
-      className="absolute top-16 left-8 transform w-96 max-w-sm backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0 px-[28px] bg-transparent"
+      className="absolute top-[26%] left-8 transform w-96 max-w-sm backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0 px-[28px] bg-transparent"
     >
       <motion.form 
         onSubmit={handleSubmit} 
