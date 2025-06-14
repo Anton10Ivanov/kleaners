@@ -31,7 +31,6 @@ export const Hero = memo(({
     endTimer
   } = useComponentTimer('Hero');
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const imagesLoadedRef = useRef<boolean>(false);
   const isPreviewWindow = environmentUtils.isPreviewWindow();
 
   // Mark Hero as important for Core Web Vitals
@@ -71,12 +70,10 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-[80vh] flex flex-col justify-center bg-transparent">
-      {/* Background Elements - positioned to fill entire section */}
+    <section className="relative w-full min-h-[85vh] flex flex-col justify-center">
       <BackgroundElements />
 
-      {/* Content Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <HeroProvider 
           initialService={selectedService} 
           initialPostalCode={postalCode} 
