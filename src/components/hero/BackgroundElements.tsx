@@ -1,46 +1,42 @@
 
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Feather } from "lucide-react";
-import { useImageLoader } from "@/hooks/useImageLoader";
-import environmentUtils from "@/utils/environment";
 
 export const BackgroundElements = memo(() => {
-  const [shouldShowImage, setShouldShowImage] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
-  // Use the image loader hook for better reliability
-  const { src: imageSrc, isLoaded: imageLoaded, hasError: imageError, retry } = useImageLoader(
-    '/lovable-uploads/opciya1 (1) 2.png',
-    {
-      preload: environmentUtils.features.enablePreloading(),
-      onLoad: () => {
-        console.log("Hero background image loaded successfully");
-        setShouldShowImage(true);
-      },
-      onError: (error) => {
-        console.error("Failed to load hero image:", error);
-      }
-    }
-  );
-
-  // Fallback visibility timer
+  // Simplified image loading
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!imageLoaded && !imageError) {
-        console.warn("Image loading timeout, showing fallback");
-        setShouldShowImage(true);
-      }
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [imageLoaded, imageError]);
+    const img = new Image();
+    
+    img.onload = () => {
+      console.log("Hero background image loaded successfully");
+      setImageLoaded(true);
+      setImageError(false);
+    };
+    
+    img.onerror = (error) => {
+      console.error("Failed to load hero image:", error);
+      setImageError(true);
+      setImageLoaded(false);
+    };
+    
+    // Use the image directly without complex path resolution
+    img.src = '/lovable-uploads/opciya1 (1) 2.png';
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, []);
 
   return (
     <>
       {/* Enhanced background with warmth and emotion */}
-      <div className="absolute inset-0 overflow-hidden" ref={containerRef}>
-        {/* Primary gradient background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Primary gradient background - always visible */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-orange-50/30"></div>
         
         {/* Floating feather animations */}
@@ -77,20 +73,18 @@ export const BackgroundElements = memo(() => {
           <Feather className="h-8 w-8" />
         </motion.div>
 
-        {/* Desktop background image with warmth overlay */}
-        <div className="absolute inset-0 z-0 hidden lg:block">
-          {shouldShowImage && (
+        {/* Desktop background image - only show when loaded successfully */}
+        {imageLoaded && !imageError && (
+          <div className="absolute inset-0 z-0 hidden lg:block">
             <div className="relative w-full h-full">
               <img 
-                src={imageSrc}
+                src="/lovable-uploads/opciya1 (1) 2.png"
                 alt="Professional cleaning service" 
-                className="absolute right-0 h-full w-auto object-contain object-right opacity-60"
+                className="absolute right-0 h-full w-auto object-contain object-right opacity-60 transition-opacity duration-300"
                 style={{
                   maxWidth: '45%',
                   filter: 'saturate(1.2) brightness(1.1) sepia(0.1)'
                 }}
-                onLoad={() => setShouldShowImage(true)}
-                onError={retry}
               />
               {/* Warmth overlay */}
               <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-orange-50/20"></div>
@@ -102,14 +96,15 @@ export const BackgroundElements = memo(() => {
                 }}
               ></div>
             </div>
-          )}
-          
-          {!shouldShowImage && !imageError && (
-            <div className="absolute right-0 top-0 bottom-0 w-[40%] flex items-center justify-center">
-              <div className="h-16 w-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin opacity-40"></div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+        
+        {/* Loading indicator - only show while loading */}
+        {!imageLoaded && !imageError && (
+          <div className="absolute right-0 top-0 bottom-0 w-[40%] hidden lg:flex items-center justify-center">
+            <div className="h-16 w-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin opacity-40"></div>
+          </div>
+        )}
         
         {/* Mobile background - warm pattern */}
         <div className="absolute inset-0 z-0 block lg:hidden">
