@@ -144,7 +144,7 @@ export const HeroForm = memo(({
     }} transition={{
       duration: 0.6,
       delay: 0.9
-    }} className="space-y-28 text-center">
+    }} className="space-y-8 text-center">
         {/* Location Input with enhanced styling */}
         <div className="space-y-3">
           <label className="block text-sm font-medium text-white-700 mb-2">
