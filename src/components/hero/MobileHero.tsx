@@ -31,7 +31,7 @@ export const MobileHero = memo(({
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden">
       {/* Full-width background image for mobile */}
       {imageLoaded && (
         <div 
@@ -51,7 +51,8 @@ export const MobileHero = memo(({
       )}
 
       {/* Content overlay */}
-      <div className="relative z-10 pt-20 pb-4 px-4">
+      <div className="relative z-10 pt-16 pb-4 px-4">
+        {/* Reduced pt-20 to pt-16 to match navbar height exactly */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -1,4 +1,3 @@
-
 import { useEffect, memo } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
@@ -69,7 +68,7 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden">
       <HeroProvider 
         initialService={selectedService} 
         initialPostalCode={postalCode} 
