@@ -8,39 +8,43 @@ export const ProfessionalTrustSection = memo(() => {
     {
       icon: Shield,
       title: "Fully Insured & Bonded",
-      description: "€5M coverage for complete peace of mind"
+      description: "€5M coverage for complete peace of mind",
+      color: "bg-green-500/10 text-green-600"
     },
     {
       icon: Users,
       title: "Vetted Professionals",
-      description: "Background-checked and certified cleaners"
+      description: "Background-checked and certified cleaners",
+      color: "bg-blue-500/10 text-blue-600"
     },
     {
       icon: Clock,
       title: "Instant Booking",
-      description: "Book in minutes, confirmed within hours"
+      description: "Book in minutes, confirmed within hours",
+      color: "bg-purple-500/10 text-purple-600"
     },
     {
       icon: CheckCircle,
       title: "Satisfaction Guaranteed",
-      description: "100% money-back guarantee on all services"
+      description: "100% money-back guarantee on all services",
+      color: "bg-primary/10 text-primary"
     }
   ];
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-800">
+    <section className="py-20 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/50 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             Why Choose Our Services?
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Professional cleaning services you can trust, with the reliability and quality you deserve.
           </p>
         </motion.div>
@@ -51,19 +55,24 @@ export const ProfessionalTrustSection = memo(() => {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
                 viewport={{ once: true }}
-                className="text-center p-6 bg-white dark:bg-gray-700 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="text-center p-8 bg-white dark:bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-600"
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-lg mb-4">
-                  <IconComponent className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <motion.div 
+                  className={`inline-flex items-center justify-center w-16 h-16 ${feature.color} rounded-2xl mb-6`}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <IconComponent className="h-8 w-8" />
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
