@@ -19,8 +19,8 @@ const OptimizedDesktopNavigationComponent: React.FC<OptimizedDesktopNavigationPr
   const { isMobile, getMobileSpacing } = useMobileOptimizations();
   const { user } = useAuth();
 
-  // Memoize user role calculation
-  const userRole = useMemo(() => user?.role || null, [user?.role]);
+  // Memoize user role calculation with proper type casting
+  const userRole = useMemo(() => (user?.role as 'client' | 'provider' | 'admin') || null, [user?.role]);
 
   // Memoize navigation classes
   const navigationClasses = useMemo(() => cn(

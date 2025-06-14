@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { BookingFormData } from '@/schemas/booking';
 import { toast } from 'sonner';
@@ -121,6 +120,7 @@ export const useBookingSubmission = () => {
       console.log('Submitting booking with reference:', referenceNumber, data);
       
       // Map form data to database schema and insert into Supabase
+      // Note: extras is an array of strings, so we store it directly
       const { error: insertError } = await supabase.from('bookings').insert({
         client_id: user.id,
         service_type: data.serviceType === 'home' ? 'regular' : 'business',
@@ -131,7 +131,7 @@ export const useBookingSubmission = () => {
         address: `${data.address}, ${data.city} ${data.postalCode}`,
         notes: data.specialInstructions,
         frequency: data.frequency,
-        extras: data.extras.map(e => e.name),
+        extras: data.extras || [], // extras is already an array of strings
       });
 
       if (insertError) {
