@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { ServiceType } from "@/schemas/booking";
 import { getBookingRoute } from "@/utils/serviceRouteMapping";
-
 interface HeroFormProps {
   selectedService: string;
   setSelectedService: (value: string) => void;
@@ -16,7 +15,6 @@ interface HeroFormProps {
   handleNextStep: () => void;
   isMobile: boolean;
 }
-
 export const HeroForm = memo(({
   selectedService,
   setSelectedService,
@@ -26,7 +24,6 @@ export const HeroForm = memo(({
   isMobile
 }: HeroFormProps) => {
   const navigate = useNavigate();
-  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -44,7 +41,6 @@ export const HeroForm = memo(({
       handleNextStep();
     }
   };
-
   if (isMobile) {
     return <motion.div initial={{
       opacity: 0,
@@ -130,7 +126,6 @@ export const HeroForm = memo(({
         </motion.form>
       </motion.div>;
   }
-
   return <motion.div initial={{
     opacity: 0,
     y: 30
@@ -159,7 +154,7 @@ export const HeroForm = memo(({
 
           {/* Location Input with enhanced styling */}
           <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white-700 mb-2">
               Your Postal code
             </label>
             <div className="relative group w-[70%]">
@@ -218,5 +213,4 @@ export const HeroForm = memo(({
       </div>
     </motion.div>;
 });
-
 HeroForm.displayName = "HeroForm";
