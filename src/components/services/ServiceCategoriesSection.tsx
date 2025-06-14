@@ -37,22 +37,22 @@ export const ServiceCategoriesSection: React.FC<ServiceCategoriesSectionProps> =
     id="services"
     grid
   >
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
       {serviceCategories.map((category) => (
         <motion.div
           key={category.id}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.55 }}
           viewport={{ once: true }}
         >
-          <Card className="h-full hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <Card className="h-full hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/90 dark:bg-gray-800/90 border border-primary/10 rounded-xl">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between mb-2">
                 <div className="p-2 bg-primary/10 rounded-full">
                   {React.createElement(category.icon, { className: "h-5 w-5 text-primary" })}
                 </div>
-                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
+                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-semibold">
                   {category.price}
                 </Badge>
               </div>
@@ -71,7 +71,7 @@ export const ServiceCategoriesSection: React.FC<ServiceCategoriesSectionProps> =
             </CardContent>
             <CardFooter>
               <Link to={category.href} className="w-full">
-                <Button variant="outline" className="w-full justify-between">
+                <Button variant="outline" size="lg" className="w-full justify-between">
                   <span>View Details</span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>

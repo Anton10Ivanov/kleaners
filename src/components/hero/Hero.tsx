@@ -1,3 +1,4 @@
+
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -47,12 +48,16 @@ const Hero = ({
       actions={null}
       className="relative"
     >
-      <div className="w-full max-w-xl mx-auto p-6 bg-white/90 rounded-xl shadow-md border border-primary/10 flex flex-col gap-4">
-        {/* Service input & Postal Code input. Place existing hero form here */}
+      <motion.div
+        className="w-full max-w-xl mx-auto p-4 sm:p-6 bg-white/95 dark:bg-gray-900/80 rounded-xl shadow-lg border border-primary/10 flex flex-col gap-4"
+        initial={{ opacity: 0, scale: 0.96, y: 28 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.16 }}
+      >
         <div className="grid gap-2">
-          <Label htmlFor="service">Select Service</Label>
-          <Select onValueChange={handleServiceChange}>
-            <SelectTrigger className="bg-white">
+          <Label htmlFor="service" className="font-semibold">Select Service</Label>
+          <Select value={selectedService} onValueChange={handleServiceChange}>
+            <SelectTrigger className="bg-white dark:bg-gray-800 border border-gray-200">
               <SelectValue placeholder="Choose a cleaning service" />
             </SelectTrigger>
             <SelectContent>
@@ -63,26 +68,23 @@ const Hero = ({
             </SelectContent>
           </Select>
         </div>
-
         <div className="grid gap-2">
-          <Label htmlFor="postalCode">Postal Code</Label>
+          <Label htmlFor="postalCode" className="font-semibold">Postal Code</Label>
           <Input
             id="postalCode"
             type="text"
             placeholder="Enter your postal code"
             value={postalCode}
             onChange={handlePostalCodeChange}
+            className="bg-white dark:bg-gray-800 border border-gray-200"
           />
         </div>
-        {/* Main vertical form layout, including inputs and the CTA/button */}
-        {/* Maintain use of Poppins, font sizes, spacings */}
-        {/* Hero action button goes here */}
-        <motion.div className="flex justify-center">
-          <Button onClick={handleNextStep}>
+        <motion.div className="flex justify-center mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+          <Button size="lg" className="w-full md:w-auto" onClick={handleNextStep}>
             Continue
           </Button>
         </motion.div>
-      </div>
+      </motion.div>
     </SectionTemplate>
   );
 };

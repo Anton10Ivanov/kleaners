@@ -72,19 +72,17 @@ export const EnhancedTestimonials = memo(() => {
       id="testimonials"
       grid
     >
-      {/* Testimonials cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {testimonials.map((testimonial, index) => (
           <motion.div
             key={testimonial.id}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
+            transition={{ duration: 0.6, delay: index * 0.08 }}
             viewport={{ once: true }}
-            className="bg-white dark:bg-gray-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 p-6 relative"
+            className="bg-white dark:bg-gray-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 p-6 relative flex flex-col"
           >
             <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
-            
             <div className="flex items-center gap-4 mb-4">
               <img
                 src={testimonial.avatar}
@@ -92,30 +90,17 @@ export const EnhancedTestimonials = memo(() => {
                 className="w-12 h-12 rounded-full object-cover"
               />
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white">
-                  {testimonial.name}
-                </h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {testimonial.location}
-                </p>
+                <h4 className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.location}</p>
               </div>
             </div>
-
             <div className="flex items-center justify-between mb-4">
               <StarRating rating={testimonial.rating} />
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {testimonial.date}
-              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{testimonial.date}</span>
             </div>
-
-            <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-              {testimonial.text}
-            </p>
-
+            <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed flex-grow">{testimonial.text}</p>
             <div className="flex items-center justify-between text-sm">
-              <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
-                {testimonial.service}
-              </span>
+              <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">{testimonial.service}</span>
               <div className="flex items-center gap-1 text-yellow-500">
                 <Star className="h-3 w-3 fill-current" />
                 <span className="text-xs font-medium">{testimonial.rating}.0</span>
@@ -124,15 +109,14 @@ export const EnhancedTestimonials = memo(() => {
           </motion.div>
         ))}
       </div>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.24 }}
         viewport={{ once: true }}
         className="text-center mt-12"
       >
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 inline-block">
+        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 inline-block shadow">
           <div className="flex items-center justify-center gap-8 text-center">
             <div>
               <div className="text-2xl font-bold text-primary">4.9</div>
