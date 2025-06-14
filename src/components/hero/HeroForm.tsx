@@ -129,74 +129,80 @@ export const HeroForm = memo(({
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.8, delay: 0.6 }}
-      className="w-full max-w-4xl mx-auto"
+      className="w-full max-w-lg"
     >
-      <motion.form 
-        onSubmit={handleSubmit} 
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end" 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.8 }}
-      >
-        {/* Location */}
-        <div className="space-y-3">
-          <Label htmlFor="desktop-postal-code" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-            Your Location
-          </Label>
-          <Input 
-            id="desktop-postal-code" 
-            type="text" 
-            placeholder="Enter your city or postal code" 
-            value={postalCode} 
-            onChange={e => setPostalCode(e.target.value)} 
-            className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium" 
-            required 
-          />
-        </div>
+      <div className="bg-white rounded-2xl shadow-2xl border border-gray-200/20 p-8 backdrop-blur-sm">
+        <motion.form 
+          onSubmit={handleSubmit} 
+          className="space-y-6" 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.8 }}
+        >
+          {/* Location */}
+          <div className="space-y-3">
+            <Label htmlFor="desktop-postal-code" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              Your Location
+            </Label>
+            <Input 
+              id="desktop-postal-code" 
+              type="text" 
+              placeholder="Enter your city or postal code" 
+              value={postalCode} 
+              onChange={e => setPostalCode(e.target.value)} 
+              className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium" 
+              required 
+            />
+          </div>
 
-        {/* Service Type */}
-        <div className="space-y-3">
-          <Label htmlFor="desktop-service-type" className="text-lg font-bold text-gray-900 tracking-wide font-['Open_Sans']">
-            Service Type
-          </Label>
-          <Select value={selectedService} onValueChange={setSelectedService}>
-            <SelectTrigger 
-              id="desktop-service-type" 
-              className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+          {/* Service Type */}
+          <div className="space-y-3">
+            <Label htmlFor="desktop-service-type" className="text-base font-bold text-gray-900 tracking-wide font-['Open_Sans']">
+              Service Type
+            </Label>
+            <Select value={selectedService} onValueChange={setSelectedService}>
+              <SelectTrigger 
+                id="desktop-service-type" 
+                className="h-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 hover:border-gray-300 text-base font-medium"
+              >
+                <SelectValue placeholder="Select cleaning service" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
+                <SelectItem value={ServiceType.Home} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Home Cleaning</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Deep Cleaning</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Move In/Out</span>
+                </SelectItem>
+                <SelectItem value={ServiceType.Office} className="cursor-pointer">
+                  <span className="font-semibold text-gray-800">Office Cleaning</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          {/* CTA Button */}
+          <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border border-green-500" 
+              style={{
+                textShadow: '0 0 1px rgba(34, 197, 94, 0.8)',
+                boxShadow: '0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 15px rgba(126,188,230,0.2)'
+              }}
             >
-              <SelectValue placeholder="Select cleaning service" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
-              <SelectItem value={ServiceType.Home} className="cursor-pointer">
-                <span className="font-semibold text-gray-800">Home Cleaning</span>
-              </SelectItem>
-              <SelectItem value={ServiceType.DeepCleaning} className="cursor-pointer">
-                <span className="font-semibold text-gray-800">Deep Cleaning</span>
-              </SelectItem>
-              <SelectItem value={ServiceType.MoveInOut} className="cursor-pointer">
-                <span className="font-semibold text-gray-800">Move In/Out</span>
-              </SelectItem>
-              <SelectItem value={ServiceType.Office} className="cursor-pointer">
-                <span className="font-semibold text-gray-800">Office Cleaning</span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        {/* CTA Button */}
-        <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
-          <Button 
-            type="submit" 
-            className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 border border-green-500" 
-            style={{
-              textShadow: '0 0 1px rgba(34, 197, 94, 0.8)',
-              boxShadow: '0 0 0 1px rgba(34, 197, 94, 0.3), 0 8px 15px rgba(126,188,230,0.2)'
-            }}
-          >
-            Get Instant Quote <ArrowRight className="h-5 w-5" />
-          </Button>
-        </motion.div>
-      </motion.form>
+              Get Instant Quote <ArrowRight className="h-5 w-5" />
+            </Button>
+          </motion.div>
+
+          <p className="text-sm text-gray-500 text-center font-medium">
+            Direct price estimation on final step • No commitment
+          </p>
+        </motion.form>
+      </div>
     </motion.div>
   );
 });

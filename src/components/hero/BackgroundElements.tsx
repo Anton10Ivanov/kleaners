@@ -81,7 +81,7 @@ export const BackgroundElements = memo(() => {
           <Feather className="h-8 w-8" />
         </motion.div>
 
-        {/* Desktop background image - only show opciya1 image when loaded */}
+        {/* Desktop background image - full width background */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -91,17 +91,16 @@ export const BackgroundElements = memo(() => {
           <div className="relative w-full h-full">
             {imageLoaded && (
               <>
-                <img 
-                  src={heroImageSrc}
-                  alt="Professional cleaning service" 
-                  className="absolute right-0 h-full w-auto object-contain object-right opacity-60 transition-opacity duration-300"
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70 transition-opacity duration-300"
                   style={{
-                    maxWidth: '45%',
+                    backgroundImage: `url(${heroImageSrc})`,
+                    backgroundPosition: 'center right',
                     filter: 'saturate(1.2) brightness(1.1) sepia(0.1)'
                   }}
                 />
-                {/* Warmth overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-orange-50/20"></div>
+                {/* Enhanced gradient overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/98 to-white/80"></div>
               </>
             )}
             
