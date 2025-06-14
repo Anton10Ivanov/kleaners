@@ -1,4 +1,3 @@
-
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Sparkles } from "lucide-react";
@@ -174,7 +173,7 @@ export const HeroForm = memo(({
         delay: 0.7,
         ease: "easeOut"
       }} 
-      className="w-full max-w-lg mt-0 backdrop-blur-sm shadow-2xl border border-white/20 p-10 px-[19px] py-[13px] bg-transparent rounded-none"
+      className="w-full max-w-sm mt-0 backdrop-blur-sm shadow-2xl border border-white/20 p-10 px-[19px] py-[13px] bg-transparent rounded-none"
     >
       <motion.form 
         onSubmit={handleSubmit} 
