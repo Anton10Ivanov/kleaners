@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Raleway:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
 @import "./styles/designTokens.css";
 @import "./styles/componentLibrary.css";
@@ -12,10 +13,10 @@
 @layer base {
   :root {
     /* Font family variables - Unified */
-    --ff: 'Poppins', sans-serif;
-    --ff2: 'Poppins', sans-serif;
-    --ff-heading: 'Poppins', sans-serif;
-    --ff-label: 'Poppins', sans-serif;
+    --ff: 'Raleway', sans-serif;
+    --ff2: 'Raleway', sans-serif;
+    --ff-heading: 'Inter', sans-serif;
+    --ff-label: 'Open Sans', sans-serif;
     
     /* Typography values - Standardized */
     --p: 1rem/1.5em var(--ff);
@@ -135,24 +136,12 @@
   /* Enhanced typography styles - Design System */
   h1 {
     font: var(--h1);
-    @apply text-heading-color dark:text-white font-sans;
-    margin-bottom: 1.25rem;
-    margin-top: 1.25rem;
-  }
-
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 2.1rem; /* Slightly larger for mobile hero */
-      margin-top: 1.2rem;
-      margin-bottom: 1.2rem;
-    }
+    @apply text-heading-color dark:text-white;
   }
 
   h2 {
     font: var(--h2);
-    @apply text-heading-color dark:text-white font-sans;
-    margin-bottom: 1rem;
-    margin-top: 1.2rem;
+    @apply text-heading-color dark:text-white;
   }
 
   h3 {
@@ -160,9 +149,7 @@
     line-height: 1.3em;
     font-weight: 600;
     font-family: var(--ff-heading);
-    @apply text-heading-color dark:text-white font-sans;
-    margin-bottom: 1rem;
-    margin-top: 1.2rem;
+    @apply text-heading-color dark:text-white;
   }
 
   h4, h5, h6 {

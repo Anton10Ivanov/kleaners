@@ -1,7 +1,7 @@
+
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
-import { SectionTemplate } from "../home/SectionTemplate";
 
 interface Testimonial {
   id: number;
@@ -64,76 +64,101 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 export const EnhancedTestimonials = memo(() => {
   return (
-    <SectionTemplate
-      icon={<Star className="h-8 w-8 text-primary" />}
-      title="Customer Testimonials"
-      description="Trusted by thousands for quality cleaning results and reliable service."
-      background="bg-gradient-to-br from-white via-primary/5 to-theme-lightblue"
-      id="testimonials"
-      grid
-    >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-        {testimonials.map((testimonial, index) => (
-          <motion.div
-            key={testimonial.id}
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.08 }}
-            viewport={{ once: true }}
-            className="bg-white dark:bg-gray-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 p-6 relative flex flex-col"
-          >
-            <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
-            <div className="flex items-center gap-4 mb-4">
-              <img
-                src={testimonial.avatar}
-                alt={testimonial.name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
+    <section className="py-16 md:py-24 bg-white dark:bg-gray-800 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            What Our Customers Say
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Don't just take our word for it. Here's what our satisfied customers have to say about our cleaning services.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-gray-700 rounded-xl shadow-lg border border-gray-100 dark:border-gray-600 p-6 relative"
+            >
+              <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
+              
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={testimonial.avatar}
+                  alt={testimonial.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {testimonial.location}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mb-4">
+                <StarRating rating={testimonial.rating} />
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {testimonial.date}
+                </span>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                {testimonial.text}
+              </p>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
+                  {testimonial.service}
+                </span>
+                <div className="flex items-center gap-1 text-yellow-500">
+                  <Star className="h-3 w-3 fill-current" />
+                  <span className="text-xs font-medium">{testimonial.rating}.0</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 inline-block">
+            <div className="flex items-center justify-center gap-8 text-center">
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.location}</p>
+                <div className="text-2xl font-bold text-primary">4.9</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Average Rating</div>
               </div>
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <StarRating rating={testimonial.rating} />
-              <span className="text-xs text-gray-500 dark:text-gray-400">{testimonial.date}</span>
-            </div>
-            <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed flex-grow">{testimonial.text}</p>
-            <div className="flex items-center justify-between text-sm">
-              <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">{testimonial.service}</span>
-              <div className="flex items-center gap-1 text-yellow-500">
-                <Star className="h-3 w-3 fill-current" />
-                <span className="text-xs font-medium">{testimonial.rating}.0</span>
+              <div>
+                <div className="text-2xl font-bold text-primary">500+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Happy Customers</div>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.24 }}
-        viewport={{ once: true }}
-        className="text-center mt-12"
-      >
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 inline-block shadow">
-          <div className="flex items-center justify-center gap-8 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">4.9</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Average Rating</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">500+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Happy Customers</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">99%</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Satisfaction Rate</div>
+              <div>
+                <div className="text-2xl font-bold text-primary">99%</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Satisfaction Rate</div>
+              </div>
             </div>
           </div>
-        </div>
-      </motion.div>
-    </SectionTemplate>
+        </motion.div>
+      </div>
+    </section>
   );
 });
 
