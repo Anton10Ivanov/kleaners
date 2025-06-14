@@ -71,7 +71,7 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-[70vh] flex flex-col justify-center overflow-hidden bg-transparent">
+    <section className="relative w-full min-h-[70vh] flex flex-col justify-center bg-transparent"> {/* Removed overflow-hidden */}
       <BackgroundElements />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,3 +107,4 @@ export const Hero = memo(({
 
 Hero.displayName = "Hero";
 export default Hero;
+
