@@ -21,7 +21,7 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
       }`}
       style={{ height: '64px' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 my-[3px] py-[8px] bg-transparent">
           {children}
         </div>
