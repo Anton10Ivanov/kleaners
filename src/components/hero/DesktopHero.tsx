@@ -19,23 +19,27 @@ export const DesktopHero = memo(({
   handleNextStep
 }: DesktopHeroProps) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh] relative">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-h-[80vh] relative py-12">
       {/* Left side - Content and Form */}
-      <div className="flex flex-col space-y-8 text-left relative z-10">
+      <div className="lg:col-span-7 flex flex-col space-y-12 text-left relative z-10 pr-8">
         <HeroContent isMobile={false} />
         
-        <HeroForm
-          selectedService={selectedService}
-          setSelectedService={setSelectedService}
-          postalCode={postalCode}
-          setPostalCode={setPostalCode}
-          handleNextStep={handleNextStep}
-          isMobile={false}
-        />
+        <div className="flex justify-start">
+          <HeroForm
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            handleNextStep={handleNextStep}
+            isMobile={false}
+          />
+        </div>
       </div>
       
-      {/* Right side - Reserved for image background */}
-      <div className="hidden lg:block"></div>
+      {/* Right side - Reserved for background image */}
+      <div className="lg:col-span-5 hidden lg:block relative">
+        {/* This space allows the background image to show through */}
+      </div>
     </div>
   );
 });
