@@ -16,13 +16,13 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
       transition={{ duration: 0.8 }}
-      className={`space-y-${isMobile ? '8' : '12'} max-w-4xl mx-auto`}
+      className={`space-y-${isMobile ? '8' : '8'} max-w-2xl ${isMobile ? 'mx-auto text-center' : 'text-left'}`}
     >
       <motion.h1 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.2 }}
-        className={`${isMobile ? 'text-2xl md:text-4xl' : 'text-5xl xl:text-6xl'} font-black leading-tight text-gray-900 font-['Inter'] ${isMobile ? 'mb-2' : ''}`}
+        className={`${isMobile ? 'text-2xl md:text-4xl text-center' : 'text-4xl xl:text-5xl text-left'} font-black leading-tight text-gray-900 font-['Inter'] ${isMobile ? 'mb-2' : ''}`}
       >
         Get{" "}
         <span className="text-primary font-extrabold">instant price</span>{" "}
@@ -33,7 +33,7 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.6, delay: 0.3 }}
-        className={`${isMobile ? 'text-sm' : 'text-xl'} text-gray-600 font-medium ${isMobile ? 'mb-2' : ''}`}
+        className={`${isMobile ? 'text-sm text-center' : 'text-lg text-left'} text-gray-600 font-medium ${isMobile ? 'mb-2' : ''}`}
       >
         Professional cleaning services • Direct price estimation on final step
       </motion.p>
@@ -43,7 +43,7 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
+          className="grid grid-cols-2 gap-4 max-w-lg"
         >
           {benefits.map((benefit, index) => (
             <motion.div 
@@ -53,8 +53,8 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
               transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
               className="flex items-center gap-3"
             >
-              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-              <span className="text-gray-700 font-semibold">{benefit}</span>
+              <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+              <span className="text-gray-700 font-semibold text-sm">{benefit}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -82,8 +82,8 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         </motion.div>
       )}
 
-      {/* Trust Badges */}
-      <TrustBadges />
+      {/* Trust Badges - only for mobile */}
+      {isMobile && <TrustBadges />}
     </motion.div>
   );
 });

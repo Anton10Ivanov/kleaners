@@ -19,17 +19,23 @@ export const DesktopHero = memo(({
   handleNextStep
 }: DesktopHeroProps) => {
   return (
-    <div className="flex flex-col items-center text-center space-y-12 relative">
-      <HeroContent isMobile={false} />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh] relative">
+      {/* Left side - Content and Form */}
+      <div className="flex flex-col space-y-8 text-left relative z-10">
+        <HeroContent isMobile={false} />
+        
+        <HeroForm
+          selectedService={selectedService}
+          setSelectedService={setSelectedService}
+          postalCode={postalCode}
+          setPostalCode={setPostalCode}
+          handleNextStep={handleNextStep}
+          isMobile={false}
+        />
+      </div>
       
-      <HeroForm
-        selectedService={selectedService}
-        setSelectedService={setSelectedService}
-        postalCode={postalCode}
-        setPostalCode={setPostalCode}
-        handleNextStep={handleNextStep}
-        isMobile={false}
-      />
+      {/* Right side - Reserved for image background */}
+      <div className="hidden lg:block"></div>
     </div>
   );
 });
