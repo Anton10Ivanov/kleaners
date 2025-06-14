@@ -70,40 +70,34 @@ export const Hero = memo(({
   };
 
   return (
-    <section 
-      className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden"
-    >
+    <section className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 z-10 overflow-hidden">
       <BackgroundElements />
-
-      <div 
-        className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 z-10"
+      
+      <HeroProvider 
+        initialService={selectedService} 
+        initialPostalCode={postalCode} 
+        onNextStep={handleValidatedNextStep} 
+        onServiceChange={setSelectedService} 
+        onPostalCodeChange={setPostalCode}
       >
-        <HeroProvider 
-          initialService={selectedService} 
-          initialPostalCode={postalCode} 
-          onNextStep={handleValidatedNextStep} 
-          onServiceChange={setSelectedService} 
-          onPostalCodeChange={setPostalCode}
-        >
-          {isMobile ? (
-            <MobileHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          ) : (
-            <DesktopHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          )}
-        </HeroProvider>
-      </div>
+        {isMobile ? (
+          <MobileHero 
+            selectedService={selectedService} 
+            setSelectedService={setSelectedService} 
+            postalCode={postalCode} 
+            setPostalCode={setPostalCode} 
+            handleNextStep={handleValidatedNextStep} 
+          />
+        ) : (
+          <DesktopHero 
+            selectedService={selectedService} 
+            setSelectedService={setSelectedService} 
+            postalCode={postalCode} 
+            setPostalCode={setPostalCode} 
+            handleNextStep={handleValidatedNextStep} 
+          />
+        )}
+      </HeroProvider>
     </section>
   );
 });
