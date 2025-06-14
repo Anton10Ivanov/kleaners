@@ -1,3 +1,4 @@
+
 import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
@@ -75,7 +76,7 @@ export const Hero = memo(({
       <BackgroundElements />
 
       <div 
-        className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 z-10"
+        className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 z-10"
       >
         <HeroProvider 
           initialService={selectedService} 
