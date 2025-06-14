@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { ServiceType } from "@/schemas/booking";
 import { getBookingRoute } from "@/utils/serviceRouteMapping";
+
 interface HeroFormProps {
   selectedService: string;
   setSelectedService: (value: string) => void;
@@ -15,6 +16,7 @@ interface HeroFormProps {
   handleNextStep: () => void;
   isMobile: boolean;
 }
+
 export const HeroForm = memo(({
   selectedService,
   setSelectedService,
@@ -24,6 +26,7 @@ export const HeroForm = memo(({
   isMobile
 }: HeroFormProps) => {
   const navigate = useNavigate();
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -41,6 +44,7 @@ export const HeroForm = memo(({
       handleNextStep();
     }
   };
+
   if (isMobile) {
     return <motion.div initial={{
       opacity: 0,
@@ -126,6 +130,7 @@ export const HeroForm = memo(({
         </motion.form>
       </motion.div>;
   }
+
   return <motion.div initial={{
     opacity: 0,
     y: 30
@@ -137,7 +142,7 @@ export const HeroForm = memo(({
     delay: 0.7,
     ease: "easeOut"
   }} className="w-full max-w-lg mt-0">
-      <div className="backdrop-blur-sm shadow-2xl border border-white/20 p-10 px-[19px] py-[13px] bg-transparent rounded-none">
+      <div className="backdrop-blur-sm shadow-2xl border border-white/20 p-10 px-[19px] py-[13px] bg-transparent rounded-none w-[70%]">
         <motion.form onSubmit={handleSubmit} className="space-y-8" initial={{
         opacity: 0
       }} animate={{
@@ -154,36 +159,41 @@ export const HeroForm = memo(({
 
           {/* Location Input with enhanced styling */}
           <div className="space-y-3">
-            <div className="relative group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Postal code
+            </label>
+            <div className="relative group w-[70%]">
               <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
-              <Input type="text" placeholder="Enter your location" value={postalCode} onChange={e => setPostalCode(e.target.value)} required className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md px-[44px]" />
+              <Input type="text" placeholder="Enter your location" value={postalCode} onChange={e => setPostalCode(e.target.value)} required className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md px-[44px] w-full" />
             </div>
           </div>
 
           {/* Service Type with enhanced styling */}
           <div className="space-y-3">
-            <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger className="h-16 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="h-5 w-5 text-gray-400" />
-                  <SelectValue placeholder="Choose cleaning service" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-2xl z-50">
-                <SelectItem value={ServiceType.Home} className="text-base font-medium py-3">
-                  <span className="font-semibold text-gray-800">Home Cleaning</span>
-                </SelectItem>
-                <SelectItem value={ServiceType.DeepCleaning} className="text-base font-medium py-3">
-                  <span className="font-semibold text-gray-800">Deep Cleaning</span>
-                </SelectItem>
-                <SelectItem value={ServiceType.MoveInOut} className="text-base font-medium py-3">
-                  <span className="font-semibold text-gray-800">Move In/Out</span>
-                </SelectItem>
-                <SelectItem value={ServiceType.Office} className="text-base font-medium py-3">
-                  <span className="font-semibold text-gray-800">Office Cleaning</span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="w-[70%]">
+              <Select value={selectedService} onValueChange={setSelectedService}>
+                <SelectTrigger className="h-16 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md w-full">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-5 w-5 text-gray-400" />
+                    <SelectValue placeholder="Choose cleaning service" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-2xl z-50">
+                  <SelectItem value={ServiceType.Home} className="text-base font-medium py-3">
+                    <span className="font-semibold text-gray-800">Home Cleaning</span>
+                  </SelectItem>
+                  <SelectItem value={ServiceType.DeepCleaning} className="text-base font-medium py-3">
+                    <span className="font-semibold text-gray-800">Deep Cleaning</span>
+                  </SelectItem>
+                  <SelectItem value={ServiceType.MoveInOut} className="text-base font-medium py-3">
+                    <span className="font-semibold text-gray-800">Move In/Out</span>
+                  </SelectItem>
+                  <SelectItem value={ServiceType.Office} className="text-base font-medium py-3">
+                    <span className="font-semibold text-gray-800">Office Cleaning</span>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
           {/* Enhanced CTA Button with better animations */}
@@ -196,7 +206,7 @@ export const HeroForm = memo(({
           type: "spring",
           stiffness: 400,
           damping: 25
-        }}>
+        }} className="w-[70%]">
             <Button type="submit" className="w-full h-16 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 group">
               Get Instant Quote 
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -208,4 +218,5 @@ export const HeroForm = memo(({
       </div>
     </motion.div>;
 });
+
 HeroForm.displayName = "HeroForm";
