@@ -20,14 +20,14 @@ export const MobileHero = memo(({
 }: MobileHeroProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // Load the portrait image for mobile
-  const portraitImageSrc = '/lovable-uploads/343cfe48-b5df-4330-b85d-fafc14c3129d.png';
+  // Use the new uploaded image for mobile
+  const heroImageSrc = '/lovable-uploads/0f71149a-8eeb-4bdd-81d2-36cf7c43dba4.png';
   
   useEffect(() => {
     const img = new Image();
     img.onload = () => setImageLoaded(true);
     img.onerror = () => setImageLoaded(false);
-    img.src = portraitImageSrc;
+    img.src = heroImageSrc;
   }, []);
 
   return (
@@ -37,7 +37,7 @@ export const MobileHero = memo(({
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: `url(${portraitImageSrc})`,
+            backgroundImage: `url(${heroImageSrc})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat'

@@ -19,20 +19,20 @@ export const DesktopHero = memo(({
 }: DesktopHeroProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // Load the portrait image
-  const portraitImageSrc = '/lovable-uploads/343cfe48-b5df-4330-b85d-fafc14c3129d.png';
+  // Use the new uploaded image
+  const heroImageSrc = '/lovable-uploads/0f71149a-8eeb-4bdd-81d2-36cf7c43dba4.png';
   
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
-      console.log('Portrait image loaded successfully');
+      console.log('Hero image loaded successfully');
       setImageLoaded(true);
     };
     img.onerror = (error) => {
-      console.error('Failed to load portrait image:', error);
+      console.error('Failed to load hero image:', error);
       setImageLoaded(false);
     };
-    img.src = portraitImageSrc;
+    img.src = heroImageSrc;
   }, []);
 
   return (
@@ -42,7 +42,7 @@ export const DesktopHero = memo(({
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: `url(${portraitImageSrc})`,
+            backgroundImage: `url(${heroImageSrc})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat'
