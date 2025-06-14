@@ -21,25 +21,23 @@ export const BackgroundElements = memo(() => {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full">
-      {/* Show the opciya image as soon as it loads */}
-      {imageLoaded && (
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url(${heroImageSrc})`,
-            zIndex: 1
-          }}
-        />
-      )}
-      
-      {/* Light overlay only to ensure text readability - much more transparent */}
+    <div className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
+      {/* Show the opciya image directly without complex overlays */}
       <div 
-        className="absolute inset-0 bg-white/30"
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: imageLoaded ? `url(${heroImageSrc})` : 'none',
+          opacity: imageLoaded ? 1 : 0,
+        }}
+      />
+      
+      {/* Very minimal overlay just for text readability on the left side */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/20 to-transparent"
         style={{ zIndex: 2 }}
       />
       
-      {/* Fallback gradient if image fails to load */}
+      {/* Fallback background if image fails to load */}
       {!imageLoaded && (
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100" />
       )}
