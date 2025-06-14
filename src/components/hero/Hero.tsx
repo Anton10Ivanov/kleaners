@@ -56,10 +56,10 @@ const Hero = ({
               <SelectValue placeholder="Choose a cleaning service" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ServiceType.REGULAR_CLEANING}>Regular Cleaning</SelectItem>
-              <SelectItem value={ServiceType.DEEP_CLEANING}>Deep Cleaning</SelectItem>
-              <SelectItem value={ServiceType.MOVE_IN_OUT_CLEANING}>Move In/Out Cleaning</SelectItem>
-              <SelectItem value={ServiceType.OFFICE_CLEANING}>Office Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Home}>Regular Cleaning</SelectItem>
+              <SelectItem value={ServiceType.DeepCleaning}>Deep Cleaning</SelectItem>
+              <SelectItem value={ServiceType.MoveInOut}>Move In/Out Cleaning</SelectItem>
+              <SelectItem value={ServiceType.Office}>Office Cleaning</SelectItem>
             </SelectContent>
           </Select>
         </div>
