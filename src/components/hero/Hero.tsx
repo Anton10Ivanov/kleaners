@@ -1,4 +1,3 @@
-
 import { useEffect, memo, useRef } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
@@ -70,10 +69,10 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-[85vh] flex flex-col justify-center">
+    <section className="relative w-full min-h-screen flex flex-col justify-center" style={{ zIndex: 0 }}>
       <BackgroundElements />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16" style={{ zIndex: 10 }}>
         <HeroProvider 
           initialService={selectedService} 
           initialPostalCode={postalCode} 
