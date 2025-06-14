@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -16,24 +17,25 @@ const Logo = () => {
   return (
     <button
       onClick={() => navigate("/")}
-      className="flex items-center gap-2"
+      // Font consistency
+      className="flex items-center gap-2 font-sans font-bold text-2xl tracking-wide"
       aria-label="Go to homepage"
       tabIndex={0}
+      style={{
+        color: "#7ebce6",
+        letterSpacing: "0.01em",
+        fontFamily: "'Poppins', sans-serif",
+      }}
     >
       <img
         src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
         alt="Kleaners Logo"
         className="h-8 w-8 object-contain"
-      />
-      <span
-        className="text-2xl font-bold tracking-wide"
         style={{
-          color: "#7ebce6",
-          letterSpacing: "0.01em",
+          fontFamily: "'Poppins', sans-serif"
         }}
-      >
-        Kleaners
-      </span>
+      />
+      <span>Kleaners</span>
     </button>
   );
 };
@@ -45,7 +47,6 @@ const UnifiedNavbar: React.FC = () => {
   return (
     <nav
       className={cn(
-        // Blur and gradient background for modern look
         "fixed top-0 left-0 w-full z-50",
         "backdrop-blur-[7px] bg-white/90 shadow-md border-b border-transparent",
         "transition-all duration-300"
@@ -55,6 +56,7 @@ const UnifiedNavbar: React.FC = () => {
       style={{
         // Subtle blue/gradient touch behind
         backgroundImage: "linear-gradient(93deg,rgba(126,188,230,0.18) 0%,#fff 70%)",
+        fontFamily: "'Poppins', sans-serif"
       }}
     >
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between px-4 md:px-8 h-[68px]">
@@ -62,17 +64,18 @@ const UnifiedNavbar: React.FC = () => {
         <Logo />
 
         {/* Nav Items center/right */}
-        <ul className="hidden md:flex items-center space-x-2 lg:space-x-6">
+        <ul className="hidden md:flex items-center space-x-3 lg:space-x-6 font-sans">
           {NAV_ITEMS.map((item) => (
             <li key={item.label}>
               <button
                 className={cn(
-                  "text-base font-medium px-3 py-2 transition-colors duration-150 rounded-md",
+                  "text-base font-medium px-3 py-2 transition-colors duration-150 rounded-md font-sans",
                   location.pathname === item.href
                     ? "text-[#7ebce6] bg-[#7ebce6]/10"
                     : "text-gray-800 dark:text-gray-100 hover:text-[#7ebce6] hover:bg-[#7ebce6]/10"
                 )}
                 onClick={() => navigate(item.href)}
+                style={{fontFamily: "'Poppins', sans-serif"}}
               >
                 {item.label}
               </button>
@@ -80,27 +83,21 @@ const UnifiedNavbar: React.FC = () => {
           ))}
         </ul>
 
-        {/* Auth + CTA right */}
-        <div className="flex items-center space-x-2 lg:space-x-4">
+        {/* Auth right (no CTA) */}
+        <div className="flex items-center space-x-3 lg:space-x-4">
           <button
-            className="text-base font-medium text-gray-700 hover:text-[#7ebce6] bg-transparent px-3 py-2 rounded-md transition-colors"
+            className="text-base font-medium text-gray-700 hover:text-[#7ebce6] bg-transparent px-4 py-2 rounded-md transition-colors font-sans min-h-[44px]"
             onClick={() => navigate('/login')}
             tabIndex={0}
+            style={{fontFamily: "'Poppins', sans-serif"}}
           >
             Sign in
           </button>
-          <Button
-            size="sm"
-            className="!bg-[#7ebce6] !text-white font-semibold px-4 py-2 rounded-full shadow hover:!bg-[#69aad1] transition-colors"
-            onClick={() => navigate('/quote')}
-          >
-            Get instant quote
-          </Button>
         </div>
       </div>
-      {/* Mobile simplified: brand left, burger (future), nav items horizontal scroll (future). */}
     </nav>
   );
 };
 
 export default UnifiedNavbar;
+
