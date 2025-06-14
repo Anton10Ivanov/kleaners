@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -105,11 +106,11 @@ export default {
       },
       fontFamily: {
         // Design system fonts
-        sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
-        heading: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
-        label: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--ff)", 'system-ui', 'sans-serif'],
+        heading: ["var(--ff-heading)", 'system-ui', 'sans-serif'],
+        label: ["var(--ff-label)", 'system-ui', 'sans-serif'],
         // Legacy - keep for backwards compatibility
-        raleway: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"], // deprecated, unify to Poppins
+        raleway: ["var(--ff)"],
       },
       fontSize: {
         // Design system typography scale
