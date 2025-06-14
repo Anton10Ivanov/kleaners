@@ -71,10 +71,12 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-[70vh] flex flex-col justify-center bg-transparent"> {/* Removed overflow-hidden */}
+    <section className="relative w-full min-h-[80vh] flex flex-col justify-center bg-transparent">
+      {/* Background Elements - positioned to fill entire section */}
       <BackgroundElements />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Content Container */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <HeroProvider 
           initialService={selectedService} 
           initialPostalCode={postalCode} 
@@ -107,4 +109,3 @@ export const Hero = memo(({
 
 Hero.displayName = "Hero";
 export default Hero;
-
