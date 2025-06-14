@@ -2,6 +2,7 @@
 import { memo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HeroForm } from "./HeroForm";
+import { TrustBadge } from "./TrustBadge";
 
 interface MobileHeroProps {
   selectedService: string;
@@ -67,6 +68,9 @@ export const MobileHero = memo(({
             handleNextStep={handleNextStep}
             isMobile={true}
           />
+
+          {/* Trust Badge positioned below the form */}
+          <TrustBadge isMobile={true} />
         </motion.div>
       </div>
     </div>
