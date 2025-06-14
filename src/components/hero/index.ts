@@ -15,6 +15,7 @@ export { FeatureList } from './FeatureList';
 export { HeroTestimonials } from './HeroTestimonials';
 export { SocialProof } from './SocialProof';
 export { TrustBadges } from './TrustBadges';
+export { TrustBadge } from './TrustBadge';
 export { HeroImage } from './HeroImage';
 export { ProfessionalTrustSection } from './ProfessionalTrustSection';
 export { ProcessSteps } from './ProcessSteps';
