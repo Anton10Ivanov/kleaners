@@ -31,8 +31,7 @@ export const DesktopHero = memo(({
     };
     img.src = heroImageSrc;
   }, []);
-  return <div className="relative w-full h-full overflow-hidden pt-16">
-      {/* Added pt-16 here to account for navbar height internally */}
+  return <div className="relative w-full h-full overflow-hidden">
       {/* Full-width background image */}
       {imageLoaded && <div className="absolute inset-0 w-full h-full bg-gray-100" style={{
       backgroundImage: `url(${heroImageSrc})`,
