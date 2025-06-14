@@ -15,7 +15,7 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
 
   return (
     <div className={cn(
-      "hidden md:flex items-center",
+      "hidden md:flex items-center gap-1",
       getMobileSpacing('sm')
     )}>
       {user && (
@@ -24,7 +24,7 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
         </div>
       )}
       
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-1">
         <div className="touch-comfortable">
           <ThemeToggle />
         </div>
