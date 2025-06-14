@@ -1,7 +1,6 @@
 
 import { memo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { HeroContent } from "./HeroContent";
 import { HeroForm } from "./HeroForm";
 
 interface MobileHeroProps {
@@ -32,7 +31,7 @@ export const MobileHero = memo(({
   }, []);
 
   return (
-    <div className="relative w-full min-h-[60vh] overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden">
       {/* Full-width background image for mobile */}
       {imageLoaded && (
         <div 
@@ -43,10 +42,7 @@ export const MobileHero = memo(({
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat'
           }}
-        >
-          {/* Mobile-specific overlay for better readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-white/20 to-transparent" />
-        </div>
+        />
       )}
       
       {/* Fallback background */}
@@ -55,28 +51,21 @@ export const MobileHero = memo(({
       )}
 
       {/* Content overlay */}
-      <div className="relative z-10 flex flex-col justify-center items-center min-h-[60vh] px-4 py-8">
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full max-w-md mx-auto"
         >
-          {/* White background card for content */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6">
-            <HeroContent isMobile={true} />
-            
-            <div className="w-full mt-6">
-              <HeroForm
-                selectedService={selectedService}
-                setSelectedService={setSelectedService}
-                postalCode={postalCode}
-                setPostalCode={setPostalCode}
-                handleNextStep={handleNextStep}
-                isMobile={true}
-              />
-            </div>
-          </div>
+          <HeroForm
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            handleNextStep={handleNextStep}
+            isMobile={true}
+          />
         </motion.div>
       </div>
     </div>

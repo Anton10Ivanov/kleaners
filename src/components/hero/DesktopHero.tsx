@@ -1,6 +1,5 @@
 
 import { memo, useState, useEffect } from "react";
-import { HeroContent } from "./HeroContent";
 import { HeroForm } from "./HeroForm";
 
 interface DesktopHeroProps {
@@ -37,7 +36,7 @@ export const DesktopHero = memo(({
   }, []);
 
   return (
-    <div className="relative w-full min-h-[80vh] overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden">
       {/* Full-width background image */}
       {imageLoaded && (
         <div 
@@ -48,10 +47,7 @@ export const DesktopHero = memo(({
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat'
           }}
-        >
-          {/* Subtle overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-transparent" />
-        </div>
+        />
       )}
       
       {/* Fallback if image doesn't load */}
@@ -60,24 +56,17 @@ export const DesktopHero = memo(({
       )}
 
       {/* Left-positioned form overlay */}
-      <div className="relative z-10 flex items-center min-h-[80vh] py-12">
+      <div className="relative z-10 flex items-center min-h-screen py-12">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            {/* White background container for form area with enhanced styling */}
-            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 lg:p-12 border border-white/20">
-              <HeroContent isMobile={false} />
-              
-              <div className="mt-8">
-                <HeroForm
-                  selectedService={selectedService}
-                  setSelectedService={setSelectedService}
-                  postalCode={postalCode}
-                  setPostalCode={setPostalCode}
-                  handleNextStep={handleNextStep}
-                  isMobile={false}
-                />
-              </div>
-            </div>
+          <div className="max-w-lg">
+            <HeroForm
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+              postalCode={postalCode}
+              setPostalCode={setPostalCode}
+              handleNextStep={handleNextStep}
+              isMobile={false}
+            />
           </div>
         </div>
       </div>
