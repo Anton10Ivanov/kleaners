@@ -1,7 +1,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin, Home, Building, Sparkles, ArrowRightLeft } from "lucide-react";
+import { ArrowRight, Home, Building, Sparkles, ArrowRightLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,14 +74,13 @@ export const HeroForm = memo(({
           </div>
 
           {/* Location Input */}
-          <div className="relative group">
-            <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
+          <div>
             <Input 
               type="text" 
-              placeholder="Enter your location" 
+              placeholder="City name or Postal code" 
               value={postalCode} 
               onChange={e => setPostalCode(e.target.value)} 
-              className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
+              className="h-16 px-4 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
               required 
             />
           </div>
@@ -151,20 +150,17 @@ export const HeroForm = memo(({
       >
         {/* Location Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-900 mb-2 text-center">
             Your Postal code
           </label>
-          <div className="relative group">
-            <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
-            <Input 
-              type="text" 
-              placeholder="Enter your location" 
-              value={postalCode} 
-              onChange={e => setPostalCode(e.target.value)} 
-              required 
-              className="h-14 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
-            />
-          </div>
+          <Input 
+            type="text" 
+            placeholder="City name or Postal code" 
+            value={postalCode} 
+            onChange={e => setPostalCode(e.target.value)} 
+            required 
+            className="h-14 px-4 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
+          />
         </div>
 
         {/* Service Type Grid */}
