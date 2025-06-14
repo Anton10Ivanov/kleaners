@@ -21,38 +21,35 @@ export const BackgroundElements = memo(() => {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden">
-      {/* Opciya background image - direct implementation */}
-      <div 
-        className="absolute inset-0 w-full h-full"
-        style={{
-          backgroundImage: `url(${heroImageSrc})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          opacity: imageLoaded ? 1 : 0,
-          transition: 'opacity 0.5s ease-in-out',
-          zIndex: 1
-        }}
-      />
+    <div className="absolute inset-0 w-full h-full">
+      {/* Simple, direct opciya background image - no overlays */}
+      {imageLoaded && (
+        <div 
+          className="absolute inset-0 w-full h-full"
+          style={{
+            backgroundImage: `url(${heroImageSrc})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: 1
+          }}
+        />
+      )}
       
-      {/* Subtle overlay for text readability */}
+      {/* Very subtle overlay only for text readability - much lighter */}
       <div 
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.2) 50%, transparent 100%)',
+          background: 'rgba(255, 255, 255, 0.1)',
           zIndex: 2
         }}
       />
       
-      {/* Fallback blue background if image fails */}
+      {/* Blue fallback only if image fails to load */}
       {!imageLoaded && (
         <div 
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%)',
-            zIndex: 1
-          }}
+          className="absolute inset-0 bg-blue-500"
+          style={{ zIndex: 1 }}
         />
       )}
     </div>
