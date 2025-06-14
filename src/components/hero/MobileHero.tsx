@@ -51,7 +51,7 @@ export const MobileHero = memo(({
       )}
 
       {/* Content overlay */}
-      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-4 py-4">
+      <div className="relative z-10 pt-20 pb-4 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
