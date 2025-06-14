@@ -1,10 +1,10 @@
 
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Clock, Star, MapPin, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { NavbarButton, NavbarBadge } from '../core/NavbarPrimitives';
+import { getNavbarIconClasses, navbarResponsive } from '../utils/styleHelpers';
 
 interface ContextualMenusProps {
   userRole?: 'client' | 'provider' | 'admin' | null;
@@ -62,28 +62,28 @@ export const ContextualMenus: React.FC<ContextualMenusProps> = ({
   if (contextualItems.length === 0) return null;
 
   return (
-    <div className={cn("hidden lg:flex items-center space-x-2", className)}>
+    <div className={cn(navbarResponsive.desktopOnly, "items-center space-x-2", className)}>
       {contextualItems.map((item) => {
         const IconComponent = item.icon;
         return (
-          <Button
+          <NavbarButton
             key={item.href}
-            variant="ghost"
+            variant="contextual"
             size="sm"
-            className="h-8 px-3 gap-2 relative"
+            className="relative"
             onClick={() => window.location.href = item.href}
           >
-            <IconComponent className="h-4 w-4" />
-            <span className="text-sm">{item.label}</span>
+            <IconComponent className={getNavbarIconClasses('sm')} />
+            <span className="text-sm font-medium">{item.label}</span>
             {item.badge && (
-              <Badge 
-                variant="secondary" 
-                className="ml-1 px-1.5 py-0.5 text-xs bg-primary/10 text-primary"
+              <NavbarBadge 
+                variant={item.badge === 'Hot' ? 'hot' : item.badge === 'New' ? 'new' : 'primary'}
+                className="ml-1"
               >
                 {item.badge}
-              </Badge>
+              </NavbarBadge>
             )}
-          </Button>
+          </NavbarButton>
         );
       })}
     </div>
