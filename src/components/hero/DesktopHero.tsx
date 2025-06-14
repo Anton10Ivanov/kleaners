@@ -1,3 +1,4 @@
+
 import { memo, useState, useEffect } from "react";
 import { HeroForm } from "./HeroForm";
 interface DesktopHeroProps {
@@ -42,10 +43,7 @@ export const DesktopHero = memo(({
       {/* Fallback if image doesn't load */}
       {!imageLoaded && <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-slate-100" />}
 
-      {/* Left-positioned form overlay */}
-      <div className="relative z-10 pt-20 pb-4 py-0">
-        <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} isMobile={false} />
-      </div>
+      <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} isMobile={false} />
     </div>;
 });
 DesktopHero.displayName = "DesktopHero";
