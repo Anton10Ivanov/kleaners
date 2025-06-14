@@ -6,7 +6,7 @@ import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
-import { ServiceType } from "@/types/enums";
+import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";

@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
@@ -6,8 +7,7 @@ import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { HomeDetailsSection } from './HomeDetailsSection';
-import { BookingFormData, Frequency } from '@/schemas/booking';
-import { ServiceType } from '@/types/enums';
+import { BookingFormData, Frequency, ServiceType } from '@/schemas/booking';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';

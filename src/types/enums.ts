@@ -1,4 +1,3 @@
-
 /**
  * Enum for booking status values
  */
@@ -8,28 +7,6 @@ export enum BookingStatus {
   Confirmed = "confirmed",
   Completed = "completed",
   Cancelled = "cancelled"
-}
-
-/**
- * Unified Service Type enum - replaces both Service and ServiceType
- */
-export enum ServiceType {
-  Home = "home",
-  Office = "office",
-  DeepCleaning = "deep-cleaning",
-  MoveInOut = "move-in-out",
-  PostConstruction = "post-construction"
-}
-
-/**
- * Enum for booking frequency options
- */
-export enum Frequency {
-  OneTime = "one-time",
-  Weekly = "weekly",
-  BiWeekly = "bi-weekly",
-  Monthly = "monthly",
-  Custom = "custom"
 }
 
 /**
