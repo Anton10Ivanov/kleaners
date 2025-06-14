@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,10 @@ import { BookingSteps } from './BookingSteps';
 import { Hero } from '../hero';
 import { MobileBookingSummaryOptimized } from '../booking/mobile';
 import { serviceCategories } from '@/components/navbar/navigationData';
+
+// New professional sections
+import { ProfessionalTrustSection } from '../hero/ProfessionalTrustSection';
+import { ProcessSteps } from '../hero/ProcessSteps';
 
 // Optimized lazy loading
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
@@ -42,9 +47,6 @@ const HomePage = () => {
     
     return () => {
       endTimer('initialRender');
-      // Performance monitor results are logged globally or can be triggered elsewhere if needed.
-      // Avoid logging on every unmount if it's too noisy.
-      // performanceMonitor.logResults(); 
     };
   }, [startTimer, endTimer]);
 
@@ -102,7 +104,7 @@ const HomePage = () => {
 
   const setSelectedService = useCallback((service: ServiceType | string) => {
     startTimer('setServiceInteraction');
-    setValue('service', service as ServiceType); // Ensure service is of type ServiceType
+    setValue('service', service as ServiceType);
     endTimer('setServiceInteraction');
   }, [setValue, startTimer, endTimer]);
 
@@ -112,13 +114,13 @@ const HomePage = () => {
     endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
-  // Convert serviceCategories to the expected format with proper ServiceCategory interface
+  // Convert serviceCategories to the expected format
   const convertedServiceCategories = useMemo(() => {
     return serviceCategories.map(category => ({
       id: category.title.toLowerCase().replace(/\s+/g, '-'),
       title: category.title,
       description: category.description,
-      image: "/placeholder.svg", // Consider actual images
+      image: "/placeholder.svg",
       price: "From €25/hour",
       href: category.services[0]?.href || "/services",
       features: category.services.map(service => service.title),
@@ -146,6 +148,12 @@ const HomePage = () => {
               setPostalCode={setPostalCode}
               handleNextStep={handleHeroNextStep}
             />
+            
+            {/* Professional trust section - moved from hero */}
+            <ProfessionalTrustSection />
+            
+            {/* How it works section */}
+            <ProcessSteps />
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
