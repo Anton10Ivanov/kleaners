@@ -56,7 +56,7 @@ export const DesktopHero = memo(({
       )}
 
       {/* Left-positioned form overlay */}
-      <div className="relative z-10 flex items-center min-h-screen py-4">
+      <div className="relative z-10 pt-20 pb-4">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-lg">
             <HeroForm
