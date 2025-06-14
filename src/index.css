@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Raleway:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
 @import "./styles/designTokens.css";
 @import "./styles/componentLibrary.css";
@@ -13,10 +12,10 @@
 @layer base {
   :root {
     /* Font family variables - Unified */
-    --ff: 'Raleway', sans-serif;
-    --ff2: 'Raleway', sans-serif;
-    --ff-heading: 'Inter', sans-serif;
-    --ff-label: 'Open Sans', sans-serif;
+    --ff: 'Poppins', sans-serif;
+    --ff2: 'Poppins', sans-serif;
+    --ff-heading: 'Poppins', sans-serif;
+    --ff-label: 'Poppins', sans-serif;
     
     /* Typography values - Standardized */
     --p: 1rem/1.5em var(--ff);
