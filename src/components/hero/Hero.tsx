@@ -1,10 +1,9 @@
 
-import { useEffect, memo, useRef } from "react";
+import { useEffect, memo } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { MobileHero } from "./MobileHero";
 import { DesktopHero } from "./DesktopHero";
 import { HeroProvider } from "./HeroContext";
-import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
@@ -71,35 +70,31 @@ export const Hero = memo(({
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden">
-      <BackgroundElements />
-      
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 z-10">
-        <HeroProvider 
-          initialService={selectedService} 
-          initialPostalCode={postalCode} 
-          onNextStep={handleValidatedNextStep} 
-          onServiceChange={setSelectedService} 
-          onPostalCodeChange={setPostalCode}
-        >
-          {isMobile ? (
-            <MobileHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          ) : (
-            <DesktopHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          )}
-        </HeroProvider>
-      </div>
+      <HeroProvider 
+        initialService={selectedService} 
+        initialPostalCode={postalCode} 
+        onNextStep={handleValidatedNextStep} 
+        onServiceChange={setSelectedService} 
+        onPostalCodeChange={setPostalCode}
+      >
+        {isMobile ? (
+          <MobileHero 
+            selectedService={selectedService} 
+            setSelectedService={setSelectedService} 
+            postalCode={postalCode} 
+            setPostalCode={setPostalCode} 
+            handleNextStep={handleValidatedNextStep} 
+          />
+        ) : (
+          <DesktopHero 
+            selectedService={selectedService} 
+            setSelectedService={setSelectedService} 
+            postalCode={postalCode} 
+            setPostalCode={setPostalCode} 
+            handleNextStep={handleValidatedNextStep} 
+          />
+        )}
+      </HeroProvider>
     </section>
   );
 });
