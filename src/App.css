@@ -1,9 +1,15 @@
+/* Remove the padding from #root so layout aligns with the navbar,
+   and place padding on content sections as needed instead. */
 
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* Removed the global padding for better navbar-Hero integration */
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
