@@ -137,7 +137,7 @@ export const HeroForm = memo(({
     delay: 0.7,
     ease: "easeOut"
   }} className="w-full max-w-lg mt-0">
-      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-10 py-[25px] px-[21px]">
+      <div className="backdrop-blur-sm shadow-2xl border border-white/20 p-10 px-[19px] py-[13px] bg-transparent rounded-none">
         <motion.form onSubmit={handleSubmit} className="space-y-8" initial={{
         opacity: 0
       }} animate={{
@@ -156,7 +156,7 @@ export const HeroForm = memo(({
           <div className="space-y-3">
             <div className="relative group">
               <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
-              <Input type="text" placeholder="Enter your location" value={postalCode} onChange={e => setPostalCode(e.target.value)} className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" required />
+              <Input type="text" placeholder="Enter your location" value={postalCode} onChange={e => setPostalCode(e.target.value)} required className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md px-[44px]" />
             </div>
           </div>
 
