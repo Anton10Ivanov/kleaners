@@ -9,6 +9,7 @@ import { SectionLoading } from '@/components/ui/section-loading';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
 import { useBookingForm } from '@/hooks/useBookingForm';
+import { BookingSteps } from './BookingSteps';
 
 // Centralized imports
 import { Hero } from '../hero';
@@ -17,9 +18,9 @@ import { serviceCategories } from '@/components/navbar/navigationData';
 
 // Optimized lazy loading
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
-const LazyServiceCategoriesSection = lazy(() => import('../services/ServiceCategoriesSection'));
+const LazyServiceCategoriesSection = lazy(() => import('../services/ServiceCategoriesSection').then(module => ({ default: module.ServiceCategoriesSection })));
 const LazyBusinessSolutionsSection = lazy(() => import('./BusinessSolutionsSection'));
-const LazyHomeSections = lazy(() => import('./HomeSections'));
+const LazyHomeSections = lazy(() => import('./HomeSections').then(module => ({ default: module.HomeSections })));
 
 // Simple error fallback component
 const ErrorFallback = ({ error }: { error: Error }) => (
