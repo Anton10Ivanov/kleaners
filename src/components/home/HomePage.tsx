@@ -13,19 +13,19 @@ import { useBookingForm } from '@/hooks/useBookingForm';
 // Centralized imports
 import { Hero } from '../hero';
 import { MobileBookingSummaryOptimized } from '../booking/mobile';
-import { ServiceCategoriesSection } from '../services/ServiceCategoriesSection';
 import { serviceCategories } from '@/components/navbar/navigationData';
-import { HomeSections } from './HomeSections';
-import { BookingSteps } from './BookingSteps';
-import BusinessSolutionsSection from './BusinessSolutionsSection';
 
 // Optimized lazy loading
 const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
+const LazyServiceCategoriesSection = lazy(() => import('../services/ServiceCategoriesSection'));
+const LazyBusinessSolutionsSection = lazy(() => import('./BusinessSolutionsSection'));
+const LazyHomeSections = lazy(() => import('./HomeSections'));
 
 // Simple error fallback component
-const ErrorFallback = () => (
-  <div className="text-center py-8">
+const ErrorFallback = ({ error }: { error: Error }) => (
+  <div className="text-center py-8 text-red-500">
     <p>Something went wrong loading this section.</p>
+    <p className="text-sm">{error?.message}</p>
   </div>
 );
 
@@ -41,7 +41,9 @@ const HomePage = () => {
     
     return () => {
       endTimer('initialRender');
-      performanceMonitor.logResults();
+      // Performance monitor results are logged globally or can be triggered elsewhere if needed.
+      // Avoid logging on every unmount if it's too noisy.
+      // performanceMonitor.logResults(); 
     };
   }, [startTimer, endTimer]);
 
@@ -65,7 +67,6 @@ const HomePage = () => {
   const handleNext = useCallback(() => {
     startTimer('nextStepInteraction');
     
-    // Enhanced validation for mobile
     if (currentStep === 1 && (!selectedService || !postalCode)) {
       if (!selectedService) toast.error("Please select a service type");
       if (!postalCode) toast.error("Please enter your postal code");
@@ -80,7 +81,6 @@ const HomePage = () => {
       return;
     }
     
-    // Smooth scroll behavior
     if (isMobile) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -108,13 +108,13 @@ const HomePage = () => {
     endTimer('heroNextStepInteraction');
   }, [handleNextStep, startTimer, endTimer]);
 
-  const setSelectedService = useCallback((service) => {
+  const setSelectedService = useCallback((service: ServiceType | string) => {
     startTimer('setServiceInteraction');
-    setValue('service', service);
+    setValue('service', service as ServiceType); // Ensure service is of type ServiceType
     endTimer('setServiceInteraction');
   }, [setValue, startTimer, endTimer]);
 
-  const setPostalCode = useCallback((code) => {
+  const setPostalCode = useCallback((code: string) => {
     startTimer('setPostalCodeInteraction');
     setValue('postalCode', code);
     endTimer('setPostalCodeInteraction');
@@ -126,13 +126,13 @@ const HomePage = () => {
       id: category.title.toLowerCase().replace(/\s+/g, '-'),
       title: category.title,
       description: category.description,
-      image: "/placeholder.svg",
+      image: "/placeholder.svg", // Consider actual images
       price: "From €25/hour",
       href: category.services[0]?.href || "/services",
       features: category.services.map(service => service.title),
       category: category.title.toLowerCase(),
       icon: category.icon,
-      services: category.services // Keep the original services with LucideIcon types
+      services: category.services
     }));
   }, []);
 
@@ -157,24 +157,27 @@ const HomePage = () => {
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
-            {/* Service Categories Section */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <ServiceCategoriesSection serviceCategories={convertedServiceCategories} />
-            </ErrorBoundary>
+            <Suspense fallback={<SectionLoading />}>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <LazyServiceCategoriesSection serviceCategories={convertedServiceCategories} />
+              </ErrorBoundary>
+            </Suspense>
             
             <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
             
-            {/* Business Solutions Section */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <BusinessSolutionsSection />
-            </ErrorBoundary>
+            <Suspense fallback={<SectionLoading />}>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <LazyBusinessSolutionsSection />
+              </ErrorBoundary>
+            </Suspense>
             
             <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
             
-            {/* Why Choose Us and other sections */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <HomeSections />
-            </ErrorBoundary>
+            <Suspense fallback={<SectionLoading />}>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <LazyHomeSections />
+              </ErrorBoundary>
+            </Suspense>
           </motion.div>
         ) : (
           <BookingSteps
