@@ -10,8 +10,8 @@ export const DesktopNavigation = () => {
   const { isMobile, getMobileSpacing } = useMobileOptimizations();
   const { user } = useAuth();
 
-  // Determine user role (this would typically come from your auth system)
-  const userRole = user?.role || null;
+  // Safely cast user role to the expected type
+  const userRole = (user?.role as 'client' | 'provider' | 'admin') || null;
 
   return (
     <div className="hidden lg:flex items-center space-x-6">
