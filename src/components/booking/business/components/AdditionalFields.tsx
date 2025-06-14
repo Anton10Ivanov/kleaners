@@ -1,7 +1,5 @@
-
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from "@/schemas/booking";
-import { Frequency } from "@/types/enums";
+import { BookingFormData, Frequency } from "@/schemas/booking";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

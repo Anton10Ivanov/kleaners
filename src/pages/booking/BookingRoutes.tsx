@@ -1,11 +1,10 @@
-
 import { Routes, Route } from 'react-router-dom';
 import BookingServiceSelector from '@/components/booking/BookingServiceSelector';
 import HomeCleaningBooking from './HomeCleaningBooking';
 import DeepCleaningBooking from './DeepCleaningBooking';
 import MoveInOutBooking from './MoveInOutBooking';
 import OfficeCleaningBooking from './OfficeCleaningBooking';
-import { ServiceType } from '@/types/enums';
+import { ServiceType } from '@/schemas/booking';
 import { useNavigate } from 'react-router-dom';
 
 const BookingRoutes = () => {

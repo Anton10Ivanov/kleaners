@@ -1,8 +1,6 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { homeCleaningSchema, BookingFormData } from '@/schemas/booking';
-import { ServiceType } from '@/types/enums';
+import { homeCleaningSchema, BookingFormData, ServiceType } from '@/schemas/booking';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
