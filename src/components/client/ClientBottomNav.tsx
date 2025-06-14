@@ -1,6 +1,6 @@
 
 import { NavLink } from 'react-router-dom';
-import { Home, Calendar, MessageSquare, Receipt, User, Settings } from 'lucide-react';
+import { Home, Calendar, MessageSquare, User, Settings } from 'lucide-react'; // Removed Receipt as it's not used
 
 const ClientBottomNav = () => {
   const navItems = [
@@ -12,14 +12,14 @@ const ClientBottomNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-10">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-10 safe-area-inset-bottom">
       <nav className="flex justify-around items-center h-16">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center px-2 py-1 rounded-md ${
+              `flex flex-col items-center justify-center px-2 py-1 rounded-md h-full w-full ${ // Added h-full w-full to make NavLink fill space
                 isActive
                   ? 'text-primary'
                   : 'text-muted-foreground hover:text-foreground'
@@ -36,3 +36,4 @@ const ClientBottomNav = () => {
 };
 
 export default ClientBottomNav;
+
