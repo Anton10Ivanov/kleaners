@@ -5,87 +5,30 @@ import { Feather } from "lucide-react";
 
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   
-  // Multiple image sources as fallbacks
-  const imageSources = [
-    '/lovable-uploads/opciya1 (1) 2.png',
-    // Add more fallback sources if needed
-    'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&h=600&fit=crop&auto=format' // Professional cleaning fallback
-  ];
+  // Only use the specific opciya1 image
+  const heroImageSrc = '/lovable-uploads/opciya1 (1) 2.png';
   
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  // Aggressive image loading with multiple fallbacks
+  // Simple image loading
   useEffect(() => {
-    let isMounted = true;
-    
-    const loadImageWithFallbacks = async (sourceIndex = 0) => {
-      if (sourceIndex >= imageSources.length) {
-        // All sources failed, just show gradient background
-        if (isMounted) {
-          setImageError(true);
-          setImageLoaded(false);
-        }
-        return;
-      }
-      
-      const img = new Image();
-      const currentSource = imageSources[sourceIndex];
-      
-      // Set up promise-based loading
-      const loadPromise = new Promise((resolve, reject) => {
-        img.onload = () => {
-          console.log(`Hero image loaded successfully from source ${sourceIndex + 1}`);
-          resolve(img);
-        };
-        
-        img.onerror = (error) => {
-          console.warn(`Failed to load image from source ${sourceIndex + 1}:`, error);
-          reject(error);
-        };
-        
-        // Add timeout for slow networks
-        setTimeout(() => {
-          if (img.complete === false) {
-            reject(new Error('Image load timeout'));
-          }
-        }, 5000);
-      });
-      
-      try {
-        // Start loading
-        img.src = currentSource;
-        
-        // Wait for load or timeout
-        await loadPromise;
-        
-        if (isMounted) {
-          setCurrentImageIndex(sourceIndex);
-          setImageLoaded(true);
-          setImageError(false);
-        }
-      } catch (error) {
-        // Try next source
-        if (isMounted) {
-          await loadImageWithFallbacks(sourceIndex + 1);
-        }
-      }
+    const img = new Image();
+    img.onload = () => {
+      console.log('Hero image loaded successfully');
+      setImageLoaded(true);
     };
-    
-    loadImageWithFallbacks();
-    
-    return () => {
-      isMounted = false;
+    img.onerror = (error) => {
+      console.warn('Failed to load hero image:', error);
+      setImageLoaded(false);
     };
+    img.src = heroImageSrc;
   }, []);
 
-  // Preload primary image
+  // Preload the image
   useEffect(() => {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
-    link.href = imageSources[0];
+    link.href = heroImageSrc;
     document.head.appendChild(link);
     
     return () => {
@@ -138,7 +81,7 @@ export const BackgroundElements = memo(() => {
           <Feather className="h-8 w-8" />
         </motion.div>
 
-        {/* Desktop background image - show when loaded OR show enhanced gradient */}
+        {/* Desktop background image - only show opciya1 image when loaded */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -146,10 +89,10 @@ export const BackgroundElements = memo(() => {
           className="absolute inset-0 z-0 hidden lg:block"
         >
           <div className="relative w-full h-full">
-            {imageLoaded && !imageError ? (
+            {imageLoaded && (
               <>
                 <img 
-                  src={imageSources[currentImageIndex]}
+                  src={heroImageSrc}
                   alt="Professional cleaning service" 
                   className="absolute right-0 h-full w-auto object-contain object-right opacity-60 transition-opacity duration-300"
                   style={{
@@ -160,15 +103,12 @@ export const BackgroundElements = memo(() => {
                 {/* Warmth overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-orange-50/20"></div>
               </>
-            ) : (
-              /* Enhanced gradient when image unavailable */
-              <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 via-white to-orange-100/60"></div>
-                <div className="absolute right-0 top-0 bottom-0 w-[45%] bg-gradient-to-l from-primary/10 to-transparent"></div>
-                {/* Decorative elements when no image */}
-                <div className="absolute right-8 top-1/2 transform -translate-y-1/2 opacity-20">
-                  <Feather className="h-32 w-32 text-primary" />
-                </div>
+            )}
+            
+            {/* Decorative elements when image is loading or not available */}
+            {!imageLoaded && (
+              <div className="absolute right-8 top-1/2 transform -translate-y-1/2 opacity-20">
+                <Feather className="h-32 w-32 text-primary" />
               </div>
             )}
             
