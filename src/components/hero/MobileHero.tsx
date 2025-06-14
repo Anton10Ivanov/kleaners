@@ -21,7 +21,7 @@ export const MobileHero = memo(({
   const [imageLoaded, setImageLoaded] = useState(false);
   
   // Use the new uploaded image for mobile
-  const heroImageSrc = '/lovable-uploads/0f71149a-8eeb-4bdd-81d2-36cf7c43dba4.png';
+  const heroImageSrc = '/lovable-uploads/d0852217-53a8-414a-b080-073eec924014.png';
   
   useEffect(() => {
     const img = new Image();
