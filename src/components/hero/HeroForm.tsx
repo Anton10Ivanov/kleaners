@@ -49,66 +49,77 @@ export const HeroForm = memo(({
   if (isMobile) {
     return (
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }} 
-        animate={{ opacity: 1, scale: 1 }} 
-        transition={{ duration: 0.6, delay: 0.4 }} 
-        className="w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-6"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+        animate={{ opacity: 1, scale: 1, y: 0 }} 
+        transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }} 
+        className="w-full bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8"
       >
         <motion.form 
           onSubmit={handleSubmit} 
-          className="space-y-5"
+          className="space-y-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
         >
-          {/* Location Input */}
+          {/* Enhanced form header */}
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Your Quote</h3>
+            <p className="text-sm font-medium text-gray-600">Quick • Easy • Free • No Commitment</p>
+          </div>
+
+          {/* Location Input with enhanced styling */}
           <div className="space-y-2">
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <div className="relative group">
+              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
               <Input
                 type="text"
                 placeholder="Enter your location"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                className="h-14 pl-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-base font-medium"
+                className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md"
                 required
               />
             </div>
           </div>
 
-          {/* Service Type */}
+          {/* Service Type with enhanced styling */}
           <div className="space-y-2">
             <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-base font-medium">
+              <SelectTrigger className="h-16 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-3">
                   <Sparkles className="h-5 w-5 text-gray-400" />
                   <SelectValue placeholder="Choose cleaning service" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
-                <SelectItem value={ServiceType.Home}>
+              <SelectContent className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-2xl z-50">
+                <SelectItem value={ServiceType.Home} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Home Cleaning</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.DeepCleaning}>
+                <SelectItem value={ServiceType.DeepCleaning} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Deep Cleaning</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.MoveInOut}>
+                <SelectItem value={ServiceType.MoveInOut} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Move In/Out</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.Office}>
+                <SelectItem value={ServiceType.Office} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Office Cleaning</span>
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
           
-          {/* CTA Button */}
-          <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }}>
+          {/* Enhanced CTA Button with better animations */}
+          <motion.div 
+            whileHover={{ scale: 1.02, y: -2 }} 
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
             <Button 
               type="submit" 
-              className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform transition-all duration-300 hover:-translate-y-1"
+              className="w-full h-16 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1"
             >
-              Get Instant Quote <ArrowRight className="h-5 w-5" />
+              Get Instant Quote 
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
 
@@ -122,73 +133,78 @@ export const HeroForm = memo(({
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }} 
+      initial={{ opacity: 0, y: 30 }} 
       animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.8, delay: 0.6 }}
-      className="w-full max-w-md"
+      transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+      className="w-full max-w-lg"
     >
-      <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 backdrop-blur-sm">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-10">
         <motion.form 
           onSubmit={handleSubmit} 
-          className="space-y-6" 
+          className="space-y-8" 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
         >
-          {/* Form Header */}
-          <div className="text-center mb-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Get Your Quote</h3>
-            <p className="text-sm text-gray-600">Quick • Easy • Free</p>
+          {/* Enhanced form header */}
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Get Your Quote</h3>
+            <p className="text-sm font-medium text-gray-600">Quick • Easy • Free • No Commitment</p>
           </div>
 
-          {/* Location Input */}
+          {/* Location Input with enhanced styling */}
           <div className="space-y-3">
-            <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <div className="relative group">
+              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors duration-200" />
               <Input 
                 type="text" 
                 placeholder="Enter your location" 
                 value={postalCode} 
                 onChange={e => setPostalCode(e.target.value)} 
-                className="h-14 pl-12 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-base font-medium" 
+                className="h-16 pl-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" 
                 required 
               />
             </div>
           </div>
 
-          {/* Service Type */}
+          {/* Service Type with enhanced styling */}
           <div className="space-y-3">
             <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger className="h-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-base font-medium">
+              <SelectTrigger className="h-16 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-3">
                   <Sparkles className="h-5 w-5 text-gray-400" />
                   <SelectValue placeholder="Choose cleaning service" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="bg-white border-2 border-gray-200 rounded-xl shadow-xl z-50">
-                <SelectItem value={ServiceType.Home}>
+              <SelectContent className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-2xl z-50">
+                <SelectItem value={ServiceType.Home} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Home Cleaning</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.DeepCleaning}>
+                <SelectItem value={ServiceType.DeepCleaning} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Deep Cleaning</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.MoveInOut}>
+                <SelectItem value={ServiceType.MoveInOut} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Move In/Out</span>
                 </SelectItem>
-                <SelectItem value={ServiceType.Office}>
+                <SelectItem value={ServiceType.Office} className="text-base font-medium py-3">
                   <span className="font-semibold text-gray-800">Office Cleaning</span>
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
           
-          {/* CTA Button */}
-          <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }}>
+          {/* Enhanced CTA Button with better animations */}
+          <motion.div 
+            whileHover={{ scale: 1.02, y: -2 }} 
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
             <Button 
               type="submit" 
-              className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1" 
+              className="w-full h-16 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 group" 
             >
-              Get Instant Quote <ArrowRight className="h-5 w-5" />
+              Get Instant Quote 
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
 

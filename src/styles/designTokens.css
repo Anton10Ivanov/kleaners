@@ -1,16 +1,16 @@
 
-/* Design Tokens CSS
- * Central source of truth for design system values
- * Based on designTokens.ts configuration
+/* Enhanced Design Tokens CSS - Phase 4 Professional Polish
+ * Optimized design system values with improved consistency
  */
 
 :root {
-  /* Touch Targets - Mobile First */
+  /* Enhanced Touch Targets - Professional mobile experience */
   --touch-minimum: 44px;
   --touch-comfortable: 48px;
   --touch-large: 56px;
+  --touch-xl: 64px;
 
-  /* Typography Scale */
+  /* Refined Typography Scale - Better visual hierarchy */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -19,48 +19,81 @@
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
 
-  /* Font Weights */
+  /* Enhanced Font Weights */
+  --font-light: 300;
   --font-normal: 400;
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
+  --font-extrabold: 800;
+  --font-black: 900;
 
-  /* Line Heights */
+  /* Optimized Line Heights */
+  --leading-none: 1;
   --leading-tight: 1.25;
+  --leading-snug: 1.375;
   --leading-normal: 1.5;
-  --leading-relaxed: 1.75;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
 
-  /* Border Radius */
+  /* Professional Border Radius Scale */
   --radius-none: 0;
   --radius-sm: 0.125rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Shadows */
+  /* Enhanced Shadow System */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
-  /* Animation Durations */
+  /* Professional Animation System */
+  --duration-instant: 0ms;
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
+  --duration-slower: 750ms;
 
-  /* Animation Easing */
+  /* Enhanced Easing Functions */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Professional Spacing Scale */
+  --space-px: 1px;
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
 }
 
-/* Utility Classes Based on Design Tokens */
+/* Enhanced Utility Classes Based on Design Tokens */
 @layer utilities {
-  /* Touch Target Utilities */
+  /* Professional Touch Target Utilities */
   .touch-minimum {
     min-height: var(--touch-minimum);
     min-width: var(--touch-minimum);
@@ -76,44 +109,87 @@
     min-width: var(--touch-large);
   }
 
-  /* Design System Component Styles */
+  .touch-xl {
+    min-height: var(--touch-xl);
+    min-width: var(--touch-xl);
+  }
+
+  /* Enhanced Design System Component Styles */
   .btn-primary {
-    @apply bg-primary hover:bg-primary-hover text-primary-foreground;
-    @apply rounded-lg px-4 py-3 font-medium transition-colors;
-    @apply shadow-md hover:shadow-lg;
+    @apply bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90;
+    @apply text-primary-foreground font-semibold;
+    @apply rounded-2xl px-6 py-4 transition-all duration-300;
+    @apply shadow-lg hover:shadow-xl hover:-translate-y-1;
+    @apply focus:ring-4 focus:ring-primary/30 focus:outline-none;
     min-height: var(--touch-comfortable);
   }
   
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
-    @apply rounded-lg px-4 py-3 font-medium transition-colors;
+    @apply bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200;
+    @apply hover:border-gray-300 font-semibold;
+    @apply rounded-2xl px-6 py-4 transition-all duration-300;
     @apply shadow-sm hover:shadow-md;
+    @apply focus:ring-4 focus:ring-gray-200 focus:outline-none;
     min-height: var(--touch-comfortable);
   }
 
   .btn-outline {
     @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
-    @apply rounded-lg px-4 py-3 font-medium transition-colors;
+    @apply font-semibold rounded-2xl px-6 py-4 transition-all duration-300;
+    @apply focus:ring-4 focus:ring-primary/30 focus:outline-none;
     min-height: var(--touch-comfortable);
   }
 
-  /* Card Styles */
+  /* Enhanced Card Styles */
   .card-primary {
-    @apply bg-card text-card-foreground border border-border;
-    @apply rounded-xl shadow-sm;
+    @apply bg-white text-gray-900 border border-gray-200;
+    @apply rounded-2xl shadow-sm hover:shadow-md transition-all duration-300;
   }
 
   .card-elevated {
-    @apply bg-card text-card-foreground;
-    @apply rounded-xl shadow-md hover:shadow-lg transition-shadow;
+    @apply bg-white text-gray-900 border border-gray-100;
+    @apply rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply hover:-translate-y-1;
   }
 
-  /* Form Element Styles */
+  .card-glass {
+    @apply bg-white/95 backdrop-blur-sm border border-white/20;
+    @apply rounded-2xl shadow-xl;
+  }
+
+  /* Professional Form Element Styles */
   .input-primary {
-    @apply bg-background border border-input text-foreground;
-    @apply rounded-md px-3 py-2 text-base;
-    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
-    @apply transition-colors;
+    @apply bg-white border-2 border-gray-200 text-gray-900;
+    @apply rounded-xl px-4 py-3 text-base font-medium;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary;
+    @apply hover:border-gray-300 transition-all duration-300;
+    @apply shadow-sm hover:shadow-md;
     min-height: var(--touch-comfortable);
+  }
+
+  .input-large {
+    @apply bg-white border-2 border-gray-200 text-gray-900;
+    @apply rounded-2xl px-6 py-4 text-lg font-medium;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary;
+    @apply hover:border-gray-300 transition-all duration-300;
+    @apply shadow-sm hover:shadow-md;
+    min-height: var(--touch-xl);
+  }
+
+  /* Professional Text Styles */
+  .text-hero {
+    @apply text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight;
+  }
+
+  .text-subhero {
+    @apply text-xl lg:text-2xl font-medium leading-relaxed text-gray-600;
+  }
+
+  .text-section-title {
+    @apply text-3xl lg:text-4xl font-bold leading-tight tracking-tight;
+  }
+
+  .text-card-title {
+    @apply text-xl lg:text-2xl font-bold leading-tight;
   }
 }
