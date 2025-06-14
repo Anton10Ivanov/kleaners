@@ -14,7 +14,8 @@ const RootLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
-      <main className="flex-grow w-full">
+      <main className="flex-grow w-full pt-16 sm:pt-16">
+        {/* pt-16 ensures homepage elements are pushed below the navbar (64px) */}
         <Outlet />
         {isHomePage && <HeroCTA />}
       </main>
