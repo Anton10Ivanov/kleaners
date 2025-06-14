@@ -10,47 +10,62 @@ export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState(false);
 
+  // Create unique ID for each instance
+  const widgetId = isMobile ? 'trustindex-widget-mobile' : 'trustindex-widget-desktop';
+
   useEffect(() => {
-    // Check if the script is already loaded
-    const checkScript = () => {
-      const widget = document.getElementById('trustindex-widget');
-      if (widget && widget.innerHTML.trim() !== '') {
+    // Check if TrustIndex is available globally
+    const checkTrustIndex = () => {
+      if (typeof window !== 'undefined' && (window as any).TrustindexCollector) {
+        console.log('TrustIndex script loaded successfully');
         setScriptLoaded(true);
-        return;
+        
+        // Initialize widget for this specific container
+        setTimeout(() => {
+          try {
+            (window as any).TrustindexCollector.init();
+          } catch (error) {
+            console.warn('TrustIndex initialization failed:', error);
+            setScriptError(true);
+          }
+        }, 100);
+        return true;
       }
-      
-      // Check if TrustIndex script exists
-      const scripts = document.querySelectorAll('script[src*="trustindex"]');
-      if (scripts.length === 0) {
-        console.warn('TrustIndex script not found');
-        setScriptError(true);
-        return;
-      }
+      return false;
     };
 
     // Check immediately
-    checkScript();
+    if (checkTrustIndex()) return;
 
-    // Set up a timeout to check for script loading
+    // Check if script tag exists
+    const scriptExists = document.querySelector('script[src*="trustindex"]');
+    if (!scriptExists) {
+      console.warn('TrustIndex script not found in DOM');
+      setScriptError(true);
+      return;
+    }
+
+    // Set up interval to check for script loading
+    const checkInterval = setInterval(() => {
+      if (checkTrustIndex()) {
+        clearInterval(checkInterval);
+      }
+    }, 500);
+
+    // Set timeout for script loading
     const timeout = setTimeout(() => {
+      clearInterval(checkInterval);
       if (!scriptLoaded) {
-        console.warn('TrustIndex script timeout');
+        console.warn('TrustIndex script loading timeout');
         setScriptError(true);
       }
-    }, 5000);
-
-    // Listen for script load events
-    const handleScriptLoad = () => {
-      setTimeout(checkScript, 100); // Small delay to let script initialize
-    };
-
-    window.addEventListener('load', handleScriptLoad);
+    }, 10000);
 
     return () => {
+      clearInterval(checkInterval);
       clearTimeout(timeout);
-      window.removeEventListener('load', handleScriptLoad);
     };
-  }, [scriptLoaded]);
+  }, [scriptLoaded, widgetId]);
 
   // Fallback content when script fails to load
   const FallbackBadge = () => (
@@ -73,7 +88,11 @@ export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
         {scriptError ? (
           <FallbackBadge />
         ) : (
-          <div id="trustindex-widget" className="trust-badge-container">
+          <div 
+            id={widgetId} 
+            className="trust-badge-container"
+            data-trustindex-id="86dae104895f1920d366ad96a19"
+          >
             {/* TrustIndex widget will be automatically injected here by the script */}
           </div>
         )}
@@ -91,7 +110,11 @@ export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
       {scriptError ? (
         <FallbackBadge />
       ) : (
-        <div id="trustindex-widget" className="trust-badge-container">
+        <div 
+          id={widgetId} 
+          className="trust-badge-container"
+          data-trustindex-id="86dae104895f1920d366ad96a19"
+        >
           {/* TrustIndex widget will be automatically injected here by the script */}
         </div>
       )}

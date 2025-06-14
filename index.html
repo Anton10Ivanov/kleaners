@@ -26,7 +26,7 @@
     <meta property="twitter:description" content="Book professional cleaning services with transparent pricing and guaranteed satisfaction." />
     <meta property="twitter:image" content="/og-image.png" />
     
-    <!-- Trust Badge Script with error handling -->
+    <!-- Trust Badge Script with improved error handling -->
     <script>
       // Add error handling for the TrustIndex script
       window.addEventListener('error', function(e) {
@@ -37,8 +37,22 @@
           return false;
         }
       });
+
+      // Add script loading with better error handling
+      (function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://cdn.trustindex.io/loader-cert.js?86dae104895f1920d366ad96a19';
+        script.onerror = function() {
+          console.warn('TrustIndex script failed to load from CDN');
+        };
+        script.onload = function() {
+          console.log('TrustIndex script loaded successfully');
+        };
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer async src='https://cdn.trustindex.io/loader-cert.js?86dae104895f1920d366ad96a19' onerror="console.warn('TrustIndex script load failed')"></script>
     
     <!-- SPA fallback for deep-linking -->
     <script type="text/javascript">
