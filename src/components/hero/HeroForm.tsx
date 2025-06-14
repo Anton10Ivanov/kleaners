@@ -99,11 +99,11 @@ export const HeroForm = memo(({
                   className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
                     isSelected 
                       ? 'bg-primary text-white border-primary shadow-lg' 
-                      : 'bg-white border-gray-200 hover:border-primary hover:bg-primary/5 shadow-sm hover:shadow-md'
+                      : 'bg-white border-gray-200 hover:bg-primary hover:text-white hover:border-primary shadow-sm hover:shadow-md'
                   }`}
                 >
-                  <IconComponent className={`h-6 w-6 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
-                  <span className={`text-sm font-medium ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                  <IconComponent className={`h-6 w-6 ${isSelected ? 'text-white' : 'text-gray-600 hover:text-white'}`} />
+                  <span className={`text-sm font-medium ${isSelected ? 'text-white' : 'text-gray-800 hover:text-white'}`}>
                     {service.label}
                   </span>
                 </button>
@@ -177,11 +177,11 @@ export const HeroForm = memo(({
                 className={`p-3 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-1 ${
                   isSelected 
                     ? 'bg-primary text-white border-primary shadow-lg' 
-                    : 'bg-white border-gray-200 hover:border-primary hover:bg-primary/5 shadow-sm hover:shadow-md'
+                    : 'bg-white border-gray-200 hover:bg-primary hover:text-white hover:border-primary shadow-sm hover:shadow-md'
                 }`}
               >
-                <IconComponent className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
-                <span className={`text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                <IconComponent className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-600 hover:text-white'}`} />
+                <span className={`text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-800 hover:text-white'}`}>
                   {service.label}
                 </span>
               </button>
