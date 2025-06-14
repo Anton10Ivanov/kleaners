@@ -1,7 +1,6 @@
 
 import { memo, useState, useEffect } from "react";
 import { HeroForm } from "./HeroForm";
-import { TrustBadge } from "./TrustBadge";
 
 interface DesktopHeroProps {
   selectedService: string;
@@ -64,9 +63,6 @@ export const DesktopHero = memo(({
         handleNextStep={handleNextStep} 
         isMobile={false} 
       />
-
-      {/* Trust Badge positioned separately below the form */}
-      <TrustBadge isMobile={false} />
     </div>
   );
 });
