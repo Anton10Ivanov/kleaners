@@ -1,3 +1,4 @@
+
 import { memo, useState, useEffect } from "react";
 import { HeroForm } from "./HeroForm";
 interface DesktopHeroProps {
@@ -45,9 +46,7 @@ export const DesktopHero = memo(({
       {/* Left-positioned form overlay */}
       <div className="relative z-10 pt-20 pb-4 py-0">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 my-0">
-          <div className="max-w-lg">
-            <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} isMobile={false} />
-          </div>
+          <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} isMobile={false} />
         </div>
       </div>
     </div>;
