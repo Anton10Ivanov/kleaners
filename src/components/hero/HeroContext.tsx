@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
-import { ServiceType } from "@/types/enums";
+import { ServiceType } from "@/schemas/booking";
 
 type HeroContextType = {
   selectedService: string;

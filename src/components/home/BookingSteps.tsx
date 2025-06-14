@@ -1,4 +1,3 @@
-
 import { Suspense, lazy, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
@@ -24,7 +23,6 @@ interface BookingStepsProps {
   isMobile: boolean;
   frequency: any;
   hours: any;
-  currentPrice: number;
   selectedExtras: string[];
 }
 
@@ -37,7 +35,6 @@ export const BookingSteps = ({
   isMobile,
   frequency,
   hours,
-  currentPrice,
   selectedExtras
 }: BookingStepsProps) => {
   const formData = form?.getValues();

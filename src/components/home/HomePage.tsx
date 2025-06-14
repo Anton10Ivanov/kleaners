@@ -55,15 +55,6 @@ const HomePage = () => {
   const selectedExtras = watch('extras') || [];
   const postalCode = watch('postalCode') || '';
 
-  // Memoized price calculation
-  const currentPrice = useMemo(() => {
-    startTimer('priceCalculation');
-    const price = frequency === Frequency.Weekly ? 27 : 
-                 frequency === Frequency.BiWeekly ? 30 : 35;
-    endTimer('priceCalculation');
-    return price;
-  }, [frequency, startTimer, endTimer]);
-
   // Memoized handlers
   const handleNext = useCallback(() => {
     startTimer('nextStepInteraction');
@@ -190,7 +181,6 @@ const HomePage = () => {
             isMobile={isMobile}
             frequency={frequency}
             hours={hours}
-            currentPrice={currentPrice}
             selectedExtras={selectedExtras}
           />
         )}
