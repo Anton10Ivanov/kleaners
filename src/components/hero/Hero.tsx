@@ -1,110 +1,90 @@
-
-import { useEffect, memo, useRef } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { MobileHero } from "./MobileHero";
-import { DesktopHero } from "./DesktopHero";
-import { HeroProvider } from "./HeroContext";
-import { BackgroundElements } from "./BackgroundElements";
-import { toast } from "sonner";
-import { ServiceType } from "@/schemas/booking";
-import { performanceMonitor } from "@/utils/performance";
-import { useComponentTimer } from "@/hooks/useComponentTimer";
-import environmentUtils from "@/utils/environment";
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Home } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { ServiceType } from '@/schemas/booking';
+import { SectionTemplate } from "../home/SectionTemplate";
 
 interface HeroProps {
-  selectedService: string;
-  setSelectedService: (value: string) => void;
+  selectedService: ServiceType | string;
+  setSelectedService: (service: ServiceType | string) => void;
   postalCode: string;
-  setPostalCode: (value: string) => void;
+  setPostalCode: (code: string) => void;
   handleNextStep: () => void;
 }
 
-export const Hero = memo(({
+const Hero = ({
   selectedService,
   setSelectedService,
   postalCode,
   setPostalCode,
-  handleNextStep
+  handleNextStep,
 }: HeroProps) => {
-  const {
-    startTimer,
-    endTimer
-  } = useComponentTimer('Hero');
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const imagesLoadedRef = useRef<boolean>(false);
-  const isPreviewWindow = environmentUtils.isPreviewWindow();
 
-  // Mark Hero as important for Core Web Vitals
-  useEffect(() => {
-    performanceMonitor.markAsImportant('Hero');
+  const handleServiceChange = useCallback((value: string) => {
+    setSelectedService(value);
+  }, [setSelectedService]);
 
-    // Add debug info for preview windows
-    if (isPreviewWindow) {
-      console.log("Hero: Running in preview window mode");
-    }
-  }, [isPreviewWindow]);
-
-  // Set default service to "home" when component mounts
-  useEffect(() => {
-    startTimer('serviceInitialization');
-    if (!selectedService) {
-      console.log("Setting service to: home");
-      setSelectedService(ServiceType.Home);
-    }
-    endTimer('serviceInitialization');
-  }, [selectedService, setSelectedService, startTimer, endTimer]);
-
-  const handleValidatedNextStep = () => {
-    startTimer('validateAndNextStep');
-    if (!selectedService) {
-      toast.error("Please select a service type");
-      endTimer('validateAndNextStep');
-      return;
-    }
-    if (!postalCode) {
-      toast.error("Please enter your city or area code");
-      endTimer('validateAndNextStep');
-      return;
-    }
-    handleNextStep();
-    endTimer('validateAndNextStep');
-  };
+  const handlePostalCodeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPostalCode(e.target.value);
+  }, [setPostalCode]);
 
   return (
-    <section className="relative w-full min-h-[70vh] flex flex-col justify-center bg-transparent"> {/* Removed overflow-hidden */}
-      <BackgroundElements />
+    <SectionTemplate
+      icon={<Home className="h-8 w-8 text-primary" />}
+      title="Kleaners.de - Book Your Professional Cleaners Instantly"
+      description="Transparent pricing, trusted staff, sparkling results. Enter your service and location to get started."
+      background="bg-gradient-to-br from-primary/10 via-theme-lightblue to-white"
+      actions={null}
+      className="relative"
+    >
+      <div className="w-full max-w-xl mx-auto p-6 bg-white/90 rounded-xl shadow-md border border-primary/10 flex flex-col gap-4">
+        {/* Service input & Postal Code input. Place existing hero form here */}
+        <div className="grid gap-2">
+          <Label htmlFor="service">Select Service</Label>
+          <Select onValueChange={handleServiceChange}>
+            <SelectTrigger className="bg-white">
+              <SelectValue placeholder="Choose a cleaning service" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ServiceType.REGULAR_CLEANING}>Regular Cleaning</SelectItem>
+              <SelectItem value={ServiceType.DEEP_CLEANING}>Deep Cleaning</SelectItem>
+              <SelectItem value={ServiceType.MOVE_IN_OUT_CLEANING}>Move In/Out Cleaning</SelectItem>
+              <SelectItem value={ServiceType.OFFICE_CLEANING}>Office Cleaning</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <HeroProvider 
-          initialService={selectedService} 
-          initialPostalCode={postalCode} 
-          onNextStep={handleValidatedNextStep} 
-          onServiceChange={setSelectedService} 
-          onPostalCodeChange={setPostalCode}
-        >
-          {isMobile ? (
-            <MobileHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          ) : (
-            <DesktopHero 
-              selectedService={selectedService} 
-              setSelectedService={setSelectedService} 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          )}
-        </HeroProvider>
+        <div className="grid gap-2">
+          <Label htmlFor="postalCode">Postal Code</Label>
+          <Input
+            id="postalCode"
+            type="text"
+            placeholder="Enter your postal code"
+            value={postalCode}
+            onChange={handlePostalCodeChange}
+          />
+        </div>
+        {/* Main vertical form layout, including inputs and the CTA/button */}
+        {/* Maintain use of Poppins, font sizes, spacings */}
+        {/* Hero action button goes here */}
+        <motion.div className="flex justify-center">
+          <Button onClick={handleNextStep}>
+            Continue
+          </Button>
+        </motion.div>
       </div>
-    </section>
+    </SectionTemplate>
   );
-});
+};
 
-Hero.displayName = "Hero";
 export default Hero;
-
