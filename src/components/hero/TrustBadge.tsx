@@ -7,72 +7,34 @@ interface TrustBadgeProps {
 }
 
 export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [scriptError, setScriptError] = useState(false);
-
-  // Create unique ID for each instance
-  const widgetId = isMobile ? 'trustindex-widget-mobile' : 'trustindex-widget-desktop';
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
-    // Check if TrustIndex is available globally
-    const checkTrustIndex = () => {
-      if (typeof window !== 'undefined' && (window as any).TrustindexCollector) {
-        console.log('TrustIndex script loaded successfully');
-        setScriptLoaded(true);
-        
-        // Initialize widget for this specific container
-        setTimeout(() => {
-          try {
-            (window as any).TrustindexCollector.init();
-          } catch (error) {
-            console.warn('TrustIndex initialization failed:', error);
-            setScriptError(true);
-          }
-        }, 100);
-        return true;
+    // Simple timeout to show fallback if TrustIndex doesn't load
+    const timer = setTimeout(() => {
+      const hasWidget = document.querySelector('.trustindex-widget') || 
+                       document.querySelector('[data-trustindex-id]');
+      if (!hasWidget) {
+        setShowFallback(true);
       }
-      return false;
-    };
+    }, 3000);
 
-    // Check immediately
-    if (checkTrustIndex()) return;
+    return () => clearTimeout(timer);
+  }, []);
 
-    // Check if script tag exists
-    const scriptExists = document.querySelector('script[src*="trustindex"]');
-    if (!scriptExists) {
-      console.warn('TrustIndex script not found in DOM');
-      setScriptError(true);
-      return;
-    }
-
-    // Set up interval to check for script loading
-    const checkInterval = setInterval(() => {
-      if (checkTrustIndex()) {
-        clearInterval(checkInterval);
-      }
-    }, 500);
-
-    // Set timeout for script loading
-    const timeout = setTimeout(() => {
-      clearInterval(checkInterval);
-      if (!scriptLoaded) {
-        console.warn('TrustIndex script loading timeout');
-        setScriptError(true);
-      }
-    }, 10000);
-
-    return () => {
-      clearInterval(checkInterval);
-      clearTimeout(timeout);
-    };
-  }, [scriptLoaded, widgetId]);
-
-  // Fallback content when script fails to load
+  // Fallback trust badge
   const FallbackBadge = () => (
-    <div className="flex items-center gap-2 text-sm text-gray-600 bg-white/80 rounded-lg px-3 py-2 shadow-sm">
-      <div className="flex items-center gap-1">
-        <span className="text-yellow-500">★★★★★</span>
-        <span className="font-medium">Trusted by 500+ customers</span>
+    <div className="flex items-center gap-2 text-sm text-gray-600 bg-white/90 rounded-lg px-4 py-3 shadow-md border border-gray-200">
+      <div className="flex items-center gap-2">
+        <div className="flex text-yellow-500">
+          {'★★★★★'.split('').map((star, i) => (
+            <span key={i} className="text-lg">{star}</span>
+          ))}
+        </div>
+        <div className="flex flex-col">
+          <span className="font-semibold text-gray-800">Trusted by 500+ customers</span>
+          <span className="text-xs text-gray-500">Excellent service rating</span>
+        </div>
       </div>
     </div>
   );
@@ -83,17 +45,19 @@ export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 1.0 }}
-        className="w-full flex justify-start items-center mt-6 px-2"
+        className="w-full flex justify-center items-center mt-6"
       >
-        {scriptError ? (
+        {showFallback ? (
           <FallbackBadge />
         ) : (
-          <div 
-            id={widgetId} 
-            className="trust-badge-container"
-            data-trustindex-id="86dae104895f1920d366ad96a19"
-          >
-            {/* TrustIndex widget will be automatically injected here by the script */}
+          <div>
+            <div 
+              className="trustindex-widget" 
+              data-trustindex-widget="86dae104895f1920d366ad96a19"
+            ></div>
+            <div style={{ display: 'none' }}>
+              <FallbackBadge />
+            </div>
           </div>
         )}
       </motion.div>
@@ -105,17 +69,19 @@ export const TrustBadge = memo(({ isMobile }: TrustBadgeProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 1.2 }}
-      className="absolute top-[45%] left-8 w-96 max-w-sm z-5 flex justify-start items-center"
+      className="absolute top-[55%] left-8 w-80 max-w-sm z-5 flex justify-start items-center"
     >
-      {scriptError ? (
+      {showFallback ? (
         <FallbackBadge />
       ) : (
-        <div 
-          id={widgetId} 
-          className="trust-badge-container"
-          data-trustindex-id="86dae104895f1920d366ad96a19"
-        >
-          {/* TrustIndex widget will be automatically injected here by the script */}
+        <div>
+          <div 
+            className="trustindex-widget" 
+            data-trustindex-widget="86dae104895f1920d366ad96a19"
+          ></div>
+          <div style={{ display: 'none' }}>
+            <FallbackBadge />
+          </div>
         </div>
       )}
     </motion.div>
