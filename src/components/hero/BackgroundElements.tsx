@@ -6,29 +6,60 @@ import { Feather } from "lucide-react";
 export const BackgroundElements = memo(() => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   
-  // Simplified image loading
+  // Image loading with retry mechanism
   useEffect(() => {
-    const img = new Image();
-    
-    img.onload = () => {
-      console.log("Hero background image loaded successfully");
-      setImageLoaded(true);
-      setImageError(false);
+    const loadImage = () => {
+      const img = new Image();
+      
+      img.onload = () => {
+        console.log("Hero background image loaded successfully");
+        setImageLoaded(true);
+        setImageError(false);
+      };
+      
+      img.onerror = (error) => {
+        console.error(`Failed to load hero image (attempt ${retryCount + 1}):`, error);
+        setImageError(true);
+        setImageLoaded(false);
+        
+        // Retry up to 2 times with delay
+        if (retryCount < 2) {
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+            setImageError(false);
+          }, 1000 + retryCount * 1000); // Progressive delay
+        }
+      };
+      
+      // Try to load the image
+      img.src = '/lovable-uploads/opciya1 (1) 2.png';
+      
+      return () => {
+        img.onload = null;
+        img.onerror = null;
+      };
     };
-    
-    img.onerror = (error) => {
-      console.error("Failed to load hero image:", error);
-      setImageError(true);
-      setImageLoaded(false);
-    };
-    
-    // Use the image directly without complex path resolution
-    img.src = '/lovable-uploads/opciya1 (1) 2.png';
+
+    const cleanup = loadImage();
+    return cleanup;
+  }, [retryCount]);
+
+  // Preload image for better performance
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = '/lovable-uploads/opciya1 (1) 2.png';
+    document.head.appendChild(link);
     
     return () => {
-      img.onload = null;
-      img.onerror = null;
+      try {
+        document.head.removeChild(link);
+      } catch (e) {
+        // Link might have been removed already
+      }
     };
   }, []);
 
@@ -36,7 +67,7 @@ export const BackgroundElements = memo(() => {
     <>
       {/* Enhanced background with warmth and emotion */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Primary gradient background - always visible */}
+        {/* Primary gradient background - always visible as fallback */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-orange-50/30"></div>
         
         {/* Floating feather animations */}
@@ -75,7 +106,12 @@ export const BackgroundElements = memo(() => {
 
         {/* Desktop background image - only show when loaded successfully */}
         {imageLoaded && !imageError && (
-          <div className="absolute inset-0 z-0 hidden lg:block">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-0 hidden lg:block"
+          >
             <div className="relative w-full h-full">
               <img 
                 src="/lovable-uploads/opciya1 (1) 2.png"
@@ -96,13 +132,26 @@ export const BackgroundElements = memo(() => {
                 }}
               ></div>
             </div>
-          </div>
+          </motion.div>
         )}
         
         {/* Loading indicator - only show while loading */}
         {!imageLoaded && !imageError && (
           <div className="absolute right-0 top-0 bottom-0 w-[40%] hidden lg:flex items-center justify-center">
-            <div className="h-16 w-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin opacity-40"></div>
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-16 w-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin opacity-40"></div>
+              <div className="text-xs text-primary/40">Loading image...</div>
+            </div>
+          </div>
+        )}
+        
+        {/* Error state - show if all retries failed */}
+        {imageError && retryCount >= 2 && (
+          <div className="absolute right-0 top-0 bottom-0 w-[40%] hidden lg:flex items-center justify-center">
+            <div className="text-center text-primary/30">
+              <Feather className="h-16 w-16 mx-auto mb-2 opacity-30" />
+              <div className="text-xs">Image unavailable</div>
+            </div>
           </div>
         )}
         
