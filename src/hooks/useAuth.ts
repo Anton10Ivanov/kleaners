@@ -1,14 +1,11 @@
 
 import { useState, useEffect } from 'react';
-
-interface User {
-  id: string;
-  email: string;
-  role: 'client' | 'provider' | 'admin' | null;
-}
+import { supabase } from '@/integrations/supabase/client';
+import { Session, User } from '@supabase/supabase-js';
 
 interface AuthState {
   user: User | null;
+  session: Session | null;
   isLoading: boolean;
   isAuthenticated: boolean;
 }
@@ -16,78 +13,39 @@ interface AuthState {
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
+    session: null,
     isLoading: true,
-    isAuthenticated: false
+    isAuthenticated: false,
   });
 
   useEffect(() => {
-    // Simulate auth check - in real app, this would check with Supabase
-    const checkAuth = async () => {
-      try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Mock user data - replace with actual auth logic
-        const mockUser: User = {
-          id: '123',
-          email: 'user@example.com',
-          role: null
-        };
+    // Immediately fetch the current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAuthState({ 
+        session, 
+        user: session?.user ?? null, 
+        isLoading: false, 
+        isAuthenticated: !!session 
+      });
+    });
 
+    // Listen for changes in authentication state
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
         setAuthState({
-          user: mockUser,
+          session,
+          user: session?.user ?? null,
           isLoading: false,
-          isAuthenticated: true
-        });
-      } catch (error) {
-        setAuthState({
-          user: null,
-          isLoading: false,
-          isAuthenticated: false
+          isAuthenticated: !!session,
         });
       }
-    };
+    );
 
-    checkAuth();
+    // Clean up the listener on component unmount
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setAuthState(prev => ({ ...prev, isLoading: true }));
-    
-    try {
-      // Simulate login API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const user: User = {
-        id: '123',
-        email,
-        role: null
-      };
-
-      setAuthState({
-        user,
-        isLoading: false,
-        isAuthenticated: true
-      });
-      
-      return { success: true };
-    } catch (error) {
-      setAuthState(prev => ({ ...prev, isLoading: false }));
-      return { success: false, error: 'Login failed' };
-    }
-  };
-
-  const logout = async () => {
-    setAuthState({
-      user: null,
-      isLoading: false,
-      isAuthenticated: false
-    });
-  };
-
-  return {
-    ...authState,
-    login,
-    logout
-  };
+  return authState;
 };
