@@ -19,10 +19,10 @@ const buttonVariants = cva(
         home: "text-gray-500 hover:text-primary/90 cursor-pointer dark:text-gray-400 dark:hover:text-primary/90",
       },
       size: {
-        default: "h-12 px-6 py-3",
-        sm: "h-10 px-4 py-2 text-sm",
-        lg: "h-14 px-8 py-4 text-lg",
-        icon: "h-12 w-12",
+        default: "h-11 px-4 py-2",
+        sm: "h-9 px-3 py-1 text-sm",
+        lg: "h-12 px-6 py-2 text-lg",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {
