@@ -11,9 +11,19 @@ interface EnhancedBookingSummaryProps {
   form: UseFormReturn<BookingFormData>;
   onSubmit?: () => void;
   isSubmitting?: boolean;
+  onBack?: () => void;
+  backButtonText?: string;
+  showBackButton?: boolean;
 }
 
-const EnhancedBookingSummary = ({ form, onSubmit, isSubmitting }: EnhancedBookingSummaryProps) => {
+const EnhancedBookingSummary = ({ 
+  form, 
+  onSubmit, 
+  isSubmitting, 
+  onBack, 
+  backButtonText = 'Back', 
+  showBackButton = false 
+}: EnhancedBookingSummaryProps) => {
   const formData = form.watch();
   const { 
     frequency = Frequency.Weekly, 
@@ -169,15 +179,27 @@ const EnhancedBookingSummary = ({ form, onSubmit, isSubmitting }: EnhancedBookin
 
         {onSubmit && (
           <div className="pt-4 mt-2 border-t">
-            <Button
-              type="button"
-              onClick={onSubmit}
-              disabled={isSubmitting}
-              className="w-full"
-              size="lg"
-            >
-              {isSubmitting ? "Processing Booking..." : "Complete Booking"}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              {showBackButton && onBack && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onBack}
+                  className="w-full"
+                >
+                  {backButtonText}
+                </Button>
+              )}
+              <Button
+                type="button"
+                onClick={onSubmit}
+                disabled={isSubmitting}
+                className="w-full"
+                size="lg"
+              >
+                {isSubmitting ? "Processing Booking..." : "Complete Booking"}
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
