@@ -13,8 +13,7 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'bg-white shadow-md' : 'bg-white/95 backdrop-blur-sm'}`} style={{ height: '64px' }}>
       <div
-        className="w-full px-2 md:px-6 h-16 py-0 my-0 grid grid-cols-3 items-center bg-transparent"
-        style={{ minHeight: '64px' }}
+        className="w-full px-2 md:px-6 h-16 grid grid-cols-3 items-center bg-transparent"
       >
         <div className="flex items-center justify-start min-w-0">
           {children[0]}
@@ -31,3 +30,4 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
   );
 };
 export default NavbarContainer;
+
