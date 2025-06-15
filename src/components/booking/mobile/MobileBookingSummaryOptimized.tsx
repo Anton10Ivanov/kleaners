@@ -87,49 +87,37 @@ const MobileBookingSummaryOptimized = ({
           
           {frequency && hours > 0 && (
             <>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-4 h-4 text-primary shrink-0" />
-                  <span className="font-medium">
-                    {frequency === 'weekly' ? 'Weekly' : 
-                     frequency === 'bi-weekly' ? 'Every 2 Weeks' : 'One Time'}
-                  </span>
-                </div>
-                <span className="font-semibold tabular-nums">{currentPrice.toFixed(2)} €/h</span>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <Calendar className="w-4 h-4 text-primary shrink-0" />
+                <span className="font-medium">
+                  {frequency === 'weekly' ? 'Weekly' : 
+                   frequency === 'bi-weekly' ? 'Every 2 Weeks' : 'One Time'}
+                </span>
               </div>
               
-              <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                <div className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-primary shrink-0" />
-                  <span className="font-medium">{hours} Cleaning Hours</span>
-                </div>
-                <span className="font-semibold tabular-nums">{(currentPrice * hours).toFixed(2)} €</span>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <Clock className="w-4 h-4 text-primary shrink-0" />
+                <span className="font-medium">{hours} Cleaning Hours</span>
               </div>
             </>
           )}
           
           {selectedExtras.length > 0 && selectedExtras.map(extra => {
-            const hourlyRate = getHourlyRate(frequency || '');
-            let extraCost = 0;
             let extraLabel = '';
 
             switch (extra) {
               case 'cabinets':
-                extraCost = 0.5 * hourlyRate;
                 extraLabel = 'Inside Cabinets (30 min)';
                 break;
               case 'fridge':
-                extraCost = 0.5 * hourlyRate;
                 extraLabel = 'Inside Fridge (30 min)';
                 break;
               case 'oven':
-                extraCost = hourlyRate;
                 extraLabel = 'Inside Oven (60 min)';
                 break;
               case 'ironing':
                 const ironingTime = localStorage.getItem('ironingTime') ? 
                   parseInt(localStorage.getItem('ironingTime') || '30') : 30;
-                extraCost = (ironingTime / 60) * hourlyRate;
                 extraLabel = `Ironing (${ironingTime} min)`;
                 break;
               default:
@@ -137,25 +125,12 @@ const MobileBookingSummaryOptimized = ({
             }
 
             return (
-              <div key={extra} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                <div className="flex items-center gap-3">
-                  <Check className="w-4 h-4 text-primary shrink-0" />
-                  <span className="font-medium">{extraLabel}</span>
-                </div>
-                <span className="font-semibold tabular-nums">{extraCost.toFixed(2)} €</span>
+              <div key={extra} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <Check className="w-4 h-4 text-primary shrink-0" />
+                <span className="font-medium">{extraLabel}</span>
               </div>
             );
           })}
-
-          <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-gray-900 dark:text-white">Total</span>
-              <span className="text-lg font-bold text-primary tabular-nums">
-                {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
-              </span>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">Price per cleaning session</p>
-          </div>
         </div>
       </motion.div>
     );
@@ -170,10 +145,7 @@ const MobileBookingSummaryOptimized = ({
         className="w-full p-4 flex items-center justify-center h-auto rounded-none border-none"
       >
         <div className="flex items-center justify-center gap-3 flex-1">
-          <span className="text-base font-bold text-gray-900 dark:text-white">Total:</span>
-          <span className="text-base font-bold text-primary tabular-nums">
-            {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
-          </span>
+          <span className="text-base font-bold text-gray-900 dark:text-white">Summary</span>
           {isExpanded ? (
             <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           ) : (
@@ -200,9 +172,8 @@ const MobileBookingSummaryOptimized = ({
               )}
               
               {frequency && hours > 0 && (
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2 text-sm">
                   <span>{frequency === 'weekly' ? 'Weekly' : frequency === 'bi-weekly' ? 'Every 2 Weeks' : 'One Time'} • {hours}h</span>
-                  <span className="font-semibold tabular-nums">{(currentPrice * hours).toFixed(2)} €</span>
                 </div>
               )}
               

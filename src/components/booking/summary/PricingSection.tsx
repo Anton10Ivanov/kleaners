@@ -1,4 +1,3 @@
-
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 
@@ -27,22 +26,8 @@ const PricingSection = ({ form }: PricingSectionProps) => {
   const extrasPrice = extras.length * 15;
   const totalPrice = basePrice + extrasPrice;
 
-  return (
-    <div className="border-t pt-3 space-y-2">
-      {extrasPrice > 0 && (
-        <div className="flex justify-between text-gray-600 dark:text-gray-400">
-          <span>Additional services</span>
-          <span>€{extrasPrice}</span>
-        </div>
-      )}
-      
-      <div className="flex justify-between font-semibold text-lg pt-2">
-        <span>Total</span>
-        <span className="text-primary">€{totalPrice}</span>
-      </div>
-      <p className="text-xs text-gray-500">Per cleaning session</p>
-    </div>
-  );
+  // Keep pricing logic but don't render any pricing information
+  return null;
 };
 
 export default PricingSection;
