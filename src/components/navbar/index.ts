@@ -7,7 +7,6 @@ export { default as Navbar } from './Navbar';
 
 // Core components
 export { Logo } from './Logo';
-export { ThemeToggle } from './ThemeToggle';
 export { default as LanguageSelector } from './LanguageSelector';
 export { MobileMenu } from './MobileMenu';
 export { default as NavbarContainer } from './NavbarContainer';
