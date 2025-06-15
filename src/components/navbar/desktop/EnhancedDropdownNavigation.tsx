@@ -98,8 +98,8 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                           onKeyDown={(e) => handleKeyDown(e, subItem.path)}
                           className={cn(
                             "group flex flex-col items-start w-full text-left rounded-lg",
-                            "hover:bg-accent/50 dark:hover:bg-gray-700/50",
-                            "focus:bg-accent/50 focus:outline-none",
+                            "hover:bg-gray-50 dark:hover:bg-gray-700/50",
+                            "focus:bg-gray-50 focus:outline-none",
                             "focus-visible:ring-2 focus-visible:ring-primary/20",
                             "transition-all duration-200 touch-comfortable",
                             getMobileSpacing('sm')
