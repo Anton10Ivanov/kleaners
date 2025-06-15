@@ -23,7 +23,7 @@ const OfficeCleaningBooking = () => {
     defaultValues: {
       service: ServiceType.Office,
       businessType: '',
-      propertySize: 100,
+      squareMeters: 100,
       cleaningOptions: [],
       firstName: '',
       lastName: '',

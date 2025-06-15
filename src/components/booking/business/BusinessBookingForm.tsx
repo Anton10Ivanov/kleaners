@@ -6,7 +6,7 @@ import CleaningAddress from "../final/CleaningAddress";
 import SpecialInstructions from "../final/SpecialInstructions";
 import PromoCode from "../final/PromoCode";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { TextField } from "@/components/ui/form-field";
+import { ValidatedInput } from "@/components/booking/ValidatedInput";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Info } from 'lucide-react';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -62,7 +62,7 @@ const BusinessBookingForm = ({ form }: { form: UseFormReturn<BusinessCleaningFor
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-2">
-                  <FormLabel>Business Type</FormLabel>
+                  <FormLabel>Business Type <span className="text-destructive">*</span></FormLabel>
                   <TooltipProvider delayDuration={200}>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -98,13 +98,13 @@ const BusinessBookingForm = ({ form }: { form: UseFormReturn<BusinessCleaningFor
             )}
           />
 
-          <TextField
-             form={form}
-             name="propertySize"
+          <ValidatedInput
+             name="squareMeters"
              label="Approximate Size (m²)"
              type="number"
              placeholder="e.g. 150"
              required
+             min={10}
            />
            
            <FormField
@@ -113,7 +113,7 @@ const BusinessBookingForm = ({ form }: { form: UseFormReturn<BusinessCleaningFor
               render={() => (
                 <FormItem>
                   <div className="mb-4">
-                    <FormLabel className="text-base">Cleaning Options</FormLabel>
+                    <FormLabel className="text-base">Cleaning Options <span className="text-destructive">*</span></FormLabel>
                     <p className="text-sm text-muted-foreground">
                       Select any additional services you require.
                     </p>
