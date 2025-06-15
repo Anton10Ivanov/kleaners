@@ -27,7 +27,7 @@ const UserControls: React.FC<UserControlsProps> = ({ user }) => {
       variant="ghost" 
       size="sm" 
       onClick={handleBookingsClick}
-      className="flex items-center gap-2 h-10 px-3 hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="flex items-center gap-2 h-9 px-3 hover:bg-gray-100 dark:hover:bg-gray-800"
     >
       <Calendar className="h-4 w-4" />
       <span className="hidden lg:inline">My Bookings</span>
