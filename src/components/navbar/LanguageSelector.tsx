@@ -29,7 +29,7 @@ export default function LanguageSelector({ currentLanguage = "en", onLanguageCha
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-900 hover:bg-gray-100 font-medium">
+        <Button variant="ghost" size="sm" className="h-10 px-3 text-gray-900 hover:bg-gray-100 font-medium">
           {currentLanguageDisplay}
         </Button>
       </DropdownMenuTrigger>
