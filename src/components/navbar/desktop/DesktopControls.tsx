@@ -24,6 +24,12 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
         </div>
       )}
       
+      {!user && (
+        <div className="touch-comfortable">
+          <AuthButtons />
+        </div>
+      )}
+      
       <div className="flex items-center gap-1">
         <div className="touch-comfortable">
           <LanguageSelector 
@@ -32,12 +38,6 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
           />
         </div>
       </div>
-      
-      {!user && (
-        <div className="touch-comfortable">
-          <AuthButtons />
-        </div>
-      )}
     </div>
   );
 };
