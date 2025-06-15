@@ -7,17 +7,20 @@ const AuthButtons: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <Button 
         variant="ghost" 
+        size="sm"
         onClick={() => navigate('/login')}
-        className="text-sm font-medium hover:text-primary transition-colors"
+        className="text-xs px-2 py-1 h-7 text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors"
       >
         Sign In
       </Button>
       <Button 
+        variant="ghost" 
+        size="sm"
         onClick={() => navigate('/signup')}
-        className="text-sm font-medium bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 transition-colors"
+        className="text-xs px-2 py-1 h-7 text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors"
       >
         Sign Up
       </Button>
