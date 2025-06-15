@@ -27,6 +27,7 @@ const ActionButtons = ({
             variant="outline"
             onClick={onBack}
             className="w-full"
+            size="sm"
           >
             {backButtonText}
           </Button>
@@ -36,7 +37,7 @@ const ActionButtons = ({
           onClick={onSubmit}
           disabled={isSubmitting}
           className="w-full"
-          size="lg"
+          size="sm"
         >
           {isSubmitting ? "Processing Booking..." : "Complete Booking"}
         </Button>
