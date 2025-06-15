@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { businessCleaningSchema, BusinessCleaningFormData, ServiceType } from '@/schemas/booking';
@@ -11,6 +10,7 @@ import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import BusinessBookingForm from '@/components/booking/business/BusinessBookingForm';
+import { BookingProgress } from '@/components/booking/BookingProgress';
 
 const OfficeCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,16 +19,29 @@ const OfficeCleaningBooking = () => {
   
   const form = useForm<BusinessCleaningFormData>({
     resolver: zodResolver(businessCleaningSchema),
+    mode: 'onTouched',
     defaultValues: {
       service: ServiceType.Office,
       businessType: '',
       propertySize: 100,
       cleaningOptions: [],
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      postalCode: '',
+      address: '',
+      city: '',
+      specialInstructions: '',
+      promoCode: ''
     },
   });
 
-  const handleNext = () => {
-    setCurrentStep(prev => Math.min(prev + 1, 2));
+  const handleNext = async () => {
+    const isValid = await form.trigger();
+    if (isValid) {
+      setCurrentStep(prev => Math.min(prev + 1, 2));
+    }
   };
 
   const handleBack = () => {
@@ -50,19 +63,11 @@ const OfficeCleaningBooking = () => {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Office Cleaning Booking
           </h1>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <span>Step {currentStep} of 2</span>
-            <div className="flex space-x-1">
-              {[1, 2].map((step) => (
-                <div
-                  key={step}
-                  className={`w-2 h-2 rounded-full ${
-                    step <= currentStep ? 'bg-primary' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
+          <BookingProgress 
+            currentStep={currentStep}
+            totalSteps={2}
+            steps={['Booking Details', 'Confirmation']}
+          />
         </div>
 
         <Form {...form}>
@@ -76,9 +81,7 @@ const OfficeCleaningBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <BusinessBookingForm form={form} />
-                  </div>
+                  <BusinessBookingForm form={form} />
                 </motion.div>
               )}
 
