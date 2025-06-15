@@ -84,7 +84,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                 isMobile ? "w-[320px] p-4" : "w-[300px] p-4"
               )}>
                 {item.subMenus?.map((subMenu) => (
-                  <div key={subMenu.title} className="space-y-2">
+                  <div key={subMenu.title}>
                     <h4 className={cn(
                       "font-semibold text-foreground mb-3",
                       getMobileTextSize('md')
@@ -98,7 +98,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                           onClick={() => navigate(subItem.path)}
                           onKeyDown={(e) => handleKeyDown(e, subItem.path)}
                           className={cn(
-                            "group flex items-start gap-3 w-full text-left rounded-lg",
+                            "group flex flex-col items-start w-full text-left rounded-lg",
                             "hover:bg-accent/50 dark:hover:bg-gray-700/50",
                             "focus:bg-accent/50 focus:outline-none",
                             "focus-visible:ring-2 focus-visible:ring-primary/20",
@@ -106,24 +106,19 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             getMobileSpacing('sm')
                           )}
                         >
-                          <div className="flex-shrink-0 mt-0.5 text-primary transition-colors">
-                            {subItem.icon}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h5 className={cn(
-                              "font-medium text-foreground group-hover:text-primary",
-                              "transition-colors duration-200",
-                              getMobileTextSize('sm')
-                            )}>
-                              {subItem.label}
-                            </h5>
-                            <p className={cn(
-                              "text-muted-foreground leading-relaxed",
-                              isMobile ? "text-sm mt-1" : "text-xs"
-                            )}>
-                              {subItem.description}
-                            </p>
-                          </div>
+                          <h5 className={cn(
+                            "font-medium text-foreground group-hover:text-primary",
+                            "transition-colors duration-200",
+                            getMobileTextSize('sm')
+                          )}>
+                            {subItem.label}
+                          </h5>
+                          <p className={cn(
+                            "text-muted-foreground leading-relaxed",
+                            isMobile ? "text-sm mt-1" : "text-xs"
+                          )}>
+                            {subItem.description}
+                          </p>
                         </button>
                       ))}
                     </div>
