@@ -1,3 +1,4 @@
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { homeCleaningSchema, BookingFormData, ServiceType } from '@/schemas/booking';
@@ -142,18 +143,18 @@ const HomeCleaningBooking = () => {
               )}
             </AnimatePresence>
 
-            <div className="flex justify-between mt-8">
-              <Button
-                type="button"
-                onClick={handleBack}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {currentStep === 1 ? 'Back to Services' : 'Previous'}
-              </Button>
-              
-              {currentStep < 3 && (
+            {currentStep < 3 && (
+              <div className="flex justify-between mt-8">
+                <Button
+                  type="button"
+                  onClick={handleBack}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  {currentStep === 1 ? 'Back to Services' : 'Previous'}
+                </Button>
+                
                 <Button
                   type="button"
                   onClick={handleNext}
@@ -162,8 +163,8 @@ const HomeCleaningBooking = () => {
                   Next
                   <ArrowRight className="h-4 w-4" />
                 </Button>
-              )}
-            </div>
+              </div>
+            )}
           </form>
         </Form>
       </div>
