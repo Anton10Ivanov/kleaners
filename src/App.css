@@ -1,3 +1,4 @@
+
 /* Remove the padding from #root so layout aligns with the navbar,
    and place padding on content sections as needed instead. */
 
@@ -169,10 +170,11 @@
   }
 }
 
+/* Removed padding-top: 64px from .flex-grow for landing page/hero positioning */
 /* Ensure main content is always visible */
 main.flex-grow {
   width: 100%;
-  padding-top: 64px; /* Height of the navbar */
+  /* padding-top: 64px;  Height of the navbar (REMOVED!) */
 }
 
 /* Ensure RootLayout takes full height and width */
@@ -180,3 +182,4 @@ main.flex-grow {
   min-height: 100vh;
   width: 100%;
 }
+
