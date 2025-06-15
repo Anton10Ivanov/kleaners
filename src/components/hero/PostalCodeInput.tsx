@@ -1,14 +1,17 @@
+
 import { memo } from "react";
 import { Input } from "@/components/ui/input";
 interface PostalCodeInputProps {
   postalCode: string;
   setPostalCode: (value: string) => void;
   isMobile: boolean;
+  showLabel?: boolean;
 }
 export const PostalCodeInput = memo(({
   postalCode,
   setPostalCode,
-  isMobile
+  isMobile,
+  showLabel = true
 }: PostalCodeInputProps) => {
   if (isMobile) {
     return <div>
@@ -16,9 +19,9 @@ export const PostalCodeInput = memo(({
       </div>;
   }
   return <div>
-      <label className="block text-sm font-medium text-cyan-50 mb-2 text-center bg-transparent ">
+      {showLabel && <label className="block text-sm font-medium text-cyan-50 mb-2 text-center bg-transparent ">
         Your Postal code
-      </label>
+      </label>}
       <Input type="text" placeholder="City name or Postal code" value={postalCode} onChange={e => setPostalCode(e.target.value)} required className="h-14 px-4 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md" />
     </div>;
 });
