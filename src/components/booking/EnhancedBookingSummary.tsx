@@ -1,3 +1,4 @@
+
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { format } from 'date-fns';
@@ -130,27 +131,6 @@ const EnhancedBookingSummary = ({
           </div>
         )}
 
-        {/* Promo Code */}
-        <div className="border-t pt-3">
-          <h4 className="font-medium mb-2">Promo Code</h4>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Enter promo code"
-              value={promoCode || ''}
-              onChange={(e) => form.setValue('promoCode', e.target.value)}
-              className="flex-1"
-            />
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="sm"
-              onClick={handlePromoCodeApply}
-            >
-              Apply
-            </Button>
-          </div>
-        </div>
-
         {/* Pricing */}
         <div className="border-t pt-3 space-y-2">
           {extrasPrice > 0 && (
@@ -165,6 +145,28 @@ const EnhancedBookingSummary = ({
             <span className="text-primary">€{totalPrice}</span>
           </div>
           <p className="text-xs text-gray-500">Per cleaning session</p>
+        </div>
+
+        {/* Promo Code - moved under total */}
+        <div className="border-t pt-3">
+          <h4 className="font-medium mb-3">Promo Code</h4>
+          <div className="flex gap-3">
+            <Input
+              placeholder="Enter promo code"
+              value={promoCode || ''}
+              onChange={(e) => form.setValue('promoCode', e.target.value)}
+              className="flex-1 h-10 text-base"
+            />
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="default"
+              onClick={handlePromoCodeApply}
+              className="px-4 whitespace-nowrap"
+            >
+              Apply
+            </Button>
+          </div>
         </div>
 
         {onSubmit && (
