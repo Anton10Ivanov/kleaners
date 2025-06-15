@@ -1,4 +1,3 @@
-
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -70,7 +69,12 @@ export const HeroForm = memo(({
           </div>
 
           {/* Location Input */}
-          <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
+          <div className="grid grid-cols-2 gap-2">
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
+          </div>
 
           {/* Service Type Grid */}
           <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={true} />
@@ -100,7 +104,17 @@ export const HeroForm = memo(({
       delay: 0.9
     }} className="space-y-4">
         {/* Location Input */}
-        <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} />
+        <div>
+          <label className="block text-sm font-medium text-cyan-50 mb-2 text-center bg-transparent ">
+            Your Postal code
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} showLabel={false} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} showLabel={false} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} showLabel={false} />
+            <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} showLabel={false} />
+          </div>
+        </div>
 
         {/* Service Type Grid */}
         <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={false} />
