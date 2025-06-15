@@ -5,8 +5,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AccountPreferences as AccountPreferencesType } from '@/hooks/useUserProfileData';
-import { useTheme } from 'next-themes';
-import { useEffect } from 'react';
 
 interface AccountPreferencesProps {
   /** User's account preferences */
@@ -33,16 +31,6 @@ export function AccountPreferences({
   });
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const { setTheme } = useTheme();
-  
-  // Sync dark mode preference with theme system
-  useEffect(() => {
-    if (formData.darkMode) {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
-  }, [formData.darkMode, setTheme]);
   
   const handleToggleChange = (key: keyof AccountPreferencesType) => {
     if (typeof formData[key] === 'boolean') {
@@ -104,20 +92,6 @@ export function AccountPreferences({
             <SelectItem value="es">Spanish</SelectItem>
           </SelectContent>
         </Select>
-      </div>
-      
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <Label htmlFor="darkMode" className="text-foreground">Dark Mode</Label>
-          <div className="text-sm text-muted-foreground">
-            Use dark theme throughout the application
-          </div>
-        </div>
-        <Switch 
-          id="darkMode" 
-          checked={formData.darkMode} 
-          onCheckedChange={() => handleToggleChange('darkMode')} 
-        />
       </div>
       
       <div className="flex items-center justify-between">
