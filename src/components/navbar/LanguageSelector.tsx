@@ -6,11 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 // Supported languages with their codes and names
 const languages = [
-  { code: "en", name: "English" },
-  { code: "de", name: "Deutsch" },
-  { code: "es", name: "Español" },
-  { code: "it", name: "Italiano" },
-  { code: "fr", name: "Français" },
+  { code: "en", name: "EN" },
+  { code: "de", name: "DE" },
 ];
 
 interface LanguageSelectorProps {
@@ -35,7 +32,7 @@ export default function LanguageSelector({ currentLanguage = "en", onLanguageCha
           <Globe className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-16">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
