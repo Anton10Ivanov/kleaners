@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,6 @@ const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
 const LazyServiceCategoriesSection = lazy(() => import('../services/ServiceCategoriesSection').then(module => ({ default: module.ServiceCategoriesSection })));
 const LazyBusinessSolutionsSection = lazy(() => import('./BusinessSolutionsSection'));
 const LazyHomeSections = lazy(() => import('./HomeSections').then(module => ({ default: module.HomeSections })));
-const LazyTrustIndexWidget = lazy(() => import('../testimonials/TrustIndexWidget'));
 
 // Simple error fallback component
 const ErrorFallback = ({ error }: { error: Error }) => (
@@ -149,14 +149,7 @@ const HomePage = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            {/* TrustIndex Widget - right after the booking form */}
-            <Suspense fallback={<SectionLoading />}>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <LazyTrustIndexWidget />
-              </ErrorBoundary>
-            </Suspense>
-            
-            {/* Professional trust section */}
+            {/* Professional trust section - moved from hero */}
             <ProfessionalTrustSection />
             
             {/* How it works section */}
