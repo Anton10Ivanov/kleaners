@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { BookingFormData, ProviderOption } from "@/schemas/booking";
 import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
 import BookingConfirmation from "./BookingConfirmation";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -16,6 +15,7 @@ import { BookingSubmissionLoader } from "@/components/ui/loading-states";
 import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
 import { displayFormErrors } from "@/utils/errors/formErrors";
 import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface FinalStepProps {
@@ -95,11 +95,22 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
   // Unified responsive layout for all screen sizes
   return (
     <FormErrorBoundary>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] gap-8">
         {/* Left Column - Form Fields */}
-        <div className="lg:col-span-2 space-y-6">
-            <CleaningAddress form={form} postalCode={postalCode} />
-            <PersonalInformation form={form} />
+        <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact & Address</CardTitle>
+                <CardDescription>
+                  Please provide your contact information and service address.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <PersonalInformation form={form} />
+                <Separator />
+                <CleaningAddress form={form} postalCode={postalCode} />
+              </CardContent>
+            </Card>
             
             {hasProviderOptions && (
               <ProviderSelection 
@@ -111,17 +122,15 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
         </div>
 
         {/* Right Column - Booking Summary */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <EnhancedBookingSummary 
-              form={form} 
-              onSubmit={handleSubmit} 
-              isSubmitting={isSubmitting}
-              onBack={onBack}
-              showBackButton={!!onBack}
-              backButtonText="Previous"
-            />
-          </div>
+        <div className="sticky top-24 self-start">
+          <EnhancedBookingSummary 
+            form={form} 
+            onSubmit={handleSubmit} 
+            isSubmitting={isSubmitting}
+            onBack={onBack}
+            showBackButton={!!onBack}
+            backButtonText="Previous"
+          />
         </div>
       </div>
     </FormErrorBoundary>
