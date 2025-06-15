@@ -145,7 +145,7 @@ export const homeCleaningSchema = bookingSchema.extend({
 export const businessCleaningSchema = bookingSchema.extend({
   businessType: z.string().min(1, "Business type is required"),
   cleaningOptions: z.array(z.string()).min(1, "At least one cleaning option is required"),
-  squareMeters: z.number().min(10, "Square meters is required"),
+  squareMeters: z.coerce.number().min(10, "Square meters must be at least 10."),
   specialRequirements: z.string().optional(),
 });
 
