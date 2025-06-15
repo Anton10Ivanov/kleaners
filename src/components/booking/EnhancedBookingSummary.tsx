@@ -158,11 +158,6 @@ const EnhancedBookingSummary = ({
 
         {/* Pricing */}
         <div className="border-t pt-3 space-y-2">
-          <div className="flex justify-between">
-            <span>Cleaning ({hours}h × €{hourlyRate})</span>
-            <span>€{basePrice}</span>
-          </div>
-          
           {extrasPrice > 0 && (
             <div className="flex justify-between text-gray-600 dark:text-gray-400">
               <span>Additional services</span>
