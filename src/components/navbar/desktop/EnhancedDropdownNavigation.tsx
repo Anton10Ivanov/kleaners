@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import {
   NavigationMenu,
@@ -65,13 +64,13 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
             <NavigationMenuTrigger 
               className={cn(
                 "group transition-all duration-200 focus:outline-none",
-                "hover:bg-accent hover:text-accent-foreground",
-                "focus:bg-accent focus:text-accent-foreground", 
+                "hover:bg-gray-100 hover:text-gray-800",
+                "focus:bg-gray-100", 
                 "focus-visible:ring-2 focus-visible:ring-primary/20",
-                "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                "font-medium touch-comfortable",
-                isMobile ? "h-12 px-4 py-3 text-base" : "h-10 px-4 py-2 text-sm",
-                activeItem === item.id.toString() && "bg-accent/30"
+                "data-[active]:bg-gray-50 data-[state=open]:bg-gray-50",
+                "font-medium text-gray-600",
+                isMobile ? "h-12 px-3 text-base" : "h-9 px-3 text-sm",
+                activeItem === item.id.toString() && "bg-gray-50"
               )}
             >
               {item.label}
