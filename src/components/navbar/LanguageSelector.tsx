@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -25,11 +24,13 @@ export default function LanguageSelector({ currentLanguage = "en", onLanguageCha
     if (onLanguageChange) onLanguageChange();
   };
 
+  const currentLanguageDisplay = languages.find(lang => lang.code === currentLang)?.name || "EN";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8 p-0 text-gray-900 hover:bg-gray-100">
-          <Globe className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-900 hover:bg-gray-100 font-medium">
+          {currentLanguageDisplay}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-16">
