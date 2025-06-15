@@ -2,7 +2,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -113,21 +112,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
     setOpenDialog(null);
   };
 
-  const calculateTotalExtras = () => {
-    return selectedExtras.reduce((total, extraId) => {
-      const extra = AVAILABLE_EXTRAS.find(e => e.id === extraId);
-      if (!extra) return total;
-      
-      if (extraId === 'windows') {
-        const basePrice = windowCount * extra.price;
-        const framePrice = includeFrames ? windowCount * 2 : 0; // €2 extra per window for frames
-        return total + basePrice + framePrice;
-      }
-      if (extraId === 'ironing') return total + Math.ceil(ironingTime / 30) * extra.price;
-      return total + extra.price;
-    }, 0);
-  };
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -155,9 +139,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                 <div className="flex flex-col items-start space-y-3 w-full">
                   <div className="flex items-center justify-between w-full">
                     <Icon className="h-5 w-5 text-primary" />
-                    <Badge variant="secondary" className="text-xs">
-                      +€{extra.price}
-                    </Badge>
                   </div>
                   
                   <div className="text-left space-y-1">
@@ -171,23 +152,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
           );
         })}
       </div>
-
-      {selectedExtras.length > 0 && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-primary/5 border border-primary/20 rounded-lg p-4"
-        >
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-900 dark:text-white">
-              Additional services total:
-            </span>
-            <span className="font-bold text-lg text-primary">
-              €{calculateTotalExtras()}
-            </span>
-          </div>
-        </motion.div>
-      )}
 
       {/* Window Cleaning Dialog - Enhanced with frames option */}
       <Dialog open={openDialog === 'windows'} onOpenChange={() => setOpenDialog(null)}>
@@ -224,30 +188,11 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
               <div className="flex items-center justify-between">
                 <div>
                   <label className="text-sm font-medium">Include window frames</label>
-                  <p className="text-xs text-gray-500">+€2 per window</p>
                 </div>
                 <Switch
                   checked={includeFrames}
                   onCheckedChange={setIncludeFrames}
                 />
-              </div>
-            </div>
-
-            {/* Pricing summary */}
-            <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Windows ({windowCount}x €3)</span>
-                <span>€{windowCount * 3}</span>
-              </div>
-              {includeFrames && (
-                <div className="flex justify-between text-sm">
-                  <span>Frames ({windowCount}x €2)</span>
-                  <span>€{windowCount * 2}</span>
-                </div>
-              )}
-              <div className="border-t pt-2 flex justify-between font-medium">
-                <span>Total</span>
-                <span>€{windowCount * 3 + (includeFrames ? windowCount * 2 : 0)}</span>
               </div>
             </div>
             
@@ -286,9 +231,6 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
               >
                 +
               </Button>
-            </div>
-            <div className="text-center text-sm text-gray-600">
-              €{Math.ceil(ironingTime / 30) * 25} total
             </div>
             <Button 
               onClick={() => handleConfirmPopup('ironing')}
