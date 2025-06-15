@@ -73,7 +73,12 @@ export const HeroForm = memo(({
           <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={true} />
 
           {/* Service Type Grid */}
-          <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={true} />
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-2 text-center">
+              Service Type
+            </label>
+            <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={true} />
+          </div>
           
           {/* Enhanced CTA Button */}
           <SubmitButton isMobile={true} />
@@ -103,7 +108,12 @@ export const HeroForm = memo(({
         <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} isMobile={false} />
 
         {/* Service Type Grid */}
-        <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={false} />
+        <div>
+          <label className="block text-sm font-medium text-cyan-50 mb-2 text-center bg-transparent ">
+            Service Type
+          </label>
+          <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} isMobile={false} />
+        </div>
         
         {/* CTA Button */}
         <SubmitButton isMobile={false} />
