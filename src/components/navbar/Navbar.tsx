@@ -37,28 +37,34 @@ const NavbarContent = () => {
 
   if (!mounted) return null;
 
+  // Children: [Logo, DesktopNavigation, DesktopControls, MobileControls, MobileMenu]
   return (
     <NavbarContainer isVisible={isVisible} scrolled={scrolled}>
+      {/* Section 1: Left (Logo) */}
       <Logo />
+      {/* Section 2: Center (DesktopNavigation) */}
       <DesktopNavigation />
-      <DesktopControls 
+      {/* Section 3: Right (Auth Buttons, Language) */}
+      <DesktopControls
         user={user}
         currentLanguage={currentLanguage}
         onLanguageChange={toggleLanguage}
       />
-      <MobileControls 
+      {/* Mobile controls (only show on mobile) */}
+      <MobileControls
         user={user}
         handleBookingsClick={handleBookingsClick}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
       />
-      <MobileMenu 
-        isOpen={isMenuOpen} 
+      {/* MobileMenu stays out of the main grid flow */}
+      <MobileMenu
+        isOpen={isMenuOpen}
         setIsOpen={setIsMenuOpen}
-        isMobileServicesOpen={isMobileServicesOpen} 
-        setIsMobileServicesOpen={setIsMobileServicesOpen} 
-        currentLanguage={currentLanguage} 
-        onLanguageChange={toggleLanguage} 
+        isMobileServicesOpen={isMobileServicesOpen}
+        setIsMobileServicesOpen={setIsMobileServicesOpen}
+        currentLanguage={currentLanguage}
+        onLanguageChange={toggleLanguage}
         userRole={userRole}
       />
     </NavbarContainer>
