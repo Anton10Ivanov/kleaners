@@ -55,7 +55,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
 
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList className="space-x-2">
+      <NavigationMenuList className="space-x-4">
         {navItems.map((item) => (
           <NavigationMenuItem 
             key={item.id}
@@ -70,7 +70,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                 "focus-visible:ring-2 focus-visible:ring-primary/20",
                 "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
                 "font-semibold text-base tracking-wide touch-comfortable",
-                isMobile ? "h-12 px-4 py-3 text-lg" : "h-10 px-4 py-2 text-base",
+                isMobile ? "h-12 px-4 py-3 text-lg" : "h-10 px-5 py-2 text-base",
                 activeItem === item.id.toString() && "bg-accent/30"
               )}
             >
@@ -112,7 +112,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             "font-semibold text-foreground group-hover:text-primary",
                             "transition-colors duration-200 text-base leading-tight",
                             "mb-1",
-                            getMobileTextSize('base')
+                            getMobileTextSize('sm')
                           )}>
                             {subItem.label}
                           </h5>
