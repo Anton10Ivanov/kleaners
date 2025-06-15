@@ -89,7 +89,7 @@ export const HeroForm = memo(({
     duration: 0.8,
     delay: 0.7,
     ease: "easeOut"
-  }} className="absolute top-[20%] left-8 transform w-96 max-w-sm backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0 px-[28px] bg-transparent">
+  }} className="absolute top-[15%] left-8 transform w-96 max-w-sm backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 z-10 py-0 px-[28px] bg-transparent">
       <motion.form onSubmit={handleSubmit} initial={{
       opacity: 0
     }} animate={{
