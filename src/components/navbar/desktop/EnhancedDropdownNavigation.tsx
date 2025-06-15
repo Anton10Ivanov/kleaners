@@ -81,7 +81,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                 "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm",
                 "shadow-xl rounded-xl border border-border/50 z-50",
                 "animate-in fade-in-0 zoom-in-95 duration-200",
-                isMobile ? "w-[320px] p-6" : "w-[300px] p-6"
+                isMobile ? "w-[320px] p-5" : "w-[360px] p-5"
               )}>
                 {item.subMenus?.map((subMenu) => (
                   <div key={subMenu.title}>
