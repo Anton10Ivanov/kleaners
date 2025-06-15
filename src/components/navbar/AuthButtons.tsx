@@ -123,7 +123,7 @@ export const AuthButtons = () => {
   };
 
   if (loading) {
-    return <Button variant="ghost" size="sm" disabled>
+    return <Button variant="ghost" size="sm" disabled className="text-gray-900 dark:text-gray-100">
         <Loader2 className="h-4 w-4 animate-spin" />
       </Button>;
   }
@@ -131,7 +131,7 @@ export const AuthButtons = () => {
   if (user) {
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
             <UserCircle className="h-5 w-5" />
             <span className="hidden md:inline">
               {userProfile?.first_name || user.email || 'My Account'}
@@ -200,10 +200,10 @@ export const AuthButtons = () => {
   }
 
   return <div className="flex items-center gap-2">
-      <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
+      <Button variant="ghost" size="sm" onClick={() => navigate('/login')} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
         Login
       </Button>
-      <Button variant="default" size="sm" onClick={() => navigate('/signup')} className="text-inherit rounded-none bg-[#a6e7b3] font-medium text-sm opacity-50">
+      <Button variant="ghost" size="sm" onClick={() => navigate('/signup')} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
         Sign up
       </Button>
     </div>;
