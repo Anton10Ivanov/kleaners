@@ -34,7 +34,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
     }
     timeoutRef.current = setTimeout(() => {
       setActiveItem(null);
-    }, 300);
+    }, 200);
   };
 
   // Keyboard navigation support
@@ -55,81 +55,84 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
 
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList className="space-x-4">
+      <NavigationMenuList className="space-x-6">
         {navItems.map((item) => (
-          <NavigationMenuItem 
+          <NavigationMenuItem
             key={item.id}
             onMouseEnter={() => handleItemMouseEnter(item.id.toString())}
             onMouseLeave={handleItemMouseLeave}
+            className="relative"
           >
-            <NavigationMenuTrigger 
+            <NavigationMenuTrigger
               className={cn(
-                "group transition-all duration-200 focus:outline-none",
+                "group transition-all duration-200 focus:outline-none rounded-md",
                 "hover:bg-accent hover:text-accent-foreground",
                 "focus:bg-accent focus:text-accent-foreground", 
                 "focus-visible:ring-2 focus-visible:ring-primary/20",
                 "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                "font-semibold text-base tracking-wide touch-comfortable",
-                isMobile ? "h-12 px-4 py-3 text-lg" : "h-10 px-5 py-2 text-base",
+                "font-semibold text-base tracking-wide touch-comfortable px-6 py-2",
                 activeItem === item.id.toString() && "bg-accent/30"
               )}
             >
               {item.label}
             </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className={cn(
-                "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm",
-                "shadow-xl rounded-xl border border-border/50 z-50",
-                "animate-in fade-in-0 zoom-in-95 duration-200",
-                isMobile ? "w-[320px] p-5" : "w-[360px] p-5"
-              )}>
-                {item.subMenus?.map((subMenu) => (
-                  <div key={subMenu.title}>
-                    <h4 className={cn(
-                      "font-bold text-foreground mb-4 text-lg tracking-tight",
-                      "border-b border-border/20 pb-2",
-                      getMobileTextSize('lg')
-                    )}>
-                      {subMenu.title}
-                    </h4>
-                    <div className="space-y-2">
-                      {subMenu.items.map((subItem) => (
-                        <button
-                          key={subItem.path}
-                          onClick={() => navigate(subItem.path)}
-                          onKeyDown={(e) => handleKeyDown(e, subItem.path)}
-                          className={cn(
-                            "group flex flex-col items-start w-full text-left rounded-lg",
-                            "hover:bg-accent/50 dark:hover:bg-gray-700/50",
-                            "focus:bg-accent/50 focus:outline-none",
-                            "focus-visible:ring-2 focus-visible:ring-primary/20",
-                            "transition-all duration-200 touch-comfortable",
-                            "p-3 border border-transparent hover:border-border/20",
-                            getMobileSpacing('sm')
-                          )}
-                        >
-                          <h5 className={cn(
-                            "font-semibold text-foreground group-hover:text-primary",
-                            "transition-colors duration-200 text-base leading-tight",
-                            "mb-1",
-                            getMobileTextSize('sm')
-                          )}>
-                            {subItem.label}
-                          </h5>
-                          <p className={cn(
-                            "text-muted-foreground leading-relaxed font-normal",
-                            isMobile ? "text-sm" : "text-sm",
-                            "group-hover:text-muted-foreground/80"
-                          )}>
-                            {subItem.description}
-                          </p>
-                        </button>
-                      ))}
+            {item.subMenus && (
+              <NavigationMenuContent>
+                <div
+                  className={cn(
+                    "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm",
+                    "shadow-xl rounded-xl border border-border/50 z-50",
+                    "animate-in fade-in-0 zoom-in-95 duration-200",
+                    isMobile ? "w-[320px] p-6" : "w-[420px] p-6"
+                  )}
+                  // Add relative positioning and a margin if needed to help dropdown alignment
+                >
+                  {item.subMenus.map((subMenu) => (
+                    <div key={subMenu.title}>
+                      <h4 className={cn(
+                        "font-bold text-foreground mb-4 text-lg tracking-tight border-b border-border/20 pb-2",
+                        getMobileTextSize('lg')
+                      )}>
+                        {subMenu.title}
+                      </h4>
+                      <div className="space-y-2">
+                        {subMenu.items.map((subItem) => (
+                          <button
+                            key={subItem.path}
+                            onClick={() => navigate(subItem.path)}
+                            onKeyDown={(e) => handleKeyDown(e, subItem.path)}
+                            className={cn(
+                              "group flex flex-col items-start w-full text-left rounded-lg",
+                              "hover:bg-accent/50 dark:hover:bg-gray-700/50",
+                              "focus:bg-accent/50 focus:outline-none",
+                              "focus-visible:ring-2 focus-visible:ring-primary/20",
+                              "transition-all duration-200 touch-comfortable",
+                              "p-3 border border-transparent hover:border-border/20",
+                              getMobileSpacing('sm')
+                            )}
+                          >
+                            <h5 className={cn(
+                              "font-semibold text-foreground group-hover:text-primary",
+                              "transition-colors duration-200 text-base leading-tight mb-1",
+                              getMobileTextSize('sm')
+                            )}>
+                              {subItem.label}
+                            </h5>
+                            <p className={cn(
+                              "text-muted-foreground leading-relaxed font-normal",
+                              isMobile ? "text-sm" : "text-sm",
+                              "group-hover:text-muted-foreground/80"
+                            )}>
+                              {subItem.description}
+                            </p>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </NavigationMenuContent>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            )}
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>
