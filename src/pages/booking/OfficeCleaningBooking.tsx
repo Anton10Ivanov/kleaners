@@ -96,23 +96,24 @@ const OfficeCleaningBooking = () => {
                     form={form}
                     postalCode={form.watch('postalCode') || ''}
                     onSubmit={handleSubmit}
+                    onBack={handleBack}
                   />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <div className="flex justify-between mt-8">
-              <Button
-                type="button"
-                onClick={handleBack}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {currentStep === 1 ? 'Back to Services' : 'Previous'}
-              </Button>
-              
-              {currentStep < 2 && (
+            {currentStep < 2 && (
+              <div className="flex justify-between mt-8">
+                <Button
+                  type="button"
+                  onClick={handleBack}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  {currentStep === 1 ? 'Back to Services' : 'Previous'}
+                </Button>
+                
                 <Button
                   type="button"
                   onClick={handleNext}
@@ -121,8 +122,8 @@ const OfficeCleaningBooking = () => {
                   Next
                   <ArrowRight className="h-4 w-4" />
                 </Button>
-              )}
-            </div>
+              </div>
+            )}
           </form>
         </Form>
       </div>

@@ -136,6 +136,7 @@ const HomeCleaningBooking = () => {
                     form={form}
                     postalCode={form.watch('postalCode') || ''}
                     onSubmit={handleSubmit}
+                    onBack={handleBack}
                   />
                 </motion.div>
               )}

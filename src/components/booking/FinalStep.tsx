@@ -22,9 +22,10 @@ interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
   postalCode: string;
   onSubmit: (data: BookingFormData) => void;
+  onBack?: () => void;
 }
 
-const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
+const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const { isSubmitting, submitBooking, confirmationData, clearConfirmation } = useBookingSubmission();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -49,7 +50,6 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
   }
 
   const handleSubmit = async () => {
-    // Validate required fields with detailed error messages
     const formData = form.getValues();
     const errors: string[] = [];
     
@@ -66,13 +66,11 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     const isValid = await form.trigger();
     
     if (!isValid || errors.length > 0) {
-      // Display specific validation errors
       errors.forEach(error => toast.error(error));
       displayFormErrors(form.formState.errors);
       return;
     }
     
-    // Set the selected provider if one was chosen
     if (selectedProvider) {
       form.setValue('selectedProviderId', selectedProvider);
     }
@@ -84,7 +82,6 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
       const result = await submitBooking(data);
       
       if (result.success) {
-        // Confirmation will be shown automatically via confirmationData
         console.log('Booking submitted successfully:', result.referenceNumber);
         toast.success('Booking confirmed! Check your email for details.');
       } else {
@@ -115,7 +112,14 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
           </form>
           
           {/* Summary shown separately on mobile */}
-          <EnhancedBookingSummary form={form} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+          <EnhancedBookingSummary 
+            form={form} 
+            onSubmit={handleSubmit} 
+            isSubmitting={isSubmitting}
+            onBack={onBack}
+            showBackButton={!!onBack}
+            backButtonText="Previous"
+          />
         </div>
       </FormErrorBoundary>
     );
@@ -144,7 +148,14 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
         {/* Right Column - Booking Summary */}
         <div className="lg:col-span-1">
           <div className="sticky top-6">
-            <EnhancedBookingSummary form={form} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+            <EnhancedBookingSummary 
+              form={form} 
+              onSubmit={handleSubmit} 
+              isSubmitting={isSubmitting}
+              onBack={onBack}
+              showBackButton={!!onBack}
+              backButtonText="Previous"
+            />
           </div>
         </div>
       </div>
