@@ -15,32 +15,33 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
 
   return (
     <div className={cn(
-      "hidden md:flex items-center gap-1",
+      "hidden md:flex items-center",
       getMobileSpacing('sm')
     )}>
-      {user && (
-        <div className="touch-comfortable">
-          <UserControls user={user} />
-        </div>
-      )}
-      
-      <div className="flex items-center gap-1">
-        <div className="touch-comfortable">
+      <ul className="flex items-center gap-1 list-none">
+        {user && (
+          <li className="touch-comfortable">
+            <UserControls user={user} />
+          </li>
+        )}
+        
+        <li className="touch-comfortable">
           <ThemeToggle />
-        </div>
-        <div className="touch-comfortable">
+        </li>
+        
+        <li className="touch-comfortable">
           <LanguageSelector 
             currentLanguage={currentLanguage} 
             onLanguageChange={onLanguageChange} 
           />
-        </div>
-      </div>
-      
-      {!user && (
-        <div className="touch-comfortable">
-          <AuthButtons />
-        </div>
-      )}
+        </li>
+        
+        {!user && (
+          <li className="touch-comfortable">
+            <AuthButtons />
+          </li>
+        )}
+      </ul>
     </div>
   );
 };
