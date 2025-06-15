@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 
 const HeroCTA = () => {
   return (
-    <section className="py-16 text-white bg-theme-blue">
+    <section
+      className="bg-theme-blue text-white pb-16"
+      // pt-16 mobile, pt-[64px] md+ (so background always goes under navbar)
+      style={{ paddingTop: '64px' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-12 items-center gap-8">
           <div className="md:col-span-8 space-y-4">
@@ -34,3 +38,4 @@ const HeroCTA = () => {
 };
 
 export default HeroCTA;
+
