@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface UserPreferences {
-  darkMode: boolean;
   language: string;
   notificationsEnabled: boolean;
   emailNotifications: boolean;
@@ -16,7 +15,6 @@ interface UserSettingsState {
   error: string | null;
   
   // Actions
-  setDarkMode: (enabled: boolean) => void;
   setLanguage: (language: string) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   setEmailNotifications: (enabled: boolean) => void;
@@ -25,7 +23,6 @@ interface UserSettingsState {
 }
 
 const defaultPreferences: UserPreferences = {
-  darkMode: false,
   language: 'en',
   notificationsEnabled: true,
   emailNotifications: true,
@@ -43,11 +40,6 @@ const useUserSettingsStore = create<UserSettingsState>()(
       isLoading: false,
       error: null,
       
-      setDarkMode: (enabled) => 
-        set((state) => ({
-          preferences: { ...state.preferences, darkMode: enabled }
-        })),
-        
       setLanguage: (language) => 
         set((state) => ({
           preferences: { ...state.preferences, language }

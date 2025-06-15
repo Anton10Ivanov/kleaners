@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, UserRole } from '@/integrations/supabase/client';
@@ -123,7 +124,7 @@ export const AuthButtons = () => {
   };
 
   if (loading) {
-    return <Button variant="ghost" size="sm" disabled className="text-gray-900 dark:text-gray-100">
+    return <Button variant="ghost" size="sm" disabled className="text-gray-900">
         <Loader2 className="h-4 w-4 animate-spin" />
       </Button>;
   }
@@ -131,7 +132,7 @@ export const AuthButtons = () => {
   if (user) {
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-900 hover:bg-gray-100">
             <UserCircle className="h-5 w-5" />
             <span className="hidden md:inline">
               {userProfile?.first_name || user.email || 'My Account'}
@@ -200,10 +201,10 @@ export const AuthButtons = () => {
   }
 
   return <div className="flex items-center gap-2">
-      <Button variant="ghost" size="sm" onClick={() => navigate('/login')} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
+      <Button variant="ghost" size="sm" onClick={() => navigate('/login')} className="text-gray-900 hover:bg-gray-100">
         Login
       </Button>
-      <Button variant="ghost" size="sm" onClick={() => navigate('/signup')} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
+      <Button variant="ghost" size="sm" onClick={() => navigate('/signup')} className="text-gray-900 hover:bg-gray-100">
         Sign up
       </Button>
     </div>;

@@ -31,7 +31,7 @@ export default function LanguageSelector({ currentLanguage = "en", onLanguageCha
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8 p-0 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
+        <Button variant="ghost" size="icon" className="h-8 w-8 p-0 text-gray-900 hover:bg-gray-100">
           <Globe className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>

@@ -1,7 +1,7 @@
 
 import { cn } from '@/lib/utils';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-import { ThemeToggle, LanguageSelector, UserControls } from '../';
+import { LanguageSelector, UserControls } from '../';
 import { AuthButtons } from '../auth';
 
 interface DesktopControlsProps {
@@ -25,9 +25,6 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
       )}
       
       <div className="flex items-center gap-1">
-        <div className="touch-comfortable">
-          <ThemeToggle />
-        </div>
         <div className="touch-comfortable">
           <LanguageSelector 
             currentLanguage={currentLanguage} 
