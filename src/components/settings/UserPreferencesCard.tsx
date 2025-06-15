@@ -1,5 +1,4 @@
 
-import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -14,24 +13,12 @@ import { Undo2 } from 'lucide-react';
 export function UserPreferencesCard() {
   const {
     preferences,
-    setDarkMode,
     setLanguage,
     setNotificationsEnabled,
     setEmailNotifications,
     setSmsNotifications,
     resetToDefaults
   } = useUserSettingsStore();
-  
-  // Sync darkMode preference with system theme
-  useEffect(() => {
-    // Only update document class if it doesn't match our preference
-    const isDarkModeActive = document.documentElement.classList.contains('dark');
-    if (preferences.darkMode && !isDarkModeActive) {
-      document.documentElement.classList.add('dark');
-    } else if (!preferences.darkMode && isDarkModeActive) {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [preferences.darkMode]);
 
   return (
     <Card>
@@ -41,18 +28,6 @@ export function UserPreferencesCard() {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="dark-mode" className="flex flex-col">
-              <span>Dark Mode</span>
-              <span className="text-sm text-muted-foreground">Enable dark theme</span>
-            </Label>
-            <Switch
-              id="dark-mode"
-              checked={preferences.darkMode}
-              onCheckedChange={setDarkMode}
-            />
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="language">Language</Label>
             <Select
