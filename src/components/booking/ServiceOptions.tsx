@@ -15,21 +15,18 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
       value: Frequency.Weekly, 
       label: 'Weekly', 
       description: '4 visits/month',
-      price: '€27',
       savings: 23
     },
     { 
       value: Frequency.BiWeekly, 
       label: 'Bi-weekly', 
       description: '2 visits/month',
-      price: '€30',
       savings: 14
     },
     { 
       value: Frequency.OneTime, 
       label: 'One-time', 
       description: 'Single visit',
-      price: '€35',
       savings: 0
     }
   ];
@@ -71,22 +68,15 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
                 }`}>
                   {option.description}
                 </div>
-                <div className="space-y-1">
-                  <div className={`font-bold text-lg ${
-                    frequency === option.value ? 'text-white' : 'text-primary'
+                {calculateSavings(option.savings) && (
+                  <div className={`text-xs font-medium px-2 py-1 rounded-full ${
+                    frequency === option.value 
+                      ? 'bg-green-400 text-green-900' 
+                      : 'bg-green-100 text-green-700'
                   }`}>
-                    {option.price}/hr
+                    {calculateSavings(option.savings)}
                   </div>
-                  {calculateSavings(option.savings) && (
-                    <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      frequency === option.value 
-                        ? 'bg-green-400 text-green-900' 
-                        : 'bg-green-100 text-green-700'
-                    }`}>
-                      {calculateSavings(option.savings)}
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </Button>
           </motion.div>

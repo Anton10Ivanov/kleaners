@@ -94,17 +94,14 @@ const MobileBookingSummary = ({
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-700">
-      {/* Collapsed Header - Centered Total */}
+      {/* Collapsed Header - Show summary without pricing */}
       <Button
         variant="ghost"
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full p-4 flex items-center justify-center h-auto rounded-none border-none dark:text-white"
       >
         <div className="flex items-center justify-center gap-3 flex-1">
-          <span className="text-lg font-bold text-gray-900 dark:text-white">Total:</span>
-          <span className="text-lg font-bold text-primary tabular-nums">
-            {frequency && hours > 0 ? `${totalCost.toFixed(2)} €` : 'Select options'}
-          </span>
+          <span className="text-lg font-bold text-gray-900 dark:text-white">Summary</span>
           {isExpanded ? (
             <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           ) : (
@@ -141,40 +138,32 @@ const MobileBookingSummary = ({
                       {frequency === 'weekly' ? 'Weekly' : 
                        frequency === 'bi-weekly' ? 'Every 2 Weeks' : 'One Time'}
                     </span>
-                    <span className="ml-auto font-semibold tabular-nums">{currentPrice.toFixed(2)} €/h</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2 rounded-md bg-gray-50 dark:bg-gray-700">
                     <Clock className="w-4 h-4 text-primary shrink-0" />
                     <span className="font-medium">{hours} Cleaning Hours</span>
-                    <span className="ml-auto font-semibold tabular-nums">{(currentPrice * hours).toFixed(2)} €</span>
                   </div>
                 </>
               )}
               
               {/* Selected Extras */}
               {selectedExtras.length > 0 && selectedExtras.map(extra => {
-                const hourlyRate = getHourlyRate(frequency);
-                let extraCost = 0;
                 let extraLabel = '';
 
                 switch (extra) {
                   case 'cabinets':
-                    extraCost = 0.5 * hourlyRate;
                     extraLabel = 'Inside Cabinets (30 min)';
                     break;
                   case 'fridge':
-                    extraCost = 0.5 * hourlyRate;
                     extraLabel = 'Inside Fridge (30 min)';
                     break;
                   case 'oven':
-                    extraCost = hourlyRate;
                     extraLabel = 'Inside Oven (60 min)';
                     break;
                   case 'ironing':
                     const ironingTime = localStorage.getItem('ironingTime') ? 
                       parseInt(localStorage.getItem('ironingTime') || '30') : 
                       30;
-                    extraCost = (ironingTime / 60) * hourlyRate;
                     extraLabel = `Ironing (${ironingTime} min)`;
                     break;
                   default:
@@ -185,7 +174,6 @@ const MobileBookingSummary = ({
                   <div key={extra} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 p-2 rounded-md bg-gray-50 dark:bg-gray-700">
                     <Check className="w-4 h-4 text-primary shrink-0" />
                     <span className="font-medium truncate">{extraLabel}</span>
-                    <span className="ml-auto font-semibold tabular-nums">{extraCost.toFixed(2)} €</span>
                   </div>
                 );
               })}
