@@ -28,7 +28,6 @@ interface FinalStepProps {
 const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const { isSubmitting, submitBooking, confirmationData, clearConfirmation } = useBookingSubmission();
-  const isMobile = useMediaQuery("(max-width: 768px)");
   
   const providerOptions = form.watch('providerOptions') as ProviderOption[] || [];
   const hasProviderOptions = providerOptions && providerOptions.length > 0;
@@ -93,45 +92,12 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
     }
   };
 
-  // Mobile layout - single column
-  if (isMobile) {
-    return (
-      <FormErrorBoundary>
-        <div className="space-y-6">
-          <form className="space-y-6">
-            <CleaningAddress form={form} postalCode={postalCode} />
-            <PersonalInformation form={form} />
-            
-            {hasProviderOptions && (
-              <ProviderSelection 
-                providers={providerOptions} 
-                selectedProvider={selectedProvider}
-                onSelectProvider={setSelectedProvider}
-              />
-            )}
-          </form>
-          
-          {/* Summary shown separately on mobile */}
-          <EnhancedBookingSummary 
-            form={form} 
-            onSubmit={handleSubmit} 
-            isSubmitting={isSubmitting}
-            onBack={onBack}
-            showBackButton={!!onBack}
-            backButtonText="Previous"
-          />
-        </div>
-      </FormErrorBoundary>
-    );
-  }
-
-  // Desktop layout - two columns
+  // Unified responsive layout for all screen sizes
   return (
     <FormErrorBoundary>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Form Fields */}
-        <div className="lg:col-span-2">
-          <form className="space-y-6">
+        <div className="lg:col-span-2 space-y-6">
             <CleaningAddress form={form} postalCode={postalCode} />
             <PersonalInformation form={form} />
             
@@ -142,12 +108,11 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
                 onSelectProvider={setSelectedProvider}
               />
             )}
-          </form>
         </div>
 
         {/* Right Column - Booking Summary */}
         <div className="lg:col-span-1">
-          <div className="sticky top-6">
+          <div className="sticky top-24">
             <EnhancedBookingSummary 
               form={form} 
               onSubmit={handleSubmit} 
