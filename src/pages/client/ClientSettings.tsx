@@ -9,8 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription } from '@/components/ui/card';
 import { ProfileSkeleton } from '@/components/user/profile/ProfileSkeleton';
 import { ProfileErrorState } from '@/components/user/profile/ProfileErrorState';
-import useUserSettingsStore from '@/store/useUserSettingsStore';
-import { useEffect } from 'react';
 
 /**
  * ClientSettings Page
@@ -32,15 +30,6 @@ export default function ClientSettings(): JSX.Element {
     changePassword
   } = useUserProfileData();
   
-  const { preferences, setDarkMode } = useUserSettingsStore();
-  
-  // Sync profile dark mode with app settings
-  useEffect(() => {
-    if (profile && profile.accountPreferences.darkMode !== undefined) {
-      setDarkMode(profile.accountPreferences.darkMode);
-    }
-  }, [profile, setDarkMode]);
-  
   // Loading state for profile
   if (profileLoading) {
     return <ProfileSkeleton />;
@@ -55,14 +44,14 @@ export default function ClientSettings(): JSX.Element {
   if (!profile) {
     return (
       <div className="container mx-auto px-4 py-6 text-center">
-        <p className="text-zinc-800 dark:text-zinc-200">No profile data available</p>
+        <p className="text-zinc-800">No profile data available</p>
       </div>
     );
   }
   
   return (
     <div className="container mx-auto px-4 py-6 pb-16 md:pb-0">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Settings</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">Settings</h1>
       
       <Tabs defaultValue="preferences" className="w-full">
         <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-2 mb-8">
@@ -80,7 +69,7 @@ export default function ClientSettings(): JSX.Element {
           <TabsContent value="preferences">
             <Card className="bg-card text-card-foreground">
               <CardContent className="pt-6">
-                <CardDescription className="mb-4 text-center dark:text-gray-300">
+                <CardDescription className="mb-4 text-center">
                   Customize your application experience
                 </CardDescription>
                 <AccountPreferences
@@ -94,7 +83,7 @@ export default function ClientSettings(): JSX.Element {
           <TabsContent value="security">
             <Card className="bg-card text-card-foreground">
               <CardContent className="pt-6">
-                <CardDescription className="mb-4 text-center dark:text-gray-300">
+                <CardDescription className="mb-4 text-center">
                   Manage your account security
                 </CardDescription>
                 <SecuritySettings
