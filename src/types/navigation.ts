@@ -6,7 +6,7 @@ import { LucideIcon } from 'lucide-react';
 export interface NavigationItem {
   label: string;
   description: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode; // Made optional
   path: string;
   price?: string;
 }

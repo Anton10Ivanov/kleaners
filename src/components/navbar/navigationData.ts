@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Heart, HelpCircle, Phone, Users, FileText, Shield, Home, Building, Sparkles, LucideIcon, Briefcase, Building2, HardHat } from 'lucide-react';
 import { ServiceCategory, NavItem, PopularService } from '@/types/navigation';
@@ -91,25 +90,21 @@ export const navItems: NavItem[] = [
         {
           label: "View All Services",
           description: "Browse our complete range of cleaning services",
-          icon: React.createElement(Sparkles, { className: "h-5 w-5" }),
           path: "/services"
         },
         {
           label: "Home Cleaning",
           description: "Regular and deep cleaning for your home",
-          icon: React.createElement(Home, { className: "h-5 w-5" }),
           path: "/services/home-cleaning"
         },
         {
           label: "Office Cleaning",
           description: "Professional commercial cleaning",
-          icon: React.createElement(Building, { className: "h-5 w-5" }),
           path: "/services/office-cleaning"
         },
         {
           label: "Book Now",
           description: "Start your booking process",
-          icon: React.createElement(Briefcase, { className: "h-5 w-5" }),
           path: "/booking"
         }
       ]
@@ -123,22 +118,18 @@ export const navItems: NavItem[] = [
       items: [{
         label: "Company's Values",
         description: "Our principles and what we stand for",
-        icon: React.createElement(Heart, { className: "h-5 w-5" }),
         path: "/about/values"
       }, {
         label: "FAQ",
         description: "Frequently asked questions",
-        icon: React.createElement(HelpCircle, { className: "h-5 w-5" }),
         path: "/about/faq"
       }, {
         label: "Terms of Service",
         description: "Our terms and conditions",
-        icon: React.createElement(FileText, { className: "h-5 w-5" }),
         path: "/legal/terms"
       }, {
         label: "Privacy Policy",
         description: "How we handle your data",
-        icon: React.createElement(Shield, { className: "h-5 w-5" }),
         path: "/legal/privacy"
       }]
     }]
@@ -150,12 +141,10 @@ export const navItems: NavItem[] = [
       items: [{
         label: "Get in Touch",
         description: "Contact our customer service team",
-        icon: React.createElement(Phone, { className: "h-5 w-5" }),
         path: "/contact"
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        icon: React.createElement(Users, { className: "h-5 w-5" }),
         path: "/join-team"
       }]
     }]
