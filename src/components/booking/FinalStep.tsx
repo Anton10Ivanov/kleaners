@@ -48,9 +48,7 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     return <BookingSubmissionLoader />;
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     // Validate required fields with detailed error messages
     const formData = form.getValues();
     const errors: string[] = [];
@@ -103,7 +101,7 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
     return (
       <FormErrorBoundary>
         <div className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6">
             <CleaningAddress form={form} postalCode={postalCode} />
             <PersonalInformation form={form} />
             
@@ -114,20 +112,10 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
                 onSelectProvider={setSelectedProvider}
               />
             )}
-            
-            <div className="flex justify-end">
-              <Button 
-                type="submit" 
-                disabled={isSubmitting} 
-                className="w-full px-8 py-3"
-              >
-                {isSubmitting ? "Processing Booking..." : "Complete Booking"}
-              </Button>
-            </div>
           </form>
           
           {/* Summary shown separately on mobile */}
-          <EnhancedBookingSummary form={form} />
+          <EnhancedBookingSummary form={form} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
         </div>
       </FormErrorBoundary>
     );
@@ -139,7 +127,7 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Form Fields */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6">
             <CleaningAddress form={form} postalCode={postalCode} />
             <PersonalInformation form={form} />
             
@@ -150,23 +138,13 @@ const FinalStep = ({ form, postalCode, onSubmit }: FinalStepProps) => {
                 onSelectProvider={setSelectedProvider}
               />
             )}
-            
-            <div className="flex justify-end">
-              <Button 
-                type="submit" 
-                disabled={isSubmitting} 
-                className="w-full sm:w-auto px-8 py-3"
-              >
-                {isSubmitting ? "Processing Booking..." : "Complete Booking"}
-              </Button>
-            </div>
           </form>
         </div>
 
         {/* Right Column - Booking Summary */}
         <div className="lg:col-span-1">
           <div className="sticky top-6">
-            <EnhancedBookingSummary form={form} />
+            <EnhancedBookingSummary form={form} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
           </div>
         </div>
       </div>

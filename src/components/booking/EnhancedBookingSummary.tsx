@@ -1,4 +1,3 @@
-
 import { UseFormReturn } from 'react-hook-form';
 import { BookingFormData, Frequency } from '@/schemas/booking';
 import { format } from 'date-fns';
@@ -10,9 +9,11 @@ import { toast } from 'sonner';
 
 interface EnhancedBookingSummaryProps {
   form: UseFormReturn<BookingFormData>;
+  onSubmit?: () => void;
+  isSubmitting?: boolean;
 }
 
-const EnhancedBookingSummary = ({ form }: EnhancedBookingSummaryProps) => {
+const EnhancedBookingSummary = ({ form, onSubmit, isSubmitting }: EnhancedBookingSummaryProps) => {
   const formData = form.watch();
   const { 
     frequency = Frequency.Weekly, 
@@ -165,6 +166,20 @@ const EnhancedBookingSummary = ({ form }: EnhancedBookingSummaryProps) => {
           </div>
           <p className="text-xs text-gray-500">Per cleaning session</p>
         </div>
+
+        {onSubmit && (
+          <div className="pt-4 mt-2 border-t">
+            <Button
+              type="button"
+              onClick={onSubmit}
+              disabled={isSubmitting}
+              className="w-full"
+              size="lg"
+            >
+              {isSubmitting ? "Processing Booking..." : "Complete Booking"}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
