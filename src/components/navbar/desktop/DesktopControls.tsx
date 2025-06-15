@@ -15,7 +15,7 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
 
   return (
     <div className={cn(
-      "hidden md:flex items-center gap-1",
+      "hidden md:flex items-center gap-1 w-full", // Added w-full to stretch full navbar width
       getMobileSpacing('sm')
     )}>
       {user && (
@@ -30,7 +30,8 @@ export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: Des
         </div>
       )}
       
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 ml-auto">
+        {/* Use ml-auto to stick language selector etc. to the right */}
         <div className="touch-comfortable">
           <LanguageSelector 
             currentLanguage={currentLanguage} 
