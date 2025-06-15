@@ -13,32 +13,20 @@ interface DesktopControlsProps {
 export const DesktopControls = ({ user, currentLanguage, onLanguageChange }: DesktopControlsProps) => {
   const { getMobileSpacing } = useMobileOptimizations();
 
+  // Only styles for items inside, no excessive width/flex
   return (
     <div className={cn(
-      "hidden md:flex items-center gap-1 w-full", // Added w-full to stretch full navbar width
+      "hidden md:flex items-center gap-2",
       getMobileSpacing('sm')
     )}>
-      {user && (
-        <div className="touch-comfortable">
-          <UserControls user={user} />
-        </div>
-      )}
-      
-      {!user && (
-        <div className="touch-comfortable">
-          <AuthButtons />
-        </div>
-      )}
-      
-      <div className="flex items-center gap-1 ml-auto">
-        {/* Use ml-auto to stick language selector etc. to the right */}
-        <div className="touch-comfortable">
-          <LanguageSelector 
-            currentLanguage={currentLanguage} 
-            onLanguageChange={onLanguageChange} 
-          />
-        </div>
-      </div>
+      {user
+        ? <UserControls user={user} />
+        : <AuthButtons />
+      }
+      <LanguageSelector
+        currentLanguage={currentLanguage}
+        onLanguageChange={onLanguageChange}
+      />
     </div>
   );
 };
