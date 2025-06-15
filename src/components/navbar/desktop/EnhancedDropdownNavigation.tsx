@@ -69,8 +69,8 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                 "focus:bg-accent focus:text-accent-foreground", 
                 "focus-visible:ring-2 focus-visible:ring-primary/20",
                 "data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
-                "font-medium touch-comfortable",
-                isMobile ? "h-12 px-4 py-3 text-base" : "h-10 px-4 py-2 text-sm",
+                "font-semibold text-base tracking-wide touch-comfortable",
+                isMobile ? "h-12 px-4 py-3 text-lg" : "h-10 px-4 py-2 text-base",
                 activeItem === item.id.toString() && "bg-accent/30"
               )}
             >
@@ -81,17 +81,18 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                 "bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm",
                 "shadow-xl rounded-xl border border-border/50 z-50",
                 "animate-in fade-in-0 zoom-in-95 duration-200",
-                isMobile ? "w-[320px] p-4" : "w-[300px] p-4"
+                isMobile ? "w-[320px] p-6" : "w-[300px] p-6"
               )}>
                 {item.subMenus?.map((subMenu) => (
                   <div key={subMenu.title}>
                     <h4 className={cn(
-                      "font-semibold text-foreground mb-3",
-                      getMobileTextSize('md')
+                      "font-bold text-foreground mb-4 text-lg tracking-tight",
+                      "border-b border-border/20 pb-2",
+                      getMobileTextSize('lg')
                     )}>
                       {subMenu.title}
                     </h4>
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       {subMenu.items.map((subItem) => (
                         <button
                           key={subItem.path}
@@ -103,19 +104,22 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             "focus:bg-accent/50 focus:outline-none",
                             "focus-visible:ring-2 focus-visible:ring-primary/20",
                             "transition-all duration-200 touch-comfortable",
+                            "p-3 border border-transparent hover:border-border/20",
                             getMobileSpacing('sm')
                           )}
                         >
                           <h5 className={cn(
-                            "font-medium text-foreground group-hover:text-primary",
-                            "transition-colors duration-200",
-                            getMobileTextSize('sm')
+                            "font-semibold text-foreground group-hover:text-primary",
+                            "transition-colors duration-200 text-base leading-tight",
+                            "mb-1",
+                            getMobileTextSize('base')
                           )}>
                             {subItem.label}
                           </h5>
                           <p className={cn(
-                            "text-muted-foreground leading-relaxed",
-                            isMobile ? "text-sm mt-1" : "text-xs"
+                            "text-muted-foreground leading-relaxed font-normal",
+                            isMobile ? "text-sm" : "text-sm",
+                            "group-hover:text-muted-foreground/80"
                           )}>
                             {subItem.description}
                           </p>
