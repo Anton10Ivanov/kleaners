@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { handleApiError, ErrorSeverity } from '@/utils/errors';
 import { JoinTeamFormData } from './types';
+import { logger } from '@/utils/logging';
 
 export const useFormSubmission = (
   agreeToBackgroundCheck: boolean,
@@ -17,7 +18,7 @@ export const useFormSubmission = (
   const onSubmit = async (data: JoinTeamFormData) => {
     setIsSubmitting(true);
     try {
-      console.log('Form data submitted:', data);
+      logger.debug('Form submission initiated', { formDataKeys: Object.keys(data) }, 'useFormSubmission');
       
       const formattedData = {
         ...data,
@@ -29,7 +30,7 @@ export const useFormSubmission = (
         workDays: availability.filter(item => !['vollzeit', 'midijob', 'minijob'].includes(item)).join(', ')
       };
       
-      console.log('Formatted form data:', formattedData);
+      logger.debug('Form data formatted for submission', { formattedDataKeys: Object.keys(formattedData) }, 'useFormSubmission');
       
       await new Promise(resolve => setTimeout(resolve, 1500));
       

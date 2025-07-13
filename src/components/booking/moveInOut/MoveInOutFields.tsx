@@ -6,6 +6,7 @@ import PropertyCondition from './PropertyCondition';
 import CleaningPersonnel from './CleaningPersonnel';
 import SpecialConditions from './SpecialConditions';
 import AdditionalNotesField from './components/AdditionalNotesField';
+import { logger } from "@/utils/logging";
 
 interface MoveInOutFieldsProps {
   form: UseFormReturn<MoveInOutFormData>;
@@ -21,7 +22,7 @@ const MoveInOutFields = ({ form }: MoveInOutFieldsProps) => {
   const specialConditions = form.watch('specialConditions') || [];
   const additionalNotes = form.watch('additionalNotes') || '';
 
-  console.log('Rendering MoveInOutFields with squareMeters:', squareMeters);
+  logger.debug('Rendering MoveInOutFields', { squareMeters }, 'MoveInOutFields');
   
   return (
     <div className="space-y-6">

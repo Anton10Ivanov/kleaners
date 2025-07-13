@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "./SocialLogin";
+import { logger } from "@/utils/logging";
 
 interface LoginFormProps {
   onResetMode: () => void;
@@ -44,7 +45,10 @@ const LoginForm = ({
       
       navigate(returnUrl);
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        email: email 
+      }, "LoginForm");
       toast({
         variant: "destructive",
         title: "Error",

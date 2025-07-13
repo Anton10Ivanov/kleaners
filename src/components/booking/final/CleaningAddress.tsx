@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AddressAutocomplete } from "@/components/forms/AddressAutocomplete";
 import FormErrorBoundary from "@/components/forms/FormErrorBoundary";
 import SpecialInstructions from "./SpecialInstructions";
+import { logger } from "@/utils/logging";
 
 interface CleaningAddressProps {
   form: UseFormReturn<BookingFormData>;
@@ -27,7 +28,7 @@ const CleaningAddress = ({ form, postalCode }: CleaningAddressProps) => {
               <AddressAutocomplete 
                 form={form}
                 onAddressSelect={(address) => {
-                  console.log('Address selected:', address);
+                  logger.debug('Address selected', { address }, 'CleaningAddress');
                 }}
               />
             </div>

@@ -8,6 +8,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar as ShadcnCalendar } from "@/components/ui/calendar";
 import { TimeSlots } from "@/components/booking/calendar/TimeSlots";
+import { logger } from "@/utils/logging";
 
 interface CalendarProps {
   form: UseFormReturn<BookingFormData>;
@@ -53,7 +54,7 @@ const Calendar = ({
           .contains('provider_service_areas.postal_code', [postalCode]);
           
         if (error) {
-          console.error('Error fetching providers:', error);
+          logger.error('Failed to fetch providers', { error: error.message, postalCode }, 'Calendar');
           return;
         }
         
@@ -80,7 +81,7 @@ const Calendar = ({
           form.setValue('providerOptions', []);
         }
       } catch (err) {
-        console.error('Error processing provider availability:', err);
+        logger.error('Failed to process provider availability', { error: err instanceof Error ? err.message : 'Unknown error' }, 'Calendar');
       }
     };
     
