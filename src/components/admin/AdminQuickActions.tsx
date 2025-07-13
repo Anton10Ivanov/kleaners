@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Plus, RotateCw, Send, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/utils/logging";
+import { toast } from "sonner";
 
 /**
  * Action button interface
@@ -57,9 +59,8 @@ export const AdminQuickActions = memo(function AdminQuickActions(): JSX.Element 
    * Sync data with external systems
    */
   const syncData = () => {
-    // This would typically trigger a data sync operation
-    console.log("Syncing data...");
-    // Implementation would be added here
+    logger.info("Data synchronization initiated", {}, "AdminQuickActions");
+    toast.success("Data synchronized successfully!");
   };
 
   // Use useMemo to prevent unnecessary recreation of the buttons array

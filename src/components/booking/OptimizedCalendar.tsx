@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import TimeGrid from "./TimeGrid";
+import { logger } from "@/utils/logging";
 
 interface OptimizedCalendarProps {
   form: UseFormReturn<BookingFormData>;
@@ -60,7 +61,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
           .contains('provider_service_areas.postal_code', [postalCode]);
 
         if (error) {
-          console.error('Error fetching providers:', error);
+          logger.error('Failed to fetch providers', { error: error.message, postalCode }, 'OptimizedCalendar');
           return;
         }
 
@@ -86,7 +87,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
           form.setValue('providerOptions', []);
         }
       } catch (err) {
-        console.error('Error processing provider availability:', err);
+        logger.error('Failed to process provider availability', { error: err instanceof Error ? err.message : 'Unknown error' }, 'OptimizedCalendar');
       }
     };
 

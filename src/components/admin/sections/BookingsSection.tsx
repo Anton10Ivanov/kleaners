@@ -12,6 +12,7 @@ import { BookingsLoadingState } from "./bookings/components/BookingsLoadingState
 import { BookingsErrorState } from "./bookings/components/BookingsErrorState";
 import { BookingsEmptyState } from "./bookings/components/BookingsEmptyState";
 import { BookingsStatusBadge } from "./bookings/components/BookingsStatusBadge";
+import { logger } from "@/utils/logging";
 
 export const BookingsSection = () => {
   const { toast } = useToast();
@@ -69,11 +70,11 @@ export const BookingsSection = () => {
   };
 
   const handleViewDetails = (booking) => {
-    console.log("View details:", booking);
+    logger.debug("Viewing booking details", { bookingId: booking.id }, "BookingsSection");
   };
 
   const handleContactClient = (booking) => {
-    console.log("Contact client:", booking);
+    logger.debug("Contacting client", { bookingId: booking.id, clientEmail: booking.email }, "BookingsSection");
   };
 
   const totalItems = bookings?.length || 0;

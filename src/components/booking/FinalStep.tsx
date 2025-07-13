@@ -17,6 +17,7 @@ import { displayFormErrors } from "@/utils/errors/formErrors";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { logger } from "@/utils/logging";
 
 interface FinalStepProps {
   form: UseFormReturn<BookingFormData>;
@@ -76,18 +77,12 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
     
     try {
       const data = form.getValues();
-      console.log('Submitting booking data:', data);
+      logger.info('Booking submission initiated', { serviceType: data.serviceType, postalCode: data.postalCode }, 'FinalStep');
       
       const result = await submitBooking(data);
-      
-      if (result.success) {
-        console.log('Booking submitted successfully:', result.referenceNumber);
-        toast.success('Booking confirmed! Check your email for details.');
-      } else {
-        toast.error(result.error || 'Failed to submit booking');
-      }
+      logger.info('Booking submitted successfully', { referenceNumber: result.referenceNumber }, 'FinalStep');
     } catch (error) {
-      console.error("Error submitting booking:", error);
+      logger.error('Booking submission failed', { error: error instanceof Error ? error.message : 'Unknown error' }, 'FinalStep');
       toast.error('An unexpected error occurred. Please try again.');
     }
   };

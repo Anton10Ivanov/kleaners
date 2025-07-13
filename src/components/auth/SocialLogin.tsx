@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/utils/logging";
 
 const SocialLogin = () => {
   const { toast } = useToast();
@@ -16,7 +17,9 @@ const SocialLogin = () => {
       });
       if (error) throw error;
     } catch (error) {
-      console.error('Google login error:', error);
+      logger.error('Google login failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      }, "SocialLogin");
       toast({
         variant: "destructive",
         title: "Error",
@@ -35,7 +38,9 @@ const SocialLogin = () => {
       });
       if (error) throw error;
     } catch (error) {
-      console.error('Apple login error:', error);
+      logger.error('Apple login failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      }, "SocialLogin");
       toast({
         variant: "destructive",
         title: "Error",

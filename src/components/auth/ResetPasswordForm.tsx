@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/utils/logging";
 
 interface ResetPasswordFormProps {
   onBackToLogin: () => void;
@@ -32,7 +33,10 @@ const ResetPasswordForm = ({ onBackToLogin }: ResetPasswordFormProps) => {
       });
       onBackToLogin();
     } catch (error) {
-      console.error('Password reset error:', error);
+      logger.error('Password reset failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        email: email 
+      }, "ResetPasswordForm");
       toast({
         variant: "destructive",
         title: "Error",

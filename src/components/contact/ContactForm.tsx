@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logging';
 
 // Define validation schema
 const contactFormSchema = z.object({
@@ -81,7 +82,10 @@ const ContactForm = () => {
       // Reset form
       form.reset();
     } catch (error) {
-      console.error('Error submitting question:', error);
+      logger.error('Failed to submit contact form', { 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        email: data.email 
+      }, "ContactForm");
       
       // Show error message with appropriate message based on the error
       const errorMessage = error.message?.includes('rate limit') 

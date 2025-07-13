@@ -12,6 +12,7 @@ import SocialLogin from "./SocialLogin";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { logger } from "@/utils/logging";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -119,7 +120,10 @@ const SignupForm = () => {
             });
             
           if (providerError) {
-            console.error('Error creating provider record:', providerError);
+            logger.error('Failed to create provider record', { 
+              error: providerError.message,
+              email: formData.email 
+            }, "SignupForm");
           }
           
           // Connect with provider application if it exists
@@ -156,7 +160,11 @@ const SignupForm = () => {
 
       navigate('/');
     } catch (error) {
-      console.error('Signup error:', error);
+      logger.error('Signup failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        email: formData.email,
+        userType: formData.userType 
+      }, "SignupForm");
       toast({
         variant: "destructive",
         title: "Error",

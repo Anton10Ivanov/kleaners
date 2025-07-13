@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logging';
 
 interface VacationRequest {
   id: string;
@@ -54,7 +55,7 @@ export function VacationRequestsSection() {
           .in('id', providerIds);
           
         if (providersError) {
-          console.error("Error fetching provider names:", providersError);
+          logger.error("Failed to fetch provider names", { error: providersError.message }, "VacationRequestsSection");
         }
         
         // Map provider names to vacation requests
@@ -71,7 +72,7 @@ export function VacationRequestsSection() {
         setVacationRequests([]);
       }
     } catch (error) {
-      console.error("Error fetching vacation requests:", error);
+      logger.error("Failed to fetch vacation requests", { error: error instanceof Error ? error.message : 'Unknown error' }, "VacationRequestsSection");
       toast.error("Failed to fetch vacation requests");
     } finally {
       setIsLoading(false);
@@ -102,7 +103,7 @@ export function VacationRequestsSection() {
       
       toast.success(`Vacation request ${status}`);
     } catch (error) {
-      console.error(`Error ${status} vacation request:`, error);
+      logger.error(`Failed to ${status} vacation request`, { error: error instanceof Error ? error.message : 'Unknown error', requestId: id }, "VacationRequestsSection");
       toast.error(`Failed to ${status} vacation request`);
     }
   };
