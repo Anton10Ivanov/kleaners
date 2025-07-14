@@ -40,13 +40,17 @@ const HomePage = () => {
   const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Performance monitoring
+  // Performance monitoring - simplified to prevent blocking
   useEffect(() => {
-    performanceMonitor.markAsImportant('HomePage');
-    startTimer('initialRender');
+    if (import.meta.env.DEV) {
+      performanceMonitor.markAsImportant('HomePage');
+      startTimer('initialRender');
+    }
     
     return () => {
-      endTimer('initialRender');
+      if (import.meta.env.DEV) {
+        endTimer('initialRender');
+      }
     };
   }, [startTimer, endTimer]);
 
@@ -59,19 +63,19 @@ const HomePage = () => {
 
   // Memoized handlers
   const handleNext = useCallback(() => {
-    startTimer('nextStepInteraction');
+    if (import.meta.env.DEV) startTimer('nextStepInteraction');
     
     if (currentStep === 1 && (!selectedService || !postalCode)) {
       if (!selectedService) toast.error("Please select a service type");
       if (!postalCode) toast.error("Please enter your postal code");
-      endTimer('nextStepInteraction');
+      if (import.meta.env.DEV) endTimer('nextStepInteraction');
       return;
     }
     
     if (currentStep === 2 && (!frequency || !hours)) {
       if (!frequency) toast.error("Please select a frequency");
       if (!hours) toast.error("Please specify the hours needed");
-      endTimer('nextStepInteraction');
+      if (import.meta.env.DEV) endTimer('nextStepInteraction');
       return;
     }
     
@@ -84,34 +88,34 @@ const HomePage = () => {
     if (currentStep === 2) {
       toast.success("Great! Let's complete your booking details.");
     }
-    endTimer('nextStepInteraction');
+    if (import.meta.env.DEV) endTimer('nextStepInteraction');
   }, [currentStep, selectedService, postalCode, frequency, hours, handleNextStep, isMobile, startTimer, endTimer]);
 
   const handleBack = useCallback(() => {
-    startTimer('backStepInteraction');
+    if (import.meta.env.DEV) startTimer('backStepInteraction');
     if (isMobile) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     handleBackStep();
-    endTimer('backStepInteraction');
+    if (import.meta.env.DEV) endTimer('backStepInteraction');
   }, [handleBackStep, isMobile, startTimer, endTimer]);
 
   const handleHeroNextStep = useCallback(() => {
-    startTimer('heroNextStepInteraction');
+    if (import.meta.env.DEV) startTimer('heroNextStepInteraction');
     handleNextStep();
-    endTimer('heroNextStepInteraction');
+    if (import.meta.env.DEV) endTimer('heroNextStepInteraction');
   }, [handleNextStep, startTimer, endTimer]);
 
   const setSelectedService = useCallback((service: ServiceType | string) => {
-    startTimer('setServiceInteraction');
+    if (import.meta.env.DEV) startTimer('setServiceInteraction');
     setValue('service', service as ServiceType);
-    endTimer('setServiceInteraction');
+    if (import.meta.env.DEV) endTimer('setServiceInteraction');
   }, [setValue, startTimer, endTimer]);
 
   const setPostalCode = useCallback((code: string) => {
-    startTimer('setPostalCodeInteraction');
+    if (import.meta.env.DEV) startTimer('setPostalCodeInteraction');
     setValue('postalCode', code);
-    endTimer('setPostalCodeInteraction');
+    if (import.meta.env.DEV) endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
   // Convert serviceCategories to the expected format
@@ -155,29 +159,32 @@ const HomePage = () => {
             {/* How it works section */}
             <ProcessSteps />
             
-            <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
-            
-            <Suspense fallback={<SectionLoading />}>
+            {/* Service Categories Section */}
+            <div className="bg-white dark:bg-gray-800 py-2">
               <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <LazyServiceCategoriesSection serviceCategories={convertedServiceCategories} />
+                <Suspense fallback={<SectionLoading />}>
+                  <LazyServiceCategoriesSection serviceCategories={convertedServiceCategories} />
+                </Suspense>
               </ErrorBoundary>
-            </Suspense>
+            </div>
             
-            <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
-            
-            <Suspense fallback={<SectionLoading />}>
+            {/* Business Solutions Section */}
+            <div className="py-2">
               <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <LazyBusinessSolutionsSection />
+                <Suspense fallback={<SectionLoading />}>
+                  <LazyBusinessSolutionsSection />
+                </Suspense>
               </ErrorBoundary>
-            </Suspense>
+            </div>
             
-            <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
-            
-            <Suspense fallback={<SectionLoading />}>
+            {/* Why Choose Us, Testimonials, FAQ Section */}
+            <div className="bg-white dark:bg-gray-800 py-2">
               <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <LazyHomeSections />
+                <Suspense fallback={<SectionLoading />}>
+                  <LazyHomeSections />
+                </Suspense>
               </ErrorBoundary>
-            </Suspense>
+            </div>
           </motion.div>
         ) : (
           <BookingSteps
