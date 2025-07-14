@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Message, FileAttachment, sendMessage } from '@/utils/chat';
 import { supabase } from '@/integrations/supabase/client';
+import { logError } from '@/utils/console-cleanup';
 
 export const useChat = (conversationId: string, userId: string, recipientId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,7 +23,7 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
           setMessages(response.data);
         }
       } catch (error) {
-        console.error('Error loading messages:', error);
+        logError('Error loading messages', error, 'useChat');
       } finally {
         setIsLoading(false);
       }
@@ -47,7 +48,7 @@ export const useChat = (conversationId: string, userId: string, recipientId: str
       setMessages(prev => [...prev, sentMessage]);
       return sentMessage;
     } catch (error) {
-      console.error('Error sending message:', error);
+      logError('Error sending message', error, 'useChat');
       throw error;
     }
   };

@@ -7,6 +7,7 @@ import { formPersistence } from '@/utils/formPersistence';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { getPrice } from '@/utils/pricing';
+import { logInfo, logError } from '@/utils/console-cleanup';
 
 interface BookingSubmissionResult {
   success: boolean;
@@ -48,7 +49,7 @@ export const useBookingSubmission = () => {
    */
   const sendConfirmationEmail = async (bookingData: BookingFormData, referenceNumber: string): Promise<boolean> => {
     try {
-      console.log('Sending confirmation email for booking:', referenceNumber);
+      logInfo('Sending confirmation email for booking', { referenceNumber }, 'useBookingSubmission');
       
       // Simulate email sending API call
       const emailData = {
@@ -68,12 +69,12 @@ export const useBookingSubmission = () => {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('Email sent successfully:', emailData);
+      logInfo('Email sent successfully', { emailData }, 'useBookingSubmission');
       toast.success('Confirmation email sent!');
       return true;
       
     } catch (error) {
-      console.error('Failed to send confirmation email:', error);
+      logError('Failed to send confirmation email', error, 'useBookingSubmission');
       toast.error('Failed to send confirmation email. We will contact you shortly.');
       return false;
     }
@@ -84,7 +85,7 @@ export const useBookingSubmission = () => {
    */
   const updateBookingStatus = (newStatus: BookingStatus) => {
     setBookingStatus(newStatus);
-    console.log('Booking status updated to:', newStatus);
+    logInfo('Booking status updated', { newStatus }, 'useBookingSubmission');
   };
   
   /**
@@ -117,7 +118,7 @@ export const useBookingSubmission = () => {
       // Generate booking reference
       const referenceNumber = generateBookingReference();
       
-      console.log('Submitting booking with reference:', referenceNumber, data);
+      logInfo('Submitting booking', { referenceNumber, dataKeys: Object.keys(data) }, 'useBookingSubmission');
       
       // Map form data to database schema and insert into Supabase
       // Note: extras is an array of strings, so we store it directly
@@ -135,7 +136,7 @@ export const useBookingSubmission = () => {
       });
 
       if (insertError) {
-        console.error('Supabase insert error:', insertError);
+        logError('Supabase insert error', insertError, 'useBookingSubmission');
         throw new Error('Could not save your booking. Please try again.');
       }
       
@@ -179,7 +180,7 @@ export const useBookingSubmission = () => {
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      console.error('Error submitting booking:', error);
+      logError('Error submitting booking', error, 'useBookingSubmission');
       
       updateBookingStatus(BookingStatus.CANCELLED);
       toast.error(errorMessage);

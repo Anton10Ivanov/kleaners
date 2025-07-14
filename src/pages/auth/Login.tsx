@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import LoginForm from "@/components/auth/LoginForm";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
+import { logInfo, logError } from "@/utils/console-cleanup";
 
 const Login = () => {
   const [isResetMode, setIsResetMode] = useState(false);
@@ -33,16 +34,16 @@ const Login = () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-          console.log('User logged in:', user.id);
+          logInfo('User logged in', { userId: user.id }, 'Login');
           
           // Redirect to returnUrl or default
           const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
-          console.log('Redirecting to:', returnUrl);
+          logInfo('Redirecting to', { returnUrl }, 'Login');
           sessionStorage.removeItem('authReturnUrl');
           navigate(returnUrl);
         }
       } catch (error) {
-        console.error("Auth check error:", error);
+        logError("Auth check error", error, 'Login');
       }
     };
 
@@ -50,12 +51,12 @@ const Login = () => {
 
     // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event);
+      logInfo('Auth state changed', { event }, 'Login');
       
       if (event === 'SIGNED_IN' && session?.user) {
         // Redirect on sign in
         const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
-        console.log('Signed in, redirecting to:', returnUrl);
+        logInfo('Signed in, redirecting to', { returnUrl }, 'Login');
         sessionStorage.removeItem('authReturnUrl');
         navigate(returnUrl);
       }

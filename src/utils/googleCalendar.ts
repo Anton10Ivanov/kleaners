@@ -1,5 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import { logError } from './console-cleanup';
 
 interface GoogleCalendarEvent {
   id: string;
@@ -88,7 +89,7 @@ export const addToGoogleCalendar = async (
     }
 
   } catch (error) {
-    console.error('Error adding event to Google Calendar:', error);
+    logError('Error adding event to Google Calendar', error, 'googleCalendar');
     throw error;
   }
 };

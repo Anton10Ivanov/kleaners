@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
 import type { User } from "@/types/supabase";
+import { logError } from '@/utils/console-cleanup';
 
 export const profileFormSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
@@ -61,7 +62,7 @@ export const useProfile = (user: User) => {
           setAvatarUrl(data.avatar_url);
         }
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        logError('Error fetching profile', error, 'useProfile');
         toast({
           variant: "destructive",
           title: "Error loading profile",
@@ -98,7 +99,7 @@ export const useProfile = (user: User) => {
         description: "Your profile has been updated successfully."
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      logError('Error updating profile', error, 'useProfile');
       toast({
         variant: "destructive",
         title: "Error updating profile",
@@ -145,7 +146,7 @@ export const useProfile = (user: User) => {
         form.setValue('avatar_url', data.publicUrl);
       }
     } catch (error) {
-      console.error('Error uploading avatar:', error);
+      logError('Error uploading avatar', error, 'useProfile');
       throw error;
     }
   };

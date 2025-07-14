@@ -5,6 +5,7 @@ import { DateRange } from "react-day-picker";
 import { useBookingsQuery } from "./bookings/useBookingsQuery";
 import { useBookingsMutations } from "./bookings/useBookingsMutations";
 import { BookingsFilterParams } from "./bookings/bookingsUtils";
+import { logInfo } from '@/utils/console-cleanup';
 
 interface UseBookingsProps {
   selectedStatus: BookingStatus | null;
@@ -40,7 +41,7 @@ export const useBookings = ({
 
   // Helper to refresh data with current filters
   const refreshBookings = () => {
-    console.log("Manually refreshing bookings data");
+    logInfo("Manually refreshing bookings data", {}, "useBookings");
     // Fix the build error by using the query key from the useBookingsQuery hook
     return queryClient.invalidateQueries({ 
       queryKey: getBookingsQueryKey(currentFilters) 

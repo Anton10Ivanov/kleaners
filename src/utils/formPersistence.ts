@@ -1,5 +1,6 @@
 
 import { BookingFormData } from '@/schemas/booking';
+import { logWarning } from './console-cleanup';
 
 const STORAGE_KEY = 'booking-form-data';
 const TIMESTAMP_KEY = 'booking-form-timestamp';
@@ -19,7 +20,7 @@ export const formPersistence = {
       localStorage.setItem(TIMESTAMP_KEY, timestamp.toString());
       return true;
     } catch (error) {
-      console.warn('Failed to save form data:', error);
+      logWarning('Failed to save form data', { error }, 'formPersistence');
       return false;
     }
   },
@@ -47,7 +48,7 @@ export const formPersistence = {
 
       return JSON.parse(dataStr);
     } catch (error) {
-      console.warn('Failed to load form data:', error);
+      logWarning('Failed to load form data', { error }, 'formPersistence');
       return null;
     }
   },
@@ -60,7 +61,7 @@ export const formPersistence = {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(TIMESTAMP_KEY);
     } catch (error) {
-      console.warn('Failed to clear form data:', error);
+      logWarning('Failed to clear form data', { error }, 'formPersistence');
     }
   },
 

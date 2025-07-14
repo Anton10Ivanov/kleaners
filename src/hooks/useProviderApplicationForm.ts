@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { logError } from '@/utils/console-cleanup';
 import { 
   PersonalInfoFormValues, 
   DocumentsFormValues,
@@ -191,7 +192,7 @@ export const useProviderApplicationForm = () => {
       toast.success('Application submitted successfully!');
       return data.id;
     } catch (error) {
-      console.error('Error submitting application:', error);
+      logError('Error submitting application', error, 'useProviderApplicationForm');
       toast.error('Failed to submit application. Please try again.');
       return null;
     }
