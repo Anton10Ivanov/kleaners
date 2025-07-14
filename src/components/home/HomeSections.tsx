@@ -22,7 +22,7 @@ export const HomeSections = () => {
         </Suspense>
       </ErrorBoundary>
       
-      <div className="wave-divider bg-white dark:bg-gray-800 h-16 md:h-24"></div>
+      <div className="py-8"></div>
       
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Suspense fallback={<SectionLoading />}>
@@ -30,7 +30,7 @@ export const HomeSections = () => {
         </Suspense>
       </ErrorBoundary>
       
-      <div className="wave-divider bg-theme-lightblue dark:bg-gray-900 h-16 md:h-24"></div>
+      <div className="py-8"></div>
       
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Suspense fallback={<SectionLoading />}>
