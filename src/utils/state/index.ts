@@ -1,6 +1,6 @@
 
 import environmentUtils from '@/utils/environment';
-import { logWarning } from './console-cleanup';
+import { logWarning } from '../console-cleanup';
 
 /**
  * State management utilities for consistent state across environments
