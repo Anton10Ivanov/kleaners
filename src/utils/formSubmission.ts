@@ -1,5 +1,6 @@
 
 import { toast } from 'sonner';
+import { logError, logInfo } from './console-cleanup';
 
 /**
  * Handles form submission errors and displays appropriate messages
@@ -12,7 +13,7 @@ export const handleFormSubmissionError = (
   fallbackMessage = 'An error occurred while submitting the form. Please try again.',
   showToast = true
 ) => {
-  console.error('Form submission error:', error);
+  logError('Form submission error', error, 'formSubmission');
   
   let errorMessage = fallbackMessage;
   
@@ -130,11 +131,12 @@ export const trackFormSubmission = (
 ) => {
   // In a real app, this would send data to an analytics service
   if (import.meta.env.DEV) {
-    console.log(`[ANALYTICS] Form submission: ${formName}`, {
+    logInfo('Form submission analytics', { 
+      formName, 
       success,
       timestamp: new Date().toISOString(),
       ...metadata
-    });
+    }, 'formSubmission');
   }
   
   // Placeholder for actual analytics implementation

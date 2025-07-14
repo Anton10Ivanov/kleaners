@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { Database } from "@/integrations/supabase/types";
 import { useEffect } from "react";
+import { logInfo, logError } from '@/utils/console-cleanup';
 
 type Client = Database["public"]["Tables"]["clients"]["Row"];
 
@@ -13,14 +14,14 @@ export const useClients = () => {
   const { data: clients = [], isLoading } = useQuery({
     queryKey: ["clients"],
     queryFn: async () => {
-      console.log("Fetching clients...");
+      logInfo("Fetching clients", {}, "useClients");
       const { data, error } = await supabase
         .from("clients")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error fetching clients:", error);
+        logError("Error fetching clients", error, "useClients");
         toast({
           variant: "destructive",
           title: "Error fetching clients",
@@ -29,14 +30,14 @@ export const useClients = () => {
         throw error;
       }
 
-      console.log("Fetched clients:", data);
+      logInfo("Fetched clients", { count: data.length }, "useClients");
       return data;
     },
   });
 
   // Set up real-time subscription
   useEffect(() => {
-    console.log("Setting up real-time subscription for clients...");
+    logInfo("Setting up real-time subscription for clients", {}, "useClients");
     const channel = supabase
       .channel("clients-changes")
       .on(
@@ -47,17 +48,17 @@ export const useClients = () => {
           table: "clients",
         },
         (payload) => {
-          console.log("Real-time client update received:", payload);
+          logInfo("Real-time client update received", { event: payload.eventType }, "useClients");
           // Invalidate and refetch
           queryClient.invalidateQueries({ queryKey: ["clients"] });
         }
       )
       .subscribe((status) => {
-        console.log("Subscription status:", status);
+        logInfo("Subscription status", { status }, "useClients");
       });
 
     return () => {
-      console.log("Cleaning up clients subscription");
+      logInfo("Cleaning up clients subscription", {}, "useClients");
       supabase.removeChannel(channel);
     };
   }, [queryClient]);
@@ -71,7 +72,7 @@ export const useClients = () => {
         .single();
 
       if (error) {
-        console.error("Error creating client:", error);
+        logError("Error creating client", error, "useClients");
         toast({
           variant: "destructive",
           title: "Error creating client",
@@ -102,7 +103,7 @@ export const useClients = () => {
         .single();
 
       if (error) {
-        console.error("Error updating client:", error);
+        logError("Error updating client", error, "useClients");
         toast({
           variant: "destructive",
           title: "Error updating client",
@@ -131,7 +132,7 @@ export const useClients = () => {
         .eq("id", id);
 
       if (error) {
-        console.error("Error deleting client:", error);
+        logError("Error deleting client", error, "useClients");
         toast({
           variant: "destructive",
           title: "Error deleting client",

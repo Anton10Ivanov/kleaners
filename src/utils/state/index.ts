@@ -1,5 +1,6 @@
 
 import environmentUtils from '@/utils/environment';
+import { logWarning } from './console-cleanup';
 
 /**
  * State management utilities for consistent state across environments
@@ -13,7 +14,7 @@ export const stateUtils = {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.warn(`Failed to get storage item ${key}:`, error);
+      logWarning(`Failed to get storage item ${key}`, { error }, 'stateUtils');
       return defaultValue;
     }
   },
@@ -25,7 +26,7 @@ export const stateUtils = {
       localStorage.setItem(key, JSON.stringify(value));
       return true;
     } catch (error) {
-      console.warn(`Failed to set storage item ${key}:`, error);
+      logWarning(`Failed to set storage item ${key}`, { error }, 'stateUtils');
       return false;
     }
   },
@@ -37,7 +38,7 @@ export const stateUtils = {
       localStorage.removeItem(key);
       return true;
     } catch (error) {
-      console.warn(`Failed to remove storage item ${key}:`, error);
+      logWarning(`Failed to remove storage item ${key}`, { error }, 'stateUtils');
       return false;
     }
   },
@@ -50,7 +51,7 @@ export const stateUtils = {
       const item = sessionStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.warn(`Failed to get session item ${key}:`, error);
+      logWarning(`Failed to get session item ${key}`, { error }, 'stateUtils');
       return defaultValue;
     }
   },
@@ -62,7 +63,7 @@ export const stateUtils = {
       sessionStorage.setItem(key, JSON.stringify(value));
       return true;
     } catch (error) {
-      console.warn(`Failed to set session item ${key}:`, error);
+      logWarning(`Failed to set session item ${key}`, { error }, 'stateUtils');
       return false;
     }
   },
@@ -77,7 +78,7 @@ export const stateUtils = {
           const newValue = JSON.parse(event.newValue);
           callback(newValue);
         } catch (error) {
-          console.warn(`Failed to parse storage change for ${key}:`, error);
+          logWarning(`Failed to parse storage change for ${key}`, { error }, 'stateUtils');
         }
       }
     };
