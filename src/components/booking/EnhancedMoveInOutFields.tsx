@@ -1,16 +1,12 @@
 import { UseFormReturn } from "react-hook-form";
 import { MoveInOutBookingForm } from "@/schemas/bookingSchemas";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Building2, Shield, Trash2, Key, ArrowRightLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ConditionalFields } from '@/components/booking/shared/SharedFields';
+import { Building2, Shield, Trash2, Key } from 'lucide-react';
+import { ConditionalFields, PropertySizeField, BedroomsField, BathroomsField, ExtrasField } from '@/components/booking/shared/SharedFields';
 import { ServiceType } from '@/schemas/booking';
-import ExtrasSelector from '@/components/booking/ExtrasSelector';
 
 interface EnhancedMoveInOutFieldsProps {
   form: UseFormReturn<MoveInOutBookingForm>;
@@ -25,103 +21,13 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
       </div>
 
       {/* Square Meters */}
-      <FormField
-        control={form.control}
-        name="squareMeters"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Property Size (m²)</FormLabel>
-            <FormControl>
-              <div className="space-y-2">
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  min="10"
-                  max="500"
-                />
-                <div className="text-sm text-gray-500">
-                  Minimum 10 m², maximum 500 m²
-                </div>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <PropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
 
       {/* Bedrooms */}
-      <FormField
-        control={form.control}
-        name="bedrooms"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Number of Bedrooms</FormLabel>
-            <FormControl>
-              <Input
-                type="number"
-                {...field}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                min="0"
-                max="10"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <BedroomsField form={form} />
 
       {/* Bathrooms */}
-      <FormField
-        control={form.control}
-        name="bathrooms"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Number of Bathrooms</FormLabel>
-            <FormControl>
-              <Input
-                type="number"
-                {...field}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                min="1"
-                max="10"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      {/* Dirtiness Level */}
-      <FormField
-        control={form.control}
-        name="dirtinessLevel"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Dirtiness Level (1-5)</FormLabel>
-            <FormControl>
-              <div className="space-y-2">
-                <Slider
-                  value={[field.value]}
-                  onValueChange={(value) => field.onChange(value[0])}
-                  max={5}
-                  min={1}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Light</span>
-                  <span>Heavy</span>
-                </div>
-                <div className="text-center text-sm font-medium">
-                  Level {field.value}
-                </div>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <BathroomsField form={form} />
 
       {/* Cleaning Goal */}
       <FormField
@@ -160,17 +66,17 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
         name="isFurnished"
         render={({ field }) => (
           <FormItem>
-            <div className="flex items-center justify-between">
-              <FormLabel>Property is Furnished</FormLabel>
+            <div className="flex items-center space-x-2">
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-            </div>
-            <div className="text-sm text-gray-500">
-              Cleaning around furniture and personal items
+              <Label htmlFor="furnished" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Property is furnished
+              </Label>
             </div>
             <FormMessage />
           </FormItem>
@@ -183,20 +89,17 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
         name="trashRemovalNeeded"
         render={({ field }) => (
           <FormItem>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Trash2 className="h-4 w-4 text-red-500" />
-                <FormLabel>Trash Removal Needed</FormLabel>
-              </div>
+            <div className="flex items-center space-x-2">
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-            </div>
-            <div className="text-sm text-gray-500">
-              Disposal of leftover items and trash
+              <Label htmlFor="trash-removal" className="flex items-center gap-2">
+                <Trash2 className="h-4 w-4" />
+                Trash removal needed
+              </Label>
             </div>
             <FormMessage />
           </FormItem>
@@ -209,17 +112,17 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
         name="preInspectionRequired"
         render={({ field }) => (
           <FormItem>
-            <div className="flex items-center justify-between">
-              <FormLabel>Pre-inspection Required</FormLabel>
+            <div className="flex items-center space-x-2">
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-            </div>
-            <div className="text-sm text-gray-500">
-              Property assessment before cleaning
+              <Label htmlFor="pre-inspection" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Pre-inspection required
+              </Label>
             </div>
             <FormMessage />
           </FormItem>
@@ -232,81 +135,28 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
         name="parkingAvailable"
         render={({ field }) => (
           <FormItem>
-            <div className="flex items-center justify-between">
-              <FormLabel>Parking Available</FormLabel>
+            <div className="flex items-center space-x-2">
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-            </div>
-            <div className="text-sm text-gray-500">
-              Parking space available for cleaning team
-            </div>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      {/* Disinfection */}
-      <FormField
-        control={form.control}
-        name="disinfectionRequired"
-        render={({ field }) => (
-          <FormItem>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-blue-500" />
-                <FormLabel>Disinfection Required</FormLabel>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </div>
-            <div className="text-sm text-gray-500">
-              Full disinfection of all surfaces
+              <Label htmlFor="parking" className="flex items-center gap-2">
+                <Key className="h-4 w-4" />
+                Parking available
+              </Label>
             </div>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      {/* Enhanced Extras Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ArrowRightLeft className="h-5 w-5" />
-            Additional Services
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="extras"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <ExtrasSelector
-                    serviceType={ServiceType.MoveInOut}
-                    selectedExtras={(field.value || []) as any}
-                    onExtrasChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </CardContent>
-      </Card>
+      {/* Extras */}
+      <ExtrasField form={form} serviceType={ServiceType.MoveInOut} />
 
       {/* Shared Fields */}
-      <div className="mt-6">
-        <ConditionalFields form={form} serviceType={ServiceType.MoveInOut} />
-      </div>
+      <ConditionalFields form={form} serviceType={ServiceType.MoveInOut} />
     </div>
   );
 };
