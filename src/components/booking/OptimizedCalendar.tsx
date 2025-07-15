@@ -4,7 +4,7 @@ import { format, addDays, subDays, startOfWeek, endOfWeek, eachDayOfInterval, is
 import { toZonedTime } from 'date-fns-tz';
 import { Link } from "react-router-dom";
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData, ProviderOption } from "@/schemas/booking";
+import { BookingFormData } from "@/schemas/bookingSchemas";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,11 @@ import TimeGrid from "./TimeGrid";
 import { logger } from "@/utils/logging";
 
 interface OptimizedCalendarProps {
-  form: UseFormReturn<BookingFormData>;
+  form: UseFormReturn<any>;
+  serviceType?: string;
 }
 
-const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
+const OptimizedCalendar = ({ form, serviceType }: OptimizedCalendarProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>();
   const [availableProviders, setAvailableProviders] = useState<any[]>([]);
   const [weekStart, setWeekStart] = useState(() => {
@@ -25,7 +26,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     return startOfWeek(today, { weekStartsOn: 1 });
   });
 
-  const date = form.watch('date');
+  const date = form.watch('selectedDate');
   const hours = form.watch('hours') || 2;
   const postalCode = form.watch('postalCode');
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -76,7 +77,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
         setAvailableProviders(available);
         
         if (available.length > 0) {
-          const providerOptions: ProviderOption[] = available.map(p => ({
+          const providerOptions = available.map(p => ({
             id: p.id,
             name: `${p.first_name} ${p.last_name}`,
             rating: 4.5, // Default rating
@@ -95,9 +96,9 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
   }, [date, selectedTimeSlot, postalCode, form]);
 
   const handleDateSelect = (selectedDate: Date) => {
-    form.setValue('date', selectedDate);
+    form.setValue('selectedDate', selectedDate);
     setSelectedTimeSlot(undefined);
-    form.setValue('preferredTime', undefined);
+    form.setValue('selectedTime', '');
     form.setValue('providerOptions', []);
   };
 
@@ -113,7 +114,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
     
     const timeSlot = `${startTime}-${endTime}`;
     setSelectedTimeSlot(timeSlot);
-    form.setValue('preferredTime', timeSlot);
+    form.setValue('selectedTime', timeSlot);
   };
 
   const navigateWeek = (direction: 'prev' | 'next') => {

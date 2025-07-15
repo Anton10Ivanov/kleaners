@@ -1,10 +1,10 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { DeepCleaningFormData } from "@/schemas/booking";
+import { DeepCleaningBookingForm } from "@/schemas/bookingSchemas";
 import OptimizedCalendar from "@/components/booking/OptimizedCalendar";
 
 interface DeepCleaningStep2Props {
-  form: UseFormReturn<DeepCleaningFormData>;
+  form: UseFormReturn<DeepCleaningBookingForm>;
 }
 
 const DeepCleaningStep2 = ({ form }: DeepCleaningStep2Props) => {
