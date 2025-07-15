@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -17,14 +16,13 @@ import { Hero } from '../hero';
 import { MobileBookingSummaryOptimized } from '../booking/mobile';
 import { serviceCategories } from '@/components/navbar/navigationData';
 
-// New professional sections
-import { ProfessionalTrustSection } from '../hero/ProfessionalTrustSection';
-import { ProcessSteps } from '../hero/ProcessSteps';
+// Enhanced professional sections
+import { EnhancedProfessionalTrustSection } from '../hero/EnhancedProfessionalTrustSection';
+import { EnhancedProcessSteps } from '../hero/EnhancedProcessSteps';
+import { EnhancedServiceCategoriesSection } from '../services/EnhancedServiceCategoriesSection';
+import { EnhancedBusinessSolutionsSection } from './EnhancedBusinessSolutionsSection';
 
 // Optimized lazy loading
-const LazyBookingContent = lazy(() => import('../booking/BookingContent'));
-const LazyServiceCategoriesSection = lazy(() => import('../services/ServiceCategoriesSection').then(module => ({ default: module.ServiceCategoriesSection })));
-const LazyBusinessSolutionsSection = lazy(() => import('./BusinessSolutionsSection'));
 const LazyHomeSections = lazy(() => import('./HomeSections').then(module => ({ default: module.HomeSections })));
 
 // Simple error fallback component
@@ -135,7 +133,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen font-raleway bg-theme-lightblue dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen font-raleway bg-section-primary transition-colors duration-300">
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
@@ -143,7 +141,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="bg-theme-lightblue dark:bg-gray-900"
+            className="bg-section-primary"
           >
             <Hero 
               selectedService={selectedService || ''}
@@ -153,38 +151,32 @@ const HomePage = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            {/* Professional trust section - moved from hero */}
-            <ProfessionalTrustSection />
+            {/* Enhanced trust section */}
+            <EnhancedProfessionalTrustSection />
             
-            {/* How it works section */}
-            <ProcessSteps />
+            {/* Enhanced how it works section */}
+            <EnhancedProcessSteps />
             
-            {/* Service Categories Section */}
-            <div className="bg-white dark:bg-gray-800 py-2">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <LazyServiceCategoriesSection serviceCategories={convertedServiceCategories} />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
+            {/* Enhanced Service Categories Section */}
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<SectionLoading />}>
+                <EnhancedServiceCategoriesSection serviceCategories={convertedServiceCategories} />
+              </Suspense>
+            </ErrorBoundary>
             
-            {/* Business Solutions Section */}
-            <div className="py-2">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <LazyBusinessSolutionsSection />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
+            {/* Enhanced Business Solutions Section */}
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<SectionLoading />}>
+                <EnhancedBusinessSolutionsSection />
+              </Suspense>
+            </ErrorBoundary>
             
             {/* Why Choose Us, Testimonials, FAQ Section */}
-            <div className="bg-white dark:bg-gray-800 py-2">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <LazyHomeSections />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<SectionLoading />}>
+                <LazyHomeSections />
+              </Suspense>
+            </ErrorBoundary>
           </motion.div>
         ) : (
           <BookingSteps

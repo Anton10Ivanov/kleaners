@@ -5,6 +5,7 @@
 @import "./styles/spacing.css";
 @import "./styles/animations.css";
 @import "./styles/mobileOptimizations.css";
+@import "./styles/visualHarmonization.css";
 @import "./styles/globals.css";
 @tailwind base;
 @tailwind components;
@@ -42,38 +43,38 @@
     --spacing6: 80px;
     --spacing7: 160px;
     
-    /* Design System Colors - Light mode only */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 20%;
-    --heading-color: 0 0% 11%;
-    --secondary-text: 35 35% 35%;
-    --surface: 0 0% 98%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
+    /* Enhanced Design System Colors - Harmonized */
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --heading-color: 15 23 42;
+    --secondary-text: 71 85 105;
+    --surface: 248 250 252;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
     
-    /* Primary colors - Blue theme from designTokens */
-    --primary: 206 65% 70%;
-    --primary-hover: 206 65% 60%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary colors - Enhanced blue theme */
+    --primary: 59 130 246;
+    --primary-hover: 37 99 235;
+    --primary-foreground: 255 255 255;
     
-    /* Secondary colors - Green theme */
-    --secondary: 122 65% 84%;
-    --secondary-foreground: 30 25% 25%;
+    /* Secondary colors - Complementary */
+    --secondary: 248 250 252;
+    --secondary-foreground: 71 85 105;
     
     /* Semantic colors */
-    --success: 122 41% 49%;
-    --destructive: 350 90% 55%;
-    --muted: 206 25% 90%;
-    --muted-foreground: 35 35% 35%;
-    --accent: 206 65% 70%;
-    --accent-foreground: 0 0% 100%;
+    --success: 34 197 94;
+    --destructive: 239 68 68;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 59 130 246;
+    --accent-foreground: 255 255 255;
     
     /* UI Colors */
-    --border: 206 20% 88%;
-    --input: 206 20% 88%;
-    --ring: 206 65% 70%;
+    --border: 226 232 240;
+    --input: 248 250 252;
+    --ring: 59 130 246;
     --radius: 0.75rem;
   }
 }
