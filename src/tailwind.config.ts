@@ -196,6 +196,14 @@ export default {
           "50%": { transform: "scale(1.05)" },
           "100%": { transform: "scale(1)" },
         },
+        "gradient-x": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "bounce-gentle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -204,6 +212,11 @@ export default {
         slideIn: "slideIn var(--duration-slow) var(--ease-out)",
         float: "float 6s var(--ease-in-out) infinite",
         pulse: "pulse 3s var(--ease-in-out) infinite",
+        "gradient-x": "gradient-x 3s ease-in-out infinite",
+        "bounce-gentle": "bounce-gentle 2s ease-in-out infinite",
+      },
+      backgroundSize: {
+        "size-200": "200% 200%",
       },
     },
   },
