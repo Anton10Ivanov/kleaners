@@ -7,6 +7,7 @@ import ProviderLayout from '@/components/provider/ProviderLayout';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ScrollToTop from '@/components/ScrollToTop';
 import { Toaster } from '@/components/ui/toaster';
+import { FeatureFlagDebugPanel } from '@/contexts/FeatureFlagContext';
 
 // Import pages
 import Index from '@/pages/Index';
@@ -226,6 +227,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
+      <FeatureFlagDebugPanel />
     </>
   );
 }
