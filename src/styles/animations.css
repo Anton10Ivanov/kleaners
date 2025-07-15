@@ -1,10 +1,10 @@
 
 /**
- * Enhanced Animation System CSS - Phase 4 Optimizations
- * Professional animations with improved performance and consistency
+ * Optimized Animation System CSS - Phase 2 Performance
+ * Essential animations only: page transitions and modals
  */
 
-/* Optimized Animation Keyframes */
+/* Core Animation Keyframes - Essential Only */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -71,133 +71,53 @@
   }
 }
 
-@keyframes gentlePulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes floatSoft {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-/* Enhanced Animation Utility Classes */
+/* Essential Animation Utility Classes */
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: fadeIn 0.3s ease-out;
   }
 
   .animate-fade-out {
-    animation: fadeOut 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: fadeOut 0.3s ease-out;
   }
 
   .animate-slide-up {
-    animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: slideUp 0.3s ease-out;
   }
 
   .animate-slide-down {
-    animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: slideDown 0.3s ease-out;
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: scaleIn 0.2s ease-out;
   }
 
   .animate-scale-out {
-    animation: scaleOut 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: scaleOut 0.2s ease-out;
   }
 
-  .animate-gentle-pulse {
-    animation: gentlePulse 3s ease-in-out infinite;
-  }
-
-  .animate-float-soft {
-    animation: floatSoft 6s ease-in-out infinite;
-  }
-
-  /* Enhanced Hover Animations with better performance */
-  .hover-lift {
-    @apply transition-all duration-300 ease-out;
-    will-change: transform;
-  }
-  
-  .hover-lift:hover {
-    @apply -translate-y-2 shadow-lg;
-  }
-
-  .hover-scale {
-    @apply transition-all duration-300 ease-out;
-    will-change: transform;
-  }
-  
-  .hover-scale:hover {
-    @apply scale-105;
-  }
-
-  .hover-glow {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .hover-glow:hover {
-    @apply shadow-xl;
-    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1);
-  }
-
-  /* Enhanced Focus Animations */
-  .focus-ring {
-    @apply transition-all duration-200;
-    @apply focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary;
-  }
-
-  .focus-glow {
-    @apply transition-all duration-300;
-    @apply focus:outline-none focus:ring-4 focus:ring-primary/30 focus:border-primary focus:shadow-lg;
+  /* Essential transitions only */
+  .transition-essential {
+    @apply transition-opacity duration-200 ease-out;
   }
 }
 
-/* Professional Component-Specific Animations */
+/* Essential Component Animations - Page Transitions & Modals Only */
 @layer components {
-  .card-animated {
-    @apply transition-all duration-300 ease-out;
-    @apply hover:shadow-xl hover:-translate-y-2;
-    will-change: transform, box-shadow;
-  }
-
-  .button-animated {
-    @apply transition-all duration-200 ease-out;
-    @apply hover:scale-105 hover:shadow-lg active:scale-95;
-    will-change: transform, box-shadow;
-  }
-
-  .nav-item-animated {
-    @apply transition-all duration-200 ease-out;
-    @apply hover:bg-accent/50 hover:text-accent-foreground;
-  }
-
-  .form-field-animated {
-    @apply transition-all duration-300 ease-out;
-    @apply focus-within:ring-4 focus-within:ring-primary/20 focus-within:border-primary;
-    @apply hover:shadow-md hover:border-gray-300;
-  }
-
-  .hero-element {
+  .page-transition {
     @apply animate-fade-in;
     animation-fill-mode: both;
   }
 
-  .stagger-children > * {
-    @apply animate-fade-in;
-    animation-delay: calc(var(--stagger-delay, 0) * 0.1s);
+  .modal-transition {
+    @apply animate-scale-in;
+    animation-fill-mode: both;
+  }
+
+  .modal-exit {
+    @apply animate-scale-out;
+    animation-fill-mode: both;
   }
 }
 

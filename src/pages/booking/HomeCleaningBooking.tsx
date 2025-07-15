@@ -6,7 +6,7 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion'; // Removed for performance
 import ServiceOptions from '@/components/booking/ServiceOptions';
 import OptimizedCalendar from '@/components/booking/OptimizedCalendar';
 import EnhancedExtras from '@/components/booking/EnhancedExtras';
@@ -82,66 +82,47 @@ const HomeCleaningBooking = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
-            <AnimatePresence mode="wait">
-              {currentStep === 1 && (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <HomeDetailsSection 
-                    form={form} 
-                    onSuggestedTimeSelect={handleSuggestedTimeSelect}
+            {currentStep === 1 && (
+              <div className="page-transition space-y-6">
+                <HomeDetailsSection 
+                  form={form} 
+                  onSuggestedTimeSelect={handleSuggestedTimeSelect}
+                />
+                
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <ServiceOptions
+                    frequency={frequency}
+                    setFrequency={(freq) => form.setValue('frequency', freq)}
+                    isRegularCleaning={true}
                   />
-                  
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <ServiceOptions
-                      frequency={frequency}
-                      setFrequency={(freq) => form.setValue('frequency', freq)}
-                      isRegularCleaning={true}
-                    />
-                  </div>
-                </motion.div>
-              )}
+                </div>
+              </div>
+            )}
 
-              {currentStep === 2 && (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  {showCalendar && (
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                      <OptimizedCalendar form={form} />
-                    </div>
-                  )}
-                  
+            {currentStep === 2 && (
+              <div className="page-transition space-y-6">
+                {showCalendar && (
                   <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <EnhancedExtras form={form} />
+                    <OptimizedCalendar form={form} />
                   </div>
-                </motion.div>
-              )}
+                )}
+                
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <EnhancedExtras form={form} />
+                </div>
+              </div>
+            )}
 
-              {currentStep === 3 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                >
-                  <FinalStep
-                    form={form}
-                    postalCode={form.watch('postalCode') || ''}
-                    onSubmit={handleSubmit}
-                    onBack={handleBack}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {currentStep === 3 && (
+              <div className="page-transition">
+                <FinalStep
+                  form={form}
+                  postalCode={form.watch('postalCode') || ''}
+                  onSubmit={handleSubmit}
+                  onBack={handleBack}
+                />
+              </div>
+            )}
 
             {currentStep < 3 && (
               <div className="flex justify-between mt-8">

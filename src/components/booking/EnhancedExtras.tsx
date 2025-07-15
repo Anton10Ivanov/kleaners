@@ -1,5 +1,5 @@
 
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion'; // Removed for performance
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
@@ -120,11 +120,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
           const isSelected = selectedExtras.includes(extra.id);
           
           return (
-            <motion.div 
-              key={extra.id}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
+            <div key={extra.id}>
               <Button
                 variant="outline"
                 onClick={() => toggleExtra(extra.id, extra.hasPopup)}
@@ -148,7 +144,7 @@ const EnhancedExtras = ({ form }: EnhancedExtrasProps) => {
                   </div>
                 </div>
               </Button>
-            </motion.div>
+            </div>
           );
         })}
       </div>

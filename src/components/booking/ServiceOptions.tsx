@@ -1,5 +1,5 @@
 
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion'; // Removed for performance
 import { Button } from '@/components/ui/button';
 import { Frequency } from '@/schemas/booking';
 
@@ -37,18 +37,10 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {options.map((option) => (
-          <motion.div
-            key={option.value}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
+          <div key={option.value}>
             <Button
               variant={frequency === option.value ? "default" : "outline"}
               onClick={() => setFrequency(option.value)}
@@ -79,10 +71,10 @@ const ServiceOptions = ({ frequency, setFrequency, isRegularCleaning = false }: 
                 )}
               </div>
             </Button>
-          </motion.div>
+          </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
