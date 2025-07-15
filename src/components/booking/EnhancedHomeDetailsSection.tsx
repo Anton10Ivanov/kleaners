@@ -5,9 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Home, User, Droplets } from 'lucide-react';
+import { Calendar, Clock, Home, User, Droplets, Star } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ExtrasSelector from '@/components/booking/ExtrasSelector';
+import { ServiceType } from '@/schemas/booking';
 
 interface EnhancedHomeDetailsSectionProps {
   form: UseFormReturn<HomeBookingForm>;
@@ -251,6 +254,36 @@ export const EnhancedHomeDetailsSection = ({ form, onSuggestedTimeSelect }: Enha
             )}
           />
         </div>
+      </div>
+
+      {/* Enhanced Extras Section */}
+      <div className="mt-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Star className="h-5 w-5" />
+              Additional Services
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="extras"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ExtrasSelector
+                      serviceType={ServiceType.Home}
+                      selectedExtras={(field.value || []) as any}
+                      onExtrasChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

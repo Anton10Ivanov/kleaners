@@ -36,7 +36,14 @@ const sharedFields = {
     type: z.enum(["pro", "regular"]),
     framesIncluded: z.boolean(),
   }).optional(),
-  extras: z.array(z.enum(["ironing", "fridge", "oven", "cabinets", "balcony", "carpet"])).optional(),
+  // Enhanced extras system
+  extras: z.array(z.object({
+    id: z.string(),
+    selectedOptions: z.record(z.any()).optional(),
+    customData: z.record(z.any()).optional(),
+    finalPrice: z.number(),
+    estimatedTime: z.number()
+  })).default([]).optional(),
 };
 
 // ---------- SHARED FIELDSETS ----------
