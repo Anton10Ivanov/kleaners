@@ -43,39 +43,44 @@
     --spacing6: 80px;
     --spacing7: 160px;
     
-    /* WCAG Compliant Color System - HSL Format */
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 15 23 42; /* slate-900 - AAA contrast (15.8:1) */
-    --heading-color: 15 23 42; /* slate-900 - AAA contrast */
-    --secondary-text: 51 65 85; /* slate-700 - AA contrast (7.4:1) */
-    --surface: 248 250 252; /* slate-50 */
-    --card: 255 255 255; /* white */
-    --card-foreground: 15 23 42; /* slate-900 */
-    --popover: 255 255 255; /* white */
-    --popover-foreground: 15 23 42; /* slate-900 */
+    /* STRICT COLOR SCHEME - WCAG Compliant HSL Format */
+    /* Surgical White - Backgrounds, cards (60% allocation) */
+    --background: 0 0 100; /* #FFFFFF */
+    --card: 0 0 100; /* #FFFFFF */
+    --popover: 0 0 100; /* #FFFFFF */
+    --surface: 0 0 100; /* #FFFFFF */
+    --input: 0 0 100; /* #FFFFFF */
     
-    /* Primary Blue - WCAG AAA Compliant */
-    --primary: 37 99 235; /* blue-600 - AAA contrast (4.6:1) on white */
-    --primary-hover: 29 78 216; /* blue-700 - Enhanced contrast */
-    --primary-foreground: 255 255 255; /* white - AAA contrast (12.6:1) */
+    /* Prussian Blue - Primary color for headers, navigation, borders (70% allocation) */
+    --primary: 196 100 14; /* #003049 - Prussian Blue */
+    --primary-hover: 196 100 12; /* Darker shade for hover */
+    --heading-color: 196 100 14; /* #003049 - Headers use Prussian Blue */
+    --border: 196 100 14; /* #003049 - Borders use Prussian Blue */
+    --ring: 196 100 14; /* #003049 - Focus rings use Prussian Blue */
     
-    /* Secondary Colors */
-    --secondary: 241 245 249; /* slate-100 */
-    --secondary-foreground: 51 65 85; /* slate-700 */
+    /* Laser Lime - CTAs, key action items (15% allocation) */
+    --accent: 150 100 50; /* #00FF87 - Laser Lime */
+    --accent-foreground: 196 100 14; /* #003049 - Prussian Blue text on Lime */
     
-    /* Semantic Colors - WCAG Compliant */
-    --success: 21 128 61; /* green-700 - AA contrast (4.5:1) */
-    --destructive: 220 38 38; /* red-600 - AA contrast (5.3:1) */
-    --warning: 217 119 6; /* amber-600 - AA contrast (4.6:1) */
-    --muted: 241 245 249; /* slate-100 */
-    --muted-foreground: 100 116 139; /* slate-500 */
-    --accent: 37 99 235; /* blue-600 */
-    --accent-foreground: 255 255 255; /* white */
+    /* Titanium Text - Body text, subtitles (10% allocation) */
+    --foreground: 235 18 26; /* #2B2D42 - Titanium Text */
+    --secondary-text: 235 18 26; /* #2B2D42 - Body text */
+    --card-foreground: 235 18 26; /* #2B2D42 */
+    --popover-foreground: 235 18 26; /* #2B2D42 */
     
-    /* UI Colors */
-    --border: 226 232 240; /* slate-200 */
-    --input: 248 250 252; /* slate-50 */
-    --ring: 37 99 235; /* blue-600 */
+    /* White text on Prussian Blue backgrounds */
+    --primary-foreground: 0 0 100; /* #FFFFFF - White text on Prussian Blue */
+    
+    /* Secondary Colors - Light gray backgrounds */
+    --secondary: 0 0 98; /* Light gray #FAFAFA */
+    --secondary-foreground: 196 100 14; /* #003049 - Prussian Blue text */
+    --muted: 0 0 96; /* Lighter gray #F5F5F5 */
+    --muted-foreground: 235 18 26; /* #2B2D42 - Titanium Text */
+    
+    /* Emergency Amber - Alerts, limited-time badges (5% allocation) */
+    --warning: 36 100 50; /* #FF9E00 - Emergency Amber */
+    --destructive: 0 84 60; /* Red for errors - #991B1B */
+    --success: 142 76 36; /* Green for success - #16A34A */
     --radius: 0.75rem;
   }
 }

@@ -114,25 +114,28 @@
     min-width: var(--touch-xl);
   }
 
-  /* WCAG Compliant Design System Component Styles */
+  /* STRICT COLOR SCHEME - Button System */
   .btn-primary {
-    @apply bg-primary hover:bg-primary-hover text-primary-foreground font-semibold;
+    /* Laser Lime background with Prussian Blue text - Primary CTA */
+    @apply bg-accent hover:bg-accent/90 text-accent-foreground font-semibold;
     @apply rounded-2xl px-6 py-4 transition-all duration-300;
     @apply shadow-lg hover:shadow-xl hover:-translate-y-1;
-    @apply focus:ring-4 focus:ring-primary/30 focus:outline-none;
+    @apply focus:ring-4 focus:ring-accent/30 focus:outline-none;
     min-height: var(--touch-comfortable);
   }
   
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground border-2 border-border;
-    @apply hover:border-border/60 font-semibold;
+    /* White background with Prussian Blue text and border */
+    @apply bg-card hover:bg-muted text-primary border-2 border-primary;
+    @apply hover:border-primary/80 font-semibold;
     @apply rounded-2xl px-6 py-4 transition-all duration-300;
     @apply shadow-sm hover:shadow-md;
-    @apply focus:ring-4 focus:ring-muted focus:outline-none;
+    @apply focus:ring-4 focus:ring-primary/30 focus:outline-none;
     min-height: var(--touch-comfortable);
   }
 
   .btn-outline {
+    /* Prussian Blue border and text, hover fills with Prussian Blue */
     @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
     @apply font-semibold rounded-2xl px-6 py-4 transition-all duration-300;
     @apply focus:ring-4 focus:ring-primary/30 focus:outline-none;
