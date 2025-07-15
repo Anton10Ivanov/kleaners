@@ -73,7 +73,8 @@ export const HomeCleaningSchema = z.object({
   frequency: FrequencyEnum,
   hours: z.number().min(1, "Minimum 1 hour required").max(12, "Maximum 12 hours allowed"),
   dirtinessLevel: z.number().min(1, "Please select dirtiness level").max(5),
-  numResidents: z.number().min(1, "At least 1 resident required").max(20, "Maximum 20 residents allowed"),
+  pets: z.string().optional(),
+  lastCleaned: z.string().optional(),
   suppliesProvided: z.boolean().default(false),
 }).merge(addressFields).merge(contactFields)
 .superRefine((data, ctx) => {
@@ -89,14 +90,13 @@ export const HomeCleaningSchema = z.object({
     }
   }
   
-  // Validate residents vs property size
-  if (data.propertySize && data.numResidents) {
-    const maxReasonableResidents = Math.floor(data.propertySize / 20);
-    if (data.numResidents > maxReasonableResidents) {
+  // Validate pets consideration for service
+  if (data.pets === 'both' || data.pets === 'dogs') {
+    if (data.dirtinessLevel && data.dirtinessLevel <= 2) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `${data.numResidents} residents might be too many for a ${data.propertySize}m² property`,
-        path: ["numResidents"]
+        message: "Properties with dogs typically require higher dirtiness level assessment",
+        path: ["dirtinessLevel"]
       });
     }
   }
@@ -122,6 +122,8 @@ export const OfficeCleaningSchema = z.object({
   avgVisitorsPerWeek: z.number().min(0, "Visitors per week cannot be negative"),
   cleaningDuringWorkHours: z.boolean().default(false),
   securityClearanceRequired: z.boolean().default(false),
+  pets: z.string().optional(),
+  lastCleaned: z.string().optional(),
 }).merge(addressFields).merge(contactFields);
 
 // ---------- DEEP CLEANING SCHEMA ----------
@@ -132,11 +134,13 @@ export const DeepCleaningSchema = z.object({
   bedrooms: z.number().min(0, "Bedrooms cannot be negative").max(10, "Maximum 10 bedrooms allowed"),
   bathrooms: z.number().min(1, "At least 1 bathroom is required").max(10, "Maximum 10 bathrooms allowed"),
   dirtinessLevel: z.number().min(1, "Please select dirtiness level").max(5),
-  lastCleaned: z.coerce.date().optional(),
+  lastCleaned: z.string().optional(),
   includeWallsAndCeilings: z.boolean().default(false),
   moldOrPestPresence: z.boolean().optional(),
   specialSurfacesToHandle: z.string().optional(),
   targetAreas: z.array(z.enum(["bathroom", "kitchen", "living-room", "whole-place"])).min(1, "Please select at least one target area"),
+  pets: z.string().optional(),
+  cleaningGoal: z.enum(["thorough", "maintenance", "restoration"], { required_error: "Please select a cleaning goal" }),
 }).merge(addressFields).merge(contactFields);
 
 // ---------- MOVE IN/OUT SCHEMA ----------
@@ -153,6 +157,8 @@ export const MoveInOutSchema = z.object({
   dirtinessLevel: z.number().min(1, "Please select dirtiness level").max(5),
   cleaningGoal: z.enum(["deposit", "owner", "clean-start"], { required_error: "Please select a cleaning goal" }),
   disinfectionRequired: z.boolean().default(false),
+  pets: z.string().optional(),
+  lastCleaned: z.string().optional(),
 }).merge(addressFields).merge(contactFields);
 
 // ---------- POST CONSTRUCTION SCHEMA ----------
@@ -166,6 +172,8 @@ export const PostConstructionSchema = z.object({
   specialEquipmentNeeded: z.boolean().default(false),
   accessRestrictions: z.string().optional(),
   completionDeadline: z.coerce.date().optional(),
+  pets: z.string().optional(),
+  lastCleaned: z.string().optional(),
 }).merge(addressFields).merge(contactFields);
 
 // ---------- EXPORT SCHEMA MAP ----------

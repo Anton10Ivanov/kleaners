@@ -43,9 +43,16 @@ const calculateHomeDuration = (data: any): number => {
   
   baseTime *= dirtinessMultiplier;
   
-  // Residents impact (more people = more mess)
-  const residentsMultiplier = Math.min(1.5, 1 + ((data.numResidents || 1) - 1) * 0.1);
-  baseTime *= residentsMultiplier;
+  // Pets impact (more cleaning needed)
+  const pets = data.pets || 'none';
+  const petsMultiplier = {
+    'none': 1.0,
+    'cats': 1.1,
+    'dogs': 1.2,
+    'both': 1.3,
+    'other': 1.15
+  }[pets] || 1.0;
+  baseTime *= petsMultiplier;
   
   // Cleaning pace adjustment
   if (data.cleaningPace === 'quick') {
@@ -294,7 +301,7 @@ export const calculateComplexityScore = (data: any): number => {
   if (serviceType === 'home') {
     const homeData = data as any;
     if (homeData.dirtinessLevel >= 4) score += 1;
-    if (homeData.numResidents > 5) score += 1;
+    if (homeData.pets === 'both' || homeData.pets === 'dogs') score += 1;
   } else if (serviceType === 'office') {
     const officeData = data as any;
     if (officeData.cleaningDuringWorkHours) score += 1;

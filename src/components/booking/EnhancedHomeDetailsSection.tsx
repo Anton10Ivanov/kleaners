@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ExtrasSelector from '@/components/booking/ExtrasSelector';
 import { ServiceType } from '@/schemas/booking';
-import { ConditionalFields, PropertySizeField, BedroomsField, BathroomsField, HoursSelectionField, ResidentsField, ExtrasField } from '@/components/booking/shared/SharedFields';
+import { ConditionalFields, PropertySizeField, BedroomsField, BathroomsField, HoursSelectionField, ExtrasField } from '@/components/booking/shared/SharedFields';
 import { RealTimePricing } from '@/components/booking/RealTimePricing';
 
 interface EnhancedHomeDetailsSectionProps {
@@ -43,9 +43,35 @@ export const EnhancedHomeDetailsSection = ({ form, onSuggestedTimeSelect }: Enha
           <BathroomsField form={form} />
         </div>
 
-        {/* Number of Residents */}
-        <div>
-          <ResidentsField form={form} />
+        {/* Service Options */}
+        <div className="md:col-span-2">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border">
+            <h4 className="text-md font-semibold mb-3">Service Options</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Frequency</label>
+                <select
+                  {...form.register('frequency')}
+                  className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                >
+                  <option value="one-time">One-time</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="bi-weekly">Bi-weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Cleaning Pace</label>
+                <select
+                  {...form.register('cleaningPace')}
+                  className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="quick">Quick</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Estimated Hours */}

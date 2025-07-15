@@ -78,6 +78,16 @@ export const DirtinessLevelField = ({ form }: { form: UseFormReturn<any> }) => {
 
 // Last Cleaned Field - Used in all service types
 export const LastCleanedField = ({ form }: { form: UseFormReturn<any> }) => {
+  const lastCleanedOptions = [
+    { value: 'never', label: 'Never cleaned professionally' },
+    { value: 'over-year', label: 'Over a year ago' },
+    { value: '6-12-months', label: '6-12 months ago' },
+    { value: '3-6-months', label: '3-6 months ago' },
+    { value: '1-3-months', label: '1-3 months ago' },
+    { value: 'within-month', label: 'Within the last month' },
+    { value: 'within-week', label: 'Within the last week' },
+  ];
+
   return (
     <FormField
       control={form.control}
@@ -89,33 +99,17 @@ export const LastCleanedField = ({ form }: { form: UseFormReturn<any> }) => {
             Last Cleaned
           </FormLabel>
           <FormControl>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !field.value && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {field.value ? (
-                    format(field.value, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value}
-                  onSelect={field.onChange}
-                  disabled={(date) => date > new Date()}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <select
+              {...field}
+              className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+            >
+              <option value="">Select when last cleaned</option>
+              {lastCleanedOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </FormControl>
           <FormDescription>
             When was this space last professionally cleaned?
@@ -341,12 +335,44 @@ export const BathroomsField = ({ form }: { form: UseFormReturn<any> }) => {
   );
 };
 
-// Hours Selection Field - Used in Home and can be reused
+// Hours Selection Field - Calculated automatically based on property details
 export const HoursSelectionField = ({ form, onSuggestedTimeSelect }: { 
   form: UseFormReturn<any>;
   onSuggestedTimeSelect?: (hours: number) => void;
 }) => {
-  const suggestedHours = [2, 3, 4, 5, 6];
+  const propertySize = form.watch('propertySize') || form.watch('squareMeters') || 70;
+  const bedrooms = form.watch('bedrooms') || 2;
+  const bathrooms = form.watch('bathrooms') || 1;
+  const dirtinessLevel = form.watch('dirtinessLevel') || 3;
+  
+  // Calculate estimated hours based on property details
+  const calculateEstimatedHours = () => {
+    let baseTime = 2;
+    
+    // Size factor
+    baseTime += Math.max(0, (propertySize - 50) / 30);
+    
+    // Room complexity
+    baseTime += (bedrooms * 0.5);
+    baseTime += (bathrooms * 0.5);
+    
+    // Dirtiness multiplier
+    const dirtinessMultiplier = {
+      1: 0.8, 2: 0.9, 3: 1.0, 4: 1.3, 5: 1.6
+    }[dirtinessLevel] || 1.0;
+    
+    baseTime *= dirtinessMultiplier;
+    
+    return Math.max(2, Math.round(baseTime * 2) / 2);
+  };
+
+  const estimatedHours = calculateEstimatedHours();
+
+  // Auto-update hours when calculation changes
+  React.useEffect(() => {
+    form.setValue('hours', estimatedHours);
+    onSuggestedTimeSelect?.(estimatedHours);
+  }, [estimatedHours, form, onSuggestedTimeSelect]);
 
   return (
     <FormField
@@ -356,7 +382,7 @@ export const HoursSelectionField = ({ form, onSuggestedTimeSelect }: {
         <FormItem>
           <FormLabel className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            Estimated Hours
+            Estimated Hours (Auto-calculated)
           </FormLabel>
           <FormControl>
             <div className="space-y-4">
@@ -364,31 +390,10 @@ export const HoursSelectionField = ({ form, onSuggestedTimeSelect }: {
                 <div className="text-2xl font-bold text-primary">
                   {field.value} hours
                 </div>
+                <p className="text-sm text-muted-foreground">
+                  Based on {propertySize}m², {bedrooms} bedrooms, {bathrooms} bathrooms
+                </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {suggestedHours.map((hours) => (
-                  <Button
-                    key={hours}
-                    type="button"
-                    variant={field.value === hours ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => {
-                      field.onChange(hours);
-                      onSuggestedTimeSelect?.(hours);
-                    }}
-                  >
-                    {hours}h
-                  </Button>
-                ))}
-              </div>
-              <Slider
-                value={[field.value]}
-                onValueChange={(value) => field.onChange(value[0])}
-                max={12}
-                min={1}
-                step={1}
-                className="w-full"
-              />
             </div>
           </FormControl>
           <FormMessage />
@@ -398,27 +403,42 @@ export const HoursSelectionField = ({ form, onSuggestedTimeSelect }: {
   );
 };
 
-// Residents Field - Used in Home cleaning
-export const ResidentsField = ({ form }: { form: UseFormReturn<any> }) => {
+// Pets Field - Used in all service types
+export const PetsField = ({ form }: { form: UseFormReturn<any> }) => {
+  const petsOptions = [
+    { value: 'none', label: 'No pets' },
+    { value: 'cats', label: 'Cats only' },
+    { value: 'dogs', label: 'Dogs only' },
+    { value: 'both', label: 'Both cats and dogs' },
+    { value: 'other', label: 'Other pets' },
+  ];
+
   return (
     <FormField
       control={form.control}
-      name="numResidents"
+      name="pets"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="flex items-center gap-2">
             <User className="h-4 w-4" />
-            Number of Residents
+            Pets in Property
           </FormLabel>
           <FormControl>
-            <Input
-              type="number"
-              min={1}
-              max={20}
+            <select
               {...field}
-              onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-            />
+              className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+            >
+              <option value="">Select pet situation</option>
+              {petsOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </FormControl>
+          <FormDescription>
+            Pets may require special cleaning considerations
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -492,9 +512,10 @@ export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Additional Options</CardTitle>
+          <CardTitle className="text-base">Property Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <PetsField form={form} />
           {showDisinfection && <DisinfectionRequiredField form={form} />}
           {showSupplies && <SuppliesProvidedField form={form} />}
         </CardContent>
