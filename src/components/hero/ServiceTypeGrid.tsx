@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { Home, Building, Sparkles, ArrowRightLeft } from "lucide-react";
+import { Home, Building, Sparkles, ArrowRightLeft, HardHat } from "lucide-react";
 import { ServiceType } from "@/schemas/booking";
 
 interface ServiceTypeGridProps {
@@ -14,12 +14,13 @@ const serviceOptions = [
   { type: ServiceType.Office, label: 'Office', icon: Building },
   { type: ServiceType.DeepCleaning, label: 'Deep', icon: Sparkles },
   { type: ServiceType.MoveInOut, label: 'Move', icon: ArrowRightLeft },
+  { type: ServiceType.PostConstruction, label: 'Post-Con', icon: HardHat },
 ];
 
 export const ServiceTypeGrid = memo(({ selectedService, setSelectedService, isMobile }: ServiceTypeGridProps) => {
   if (isMobile) {
     return (
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-2">
         {serviceOptions.map((service) => {
           const IconComponent = service.icon;
           const isSelected = selectedService === service.type;
@@ -47,7 +48,7 @@ export const ServiceTypeGrid = memo(({ selectedService, setSelectedService, isMo
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-3 gap-2">
       {serviceOptions.map((service) => {
         const IconComponent = service.icon;
         const isSelected = selectedService === service.type;

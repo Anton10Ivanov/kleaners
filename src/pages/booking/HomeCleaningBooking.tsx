@@ -26,7 +26,8 @@ const HomeCleaningBooking = () => {
       bedrooms: 2,
       bathrooms: 1,
       dirtinessLevel: 3,
-      numResidents: 2,
+      pets: 'none',
+      lastCleaned: '',
       suppliesProvided: false,
       postalCode: '',
       address: '',
@@ -95,37 +96,6 @@ const HomeCleaningBooking = () => {
                   form={form} 
                   onSuggestedTimeSelect={handleSuggestedTimeSelect}
                 />
-                
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <ArrowRight className="h-5 w-5" />
-                    Service Options
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Frequency</label>
-                      <select
-                        {...form.register('frequency')}
-                        className="w-full p-2 border rounded-lg"
-                      >
-                        <option value="one-time">One-time</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="bi-weekly">Bi-weekly</option>
-                        <option value="monthly">Monthly</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Cleaning Pace</label>
-                      <select
-                        {...form.register('cleaningPace')}
-                        className="w-full p-2 border rounded-lg"
-                      >
-                        <option value="standard">Standard</option>
-                        <option value="quick">Quick</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
 

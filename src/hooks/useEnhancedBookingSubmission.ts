@@ -139,7 +139,6 @@ export const useEnhancedBookingSubmission = () => {
       // Add service-specific fields
       ...(data.serviceType === 'home' && {
         property_size: (data as any).propertySize,
-        num_residents: (data as any).numResidents,
         supplies_provided: (data as any).suppliesProvided,
         dirtiness_level: (data as any).dirtinessLevel,
       }),
