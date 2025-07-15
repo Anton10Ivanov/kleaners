@@ -38,7 +38,7 @@ export const EnhancedServiceCategoriesSection: React.FC<EnhancedServiceCategorie
           {serviceCategories.map((category) => {
             const IconComponent = category.icon;
             return (
-              <div key={category.id} className="service-category-card">
+              <div key={category.id} className="service-category-card group">
                 <div className="flex items-start justify-between mb-4">
                   <IconComponent className="service-category-icon" />
                   <span className="text-sm font-semibold text-primary bg-blue-50 px-3 py-1 rounded-full">

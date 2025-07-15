@@ -83,7 +83,7 @@
   }
   
   .service-category-card {
-    @apply service-card group cursor-pointer;
+    @apply service-card cursor-pointer;
   }
   
   .service-category-icon {
