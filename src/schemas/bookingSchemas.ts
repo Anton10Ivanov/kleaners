@@ -75,7 +75,43 @@ export const HomeCleaningSchema = z.object({
   dirtinessLevel: z.number().min(1, "Please select dirtiness level").max(5),
   numResidents: z.number().min(1, "At least 1 resident required").max(20, "Maximum 20 residents allowed"),
   suppliesProvided: z.boolean().default(false),
-}).merge(addressFields).merge(contactFields);
+}).merge(addressFields).merge(contactFields)
+.superRefine((data, ctx) => {
+  // Business logic validation
+  if (data.propertySize && data.bedrooms && data.bathrooms) {
+    const estimatedMinSize = (data.bedrooms * 15) + (data.bathrooms * 8) + 30;
+    if (data.propertySize < estimatedMinSize) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Property size seems too small for ${data.bedrooms} bedrooms and ${data.bathrooms} bathrooms. Expected at least ${estimatedMinSize}m²`,
+        path: ["propertySize"]
+      });
+    }
+  }
+  
+  // Validate residents vs property size
+  if (data.propertySize && data.numResidents) {
+    const maxReasonableResidents = Math.floor(data.propertySize / 20);
+    if (data.numResidents > maxReasonableResidents) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `${data.numResidents} residents might be too many for a ${data.propertySize}m² property`,
+        path: ["numResidents"]
+      });
+    }
+  }
+  
+  // Validate frequency vs property size
+  if (data.frequency === 'weekly' && data.propertySize && data.propertySize > 200) {
+    if (data.dirtinessLevel && data.dirtinessLevel <= 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Large properties with weekly cleaning and low dirtiness might be over-serviced. Consider bi-weekly.",
+        path: ["frequency"]
+      });
+    }
+  }
+});
 
 // ---------- OFFICE SCHEMA ----------
 export const OfficeCleaningSchema = z.object({
