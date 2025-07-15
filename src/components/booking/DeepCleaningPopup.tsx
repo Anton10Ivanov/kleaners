@@ -32,7 +32,7 @@ export const DeepCleaningPopup = ({
       <DialogContent className="max-w-md mx-auto">
         <DialogHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full">
+            <div className="p-3 bg-warning/10 rounded-full">
               <Sparkles className="h-8 w-8 text-yellow-600" />
             </div>
           </div>
@@ -52,7 +52,7 @@ export const DeepCleaningPopup = ({
         <div className="flex flex-col gap-3 mt-6">
           <Button 
             onClick={onSwitchToDeepCleaning}
-            className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-semibold"
+            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold"
           >
             👉 Switch to Deep Cleaning Booking
           </Button>

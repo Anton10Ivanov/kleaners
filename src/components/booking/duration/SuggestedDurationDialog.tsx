@@ -48,7 +48,7 @@ export const SuggestedDurationDialog = ({
         </DialogHeader>
         
         <div className="space-y-4">
-          <div className="p-4 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-lg">
+          <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle className="h-4 w-4 text-primary" />
               <span className="font-semibold text-primary">Recommended: {suggestedDuration} hours</span>

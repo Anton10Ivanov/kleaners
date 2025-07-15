@@ -164,9 +164,9 @@ export const ServiceCategoriesSection = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <Card className="inline-block bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20 overflow-hidden relative">
+                  <Card className="inline-block bg-card border-border overflow-hidden relative hover:shadow-lg transition-shadow duration-300">
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5"
+                      className="absolute inset-0 bg-primary/5"
                       animate={{
                         x: ['-100%', '100%'],
                       }}

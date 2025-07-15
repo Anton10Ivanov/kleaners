@@ -26,7 +26,7 @@ const BusinessSolutionsSection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-transparent to-primary/10">
+    <section className="py-16 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content Side */}
@@ -100,7 +100,7 @@ const BusinessSolutionsSection = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <Card className="bg-card border-border hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-primary">
                   <Building2 className="h-5 w-5" />
