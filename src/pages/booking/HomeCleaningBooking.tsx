@@ -2,6 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { homeCleaningSchema, BookingFormData, ServiceType } from '@/schemas/booking';
+import { HomeCleaningSchema, type HomeBookingForm } from '@/schemas/bookingSchemas';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -13,10 +14,13 @@ import EnhancedExtras from '@/components/booking/EnhancedExtras';
 import FinalStep from '@/components/booking/FinalStep';
 import { HomeDetailsSection } from '@/components/booking/HomeDetailsSection';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
+import { useEnhancedBookingSubmission } from '@/hooks/useEnhancedBookingSubmission';
+import { useFeatureFlags } from '@/contexts/FeatureFlagContext';
 import { useNavigate } from 'react-router-dom';
 
 const HomeCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const { flags } = useFeatureFlags();
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
   
@@ -47,6 +51,8 @@ const HomeCleaningBooking = () => {
   };
 
   const handleSubmit = async (data: BookingFormData) => {
+    // For now, use legacy submission regardless of flag
+    // Enhanced submission will be integrated in a later phase
     await submitBooking(data);
   };
 
