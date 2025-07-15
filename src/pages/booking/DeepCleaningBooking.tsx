@@ -1,7 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { deepCleaningSchema, DeepCleaningFormData } from '@/schemas/booking';
+import { DeepCleaningSchema, DeepCleaningBookingForm } from '@/schemas/bookingSchemas';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
-import DeepCleaningFields from '@/components/booking/deepCleaning/DeepCleaningFields';
+import EnhancedDeepCleaningFields from '@/components/booking/EnhancedDeepCleaningFields';
 import DeepCleaningStep2 from './DeepCleaningStep2';
 
 const DeepCleaningBooking = () => {
@@ -18,16 +18,26 @@ const DeepCleaningBooking = () => {
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
   
-  const form = useForm<DeepCleaningFormData>({
-    resolver: zodResolver(deepCleaningSchema),
+  const form = useForm<DeepCleaningBookingForm>({
+    resolver: zodResolver(DeepCleaningSchema),
     defaultValues: {
-      service: "deep-cleaning" as const,
+      serviceType: "deep-cleaning",
       squareMeters: 50,
       bedrooms: 1,
       bathrooms: 1,
       dirtinessLevel: 3,
-      lastCleaned: 3,
-      cleaningPersonnel: 'normal',
+      includeWallsAndCeilings: false,
+      targetAreas: ["bathroom"],
+      postalCode: '',
+      selectedDate: new Date(),
+      selectedTime: '',
+      address: '',
+      city: '',
+      accessMethod: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
     },
   });
 
@@ -43,7 +53,7 @@ const DeepCleaningBooking = () => {
     }
   };
 
-  const handleSubmit = async (data: DeepCleaningFormData) => {
+  const handleSubmit = async (data: DeepCleaningBookingForm) => {
     await submitBooking(data as any);
   };
 
@@ -81,7 +91,7 @@ const DeepCleaningBooking = () => {
                   className="space-y-6"
                 >
                   <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <DeepCleaningFields form={form} />
+                    <EnhancedDeepCleaningFields form={form} />
                   </div>
                 </motion.div>
               )}

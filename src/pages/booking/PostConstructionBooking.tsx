@@ -1,7 +1,6 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MoveInOutSchema, MoveInOutBookingForm } from '@/schemas/bookingSchemas';
+import { PostConstructionSchema, PostConstructionBookingForm } from '@/schemas/bookingSchemas';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -10,25 +9,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
-import EnhancedMoveInOutFields from '@/components/booking/EnhancedMoveInOutFields';
-import MoveInOutStep2 from './MoveInOutStep2';
+import PostConstructionFields from '@/components/booking/postConstruction/PostConstructionFields';
+import PostConstructionStep2 from './PostConstructionStep2';
 
-const MoveInOutBooking = () => {
+const PostConstructionBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
   
-  const form = useForm<MoveInOutBookingForm>({
-    resolver: zodResolver(MoveInOutSchema),
+  const form = useForm<PostConstructionBookingForm>({
+    resolver: zodResolver(PostConstructionSchema),
     defaultValues: {
-      serviceType: "move-in-out",
-      squareMeters: 60,
-      bedrooms: 2,
-      bathrooms: 1,
-      dirtinessLevel: 3,
-      isFurnished: false,
-      trashRemovalNeeded: false,
-      cleaningGoal: "deposit",
+      serviceType: "post-construction",
+      squareMeters: 100,
+      constructionType: "renovation",
+      dustLevel: 3,
+      hazardousMaterials: false,
+      specialEquipmentNeeded: false,
       postalCode: '',
       selectedDate: new Date(),
       selectedTime: '',
@@ -54,7 +51,7 @@ const MoveInOutBooking = () => {
     }
   };
 
-  const handleSubmit = async (data: MoveInOutBookingForm) => {
+  const handleSubmit = async (data: PostConstructionBookingForm) => {
     await submitBooking(data as any);
   };
 
@@ -63,7 +60,7 @@ const MoveInOutBooking = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Move In/Out Cleaning Booking
+            Post Construction Cleaning
           </h1>
           <div className="flex items-center space-x-2 text-sm text-gray-500">
             <span>Step {currentStep} of 3</span>
@@ -92,7 +89,7 @@ const MoveInOutBooking = () => {
                   className="space-y-6"
                 >
                   <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <EnhancedMoveInOutFields form={form} />
+                    <PostConstructionFields form={form} />
                   </div>
                 </motion.div>
               )}
@@ -105,7 +102,7 @@ const MoveInOutBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <MoveInOutStep2 form={form} />
+                  <PostConstructionStep2 form={form} />
                 </motion.div>
               )}
 
@@ -117,7 +114,7 @@ const MoveInOutBooking = () => {
                   exit={{ opacity: 0, x: -20 }}
                 >
                   <FinalStep
-                    form={form}
+                    form={form as any}
                     postalCode={form.watch('postalCode') || ''}
                     onSubmit={handleSubmit}
                   />
@@ -154,4 +151,4 @@ const MoveInOutBooking = () => {
   );
 };
 
-export default MoveInOutBooking;
+export default PostConstructionBooking;

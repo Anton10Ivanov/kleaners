@@ -4,6 +4,7 @@ import HomeCleaningBooking from './HomeCleaningBooking';
 import DeepCleaningBooking from './DeepCleaningBooking';
 import MoveInOutBooking from './MoveInOutBooking';
 import OfficeCleaningBooking from './OfficeCleaningBooking';
+import PostConstructionBooking from './PostConstructionBooking';
 import { ServiceType } from '@/schemas/booking';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,6 +24,9 @@ const BookingRoutes = () => {
         break;
       case ServiceType.MoveInOut:
         navigate('/booking/move-in-out');
+        break;
+      case ServiceType.PostConstruction:
+        navigate('/booking/post-construction');
         break;
       default:
         navigate('/booking/home-cleaning');
@@ -50,6 +54,10 @@ const BookingRoutes = () => {
       <Route 
         path="move-in-out" 
         element={<MoveInOutBooking />} 
+      />
+      <Route 
+        path="post-construction" 
+        element={<PostConstructionBooking />} 
       />
     </Routes>
   );

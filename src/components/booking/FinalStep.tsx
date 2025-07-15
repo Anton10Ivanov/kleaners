@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData, ProviderOption } from "@/schemas/booking";
+import { BookingFormData } from "@/schemas/bookingSchemas";
 import CleaningAddress from "./final/CleaningAddress";
 import PersonalInformation from "./final/PersonalInformation";
 import EnhancedBookingSummary from "./EnhancedBookingSummary";
@@ -20,9 +20,9 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { logger } from "@/utils/logging";
 
 interface FinalStepProps {
-  form: UseFormReturn<BookingFormData>;
+  form: UseFormReturn<any>;
   postalCode: string;
-  onSubmit: (data: BookingFormData) => void;
+  onSubmit: (data: any) => void;
   onBack?: () => void;
 }
 
@@ -30,7 +30,7 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const { isSubmitting, submitBooking, confirmationData, clearConfirmation } = useBookingSubmission();
   
-  const providerOptions = form.watch('providerOptions') as ProviderOption[] || [];
+  const providerOptions = form.watch('providerOptions') || [];
   const hasProviderOptions = providerOptions && providerOptions.length > 0;
   
   // Show confirmation page if booking was successful
@@ -134,7 +134,7 @@ const FinalStep = ({ form, postalCode, onSubmit, onBack }: FinalStepProps) => {
 
 // Extracted into a separate component for better organization
 interface ProviderSelectionProps {
-  providers: ProviderOption[];
+  providers: any[];
   selectedProvider: string | null;
   onSelectProvider: (id: string | null) => void;
 }
