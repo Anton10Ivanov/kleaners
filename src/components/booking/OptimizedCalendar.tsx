@@ -9,7 +9,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Users } from "lucide-react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion"; // Removed for performance
 import TimeGrid from "./TimeGrid";
 import { logger } from "@/utils/logging";
 
@@ -181,25 +181,17 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
 
       {/* Time Grid */}
       {date && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
-        >
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <TimeGrid 
             selectedTime={selectedTimeSlot ? selectedTimeSlot.split('-')[0] : ''} 
             onTimeSelect={handleTimeSlotSelect} 
           />
-        </motion.div>
+        </div>
       )}
 
       {/* Show selected time range */}
       {selectedTimeSlot && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3"
-        >
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-blue-600" />
@@ -208,22 +200,18 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* Provider Availability */}
       {selectedTimeSlot && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          className={`
+        <div className={`
             p-3 rounded-lg border-l-4 
             ${availableProviders.length > 0 
               ? 'bg-green-50 dark:bg-green-900/20 border-green-400' 
               : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-400'
             }
-          `}
-        >
+          `}>
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span className="text-sm font-medium">
@@ -238,7 +226,7 @@ const OptimizedCalendar = ({ form }: OptimizedCalendarProps) => {
               Your booking will be matched with the next available provider.
             </p>
           )}
-        </motion.div>
+        </div>
       )}
 
       {!selectedTimeSlot && date && (
