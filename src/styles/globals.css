@@ -9,46 +9,7 @@
 @import './componentLibrary.css';
 @import './animations.css';
 
-@layer base {
-  :root {
-    --background: 248 250 252; /* High-converting blue-gray background */
-    --foreground: 222.2 84% 4.9%;
-    --card: 255 255 255; /* Clean white cards on blue background */
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 255 255 255;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 59 130 246; /* High-converting blue primary */
-    --primary-foreground: 255 255 255;
-    --primary-hover: 37 99 235;
-    --secondary: 219 234 254; /* Light blue secondary */
-    --secondary-foreground: 30 58 138;
-    --muted: 241 245 249; /* Subtle blue-gray muted */
-    --muted-foreground: 100 116 139;
-    --accent: 59 130 246; /* Matching blue accent */
-    --accent-foreground: 255 255 255;
-    --destructive: 239 68 68;
-    --destructive-foreground: 255 255 255;
-    --border: 226 232 240; /* Light blue-gray borders */
-    --input: 248 250 252; /* Matching input backgrounds */
-    --ring: 59 130 246; /* Blue focus rings */
-    --radius: 0.5rem;
-    --chart-1: 59 130 246;
-    --chart-2: 16 185 129;
-    --chart-3: 245 158 11;
-    --chart-4: 239 68 68;
-    --chart-5: 139 92 246;
-
-    /* High-converting blue semantic colors */
-    --success: 34 197 94;
-    --warning: 245 158 11;
-    --error: 239 68 68;
-    --info: 59 130 246;
-
-    /* Blue-themed typography */
-    --heading-color: 30 58 138; /* Blue headings */
-    --secondary-text: 71 85 105; /* Blue-gray text */
-  }
-}
+/* Colors are defined in index.css - avoiding duplication */
 
 @layer base {
   * {
@@ -58,8 +19,8 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    /* High-converting blue background gradient */
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, rgb(239, 246, 255) 100%);
+    /* Solid background following WCAG contrast guidelines */
+    background: hsl(var(--background));
     min-height: 100vh;
   }
 
@@ -103,13 +64,14 @@
     text-wrap: pretty;
   }
 
-  /* High-converting blue backgrounds */
-  .bg-primary-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-hover)) 100%);
+  /* WCAG compliant solid backgrounds */
+  .bg-primary-solid {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
   }
 
-  .bg-surface-blue {
-    background: linear-gradient(135deg, rgb(248, 250, 252) 0%, rgb(239, 246, 255) 100%);
+  .bg-surface-subtle {
+    background: hsl(var(--surface));
   }
 
   /* Consolidated scroll utilities */
