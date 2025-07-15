@@ -60,7 +60,7 @@ export const ProcessSteps = memo(() => {
               >
                 {/* Enhanced step connector line */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-20 left-1/2 w-full h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 transform translate-x-8 z-0" />
+                  <div className="hidden md:block absolute top-20 left-1/2 w-full h-0.5 bg-primary/30 transform translate-x-8 z-0" />
                 )}
                 
                 <div className="relative z-10">

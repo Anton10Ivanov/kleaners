@@ -103,7 +103,7 @@ export const Steps = ({ currentStep, children, className }: StepsProps) => {
                       "h-full w-full transition-all duration-300",
                       {
                         "bg-green-600": status === "complete",
-                        "bg-gradient-to-r from-green-600 to-muted-foreground/20": isCurrent,
+                        "bg-success": isCurrent,
                         "bg-muted-foreground/20": !isCompleted && !isCurrent
                       }
                     )}

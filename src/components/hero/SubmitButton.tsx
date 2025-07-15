@@ -19,7 +19,7 @@ export const SubmitButton = memo(({ isMobile }: SubmitButtonProps) => {
         >
           <Button 
             type="submit" 
-            className="w-full h-16 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1"
+            className="w-full h-16 bg-primary hover:bg-primary-hover text-primary-foreground font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1"
           >
             Instant Quote. Fixed Price
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -41,7 +41,7 @@ export const SubmitButton = memo(({ isMobile }: SubmitButtonProps) => {
     >
       <Button 
         type="submit" 
-        className="w-full h-14 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl transform transition-all duration-300 hover:-translate-y-1 group"
+        className="w-full h-14 bg-primary hover:bg-primary-hover text-primary-foreground font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 group"
       >
         Instant Quote. Fixed Price
         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

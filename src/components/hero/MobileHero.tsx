@@ -47,7 +47,7 @@ export const MobileHero = memo(({
       
       {/* Fallback background */}
       {!imageLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-slate-100" />
+        <div className="absolute inset-0 bg-muted" />
       )}
 
       {/* Content overlay */}

@@ -65,7 +65,7 @@ export const EstimationDisplay = ({
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4 }}
         >
-          <Alert className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
+          <Alert className="bg-primary/10 border-primary/20">
             <div className="flex items-start gap-3">
               <div className="p-1 bg-primary/20 rounded-full mt-1">
                 <CheckCircle className="h-4 w-4 text-primary" />

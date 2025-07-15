@@ -97,7 +97,7 @@ export const TimeSlider = ({ value, onChange, className }: TimeSliderProps) => {
       </div>
       
       <motion.div 
-        className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-xl p-6 border border-primary/20"
+        className="bg-primary/10 rounded-xl p-6 border border-primary/20"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}

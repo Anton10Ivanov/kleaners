@@ -21,7 +21,7 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         className={`${isMobile ? 'text-4xl md:text-5xl text-center' : 'text-5xl xl:text-6xl text-left'} font-bold leading-[1.1] text-gray-900 font-['Inter'] tracking-tight`}
       >
         Professional Cleaning{" "}
-        <span className="text-primary font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+        <span className="text-primary font-bold">
           Made Simple
         </span>
       </motion.h1>
