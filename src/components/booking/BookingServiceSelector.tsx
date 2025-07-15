@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Home, Building, Sparkles, ArrowRightLeft } from 'lucide-react';
+import { Home, Building, Sparkles, ArrowRightLeft, HardHat } from 'lucide-react';
 import { ServiceType } from '@/schemas/booking';
 
 interface BookingServiceSelectorProps {
@@ -44,6 +44,15 @@ const services = [
     color: 'bg-orange-50 border-orange-200 hover:bg-orange-100',
     iconColor: 'text-orange-600',
     route: '/booking/move-in-out'
+  },
+  {
+    type: ServiceType.PostConstruction,
+    title: 'Post Construction',
+    description: 'Construction cleanup service',
+    icon: HardHat,
+    color: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
+    iconColor: 'text-yellow-600',
+    route: '/booking/post-construction'
   }
 ];
 
