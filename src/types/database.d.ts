@@ -64,6 +64,27 @@ export interface Database {
           provider_id?: string | null;
           extras?: string[] | null;
           frequency?: "one_time" | "weekly" | "bi_weekly" | "monthly" | null;
+          // Phase 1: Service-specific fields
+          property_size?: number | null;
+          num_residents?: number | null;
+          supplies_provided?: boolean | null;
+          square_meters?: number | null;
+          num_employees?: number | null;
+          avg_visitors_per_week?: number | null;
+          cleaning_during_work_hours?: boolean | null;
+          security_clearance_required?: boolean | null;
+          dirtiness_level?: number | null;
+          last_cleaned?: string | null;
+          include_walls_and_ceilings?: boolean | null;
+          mold_or_pest_presence?: boolean | null;
+          special_surfaces_to_handle?: string | null;
+          target_areas?: string[] | null;
+          is_furnished?: boolean | null;
+          trash_removal_needed?: boolean | null;
+          pre_inspection_required?: boolean | null;
+          parking_available?: boolean | null;
+          cleaning_goal?: string | null;
+          disinfection_required?: boolean | null;
         };
         Insert: {
           id?: string;
@@ -81,6 +102,27 @@ export interface Database {
           provider_id?: string | null;
           extras?: string[] | null;
           frequency?: "one_time" | "weekly" | "bi_weekly" | "monthly" | null;
+          // Phase 1: Service-specific fields
+          property_size?: number | null;
+          num_residents?: number | null;
+          supplies_provided?: boolean | null;
+          square_meters?: number | null;
+          num_employees?: number | null;
+          avg_visitors_per_week?: number | null;
+          cleaning_during_work_hours?: boolean | null;
+          security_clearance_required?: boolean | null;
+          dirtiness_level?: number | null;
+          last_cleaned?: string | null;
+          include_walls_and_ceilings?: boolean | null;
+          mold_or_pest_presence?: boolean | null;
+          special_surfaces_to_handle?: string | null;
+          target_areas?: string[] | null;
+          is_furnished?: boolean | null;
+          trash_removal_needed?: boolean | null;
+          pre_inspection_required?: boolean | null;
+          parking_available?: boolean | null;
+          cleaning_goal?: string | null;
+          disinfection_required?: boolean | null;
         };
         Update: {
           id?: string;
@@ -98,6 +140,27 @@ export interface Database {
           provider_id?: string | null;
           extras?: string[] | null;
           frequency?: "one_time" | "weekly" | "bi_weekly" | "monthly" | null;
+          // Phase 1: Service-specific fields
+          property_size?: number | null;
+          num_residents?: number | null;
+          supplies_provided?: boolean | null;
+          square_meters?: number | null;
+          num_employees?: number | null;
+          avg_visitors_per_week?: number | null;
+          cleaning_during_work_hours?: boolean | null;
+          security_clearance_required?: boolean | null;
+          dirtiness_level?: number | null;
+          last_cleaned?: string | null;
+          include_walls_and_ceilings?: boolean | null;
+          mold_or_pest_presence?: boolean | null;
+          special_surfaces_to_handle?: string | null;
+          target_areas?: string[] | null;
+          is_furnished?: boolean | null;
+          trash_removal_needed?: boolean | null;
+          pre_inspection_required?: boolean | null;
+          parking_available?: boolean | null;
+          cleaning_goal?: string | null;
+          disinfection_required?: boolean | null;
         };
       };
       

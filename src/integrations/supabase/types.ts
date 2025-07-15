@@ -40,10 +40,15 @@ export type Database = {
           access_instructions: string | null
           access_method: string | null
           address: string | null
+          avg_visitors_per_week: number | null
           bathrooms: number
           bedrooms: number
+          cleaning_during_work_hours: boolean | null
+          cleaning_goal: string | null
           created_at: string | null
           date: string | null
+          dirtiness_level: number | null
+          disinfection_required: boolean | null
           email: string | null
           entry_code: string | null
           extras: string[] | null
@@ -52,13 +57,28 @@ export type Database = {
           frequency: string
           hours: number
           id: string
+          include_walls_and_ceilings: boolean | null
+          is_furnished: boolean | null
+          last_cleaned: string | null
           last_name: string | null
+          mold_or_pest_presence: boolean | null
+          num_employees: number | null
+          num_residents: number | null
+          parking_available: boolean | null
           phone: string | null
           postal_code: string
+          pre_inspection_required: boolean | null
+          property_size: number | null
+          security_clearance_required: boolean | null
           service_type: string
           special_instructions: string | null
+          special_surfaces_to_handle: string | null
+          square_meters: number | null
           status: Database["public"]["Enums"]["booking_status"] | null
+          supplies_provided: boolean | null
+          target_areas: string[] | null
           total_price: number | null
+          trash_removal_needed: boolean | null
           updated_at: string | null
           user_id: string | null
         }
@@ -66,10 +86,15 @@ export type Database = {
           access_instructions?: string | null
           access_method?: string | null
           address?: string | null
+          avg_visitors_per_week?: number | null
           bathrooms: number
           bedrooms: number
+          cleaning_during_work_hours?: boolean | null
+          cleaning_goal?: string | null
           created_at?: string | null
           date?: string | null
+          dirtiness_level?: number | null
+          disinfection_required?: boolean | null
           email?: string | null
           entry_code?: string | null
           extras?: string[] | null
@@ -78,13 +103,28 @@ export type Database = {
           frequency: string
           hours: number
           id?: string
+          include_walls_and_ceilings?: boolean | null
+          is_furnished?: boolean | null
+          last_cleaned?: string | null
           last_name?: string | null
+          mold_or_pest_presence?: boolean | null
+          num_employees?: number | null
+          num_residents?: number | null
+          parking_available?: boolean | null
           phone?: string | null
           postal_code: string
+          pre_inspection_required?: boolean | null
+          property_size?: number | null
+          security_clearance_required?: boolean | null
           service_type: string
           special_instructions?: string | null
+          special_surfaces_to_handle?: string | null
+          square_meters?: number | null
           status?: Database["public"]["Enums"]["booking_status"] | null
+          supplies_provided?: boolean | null
+          target_areas?: string[] | null
           total_price?: number | null
+          trash_removal_needed?: boolean | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -92,10 +132,15 @@ export type Database = {
           access_instructions?: string | null
           access_method?: string | null
           address?: string | null
+          avg_visitors_per_week?: number | null
           bathrooms?: number
           bedrooms?: number
+          cleaning_during_work_hours?: boolean | null
+          cleaning_goal?: string | null
           created_at?: string | null
           date?: string | null
+          dirtiness_level?: number | null
+          disinfection_required?: boolean | null
           email?: string | null
           entry_code?: string | null
           extras?: string[] | null
@@ -104,13 +149,28 @@ export type Database = {
           frequency?: string
           hours?: number
           id?: string
+          include_walls_and_ceilings?: boolean | null
+          is_furnished?: boolean | null
+          last_cleaned?: string | null
           last_name?: string | null
+          mold_or_pest_presence?: boolean | null
+          num_employees?: number | null
+          num_residents?: number | null
+          parking_available?: boolean | null
           phone?: string | null
           postal_code?: string
+          pre_inspection_required?: boolean | null
+          property_size?: number | null
+          security_clearance_required?: boolean | null
           service_type?: string
           special_instructions?: string | null
+          special_surfaces_to_handle?: string | null
+          square_meters?: number | null
           status?: Database["public"]["Enums"]["booking_status"] | null
+          supplies_provided?: boolean | null
+          target_areas?: string[] | null
           total_price?: number | null
+          trash_removal_needed?: boolean | null
           updated_at?: string | null
           user_id?: string | null
         }
