@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ExtrasSelector from '@/components/booking/ExtrasSelector';
 import { ServiceType } from '@/schemas/booking';
+import { ConditionalFields } from '@/components/booking/shared/SharedFields';
 
 interface EnhancedHomeDetailsSectionProps {
   form: UseFormReturn<HomeBookingForm>;
@@ -284,6 +285,11 @@ export const EnhancedHomeDetailsSection = ({ form, onSuggestedTimeSelect }: Enha
             />
           </CardContent>
         </Card>
+      </div>
+
+      {/* Shared Fields */}
+      <div className="mt-6">
+        <ConditionalFields form={form} serviceType={ServiceType.Home} />
       </div>
     </div>
   );

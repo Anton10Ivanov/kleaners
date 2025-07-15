@@ -6,7 +6,11 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Building2, Shield, Trash2, Key } from 'lucide-react';
+import { Building2, Shield, Trash2, Key, ArrowRightLeft } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ConditionalFields } from '@/components/booking/shared/SharedFields';
+import { ServiceType } from '@/schemas/booking';
+import ExtrasSelector from '@/components/booking/ExtrasSelector';
 
 interface EnhancedMoveInOutFieldsProps {
   form: UseFormReturn<MoveInOutBookingForm>;
@@ -270,6 +274,39 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
           </FormItem>
         )}
       />
+
+      {/* Enhanced Extras Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ArrowRightLeft className="h-5 w-5" />
+            Additional Services
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FormField
+            control={form.control}
+            name="extras"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <ExtrasSelector
+                    serviceType={ServiceType.MoveInOut}
+                    selectedExtras={(field.value || []) as any}
+                    onExtrasChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Shared Fields */}
+      <div className="mt-6">
+        <ConditionalFields form={form} serviceType={ServiceType.MoveInOut} />
+      </div>
     </div>
   );
 };
