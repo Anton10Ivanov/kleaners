@@ -4,9 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
-import { Mail, Phone, Clock, MapPin, MessageCircle, Users, Shield, CheckCircle } from 'lucide-react';
+import { Mail, Phone, Clock, MapPin, MessageCircle, Users, Shield, CheckCircle, Info } from 'lucide-react';
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ const Contact = () => {
         if (error.message?.includes('spam') || error.message?.includes('rate limit')) {
           toast({
             title: 'Too many submissions',
-            description: 'You can only submit 2 messages per week. Please wait before submitting another message.',
+            description: 'You can only submit 2 messages per month. Please wait before submitting another message.',
             variant: 'destructive'
           });
           return;
@@ -69,7 +70,7 @@ const Contact = () => {
       console.error('Error submitting message:', error);
 
       // Show error message with appropriate message based on the error
-      const errorMessage = error.message?.includes('rate limit') ? 'Too many submissions. You can only submit 2 messages per week.' : 'There was an error sending your message. Please try again later.';
+      const errorMessage = error.message?.includes('rate limit') ? 'Too many submissions. You can only submit 2 messages per month.' : 'There was an error sending your message. Please try again later.';
       toast({
         title: 'Submission Failed',
         description: errorMessage,
@@ -155,18 +156,24 @@ const Contact = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="message">Message</Label>
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="message">Message</Label>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button type="button" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                <Info className="w-4 h-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-sm">To ensure quality communication we limit submissions.</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                       <Textarea id="message" placeholder="Tell us how we can help you..." value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px] resize-none border-2 focus:border-primary" />
                     </div>
 
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                      <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                        <div className="text-sm text-blue-700 dark:text-blue-300">
-                          <strong>Spam Protection:</strong> To ensure quality communication, we limit submissions to 2 messages per week per user.
-                        </div>
-                      </div>
-                    </div>
                     
                     <Button type="submit" className="w-full h-10 text-sm font-semibold" disabled={isSubmitting}>
                       {isSubmitting ? 'Sending Message...' : 'Send Message'}
