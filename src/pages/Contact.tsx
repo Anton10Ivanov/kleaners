@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
-import { Mail, Phone, Clock, MapPin, MessageCircle, Users, Shield, CheckCircle, Info } from 'lucide-react';
+import { Mail, Phone, Clock, MessageCircle, Users, Shield, CheckCircle, Info, MessageSquare } from 'lucide-react';
+
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const Contact = () => {
   const {
     toast
   } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -80,6 +82,7 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
+
   const contactMethods = [{
     icon: Mail,
     title: 'Email Us',
@@ -93,18 +96,19 @@ const Contact = () => {
     value: '+49 123 456 789',
     action: 'tel:+491234567890'
   }, {
+    icon: MessageSquare,
+    title: 'WhatsApp',
+    description: 'Message us on WhatsApp for quick support',
+    value: '+49 123 456 789',
+    action: 'https://wa.me/491234567890'
+  }, {
     icon: MessageCircle,
     title: 'Live Chat',
     description: 'Get instant support through our live chat',
     value: 'Available 9 AM - 6 PM',
     action: '#'
-  }, {
-    icon: MapPin,
-    title: 'Visit Us',
-    description: 'Come to our office for in-person support',
-    value: 'Berlin, Munich, Hamburg',
-    action: '#'
   }];
+
   const supportFeatures = [{
     icon: Clock,
     title: 'Quick Response',
@@ -118,6 +122,7 @@ const Contact = () => {
     title: 'Secure & Private',
     description: 'Your information is safe and confidential'
   }];
+
   return <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
       <div className="pt-20 pb-16 px-4 text-center">
@@ -219,15 +224,29 @@ const Contact = () => {
                   <CardDescription>Have questions about our cleaning services? We're here to help.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-1">
-                  {contactMethods.map((method, index) => <div key={index}>
-                      
+                  {contactMethods.map((method, index) => (
+                    <div key={index}>
+                      <div className="group">
+                        <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                            <method.icon className="w-4 h-4 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-white text-sm">{method.title}</h4>
+                            <p className="text-xs font-medium text-primary truncate">{method.value}</p>
+                          </div>
+                        </a>
+                      </div>
                       {/* Add emergency support under Live Chat */}
-                      {method.title === 'Live Chat' && <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                      {method.title === 'Live Chat' && (
+                        <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                           <p className="text-sm text-green-700 dark:text-green-300">
                             <strong>Emergency Support:</strong> 24/7 available for urgent cleaning needs
                           </p>
-                        </div>}
-                    </div>)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
             </div>
@@ -236,4 +255,5 @@ const Contact = () => {
       </div>
     </div>;
 };
+
 export default Contact;
