@@ -13,7 +13,7 @@ export const Logo = () => {
     <button
       onClick={handleClick}
       className={cn(
-        "flex items-center gap-2 text-[#7ebce6]/80 hover:text-[#7ebce6] transition-colors",
+        "flex items-center gap-2 text-primary hover:text-primary/80 transition-colors",
         "text-lg font-bold tracking-wide cursor-pointer"
       )}
     >
@@ -22,8 +22,8 @@ export const Logo = () => {
         alt="Kleaners.de Logo" 
         className="h-8 w-8 object-contain" 
         style={{
-          filter: 'brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(1000%) hue-rotate(190deg) brightness(100%) contrast(100%)'
-        }} 
+          filter: 'brightness(0) saturate(100%) invert(13%) sepia(98%) saturate(7489%) hue-rotate(196deg) brightness(95%) contrast(107%)'
+        }}
       />
       Kleaners
     </button>
