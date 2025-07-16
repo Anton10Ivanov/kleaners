@@ -7,25 +7,25 @@ export const EnhancedProcessSteps = () => {
     {
       number: 1,
       title: "Book Online",
-      description: "Choose your service and preferred time slot in just a few clicks",
+      description: "Schedule your cleaning service instantly with our easy online booking system",
       icon: Calendar
     },
     {
       number: 2,
-      title: "We Arrive",
-      description: "Our vetted professionals arrive on time with all necessary supplies",
+      title: "Get Confirmation",
+      description: "Receive instant email confirmation with all booking details and arrival time",
       icon: Users
     },
     {
       number: 3,
-      title: "We Clean",
-      description: "Thorough cleaning using eco-friendly products and proven techniques",
+      title: "We Arrive & Clean",
+      description: "Our professional team arrives on time and delivers exceptional cleaning results",
       icon: Sparkles
     },
     {
       number: 4,
-      title: "You Relax",
-      description: "Enjoy your spotless space while we handle all the cleaning details",
+      title: "Secure Payment",
+      description: "Safe and convenient payment processing through our trusted payment partner",
       icon: ThumbsUp
     }
   ];
