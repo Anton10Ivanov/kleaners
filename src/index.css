@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Raleway:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @import "./styles/componentLibrary.css";
 @import "./styles/spacing.css";
@@ -13,11 +13,11 @@
 
 @layer base {
   :root {
-    /* Font family variables - Unified */
-    --ff: 'Raleway', sans-serif;
-    --ff2: 'Raleway', sans-serif;
+    /* Font family variables - Unified to Inter */
+    --ff: 'Inter', sans-serif;
+    --ff2: 'Inter', sans-serif;
     --ff-heading: 'Inter', sans-serif;
-    --ff-label: 'Open Sans', sans-serif;
+    --ff-label: 'Inter', sans-serif;
     
     /* Typography values - Standardized */
     --p: 1rem/1.5em var(--ff);
