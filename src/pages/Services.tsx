@@ -18,6 +18,7 @@ const Services = () => {
   // All services from App.tsx routes - expanded list
   const allServicesFromRoutes = [
     { title: 'Home Cleaning', href: '/services/home-cleaning', description: 'Regular residential cleaning services', category: 'Residential', icon: Home },
+    { title: 'Deep Cleaning', href: '/services/deep-cleaning', description: 'Thorough one-time deep cleaning service', category: 'Residential', icon: Sparkles },
     { title: 'Office Cleaning', href: '/services/office-cleaning', description: 'Professional office cleaning services', category: 'Commercial', icon: Building2 },
     { title: 'Move In/Out Cleaning', href: '/services/move-in-out', description: 'Deep cleaning for moving transitions', category: 'Specialized', icon: Sparkles },
     { title: 'Window Cleaning', href: '/services/window-cleaning', description: 'Professional window cleaning services', category: 'Specialized', icon: Star },
