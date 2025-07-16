@@ -16,8 +16,8 @@ import { Hero } from '../hero';
 import { MobileBookingSummaryOptimized } from '../booking/mobile';
 import { serviceCategories } from '@/components/navbar/navigationData';
 
-// Enhanced professional sections
-import { EnhancedProfessionalTrustSection } from '../hero/EnhancedProfessionalTrustSection';
+// Consolidated sections
+import TrustAndBenefits from '../hero/TrustAndBenefits';
 import { EnhancedProcessSteps } from '../hero/EnhancedProcessSteps';
 import { EnhancedServiceCategoriesSection } from '../services/EnhancedServiceCategoriesSection';
 import { EnhancedBusinessSolutionsSection } from './EnhancedBusinessSolutionsSection';
@@ -151,8 +151,8 @@ const HomePage = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            {/* Enhanced trust section */}
-            <EnhancedProfessionalTrustSection />
+            {/* Consolidated trust and benefits section */}
+            <TrustAndBenefits />
             
             {/* Enhanced how it works section */}
             <EnhancedProcessSteps />
