@@ -191,17 +191,29 @@ const Contact = () => {
                   <CardDescription>Have questions about our cleaning services? We're here to help.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-1">
-                  {contactMethods.map((method, index) => <div key={index} className="group">
-                      <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                          <method.icon className="w-4 h-4 text-primary" />
+                  {contactMethods.map((method, index) => (
+                    <div key={index}>
+                      <div className="group">
+                        <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                            <method.icon className="w-4 h-4 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-white text-sm">{method.title}</h4>
+                            <p className="text-xs font-medium text-primary truncate">{method.value}</p>
+                          </div>
+                        </a>
+                      </div>
+                      {/* Add emergency support under Live Chat */}
+                      {method.title === 'Live Chat' && (
+                        <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <p className="text-sm text-green-700 dark:text-green-300">
+                            <strong>Emergency Support:</strong> 24/7 available for urgent cleaning needs
+                          </p>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-gray-900 dark:text-white text-sm">{method.title}</h4>
-                          <p className="text-xs font-medium text-primary truncate">{method.value}</p>
-                        </div>
-                      </a>
-                    </div>)}
+                      )}
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
             </div>
@@ -230,11 +242,6 @@ const Contact = () => {
                     <span className="text-gray-600 dark:text-gray-300 font-medium">Sunday</span>
                     <span className="font-semibold text-gray-600 dark:text-gray-400">Closed</span>
                   </div>
-                </div>
-                <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <p className="text-sm text-green-700 dark:text-green-300">
-                    <strong>Emergency Support:</strong> 24/7 available for urgent cleaning needs
-                  </p>
                 </div>
               </CardContent>
             </Card>
