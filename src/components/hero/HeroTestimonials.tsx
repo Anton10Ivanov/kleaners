@@ -80,7 +80,7 @@ export const HeroTestimonials = memo(() => {
               transition={{ duration: 0.3 }}
               className="absolute inset-0"
             >
-              <Card className="h-full bg-white/95 border border-gray-200/50 shadow-lg">
+              <Card className="h-full bg-card/95 border border-border/50 shadow-lg">
                 <CardContent className="p-4 h-full flex flex-col justify-between">
                   <div>
                     <div className="flex mb-2">
@@ -110,9 +110,9 @@ export const HeroTestimonials = memo(() => {
         <div className="flex justify-center items-center gap-4 mt-4">
           <button
             onClick={prevTestimonial}
-            className="p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow border border-gray-200 hover:border-primary/30"
+            className="p-2 rounded-full bg-card shadow-md hover:shadow-lg transition-shadow border border-border hover:border-primary/30"
           >
-            <ChevronLeft className="w-4 h-4 text-gray-600" />
+            <ChevronLeft className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
           </button>
           
           <div className="flex gap-1">
@@ -129,9 +129,9 @@ export const HeroTestimonials = memo(() => {
           
           <button
             onClick={nextTestimonial}
-            className="p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow border border-gray-200 hover:border-primary/30"
+            className="p-2 rounded-full bg-card shadow-md hover:shadow-lg transition-shadow border border-border hover:border-primary/30"
           >
-            <ChevronRight className="w-4 h-4 text-gray-600" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
           </button>
         </div>
       </div>

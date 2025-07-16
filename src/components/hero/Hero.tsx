@@ -1,7 +1,6 @@
 import { useEffect, memo } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { MobileHero } from "./MobileHero";
-import { DesktopHero } from "./DesktopHero";
+import { HeroForm } from "./HeroForm";
 import { HeroProvider } from "./HeroContext";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
@@ -69,6 +68,17 @@ export const Hero = memo(({
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 w-full h-full bg-muted"
+        style={{
+          backgroundImage: `url('/lovable-uploads/d0852217-53a8-414a-b080-073eec924014.png')`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
       <HeroProvider 
         initialService={selectedService} 
         initialPostalCode={postalCode} 
@@ -76,23 +86,13 @@ export const Hero = memo(({
         onServiceChange={setSelectedService} 
         onPostalCodeChange={setPostalCode}
       >
-        {isMobile ? (
-          <MobileHero 
-            selectedService={selectedService} 
-            setSelectedService={setSelectedService} 
-            postalCode={postalCode} 
-            setPostalCode={setPostalCode} 
-            handleNextStep={handleValidatedNextStep} 
-          />
-        ) : (
-          <DesktopHero 
-            selectedService={selectedService} 
-            setSelectedService={setSelectedService} 
-            postalCode={postalCode} 
-            setPostalCode={setPostalCode} 
-            handleNextStep={handleValidatedNextStep} 
-          />
-        )}
+        <HeroForm 
+          selectedService={selectedService} 
+          setSelectedService={setSelectedService} 
+          postalCode={postalCode} 
+          setPostalCode={setPostalCode} 
+          handleNextStep={handleValidatedNextStep} 
+        />
       </HeroProvider>
     </section>
   );

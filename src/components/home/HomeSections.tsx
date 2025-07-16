@@ -3,7 +3,6 @@ import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SectionLoading } from '@/components/ui/section-loading';
 
-const LazyWhyChooseUs = lazy(() => import('../WhyChooseUs'));
 const LazyTestimonials = lazy(() => import('../testimonials/EnhancedTestimonials'));
 const LazyFAQSection = lazy(() => import('../faq/FAQSection'));
 
@@ -16,14 +15,6 @@ const ErrorFallback = () => (
 export const HomeSections = () => {
   return (
     <>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <Suspense fallback={<SectionLoading />}>
-          <LazyWhyChooseUs />
-        </Suspense>
-      </ErrorBoundary>
-      
-      <div className="py-8"></div>
-      
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Suspense fallback={<SectionLoading />}>
           <LazyTestimonials />

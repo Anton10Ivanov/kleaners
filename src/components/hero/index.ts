@@ -8,8 +8,6 @@ export { HeroForm } from './HeroForm';
 export { ServiceTypeGrid } from './ServiceTypeGrid';
 export { PostalCodeInput } from './PostalCodeInput';
 export { SubmitButton } from './SubmitButton';
-export { DesktopHero } from './DesktopHero';
-export { MobileHero } from './MobileHero';
 export { FeatureBadges } from './FeatureBadges';
 export { FeatureList } from './FeatureList';
 export { HeroTestimonials } from './HeroTestimonials';
