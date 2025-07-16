@@ -147,11 +147,11 @@ const Contact = () => {
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="space-y-2">
                         <Label htmlFor="name">Name</Label>
-                        <Input id="name" placeholder="Enter your full name" value={name} onChange={e => setName(e.target.value)} required className="h-10 border-2 focus:border-primary" />
+                        <Input id="name" placeholder="Enter your full name" value={name} onChange={e => setName(e.target.value)} required className="h-10 border-2 border-green-500 focus:border-green-600" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(e.target.value)} required className="h-10 border-2 focus:border-primary" />
+                        <Input id="email" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(e.target.value)} required className="h-10 border-2 border-green-500 focus:border-green-600" />
                       </div>
                     </div>
                     
@@ -171,7 +171,7 @@ const Contact = () => {
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      <Textarea id="message" placeholder="Tell us how we can help you..." value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px] resize-none border-2 focus:border-primary" />
+                      <Textarea id="message" placeholder="Tell us how we can help you..." value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px] resize-none border-2 border-green-500 focus:border-green-600" />
                     </div>
 
                     
@@ -181,6 +181,34 @@ const Contact = () => {
                   </form>
                 </CardContent>
               </Card>
+              
+              {/* Business Hours - Under Form */}
+              <div className="mt-6">
+                <Card className="border-0 shadow-lg">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Business Hours
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-300 font-medium">Monday - Friday</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">9:00 AM - 6:00 PM</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-300 font-medium">Saturday</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">10:00 AM - 4:00 PM</span>
+                      </div>
+                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-300 font-medium">Sunday</span>
+                        <span className="font-semibold text-gray-600 dark:text-gray-400">Closed</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
             {/* Contact Methods */}
@@ -217,34 +245,6 @@ const Contact = () => {
                 </CardContent>
               </Card>
             </div>
-          </div>
-          
-          {/* Business Hours - Full Width */}
-          <div className="mt-8">
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Business Hours
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-gray-600 dark:text-gray-300 font-medium">Monday - Friday</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-gray-600 dark:text-gray-300 font-medium">Saturday</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <span className="text-gray-600 dark:text-gray-300 font-medium">Sunday</span>
-                    <span className="font-semibold text-gray-600 dark:text-gray-400">Closed</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
