@@ -9,6 +9,7 @@ export interface NavigationItem {
   icon?: React.ReactNode; // Made optional
   path: string;
   price?: string;
+  isViewAll?: boolean; // Flag for special styling of "View All Services" item
 }
 
 export interface NavigationSubMenu {

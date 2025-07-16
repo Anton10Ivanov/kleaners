@@ -88,14 +88,14 @@ export const navItems: NavItem[] = [
       title: "Our Services",
       items: [
         {
-          label: "View All Services",
-          description: "Browse our complete range of cleaning services",
-          path: "/services"
-        },
-        {
           label: "Home Cleaning",
           description: "Regular and deep cleaning for your home",
           path: "/services/home-cleaning"
+        },
+        {
+          label: "Deep Cleaning",
+          description: "Thorough one-time deep cleaning service",
+          path: "/services/deep-cleaning"
         },
         {
           label: "Office Cleaning",
@@ -103,9 +103,35 @@ export const navItems: NavItem[] = [
           path: "/services/office-cleaning"
         },
         {
-          label: "Book Now",
-          description: "Start your booking process",
-          path: "/booking"
+          label: "Move In/Out Cleaning",
+          description: "Deep cleaning for moving transitions",
+          path: "/services/move-in-out"
+        },
+        {
+          label: "Window Cleaning",
+          description: "Professional window cleaning services",
+          path: "/services/window-cleaning"
+        },
+        {
+          label: "Carpet Cleaning",
+          description: "Professional carpet cleaning services",
+          path: "/services/carpet-cleaning"
+        },
+        {
+          label: "Industrial Cleaning",
+          description: "Heavy-duty industrial facility cleaning",
+          path: "/services/industrial-cleaning"
+        },
+        {
+          label: "Construction Cleaning",
+          description: "Post-construction cleanup services",
+          path: "/services/construction-cleaning"
+        },
+        {
+          label: "View All Services",
+          description: "Browse our complete range of cleaning services",
+          path: "/services",
+          isViewAll: true
         }
       ]
     }]
