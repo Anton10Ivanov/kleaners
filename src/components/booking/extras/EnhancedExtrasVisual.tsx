@@ -65,15 +65,17 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Additional Services
-      </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        Optional extras to enhance your cleaning service
-      </p>
+    <div className="space-y-3">
+      <div className="space-y-1">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Additional Services
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Optional extras to enhance your cleaning service
+        </p>
+      </div>
 
-      <div className="grid gap-3">
+      <div className="space-y-2">
         {extraServices.map((extra) => {
           const isSelected = selectedExtras.includes(extra.id);
           const cost = calculateExtraCost(extra.duration);
@@ -85,76 +87,48 @@ export const EnhancedExtrasVisual = ({ form }: EnhancedExtrasVisualProps) => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2 }}
               whileTap={{ scale: 0.98 }}
+              className={`
+                p-3 cursor-pointer transition-all duration-200 border rounded-lg
+                ${isSelected 
+                  ? 'border-primary bg-primary/10 shadow-sm' 
+                  : 'border-gray-200 hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:hover:border-gray-600'
+                }
+              `}
+              onClick={() => toggleExtra(extra.id)}
             >
-              <Card 
-                className={`
-                  p-4 cursor-pointer transition-all duration-200 border-2
-                  ${isSelected 
-                    ? 'border-primary bg-primary/20 shadow-lg ring-4 ring-primary/30 dark:bg-primary/30' 
-                    : 'border-gray-200 hover:border-gray-300 hover:shadow-sm dark:border-gray-700 dark:hover:border-gray-600'
-                  }
-                `}
-                onClick={() => toggleExtra(extra.id)}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 flex-1">
-                    <div className={`
-                      text-2xl p-2 rounded-lg transition-colors
-                      ${isSelected 
-                        ? 'bg-primary/30 ring-2 ring-primary/50' 
-                        : 'bg-gray-100 dark:bg-gray-800'
-                      }
-                    `}>
-                      {extra.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className={`
-                        text-sm font-semibold transition-colors
-                        ${isSelected 
-                          ? 'text-primary font-bold' 
-                          : 'text-gray-900 dark:text-white'
-                        }
-                      `}>
-                        {extra.title}
-                      </h4>
-                      <p className={`
-                        text-xs transition-colors
-                        ${isSelected
-                          ? 'text-primary/80 dark:text-primary/90'
-                          : 'text-gray-500 dark:text-gray-400'
-                        }
-                      `}>
-                        {extra.description}
-                      </p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <span className={`
-                          text-xs transition-colors
-                          ${isSelected
-                            ? 'text-primary/80 font-medium'
-                            : 'text-gray-500'
-                          }
-                        `}>
-                          {extra.duration} min • +{cost.toFixed(2)} €
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={`
-                    w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all
+              <div className="flex items-start gap-3">
+                <span className="text-lg">{extra.icon}</span>
+                <div className="flex-1">
+                  <h4 className={`
+                    font-medium text-sm
                     ${isSelected 
-                      ? 'bg-primary border-primary shadow-lg ring-2 ring-primary/30' 
-                      : 'border-gray-300 dark:border-gray-600 hover:border-primary/50'
+                      ? 'text-primary' 
+                      : 'text-gray-900 dark:text-white'
                     }
                   `}>
-                    {isSelected ? (
-                      <Check className="h-4 w-4 text-white font-bold" />
-                    ) : (
-                      <Plus className="h-4 w-4 text-gray-400" />
-                    )}
-                  </div>
+                    {extra.title}
+                  </h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {extra.description}
+                  </p>
+                  <span className="text-xs text-gray-500 mt-1 block">
+                    {extra.duration} min • +{cost.toFixed(2)} €
+                  </span>
                 </div>
-              </Card>
+                <div className={`
+                  w-6 h-6 rounded-full border flex items-center justify-center flex-shrink-0
+                  ${isSelected 
+                    ? 'bg-primary border-primary' 
+                    : 'border-gray-300 dark:border-gray-600'
+                  }
+                `}>
+                  {isSelected ? (
+                    <Check className="h-3 w-3 text-white" />
+                  ) : (
+                    <Plus className="h-3 w-3 text-gray-400" />
+                  )}
+                </div>
+              </div>
             </motion.div>
           );
         })}
