@@ -14,7 +14,7 @@ import { BookingSteps } from './BookingSteps';
 // Centralized imports
 import { Hero } from '../hero';
 import { MobileBookingSummaryOptimized } from '../booking/mobile';
-import { serviceCategories } from '@/components/navbar/navigationData';
+
 
 // Consolidated sections
 import TrustAndBenefits from '../hero/TrustAndBenefits';
@@ -116,21 +116,6 @@ const HomePage = () => {
     if (import.meta.env.DEV) endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
-  // Convert serviceCategories to the expected format
-  const convertedServiceCategories = useMemo(() => {
-    return serviceCategories.map(category => ({
-      id: category.title.toLowerCase().replace(/\s+/g, '-'),
-      title: category.title,
-      description: category.description,
-      image: "/placeholder.svg",
-      price: "From €25/hour",
-      href: category.services[0]?.href || "/services",
-      features: category.services.map(service => service.title),
-      category: category.title.toLowerCase(),
-      icon: category.icon,
-      services: category.services
-    }));
-  }, []);
 
   return (
     <div className="min-h-screen font-raleway bg-section-primary transition-colors duration-300">
@@ -160,7 +145,7 @@ const HomePage = () => {
             {/* Enhanced Service Categories Section */}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Suspense fallback={<SectionLoading />}>
-                <EnhancedServiceCategoriesSection serviceCategories={convertedServiceCategories} />
+                <EnhancedServiceCategoriesSection />
               </Suspense>
             </ErrorBoundary>
             

@@ -99,9 +99,13 @@
     @apply service-card cursor-pointer;
   }
   
+  .service-category-icon-wrapper {
+    @apply flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl;
+    @apply transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110;
+  }
+  
   .service-category-icon {
-    @apply w-14 h-14 text-primary mb-6 transition-all duration-300;
-    @apply group-hover:scale-110 group-hover:rotate-3;
+    @apply w-8 h-8 text-primary transition-all duration-300;
   }
 
   /* STRICT COLOR SCHEME - Trust Section Styling */
