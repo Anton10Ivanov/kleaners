@@ -43,7 +43,7 @@ export const DesktopHero = memo(({
       {/* Fallback if image doesn't load */}
       {!imageLoaded && <div className="absolute inset-0 bg-muted" />}
 
-      <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} isMobile={false} />
+      <HeroForm selectedService={selectedService} setSelectedService={setSelectedService} postalCode={postalCode} setPostalCode={setPostalCode} handleNextStep={handleNextStep} />
     </div>;
 });
 DesktopHero.displayName = "DesktopHero";

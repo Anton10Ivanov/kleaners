@@ -65,7 +65,6 @@ export const MobileHero = memo(({
             postalCode={postalCode}
             setPostalCode={setPostalCode}
             handleNextStep={handleNextStep}
-            isMobile={true}
           />
         </motion.div>
       </div>
