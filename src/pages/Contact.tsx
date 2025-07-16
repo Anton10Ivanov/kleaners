@@ -225,9 +225,9 @@ const Contact = () => {
                 </CardHeader>
                 <CardContent className="space-y-1">
                   {contactMethods.map((method, index) => (
-                    <div key={index}>
-                      <div className="group">
-                        <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <div key={index} className="w-full">
+                      <div className="group w-full">
+                        <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full">
                           <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                             <method.icon className="w-4 h-4 text-primary" />
                           </div>
@@ -239,7 +239,7 @@ const Contact = () => {
                       </div>
                       {/* Add emergency support under Live Chat */}
                       {method.title === 'Live Chat' && (
-                        <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                        <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg w-full">
                           <p className="text-sm text-green-700 dark:text-green-300">
                             <strong>Emergency Support:</strong> 24/7 available for urgent cleaning needs
                           </p>
