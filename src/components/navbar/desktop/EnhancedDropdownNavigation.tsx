@@ -102,19 +102,25 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                             "focus:bg-gray-50 focus:outline-none",
                             "focus-visible:ring-2 focus-visible:ring-primary/20",
                             "transition-all duration-200 touch-comfortable",
-                            getMobileSpacing('sm')
+                            getMobileSpacing('sm'),
+                            subItem.isViewAll && "mt-3 pt-3 border-t border-border/30"
                           )}
                         >
                           <h5 className={cn(
-                            "font-medium text-foreground group-hover:text-primary",
+                            "font-medium group-hover:text-primary",
                             "transition-colors duration-200",
-                            getMobileTextSize('sm')
+                            getMobileTextSize('sm'),
+                            subItem.isViewAll 
+                              ? "text-muted-foreground text-xs font-normal" 
+                              : "text-foreground"
                           )}>
                             {subItem.label}
                           </h5>
                           <p className={cn(
                             "text-muted-foreground leading-relaxed",
-                            isMobile ? "text-sm mt-1" : "text-xs"
+                            subItem.isViewAll 
+                              ? "text-xs opacity-75" 
+                              : isMobile ? "text-sm mt-1" : "text-xs"
                           )}>
                             {subItem.description}
                           </p>
