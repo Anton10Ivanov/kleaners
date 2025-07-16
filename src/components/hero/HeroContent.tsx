@@ -30,9 +30,9 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
         initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-        className={`${isMobile ? 'text-lg text-center' : 'text-xl text-left'} text-gray-600 font-medium leading-relaxed max-w-xl`}
+        className={`${isMobile ? 'text-lg text-center' : 'text-xl text-left'} text-muted-foreground font-medium leading-relaxed max-w-xl`}
       >
-        Book trusted, insured cleaning professionals in minutes. 
+        Book trusted, insured cleaning professionals in minutes.
         <br className="hidden lg:block" />
         Instant quotes, flexible scheduling, guaranteed satisfaction.
       </motion.p>
@@ -62,7 +62,7 @@ export const HeroContent = memo(({ isMobile }: HeroContentProps) => {
           <span className="text-sm font-semibold text-gray-700">4.9/5 from 2,300+ customers</span>
         </div>
         
-        <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-600">
+        <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-muted-foreground">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
           <span>Available today</span>
         </div>

@@ -39,16 +39,16 @@ export const TrustBadges = memo(() => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-          className="flex flex-col items-center gap-2 bg-white/90 rounded-lg p-3 shadow-sm border border-gray-200/50"
+          className="flex flex-col items-center gap-2 bg-card/90 rounded-lg p-3 shadow-sm border border-border/50"
         >
-          <div className="w-16 h-10 bg-gray-200 rounded-md overflow-hidden">
+          <div className="w-16 h-10 bg-muted rounded-md overflow-hidden">
             <img 
               src={badge.placeholder}
               alt={badge.alt}
               className="w-full h-full object-cover opacity-50"
             />
           </div>
-          <p className="text-xs font-semibold text-gray-800 text-center">{badge.text}</p>
+          <p className="text-xs font-semibold text-card-foreground text-center">{badge.text}</p>
         </motion.div>
       ))}
     </motion.div>
