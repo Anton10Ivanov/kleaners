@@ -13,7 +13,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
 }
 
 export const Heading: React.FC<HeadingProps> = ({ level, children, className, ...props }) => {
-  const baseClasses = 'font-semibold text-gray-900 dark:text-white';
+  const baseClasses = 'font-heading font-semibold text-heading-color';
   const sizeClasses = {
     1: 'text-3xl md:text-4xl font-bold leading-tight mb-4',
     2: 'text-2xl md:text-3xl leading-tight mb-3',
@@ -48,9 +48,9 @@ export const Text: React.FC<TextProps> = ({
     caption: 'text-xs',
   };
   const colorClasses = {
-    primary: 'text-gray-900 dark:text-white',
-    secondary: 'text-gray-700 dark:text-gray-300',
-    muted: 'text-gray-600 dark:text-gray-400',
+    primary: 'text-foreground',
+    secondary: 'text-secondary-text',
+    muted: 'text-muted-foreground',
   };
   
   return (

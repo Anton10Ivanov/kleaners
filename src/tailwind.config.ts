@@ -61,12 +61,12 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // Design system fonts
+        // Design system fonts - Unified to Inter
         sans: ["var(--ff)", 'system-ui', 'sans-serif'],
-        heading: ["var(--ff-heading)", 'system-ui', 'sans-serif'],
+        heading: ["var(--ff-heading)", 'system-ui', 'sans-serif'], 
         label: ["var(--ff-label)", 'system-ui', 'sans-serif'],
-        // Legacy - keep for backwards compatibility
-        raleway: ["var(--ff)"],
+        // Unified font family
+        inter: ["Inter", 'system-ui', 'sans-serif'],
       },
       fontSize: {
         // Design system typography scale
