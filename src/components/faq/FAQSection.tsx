@@ -95,7 +95,7 @@ export const FAQSection = memo(() => {
         </motion.div>
 
         <div className="space-y-4">
-          {faqData.slice(0, 8).map((item, index) => (
+          {faqData.slice(0, 5).map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
@@ -161,11 +161,18 @@ export const FAQSection = memo(() => {
             <p className="text-gray-600 dark:text-gray-300 mb-4">
               Our customer support team is here to help you with any additional questions.
             </p>
-            <Link to="/about/faq">
-              <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
-                View All FAQs
-              </button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/about/faq">
+                <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200">
+                  View All FAQs
+                </button>
+              </Link>
+              <Link to="/contact">
+                <button className="bg-white hover:bg-gray-50 text-gray-900 px-6 py-2 rounded-lg font-medium border border-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 transition-colors duration-200">
+                  Get in Touch
+                </button>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>
