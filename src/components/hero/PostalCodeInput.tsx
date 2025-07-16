@@ -16,18 +16,19 @@ export const PostalCodeInput = memo(({
   
   return (
     <div>
-      {!isMobile && (
-        <label className="block text-sm font-medium text-primary-foreground mb-2 text-center">
-          Your Postal code
-        </label>
-      )}
+      <label className={cn(
+        "block text-sm font-medium mb-2 text-center",
+        isMobile ? "text-muted-foreground" : "text-primary-foreground"
+      )}>
+        Your Postal code
+      </label>
       <Input 
         type="text" 
         placeholder="City name or Postal code" 
         value={postalCode} 
         onChange={e => setPostalCode(e.target.value)} 
         className={cn(
-          "px-4 rounded-2xl border-2 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md",
+          "px-4 rounded-2xl border-2 border-border focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 text-base font-medium shadow-sm hover:shadow-md",
           isMobile ? "h-16" : "h-14"
         )}
         required 

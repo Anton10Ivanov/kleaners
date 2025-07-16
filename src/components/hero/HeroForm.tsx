@@ -60,9 +60,9 @@ export const HeroForm = memo(({
       }} 
       transition={{
         duration: 0.8,
-        delay: isMobile ? 0.5 : 0.7,
+        delay: isMobile ? 0.1 : 0.7,
         ease: "easeOut"
-      }} 
+      }}
       className={cn(
         "backdrop-blur-sm rounded-3xl shadow-2xl border transition-all duration-300",
         isMobile 
@@ -77,7 +77,7 @@ export const HeroForm = memo(({
         animate={{ opacity: 1 }} 
         transition={{
           duration: 0.6,
-          delay: isMobile ? 0.7 : 0.9
+          delay: isMobile ? 0.2 : 0.9
         }}
       >
         {/* Enhanced form header - Mobile only */}

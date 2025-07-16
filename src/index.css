@@ -154,4 +154,14 @@
     font-size: 1rem;
     line-height: 1.5em;
   }
+
+  html {
+    overflow-x: hidden;
+  }
+  
+  body {
+    overflow-x: hidden;
+    width: 100vw;
+    position: relative;
+  }
 }

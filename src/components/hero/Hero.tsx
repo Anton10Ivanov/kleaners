@@ -68,16 +68,23 @@ export const Hero = memo(({
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-muted"
-        style={{
-          backgroundImage: `url('/lovable-uploads/d0852217-53a8-414a-b080-073eec924014.png')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+      {/* Background Image - Desktop only */}
+      {!isMobile && (
+        <div 
+          className="absolute inset-0 w-full h-full bg-muted"
+          style={{
+            backgroundImage: `url('/lovable-uploads/d0852217-53a8-414a-b080-073eec924014.png')`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+      )}
+      
+      {/* Mobile background - solid color */}
+      {isMobile && (
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20" />
+      )}
       
       <HeroProvider 
         initialService={selectedService} 
