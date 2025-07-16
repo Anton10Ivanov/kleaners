@@ -60,7 +60,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                     
                     <div className="space-y-1">
                       {subMenu.items.map(subItem => <button key={subItem.path} onClick={() => navigate(subItem.path)} onKeyDown={e => handleKeyDown(e, subItem.path)} className={cn("group flex flex-col items-start w-full text-left rounded-lg", "hover:bg-gray-50 dark:hover:bg-gray-700/50", "focus:bg-gray-50 focus:outline-none", "focus-visible:ring-2 focus-visible:ring-primary/20", "transition-all duration-200 touch-comfortable", getMobileSpacing('sm'), subItem.isViewAll && "mt-3 pt-3 border-t border-border/30")}>
-                          <h5 className={cn("font-medium group-hover:text-primary", "transition-colors duration-200", getMobileTextSize('sm'), subItem.isViewAll ? "text-muted-foreground text-xs font-normal" : "text-foreground")}>
+                          <h5 className={cn("font-medium group-hover:text-accent", "transition-colors duration-200", "text-xs", subItem.isViewAll ? "text-muted-foreground font-normal" : "text-accent")}>
                             {subItem.label}
                           </h5>
                           
