@@ -63,9 +63,7 @@ export const EnhancedDropdownNavigation: React.FC<EnhancedDropdownNavigationProp
                           <h5 className={cn("font-medium group-hover:text-primary", "transition-colors duration-200", getMobileTextSize('sm'), subItem.isViewAll ? "text-muted-foreground text-xs font-normal" : "text-foreground")}>
                             {subItem.label}
                           </h5>
-                          <p className={cn("text-muted-foreground leading-relaxed", subItem.isViewAll ? "text-xs opacity-75" : isMobile ? "text-sm mt-1" : "text-xs")}>
-                            {subItem.description}
-                          </p>
+                          
                         </button>)}
                     </div>
                   </div>)}
