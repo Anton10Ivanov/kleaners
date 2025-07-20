@@ -291,41 +291,38 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
         {selectedQuote && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border p-8 mb-8">
             {/* Contract Terms */}
-            <div className="mb-8 p-6 bg-muted/30 rounded-xl">
-              <div className="space-y-6">
-                {/* Prominent Contract Toggle */}
-                <div className="flex items-center justify-center space-x-6 p-6 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className={`text-lg font-semibold transition-colors ${
-                    contractTerm === 'monthly' ? 'text-foreground' : 'text-muted-foreground'
-                  }`}>
-                    Monthly
-                  </div>
-                  <Switch
-                    checked={contractTerm === 'sixMonth'}
-                    onCheckedChange={(checked) => setContractTerm(checked ? 'sixMonth' : 'monthly')}
-                    className="scale-125"
-                  />
-                  <div className={`text-lg font-semibold transition-colors ${
-                    contractTerm === 'sixMonth' ? 'text-foreground' : 'text-muted-foreground'
-                  }`}>
-                    6 Months
-                  </div>
+            <div className="space-y-4 mb-8">
+              {/* Contract Toggle */}
+              <div className="flex items-center justify-center space-x-6 p-4 rounded-lg border bg-muted/20">
+                <div className={`text-base font-semibold transition-colors ${
+                  contractTerm === 'monthly' ? 'text-foreground' : 'text-muted-foreground'
+                }`}>
+                  Monthly
                 </div>
+                <Switch
+                  checked={contractTerm === 'sixMonth'}
+                  onCheckedChange={(checked) => setContractTerm(checked ? 'sixMonth' : 'monthly')}
+                />
+                <div className={`text-base font-semibold transition-colors ${
+                  contractTerm === 'sixMonth' ? 'text-foreground' : 'text-muted-foreground'
+                }`}>
+                  6 Months
+                </div>
+              </div>
 
-                {/* Subtle Annual Interest Checkbox */}
-                <div className="flex items-start space-x-3 p-3 rounded-lg border border-dashed border-muted-foreground/30">
-                  <Checkbox
-                    checked={showAnnualInterest}
-                    onCheckedChange={(checked) => setShowAnnualInterest(checked === true)}
-                    className="mt-1"
-                  />
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-foreground">
-                      Interested in annual contract?
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      We'll provide a custom quote after initial cleaning and assessment
-                    </div>
+              {/* Annual Interest Checkbox */}
+              <div className="flex items-start space-x-3 p-3 rounded-lg border border-dashed border-muted-foreground/30">
+                <Checkbox
+                  checked={showAnnualInterest}
+                  onCheckedChange={(checked) => setShowAnnualInterest(checked === true)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-foreground">
+                    Interested in annual contract?
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    We'll provide a custom quote after initial cleaning and assessment
                   </div>
                 </div>
               </div>
