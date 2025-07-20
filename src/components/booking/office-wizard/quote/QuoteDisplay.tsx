@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CheckCircle2, ArrowLeft, Calendar, Download, Phone, Crown, Star, Zap } from 'lucide-react';
+import { CheckCircle2, ArrowLeft, Calendar, Download, Phone, Crown, Star, Zap, Sparkles } from 'lucide-react';
 import { generateQuote, QuoteResult } from '../utils/questionnaire-logic';
 import { WizardAnswers } from '../index';
 
@@ -20,6 +21,7 @@ interface PackageOption {
   description: string;
   frequency: number;
   highlighted?: boolean;
+  color: string;
 }
 
 export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, availablePackages }) => {
@@ -34,52 +36,67 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
   const packageOptions: PackageOption[] = isSmallLightOffice ? [
     {
       id: 'monthly',
-      name: 'Monthly Clean',
-      icon: <Calendar className="h-5 w-5" />,
+      name: 'Smart Clean',
+      icon: <Calendar className="h-4 w-4" />,
       description: 'Once a month maintenance',
       frequency: 0.25,
-      highlighted: true
+      highlighted: true,
+      color: 'blue'
     },
     {
       id: 'biweekly',
-      name: 'Bi-weekly Clean',
-      icon: <Star className="h-5 w-5" />,
+      name: 'Comfort Care',
+      icon: <Star className="h-4 w-4" />,
       description: 'Twice a month service',
       frequency: 0.5,
-      highlighted: false
+      highlighted: false,
+      color: 'purple'
     },
     {
       id: 'weekly',
-      name: 'Weekly Clean',
-      icon: <Crown className="h-5 w-5" />,
+      name: 'Premium Service',
+      icon: <Crown className="h-4 w-4" />,
       description: 'Weekly maintenance',
       frequency: 1,
-      highlighted: false
+      highlighted: false,
+      color: 'green'
     }
   ] : [
     {
-      id: 'essential',
-      name: 'Essential Clean',
-      icon: <Calendar className="h-5 w-5" />,
+      id: 'smart',
+      name: 'Smart Clean',
+      icon: <Calendar className="h-4 w-4" />,
       description: 'Perfect for basic maintenance',
       frequency: 1,
-      highlighted: answers.officeType?.id === 'small'
+      highlighted: answers.officeType?.id === 'small',
+      color: 'blue'
     },
     {
-      id: 'professional',
-      name: 'Professional Care',
-      icon: <Star className="h-5 w-5" />,
+      id: 'comfort',
+      name: 'Comfort Care',
+      icon: <Star className="h-4 w-4" />,
       description: 'Comprehensive cleaning service',
       frequency: 2,
-      highlighted: answers.officeType?.id === 'medium'
+      highlighted: answers.officeType?.id === 'medium',
+      color: 'purple'
     },
     {
       id: 'premium',
-      name: 'Premium Maintenance',
-      icon: <Crown className="h-5 w-5" />,
+      name: 'Premium Service',
+      icon: <Crown className="h-4 w-4" />,
+      description: 'Enhanced cleaning experience',
+      frequency: 3,
+      highlighted: false,
+      color: 'green'
+    },
+    {
+      id: 'royal',
+      name: 'Royal Maintenance',
+      icon: <Sparkles className="h-4 w-4" />,
       description: 'White-glove daily service',
       frequency: 5,
-      highlighted: answers.officeType?.id === 'large'
+      highlighted: answers.officeType?.id === 'large',
+      color: 'amber'
     }
   ];
 
@@ -105,6 +122,17 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
   };
 
   const selectedQuote = selectedPackage ? getQuoteForPackage(selectedPackage) : null;
+  const selectedPackageOption = packageOptions.find(pkg => pkg.id === selectedPackage);
+
+  const getColorClasses = (color: string, isSelected: boolean) => {
+    const colorMap = {
+      blue: isSelected ? 'text-blue-600' : 'text-blue-500',
+      purple: isSelected ? 'text-purple-600' : 'text-purple-500',
+      green: isSelected ? 'text-green-600' : 'text-green-500',
+      amber: isSelected ? 'text-amber-600' : 'text-amber-500'
+    };
+    return colorMap[color as keyof typeof colorMap] || 'text-gray-500';
+  };
 
   const handleBookNow = () => {
     console.log('Booking with:', { 
@@ -130,7 +158,7 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <Phone className="h-4 w-4 mr-2" />
               Consultation Required
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-4xl font-bold text-foreground mb-2">
               Let's Schedule a Site Visit
             </h1>
             <p className="text-muted-foreground">
@@ -180,12 +208,14 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
         <div className={`grid gap-6 mb-8 ${
           isSmallLightOffice 
             ? 'grid-cols-1 max-w-2xl mx-auto' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+            : displayedPackages.length === 4 
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
         }`}>
           {displayedPackages.map((packageOption) => {
             const quote = getQuoteForPackage(packageOption.id);
             const isSelected = selectedPackage === packageOption.id;
-            const isRecommended = packageOption.highlighted;
+            const isRecommended = packageOption.highlighted && isSelected;
             
             return (
               <button
@@ -210,7 +240,7 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                     isSelected ? 'bg-accent text-accent-foreground' : 'bg-muted'
                   }`}>
                     {React.cloneElement(packageOption.icon as React.ReactElement, { 
-                      className: "w-5 h-5" 
+                      className: "w-4 h-4" 
                     })}
                   </div>
                   
@@ -312,10 +342,8 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {selectedQuote.includes.map((item, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
-                      selectedPackage === 'essential' ? 'text-blue-600' :
-                      selectedPackage === 'professional' ? 'text-purple-600' :
-                      'text-green-600'
+                    <CheckCircle2 className={`h-3 w-3 mt-1 flex-shrink-0 ${
+                      selectedPackageOption ? getColorClasses(selectedPackageOption.color, true) : 'text-green-600'
                     }`} />
                     <span className="text-sm text-muted-foreground">{item}</span>
                   </div>
