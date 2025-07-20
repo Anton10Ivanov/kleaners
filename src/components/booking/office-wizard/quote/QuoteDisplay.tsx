@@ -351,29 +351,6 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               </div>
             </div>
 
-            {/* Service Details */}
-            <div className="grid grid-cols-3 gap-4 p-6 bg-muted/30 rounded-xl mb-8">
-              <div className="text-center">
-                <div className="text-lg font-semibold text-foreground">
-                  {selectedQuote.frequency}
-                </div>
-                <div className="text-sm text-muted-foreground">Frequency</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-lg font-semibold text-foreground">
-                  {answers.officeType?.sqft} m²
-                </div>
-                <div className="text-sm text-muted-foreground">Coverage</div>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-lg font-semibold text-foreground">
-                  {contractTerm === 'sixMonth' ? '6 months' : 'Monthly'}
-                </div>
-                <div className="text-sm text-muted-foreground">Contract</div>
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
