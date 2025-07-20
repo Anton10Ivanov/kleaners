@@ -21,7 +21,7 @@ const basePricing = {
 
 // Traffic multipliers
 const trafficMultipliers = {
-  low: 0.85,
+  light: 0.85,
   medium: 1.0,
   high: 1.25,
   public: 1.5
@@ -29,10 +29,12 @@ const trafficMultipliers = {
 
 // Frequency discounts (higher frequency = better rate per visit)
 const frequencyDiscounts = {
-  1: 0,      // weekly = 0% discount
-  2: 0.08,   // bi-weekly = 8% discount  
-  3: 0.15,   // 3x/week = 15% discount
-  5: 0.25,   // 5x/week = 25% discount
+  0.25: 0,     // monthly = 0% discount
+  0.5: 0.05,   // bi-monthly = 5% discount
+  1: 0.08,     // weekly = 8% discount
+  2: 0.12,     // bi-weekly = 12% discount  
+  3: 0.18,     // 3x/week = 18% discount
+  5: 0.25,     // 5x/week = 25% discount
 };
 
 // Contract discounts
@@ -57,13 +59,18 @@ export function getAvailablePackages(answers: WizardAnswers): string[] {
   // Enterprise always needs consultation
   if (answers.officeType.id === 'enterprise') return ['consultation'];
   
-  // Large offices with high traffic: Premium + consultation
+  // Large offices with high traffic: Premium + Royal + consultation
   if (answers.officeType.id === 'large' && (answers.traffic.id === 'high' || answers.traffic.id === 'public')) {
-    return ['premium', 'consultation'];
+    return ['premium', 'royal', 'consultation'];
   }
   
-  // Small/Medium offices: All packages
-  return ['essential', 'professional', 'premium'];
+  // Small office + light traffic: Special packages
+  if (answers.officeType.id === 'small' && answers.traffic.id === 'light') {
+    return ['monthly', 'biweekly', 'weekly'];
+  }
+  
+  // All other offices: All four main packages
+  return ['smart', 'comfort', 'premium', 'royal'];
 }
 
 interface QuoteOptions {
@@ -90,15 +97,25 @@ export function generateQuote(answers: WizardAnswers, options: QuoteOptions = {}
   const frequencyDiscount = frequencyDiscounts[answers.frequency as keyof typeof frequencyDiscounts];
   const discountedPerVisit = adjustedPrice * (1 - frequencyDiscount);
 
-  // Calculate monthly price (frequency * 4.33 weeks per month)
-  const monthlyBase = discountedPerVisit * answers.frequency * 4.33;
+  // Calculate monthly price based on frequency
+  let monthlyBase: number;
+  if (answers.frequency === 0.25) {
+    // Once a month
+    monthlyBase = discountedPerVisit;
+  } else if (answers.frequency === 0.5) {
+    // Twice a month
+    monthlyBase = discountedPerVisit * 2;
+  } else {
+    // Weekly or more: frequency * 4.33 weeks per month
+    monthlyBase = discountedPerVisit * answers.frequency * 4.33;
+  }
 
   // Apply contract discount
   const contractDiscount = contractDiscounts[contract as keyof typeof contractDiscounts];
   const monthlyPrice = Math.round(monthlyBase * (1 - contractDiscount));
 
   // Calculate savings
-  const fullPriceMonthly = Math.round(basePrice * answers.frequency * 4.33);
+  const fullPriceMonthly = Math.round(basePrice * (answers.frequency <= 0.5 ? answers.frequency * 4 : answers.frequency * 4.33));
   const savings = fullPriceMonthly - monthlyPrice;
 
   // Determine plan name
@@ -122,13 +139,16 @@ export function generateQuote(answers: WizardAnswers, options: QuoteOptions = {}
 }
 
 function getPlanName(officeSize: string, frequency: number): string {
-  if (frequency <= 2) return 'Essential Clean';
-  if (frequency <= 4) return 'Professional Care';
-  return 'Premium Maintenance';
+  if (frequency <= 0.5) return 'Smart Clean';
+  if (frequency <= 1) return 'Comfort Care';
+  if (frequency <= 3) return 'Premium Service';
+  return 'Royal Maintenance';
 }
 
 function getFrequencyLabel(frequency: number): string {
   const labels = {
+    0.25: 'Monthly',
+    0.5: 'Bi-monthly',
     1: 'Weekly',
     2: 'Bi-weekly', 
     3: '3x per week',
@@ -142,12 +162,14 @@ function generateDescription(answers: WizardAnswers): string {
   const traffic = answers.traffic?.label.toLowerCase() || '';
   const freq = answers.frequency || 0;
   
-  if (freq <= 2) {
+  if (freq <= 0.5) {
     return `Perfect for ${size.toLowerCase()} spaces with ${traffic} traffic. Includes essential cleaning and maintenance.`;
-  } else if (freq <= 4) {
+  } else if (freq <= 1) {
     return `Comprehensive cleaning for ${size.toLowerCase()} offices with ${traffic} traffic. Professional-grade service and supplies.`;
+  } else if (freq <= 3) {
+    return `Enhanced cleaning for ${size.toLowerCase()} facilities with ${traffic} traffic. Premium service with priority support.`;
   } else {
-    return `Premium daily maintenance for ${size.toLowerCase()} facilities with ${traffic} traffic. White-glove service with priority support.`;
+    return `Royal daily maintenance for ${size.toLowerCase()} facilities with ${traffic} traffic. White-glove service with dedicated support.`;
   }
 }
 
@@ -160,27 +182,35 @@ function generateIncludes(officeSize: string, frequency: number): string[] {
     'Vacuuming and floor care'
   ];
 
-  const enhancedIncludes = [
+  const comfortIncludes = [
     ...baseIncludes,
     'Window cleaning (interior)',
     'Conference room deep cleaning',
-    'High-touch surface disinfection',
-    'Monthly deep clean add-ons'
+    'High-touch surface disinfection'
   ];
 
   const premiumIncludes = [
-    ...enhancedIncludes,
+    ...comfortIncludes,
     'Reception area detailing',
-    'Carpet deep cleaning (quarterly)',
+    'Monthly deep clean add-ons',
     'Kitchen appliance cleaning',
-    'Priority scheduling and support',
-    'Dedicated account manager'
+    'Priority scheduling'
+  ];
+
+  const royalIncludes = [
+    ...premiumIncludes,
+    'Carpet deep cleaning (quarterly)',
+    'Dedicated account manager',
+    'White-glove service standards',
+    '24/7 priority support'
   ];
 
   if (frequency >= 5 || officeSize === 'large' || officeSize === 'enterprise') {
-    return premiumIncludes;
+    return royalIncludes;
   } else if (frequency >= 3 || officeSize === 'medium') {
-    return enhancedIncludes;
+    return premiumIncludes;
+  } else if (frequency >= 1) {
+    return comfortIncludes;
   } else {
     return baseIncludes;
   }

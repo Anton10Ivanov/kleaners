@@ -12,8 +12,8 @@ interface FrequencyStepProps {
 
 const frequencyLabels = {
   0.25: { label: 'Once a month', description: 'Minimal maintenance', icon: <Calendar className="h-4 w-4" /> },
-  1: { label: 'Once a week', description: 'Basic maintenance', icon: <Calendar className="h-4 w-4" /> },
   0.5: { label: 'Twice a month', description: 'Light maintenance', icon: <Calendar className="h-4 w-4" /> },
+  1: { label: 'Once a week', description: 'Basic maintenance', icon: <Calendar className="h-4 w-4" /> },
   2: { label: 'Twice a week', description: 'Standard clean', icon: <Calendar className="h-4 w-4" /> },
   3: { label: '3 times a week', description: 'Enhanced clean', icon: <Clock className="h-4 w-4" /> },
   5: { label: 'Daily weekdays +', description: '5+ times weekly, up to 25 visits/month', icon: <Sparkles className="h-4 w-4" /> }
@@ -27,6 +27,25 @@ const getRecommendedFrequency = (officeSize?: string) => {
     case 'enterprise': return 5;
     default: return 2;
   }
+};
+
+// Calculate visits per month based on frequency
+const getVisitsPerMonth = (frequency: number): number => {
+  if (frequency === 0.25) return 1;
+  if (frequency === 0.5) return 2;
+  if (frequency === 1) return 4;
+  if (frequency === 2) return 8;
+  if (frequency === 3) return 12;
+  if (frequency === 5) return 20;
+  return Math.round(frequency * 4.33);
+};
+
+// Get service level name based on frequency
+const getServiceLevel = (frequency: number): string => {
+  if (frequency <= 0.5) return 'Smart';
+  if (frequency <= 1) return 'Comfort';
+  if (frequency <= 3) return 'Premium';
+  return 'Royal';
 };
 
 export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect, officeSize, traffic }) => {
@@ -46,7 +65,7 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground mb-4">
+        <h1 className="text-4xl font-bold text-foreground mb-4">
           How often do you need cleaning?
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -56,7 +75,6 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
           }
         </p>
       </div>
-
 
       {/* Frequency Options */}
       <div className={`grid gap-4 ${isSmallLightOffice ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2'}`}>
@@ -106,14 +124,14 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
       <div className="grid grid-cols-2 gap-4 text-center">
         <div className="p-4 rounded-lg bg-muted/50">
           <div className="text-lg font-semibold text-foreground">
-            {currentFrequency <= 1 ? 'Basic' : currentFrequency <= 2 ? 'Standard' : currentFrequency <= 3 ? 'Enhanced' : 'Premium'}
+            {getServiceLevel(currentFrequency)}
           </div>
           <div className="text-xs text-muted-foreground">Service Level</div>
         </div>
         
         <div className="p-4 rounded-lg bg-muted/50">
           <div className="text-lg font-semibold text-foreground">
-            {currentFrequency === 1 ? 4 : currentFrequency === 2 ? 8 : currentFrequency === 3 ? 12 : 20}
+            {getVisitsPerMonth(currentFrequency)}
           </div>
           <div className="text-xs text-muted-foreground">Visits/Month</div>
         </div>
