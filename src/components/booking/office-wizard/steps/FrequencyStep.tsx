@@ -13,21 +13,20 @@ const frequencyLabels = {
   1: { label: 'Once a week', description: 'Basic maintenance', icon: <Calendar className="h-4 w-4" /> },
   2: { label: 'Twice a week', description: 'Standard clean', icon: <Calendar className="h-4 w-4" /> },
   3: { label: '3 times a week', description: 'Enhanced clean', icon: <Clock className="h-4 w-4" /> },
-  4: { label: '4 times a week', description: 'Premium care', icon: <Clock className="h-4 w-4" /> },
-  5: { label: '5 times a week', description: 'Daily weekday', icon: <Sparkles className="h-4 w-4" /> },
-  6: { label: '6 times a week', description: 'Near-daily care', icon: <Sparkles className="h-4 w-4" /> },
-  7: { label: 'Daily cleaning', description: 'Maximum care', icon: <Sparkles className="h-4 w-4" /> }
+  5: { label: 'Daily weekdays', description: 'Mon-Fri service', icon: <Sparkles className="h-4 w-4" /> }
 };
 
 const getRecommendedFrequency = (officeSize?: string) => {
   switch (officeSize) {
-    case 'small': return 2;
-    case 'medium': return 3;
-    case 'large': return 4;
+    case 'small': return 1;
+    case 'medium': return 2;
+    case 'large': return 3;
     case 'enterprise': return 5;
     default: return 2;
   }
 };
+
+const frequencyOptions = [1, 2, 3, 5];
 
 export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect, officeSize }) => {
   const recommended = getRecommendedFrequency(officeSize);
@@ -76,45 +75,62 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
         )}
       </div>
 
-      {/* Frequency Slider */}
-      <div className="space-y-4">
-        <div className="px-4">
-          <Slider
-            value={[currentFrequency]}
-            onValueChange={(value) => onSelect(value[0])}
-            max={7}
-            min={1}
-            step={1}
-            className="w-full"
-          />
-        </div>
-        
-        {/* Slider Labels */}
-        <div className="flex justify-between text-xs text-muted-foreground px-4">
-          <span>Once/week</span>
-          <span>Daily</span>
-        </div>
+      {/* Frequency Options */}
+      <div className="grid grid-cols-2 gap-4">
+        {frequencyOptions.map((freq) => {
+          const option = frequencyLabels[freq as keyof typeof frequencyLabels];
+          const isSelected = currentFrequency === freq;
+          const isRecommended = freq === recommended;
+          
+          return (
+            <button
+              key={freq}
+              onClick={() => onSelect(freq)}
+              className={`p-4 rounded-xl border-2 transition-all ${
+                isSelected 
+                  ? 'border-primary bg-primary/5' 
+                  : 'border-border hover:border-primary/50'
+              }`}
+            >
+              <div className="flex items-center space-x-3 mb-2">
+                <div className={`p-2 rounded-lg ${
+                  isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                }`}>
+                  {option.icon}
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold text-foreground">
+                    {option.label}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {option.description}
+                  </div>
+                </div>
+              </div>
+              {isRecommended && (
+                <div className="text-center">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Recommended
+                  </span>
+                </div>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Frequency Impact */}
-      <div className="grid grid-cols-3 gap-4 text-center">
+      <div className="grid grid-cols-2 gap-4 text-center">
         <div className="p-4 rounded-lg bg-muted/50">
           <div className="text-lg font-semibold text-foreground">
-            {currentFrequency <= 2 ? 'Basic' : currentFrequency <= 4 ? 'Enhanced' : 'Premium'}
+            {currentFrequency <= 1 ? 'Basic' : currentFrequency <= 2 ? 'Standard' : currentFrequency <= 3 ? 'Enhanced' : 'Premium'}
           </div>
           <div className="text-xs text-muted-foreground">Service Level</div>
         </div>
         
         <div className="p-4 rounded-lg bg-muted/50">
           <div className="text-lg font-semibold text-foreground">
-            {Math.round((7 - currentFrequency) * 10 + 15)}%
-          </div>
-          <div className="text-xs text-muted-foreground">Cost Savings</div>
-        </div>
-        
-        <div className="p-4 rounded-lg bg-muted/50">
-          <div className="text-lg font-semibold text-foreground">
-            {currentFrequency * 4}
+            {currentFrequency === 1 ? 4 : currentFrequency === 2 ? 8 : currentFrequency === 3 ? 12 : 20}
           </div>
           <div className="text-xs text-muted-foreground">Visits/Month</div>
         </div>
