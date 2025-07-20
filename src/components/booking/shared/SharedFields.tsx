@@ -258,9 +258,9 @@ export const PropertySizeField = ({ form, fieldName = 'propertySize', label = 'P
             {label} (m²)
           </FormLabel>
           <FormControl>
-            <div className="space-y-4">
-              <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="text-2xl font-bold text-primary">
+            <div className="space-y-3">
+              <div className="px-3 py-2 bg-muted rounded-lg">
+                <div className="text-lg font-semibold text-primary">
                   {field.value}m²
                 </div>
               </div>
@@ -272,7 +272,7 @@ export const PropertySizeField = ({ form, fieldName = 'propertySize', label = 'P
                 step={10}
                 className="w-full"
               />
-              <div className="flex justify-between text-sm text-gray-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>10m²</span>
                 <span>500m²</span>
               </div>
@@ -293,15 +293,30 @@ export const BedroomsField = ({ form }: { form: UseFormReturn<any> }) => {
       name="bedrooms"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Bedrooms</FormLabel>
+          <FormLabel className="flex items-center gap-2">
+            <Home className="h-4 w-4" />
+            Bedrooms
+          </FormLabel>
           <FormControl>
-            <Input
-              type="number"
-              min={0}
-              max={10}
-              {...field}
-              onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-            />
+            <div className="space-y-3">
+              <div className="px-3 py-2 bg-muted rounded-lg">
+                <div className="text-lg font-semibold text-primary">
+                  {field.value} {field.value === 1 ? 'bedroom' : 'bedrooms'}
+                </div>
+              </div>
+              <Slider
+                value={[field.value]}
+                onValueChange={(value) => field.onChange(value[0])}
+                max={10}
+                min={0}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Studio</span>
+                <span>10+</span>
+              </div>
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -318,15 +333,30 @@ export const BathroomsField = ({ form }: { form: UseFormReturn<any> }) => {
       name="bathrooms"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Bathrooms</FormLabel>
+          <FormLabel className="flex items-center gap-2">
+            <Droplets className="h-4 w-4" />
+            Bathrooms
+          </FormLabel>
           <FormControl>
-            <Input
-              type="number"
-              min={1}
-              max={10}
-              {...field}
-              onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-            />
+            <div className="space-y-3">
+              <div className="px-3 py-2 bg-muted rounded-lg">
+                <div className="text-lg font-semibold text-primary">
+                  {field.value} {field.value === 1 ? 'bathroom' : 'bathrooms'}
+                </div>
+              </div>
+              <Slider
+                value={[field.value]}
+                onValueChange={(value) => field.onChange(value[0])}
+                max={10}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>1</span>
+                <span>10+</span>
+              </div>
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -385,12 +415,12 @@ export const HoursSelectionField = ({ form, onSuggestedTimeSelect }: {
             Estimated Hours (Auto-calculated)
           </FormLabel>
           <FormControl>
-            <div className="space-y-4">
-              <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="text-2xl font-bold text-primary">
+            <div className="space-y-3">
+              <div className="px-3 py-2 bg-muted rounded-lg">
+                <div className="text-lg font-semibold text-primary">
                   {field.value} hours
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Based on {propertySize}m², {bedrooms} bedrooms, {bathrooms} bathrooms
                 </p>
               </div>
