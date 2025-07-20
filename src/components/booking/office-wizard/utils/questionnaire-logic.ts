@@ -32,10 +32,7 @@ const frequencyDiscounts = {
   1: 0,      // weekly = 0% discount
   2: 0.08,   // bi-weekly = 8% discount  
   3: 0.15,   // 3x/week = 15% discount
-  4: 0.20,   // 4x/week = 20% discount
   5: 0.25,   // 5x/week = 25% discount
-  6: 0.28,   // 6x/week = 28% discount
-  7: 0.30    // daily = 30% discount
 };
 
 // Contract discounts
@@ -50,15 +47,36 @@ export function needsConsultation(answers: WizardAnswers): boolean {
   
   return (
     answers.officeType.id === 'enterprise' ||
-    (answers.officeType.id === 'large' && answers.traffic.id === 'public') ||
-    (answers.frequency && answers.frequency > 5)
+    (answers.officeType.id === 'large' && (answers.traffic.id === 'high' || answers.traffic.id === 'public'))
   );
 }
 
-export function generateQuote(answers: WizardAnswers): QuoteResult | null {
-  if (!answers.officeType || !answers.traffic || !answers.frequency || !answers.contract) {
+export function getAvailablePackages(answers: WizardAnswers): string[] {
+  if (!answers.officeType || !answers.traffic) return [];
+  
+  // Enterprise always needs consultation
+  if (answers.officeType.id === 'enterprise') return ['consultation'];
+  
+  // Large offices with high traffic: Premium + consultation
+  if (answers.officeType.id === 'large' && (answers.traffic.id === 'high' || answers.traffic.id === 'public')) {
+    return ['premium', 'consultation'];
+  }
+  
+  // Small/Medium offices: All packages
+  return ['essential', 'professional', 'premium'];
+}
+
+interface QuoteOptions {
+  contract?: 'monthly' | 'sixMonth' | 'annual';
+}
+
+export function generateQuote(answers: WizardAnswers, options: QuoteOptions = {}): QuoteResult | null {
+  if (!answers.officeType || !answers.traffic || !answers.frequency) {
     return null;
   }
+
+  // Default contract to monthly if not provided
+  const contract = options.contract || 'monthly';
 
   // Base price per visit
   const basePrice = basePricing[answers.officeType.id as keyof typeof basePricing];
@@ -76,7 +94,7 @@ export function generateQuote(answers: WizardAnswers): QuoteResult | null {
   const monthlyBase = discountedPerVisit * answers.frequency * 4.33;
 
   // Apply contract discount
-  const contractDiscount = contractDiscounts[answers.contract as keyof typeof contractDiscounts];
+  const contractDiscount = contractDiscounts[contract as keyof typeof contractDiscounts];
   const monthlyPrice = Math.round(monthlyBase * (1 - contractDiscount));
 
   // Calculate savings
@@ -112,12 +130,9 @@ function getPlanName(officeSize: string, frequency: number): string {
 function getFrequencyLabel(frequency: number): string {
   const labels = {
     1: 'Weekly',
-    2: 'Bi-weekly',
+    2: 'Bi-weekly', 
     3: '3x per week',
-    4: '4x per week',
-    5: 'Weekday service',
-    6: '6x per week',
-    7: 'Daily service'
+    5: 'Daily weekdays'
   };
   return labels[frequency as keyof typeof labels] || `${frequency}x per week`;
 }
