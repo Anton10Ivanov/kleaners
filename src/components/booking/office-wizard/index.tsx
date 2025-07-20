@@ -16,11 +16,16 @@ export interface WizardAnswers {
     label: string;
     sqft: number;
     employees: number;
+    description: string;
+    icon: React.ReactNode;
   };
   traffic?: {
     id: string;
     label: string;
     multiplier: number;
+    description: string;
+    visitors: string;
+    icon: React.ReactNode;
   };
   frequency?: number;
   contract?: 'monthly' | 'sixMonth' | 'annual';
