@@ -205,7 +205,7 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
         </div>
 
         {/* Package Selection */}
-        <div className={`grid gap-6 mb-8 ${
+        <div className={`grid gap-4 mb-8 ${
           isSmallLightOffice 
             ? 'grid-cols-1 max-w-2xl mx-auto' 
             : displayedPackages.length === 4 
@@ -221,7 +221,7 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <button
                 key={packageOption.id}
                 onClick={() => setSelectedPackage(packageOption.id)}
-                className={`relative p-6 rounded-xl border-2 transition-all text-left ${
+                className={`relative p-4 rounded-xl border-2 transition-all text-left h-full ${
                   isSelected 
                     ? 'border-accent bg-accent/5' 
                     : 'border-border hover:border-accent/50'
@@ -235,23 +235,25 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                   </div>
                 )}
                 
-                <div className="flex items-center space-x-4">
-                  <div className={`p-3 rounded-xl ${
-                    isSelected ? 'bg-accent text-accent-foreground' : 'bg-muted'
-                  }`}>
-                    {React.cloneElement(packageOption.icon as React.ReactElement, { 
-                      className: "w-4 h-4" 
-                    })}
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground mb-1">
-                      {packageOption.name}
-                    </h3>
+                <div className="flex flex-col h-full justify-between space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className={`p-2 rounded-lg flex-shrink-0 ${
+                      isSelected ? 'bg-accent text-accent-foreground' : 'bg-muted'
+                    }`}>
+                      {React.cloneElement(packageOption.icon as React.ReactElement, { 
+                        className: "w-4 h-4" 
+                      })}
+                    </div>
                     
-                    <p className="text-sm text-muted-foreground">
-                      {packageOption.description}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-bold text-foreground mb-1 leading-tight">
+                        {packageOption.name}
+                      </h3>
+                      
+                      <p className="text-sm text-muted-foreground leading-snug">
+                        {packageOption.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </button>
