@@ -260,13 +260,32 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
             );
           })}
         </div>
-        
-        {/* Description under packages */}
-        <div className="text-center mb-8">
-          <p className="text-muted-foreground">
-            Based on your {answers.officeType?.label.toLowerCase()} with {answers.traffic?.label.toLowerCase()} traffic
-          </p>
-        </div>
+
+        {/* What's Included */}
+        {selectedQuote && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
+              What's Included
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {selectedQuote.includes.map((item, index) => (
+                <div key={index} className="flex items-start space-x-3">
+                  <CheckCircle2 className={`h-3 w-3 mt-1 flex-shrink-0 ${
+                    selectedPackageOption ? getColorClasses(selectedPackageOption.color, true) : 'text-green-600'
+                  }`} />
+                  <span className="text-sm text-muted-foreground">{item}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Description under included items */}
+            <div className="text-center mt-6">
+              <p className="text-muted-foreground">
+                Based on your {answers.officeType?.label.toLowerCase()} with {answers.traffic?.label.toLowerCase()} traffic
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Selected Quote Details */}
         {selectedQuote && (
@@ -334,23 +353,6 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <p className="text-muted-foreground mt-4 max-w-md mx-auto">
                 {selectedQuote.description}
               </p>
-            </div>
-
-            {/* What's Included */}
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
-                What's Included
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {selectedQuote.includes.map((item, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle2 className={`h-3 w-3 mt-1 flex-shrink-0 ${
-                      selectedPackageOption ? getColorClasses(selectedPackageOption.color, true) : 'text-green-600'
-                    }`} />
-                    <span className="text-sm text-muted-foreground">{item}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
 
