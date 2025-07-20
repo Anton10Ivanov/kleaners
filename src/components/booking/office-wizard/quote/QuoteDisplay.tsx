@@ -146,32 +146,26 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
             <CheckCircle2 className="h-4 w-4 mr-2" />
             Quote Ready!
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Choose Your Cleaning Plan
-          </h1>
-          <p className="text-muted-foreground">
-            Based on your {answers.officeType?.label.toLowerCase()} with {answers.traffic?.label.toLowerCase()} traffic
-          </p>
         </div>
 
         {/* Package Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {displayedPackages.map((packageOption) => {
             const quote = getQuoteForPackage(packageOption.id);
             const isSelected = selectedPackage === packageOption.id;
-            const isHighlighted = packageOption.highlighted;
+            const isRecommended = isSelected && packageOption.highlighted;
             
             return (
               <div
                 key={packageOption.id}
                 className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all ${
                   isSelected 
-                    ? 'border-primary bg-primary/5' 
-                    : 'border-border hover:border-primary/50'
-                } ${isHighlighted ? 'ring-2 ring-accent/50 border-accent' : ''}`}
+                    ? 'border-accent bg-accent/5' 
+                    : 'border-border hover:border-accent/50'
+                }`}
                 onClick={() => setSelectedPackage(packageOption.id)}
               >
-                {isHighlighted && (
+                {isRecommended && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                     <Badge className="bg-accent text-accent-foreground">
                       Recommended
@@ -180,10 +174,14 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                 )}
                 
                 <div className="text-center">
-                  <div className={`inline-flex p-3 rounded-xl mb-4 ${
-                    isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                  <div className={`inline-flex p-2 rounded-xl mb-4 ${
+                    isSelected ? 'bg-accent text-accent-foreground' : 'bg-muted'
                   }`}>
-                    {packageOption.icon}
+                    <div className="w-4 h-4">
+                      {React.cloneElement(packageOption.icon as React.ReactElement, { 
+                        className: "w-4 h-4" 
+                      })}
+                    </div>
                   </div>
                   
                   <h3 className="text-lg font-bold text-foreground mb-2">
@@ -199,53 +197,54 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
             );
           })}
         </div>
+        
+        {/* Description under packages */}
+        <div className="text-center mb-8">
+          <p className="text-muted-foreground">
+            Based on your {answers.officeType?.label.toLowerCase()} with {answers.traffic?.label.toLowerCase()} traffic
+          </p>
+        </div>
 
         {/* Selected Quote Details */}
         {selectedQuote && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border p-8 mb-8">
             {/* Contract Terms */}
             <div className="mb-8 p-6 bg-muted/30 rounded-xl">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Contract Terms</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-sm font-medium text-foreground">Monthly</span>
-                    <Switch
-                      checked={contractTerm === 'sixMonth'}
-                      onCheckedChange={(checked) => setContractTerm(checked ? 'sixMonth' : 'monthly')}
-                    />
-                    <span className="text-sm font-medium text-foreground">6 Months</span>
+              <div className="space-y-6">
+                {/* Prominent Contract Toggle */}
+                <div className="flex items-center justify-center space-x-6 p-6 bg-white dark:bg-gray-800 rounded-lg border">
+                  <div className={`text-lg font-semibold transition-colors ${
+                    contractTerm === 'monthly' ? 'text-foreground' : 'text-muted-foreground'
+                  }`}>
+                    Monthly
                   </div>
-                  <div className="text-right">
-                    <div className="font-medium text-foreground">
-                      {contractTerm === 'sixMonth' ? '6 Month Contract' : 'Monthly Contract'}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {contractTerm === 'sixMonth' 
-                        ? 'Save 12% with commitment' 
-                        : 'Flexible billing'}
-                    </div>
+                  <Switch
+                    checked={contractTerm === 'sixMonth'}
+                    onCheckedChange={(checked) => setContractTerm(checked ? 'sixMonth' : 'monthly')}
+                    className="scale-125"
+                  />
+                  <div className={`text-lg font-semibold transition-colors ${
+                    contractTerm === 'sixMonth' ? 'text-foreground' : 'text-muted-foreground'
+                  }`}>
+                    6 Months
                   </div>
-                  {contractTerm === 'sixMonth' && (
-                    <Badge variant="success">12% Off</Badge>
-                  )}
                 </div>
 
-                <div className="flex items-center space-x-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                {/* Subtle Annual Interest Checkbox */}
+                <div className="flex items-start space-x-3 p-3 rounded-lg border border-dashed border-muted-foreground/30">
                   <Checkbox
                     checked={showAnnualInterest}
                     onCheckedChange={(checked) => setShowAnnualInterest(checked === true)}
+                    className="mt-1"
                   />
                   <div className="flex-1">
-                    <div className="font-medium text-foreground">
-                      Interested in Annual Contract
+                    <div className="text-sm font-medium text-foreground">
+                      Interested in annual contract?
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      Get a custom 20% discount quote for 12-month commitment
+                    <div className="text-xs text-muted-foreground">
+                      We'll provide a custom quote after initial cleaning and assessment
                     </div>
                   </div>
-                  <Badge className="bg-yellow-100 text-yellow-800">20% Off</Badge>
                 </div>
               </div>
             </div>
@@ -256,6 +255,12 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                 €{selectedQuote.monthlyPrice}
                 <span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
+              
+              {contractTerm === 'sixMonth' && (
+                <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-2">
+                  12% savings with 6-month contract
+                </div>
+              )}
               
               {selectedQuote.discountedPrice && (
                 <div className="text-muted-foreground line-through">
@@ -276,7 +281,11 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {selectedQuote.includes.map((item, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
+                      selectedPackage === 'essential' ? 'text-blue-600' :
+                      selectedPackage === 'professional' ? 'text-purple-600' :
+                      'text-green-600'
+                    }`} />
                     <span className="text-sm text-muted-foreground">{item}</span>
                   </div>
                 ))}
