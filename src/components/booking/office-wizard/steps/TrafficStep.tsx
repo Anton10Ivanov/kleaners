@@ -24,7 +24,7 @@ const trafficLevels: TrafficLevel[] = [
     multiplier: 0.85,
     description: 'Mostly employees, few visitors',
     visitors: '< 20 daily visitors',
-    icon: <Users className="h-6 w-6" />
+    icon: <Users className="h-4 w-4" />
   },
   {
     id: 'medium',
@@ -32,7 +32,7 @@ const trafficLevels: TrafficLevel[] = [
     multiplier: 1.0,
     description: 'Regular client meetings',
     visitors: '20-50 daily visitors',
-    icon: <TrendingUp className="h-6 w-6" />
+    icon: <TrendingUp className="h-4 w-4" />
   },
   {
     id: 'high',
@@ -40,7 +40,7 @@ const trafficLevels: TrafficLevel[] = [
     multiplier: 1.25,
     description: 'Busy office with frequent visitors',
     visitors: '50+ daily visitors',
-    icon: <Building className="h-6 w-6" />
+    icon: <Building className="h-4 w-4" />
   },
   {
     id: 'public',
@@ -48,7 +48,7 @@ const trafficLevels: TrafficLevel[] = [
     multiplier: 1.5,
     description: 'Retail, reception, or showroom',
     visitors: '100+ daily visitors',
-    icon: <Globe className="h-6 w-6" />
+    icon: <Globe className="h-4 w-4" />
   }
 ];
 
@@ -76,9 +76,9 @@ export const TrafficStep: React.FC<TrafficStepProps> = ({ selected, onSelect }) 
                 : "border-border hover:border-primary/30"
             )}
           >
-            <div className="flex items-start space-x-4">
+            <div className="flex items-center space-x-3">
               <div className={cn(
-                "p-3 rounded-lg",
+                "p-2 rounded-lg",
                 selected?.id === level.id 
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted"
@@ -90,14 +90,14 @@ export const TrafficStep: React.FC<TrafficStepProps> = ({ selected, onSelect }) 
                 <h3 className="font-semibold text-foreground mb-1">
                   {level.label}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {level.description}
-                </p>
                 <div className="text-xs text-primary font-medium">
                   {level.visitors}
                 </div>
               </div>
             </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              {level.description}
+            </p>
           </button>
         ))}
       </div>

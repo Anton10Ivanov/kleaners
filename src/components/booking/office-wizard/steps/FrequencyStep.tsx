@@ -13,7 +13,7 @@ const frequencyLabels = {
   1: { label: 'Once a week', description: 'Basic maintenance', icon: <Calendar className="h-4 w-4" /> },
   2: { label: 'Twice a week', description: 'Standard clean', icon: <Calendar className="h-4 w-4" /> },
   3: { label: '3 times a week', description: 'Enhanced clean', icon: <Clock className="h-4 w-4" /> },
-  5: { label: 'Daily weekdays', description: 'Mon-Fri service', icon: <Sparkles className="h-4 w-4" /> }
+  5: { label: 'Daily weekdays +', description: '5+ times weekly, up to 25 visits/month', icon: <Sparkles className="h-4 w-4" /> }
 };
 
 const getRecommendedFrequency = (officeSize?: string) => {
@@ -50,30 +50,6 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
         </p>
       </div>
 
-      {/* Current Selection Display */}
-      <div className="bg-primary/5 rounded-xl p-6 border border-primary/20">
-        <div className="flex items-center justify-center space-x-3 mb-3">
-          <div className="p-2 bg-primary rounded-lg text-primary-foreground">
-            {frequencyInfo.icon}
-          </div>
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-foreground">
-              {frequencyInfo.label}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              {frequencyInfo.description}
-            </p>
-          </div>
-        </div>
-        
-        {currentFrequency === recommended && (
-          <div className="text-center">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              Recommended for your office size
-            </span>
-          </div>
-        )}
-      </div>
 
       {/* Frequency Options */}
       <div className="grid grid-cols-2 gap-4">
