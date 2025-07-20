@@ -168,12 +168,12 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                   isSelected 
                     ? 'border-primary bg-primary/5' 
                     : 'border-border hover:border-primary/50'
-                } ${isHighlighted ? 'ring-2 ring-primary/20' : ''}`}
+                } ${isHighlighted ? 'ring-2 ring-accent/50 border-accent' : ''}`}
                 onClick={() => setSelectedPackage(packageOption.id)}
               >
                 {isHighlighted && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground">
+                    <Badge className="bg-accent text-accent-foreground">
                       Recommended
                     </Badge>
                   </div>
@@ -194,12 +194,6 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                     {packageOption.description}
                   </p>
                   
-                  {quote && (
-                    <div className="text-2xl font-bold text-primary">
-                      ${quote.monthlyPrice}
-                      <span className="text-sm font-normal text-muted-foreground">/month</span>
-                    </div>
-                  )}
                 </div>
               </div>
             );
@@ -216,23 +210,25 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border">
                   <div className="flex items-center space-x-3">
+                    <span className="text-sm font-medium text-foreground">Monthly</span>
                     <Switch
                       checked={contractTerm === 'sixMonth'}
                       onCheckedChange={(checked) => setContractTerm(checked ? 'sixMonth' : 'monthly')}
                     />
-                    <div>
-                      <div className="font-medium text-foreground">
-                        {contractTerm === 'sixMonth' ? '6 Month Contract' : 'Monthly Contract'}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {contractTerm === 'sixMonth' 
-                          ? 'Save 12% with 6-month commitment' 
-                          : 'Flexible monthly billing'}
-                      </div>
+                    <span className="text-sm font-medium text-foreground">6 Months</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-medium text-foreground">
+                      {contractTerm === 'sixMonth' ? '6 Month Contract' : 'Monthly Contract'}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {contractTerm === 'sixMonth' 
+                        ? 'Save 12% with commitment' 
+                        : 'Flexible billing'}
                     </div>
                   </div>
                   {contractTerm === 'sixMonth' && (
-                    <Badge variant="success">12% Savings</Badge>
+                    <Badge variant="success">12% Off</Badge>
                   )}
                 </div>
 
@@ -257,13 +253,13 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
             {/* Quote Summary */}
             <div className="text-center mb-8">
               <div className="text-4xl font-bold text-primary mb-2">
-                ${selectedQuote.monthlyPrice}
+                €{selectedQuote.monthlyPrice}
                 <span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
               
               {selectedQuote.discountedPrice && (
                 <div className="text-muted-foreground line-through">
-                  Originally ${selectedQuote.discountedPrice}/month
+                  Originally €{selectedQuote.discountedPrice}/month
                 </div>
               )}
               
@@ -298,7 +294,7 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
               
               <div className="text-center">
                 <div className="text-lg font-semibold text-foreground">
-                  {answers.officeType?.sqft.toLocaleString()} sqft
+                  {answers.officeType?.sqft} m²
                 </div>
                 <div className="text-sm text-muted-foreground">Coverage</div>
               </div>

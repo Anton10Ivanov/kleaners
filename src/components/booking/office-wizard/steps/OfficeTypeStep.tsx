@@ -21,34 +21,34 @@ const officeTypes: OfficeType[] = [
   {
     id: 'small',
     label: 'Small Office',
-    sqft: 500,
+    sqft: 46,
     employees: 5,
-    description: 'Up to 500 sqft • Perfect for startups',
-    icon: <Building2 className="h-6 w-6" />
+    description: 'Up to 50 m² • Perfect for startups',
+    icon: <Building2 className="h-4 w-4" />
   },
   {
     id: 'medium',
     label: 'Medium Office',
-    sqft: 1500,
+    sqft: 140,
     employees: 20,
-    description: '500-2000 sqft • Growing businesses',
-    icon: <Users className="h-6 w-6" />
+    description: '50-185 m² • Growing businesses',
+    icon: <Users className="h-4 w-4" />
   },
   {
     id: 'large',
     label: 'Large Office',
-    sqft: 3500,
+    sqft: 325,
     employees: 50,
-    description: '2000-5000 sqft • Established companies',
-    icon: <MapIcon className="h-6 w-6" />
+    description: '185-465 m² • Established companies',
+    icon: <MapIcon className="h-4 w-4" />
   },
   {
     id: 'enterprise',
     label: 'Enterprise',
-    sqft: 8000,
+    sqft: 745,
     employees: 100,
-    description: '5000+ sqft • Corporate headquarters',
-    icon: <Building2 className="h-6 w-6" />
+    description: '465+ m² • Corporate headquarters',
+    icon: <Building2 className="h-4 w-4" />
   }
 ];
 
@@ -76,9 +76,9 @@ export const OfficeTypeStep: React.FC<OfficeTypeStepProps> = ({ selected, onSele
                 : "border-border hover:border-primary/30"
             )}
           >
-            <div className="flex items-start space-x-4">
+            <div className="flex items-center space-x-3">
               <div className={cn(
-                "p-3 rounded-lg",
+                "p-2 rounded-lg",
                 selected?.id === type.id 
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted"
@@ -90,14 +90,14 @@ export const OfficeTypeStep: React.FC<OfficeTypeStepProps> = ({ selected, onSele
                 <h3 className="font-semibold text-foreground mb-1">
                   {type.label}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {type.description}
-                </p>
                 <div className="text-xs text-primary font-medium">
                   ~{type.employees} employees
                 </div>
               </div>
             </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              {type.description}
+            </p>
           </button>
         ))}
       </div>
