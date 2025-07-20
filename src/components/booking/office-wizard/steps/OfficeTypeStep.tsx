@@ -56,10 +56,10 @@ export const OfficeTypeStep: React.FC<OfficeTypeStepProps> = ({ selected, onSele
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-foreground mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-4">
           What's your office setup?
-        </h2>
-        <p className="text-muted-foreground">
+        </h1>
+        <p className="text-lg text-muted-foreground">
           This helps us understand your cleaning needs
         </p>
       </div>

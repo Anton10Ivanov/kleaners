@@ -7,10 +7,13 @@ interface FrequencyStepProps {
   selected?: number;
   onSelect: (frequency: number) => void;
   officeSize?: string;
+  traffic?: string;
 }
 
 const frequencyLabels = {
+  0.25: { label: 'Once a month', description: 'Minimal maintenance', icon: <Calendar className="h-4 w-4" /> },
   1: { label: 'Once a week', description: 'Basic maintenance', icon: <Calendar className="h-4 w-4" /> },
+  0.5: { label: 'Twice a month', description: 'Light maintenance', icon: <Calendar className="h-4 w-4" /> },
   2: { label: 'Twice a week', description: 'Standard clean', icon: <Calendar className="h-4 w-4" /> },
   3: { label: '3 times a week', description: 'Enhanced clean', icon: <Clock className="h-4 w-4" /> },
   5: { label: 'Daily weekdays +', description: '5+ times weekly, up to 25 visits/month', icon: <Sparkles className="h-4 w-4" /> }
@@ -26,9 +29,10 @@ const getRecommendedFrequency = (officeSize?: string) => {
   }
 };
 
-const frequencyOptions = [1, 2, 3, 5];
-
-export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect, officeSize }) => {
+export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect, officeSize, traffic }) => {
+  // Special case for small office + light traffic
+  const isSmallLightOffice = officeSize === 'small' && traffic === 'light';
+  const frequencyOptions = isSmallLightOffice ? [0.25, 0.5, 1] : [1, 2, 3, 5];
   const recommended = getRecommendedFrequency(officeSize);
   const currentFrequency = selected || recommended;
   const frequencyInfo = frequencyLabels[currentFrequency as keyof typeof frequencyLabels];
@@ -42,17 +46,20 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-foreground mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-4">
           How often do you need cleaning?
-        </h2>
-        <p className="text-muted-foreground">
-          We recommend more frequent cleaning for larger or busier offices
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          {isSmallLightOffice 
+            ? 'Perfect! We have special packages for smaller offices with light traffic'
+            : 'We recommend more frequent cleaning for larger or busier offices'
+          }
         </p>
       </div>
 
 
       {/* Frequency Options */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className={`grid gap-4 ${isSmallLightOffice ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2'}`}>
         {frequencyOptions.map((freq) => {
           const option = frequencyLabels[freq as keyof typeof frequencyLabels];
           const isSelected = currentFrequency === freq;

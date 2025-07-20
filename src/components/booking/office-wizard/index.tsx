@@ -35,6 +35,14 @@ export const PricingWizard: React.FC = () => {
 
   const updateAnswers = (key: keyof WizardAnswers, value: any) => {
     setAnswers(prev => ({ ...prev, [key]: value }));
+    
+    // Auto-transition for steps 1 and 2
+    if ((key === 'officeType' && currentStep === 1) || 
+        (key === 'traffic' && currentStep === 2)) {
+      setTimeout(() => {
+        handleNext();
+      }, 300); // Small delay for visual feedback
+    }
   };
 
   const handleNext = () => {
@@ -87,6 +95,7 @@ export const PricingWizard: React.FC = () => {
             selected={answers.frequency}
             onSelect={(frequency) => updateAnswers('frequency', frequency)}
             officeSize={answers.officeType?.id}
+            traffic={answers.traffic?.id}
           />
         );
       default:
