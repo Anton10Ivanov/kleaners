@@ -27,8 +27,36 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
   const [showAnnualInterest, setShowAnnualInterest] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<string>('');
 
-  // Define package options
-  const packageOptions: PackageOption[] = [
+  // Special case for small office + light traffic
+  const isSmallLightOffice = answers.officeType?.id === 'small' && answers.traffic?.id === 'light';
+  
+  // Define package options based on context
+  const packageOptions: PackageOption[] = isSmallLightOffice ? [
+    {
+      id: 'monthly',
+      name: 'Monthly Clean',
+      icon: <Calendar className="h-5 w-5" />,
+      description: 'Once a month maintenance',
+      frequency: 0.25,
+      highlighted: true
+    },
+    {
+      id: 'biweekly',
+      name: 'Bi-weekly Clean',
+      icon: <Star className="h-5 w-5" />,
+      description: 'Twice a month service',
+      frequency: 0.5,
+      highlighted: false
+    },
+    {
+      id: 'weekly',
+      name: 'Weekly Clean',
+      icon: <Crown className="h-5 w-5" />,
+      description: 'Weekly maintenance',
+      frequency: 1,
+      highlighted: false
+    }
+  ] : [
     {
       id: 'essential',
       name: 'Essential Clean',
@@ -149,21 +177,25 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
         </div>
 
         {/* Package Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className={`grid gap-6 mb-8 ${
+          isSmallLightOffice 
+            ? 'grid-cols-1 max-w-2xl mx-auto' 
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+        }`}>
           {displayedPackages.map((packageOption) => {
             const quote = getQuoteForPackage(packageOption.id);
             const isSelected = selectedPackage === packageOption.id;
-            const isRecommended = isSelected && packageOption.highlighted;
+            const isRecommended = packageOption.highlighted;
             
             return (
-              <div
+              <button
                 key={packageOption.id}
-                className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all ${
+                onClick={() => setSelectedPackage(packageOption.id)}
+                className={`relative p-6 rounded-xl border-2 transition-all text-left ${
                   isSelected 
                     ? 'border-accent bg-accent/5' 
                     : 'border-border hover:border-accent/50'
                 }`}
-                onClick={() => setSelectedPackage(packageOption.id)}
               >
                 {isRecommended && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -173,27 +205,26 @@ export const QuoteDisplay: React.FC<QuoteDisplayProps> = ({ answers, onBack, ava
                   </div>
                 )}
                 
-                <div className="text-center">
-                  <div className={`inline-flex p-2 rounded-xl mb-4 ${
+                <div className="flex items-center space-x-4">
+                  <div className={`p-3 rounded-xl ${
                     isSelected ? 'bg-accent text-accent-foreground' : 'bg-muted'
                   }`}>
-                    <div className="w-4 h-4">
-                      {React.cloneElement(packageOption.icon as React.ReactElement, { 
-                        className: "w-4 h-4" 
-                      })}
-                    </div>
+                    {React.cloneElement(packageOption.icon as React.ReactElement, { 
+                      className: "w-5 h-5" 
+                    })}
                   </div>
                   
-                  <h3 className="text-lg font-bold text-foreground mb-2">
-                    {packageOption.name}
-                  </h3>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {packageOption.description}
-                  </p>
-                  
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      {packageOption.name}
+                    </h3>
+                    
+                    <p className="text-sm text-muted-foreground">
+                      {packageOption.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

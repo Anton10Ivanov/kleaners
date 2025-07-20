@@ -19,7 +19,7 @@ interface TrafficStepProps {
 
 const trafficLevels: TrafficLevel[] = [
   {
-    id: 'low',
+    id: 'light',
     label: 'Light Traffic',
     multiplier: 0.85,
     description: 'Mostly employees, few visitors',
@@ -56,10 +56,10 @@ export const TrafficStep: React.FC<TrafficStepProps> = ({ selected, onSelect }) 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-foreground mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-4">
           How busy is your office?
-        </h2>
-        <p className="text-muted-foreground">
+        </h1>
+        <p className="text-lg text-muted-foreground">
           Higher traffic areas need more frequent cleaning
         </p>
       </div>
