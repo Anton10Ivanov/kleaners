@@ -2,6 +2,10 @@
 import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Calendar, Clock, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { MobileStack } from '@/components/layout/mobile-container';
+import { Badge } from '@/components/ui/badge';
 
 interface FrequencyStepProps {
   selected?: number;
@@ -49,6 +53,8 @@ const getServiceLevel = (frequency: number): string => {
 };
 
 export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect, officeSize, traffic }) => {
+  const { isMobile } = useMobileOptimizations();
+  
   // Special case for small office + light traffic
   const isSmallLightOffice = officeSize === 'small' && traffic === 'light';
   const frequencyOptions = isSmallLightOffice ? [0.25, 0.5, 1] : [1, 2, 3, 5];
@@ -63,12 +69,19 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
   }, [recommended, selected, onSelect]);
 
   return (
-    <div className="space-y-8">
+    <MobileStack spacing="lg">
+      {/* Header */}
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-foreground mb-4">
+        <h2 className={cn(
+          "font-bold text-foreground mb-3",
+          isMobile ? "text-xl" : "text-2xl lg:text-3xl"
+        )}>
           How often do you need cleaning?
-        </h1>
-        <p className="text-lg text-muted-foreground">
+        </h2>
+        <p className={cn(
+          "text-muted-foreground",
+          isMobile ? "text-sm" : "text-base"
+        )}>
           {isSmallLightOffice 
             ? 'Perfect! We have special packages for smaller offices with light traffic'
             : 'We recommend more frequent cleaning for larger or busier offices'
@@ -77,7 +90,14 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
       </div>
 
       {/* Frequency Options */}
-      <div className={`grid gap-4 ${isSmallLightOffice ? 'grid-cols-1 max-w-md mx-auto' : 'grid-cols-2'}`}>
+      <div className={cn(
+        "grid gap-3",
+        isSmallLightOffice 
+          ? "grid-cols-1 max-w-md mx-auto" 
+          : isMobile 
+            ? "grid-cols-1" 
+            : "grid-cols-2"
+      )}>
         {frequencyOptions.map((freq) => {
           const option = frequencyLabels[freq as keyof typeof frequencyLabels];
           const isSelected = currentFrequency === freq;
@@ -87,32 +107,41 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
             <button
               key={freq}
               onClick={() => onSelect(freq)}
-              className={`p-4 rounded-xl border-2 transition-all ${
+              className={cn(
+                "p-4 rounded-xl border-2 transition-all duration-200 text-left w-full touch-manipulation",
+                "hover:shadow-lg active:scale-98",
                 isSelected 
-                  ? 'border-primary bg-primary/5' 
-                  : 'border-border hover:border-primary/50'
-              }`}
+                  ? "border-primary bg-primary/10 shadow-md ring-2 ring-primary/20" 
+                  : "border-border hover:border-primary/50 bg-card"
+              )}
             >
-              <div className="flex items-center space-x-3 mb-2">
-                <div className={`p-2 rounded-lg ${
-                  isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                }`}>
+              <div className="flex items-start space-x-3 mb-3">
+                <div className={cn(
+                  "p-3 rounded-lg flex-shrink-0",
+                  isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                )}>
                   {option.icon}
                 </div>
-                <div className="text-left">
-                  <div className="font-semibold text-foreground">
+                <div className="flex-1 min-w-0">
+                  <div className={cn(
+                    "font-semibold text-foreground mb-1",
+                    isMobile ? "text-base" : "text-lg"
+                  )}>
                     {option.label}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className={cn(
+                    "text-muted-foreground",
+                    isMobile ? "text-xs" : "text-sm"
+                  )}>
                     {option.description}
                   </div>
                 </div>
               </div>
               {isRecommended && (
-                <div className="text-center">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <div className="flex justify-center">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                     Recommended
-                  </span>
+                  </Badge>
                 </div>
               )}
             </button>
@@ -121,21 +150,40 @@ export const FrequencyStep: React.FC<FrequencyStepProps> = ({ selected, onSelect
       </div>
 
       {/* Frequency Impact */}
-      <div className="grid grid-cols-2 gap-4 text-center">
-        <div className="p-4 rounded-lg bg-muted/50">
-          <div className="text-lg font-semibold text-foreground">
+      <div className={cn(
+        "grid gap-3",
+        isMobile ? "grid-cols-2" : "grid-cols-2 max-w-md mx-auto"
+      )}>
+        <div className="p-4 rounded-lg bg-muted/50 border text-center">
+          <div className={cn(
+            "font-bold text-primary mb-1",
+            isMobile ? "text-lg" : "text-xl"
+          )}>
             {getServiceLevel(currentFrequency)}
           </div>
-          <div className="text-xs text-muted-foreground">Service Level</div>
+          <div className={cn(
+            "text-muted-foreground",
+            isMobile ? "text-xs" : "text-sm"
+          )}>
+            Service Level
+          </div>
         </div>
         
-        <div className="p-4 rounded-lg bg-muted/50">
-          <div className="text-lg font-semibold text-foreground">
+        <div className="p-4 rounded-lg bg-muted/50 border text-center">
+          <div className={cn(
+            "font-bold text-primary mb-1",
+            isMobile ? "text-lg" : "text-xl"
+          )}>
             {getVisitsPerMonth(currentFrequency)}
           </div>
-          <div className="text-xs text-muted-foreground">Visits/Month</div>
+          <div className={cn(
+            "text-muted-foreground",
+            isMobile ? "text-xs" : "text-sm"
+          )}>
+            Visits/Month
+          </div>
         </div>
       </div>
-    </div>
+    </MobileStack>
   );
 };
