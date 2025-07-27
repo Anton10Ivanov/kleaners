@@ -33,9 +33,26 @@ export const environmentUtils = {
     return typeof window !== 'undefined' && window.location.href.includes('lovable.dev');
   },
 
-  // Get environment variable
+  // Get environment variable with validation
   getEnvVar: (key: string, defaultValue?: string): string => {
     return import.meta.env[key] || defaultValue || '';
+  },
+
+  // Get required environment variable (throws if missing)
+  getRequiredEnvVar: (key: string): string => {
+    const value = import.meta.env[key];
+    if (!value) {
+      throw new Error(`Required environment variable ${key} is not set`);
+    }
+    return value;
+  },
+
+  // Validate all required environment variables
+  validateRequiredVars: (requiredVars: string[]): void => {
+    const missing = requiredVars.filter(key => !import.meta.env[key]);
+    if (missing.length > 0) {
+      throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+    }
   },
 
   // Check if feature flags are enabled

@@ -4,9 +4,22 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Temporarily use a public token for development
-// In production, this should be stored in environment variables or Supabase secrets
-mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbHRiNTIyZ2QxMGMzMmpueGYxdmQ1c3ByIn0.xzk10uZUlzMGsaYQpxDZlA';
+// Get Mapbox token from environment variables
+const getMapboxToken = () => {
+  const token = import.meta.env.VITE_MAPBOX_TOKEN;
+  if (!token) {
+    console.error('VITE_MAPBOX_TOKEN environment variable is not set');
+    throw new Error('Mapbox token is required for map functionality');
+  }
+  return token;
+};
+
+// Set access token safely
+try {
+  mapboxgl.accessToken = getMapboxToken();
+} catch (error) {
+  console.error('Failed to initialize Mapbox:', error);
+}
 
 interface Location {
   id: string;

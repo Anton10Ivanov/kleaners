@@ -4,9 +4,28 @@ import type { Database } from '../../types/database';
 import { handleError } from '../../utils/errors';
 import { logger } from '../../utils/logging';
 
-// Use environment variables instead of hardcoded values
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://goldvhaiyzrlighyobbn.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvbGR2aGFpeXpybGlnaHlvYmJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2NTkxNzIsImV4cCI6MjA1NTIzNTE3Mn0.7RP-GHb1iNvTFwPpf3rT6q62oDasPj4UPKOL1hHz5VI';
+// Validate required environment variables
+const validateEnvironmentVariables = () => {
+  const requiredVars = {
+    VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
+    VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY
+  };
+
+  const missing = Object.entries(requiredVars)
+    .filter(([_, value]) => !value)
+    .map(([key]) => key);
+
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  }
+
+  return requiredVars;
+};
+
+// Get validated environment variables
+const env = validateEnvironmentVariables();
+const supabaseUrl = env.VITE_SUPABASE_URL;
+const supabaseKey = env.VITE_SUPABASE_ANON_KEY;
 
 // Log initialization
 logger.info('Initializing Supabase client', { supabaseUrl: supabaseUrl ? 'Configured' : 'Using fallback' });
