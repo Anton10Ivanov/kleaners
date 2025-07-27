@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import { PostConstructionBookingForm } from "@/schemas/bookingSchemas";
-import OptimizedCalendar from "@/components/booking/OptimizedCalendar";
+import { EnhancedCalendar } from "@/components/booking/EnhancedCalendar";
 
 interface PostConstructionStep2Props {
   form: UseFormReturn<PostConstructionBookingForm>;
@@ -9,10 +9,9 @@ interface PostConstructionStep2Props {
 const PostConstructionStep2 = ({ form }: PostConstructionStep2Props) => {
   return (
     <div className="space-y-6">
-      <OptimizedCalendar 
-        form={form}
-        serviceType="post-construction"
-      />
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+        <EnhancedCalendar form={form as any} />
+      </div>
     </div>
   );
 };

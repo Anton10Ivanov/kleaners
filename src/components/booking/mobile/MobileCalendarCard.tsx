@@ -30,11 +30,26 @@ export function MobileCalendarCard({
   const { getMobileSpacing, isMobile } = useMobileOptimizations();
   const [showTimeSelection, setShowTimeSelection] = useState(false);
 
-  const timeSlots = [
-    "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
-    "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM",
-    "4:00 PM", "5:00 PM", "6:00 PM"
-  ];
+  const [timeSlots] = useState([
+    { time: "09:00", available: true },
+    { time: "09:30", available: true }, 
+    { time: "10:00", available: true },
+    { time: "10:30", available: true },
+    { time: "11:00", available: true },
+    { time: "11:30", available: true },
+    { time: "12:00", available: true },
+    { time: "12:30", available: true },
+    { time: "13:00", available: true },
+    { time: "13:30", available: true },
+    { time: "14:00", available: true },
+    { time: "14:30", available: true },
+    { time: "15:00", available: true },
+    { time: "15:30", available: true },
+    { time: "16:00", available: true },
+    { time: "16:30", available: true },
+    { time: "17:00", available: true },
+    { time: "17:30", available: true },
+  ]);
 
   const handleDateSelect = (date: Date | undefined) => {
     onDateSelect(date);
@@ -97,11 +112,12 @@ export function MobileCalendarCard({
             </div>
             
             <div className="grid grid-cols-2 gap-2">
-              {timeSlots.map((time) => (
+              {timeSlots.map(({ time, available }) => (
                 <Button
                   key={time}
                   variant={selectedTime === time ? "default" : "outline"}
                   onClick={() => handleTimeSelect(time)}
+                  disabled={!available}
                   className={cn(
                     "touch-comfortable text-sm",
                     selectedTime === time && "bg-primary text-primary-foreground"

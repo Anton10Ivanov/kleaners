@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ServiceOptions from './ServiceOptions';
-import OptimizedCalendar from './OptimizedCalendar';
+import { EnhancedCalendar } from './EnhancedCalendar';
 import EnhancedExtras from './EnhancedExtras';
 import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
@@ -221,7 +221,7 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
                             Date & Time
                           </h3>
                         </div>
-                        <OptimizedCalendar form={form} />
+                        <EnhancedCalendar form={form} />
                       </div>
                     </>
                   )}
