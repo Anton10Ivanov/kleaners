@@ -3,3 +3,6 @@ project_id = "goldvhaiyzrlighyobbn"
 
 [functions.fetch-calendar-availability]
 verify_jwt = false
+
+[functions.enhanced-auth-security]
+verify_jwt = false

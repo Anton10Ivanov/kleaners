@@ -74,28 +74,43 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
+  // Generate CSS safely without dangerouslySetInnerHTML
+  const cssText = Object.entries(THEMES)
+    .map(
+      ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    // Sanitize color values to prevent CSS injection
+    const sanitizedColor = color?.replace(/[<>]/g, '').trim();
+    return sanitizedColor ? `  --color-${key}: ${sanitizedColor};` : null
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `
-          )
-          .join("\n"),
-      }}
-    />
-  )
+    )
+    .join("\n");
+
+  // Create style element programmatically for security
+  React.useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = cssText;
+    styleElement.setAttribute('data-chart-style', id);
+    document.head.appendChild(styleElement);
+
+    return () => {
+      const existingStyle = document.querySelector(`style[data-chart-style="${id}"]`);
+      if (existingStyle) {
+        document.head.removeChild(existingStyle);
+      }
+    };
+  }, [cssText, id]);
+
+  return null;
 }
 
 const ChartTooltip = RechartsPrimitive.Tooltip

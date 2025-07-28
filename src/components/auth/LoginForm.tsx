@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "./SocialLogin";
 import { logger } from "@/utils/logging";
+import { sanitizeInput, cleanupAuthState } from "@/utils/security";
 
 interface LoginFormProps {
   onResetMode: () => void;
@@ -25,10 +26,23 @@ const LoginForm = ({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clean up existing auth state
+    cleanupAuthState();
+    
+    // Attempt global sign out before new login
+    try {
+      await supabase.auth.signOut({ scope: 'global' });
+    } catch (err) {
+      // Continue even if this fails
+    }
+    
     setIsLoading(true);
     try {
+      const sanitizedEmail = sanitizeInput(email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: sanitizedEmail,
         password
       });
       
@@ -39,11 +53,10 @@ const LoginForm = ({
         description: "Successfully logged in."
       });
       
-      // Get the return URL from session storage or default to homepage
-      const returnUrl = sessionStorage.getItem('authReturnUrl') || '/';
-      sessionStorage.removeItem('authReturnUrl');
-      
-      navigate(returnUrl);
+      if (data.user) {
+        // Force page reload for clean state
+        window.location.href = '/';
+      }
     } catch (error) {
       logger.error('Login failed', { 
         error: error instanceof Error ? error.message : 'Unknown error',

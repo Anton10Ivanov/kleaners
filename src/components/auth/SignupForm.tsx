@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logger } from "@/utils/logging";
+import { validatePassword, sanitizeInput, cleanupAuthState } from "@/utils/security";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -58,6 +59,9 @@ const SignupForm = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Clean up any existing auth state
+    cleanupAuthState();
+    
     if (formData.password !== formData.confirmPassword) {
       toast({
         variant: "destructive",
@@ -67,26 +71,39 @@ const SignupForm = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
+    // Enhanced password validation
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Password must be at least 6 characters long",
+        title: "Password Requirements",
+        description: passwordValidation.errors.join(', '),
       });
       return;
     }
 
+    // Sanitize input data
+    const sanitizedData = {
+      email: sanitizeInput(formData.email),
+      firstName: sanitizeInput(formData.firstName),
+      lastName: sanitizeInput(formData.lastName),
+      userType: formData.userType
+    };
+
     setIsLoading(true);
 
     try {
+      const redirectUrl = `${window.location.origin}/`;
+      
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
+        email: sanitizedData.email,
         password: formData.password,
         options: {
+          emailRedirectTo: redirectUrl,
           data: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            user_type: formData.userType,
+            first_name: sanitizedData.firstName,
+            last_name: sanitizedData.lastName,
+            user_type: sanitizedData.userType,
           },
         },
       });
@@ -102,8 +119,8 @@ const SignupForm = () => {
           .from('profiles')
           .update({
             user_type: formData.userType,
-            first_name: formData.firstName,
-            last_name: formData.lastName
+            first_name: sanitizedData.firstName,
+            last_name: sanitizedData.lastName
           })
           .eq('id', userId);
           
@@ -113,9 +130,9 @@ const SignupForm = () => {
             .from('service_providers')
             .insert({
               id: userId,
-              email: formData.email,
-              first_name: formData.firstName,
-              last_name: formData.lastName,
+              email: sanitizedData.email,
+              first_name: sanitizedData.firstName,
+              last_name: sanitizedData.lastName,
               status: 'pending_approval',
             });
             
@@ -130,7 +147,7 @@ const SignupForm = () => {
           const { data: applicationData } = await supabase
             .from('provider_applications')
             .select('id')
-            .eq('email', formData.email)
+            .eq('email', sanitizedData.email)
             .order('created_at', { ascending: false })
             .limit(1)
             .single();
