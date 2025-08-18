@@ -40,7 +40,7 @@ const navigationData = [
     href: "/contact",
     children: [
       { title: "Get in Touch", href: "/contact" },
-      { title: "Join Our Team", href: "/join-team" }
+      { title: "Join Our Team", href: "/contact?tab=join" }
     ]
   },
   {

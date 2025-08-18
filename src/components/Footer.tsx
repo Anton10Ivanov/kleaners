@@ -122,7 +122,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/join-team" className="text-primary-foreground opacity-80 hover:text-accent hover:opacity-100 transition-colors">
+                <Link to="/contact?tab=join" className="text-primary-foreground opacity-80 hover:text-accent hover:opacity-100 transition-colors">
                   Join Our Team
                 </Link>
               </li>

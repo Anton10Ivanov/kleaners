@@ -171,7 +171,7 @@ export const navItems: NavItem[] = [
       }, {
         label: "Join Our Team",
         description: "Apply to work with us",
-        path: "/join-team"
+        path: "/contact?tab=join"
       }]
     }]
   }
