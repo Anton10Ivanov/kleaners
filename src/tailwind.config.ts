@@ -24,23 +24,24 @@ export default {
         "secondary-text": "hsl(var(--secondary-text))",
         surface: "hsl(var(--surface))",
         
-        // Yale Blue - Brand Primary (Headers, Navigation)
+        // Carrot Orange - Primary CTAs ONLY (10% usage)
         primary: {
           DEFAULT: "hsl(var(--primary))",
           hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
         },
         
-        // Hunter Green - Secondary Actions
+        // Yale Blue - Navigation & Headers (20% usage)
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          hover: "hsl(var(--accent-hover))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        
+        // Hunter Green - Secondary Actions (15% usage)
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
-        },
-        
-        // Carrot Orange - Primary CTAs
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
         },
         
         // Status colors
@@ -69,6 +70,12 @@ export default {
           foreground: "hsl(var(--muted-gold-foreground))",
         },
         "off-white": "hsl(var(--off-white))",
+        
+        // Link colors
+        link: {
+          DEFAULT: "hsl(var(--link))",
+          hover: "hsl(var(--link-hover))",
+        },
         
         // Status colors
         success: "hsl(var(--success))",

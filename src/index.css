@@ -44,47 +44,49 @@
     --layout-padding-md: 1.5rem; /* 24px */
     --layout-padding-lg: 2rem; /* 32px */
     
-    /* NEW COLOR SCHEME - Professional Service Brand */
-    /* Light Neutral Backgrounds - 70-80% coverage */
+    /* UPDATED COLOR SCHEME - Exact Usage Guidelines */
+    /* Light Neutral Backgrounds - 70% coverage */
     --background: 210 17 98; /* #F8F9FA - Light Neutral Background */
     --card: 0 0 100; /* #FFFFFF - White for cards */
     --popover: 0 0 100; /* #FFFFFF - White for popovers */
     --surface: 0 0 100; /* #FFFFFF - White surfaces */
     --input: 0 0 100; /* #FFFFFF - White form inputs */
     --off-white: 48 67 94; /* #FAF3E0 - Alternate section background */
-    
-    /* Orange - Brand Anchor, Headers, Navigation (PRIMARY) */
+
+    /* Carrot Orange - PRIMARY CTA ONLY (10% allocation) */
     --primary: 32 85 59; /* #F19A3E - Carrot Orange */
     --primary-hover: 32 85 48; /* #D97F28 - Darker orange for hover */
-    --heading-color: 32 85 59; /* #F19A3E - Headers use Orange */
-    --ring: 32 85 59; /* #F19A3E - Focus rings use Orange */
-    
-    /* Yale Blue - Secondary Actions, Support */
+    --primary-foreground: 0 0 100; /* #FFFFFF - White text on orange */
+
+    /* Yale Blue - Navigation & Headers (20% allocation) */
     --accent: 208 73 23; /* #0D3B66 - Yale Blue */
     --accent-hover: 208 73 18; /* Darker Yale Blue for hover */
     --accent-foreground: 0 0 100; /* #FFFFFF - White text on Yale Blue */
-    
-    /* Hunter Green - Secondary Actions, Support (15% allocation) */
+    --heading-color: 208 73 23; /* #0D3B66 - Headers use Yale Blue */
+    --ring: 32 85 59; /* #F19A3E - Focus rings use Orange */
+
+    /* Hunter Green - Secondary Actions (15% allocation) */
     --secondary: 124 31 32; /* #386641 - Hunter Green */
     --secondary-foreground: 0 0 100; /* #FFFFFF - White text on Hunter Green */
-    
-    /* Dark Neutral - Body text, Footer (Text elements) */
+
+    /* Dark Neutral - Body text (#222) */
     --foreground: 0 0 13; /* #222 - Dark Neutral */
     --secondary-text: 0 0 13; /* #222 - Body text */
     --card-foreground: 0 0 13; /* #222 */
     --popover-foreground: 0 0 13; /* #222 */
-    
-    /* White text on dark backgrounds */
-    --primary-foreground: 0 0 100; /* #FFFFFF - White text on Yale Blue */
-    
+
     /* Soft Gray - Borders, Form backgrounds, Dividers */
     --border: 0 0 88; /* #E0E0E0 - Soft Gray */
     --muted: 0 0 96; /* #F5F5F5 - Lighter gray for muted backgrounds */
     --muted-foreground: 0 0 40; /* #666 - Muted text */
-    
+
     /* Muted Gold - Accent highlights, Active states */
     --muted-gold: 46 73 67; /* #E9C46A - Muted Gold */
     --muted-gold-foreground: 0 0 13; /* #222 - Dark text on gold */
+
+    /* Link colors - Yale Blue, hover Orange */
+    --link: 208 73 23; /* #0D3B66 - Yale Blue */
+    --link-hover: 32 85 59; /* #F19A3E - Carrot Orange hover */
     
     /* Status Colors */
     --warning: 36 100 50; /* #FF9E00 - Warning Orange */
@@ -156,6 +158,12 @@
 
   a {
     font-family: var(--ff);
+    color: hsl(var(--link));
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: hsl(var(--link-hover));
   }
 
   button, input, select, textarea {
