@@ -3,6 +3,7 @@
 
 @import "./styles/componentLibrary.css";
 @import "./styles/animations.css";
+@import "./styles/hero-animations.css";
 @import "./styles/mobileOptimizations.css";
 @import "./styles/visualHarmonization.css";
 @import "./styles/globals.css";

@@ -2,6 +2,7 @@ import { useEffect, memo } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { HeroForm } from "./HeroForm";
 import { HeroProvider } from "./HeroContext";
+import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
 import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
@@ -49,23 +50,8 @@ export const Hero = memo(({
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
-      {/* Background Image - Desktop only */}
-      {!isMobile && (
-        <div 
-          className="absolute inset-0 w-full h-full bg-muted"
-          style={{
-            backgroundImage: `url('/lovable-uploads/d0852217-53a8-414a-b080-073eec924014.png')`,
-            backgroundSize: 'contain',
-            backgroundPosition: 'center center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-      )}
-      
-      {/* Mobile background - solid color */}
-      {isMobile && (
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20" />
-      )}
+      {/* Custom designed background */}
+      <BackgroundElements />
       
       <HeroProvider 
         initialService="" 
