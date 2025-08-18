@@ -95,8 +95,8 @@ export const HeroContent = memo(({ onGetQuote }: HeroContentProps) => {
               className="w-full h-auto object-cover rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500"
             />
             
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -left-6 bg-accent text-accent-foreground px-6 py-4 rounded-2xl shadow-lg">
+            {/* Floating badge - Hunter Green for secondary support */}
+            <div className="absolute -bottom-6 -left-6 bg-secondary text-secondary-foreground px-6 py-4 rounded-2xl shadow-lg">
               <div className="text-2xl font-bold">2.5K+</div>
               <div className="text-sm opacity-90">Happy Clients</div>
             </div>

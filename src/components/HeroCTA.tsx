@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const HeroCTA = () => {
   return (
     <section
-      className="bg-primary text-primary-foreground pb-16"
+      className="bg-secondary text-secondary-foreground pb-16"
       // pt-16 mobile, pt-[64px] md+ (so background always goes under navbar)
       style={{ paddingTop: '64px' }}
     >
@@ -16,14 +16,14 @@ const HeroCTA = () => {
             <span className="inline-block text-warning font-semibold text-sm uppercase tracking-wider mb-2 animate-pulse">
               ⭐ Premium Service Available
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary-foreground leading-tight">
               Ready to experience 
               <span className="block text-accent font-extrabold">spotless cleaning?</span>
             </h2>
-            <p className="text-lg md:text-xl text-primary-foreground/90 max-w-2xl leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-secondary-foreground/90 max-w-2xl leading-relaxed font-medium">
               Transform your space with our professional cleaning service. Book today and discover the difference quality makes.
             </p>
-            <div className="flex items-center gap-4 text-sm text-primary-foreground/80">
+            <div className="flex items-center gap-4 text-sm text-secondary-foreground/80">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
                 <span>Instant Booking</span>
@@ -47,7 +47,7 @@ const HeroCTA = () => {
                   <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <p className="text-center text-primary-foreground/70 text-sm font-medium">
+              <p className="text-center text-secondary-foreground/70 text-sm font-medium">
                 ⚡ 2-minute form • Instant pricing
               </p>
             </div>
