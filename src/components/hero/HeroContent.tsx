@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import heroCleanerImage from "@/assets/hero-cleaner-orange.jpg";
 
 interface HeroContentProps {
   onGetQuote: () => void;
@@ -28,7 +29,7 @@ export const HeroContent = memo(({ onGetQuote }: HeroContentProps) => {
         <Button 
           onClick={onGetQuote}
           size="lg"
-          className={`bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all duration-300 ${isMobile ? 'w-full' : 'w-auto'}`}
+          className={`bg-primary hover:bg-primary-hover text-primary-foreground font-semibold rounded-full px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all duration-300 ${isMobile ? 'w-full' : 'w-auto'}`}
         >
           Get an Instant Quote
         </Button>
@@ -39,8 +40,8 @@ export const HeroContent = memo(({ onGetQuote }: HeroContentProps) => {
         <div className="flex justify-center items-center">
           <div className="relative w-full max-w-md">
             <img 
-              src="/lovable-uploads/1272a6a1-a120-49b1-aa28-d9e5631c14b2.png"
-              alt="Happy cleaning service professional"
+              src={heroCleanerImage}
+              alt="Professional cleaning service specialist with orange uniform"
               className="w-full h-auto object-cover rounded-2xl shadow-lg"
             />
           </div>
