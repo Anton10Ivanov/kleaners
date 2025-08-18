@@ -113,7 +113,7 @@ const HomePage = () => {
 
 
   return (
-    <div className="min-h-screen font-raleway bg-section-primary transition-colors duration-300">
+    <div className="min-h-screen font-raleway bg-background transition-colors duration-300">
       <AnimatePresence mode="wait">
         {currentStep === 1 ? (
           <motion.div
@@ -121,7 +121,7 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="bg-section-primary"
+            className="bg-background"
           >
             <Hero 
               postalCode={postalCode}
@@ -129,32 +129,38 @@ const HomePage = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            {/* Consolidated trust and benefits section */}
-            <ConsolidatedTrustSection />
+            {/* Professional section spacing and backgrounds */}
+            <div className="bg-muted/30">
+              <ConsolidatedTrustSection />
+            </div>
             
-            {/* Enhanced how it works section */}
-            <EnhancedProcessSteps />
+            <div className="bg-background">
+              <EnhancedProcessSteps />
+            </div>
             
-            {/* Enhanced Service Categories Section */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<SectionLoading />}>
-                <EnhancedServiceCategoriesSection />
-              </Suspense>
-            </ErrorBoundary>
+            <div className="bg-muted/20">
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<SectionLoading />}>
+                  <EnhancedServiceCategoriesSection />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
             
-            {/* Enhanced Business Solutions Section */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<SectionLoading />}>
-                <EnhancedBusinessSolutionsSection />
-              </Suspense>
-            </ErrorBoundary>
+            <div className="bg-background">
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<SectionLoading />}>
+                  <EnhancedBusinessSolutionsSection />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
             
-            {/* Why Choose Us, Testimonials, FAQ Section */}
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <Suspense fallback={<SectionLoading />}>
-                <LazyHomeSections />
-              </Suspense>
-            </ErrorBoundary>
+            <div className="bg-muted/30">
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<SectionLoading />}>
+                  <LazyHomeSections />
+                </Suspense>
+              </ErrorBoundary>
+            </div>
           </motion.div>
         ) : (
           <BookingSteps

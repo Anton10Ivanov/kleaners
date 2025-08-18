@@ -47,12 +47,12 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full min-h-screen overflow-hidden pt-16">
       {/* Clean background */}
       <BackgroundElements />
       
-      {/* Content container */}
-      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+      {/* Content container with proper spacing */}
+      <div className="relative z-10 flex items-center justify-center px-6 sm:px-8 lg:px-12 py-20 lg:py-32">
         <div className="w-full max-w-7xl mx-auto">
           <HeroContent onGetQuote={handleValidatedNextStep} />
         </div>
