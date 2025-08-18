@@ -53,7 +53,7 @@ const HomePage = () => {
   }, [startTimer, endTimer]);
 
   // Memoized watched values
-  const selectedService = watch('service');
+  const selectedService = watch('service') || '';
   const frequency = watch('frequency');
   const hours = watch('hours');
   const selectedExtras = watch('extras') || [];
@@ -111,6 +111,12 @@ const HomePage = () => {
     if (import.meta.env.DEV) endTimer('setPostalCodeInteraction');
   }, [setValue, startTimer, endTimer]);
 
+  const setSelectedService = useCallback((service: string) => {
+    if (import.meta.env.DEV) startTimer('setSelectedServiceInteraction');
+    setValue('service', service);
+    if (import.meta.env.DEV) endTimer('setSelectedServiceInteraction');
+  }, [setValue, startTimer, endTimer]);
+
 
   return (
     <div className="min-h-screen font-raleway bg-background transition-colors duration-300">
@@ -126,6 +132,8 @@ const HomePage = () => {
             <Hero 
               postalCode={postalCode}
               setPostalCode={setPostalCode}
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
               handleNextStep={handleHeroNextStep}
             />
             

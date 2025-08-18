@@ -1,27 +1,46 @@
 
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { PostalCodeInput } from "./PostalCodeInput";
 import { SubmitButton } from "./SubmitButton";
+import { ServiceTypeGrid } from "./ServiceTypeGrid";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface HeroFormProps {
   postalCode: string;
   setPostalCode: (value: string) => void;
+  selectedService: string;
+  setSelectedService: (value: string) => void;
   handleNextStep: () => void;
 }
 
 export const HeroForm = memo(({
   postalCode,
   setPostalCode,
+  selectedService,
+  setSelectedService,
   handleNextStep
 }: HeroFormProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
+  // Auto-advance when both postal code and service are selected
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (postalCode && postalCode.length >= 4 && selectedService) {
+        handleNextStep();
+      }
+    }, 800); // Small delay for better UX
+    
+    return () => clearTimeout(timer);
+  }, [postalCode, selectedService, handleNextStep]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleNextStep();
+    if (postalCode && selectedService) {
+      handleNextStep();
+    }
   };
 
   return (
@@ -66,11 +85,43 @@ export const HeroForm = memo(({
           </div>
         )}
 
-        {/* Location Input */}
-        <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} />
+        {/* Step 1: Location Input */}
+        <div className="space-y-4">
+          <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} />
+          
+          {/* Step 2: Service Type Selection - Shows after postal code */}
+          {postalCode && postalCode.length >= 4 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="border-secondary/20">
+                <CardContent className="pt-4">
+                  <h4 className="text-sm font-medium text-secondary mb-3">Select Service Type</h4>
+                  <ServiceTypeGrid 
+                    selectedService={selectedService}
+                    setSelectedService={setSelectedService}
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Auto-advancing status indicator */}
+        {postalCode && postalCode.length >= 4 && selectedService && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-sm text-secondary font-medium"
+          >
+            ✓ Preparing your personalized quote...
+          </motion.div>
+        )}
         
-        {/* CTA Button */}
-        <SubmitButton />
+        {/* CTA Button - Only show if manual submit needed */}
+        {(!postalCode || postalCode.length < 4 || !selectedService) && <SubmitButton />}
       </motion.form>
     </motion.div>
   );
