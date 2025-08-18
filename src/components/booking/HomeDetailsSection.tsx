@@ -74,13 +74,23 @@ export const HomeDetailsSection = ({
   }, [cleaningPace, allFieldsFilled, durationChoiceMade, propertySize, bedrooms, bathrooms, form]);
   
   useEffect(() => {
-    if (allFieldsFilled && shouldSuggestDeepCleaning && !durationChoiceMade) {
+    const frequency = form.watch('frequency');
+    
+    // Only suggest deep cleaning for recurring services (not one-time)
+    // and when property is significantly large or has many bathrooms
+    const shouldShowDeepCleaningPopup = allFieldsFilled && 
+                                       shouldSuggestDeepCleaning && 
+                                       !durationChoiceMade &&
+                                       frequency !== 'one-time' && // Don't show for one-time cleaning
+                                       (propertySize > 120 || bathrooms! > 3); // Stricter conditions
+    
+    if (shouldShowDeepCleaningPopup) {
       setShowDeepCleaningPopup(true);
-    } else if (allFieldsFilled && !shouldSuggestDeepCleaning && !durationChoiceMade) {
-      // Show duration dialog when all fields are filled
+    } else if (allFieldsFilled && !durationChoiceMade) {
+      // Show duration dialog when all fields are filled and no deep cleaning popup
       setShowDurationDialog(true);
     }
-  }, [allFieldsFilled, shouldSuggestDeepCleaning, durationChoiceMade]);
+  }, [allFieldsFilled, shouldSuggestDeepCleaning, durationChoiceMade, form, propertySize, bathrooms]);
 
   const handleDurationChoice = (useSuggested: boolean) => {
     setShowDurationDialog(false);
