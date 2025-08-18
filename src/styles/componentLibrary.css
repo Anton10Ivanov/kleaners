@@ -106,11 +106,19 @@
   }
 
   .container-lg {
-    @apply container-base max-w-4xl lg:px-8;
+    @apply container-base max-w-[90%] lg:px-8;
   }
 
   .container-xl {
-    @apply container-base max-w-6xl lg:px-8;
+    @apply container-base max-w-[95%] lg:px-8;
+  }
+
+  .container-wide {
+    @apply container-base max-w-[90%] lg:px-8;
+  }
+
+  .container-ultra-wide {
+    @apply container-base max-w-[95%] lg:px-8;
   }
 
   /* Section spacing */

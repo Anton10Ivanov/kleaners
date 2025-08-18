@@ -12,7 +12,7 @@ const Footer = () => {
 
   return (
     <footer className="pt-16 pb-8 bg-primary text-primary-foreground relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[12px]">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">

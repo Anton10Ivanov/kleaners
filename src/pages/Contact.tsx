@@ -185,7 +185,7 @@ const Contact = () => {
     return <SuccessSubmission email={teamEmail} applicationId={applicationId} />;
   }
   return <div className="min-h-screen pt-24 pb-16 px-4 bg-background">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-[90%] mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-heading-color mb-4">
