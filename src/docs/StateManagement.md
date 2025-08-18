@@ -17,10 +17,12 @@ Zustand provides several advantages for our application:
 
 We organize our Zustand stores by domain:
 
-- `useBookingStore` - Manages booking form state and persistence
+- `useBookingStore` - Simplified store for booking form reset functionality
 - `useUserSettingsStore` - Manages user preferences and settings
 - `useAuthStore` - Manages authentication state (future)
 - `useNotificationStore` - Manages notifications (future)
+
+Note: Enhanced form persistence is now handled by `enhancedFormPersistence` utility with auto-save functionality.
 
 ## Store Implementation Pattern
 
