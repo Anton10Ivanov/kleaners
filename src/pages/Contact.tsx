@@ -7,10 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Mail, Phone, MessageCircle, Clock, Shield, CheckCircle, AlertCircle, MessageSquare, MapPin, Calendar, Users } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Clock, CheckCircle, Users } from 'lucide-react';
 
 // Import Join Team components
 import { useJoinTeamForm } from '@/hooks/useJoinTeamForm';
@@ -22,8 +21,6 @@ const Contact = () => {
   const [activeTab, setActiveTab] = useState('contact');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
@@ -95,7 +92,7 @@ const Contact = () => {
 
     // Basic spam detection
     const spamKeywords = ['crypto', 'bitcoin', 'investment', 'forex', 'loan', 'casino'];
-    const messageContent = `${name} ${email} ${subject} ${message}`.toLowerCase();
+    const messageContent = `${name} ${email} ${message}`.toLowerCase();
     const hasSpam = spamKeywords.some(keyword => messageContent.includes(keyword));
     if (hasSpam) {
       toast.error('Your message appears to contain spam content');
@@ -109,8 +106,8 @@ const Contact = () => {
       } = await supabase.from('customer_questions').insert([{
         name: name.trim(),
         email: email.trim(),
-        phone: phone.trim() || null,
-        subject: subject.trim() || 'General Inquiry',
+        phone: null,
+        subject: 'General Inquiry',
         message: message.trim(),
         status: 'new',
         priority: 'medium',
@@ -140,8 +137,6 @@ const Contact = () => {
       // Reset form
       setName('');
       setEmail('');
-      setPhone('');
-      setSubject('');
       setMessage('');
     } catch (error) {
       console.error('Error submitting question:', error);
@@ -153,32 +148,20 @@ const Contact = () => {
   const contactMethods = [{
     icon: Mail,
     title: 'Email Us',
-    description: 'Get in touch via email',
     value: 'info@kleaners.de',
     action: () => window.location.href = 'mailto:info@kleaners.de'
   }, {
     icon: Phone,
     title: 'Call Us',
-    description: 'Speak directly with our team',
     value: '+49 123 456 789',
     action: () => window.location.href = 'tel:+49123456789'
   }, {
     icon: MessageCircle,
     title: 'WhatsApp',
-    description: 'Chat with us on WhatsApp',
     value: 'Message Us',
     action: () => window.open('https://wa.me/49123456789', '_blank')
-  }, {
-    icon: MessageSquare,
-    title: 'Live Chat',
-    description: 'Start a live conversation',
-    value: 'Chat Now',
-    action: () => {
-      // Implement live chat integration here
-      toast.info('Live chat will be available soon!');
-    }
   }];
-  const supportFeatures = ['Quick response within 24 hours', 'Professional consultation', 'Free quotes and estimates', 'Flexible scheduling options'];
+  
 
   // Handle join team application success
   if (applicationSubmitted) {
@@ -215,13 +198,7 @@ const Contact = () => {
               {/* Contact Form */}
               <Card className="h-fit">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5 text-primary" />
-                    Send us a Message
-                  </CardTitle>
-                  <CardDescription>
-                    Fill out the form below and we'll get back to you as soon as possible
-                  </CardDescription>
+                  <CardTitle>Send us a Message</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -235,15 +212,6 @@ const Contact = () => {
                       <Input id="email" type="email" placeholder="your.email@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
                     </div>
                     
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input id="phone" type="tel" placeholder="+49 123 456 789" value={phone} onChange={e => setPhone(e.target.value)} />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Subject</Label>
-                      <Input id="subject" type="text" placeholder="What's this about?" value={subject} onChange={e => setSubject(e.target.value)} />
-                    </div>
                     
                     <div className="space-y-2">
                       <Label htmlFor="message">Message *</Label>
@@ -258,62 +226,41 @@ const Contact = () => {
               </Card>
 
               {/* Contact Methods */}
-              <div className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Other Ways to Reach Us</CardTitle>
-                    <CardDescription>
-                      Choose the method that works best for you
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {contactMethods.map((method, index) => <div key={index} onClick={method.action} className="flex items-center gap-4 p-4 rounded-lg border hover:bg-muted cursor-pointer transition-colors">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <method.icon className="h-6 w-6 text-primary" />
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Other Ways to Reach Us</h3>
+                  <div className="space-y-3">
+                    {contactMethods.map((method, index) => 
+                      <div key={index} onClick={method.action} className="flex items-center gap-4 p-4 rounded-lg hover:bg-muted cursor-pointer transition-colors">
+                        <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <method.icon className="h-5 w-5 text-primary" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-medium text-foreground">
-                            {method.title}
-                          </h3>
-                          <p className="text-sm text-secondary-text">
-                            {method.description}
-                          </p>
-                          <p className="text-sm font-medium text-primary">
-                            {method.value}
-                          </p>
+                          <h4 className="font-medium text-foreground">{method.title}</h4>
+                          <p className="text-sm font-medium text-primary">{method.value}</p>
                         </div>
-                      </div>)}
-                  </CardContent>
-                </Card>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
                 {/* Business Hours */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-primary" />
-                      Business Hours
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-primary" />
+                    Business Hours
+                  </h3>
+                  <div className="space-y-2 p-4 rounded-lg bg-muted/50">
                     <div className="flex justify-between items-center">
-                      <span className="text-secondary-text">Monday - Friday</span>
+                      <span className="text-secondary-text">Weekdays</span>
                       <span className="font-medium">8:00 AM - 8:00 PM</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-secondary-text">Saturday</span>
+                      <span className="text-secondary-text">Weekends</span>
                       <span className="font-medium">9:00 AM - 6:00 PM</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-secondary-text">Sunday</span>
-                      <span className="font-medium">10:00 AM - 4:00 PM</span>
-                    </div>
-                    <Separator className="my-2" />
-                    <div className="flex items-center gap-2 text-sm text-secondary-text">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Emergency services available 24/7
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             </div>
           </TabsContent>
