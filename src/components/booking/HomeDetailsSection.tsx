@@ -76,15 +76,17 @@ export const HomeDetailsSection = ({
   useEffect(() => {
     const frequency = form.watch('frequency');
     
+    // Only show dialogs if user hasn't made a duration choice yet
+    if (durationChoiceMade) return;
+    
     // Show deep cleaning popup for one-time home cleaning when conditions are met
     const shouldShowDeepCleaningPopup = allFieldsFilled && 
                                        shouldSuggestDeepCleaning && 
-                                       !durationChoiceMade &&
                                        frequency === 'one-time'; // Show specifically for one-time cleaning
     
     if (shouldShowDeepCleaningPopup) {
       setShowDeepCleaningPopup(true);
-    } else if (allFieldsFilled && !durationChoiceMade) {
+    } else if (allFieldsFilled) {
       // Show duration dialog when all fields are filled and no deep cleaning popup
       setShowDurationDialog(true);
     }
