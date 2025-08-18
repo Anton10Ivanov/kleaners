@@ -1,6 +1,5 @@
 
 import { cn } from "@/lib/utils";
-import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
 
 interface ResponsiveGridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -14,8 +13,8 @@ interface ResponsiveGridProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Enhanced responsive grid component with design token integration
- * Automatically adapts to screen sizes with mobile-first approach
+ * Responsive grid component using unified Tailwind responsive classes
+ * Mobile-first approach with consistent breakpoints
  */
 export function ResponsiveGrid({
   children,
@@ -25,8 +24,6 @@ export function ResponsiveGrid({
   align = "stretch",
   ...props
 }: ResponsiveGridProps) {
-  const { isMobile, isTablet } = useMobileOptimizations();
-
   const gapClasses = {
     none: "gap-0",
     xs: "gap-1",
@@ -43,17 +40,18 @@ export function ResponsiveGrid({
     stretch: "items-stretch",
   };
 
-  const getGridCols = () => {
-    if (isMobile) return `grid-cols-${cols.mobile || 1}`;
-    if (isTablet) return `grid-cols-${cols.tablet || 2}`;
-    return `grid-cols-${cols.desktop || 3}`;
+  const getGridColsClass = () => {
+    const mobile = `grid-cols-${cols.mobile || 1}`;
+    const tablet = `sm:grid-cols-${cols.tablet || 2}`;
+    const desktop = `lg:grid-cols-${cols.desktop || 3}`;
+    return `${mobile} ${tablet} ${desktop}`;
   };
 
   return (
     <div
       className={cn(
         "grid w-full",
-        getGridCols(),
+        getGridColsClass(),
         gapClasses[gap],
         alignClasses[align],
         className

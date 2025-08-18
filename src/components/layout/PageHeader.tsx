@@ -1,6 +1,6 @@
 
 import { cn } from "@/lib/utils";
-import { Container } from "./Container";
+import { UnifiedContainer } from "./UnifiedContainer";
 
 interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -41,7 +41,7 @@ export function PageHeader({
 
   return (
     <div className={cn("border-b", sizeClasses[size], className)} {...props}>
-      <Container>
+      <UnifiedContainer>
         <div className={cn("flex flex-col gap-2", alignClasses[align])}>
           <div className="flex items-center justify-between gap-4">
             <h1 className={cn(
@@ -62,7 +62,7 @@ export function PageHeader({
             </p>
           )}
         </div>
-      </Container>
+      </UnifiedContainer>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 
 import { cn } from "@/lib/utils";
-import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
 
 interface LayoutSectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
@@ -11,7 +10,7 @@ interface LayoutSectionProps extends React.HTMLAttributes<HTMLElement> {
 
 /**
  * Standardized section component with consistent vertical rhythm
- * Uses design tokens for spacing and background colors
+ * Uses unified responsive design tokens
  */
 export function LayoutSection({
   children,
@@ -21,8 +20,6 @@ export function LayoutSection({
   as: Component = "section",
   ...props
 }: LayoutSectionProps) {
-  const { getMobileSpacing } = useMobileOptimizations();
-
   const spacingClasses = {
     none: "py-0",
     sm: "py-4",

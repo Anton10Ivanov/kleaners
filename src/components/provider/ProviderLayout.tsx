@@ -5,7 +5,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProviderBottomNav from "./ProviderBottomNav";
 import { TopNav } from "./TopNav";
-import { Container } from "@/components/layout/Container";
+import { UnifiedContainer } from "@/components/layout/UnifiedContainer";
 import { supabase } from "@/integrations/supabase/client";
 
 const ProviderLayout = () => {
@@ -36,9 +36,9 @@ const ProviderLayout = () => {
       
       <main className="flex-1 overflow-auto p-3 md:p-6">
         <ScrollArea className="h-full">
-          <Container size="2xl" className="py-2">
-            <Outlet />
-          </Container>
+        <UnifiedContainer size="xl" className="py-2">
+          <Outlet />
+        </UnifiedContainer>
           {/* Add padding at the bottom on mobile to account for the bottom nav */}
           {isMobile && <div className="h-16" />}
         </ScrollArea>

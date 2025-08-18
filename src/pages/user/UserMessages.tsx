@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Container } from '@/components/layout/Container';
+import { UnifiedContainer } from '@/components/layout/UnifiedContainer';
 import { Box } from '@/components/layout/Box';
 import { useToast } from '@/hooks/use-toast';
 import ChatInterface from '@/components/chat/ChatInterface';
@@ -53,7 +53,7 @@ const UserMessages = () => {
   };
   
   return (
-    <Container>
+    <UnifiedContainer>
       <h1 className="text-2xl font-bold mb-6 mt-8">Messages</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -92,7 +92,7 @@ const UserMessages = () => {
           )}
         </div>
       </div>
-    </Container>
+    </UnifiedContainer>
   );
 };
 
