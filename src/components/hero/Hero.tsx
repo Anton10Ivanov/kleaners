@@ -1,10 +1,8 @@
 import { useEffect, memo } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { HeroForm } from "./HeroForm";
-import { HeroProvider } from "./HeroContext";
+import { HeroContent } from "./HeroContent";
 import { BackgroundElements } from "./BackgroundElements";
 import { toast } from "sonner";
-import { ServiceType } from "@/schemas/booking";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";
@@ -49,26 +47,14 @@ export const Hero = memo(({
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
-      {/* Custom designed background */}
+    <section className="relative w-full min-h-screen overflow-hidden">
+      {/* Clean background */}
       <BackgroundElements />
       
-      {/* Creative positioning container */}
-      <div className="relative z-10 h-full flex items-center justify-start px-8 lg:px-16">
-        <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl">
-          <HeroProvider 
-            initialService="" 
-            initialPostalCode={postalCode} 
-            onNextStep={handleValidatedNextStep} 
-            onServiceChange={() => {}} 
-            onPostalCodeChange={setPostalCode}
-          >
-            <HeroForm 
-              postalCode={postalCode} 
-              setPostalCode={setPostalCode} 
-              handleNextStep={handleValidatedNextStep} 
-            />
-          </HeroProvider>
+      {/* Content container */}
+      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <div className="w-full max-w-7xl mx-auto">
+          <HeroContent onGetQuote={handleValidatedNextStep} />
         </div>
       </div>
     </section>
