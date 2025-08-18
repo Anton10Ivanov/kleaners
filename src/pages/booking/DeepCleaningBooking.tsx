@@ -40,6 +40,29 @@ const DeepCleaningBooking = () => {
     },
   });
 
+  // Auto-progression logic
+  const checkStepCompletion = (step: number): boolean => {
+    const values = form.getValues();
+    switch (step) {
+      case 1:
+        return !!(values.squareMeters && values.bedrooms && values.bathrooms && values.targetAreas?.length);
+      case 2:
+        return !!(values.selectedDate && values.selectedTime);
+      default:
+        return false;
+    }
+  };
+
+  // Auto-advance when step is complete
+  useState(() => {
+    const subscription = form.watch((values) => {
+      if (currentStep === 1 && checkStepCompletion(1)) {
+        setTimeout(() => setCurrentStep(2), 800);
+      }
+    });
+    return () => subscription.unsubscribe();
+  });
+
   const handleNext = () => {
     setCurrentStep(prev => Math.min(prev + 1, 3));
   };
@@ -83,7 +106,7 @@ const DeepCleaningBooking = () => {
       totalSteps={3}
       onBack={handleBack}
       onNext={currentStep < 3 ? handleNext : undefined}
-      canProceed={true}
+      canProceed={checkStepCompletion(currentStep) || currentStep === 3}
       showBackButton={true}
       nextButtonText={currentStep === 3 ? undefined : 'Continue'}
     >
