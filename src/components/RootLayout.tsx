@@ -12,7 +12,7 @@ const RootLayout = () => {
   const isHomePage = location.pathname === "/";
   
   return (
-    <div className="min-h-screen flex flex-col bg-surface-blue transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-background transition-colors duration-300">
       <Navbar />
       <main className="flex-grow w-full">
         {/* Removed pt-16 to eliminate gap between navbar and content */}

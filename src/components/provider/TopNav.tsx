@@ -27,7 +27,7 @@ export const TopNav = () => {
   ];
   
   return (
-    <div className="bg-white dark:bg-gray-800 overflow-x-auto">
+    <div className="bg-primary dark:bg-primary overflow-x-auto">
       <div className="flex space-x-1 px-2 py-3">
         {navItems.map((item) => (
           <Link
@@ -36,8 +36,8 @@ export const TopNav = () => {
             className={cn(
               "flex items-center px-3 py-2 text-sm font-medium rounded-md whitespace-nowrap",
               currentPath === item.path
-                ? "bg-primary/10 text-primary"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700"
+                ? "bg-accent/10 text-accent"
+                : "text-primary-foreground hover:text-accent hover:bg-accent/10"
             )}
           >
             {item.icon}

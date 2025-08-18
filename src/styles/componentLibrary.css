@@ -14,16 +14,19 @@
     min-height: var(--touch-comfortable);
   }
 
+  /* Carrot Orange - Primary CTAs (10-15% usage) */
   .btn-primary {
-    @apply btn-base bg-primary hover:bg-primary-hover text-primary-foreground;
+    @apply btn-base bg-accent hover:bg-accent-hover text-accent-foreground;
     @apply px-6 py-3 shadow-sm hover:shadow-md;
   }
 
+  /* Hunter Green - Secondary Actions (15% usage) */
   .btn-secondary {
     @apply btn-base bg-secondary hover:bg-secondary/90 text-secondary-foreground;
     @apply px-6 py-3 shadow-sm hover:shadow-md;
   }
 
+  /* Yale Blue Outline - Brand color outline */
   .btn-outline {
     @apply btn-base border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
     @apply px-6 py-3;

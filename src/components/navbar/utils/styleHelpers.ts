@@ -20,7 +20,7 @@ export const navbarStyles = {
     base: "navbar-btn",
     ghost: "navbar-btn-ghost",
     contextual: "navbar-btn-contextual",
-    primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+    primary: "bg-accent text-accent-foreground hover:bg-accent-hover",
     secondary: "bg-secondary/10 text-secondary-foreground hover:bg-secondary/20"
   },
 
