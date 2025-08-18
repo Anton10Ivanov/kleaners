@@ -5,7 +5,14 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Building2, Shield, Trash2, Key } from 'lucide-react';
-import { ConditionalFields, PropertySizeField, BedroomsField, BathroomsField, ExtrasField } from '@/components/booking/shared/SharedFields';
+import { 
+  WebFriendlyPropertySizeField,
+  WebFriendlyBedroomsField,
+  WebFriendlyBathroomsField,
+  WebFriendlyDirtinessLevelField
+} from '@/components/booking/shared/WebFriendlyFields';
+import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
+import { ConditionalFields, DisinfectionRequiredField } from '@/components/booking/shared/SharedFields';
 import { ServiceType } from '@/schemas/booking';
 
 interface EnhancedMoveInOutFieldsProps {
@@ -21,13 +28,16 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
       </div>
 
       {/* Square Meters */}
-      <PropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
+      <WebFriendlyPropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
 
       {/* Bedrooms */}
-      <BedroomsField form={form} />
+      <WebFriendlyBedroomsField form={form} />
 
       {/* Bathrooms */}
-      <BathroomsField form={form} />
+      <WebFriendlyBathroomsField form={form} />
+
+      {/* Dirtiness Level */}
+      <WebFriendlyDirtinessLevelField form={form} />
 
       {/* Cleaning Goal */}
       <FormField
@@ -152,8 +162,15 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
         )}
       />
 
-      {/* Extras */}
-      <ExtrasField form={form} serviceType={ServiceType.MoveInOut} />
+      {/* Flattened Extras */}
+      <FlatExtrasSelector
+        serviceType={ServiceType.MoveInOut}
+        selectedExtras={(form.watch('extras') || []) as any}
+        onExtrasChange={(extras) => form.setValue('extras', extras as any)}
+      />
+
+      {/* Disinfection Required */}
+      <DisinfectionRequiredField form={form} />
 
       {/* Shared Fields */}
       <ConditionalFields form={form} serviceType={ServiceType.MoveInOut} />
