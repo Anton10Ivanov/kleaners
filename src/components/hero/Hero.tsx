@@ -10,12 +10,16 @@ import environmentUtils from "@/utils/environment";
 interface HeroProps {
   postalCode: string;
   setPostalCode: (value: string) => void;
+  selectedService: string;
+  setSelectedService: (value: string) => void;
   handleNextStep: () => void;
 }
 
 export const Hero = memo(({
   postalCode,
   setPostalCode,
+  selectedService,
+  setSelectedService,
   handleNextStep
 }: HeroProps) => {
   const {
@@ -38,7 +42,12 @@ export const Hero = memo(({
   const handleValidatedNextStep = () => {
     startTimer('validateAndNextStep');
     if (!postalCode) {
-      toast.error("Please enter your city or area code");
+      toast.error("Please enter your postal code");
+      endTimer('validateAndNextStep');
+      return;
+    }
+    if (!selectedService) {
+      toast.error("Please select a service type");
       endTimer('validateAndNextStep');
       return;
     }

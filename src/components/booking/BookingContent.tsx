@@ -25,6 +25,7 @@ interface BookingContentProps {
   currentStep: number;
   selectedService: string;
   form: ReturnType<typeof useForm<BookingFormData>>;
+  handleNext?: () => void;
 }
 
 const fadeVariant = {
@@ -70,7 +71,7 @@ const serviceOptions = [
   },
 ];
 
-const BookingContent = ({ currentStep, selectedService, form }: BookingContentProps) => {
+const BookingContent = ({ currentStep, selectedService, form, handleNext }: BookingContentProps) => {
   const { submitBooking } = useBookingSubmission();
   const frequency = form.watch('frequency') as Frequency | undefined;
   const hours = form.watch('hours') || 2;

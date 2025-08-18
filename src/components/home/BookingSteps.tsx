@@ -73,6 +73,7 @@ export const BookingSteps = ({
               currentStep={currentStep}
               selectedService={selectedService}
               form={form}
+              handleNext={handleNext}
             />
           </Suspense>
         </ErrorBoundary>
