@@ -104,11 +104,6 @@ const HomePage = () => {
     if (import.meta.env.DEV) endTimer('heroNextStepInteraction');
   }, [handleNextStep, startTimer, endTimer]);
 
-  const setSelectedService = useCallback((service: ServiceType | string) => {
-    if (import.meta.env.DEV) startTimer('setServiceInteraction');
-    setValue('service', service as ServiceType);
-    if (import.meta.env.DEV) endTimer('setServiceInteraction');
-  }, [setValue, startTimer, endTimer]);
 
   const setPostalCode = useCallback((code: string) => {
     if (import.meta.env.DEV) startTimer('setPostalCodeInteraction');
@@ -129,8 +124,6 @@ const HomePage = () => {
             className="bg-section-primary"
           >
             <Hero 
-              selectedService={selectedService || ''}
-              setSelectedService={setSelectedService}
               postalCode={postalCode}
               setPostalCode={setPostalCode}
               handleNextStep={handleHeroNextStep}
