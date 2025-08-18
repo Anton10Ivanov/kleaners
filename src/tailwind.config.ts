@@ -42,7 +42,6 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        "accent-hover": "hsl(var(--accent-hover))",
         
         // Status colors
         destructive: {
