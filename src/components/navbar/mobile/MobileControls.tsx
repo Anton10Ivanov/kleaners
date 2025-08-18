@@ -1,6 +1,8 @@
 
+import { Menu, Calendar, LogIn } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { MobileUserControls, MobileMenuToggle } from '../';
+import { Button } from '@/components/ui/button';
 
 interface MobileControlsProps {
   user: any;
@@ -15,26 +17,47 @@ export const MobileControls = ({
   isMenuOpen, 
   setIsMenuOpen 
 }: MobileControlsProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className={cn(
-      "md:hidden flex items-center",
-      "gap-2 min-h-[48px]" // Ensure mobile touch target height
-    )}>
+    <div className="flex md:hidden items-center gap-1">
       {user && (
-        <div className="touch-comfortable">
-          <MobileUserControls 
-            user={user} 
-            handleBookingsClick={handleBookingsClick} 
-          />
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleBookingsClick}
+          className="h-10 w-10 p-0 hover:bg-muted"
+          aria-label="View bookings"
+        >
+          <Calendar className="h-5 w-5 text-secondary-text" />
+        </Button>
       )}
       
-      <div className="touch-comfortable">
-        <MobileMenuToggle 
-          isMenuOpen={isMenuOpen} 
-          setIsMenuOpen={setIsMenuOpen} 
-        />
-      </div>
+      {!user && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate('/auth/login')}
+          className="h-10 w-10 p-0 hover:bg-muted"
+          aria-label="Login"
+        >
+          <LogIn className="h-5 w-5 text-secondary-text" />
+        </Button>
+      )}
+      
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className={cn(
+          "h-10 w-10 p-0 hover:bg-muted transition-colors",
+          isMenuOpen && "bg-primary/10 text-primary"
+        )}
+        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isMenuOpen}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
     </div>
   );
 };
