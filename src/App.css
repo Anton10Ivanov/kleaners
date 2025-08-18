@@ -3,8 +3,9 @@
    and place padding on content sections as needed instead. */
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  /* Removed max-width constraint for full-screen layout */
+  width: 100%;
+  margin: 0;
   /* Removed the global padding for better navbar-Hero integration */
   text-align: center;
   min-height: 100vh;
@@ -125,13 +126,7 @@
   }
 }
 
-/* Fix for admin panel visibility */
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
+/* Fix for admin panel visibility - consolidated #root styles */
 
 .admin-layout {
   height: 100vh;

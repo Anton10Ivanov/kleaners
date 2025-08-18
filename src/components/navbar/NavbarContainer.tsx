@@ -19,8 +19,8 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
         ? "bg-background border-b border-border shadow-sm backdrop-blur-md" 
         : "bg-background/95 backdrop-blur-md border-b border-border/50"
     )}>
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className="flex items-center justify-between h-16">
+      <div className="w-full px-4 lg:px-6">
+        <div className="flex items-center justify-between h-16 max-w-7xl mx-auto">
           {/* Logo Section */}
           <div className="flex items-center animate-fade-in">
             {children[0]}
