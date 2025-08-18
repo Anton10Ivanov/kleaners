@@ -76,13 +76,11 @@ export const HomeDetailsSection = ({
   useEffect(() => {
     const frequency = form.watch('frequency');
     
-    // Only suggest deep cleaning for recurring services (not one-time)
-    // and when property is significantly large or has many bathrooms
+    // Show deep cleaning popup for one-time home cleaning when conditions are met
     const shouldShowDeepCleaningPopup = allFieldsFilled && 
                                        shouldSuggestDeepCleaning && 
                                        !durationChoiceMade &&
-                                       frequency !== 'one-time' && // Don't show for one-time cleaning
-                                       (propertySize > 120 || bathrooms! > 3); // Stricter conditions
+                                       frequency === 'one-time'; // Show specifically for one-time cleaning
     
     if (shouldShowDeepCleaningPopup) {
       setShowDeepCleaningPopup(true);
