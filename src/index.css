@@ -85,6 +85,10 @@
     --muted-gold: 46 73 67; /* #E9C46A - Muted Gold */
     --muted-gold-foreground: 0 0 13; /* #222 - Dark text on gold */
 
+    /* Slate Gray - Icons, SVGs, Supporting elements (NEW) */
+    --neutral-icon: 215 28 47; /* #64748B - Slate Gray for icons */
+    --neutral-icon-foreground: 0 0 100; /* #FFFFFF - White text on slate */
+
     /* Link colors - Yale Blue, hover Orange */
     --link: 208 73 23; /* #0D3B66 - Yale Blue */
     --link-hover: 32 85 59; /* #F19A3E - Carrot Orange hover */

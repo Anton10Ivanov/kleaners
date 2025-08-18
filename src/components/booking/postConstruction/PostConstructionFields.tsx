@@ -118,7 +118,7 @@ const PostConstructionFields = ({ form }: PostConstructionFieldsProps) => {
           <FormItem>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <AlertTriangle className="h-4 w-4 text-secondary" />
                 <FormLabel>Hazardous Materials Present</FormLabel>
               </div>
               <FormControl>

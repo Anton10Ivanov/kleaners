@@ -48,7 +48,7 @@ export const ProviderVerification = ({ application, onClose }: ProviderVerificat
   const getStatusBadge = (status: VerificationStatus) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Pending</Badge>;
+        return <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">Pending</Badge>;
       case 'in_progress':
         return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">In Progress</Badge>;
       case 'approved':
@@ -63,7 +63,7 @@ export const ProviderVerification = ({ application, onClose }: ProviderVerificat
   const getStatusIcon = (status: VerificationStatus) => {
     switch (status) {
       case 'pending':
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+        return <AlertCircle className="h-4 w-4 text-secondary" />;
       case 'in_progress':
         return <Calendar className="h-4 w-4 text-blue-500" />;
       case 'approved':

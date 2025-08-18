@@ -19,7 +19,7 @@ const TimeGrid = ({ selectedTime, onTimeSelect }: TimeGridProps) => {
   const getAvailabilityColor = (time: string) => {
     const hour = parseInt(time.split(':')[0]);
     if (hour >= 9 && hour <= 15) return 'bg-green-50 border-green-200 text-green-700'; // High availability
-    if (hour >= 8 && hour <= 17) return 'bg-yellow-50 border-yellow-200 text-yellow-700'; // Medium
+    if (hour >= 8 && hour <= 17) return 'bg-secondary/10 border-secondary/20 text-secondary'; // Medium
     return 'bg-red-50 border-red-200 text-red-700'; // Low availability
   };
 
@@ -58,7 +58,7 @@ const TimeGrid = ({ selectedTime, onTimeSelect }: TimeGridProps) => {
           <span>High availability</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-yellow-200"></div>
+          <div className="w-3 h-3 rounded bg-secondary/30"></div>
           <span>Medium availability</span>
         </div>
         <div className="flex items-center gap-2">

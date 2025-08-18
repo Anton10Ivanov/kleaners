@@ -53,4 +53,23 @@
   .border-rating {
     @apply border-muted-gold/20;
   }
+
+  /* Icon color utilities - Slate Gray for consistency */
+  .text-icon {
+    @apply text-neutral-icon;
+  }
+  
+  .text-icon-hover {
+    @apply text-secondary;
+  }
+
+  /* Form elements - Hunter Green theme */
+  .form-accent {
+    @apply border-secondary focus:border-secondary focus:ring-secondary/20;
+  }
+
+  /* Secondary action elements - Hunter Green */
+  .secondary-accent {
+    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+  }
 }

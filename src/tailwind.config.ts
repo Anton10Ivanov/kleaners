@@ -44,13 +44,16 @@ export default {
           foreground: "hsl(var(--secondary-foreground))",
         },
         
-        // Status colors
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        'muted-gold': {
+          DEFAULT: 'hsl(var(--muted-gold))',
+          foreground: 'hsl(var(--muted-gold-foreground))'
+        },
+        'neutral-icon': {
+          DEFAULT: 'hsl(var(--neutral-icon))',
+          foreground: 'hsl(var(--neutral-icon-foreground))'
         },
         
-        // Layout colors
+        // Layout colors  
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -62,12 +65,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        
-        // New accent colors
-        "muted-gold": {
-          DEFAULT: "hsl(var(--muted-gold))",
-          foreground: "hsl(var(--muted-gold-foreground))",
         },
         "off-white": "hsl(var(--off-white))",
         

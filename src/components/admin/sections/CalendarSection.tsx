@@ -104,7 +104,7 @@ export const CalendarSection = () => {
                             ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
                             : booking.status === 'cancelled'
                             ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                            : 'bg-secondary/10 text-secondary border-secondary/20'
                         }
                       >
                         {booking.status}

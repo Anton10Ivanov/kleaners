@@ -97,7 +97,7 @@ const ModernServiceTemplate = ({ data, showTestimonials = false }: ModernService
             {/* Trust Indicators */}
             <div className="flex flex-wrap items-center gap-6 text-white/80">
               <div className="flex items-center gap-2">
-                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-muted-gold text-muted-gold" />
                 <span className="font-semibold">{data.averageRating}</span>
                 <span>rating</span>
               </div>
@@ -181,7 +181,7 @@ const ModernServiceTemplate = ({ data, showTestimonials = false }: ModernService
                           key={i}
                           className={`h-4 w-4 ${
                             i < testimonial.rating 
-                              ? 'fill-yellow-400 text-yellow-400' 
+                              ? 'fill-muted-gold text-muted-gold' 
                               : 'text-gray-300'
                           }`}
                         />

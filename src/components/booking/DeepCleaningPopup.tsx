@@ -33,7 +33,7 @@ export const DeepCleaningPopup = ({
         <DialogHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-warning/10 rounded-full">
-              <Sparkles className="h-8 w-8 text-yellow-600" />
+              <Sparkles className="h-8 w-8 text-secondary" />
             </div>
           </div>
           <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">

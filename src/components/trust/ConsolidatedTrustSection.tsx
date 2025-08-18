@@ -3,7 +3,7 @@ import { Shield, Clock, Star, CheckCircle, Users, Sparkles, Award, Heart, Phone 
 
 // Consolidated trust data - single source of truth
 const TRUST_METRICS = [
-  { value: "4.9★", label: "Average Rating", icon: Star, color: "text-yellow-500" },
+  { value: "4.9★", label: "Average Rating", icon: Star, color: "text-muted-gold" },
   { value: "€5M", label: "Insurance Coverage", icon: Shield, color: "text-green-500" },
   { value: "2min", label: "Quick Booking", icon: Clock, color: "text-blue-500" },
   { value: "2,500+", label: "Happy Customers", icon: Users, color: "text-purple-500" }

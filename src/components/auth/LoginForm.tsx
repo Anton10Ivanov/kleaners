@@ -107,7 +107,7 @@ const LoginForm = ({
           <Button type="button" variant="link" onClick={onResetMode} className="px-0 text-sm text-gray-600 hover:text-gray-900">
             Forgot your password?
           </Button>
-          <Button type="button" variant="link" onClick={() => navigate('/signup')} className="px-0 rounded-sm text-orange-600 bg-white font-bold text-base text-center">
+          <Button type="button" variant="link" onClick={() => navigate('/signup')} className="px-0 rounded-sm text-primary bg-white font-bold text-base text-center">
             Sign up
           </Button>
         </div>

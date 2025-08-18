@@ -98,7 +98,7 @@ export const CompactTestimonials = () => {
           <h2 className="text-2xl md:text-3xl font-bold mb-2">What Our Customers Say</h2>
           <div className="flex items-center justify-center gap-4 text-xs md:text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500 fill-current" />
+              <Star className="w-4 h-4 text-muted-gold fill-current" />
               <span className="font-semibold">4.9/5</span>
               <span>Average Rating</span>
             </div>
@@ -128,8 +128,8 @@ export const CompactTestimonials = () => {
                     <CardContent className="p-3 h-full flex flex-col justify-between">
                       <div>
                         <div className="flex mb-2">
-                          {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 text-yellow-500 fill-current" />
+                           {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 text-muted-gold fill-current" />
                           ))}
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 text-xs md:text-sm mb-2 line-clamp-3">

@@ -56,8 +56,8 @@ export default function ProviderDashboard(): JSX.Element {
       title: "Active Jobs",
       value: providerStats.activeBookings,
       icon: <Clock className="h-5 w-5" />,
-      color: "text-orange-600", 
-      bgColor: "bg-orange-50 dark:bg-orange-900/20",
+       color: "text-secondary",
+       bgColor: "bg-secondary/10",
       urgent: true
     },
     {
@@ -72,8 +72,8 @@ export default function ProviderDashboard(): JSX.Element {
       title: "Rating",
       value: `${providerStats.avgRating}/5`,
       icon: <Star className="h-5 w-5" />,
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50 dark:bg-yellow-900/20"
+      color: "text-secondary",
+      bgColor: "bg-secondary/10"
     },
     {
       title: "Completed Jobs",

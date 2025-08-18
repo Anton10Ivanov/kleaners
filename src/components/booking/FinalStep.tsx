@@ -194,7 +194,7 @@ const ProviderRating = ({ rating }: ProviderRatingProps) => {
         <Star
           key={i}
           className={`h-3 w-3 ${
-            i < Math.floor(rating) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'
+            i < Math.floor(rating) ? 'text-muted-gold fill-muted-gold' : 'text-neutral-icon'
           }`}
         />
       ))}

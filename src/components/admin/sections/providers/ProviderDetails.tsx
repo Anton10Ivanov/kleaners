@@ -30,7 +30,7 @@ export const ProviderDetails = ({ provider, onClose }: { provider: any; onClose:
   // Format status for badge
   const getStatusColor = (status: string) => {
     if (status === 'active') return "bg-green-500";
-    if (status === 'pending') return "bg-yellow-500";
+    if (status === 'pending') return "bg-secondary/10 text-secondary border-secondary/20";
     if (status === 'inactive') return "bg-red-500";
     return "bg-gray-500";
   };
@@ -53,7 +53,7 @@ export const ProviderDetails = ({ provider, onClose }: { provider: any; onClose:
               <CardTitle className="text-2xl">{provider.name}</CardTitle>
               <CardDescription>{provider.specialization || "Service Provider"}</CardDescription>
               <div className="flex items-center mt-1">
-                <StarIcon className="h-4 w-4 fill-yellow-400 stroke-yellow-400" />
+                <StarIcon className="h-4 w-4 fill-muted-gold stroke-muted-gold" />
                 <span className="ml-1 text-sm font-medium">
                   {provider.rating || "4.8"} ({provider.reviews || "24"})
                 </span>

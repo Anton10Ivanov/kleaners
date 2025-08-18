@@ -50,7 +50,7 @@ export const EstimationDisplay = ({
   const getServiceType = (duration: number) => {
     if (duration <= 2.5) return { text: "Quick clean", color: "text-blue-600" };
     if (duration <= 4) return { text: "Standard clean", color: "text-green-600" };
-    if (duration <= 6) return { text: "Deep clean", color: "text-orange-600" };
+    if (duration <= 6) return { text: "Deep clean", color: "text-secondary" };
     return { text: "Extensive clean", color: "text-purple-600" };
   };
 
