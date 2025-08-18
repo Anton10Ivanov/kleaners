@@ -1,259 +1,492 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from "@/hooks/use-toast";
-import { Label } from '@/components/ui/label';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { Mail, Phone, Clock, MessageCircle, Users, Shield, CheckCircle, Info, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  Mail, 
+  Phone, 
+  MessageCircle, 
+  Clock, 
+  Shield, 
+  CheckCircle, 
+  AlertCircle, 
+  MessageSquare,
+  MapPin,
+  Calendar,
+  Users
+} from 'lucide-react';
+
+// Import Join Team components
+import { useJoinTeamForm } from '@/hooks/useJoinTeamForm';
+import { ApplicationForm } from '@/components/provider/application/ApplicationForm';
+import { BenefitsPanel } from '@/components/provider/application/BenefitsPanel';
+import { SuccessSubmission } from '@/components/provider/application/SuccessSubmission';
 
 const Contact = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState('contact');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+
+  // Join Team form hook
   const {
-    toast
-  } = useToast();
+    currentStep,
+    formProgress,
+    name: teamName,
+    email: teamEmail,
+    phone: teamPhone,
+    position,
+    experience,
+    availability,
+    skills,
+    resume,
+    backgroundCheckConsent,
+    message: teamMessage,
+    agreeToTerms,
+    agreeToBackgroundCheck,
+    agreeToTraining,
+    isLoading,
+    applicationSubmitted,
+    applicationId,
+    setName: setTeamName,
+    setEmail: setTeamEmail,
+    setPhone: setTeamPhone,
+    setPosition,
+    setExperience,
+    setMessage: setTeamMessage,
+    setAgreeToTerms,
+    setAgreeToBackgroundCheck,
+    setAgreeToTraining,
+    setResume,
+    setBackgroundCheckConsent,
+    nextStep,
+    prevStep,
+    handleSubmit: handleTeamSubmit,
+    handleFileChange,
+    toggleAvailability,
+    toggleSkill,
+  } = useJoinTeamForm();
+
+  // Handle tab switching based on URL params
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'join') {
+      setActiveTab('join');
+    } else {
+      setActiveTab('contact');
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === 'join') {
+      setSearchParams({ tab: 'join' });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      // Get user agent for spam detection
-      const userAgent = navigator.userAgent;
+    
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
 
-      // Insert the question
-      const {
-        data: insertedData,
-        error
-      } = await supabase.from('customer_questions').insert({
-        name,
-        email,
-        question: message,
-        user_agent: userAgent
-      }).select('id').single();
+    // Basic spam detection
+    const spamKeywords = ['crypto', 'bitcoin', 'investment', 'forex', 'loan', 'casino'];
+    const messageContent = `${name} ${email} ${subject} ${message}`.toLowerCase();
+    const hasSpam = spamKeywords.some(keyword => messageContent.includes(keyword));
+    
+    if (hasSpam) {
+      toast.error('Your message appears to contain spam content');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from('customer_questions')
+        .insert([
+          {
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim() || null,
+            subject: subject.trim() || 'General Inquiry',
+            message: message.trim(),
+            status: 'new',
+            priority: 'medium',
+            source: 'website_contact_form'
+          }
+        ])
+        .select();
+
       if (error) {
-        // Check if it's a spam-related error
-        if (error.message?.includes('spam') || error.message?.includes('rate limit')) {
-          toast({
-            title: 'Too many submissions',
-            description: 'You can only submit 2 messages per month. Please wait before submitting another message.',
-            variant: 'destructive'
-          });
-          return;
-        }
+        console.error('Supabase error:', error);
         throw error;
       }
 
-      // If the question was successfully inserted, call the edge function to capture IP
-      if (insertedData?.id) {
-        // Call edge function to capture IP address
+      console.log('Question submitted successfully:', data);
+
+      // Call edge function to capture IP address
+      try {
         await supabase.functions.invoke('capture-question-metadata', {
-          body: {
-            questionId: insertedData.id
+          body: { 
+            questionId: data[0].id,
+            userAgent: navigator.userAgent,
+            referrer: document.referrer || 'direct'
           }
         });
+      } catch (ipError) {
+        console.warn('Failed to capture metadata:', ipError);
+        // Don't fail the whole submission for metadata capture
       }
 
-      // Show success message
-      toast({
-        title: 'Message Sent',
-        description: "We'll get back to you soon!"
-      });
-
+      toast.success('Thank you for your message! We\'ll get back to you within 24 hours.');
+      
       // Reset form
       setName('');
       setEmail('');
+      setPhone('');
+      setSubject('');
       setMessage('');
     } catch (error) {
-      console.error('Error submitting message:', error);
-
-      // Show error message with appropriate message based on the error
-      const errorMessage = error.message?.includes('rate limit') ? 'Too many submissions. You can only submit 2 messages per month.' : 'There was an error sending your message. Please try again later.';
-      toast({
-        title: 'Submission Failed',
-        description: errorMessage,
-        variant: 'destructive'
-      });
+      console.error('Error submitting question:', error);
+      toast.error('There was an error sending your message. Please try again or contact us directly.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const contactMethods = [{
-    icon: Mail,
-    title: 'Email Us',
-    description: 'Send us an email and we\'ll respond within 24 hours',
-    value: 'contact@cleaningservice.com',
-    action: 'mailto:contact@cleaningservice.com'
-  }, {
-    icon: Phone,
-    title: 'Call Us',
-    description: 'Speak directly with our customer service team',
-    value: '+49 123 456 789',
-    action: 'tel:+491234567890'
-  }, {
-    icon: MessageSquare,
-    title: 'WhatsApp',
-    description: 'Message us on WhatsApp for quick support',
-    value: '+49 123 456 789',
-    action: 'https://wa.me/491234567890'
-  }, {
-    icon: MessageCircle,
-    title: 'Live Chat',
-    description: 'Get instant support through our live chat',
-    value: 'Available 9 AM - 6 PM',
-    action: '#'
-  }];
+  const contactMethods = [
+    {
+      icon: Mail,
+      title: 'Email Us',
+      description: 'Get in touch via email',
+      value: 'info@kleaners.de',
+      action: () => window.location.href = 'mailto:info@kleaners.de'
+    },
+    {
+      icon: Phone,
+      title: 'Call Us',
+      description: 'Speak directly with our team',
+      value: '+49 123 456 789',
+      action: () => window.location.href = 'tel:+49123456789'
+    },
+    {
+      icon: MessageCircle,
+      title: 'WhatsApp',
+      description: 'Chat with us on WhatsApp',
+      value: 'Message Us',
+      action: () => window.open('https://wa.me/49123456789', '_blank')
+    },
+    {
+      icon: MessageSquare,
+      title: 'Live Chat',
+      description: 'Start a live conversation',
+      value: 'Chat Now',
+      action: () => {
+        // Implement live chat integration here
+        toast.info('Live chat will be available soon!');
+      }
+    }
+  ];
 
-  const supportFeatures = [{
-    icon: Clock,
-    title: 'Quick Response',
-    description: 'We respond to all inquiries within 24 hours'
-  }, {
-    icon: Users,
-    title: 'Expert Team',
-    description: 'Our experienced support team is here to help'
-  }, {
-    icon: Shield,
-    title: 'Secure & Private',
-    description: 'Your information is safe and confidential'
-  }];
+  const supportFeatures = [
+    'Quick response within 24 hours',
+    'Professional consultation',
+    'Free quotes and estimates',
+    'Flexible scheduling options'
+  ];
 
-  return <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      {/* Hero Section */}
-      <div className="pt-20 pb-16 px-4 text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Get in Touch
-            </h1>
-            
-          </div>
-          
-          {/* Support Features */}
-          
+  // Handle join team application success
+  if (applicationSubmitted) {
+    return <SuccessSubmission email={teamEmail} applicationId={applicationId} />;
+  }
+
+  return (
+    <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Contact Us
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Have questions about our services or interested in joining our team? We're here to help!
+          </p>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="px-4 pb-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card className="border-0 shadow-lg">
-                
+        {/* Tabbed Interface */}
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+            <TabsTrigger value="contact" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Get in Touch
+            </TabsTrigger>
+            <TabsTrigger value="join" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Join Our Team
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Contact Tab */}
+          <TabsContent value="contact" className="mt-0">
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* Contact Form */}
+              <Card className="h-fit">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-primary" />
+                    Send us a Message
+                  </CardTitle>
+                  <CardDescription>
+                    Fill out the form below and we'll get back to you as soon as possible
+                  </CardDescription>
+                </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" placeholder="Enter your full name" value={name} onChange={e => setName(e.target.value)} required className="h-10 border-2 border-green-500 focus:border-green-600" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(e.target.value)} required className="h-10 border-2 border-green-500 focus:border-green-600" />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Full Name *</Label>
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="Your full name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
                     </div>
                     
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="message">Message</Label>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button type="button" className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                                <Info className="w-4 h-4" />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="text-sm">To ensure quality communication we limit submissions.</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                      <Textarea id="message" placeholder="Tell us how we can help you..." value={message} onChange={e => setMessage(e.target.value)} required className="min-h-[120px] resize-none border-2 border-green-500 focus:border-green-600" />
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your.email@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
                     </div>
-
                     
-                    <Button type="submit" className="w-full h-10 text-sm font-semibold" disabled={isSubmitting}>
-                      {isSubmitting ? 'Sending Message...' : 'Send Message'}
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+49 123 456 789"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input
+                        id="subject"
+                        type="text"
+                        placeholder="What's this about?"
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message *</Label>
+                      <Textarea
+                        id="message"
+                        placeholder="Tell us how we can help you..."
+                        className="min-h-[120px]"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                      />
+                    </div>
+                    
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </form>
                 </CardContent>
               </Card>
-              
-              {/* Business Hours - Under Form */}
-              <div className="mt-6">
-                <Card className="border-0 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
+
+              {/* Contact Methods */}
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Other Ways to Reach Us</CardTitle>
+                    <CardDescription>
+                      Choose the method that works best for you
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {contactMethods.map((method, index) => (
+                      <div
+                        key={index}
+                        onClick={method.action}
+                        className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+                      >
+                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <method.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900 dark:text-white">
+                            {method.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            {method.description}
+                          </p>
+                          <p className="text-sm font-medium text-primary">
+                            {method.value}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Business Hours */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="h-5 w-5 text-primary" />
                       Business Hours
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <span className="text-gray-600 dark:text-gray-300 font-medium">Monday - Friday</span>
-                        <span className="font-semibold text-gray-900 dark:text-white">9:00 AM - 6:00 PM</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <span className="text-gray-600 dark:text-gray-300 font-medium">Saturday</span>
-                        <span className="font-semibold text-gray-900 dark:text-white">10:00 AM - 4:00 PM</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                        <span className="text-gray-600 dark:text-gray-300 font-medium">Sunday</span>
-                        <span className="font-semibold text-gray-600 dark:text-gray-400">Closed</span>
-                      </div>
+                  <CardContent className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-300">Monday - Friday</span>
+                      <span className="font-medium">8:00 AM - 8:00 PM</span>
                     </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-300">Saturday</span>
+                      <span className="font-medium">9:00 AM - 6:00 PM</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-300">Sunday</span>
+                      <span className="font-medium">10:00 AM - 4:00 PM</span>
+                    </div>
+                    <Separator className="my-3" />
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Emergency services available 24/7
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Support Features */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-primary" />
+                      Why Choose Us
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {supportFeatures.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                          <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </CardContent>
                 </Card>
               </div>
             </div>
+          </TabsContent>
 
-            {/* Contact Methods */}
-            <div>
-              <Card className="border-0 shadow-lg">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg">Contact Methods</CardTitle>
-                  <CardDescription>Have questions about our cleaning services? We're here to help.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-1">
-                  {contactMethods.map((method, index) => (
-                    <div key={index} className="w-full">
-                      <div className="group w-full">
-                        <a href={method.action} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors w-full">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                            <method.icon className="w-4 h-4 text-primary" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-white text-sm">{method.title}</h4>
-                            <p className="text-xs font-medium text-primary truncate">{method.value}</p>
-                          </div>
-                        </a>
-                      </div>
-                      {/* Add emergency support under Live Chat */}
-                      {method.title === 'Live Chat' && (
-                        <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg w-full">
-                          <p className="text-sm text-green-700 dark:text-green-300">
-                            <strong>Emergency Support:</strong> 24/7 available for urgent cleaning needs
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+          {/* Join Team Tab */}
+          <TabsContent value="join" className="mt-0">
+            <div className="space-y-8">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                  Join Our Team
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
+                  We're looking for passionate individuals to join our cleaning service. Apply today and become part of our growing team!
+                </p>
+                
+                {!showApplicationForm && (
+                  <Button 
+                    size="lg" 
+                    onClick={() => setShowApplicationForm(true)}
+                    className="font-semibold text-base px-8 py-6 mb-8"
+                  >
+                    Apply Now
+                  </Button>
+                )}
+              </div>
+
+              {!showApplicationForm ? (
+                <div className="space-y-12">
+                  <BenefitsPanel className="border-0 shadow-md" />
+                </div>
+              ) : (
+                <div className="w-full">
+                  <ApplicationForm 
+                    currentStep={currentStep}
+                    formProgress={formProgress}
+                    name={teamName}
+                    email={teamEmail}
+                    phone={teamPhone}
+                    position={position}
+                    experience={experience}
+                    availability={availability}
+                    skills={skills}
+                    resume={resume}
+                    backgroundCheckConsent={backgroundCheckConsent}
+                    message={teamMessage}
+                    agreeToTerms={agreeToTerms}
+                    agreeToBackgroundCheck={agreeToBackgroundCheck}
+                    agreeToTraining={agreeToTraining}
+                    isLoading={isLoading}
+                    setName={setTeamName}
+                    setEmail={setTeamEmail}
+                    setPhone={setTeamPhone}
+                    setPosition={setPosition}
+                    setExperience={setExperience}
+                    setMessage={setTeamMessage}
+                    setAgreeToTerms={setAgreeToTerms}
+                    setAgreeToBackgroundCheck={setAgreeToBackgroundCheck}
+                    setAgreeToTraining={setAgreeToTraining}
+                    setResume={setResume}
+                    setBackgroundCheckConsent={setBackgroundCheckConsent}
+                    handleFileChange={handleFileChange}
+                    toggleAvailability={toggleAvailability}
+                    toggleSkill={toggleSkill}
+                    prevStep={prevStep}
+                    handleSubmit={handleTeamSubmit}
+                  />
+                </div>
+              )}
             </div>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Contact;

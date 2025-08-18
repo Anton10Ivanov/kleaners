@@ -13,7 +13,6 @@ import { Toaster } from '@/components/ui/toaster';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Contact from '@/pages/Contact';
-import JoinTeam from '@/pages/JoinTeam';
 import Services from '@/pages/Services';
 import BusinessSolutions from '@/pages/BusinessSolutions';
 
@@ -118,7 +117,7 @@ function App() {
         <Route element={<RootLayout />}>
           <Route index element={<Index />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/join-team" element={<JoinTeam />} />
+          <Route path="/join-team" element={<Navigate to="/contact?tab=join" replace />} />
           <Route path="/services" element={<Services />} />
           <Route path="/business-solutions" element={<BusinessSolutions />} />
           

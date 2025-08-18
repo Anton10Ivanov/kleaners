@@ -21,7 +21,7 @@ const navigationData = [
     href: "/contact",
     children: [
       { title: "Get in Touch", href: "/contact", icon: Phone, description: "Contact our customer service team" },
-      { title: "Join Our Team", href: "/join-team", icon: Users, description: "Apply to work with us" }
+      { title: "Join Our Team", href: "/contact?tab=join", icon: Users, description: "Apply to work with us" }
     ]
   }
 ];
