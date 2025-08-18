@@ -17,7 +17,7 @@ import { MobileBookingSummaryOptimized } from '../booking/mobile';
 
 
 // Consolidated sections
-import TrustAndBenefits from '../hero/TrustAndBenefits';
+import ConsolidatedTrustSection from '../trust/ConsolidatedTrustSection';
 import { EnhancedProcessSteps } from '../hero/EnhancedProcessSteps';
 import { EnhancedServiceCategoriesSection } from '../services/EnhancedServiceCategoriesSection';
 import { EnhancedBusinessSolutionsSection } from './EnhancedBusinessSolutionsSection';
@@ -137,7 +137,7 @@ const HomePage = () => {
             />
             
             {/* Consolidated trust and benefits section */}
-            <TrustAndBenefits />
+            <ConsolidatedTrustSection />
             
             {/* Enhanced how it works section */}
             <EnhancedProcessSteps />
