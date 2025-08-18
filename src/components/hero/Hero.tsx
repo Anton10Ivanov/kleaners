@@ -53,19 +53,24 @@ export const Hero = memo(({
       {/* Custom designed background */}
       <BackgroundElements />
       
-      <HeroProvider 
-        initialService="" 
-        initialPostalCode={postalCode} 
-        onNextStep={handleValidatedNextStep} 
-        onServiceChange={() => {}} 
-        onPostalCodeChange={setPostalCode}
-      >
-        <HeroForm 
-          postalCode={postalCode} 
-          setPostalCode={setPostalCode} 
-          handleNextStep={handleValidatedNextStep} 
-        />
-      </HeroProvider>
+      {/* Creative positioning container */}
+      <div className="relative z-10 h-full flex items-center justify-start px-8 lg:px-16">
+        <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl">
+          <HeroProvider 
+            initialService="" 
+            initialPostalCode={postalCode} 
+            onNextStep={handleValidatedNextStep} 
+            onServiceChange={() => {}} 
+            onPostalCodeChange={setPostalCode}
+          >
+            <HeroForm 
+              postalCode={postalCode} 
+              setPostalCode={setPostalCode} 
+              handleNextStep={handleValidatedNextStep} 
+            />
+          </HeroProvider>
+        </div>
+      </div>
     </section>
   );
 });
