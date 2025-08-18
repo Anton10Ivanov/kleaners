@@ -13,7 +13,7 @@ export const SocialProof = memo(() => {
     >
       <div className="inline-flex items-center gap-1.5 bg-white/70 backdrop-blur-sm text-[#1c1c1c] font-medium rounded-full text-sm shadow-sm px-[8px] py-0">
         <div className="flex mr-1">
-          {[1, 2, 3, 4, 5].map(i => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
+          {[1, 2, 3, 4, 5].map(i => <Star key={i} className="h-4 w-4 fill-muted-gold text-muted-gold" />)}
         </div>
         <span>Trusted by 2300+ Customers</span>
       </div>

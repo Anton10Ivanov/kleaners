@@ -16,7 +16,7 @@
 
   /* Carrot Orange - Primary CTAs (10-15% usage) */
   .btn-primary {
-    @apply btn-base bg-accent hover:bg-accent/90 text-accent-foreground;
+    @apply btn-base bg-primary hover:bg-primary-hover text-primary-foreground;
     @apply px-6 py-3 shadow-sm hover:shadow-md;
   }
 
@@ -28,12 +28,12 @@
 
   /* Yale Blue Outline - Brand color outline */
   .btn-outline {
-    @apply btn-base border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
+    @apply btn-base border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground;
     @apply px-6 py-3;
   }
 
   .btn-ghost {
-    @apply btn-base text-primary hover:bg-primary/10;
+    @apply btn-base text-accent hover:bg-accent/10;
     @apply px-6 py-3;
   }
 

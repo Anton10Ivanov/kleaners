@@ -85,7 +85,7 @@ export const HeroTestimonials = memo(() => {
                   <div>
                     <div className="flex mb-2">
                       {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 text-yellow-500 fill-current" />
+                        <Star key={i} className="w-3 h-3 text-muted-gold fill-muted-gold" />
                       ))}
                     </div>
                     <p className="text-gray-700 text-sm mb-2 line-clamp-2">
