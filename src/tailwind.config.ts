@@ -77,6 +77,10 @@ export default {
           hover: "hsl(var(--link-hover))",
         },
         
+        // Dark backgrounds for footer/dark sections
+        "dark-bg": "hsl(var(--dark-bg))",
+        "dark-foreground": "hsl(var(--dark-foreground))",
+        
         // Status colors
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",

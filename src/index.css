@@ -92,6 +92,11 @@
     --warning: 36 100 50; /* #FF9E00 - Warning Orange */
     --destructive: 0 84 60; /* Red for errors */
     --success: 142 76 36; /* Green for success */
+    
+    /* Dark backgrounds for footer */
+    --dark-bg: 0 0 13; /* #222 - Dark neutral background */
+    --dark-foreground: 0 0 100; /* #FFFFFF - White text on dark */
+    
     --radius: 0.75rem;
   }
 }
