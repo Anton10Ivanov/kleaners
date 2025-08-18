@@ -26,7 +26,7 @@ import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimize
 import { MobileBookingCard, MobileCalendarCard, MobileServiceSelector } from './mobile';
 import { EnhancedExtrasVisual } from './extras/EnhancedExtrasVisual';
 import { SummaryPill } from './summary/SummaryPill';
-import { ServiceTypeGrid } from '../hero/ServiceTypeGrid';
+import BookingServiceSelector from './BookingServiceSelector';
 
 // Import service-specific form components
 import EnhancedMoveInOutFields from './EnhancedMoveInOutFields';
@@ -210,9 +210,8 @@ const BookingContent = ({ currentStep, selectedService, form, handleNext }: Book
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                       Choose Your Service
                     </h3>
-                    <ServiceTypeGrid 
-                      selectedService={form.watch('service') || ''} 
-                      setSelectedService={(service) => form.setValue('service', service)} 
+                    <BookingServiceSelector 
+                      onServiceSelect={(service) => form.setValue('service', service)} 
                     />
                   </div>
 

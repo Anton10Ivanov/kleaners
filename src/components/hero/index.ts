@@ -4,10 +4,6 @@
 
 export { default as Hero } from './Hero';
 export { HeroContent } from './HeroContent';
-export { HeroForm } from './HeroForm';
-export { ServiceTypeGrid } from './ServiceTypeGrid';
-export { PostalCodeInput } from './PostalCodeInput';
-export { SubmitButton } from './SubmitButton';
 export { FeatureBadges } from './FeatureBadges';
 export { FeatureList } from './FeatureList';
 export { HeroTestimonials } from './HeroTestimonials';

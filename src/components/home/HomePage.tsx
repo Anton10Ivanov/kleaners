@@ -1,20 +1,13 @@
 import React, { Suspense, lazy, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
-import { toast } from 'sonner';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Frequency, ServiceType } from '@/schemas/booking';
 import { SectionLoading } from '@/components/ui/section-loading';
 import { performanceMonitor } from '@/utils/performance'; 
 import { useComponentTimer } from '@/hooks/useComponentTimer';
-import { useBookingForm } from '@/hooks/useBookingForm';
-import { BookingSteps } from './BookingSteps';
 
 // Centralized imports
 import { Hero } from '../hero';
-import { MobileBookingSummaryOptimized } from '../booking/mobile';
-
 
 // Consolidated sections
 import ConsolidatedTrustSection from '../trust/ConsolidatedTrustSection';
@@ -35,18 +28,6 @@ const ErrorFallback = ({ error }: { error: Error }) => (
 
 const HomePage = () => {
   const { startTimer, endTimer } = useComponentTimer('HomePage');
-  const { 
-    form, 
-    currentStep, 
-    handleNextStep, 
-    handleBackStep, 
-    watch, 
-    setValue,
-    postalCode,
-    selectedService,
-    setPostalCode,
-    setSelectedService
-  } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Performance monitoring - simplified to prevent blocking
@@ -63,126 +44,50 @@ const HomePage = () => {
     };
   }, [startTimer, endTimer]);
 
-  // Memoized watched values
-  const frequency = watch('frequency');
-  const hours = watch('hours');
-  const selectedExtras = watch('extras') || [];
-
-  // Memoized handlers
-  const handleNext = useCallback(() => {
-    if (import.meta.env.DEV) startTimer('nextStepInteraction');
-    
-    if (currentStep === 1 && (!selectedService || !postalCode)) {
-      if (!selectedService) toast.error("Please select a service type");
-      if (!postalCode) toast.error("Please enter your postal code");
-      if (import.meta.env.DEV) endTimer('nextStepInteraction');
-      return;
-    }
-    
-    if (currentStep === 2 && (!frequency || !hours)) {
-      if (!frequency) toast.error("Please select a frequency");
-      if (!hours) toast.error("Please specify the hours needed");
-      if (import.meta.env.DEV) endTimer('nextStepInteraction');
-      return;
-    }
-    
-    if (isMobile) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    
-    handleNextStep();
-    
-    if (currentStep === 2) {
-      toast.success("Great! Let's complete your booking details.");
-    }
-    if (import.meta.env.DEV) endTimer('nextStepInteraction');
-  }, [currentStep, selectedService, postalCode, frequency, hours, handleNextStep, isMobile, startTimer, endTimer]);
-
-  const handleBack = useCallback(() => {
-    if (import.meta.env.DEV) startTimer('backStepInteraction');
-    if (isMobile) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    handleBackStep();
-    if (import.meta.env.DEV) endTimer('backStepInteraction');
-  }, [handleBackStep, isMobile, startTimer, endTimer]);
-
-  const handleHeroNextStep = useCallback(() => {
-    if (import.meta.env.DEV) startTimer('heroNextStepInteraction');
-    handleNextStep();
-    if (import.meta.env.DEV) endTimer('heroNextStepInteraction');
-  }, [handleNextStep, startTimer, endTimer]);
-
-
-  // These are now handled by the store directly
-
-
   return (
     <div className="min-h-screen font-raleway bg-background transition-colors duration-300">
-      <AnimatePresence mode="wait">
-        {currentStep === 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className="bg-background"
-          >
-            <Hero 
-              postalCode={postalCode}
-              setPostalCode={setPostalCode}
-              selectedService={selectedService}
-              setSelectedService={setSelectedService}
-              handleNextStep={handleHeroNextStep}
-            />
-            
-            {/* Alternating white/off-white section backgrounds */}
-            <div className="bg-off-white">
-              <ConsolidatedTrustSection />
-            </div>
-            
-            <div className="bg-background">
-              <EnhancedProcessSteps />
-            </div>
-            
-            <div className="bg-off-white">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <EnhancedServiceCategoriesSection />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
-            
-            <div className="bg-background">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <EnhancedBusinessSolutionsSection />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
-            
-            <div className="bg-off-white">
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<SectionLoading />}>
-                  <LazyHomeSections />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
-          </motion.div>
-        ) : (
-          <BookingSteps
-            currentStep={currentStep}
-            selectedService={selectedService || ''}
-            form={form}
-            handleNext={handleNext}
-            handleBack={handleBack}
-            isMobile={isMobile}
-            frequency={frequency}
-            hours={hours}
-            selectedExtras={selectedExtras}
-          />
-        )}
-      </AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+        className="bg-background"
+      >
+        <Hero />
+        
+        {/* Alternating white/off-white section backgrounds */}
+        <div className="bg-off-white">
+          <ConsolidatedTrustSection />
+        </div>
+        
+        <div className="bg-background">
+          <EnhancedProcessSteps />
+        </div>
+        
+        <div className="bg-off-white">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<SectionLoading />}>
+              <EnhancedServiceCategoriesSection />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+        
+        <div className="bg-background">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<SectionLoading />}>
+              <EnhancedBusinessSolutionsSection />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+        
+        <div className="bg-off-white">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<SectionLoading />}>
+              <LazyHomeSections />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+      </motion.div>
     </div>
   );
 };

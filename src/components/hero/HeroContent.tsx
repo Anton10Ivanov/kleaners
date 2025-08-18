@@ -50,54 +50,24 @@ export const HeroContent = memo(({
           </div>
         </div>
         
-        {/* Enhanced CTA with integrated form */}
+        {/* Simple CTA Button */}
         <div className="space-y-6">
-          {/* Start booking form */}
-          <div className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 ${isMobile ? 'w-full' : 'max-w-md'}`}>
-            <h3 className="text-lg font-semibold text-white mb-4">Start Your Quote</h3>
-            
-            {/* Postal Code Input */}
-            <div className="space-y-3 mb-4">
-              <label className="text-sm font-medium text-white/90">Your Postal Code</label>
-              <input type="text" placeholder="12345" maxLength={5} className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 backdrop-blur-sm text-white placeholder:text-white/60 focus:ring-2 focus:ring-secondary focus:border-transparent transition-all" onChange={e => {
-              // This will be handled by the parent component
-              const event = new CustomEvent('postalCodeChange', {
-                detail: e.target.value
-              });
-              window.dispatchEvent(event);
-            }} />
-            </div>
-            
-            {/* Service Type Selection */}
-            <div className="space-y-3 mb-4">
-              <label className="text-sm font-medium text-white/90">Service Type</label>
-              <select className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 backdrop-blur-sm text-white focus:ring-2 focus:ring-secondary focus:border-transparent transition-all" onChange={e => {
-              // This will be handled by the parent component
-              const event = new CustomEvent('serviceChange', {
-                detail: e.target.value
-              });
-              window.dispatchEvent(event);
-            }}>
-                <option value="">Choose a service...</option>
-                <option value="home">Regular Home Cleaning</option>
-                <option value="deep-cleaning">Deep Cleaning</option>
-                <option value="move-in-out">Move In/Out Cleaning</option>
-                <option value="office">Office Cleaning</option>
-                <option value="post-construction">Post Construction</option>
-              </select>
-            </div>
-            
-            <Button onClick={onGetQuote} size="lg" className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold rounded-xl py-3 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="space-y-4">
+            <Button 
+              onClick={onGetQuote} 
+              size="lg" 
+              className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-bold rounded-xl h-16 px-8 text-xl shadow-[0_8px_25px_rgba(0,255,135,0.3)] hover:shadow-[0_12px_35px_rgba(0,255,135,0.4)] transform hover:-translate-y-1 transition-all duration-300 group"
+            >
               Get Your Free Quote Now
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Button>
+            
+            <p className="text-sm text-muted-foreground text-center">
+              ✓ No obligation • ✓ Instant pricing • ✓ Book in 60 seconds
+            </p>
           </div>
-          
-          <p className="text-sm text-muted-foreground text-center">
-            ✓ No obligation • ✓ Instant pricing • ✓ Book in 60 seconds
-          </p>
         </div>
       </div>
 
