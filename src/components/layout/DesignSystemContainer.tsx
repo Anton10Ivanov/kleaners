@@ -4,7 +4,7 @@ import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
 
 interface DesignSystemContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: "sm" | "md" | "lg" | "xl" | "full" | "wide" | "ultra-wide";
   padding?: "none" | "sm" | "md" | "lg" | "xl";
   centered?: boolean;
 }
@@ -28,6 +28,8 @@ export function DesignSystemContainer({
     md: "max-w-md",
     lg: "max-w-4xl",
     xl: "max-w-7xl",
+    wide: "max-w-[90%]",
+    "ultra-wide": "max-w-[95%]",
     full: "max-w-full",
   };
 
