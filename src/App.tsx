@@ -42,6 +42,7 @@ import ClientInvoices from '@/pages/client/ClientInvoices';
 import ClientMessages from '@/pages/client/ClientMessages';
 
 // About pages
+import About from '@/pages/about/About';
 import CompanyValues from '@/pages/about/CompanyValues';
 import FAQ from '@/pages/about/FAQ';
 
@@ -138,6 +139,7 @@ function App() {
           <Route path="/verify-provider" element={<VerifyProvider />} />
           
           {/* About routes */}
+          <Route path="/about" element={<About />} />
           <Route path="/about/values" element={<CompanyValues />} />
           <Route path="/about/faq" element={<FAQ />} />
           
