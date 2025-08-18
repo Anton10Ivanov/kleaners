@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
 interface NavbarContainerProps {
   children: React.ReactNode[];
   isVisible: boolean;
@@ -11,19 +12,29 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
   scrolled
 }) => {
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 min-h-[64px] transform ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${scrolled ? 'bg-white shadow-md' : 'bg-white/95 backdrop-blur-sm'}`} style={{ height: '64px' }}>
-      <div
-        className="w-full px-2 md:px-6 h-16 grid grid-cols-3 items-center bg-transparent"
-      >
-        <div className="flex items-center justify-start min-w-0">
-          {children[0]}
-        </div>
-        <div className="flex items-center justify-center min-w-0">
-          {children[1]}
-        </div>
-        <div className="flex items-center justify-end gap-2 min-w-0">
-          {/* Allow for more than 2 children in this section (auth, language, etc) */}
-          {children.slice(2)}
+    <nav className={cn(
+      "fixed w-full z-50 transition-all duration-500 ease-in-out",
+      isVisible ? "translate-y-0" : "-translate-y-full",
+      scrolled 
+        ? "bg-background border-b border-border shadow-sm backdrop-blur-md" 
+        : "bg-background/95 backdrop-blur-md border-b border-border/50"
+    )}>
+      <div className="container mx-auto px-4 lg:px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo Section */}
+          <div className="flex items-center animate-fade-in">
+            {children[0]}
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-center flex-1 mx-8 animate-fade-in">
+            {children[1]}
+          </div>
+          
+          {/* Controls Section */}
+          <div className="flex items-center gap-3 animate-fade-in">
+            {children.slice(2)}
+          </div>
         </div>
       </div>
     </nav>
