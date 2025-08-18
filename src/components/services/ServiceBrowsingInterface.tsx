@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { cn } from "@/lib/utils";
 import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
-import { DesignSystemContainer } from "@/components/layout/DesignSystemContainer";
+import { UnifiedContainer } from "@/components/layout/UnifiedContainer";
 import { LayoutSection } from "@/components/layout/LayoutSection";
 import { ServiceSearch } from "./ServiceSearch";
 import { ServiceCategoriesGrid } from "./ServiceCategoriesGrid";
@@ -34,7 +34,7 @@ export function ServiceBrowsingInterface({
   title = "Browse Our Services",
   className
 }: ServiceBrowsingInterfaceProps) {
-  const { getMobileSpacing } = useMobileOptimizations();
+  const { isMobile } = useMobileOptimizations();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
@@ -60,8 +60,7 @@ export function ServiceBrowsingInterface({
 
   return (
     <LayoutSection spacing="xl" className={className}>
-      <DesignSystemContainer size="xl">
-        <div className={cn("space-y-8", getMobileSpacing('lg'))}>
+        <div className="space-y-8">
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold text-foreground">
@@ -105,7 +104,6 @@ export function ServiceBrowsingInterface({
             </div>
           )}
         </div>
-      </DesignSystemContainer>
     </LayoutSection>
   );
 }

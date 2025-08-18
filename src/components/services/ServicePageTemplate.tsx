@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
 import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
-import { DesignSystemContainer } from "@/components/layout/DesignSystemContainer";
+import { UnifiedContainer } from "@/components/layout/UnifiedContainer";
 import { LayoutSection } from "@/components/layout/LayoutSection";
 import { ResponsiveGrid } from "@/components/layout/ResponsiveGrid";
 import { MobileBookingCard } from "@/components/booking/mobile/MobileBookingCard";
@@ -52,13 +52,13 @@ export function ServicePageTemplate({
   onBookingClick,
   className,
 }: ServicePageTemplateProps) {
-  const { isMobile, getMobileSpacing } = useMobileOptimizations();
+  const { isMobile } = useMobileOptimizations();
 
   return (
     <div className={cn("min-h-screen bg-background", className)}>
       {/* Hero Section */}
       <LayoutSection spacing="xl" background="accent">
-        <DesignSystemContainer size="xl">
+        <UnifiedContainer size="xl">
           <div className={cn(
             "grid gap-8 items-center",
             isMobile ? "grid-cols-1 text-center" : "grid-cols-2"
@@ -87,12 +87,12 @@ export function ServicePageTemplate({
               </div>
             )}
           </div>
-        </DesignSystemContainer>
+        </UnifiedContainer>
       </LayoutSection>
 
       {/* Features Section */}
       <LayoutSection spacing="lg">
-        <DesignSystemContainer size="xl">
+        <UnifiedContainer size="xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
               What's Included
@@ -120,12 +120,12 @@ export function ServicePageTemplate({
               </div>
             ))}
           </ResponsiveGrid>
-        </DesignSystemContainer>
+        </UnifiedContainer>
       </LayoutSection>
 
       {/* Pricing Packages Section */}
       <LayoutSection spacing="lg" background="muted">
-        <DesignSystemContainer size="xl">
+        <UnifiedContainer size="xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
               Choose Your Package
@@ -176,12 +176,12 @@ export function ServicePageTemplate({
               </MobileBookingCard>
             ))}
           </ResponsiveGrid>
-        </DesignSystemContainer>
+        </UnifiedContainer>
       </LayoutSection>
 
       {/* Benefits Section */}
       <LayoutSection spacing="lg">
-        <DesignSystemContainer size="xl">
+        <UnifiedContainer size="xl">
           <div className="grid gap-8 items-center md:grid-cols-2">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-6">
@@ -215,7 +215,7 @@ export function ServicePageTemplate({
               </Button>
             </div>
           </div>
-        </DesignSystemContainer>
+        </UnifiedContainer>
       </LayoutSection>
     </div>
   );
