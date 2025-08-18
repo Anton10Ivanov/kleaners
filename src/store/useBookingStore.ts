@@ -7,9 +7,15 @@ interface BookingState {
   currentStep: number;
   formData: Partial<BookingFormData>;
   
+  // Hero form state
+  postalCode: string;
+  selectedService: string;
+  
   // Actions
   setCurrentStep: (step: number) => void;
   updateFormData: (data: Partial<BookingFormData>) => void;
+  setPostalCode: (code: string) => void;
+  setSelectedService: (service: string) => void;
   resetForm: () => void;
   
   // Enhanced persistence
@@ -52,8 +58,30 @@ const useBookingStore = create<BookingState>()(
     (set, get) => ({
       currentStep: 1,
       formData: { ...initialFormData },
+      postalCode: '',
+      selectedService: '',
       
       setCurrentStep: (step) => set({ currentStep: step }),
+      
+      setPostalCode: (code: string) => {
+        set({ postalCode: code });
+        // Also update formData for consistency
+        const newFormData = { ...get().formData, postalCode: code };
+        set({ formData: newFormData });
+        formPersistence.save(newFormData);
+      },
+      
+      setSelectedService: (service: string) => {
+        set({ selectedService: service });
+        // Also update formData for consistency
+        const newFormData = { 
+          ...get().formData, 
+          service: service,
+          serviceType: migrateServiceValue(service)
+        };
+        set({ formData: newFormData });
+        formPersistence.save(newFormData);
+      },
       
       updateFormData: (data) => {
         const newFormData = { 
@@ -65,6 +93,14 @@ const useBookingStore = create<BookingState>()(
         
         set({ formData: newFormData });
         
+        // Sync hero form state if postal code or service is updated
+        if (data.postalCode && data.postalCode !== get().postalCode) {
+          set({ postalCode: data.postalCode });
+        }
+        if (data.service && data.service !== get().selectedService) {
+          set({ selectedService: data.service });
+        }
+        
         // Auto-save to enhanced persistence
         formPersistence.save(newFormData);
       },
@@ -72,7 +108,9 @@ const useBookingStore = create<BookingState>()(
       resetForm: () => {
         set({ 
           currentStep: 1, 
-          formData: { ...initialFormData } 
+          formData: { ...initialFormData },
+          postalCode: '',
+          selectedService: ''
         });
         formPersistence.clear();
       },
@@ -85,12 +123,16 @@ const useBookingStore = create<BookingState>()(
       loadFormData: () => {
         const persistedData = formPersistence.load();
         if (persistedData) {
+          const migratedData = {
+            ...get().formData, 
+            ...persistedData,
+            serviceType: migrateServiceValue(persistedData.serviceType as string)
+          };
+          
           set({ 
-            formData: { 
-              ...get().formData, 
-              ...persistedData,
-              serviceType: migrateServiceValue(persistedData.serviceType as string)
-            } 
+            formData: migratedData,
+            postalCode: persistedData.postalCode || '',
+            selectedService: persistedData.service || ''
           });
         }
       },

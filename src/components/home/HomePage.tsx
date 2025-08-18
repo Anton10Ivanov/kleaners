@@ -35,7 +35,18 @@ const ErrorFallback = ({ error }: { error: Error }) => (
 
 const HomePage = () => {
   const { startTimer, endTimer } = useComponentTimer('HomePage');
-  const { form, currentStep, handleNextStep, handleBackStep, watch, setValue } = useBookingForm();
+  const { 
+    form, 
+    currentStep, 
+    handleNextStep, 
+    handleBackStep, 
+    watch, 
+    setValue,
+    postalCode,
+    selectedService,
+    setPostalCode,
+    setSelectedService
+  } = useBookingForm();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Performance monitoring - simplified to prevent blocking
@@ -53,11 +64,9 @@ const HomePage = () => {
   }, [startTimer, endTimer]);
 
   // Memoized watched values
-  const selectedService = watch('service') || '';
   const frequency = watch('frequency');
   const hours = watch('hours');
   const selectedExtras = watch('extras') || [];
-  const postalCode = watch('postalCode') || '';
 
   // Memoized handlers
   const handleNext = useCallback(() => {
@@ -105,17 +114,7 @@ const HomePage = () => {
   }, [handleNextStep, startTimer, endTimer]);
 
 
-  const setPostalCode = useCallback((code: string) => {
-    if (import.meta.env.DEV) startTimer('setPostalCodeInteraction');
-    setValue('postalCode', code);
-    if (import.meta.env.DEV) endTimer('setPostalCodeInteraction');
-  }, [setValue, startTimer, endTimer]);
-
-  const setSelectedService = useCallback((service: string) => {
-    if (import.meta.env.DEV) startTimer('setSelectedServiceInteraction');
-    setValue('service', service);
-    if (import.meta.env.DEV) endTimer('setSelectedServiceInteraction');
-  }, [setValue, startTimer, endTimer]);
+  // These are now handled by the store directly
 
 
   return (

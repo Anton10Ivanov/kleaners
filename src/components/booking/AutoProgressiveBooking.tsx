@@ -21,51 +21,93 @@ export const AutoProgressiveBooking = memo(({
   const [completedSections, setCompletedSections] = useState<Record<string, boolean>>({});
   const [autoAdvanceTimer, setAutoAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Watch for form completion triggers
-  const propertySize = form.watch('propertySize');
-  const bedrooms = form.watch('bedrooms');
-  const bathrooms = form.watch('bathrooms');
-  const frequency = form.watch('frequency');
-  const hours = form.watch('hours');
+  // Watch for form completion triggers - removed individual watches since we now use form.watch()
+  // This allows us to handle all service types dynamically
 
-  // Auto-advance logic for Step 2 (Property Details)
   useEffect(() => {
-    if (currentStep === 2) {
-      const isPropertyComplete = propertySize && propertySize > 0 && 
-                                bedrooms !== undefined && bedrooms >= 0 && 
-                                bathrooms && bathrooms > 0;
-      const isBookingComplete = frequency && hours && hours > 0;
-      
-      if (isPropertyComplete && isBookingComplete) {
-        // Clear existing timer
-        if (autoAdvanceTimer) {
-          clearTimeout(autoAdvanceTimer);
+    const subscription = form.watch((value: any) => {
+      if (currentStep === 2) {
+        const service = value.service || value.serviceType;
+        let isStepComplete = false;
+        
+        // Check completion based on service type
+        switch (service) {
+          case 'home':
+            isStepComplete = !!(value.propertySize && 
+                              value.bedrooms !== undefined && 
+                              value.bathrooms !== undefined && 
+                              value.frequency && 
+                              value.hours);
+            break;
+            
+          case 'move-in-out':
+            isStepComplete = !!(value.squareMeters && 
+                              value.bedrooms !== undefined && 
+                              value.bathrooms !== undefined && 
+                              value.cleaningGoal);
+            break;
+            
+          case 'deep-cleaning':
+            isStepComplete = !!(value.squareMeters && 
+                              value.bedrooms !== undefined && 
+                              value.bathrooms !== undefined && 
+                              value.targetAreas?.length);
+            break;
+            
+          case 'post-construction':
+            isStepComplete = !!(value.squareMeters && 
+                              value.constructionType && 
+                              value.dustLevel);
+            break;
+            
+          case 'office':
+            isStepComplete = !!(value.squareMeters && 
+                              value.numEmployees);
+            break;
+            
+          default:
+            // Fallback to original home logic
+            isStepComplete = !!(value.propertySize && 
+                              value.bedrooms !== undefined && 
+                              value.bathrooms !== undefined && 
+                              value.frequency && 
+                              value.hours);
         }
 
-        // Set new timer for auto-advance
-        const timer = setTimeout(() => {
-          toast.success("Great! Moving to next step...");
-          handleNext();
-        }, 1200); // 1.2 second delay for better UX
+        if (isStepComplete && !completedSections.step2) {
+          setCompletedSections(prev => ({ ...prev, step2: true }));
+          
+          // Clear any existing timer
+          if (autoAdvanceTimer) {
+            clearTimeout(autoAdvanceTimer);
+          }
 
-        setAutoAdvanceTimer(timer);
-        setCompletedSections(prev => ({ ...prev, step2: true }));
-      } else {
-        setCompletedSections(prev => ({ ...prev, step2: false }));
-        if (autoAdvanceTimer) {
-          clearTimeout(autoAdvanceTimer);
-          setAutoAdvanceTimer(null);
+          // Set new timer for auto-advance
+          const timer = setTimeout(() => {
+            toast.success("Details completed! Moving to next step...", {
+              duration: 2000,
+            });
+            handleNext();
+          }, 1500); // 1.5 second delay
+          
+          setAutoAdvanceTimer(timer);
+        } else if (!isStepComplete && completedSections.step2) {
+          setCompletedSections(prev => ({ ...prev, step2: false }));
+          if (autoAdvanceTimer) {
+            clearTimeout(autoAdvanceTimer);
+            setAutoAdvanceTimer(null);
+          }
         }
       }
-    }
+    });
 
-    // Cleanup timer on unmount or step change
     return () => {
+      subscription.unsubscribe();
       if (autoAdvanceTimer) {
         clearTimeout(autoAdvanceTimer);
       }
     };
-  }, [currentStep, propertySize, bedrooms, bathrooms, frequency, hours, handleNext, autoAdvanceTimer]);
+  }, [form.watch, currentStep, completedSections.step2, autoAdvanceTimer, handleNext]);
 
   return (
     <div className="space-y-6">
