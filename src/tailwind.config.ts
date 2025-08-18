@@ -41,8 +41,8 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
-          hover: "hsl(var(--accent-hover))",
         },
+        "accent-hover": "hsl(var(--accent-hover))",
         
         // Status colors
         destructive: {
