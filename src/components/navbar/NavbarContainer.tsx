@@ -16,8 +16,8 @@ const NavbarContainer: React.FC<NavbarContainerProps> = ({
       "fixed w-full z-50 transition-all duration-500 ease-in-out",
       isVisible ? "translate-y-0" : "-translate-y-full",
       scrolled 
-        ? "bg-background border-b border-border shadow-sm backdrop-blur-md" 
-        : "bg-background/95 backdrop-blur-md border-b border-border/50"
+        ? "bg-primary border-b border-border shadow-sm backdrop-blur-md" 
+        : "bg-primary/95 backdrop-blur-md border-b border-border/50"
     )}>
       <div className="w-full px-4 lg:px-6">
         <div className="flex items-center justify-between h-16 max-w-[90%] mx-auto">

@@ -23,26 +23,37 @@ export default {
         "heading-color": "hsl(var(--heading-color))",
         "secondary-text": "hsl(var(--secondary-text))",
         surface: "hsl(var(--surface))",
+        
+        // Yale Blue - Brand Primary (Headers, Navigation)
         primary: {
           DEFAULT: "hsl(var(--primary))",
           hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        
+        // Hunter Green - Secondary Actions
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        
+        // Carrot Orange - Primary CTAs
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+          hover: "hsl(var(--accent-hover))",
+        },
+        
+        // Status colors
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        
+        // Layout colors
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -52,6 +63,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        
+        // New accent colors
+        "muted-gold": {
+          DEFAULT: "hsl(var(--muted-gold))",
+          foreground: "hsl(var(--muted-gold-foreground))",
+        },
+        "off-white": "hsl(var(--off-white))",
+        
+        // Status colors
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",
       },

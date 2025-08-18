@@ -43,44 +43,52 @@
     --layout-padding-md: 1.5rem; /* 24px */
     --layout-padding-lg: 2rem; /* 32px */
     
-    /* STRICT COLOR SCHEME - WCAG Compliant HSL Format */
-    /* Surgical White - Backgrounds, cards (60% allocation) */
-    --background: 0 0 100; /* #FFFFFF */
-    --card: 0 0 100; /* #FFFFFF */
-    --popover: 0 0 100; /* #FFFFFF */
-    --surface: 0 0 100; /* #FFFFFF */
-    --input: 0 0 100; /* #FFFFFF */
+    /* NEW COLOR SCHEME - Professional Service Brand */
+    /* Light Neutral Backgrounds - 70-80% coverage */
+    --background: 210 17 98; /* #F8F9FA - Light Neutral Background */
+    --card: 0 0 100; /* #FFFFFF - White for cards */
+    --popover: 0 0 100; /* #FFFFFF - White for popovers */
+    --surface: 0 0 100; /* #FFFFFF - White surfaces */
+    --input: 0 0 100; /* #FFFFFF - White form inputs */
+    --off-white: 48 67 94; /* #FAF3E0 - Alternate section background */
     
-    /* Prussian Blue - Primary color for headers, navigation, borders (70% allocation) */
-    --primary: 196 100 14; /* #003049 - Prussian Blue */
-    --primary-hover: 196 100 12; /* Darker shade for hover */
-    --heading-color: 196 100 14; /* #003049 - Headers use Prussian Blue */
-    --border: 196 100 14; /* #003049 - Borders use Prussian Blue */
-    --ring: 196 100 14; /* #003049 - Focus rings use Prussian Blue */
+    /* Yale Blue - Brand Anchor, Headers, Navigation (20-25% allocation) */
+    --primary: 208 73 23; /* #0D3B66 - Yale Blue */
+    --primary-hover: 208 73 18; /* Darker Yale Blue for hover */
+    --heading-color: 208 73 23; /* #0D3B66 - Headers use Yale Blue */
+    --ring: 208 73 23; /* #0D3B66 - Focus rings use Yale Blue */
     
-    /* Laser Lime - CTAs, key action items (15% allocation) */
-    --accent: 150 100 50; /* #00FF87 - Laser Lime */
-    --accent-foreground: 196 100 14; /* #003049 - Prussian Blue text on Lime */
+    /* Carrot Orange - Primary CTAs, Highlights (10-15% allocation) */
+    --accent: 32 85 59; /* #F19A3E - Carrot Orange */
+    --accent-hover: 32 85 48; /* #D97F28 - Darker orange for hover */
+    --accent-foreground: 0 0 100; /* #FFFFFF - White text on Carrot Orange */
     
-    /* Titanium Text - Body text, subtitles (10% allocation) */
-    --foreground: 235 18 26; /* #2B2D42 - Titanium Text */
-    --secondary-text: 235 18 26; /* #2B2D42 - Body text */
-    --card-foreground: 235 18 26; /* #2B2D42 */
-    --popover-foreground: 235 18 26; /* #2B2D42 */
+    /* Hunter Green - Secondary Actions, Support (15% allocation) */
+    --secondary: 124 31 32; /* #386641 - Hunter Green */
+    --secondary-foreground: 0 0 100; /* #FFFFFF - White text on Hunter Green */
     
-    /* White text on Prussian Blue backgrounds */
-    --primary-foreground: 0 0 100; /* #FFFFFF - White text on Prussian Blue */
+    /* Dark Neutral - Body text, Footer (Text elements) */
+    --foreground: 0 0 13; /* #222 - Dark Neutral */
+    --secondary-text: 0 0 13; /* #222 - Body text */
+    --card-foreground: 0 0 13; /* #222 */
+    --popover-foreground: 0 0 13; /* #222 */
     
-    /* Secondary Colors - Light gray backgrounds */
-    --secondary: 0 0 98; /* Light gray #FAFAFA */
-    --secondary-foreground: 196 100 14; /* #003049 - Prussian Blue text */
-    --muted: 0 0 96; /* Lighter gray #F5F5F5 */
-    --muted-foreground: 235 18 26; /* #2B2D42 - Titanium Text */
+    /* White text on dark backgrounds */
+    --primary-foreground: 0 0 100; /* #FFFFFF - White text on Yale Blue */
     
-    /* Emergency Amber - Alerts, limited-time badges (5% allocation) */
-    --warning: 36 100 50; /* #FF9E00 - Emergency Amber */
-    --destructive: 0 84 60; /* Red for errors - #991B1B */
-    --success: 142 76 36; /* Green for success - #16A34A */
+    /* Soft Gray - Borders, Form backgrounds, Dividers */
+    --border: 0 0 88; /* #E0E0E0 - Soft Gray */
+    --muted: 0 0 96; /* #F5F5F5 - Lighter gray for muted backgrounds */
+    --muted-foreground: 0 0 40; /* #666 - Muted text */
+    
+    /* Muted Gold - Accent highlights, Active states */
+    --muted-gold: 46 73 67; /* #E9C46A - Muted Gold */
+    --muted-gold-foreground: 0 0 13; /* #222 - Dark text on gold */
+    
+    /* Status Colors */
+    --warning: 36 100 50; /* #FF9E00 - Warning Orange */
+    --destructive: 0 84 60; /* Red for errors */
+    --success: 142 76 36; /* Green for success */
     --radius: 0.75rem;
   }
 }
