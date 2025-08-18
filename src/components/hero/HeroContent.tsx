@@ -64,17 +64,17 @@ export const HeroContent = memo(({ onGetQuote }: HeroContentProps) => {
         {/* Enhanced CTA with integrated form */}
         <div className="space-y-6">
           {/* Start booking form */}
-          <div className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 ${isMobile ? 'w-full' : 'max-w-md'}`}>
-            <h3 className="text-lg font-semibold text-white mb-4">Start Your Quote</h3>
+          <div className={`bg-accent/10 backdrop-blur-sm border border-accent/20 rounded-2xl p-6 ${isMobile ? 'w-full' : 'max-w-md'}`}>
+            <h3 className="text-lg font-semibold text-accent-foreground mb-4">Start Your Quote</h3>
             
             {/* Postal Code Input */}
             <div className="space-y-3 mb-4">
-              <label className="text-sm font-medium text-white/90">Your Postal Code</label>
+              <label className="text-sm font-medium text-accent-foreground/90">Your Postal Code</label>
               <input
                 type="text"
                 placeholder="12345"
                 maxLength={5}
-                className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 backdrop-blur-sm text-white placeholder:text-white/60 focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-accent/30 bg-background/20 backdrop-blur-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
                 onChange={(e) => {
                   // This will be handled by the parent component
                   const event = new CustomEvent('postalCodeChange', { detail: e.target.value });
@@ -85,9 +85,9 @@ export const HeroContent = memo(({ onGetQuote }: HeroContentProps) => {
             
             {/* Service Type Selection */}
             <div className="space-y-3 mb-4">
-              <label className="text-sm font-medium text-white/90">Service Type</label>
+              <label className="text-sm font-medium text-accent-foreground/90">Service Type</label>
               <select
-                className="w-full px-4 py-3 rounded-xl border border-white/30 bg-white/20 backdrop-blur-sm text-white focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-accent/30 bg-background/20 backdrop-blur-sm text-foreground focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
                 onChange={(e) => {
                   // This will be handled by the parent component
                   const event = new CustomEvent('serviceChange', { detail: e.target.value });
