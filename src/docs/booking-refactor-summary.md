@@ -28,6 +28,20 @@
 - ✅ Enhanced layout with consistent branding
 - ✅ Ready for future SummaryPill integration
 
+#### MoveInOutBooking.tsx
+- ✅ Added AutoProgressiveWrapper for step 1 & 2
+- ✅ Enhanced progress indicator with step labels
+- ✅ SummaryPill floating cost calculator
+- ✅ Auto-save with 30-second intervals + step-based saves
+- ✅ Form persistence with 24-hour expiration
+
+#### PostConstructionBooking.tsx
+- ✅ Added AutoProgressiveWrapper for step 1 & 2
+- ✅ Enhanced progress indicator with step labels
+- ✅ SummaryPill floating cost calculator
+- ✅ Auto-save with 30-second intervals + step-based saves
+- ✅ Form persistence with 24-hour expiration
+
 ### ✅ **SAFELY DELETED UNUSED CODE:**
 - ✅ `src/components/booking/BookingContent.tsx` (358 lines)
 - ✅ `src/components/booking/AutoProgressiveBooking.tsx` (131 lines) 
