@@ -9,16 +9,12 @@ import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";
 
 interface HeroProps {
-  selectedService: string;
-  setSelectedService: (value: string) => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
 
 export const Hero = memo(({
-  selectedService,
-  setSelectedService,
   postalCode,
   setPostalCode,
   handleNextStep
@@ -40,23 +36,8 @@ export const Hero = memo(({
     }
   }, [isPreviewWindow]);
 
-  // Set default service to "home" when component mounts
-  useEffect(() => {
-    startTimer('serviceInitialization');
-    if (!selectedService) {
-      console.log("Setting service to: home");
-      setSelectedService(ServiceType.Home);
-    }
-    endTimer('serviceInitialization');
-  }, [selectedService, setSelectedService, startTimer, endTimer]);
-
   const handleValidatedNextStep = () => {
     startTimer('validateAndNextStep');
-    if (!selectedService) {
-      toast.error("Please select a service type");
-      endTimer('validateAndNextStep');
-      return;
-    }
     if (!postalCode) {
       toast.error("Please enter your city or area code");
       endTimer('validateAndNextStep');
@@ -87,15 +68,13 @@ export const Hero = memo(({
       )}
       
       <HeroProvider 
-        initialService={selectedService} 
+        initialService="" 
         initialPostalCode={postalCode} 
         onNextStep={handleValidatedNextStep} 
-        onServiceChange={setSelectedService} 
+        onServiceChange={() => {}} 
         onPostalCodeChange={setPostalCode}
       >
         <HeroForm 
-          selectedService={selectedService} 
-          setSelectedService={setSelectedService} 
           postalCode={postalCode} 
           setPostalCode={setPostalCode} 
           handleNextStep={handleValidatedNextStep} 

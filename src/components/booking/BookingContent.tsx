@@ -19,6 +19,7 @@ import MobileBookingSummaryOptimized from './mobile/MobileBookingSummaryOptimize
 import { MobileBookingCard, MobileCalendarCard, MobileServiceSelector } from './mobile';
 import { EnhancedExtrasVisual } from './extras/EnhancedExtrasVisual';
 import { SummaryPill } from './summary/SummaryPill';
+import { ServiceTypeGrid } from '../hero/ServiceTypeGrid';
 
 interface BookingContentProps {
   currentStep: number;
@@ -142,7 +143,7 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
     <div className="w-full" onClick={handleFormClick}>
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
-          {currentStep === 2 && selectedService === ServiceType.Home && (
+          {currentStep === 2 && (
             <motion.div initial="hidden" animate="visible" variants={fadeVariant}>
               {isMobile ? (
                 // Mobile: Enhanced with new mobile booking components
@@ -180,59 +181,88 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
                   </div>
                 </div>
               ) : (
-                // Desktop: Updated single container layout
+                // Desktop: Updated single container layout with service selection first
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
                   
-                  {/* 1. Home Details Section with new flow */}
+                  {/* 1. Service Selection Section */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                      About Your Home
+                      Choose Your Service
                     </h3>
-                    <HomeDetailsSection 
-                      form={form} 
-                      onSuggestedTimeSelect={handleSuggestedTimeSelect}
+                    <ServiceTypeGrid 
+                      selectedService={form.watch('service') || ''} 
+                      setSelectedService={(service) => form.setValue('service', service)} 
                     />
                   </div>
 
                   <SectionDivider />
+                  
+                  {/* Show remaining sections only if service is selected */}
+                  {form.watch('service') && (
+                    <>
+                      {/* 2. Home Details Section (only for home service) */}
+                      {form.watch('service') === ServiceType.Home && (
+                        <>
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                              About Your Home
+                            </h3>
+                            <HomeDetailsSection 
+                              form={form} 
+                              onSuggestedTimeSelect={handleSuggestedTimeSelect}
+                            />
+                          </div>
 
-                  {/* 2. Frequency Selection */}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                      Cleaning Frequency
-                    </h3>
-                    <ServiceOptions 
-                      frequency={frequency} 
-                      setFrequency={freq => form.setValue('frequency', freq)} 
-                      isRegularCleaning={true} 
-                    />
-                  </div>
-                  
-                  {/* Progressive Disclosure - Show calendar only when previous sections are complete */}
-                  {sectionsCompleted.homeDetails && sectionsCompleted.frequency && showCalendar && (
-                    <>
-                      <SectionDivider />
-                      
-                      {/* 3. Calendar Section */}
-                      <div>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Calendar className="h-5 w-5 text-primary" />
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Date & Time
-                          </h3>
-                        </div>
-                        <EnhancedCalendar form={form} />
-                      </div>
-                    </>
-                  )}
-                  
-                  {/* 4. Enhanced Extras Section - Show when calendar is complete */}
-                  {sectionsCompleted.calendar && (
-                    <>
-                      <SectionDivider />
-                      <div>
-                        <EnhancedExtrasVisual form={form} />
-                      </div>
+                          <SectionDivider />
+
+                          {/* 3. Frequency Selection */}
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                              Cleaning Frequency
+                            </h3>
+                            <ServiceOptions 
+                              frequency={frequency} 
+                              setFrequency={freq => form.setValue('frequency', freq)} 
+                              isRegularCleaning={true} 
+                            />
+                          </div>
+                          
+                          {/* Progressive Disclosure - Show calendar only when previous sections are complete */}
+                          {sectionsCompleted.homeDetails && sectionsCompleted.frequency && showCalendar && (
+                            <>
+                              <SectionDivider />
+                              
+                              {/* 4. Calendar Section */}
+                              <div>
+                                <div className="flex items-center gap-2 mb-4">
+                                  <Calendar className="h-5 w-5 text-primary" />
+                                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Date & Time
+                                  </h3>
+                                </div>
+                                <EnhancedCalendar form={form} />
+                              </div>
+                            </>
+                          )}
+                          
+                          {/* 5. Enhanced Extras Section - Show when calendar is complete */}
+                          {sectionsCompleted.calendar && (
+                            <>
+                              <SectionDivider />
+                              <div>
+                                <EnhancedExtrasVisual form={form} />
+                              </div>
+                            </>
+                          )}
+                        </>
+                      )}
+
+                      {/* Business Service Section */}
+                      {form.watch('service') === ServiceType.Office && (
+                        <>
+                          <BusinessStep form={form} />
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -240,12 +270,6 @@ const BookingContent = ({ currentStep, selectedService, form }: BookingContentPr
 
               {/* Summary Pill - replaces sticky summary */}
               <SummaryPill form={form} currentStep={currentStep} />
-            </motion.div>
-          )}
-          
-          {currentStep === 2 && selectedService === ServiceType.Office && (
-            <motion.div initial="hidden" animate="visible" variants={fadeVariant} key="business-step">
-              <BusinessStep form={form} />
             </motion.div>
           )}
           

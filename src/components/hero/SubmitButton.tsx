@@ -19,7 +19,7 @@ export const SubmitButton = memo(() => {
         <Button 
           type="submit" 
           className={cn(
-            "w-full bg-primary hover:bg-primary-hover text-primary-foreground font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 group",
+            "w-full bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-lg rounded-2xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1 group",
             isMobile ? "h-16" : "h-14"
           )}
         >

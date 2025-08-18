@@ -1,49 +1,27 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { ServiceType } from "@/schemas/booking";
-import { getBookingRoute } from "@/utils/serviceRouteMapping";
-import { ServiceTypeGrid } from "./ServiceTypeGrid";
 import { PostalCodeInput } from "./PostalCodeInput";
 import { SubmitButton } from "./SubmitButton";
 import { cn } from "@/lib/utils";
 
 interface HeroFormProps {
-  selectedService: string;
-  setSelectedService: (value: string) => void;
   postalCode: string;
   setPostalCode: (value: string) => void;
   handleNextStep: () => void;
 }
 
 export const HeroForm = memo(({
-  selectedService,
-  setSelectedService,
   postalCode,
   setPostalCode,
   handleNextStep
 }: HeroFormProps) => {
-  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // If a service is selected, navigate to specific booking route
-    if (selectedService && postalCode) {
-      const route = getBookingRoute(selectedService as ServiceType);
-      navigate(route, {
-        state: {
-          selectedService,
-          postalCode
-        }
-      });
-    } else {
-      // Fallback to original step-based flow
-      handleNextStep();
-    }
+    handleNextStep();
   };
 
   return (
@@ -90,17 +68,6 @@ export const HeroForm = memo(({
 
         {/* Location Input */}
         <PostalCodeInput postalCode={postalCode} setPostalCode={setPostalCode} />
-
-        {/* Service Type Grid */}
-        <div>
-          <label className={cn(
-            "block text-sm font-medium mb-2 text-center",
-            isMobile ? "text-muted-foreground" : "text-primary-foreground"
-          )}>
-            Service Type
-          </label>
-          <ServiceTypeGrid selectedService={selectedService} setSelectedService={setSelectedService} />
-        </div>
         
         {/* CTA Button */}
         <SubmitButton />
