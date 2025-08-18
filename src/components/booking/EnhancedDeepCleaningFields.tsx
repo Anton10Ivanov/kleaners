@@ -1,23 +1,22 @@
 import { UseFormReturn } from "react-hook-form";
 import { DeepCleaningBookingForm } from "@/schemas/bookingSchemas";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, MapPin } from 'lucide-react';
 import { 
-  MobilePropertySizeField, 
-  MobileBedroomsField, 
-  MobileBathroomsField, 
-  MobileExtrasField,
-  MobileTargetAreasField,
-  MobileSwitchField
-} from '@/components/booking/shared/MobileSharedFields';
+  WebFriendlyPropertySizeField,
+  WebFriendlyBedroomsField,
+  WebFriendlyBathroomsField,
+  WebFriendlyDirtinessLevelField
+} from '@/components/booking/shared/WebFriendlyFields';
+import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
+import { TargetAreasField, DisinfectionRequiredField } from '@/components/booking/shared/SharedFields';
 import { MobileStack } from '@/components/layout/mobile-container';
 import { ServiceType } from '@/schemas/booking';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 interface EnhancedDeepCleaningFieldsProps {
   form: UseFormReturn<DeepCleaningBookingForm>;
@@ -39,33 +38,60 @@ const EnhancedDeepCleaningFields = ({ form }: EnhancedDeepCleaningFieldsProps) =
       </div>
 
       {/* Property Size */}
-      <MobilePropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
+      <WebFriendlyPropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
 
       {/* Bedrooms */}
-      <MobileBedroomsField form={form} />
+      <WebFriendlyBedroomsField form={form} />
 
       {/* Bathrooms */}
-      <MobileBathroomsField form={form} />
+      <WebFriendlyBathroomsField form={form} />
+
+      {/* Dirtiness Level */}
+      <WebFriendlyDirtinessLevelField form={form} />
 
       {/* Target Areas */}
-      <MobileTargetAreasField form={form} />
+      <TargetAreasField form={form} />
 
       {/* Include Walls and Ceilings */}
-      <MobileSwitchField
-        form={form}
+      <FormField
+        control={form.control}
         name="includeWallsAndCeilings"
-        label="Include walls and ceilings"
-        description="Deep clean walls and ceiling surfaces"
-        icon={<Sparkles className="h-4 w-4" />}
+        render={({ field }) => (
+          <FormItem>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+              <Label className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Include walls and ceilings
+              </Label>
+            </div>
+            <FormMessage />
+          </FormItem>
+        )}
       />
 
       {/* Mold or Pest Presence */}
-      <MobileSwitchField
-        form={form}
+      <FormField
+        control={form.control}
         name="moldOrPestPresence"
-        label="Mold or pest presence"
-        description="Requires specialized cleaning treatment"
-        icon={<MapPin className="h-4 w-4" />}
+        render={({ field }) => (
+          <FormItem>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+              <Label className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                Mold or pest presence
+              </Label>
+            </div>
+            <FormMessage />
+          </FormItem>
+        )}
       />
 
       {/* Special Surfaces */}
@@ -93,8 +119,15 @@ const EnhancedDeepCleaningFields = ({ form }: EnhancedDeepCleaningFieldsProps) =
         )}
       />
 
-      {/* Extras */}
-      <MobileExtrasField form={form} serviceType={ServiceType.DeepCleaning} />
+      {/* Flattened Extras */}
+      <FlatExtrasSelector
+        serviceType={ServiceType.DeepCleaning}
+        selectedExtras={(form.watch('extras') || []) as any}
+        onExtrasChange={(extras) => form.setValue('extras', extras as any)}
+      />
+
+      {/* Disinfection Required */}
+      <DisinfectionRequiredField form={form} />
     </MobileStack>
   );
 };

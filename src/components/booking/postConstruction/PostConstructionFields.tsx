@@ -4,14 +4,16 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import { HardHat, AlertTriangle, Wrench, Calendar, Star } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { HardHat, AlertTriangle, Wrench, Calendar } from 'lucide-react';
+import { 
+  WebFriendlyPropertySizeField,
+  WebFriendlyDirtinessLevelField
+} from '@/components/booking/shared/WebFriendlyFields';
+import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
 import { ConditionalFields } from '@/components/booking/shared/SharedFields';
 import { ServiceType } from '@/schemas/booking';
-import ExtrasSelector from '@/components/booking/ExtrasSelector';
 
 interface PostConstructionFieldsProps {
   form: UseFormReturn<PostConstructionBookingForm>;
@@ -26,30 +28,7 @@ const PostConstructionFields = ({ form }: PostConstructionFieldsProps) => {
       </div>
 
       {/* Square Meters */}
-      <FormField
-        control={form.control}
-        name="squareMeters"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Property Size (m²)</FormLabel>
-            <FormControl>
-              <div className="space-y-2">
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  min="10"
-                  max="1000"
-                />
-                <div className="text-sm text-gray-500">
-                  Minimum 10 m², maximum 1000 m²
-                </div>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <WebFriendlyPropertySizeField form={form} fieldName="squareMeters" label="Property Size" />
 
       {/* Construction Type */}
       <FormField
@@ -80,35 +59,7 @@ const PostConstructionFields = ({ form }: PostConstructionFieldsProps) => {
       />
 
       {/* Dust Level */}
-      <FormField
-        control={form.control}
-        name="dustLevel"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Dust Level (1-5)</FormLabel>
-            <FormControl>
-              <div className="space-y-2">
-                <Slider
-                  value={[field.value]}
-                  onValueChange={(value) => field.onChange(value[0])}
-                  max={5}
-                  min={1}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Light</span>
-                  <span>Heavy</span>
-                </div>
-                <div className="text-center text-sm font-medium">
-                  Level {field.value}
-                </div>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <WebFriendlyDirtinessLevelField form={form} />
 
       {/* Hazardous Materials */}
       <FormField
@@ -204,33 +155,12 @@ const PostConstructionFields = ({ form }: PostConstructionFieldsProps) => {
         )}
       />
 
-      {/* Enhanced Extras Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Star className="h-5 w-5" />
-            Additional Services
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="extras"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <ExtrasSelector
-                    serviceType={ServiceType.PostConstruction}
-                    selectedExtras={(field.value || []) as any}
-                    onExtrasChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </CardContent>
-      </Card>
+      {/* Flattened Extras Section */}
+      <FlatExtrasSelector
+        serviceType={ServiceType.PostConstruction}
+        selectedExtras={(form.watch('extras') || []) as any}
+        onExtrasChange={(extras) => form.setValue('extras', extras as any)}
+      />
 
       {/* Shared Fields */}
       <div className="mt-6">
