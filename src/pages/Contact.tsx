@@ -184,21 +184,21 @@ const Contact = () => {
   if (applicationSubmitted) {
     return <SuccessSubmission email={teamEmail} applicationId={applicationId} />;
   }
-  return <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50 dark:bg-gray-900">
+  return <div className="min-h-screen pt-24 pb-16 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-heading-color mb-4">
             Contact Us
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-secondary-text max-w-3xl mx-auto">
             Have questions about our services or interested in joining our team? We're here to help!
           </p>
         </div>
 
         {/* Tabbed Interface */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
             <TabsTrigger value="contact" className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
               Get in Touch
@@ -211,7 +211,7 @@ const Contact = () => {
 
           {/* Contact Tab */}
           <TabsContent value="contact" className="mt-0">
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="grid lg:grid-cols-2 gap-8">
               {/* Contact Form */}
               <Card className="h-fit">
                 <CardHeader>
@@ -258,7 +258,7 @@ const Contact = () => {
               </Card>
 
               {/* Contact Methods */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <Card>
                   <CardHeader>
                     <CardTitle>Other Ways to Reach Us</CardTitle>
@@ -266,16 +266,16 @@ const Contact = () => {
                       Choose the method that works best for you
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {contactMethods.map((method, index) => <div key={index} onClick={method.action} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors">
+                  <CardContent className="space-y-3">
+                    {contactMethods.map((method, index) => <div key={index} onClick={method.action} className="flex items-center gap-4 p-4 rounded-lg border hover:bg-muted cursor-pointer transition-colors">
                         <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                           <method.icon className="h-6 w-6 text-primary" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 dark:text-white">
+                          <h3 className="font-medium text-foreground">
                             {method.title}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                          <p className="text-sm text-secondary-text">
                             {method.description}
                           </p>
                           <p className="text-sm font-medium text-primary">
@@ -294,54 +294,94 @@ const Contact = () => {
                       Business Hours
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-300">Monday - Friday</span>
+                      <span className="text-secondary-text">Monday - Friday</span>
                       <span className="font-medium">8:00 AM - 8:00 PM</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-300">Saturday</span>
+                      <span className="text-secondary-text">Saturday</span>
                       <span className="font-medium">9:00 AM - 6:00 PM</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-300">Sunday</span>
+                      <span className="text-secondary-text">Sunday</span>
                       <span className="font-medium">10:00 AM - 4:00 PM</span>
                     </div>
-                    <Separator className="my-3" />
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                    <Separator className="my-2" />
+                    <div className="flex items-center gap-2 text-sm text-secondary-text">
                       <CheckCircle className="h-4 w-4 text-green-500" />
                       Emergency services available 24/7
                     </div>
                   </CardContent>
                 </Card>
-
-                {/* Support Features */}
-                
               </div>
             </div>
           </TabsContent>
 
           {/* Join Team Tab */}
           <TabsContent value="join" className="mt-0">
-            <div className="space-y-8">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  Join Our Team
-                </h2>
-                <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
-                  We're looking for passionate individuals to join our cleaning service. Apply today and become part of our growing team!
-                </p>
-                
-                {!showApplicationForm && <Button size="lg" onClick={() => setShowApplicationForm(true)} className="font-semibold text-base px-8 py-6 mb-8">
-                    Apply Now
-                  </Button>}
-              </div>
-
-              {!showApplicationForm ? <div className="space-y-12">
-                  <BenefitsPanel className="border-0 shadow-md" />
-                </div> : <div className="w-full">
-                  <ApplicationForm currentStep={currentStep} formProgress={formProgress} name={teamName} email={teamEmail} phone={teamPhone} position={position} experience={experience} availability={availability} skills={skills} resume={resume} backgroundCheckConsent={backgroundCheckConsent} message={teamMessage} agreeToTerms={agreeToTerms} agreeToBackgroundCheck={agreeToBackgroundCheck} agreeToTraining={agreeToTraining} isLoading={isLoading} setName={setTeamName} setEmail={setTeamEmail} setPhone={setTeamPhone} setPosition={setPosition} setExperience={setExperience} setMessage={setTeamMessage} setAgreeToTerms={setAgreeToTerms} setAgreeToBackgroundCheck={setAgreeToBackgroundCheck} setAgreeToTraining={setAgreeToTraining} setResume={setResume} setBackgroundCheckConsent={setBackgroundCheckConsent} handleFileChange={handleFileChange} toggleAvailability={toggleAvailability} toggleSkill={toggleSkill} prevStep={prevStep} handleSubmit={handleTeamSubmit} />
-                </div>}
+            <div className="space-y-6">
+              {!showApplicationForm ? (
+                <div className="space-y-6">
+                  {/* Introduction */}
+                  <div className="text-center max-w-2xl mx-auto">
+                    <p className="text-lg text-secondary-text">
+                      We're looking for passionate individuals to join our cleaning service. Discover the benefits of working with us!
+                    </p>
+                  </div>
+                  
+                  {/* Benefits Section */}
+                  <BenefitsPanel className="border-0" />
+                  
+                  {/* Apply Button */}
+                  <div className="text-center pt-4">
+                    <Button 
+                      size="lg" 
+                      onClick={() => setShowApplicationForm(true)} 
+                      className="px-8 py-3"
+                    >
+                      Apply Now
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="max-w-4xl mx-auto">
+                  <ApplicationForm 
+                    currentStep={currentStep} 
+                    formProgress={formProgress} 
+                    name={teamName} 
+                    email={teamEmail} 
+                    phone={teamPhone} 
+                    position={position} 
+                    experience={experience} 
+                    availability={availability} 
+                    skills={skills} 
+                    resume={resume} 
+                    backgroundCheckConsent={backgroundCheckConsent} 
+                    message={teamMessage} 
+                    agreeToTerms={agreeToTerms} 
+                    agreeToBackgroundCheck={agreeToBackgroundCheck} 
+                    agreeToTraining={agreeToTraining} 
+                    isLoading={isLoading} 
+                    setName={setTeamName} 
+                    setEmail={setTeamEmail} 
+                    setPhone={setTeamPhone} 
+                    setPosition={setPosition} 
+                    setExperience={setExperience} 
+                    setMessage={setTeamMessage} 
+                    setAgreeToTerms={setAgreeToTerms} 
+                    setAgreeToBackgroundCheck={setAgreeToBackgroundCheck} 
+                    setAgreeToTraining={setAgreeToTraining} 
+                    setResume={setResume} 
+                    setBackgroundCheckConsent={setBackgroundCheckConsent} 
+                    handleFileChange={handleFileChange} 
+                    toggleAvailability={toggleAvailability} 
+                    toggleSkill={toggleSkill} 
+                    prevStep={prevStep} 
+                    handleSubmit={handleTeamSubmit} 
+                  />
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>
