@@ -138,7 +138,7 @@ const ConsolidatedTrustSection = () => {
         >
           <div className="flex items-center justify-center gap-2 mb-3">
             {[1, 2, 3, 4, 5].map(i => (
-              <Star key={i} className="h-6 w-6 fill-yellow-400 text-yellow-400" />
+              <Star key={i} className="h-6 w-6 fill-muted-gold text-muted-gold" />
             ))}
             <span className="text-2xl font-bold text-primary ml-2">4.9</span>
           </div>
