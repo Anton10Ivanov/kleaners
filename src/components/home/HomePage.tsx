@@ -129,8 +129,8 @@ const HomePage = () => {
               handleNextStep={handleHeroNextStep}
             />
             
-            {/* Professional section spacing and backgrounds */}
-            <div className="bg-muted/30">
+            {/* Alternating white/off-white section backgrounds */}
+            <div className="bg-off-white">
               <ConsolidatedTrustSection />
             </div>
             
@@ -138,7 +138,7 @@ const HomePage = () => {
               <EnhancedProcessSteps />
             </div>
             
-            <div className="bg-muted/20">
+            <div className="bg-off-white">
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Suspense fallback={<SectionLoading />}>
                   <EnhancedServiceCategoriesSection />
@@ -154,7 +154,7 @@ const HomePage = () => {
               </ErrorBoundary>
             </div>
             
-            <div className="bg-muted/30">
+            <div className="bg-off-white">
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Suspense fallback={<SectionLoading />}>
                   <LazyHomeSections />
