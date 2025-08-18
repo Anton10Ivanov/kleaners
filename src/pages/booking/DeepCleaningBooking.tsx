@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DeepCleaningSchema, DeepCleaningBookingForm } from '@/schemas/bookingSchemas';
 import { Form } from '@/components/ui/form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
@@ -11,11 +11,15 @@ import { useNavigate } from 'react-router-dom';
 import EnhancedDeepCleaningFields from '@/components/booking/EnhancedDeepCleaningFields';
 import DeepCleaningStep2 from './DeepCleaningStep2';
 import { ResponsiveBookingLayout } from '@/components/booking/shared/ResponsiveBookingLayout';
+import { EnhancedProgressIndicator } from '@/components/booking/shared/EnhancedProgressIndicator';
+import { SummaryPill } from '@/components/booking/summary/SummaryPill';
+import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
 const DeepCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { submitBooking } = useBookingSubmission();
   const navigate = useNavigate();
+  const [autoSave, setAutoSave] = useState<FormAutoSave | null>(null);
   
   const form = useForm<DeepCleaningBookingForm>({
     resolver: zodResolver(DeepCleaningSchema),
@@ -37,8 +41,31 @@ const DeepCleaningBooking = () => {
       lastName: '',
       email: '',
       phone: '',
+      ...enhancedFormPersistence.load('deep-cleaning'), // Load persisted data
     },
   });
+
+  // Enhanced form persistence
+  useEffect(() => {
+    const autoSaveInstance = new FormAutoSave(
+      () => form.getValues(),
+      'deep-cleaning',
+      30000 // 30 seconds
+    );
+    autoSaveInstance.start();
+    setAutoSave(autoSaveInstance);
+
+    return () => {
+      autoSaveInstance.stop();
+    };
+  }, [form]);
+
+  // Save on step changes
+  useEffect(() => {
+    if (autoSave) {
+      autoSave.saveNow();
+    }
+  }, [currentStep, autoSave]);
 
   // Auto-progression logic
   const checkStepCompletion = (step: number): boolean => {
@@ -110,6 +137,13 @@ const DeepCleaningBooking = () => {
       showBackButton={true}
       nextButtonText={currentStep === 3 ? undefined : 'Continue'}
     >
+      {/* Enhanced Progress Indicator */}
+      <EnhancedProgressIndicator 
+        currentStep={currentStep} 
+        totalSteps={3}
+        stepLabels={['Deep Cleaning Details', 'Schedule & Contact', 'Confirmation']}
+      />
+      
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <AnimatePresence mode="wait">
@@ -125,6 +159,9 @@ const DeepCleaningBooking = () => {
           </AnimatePresence>
         </form>
       </Form>
+      
+      {/* Enhanced Summary Pill */}
+      <SummaryPill form={form as any} currentStep={currentStep} />
     </ResponsiveBookingLayout>
   );
 };

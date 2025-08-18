@@ -49,10 +49,11 @@ Located in `src/components/auth`, these handle user authentication:
 
 #### Booking Components
 Located in `src/components/booking`, these handle the booking flow:
-- BookingContent
-- ServiceOptions
-- Calendar
-- etc.
+- BookingServiceSelector (main service selection)
+- EnhancedHomeDetailsSection
+- Various service-specific components
+- Summary components (SummaryPill, SummaryDrawer)
+- Shared components (AutoProgressiveWrapper, EnhancedProgressIndicator)
 
 ## Component Usage Guidelines
 

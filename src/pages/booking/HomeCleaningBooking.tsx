@@ -4,15 +4,20 @@ import { HomeCleaningSchema, type HomeBookingForm } from '@/schemas/bookingSchem
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useEnhancedBookingSubmission } from '@/hooks/useEnhancedBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import { EnhancedHomeDetailsSection } from '@/components/booking/EnhancedHomeDetailsSection';
+import { AutoProgressiveWrapper } from '@/components/booking/shared/AutoProgressiveWrapper';
+import { EnhancedProgressIndicator } from '@/components/booking/shared/EnhancedProgressIndicator';
+import { SummaryPill } from '@/components/booking/summary/SummaryPill';
+import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
 const HomeCleaningBooking = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { submitBooking } = useEnhancedBookingSubmission();
   const navigate = useNavigate();
+  const [autoSave, setAutoSave] = useState<FormAutoSave | null>(null);
   
   const form = useForm<HomeBookingForm>({
     resolver: zodResolver(HomeCleaningSchema),
@@ -39,8 +44,31 @@ const HomeCleaningBooking = () => {
       phone: '',
       selectedDate: new Date(),
       selectedTime: '',
+      ...enhancedFormPersistence.load('home'), // Load persisted data
     },
   });
+
+  // Enhanced form persistence
+  useEffect(() => {
+    const autoSaveInstance = new FormAutoSave(
+      () => form.getValues(),
+      'home',
+      30000 // 30 seconds
+    );
+    autoSaveInstance.start();
+    setAutoSave(autoSaveInstance);
+
+    return () => {
+      autoSaveInstance.stop();
+    };
+  }, [form]);
+
+  // Save on step changes
+  useEffect(() => {
+    if (autoSave) {
+      autoSave.saveNow();
+    }
+  }, [currentStep, autoSave]);
 
   const frequency = form.watch('frequency');
   const showCalendar = frequency && frequency !== 'custom';
@@ -65,93 +93,108 @@ const HomeCleaningBooking = () => {
     form.setValue('hours', hours);
   };
 
+  // Completion checks for auto-progression
+  const checkStep1Completion = (values: HomeBookingForm) => {
+    return !!(values.propertySize && values.bedrooms && values.bathrooms && values.frequency && values.hours);
+  };
+
+  const checkStep2Completion = (values: HomeBookingForm) => {
+    return !!(values.selectedDate && values.selectedTime);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 pt-20 pb-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Enhanced Home Cleaning Booking
+            Home Cleaning Booking
           </h1>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <span>Step {currentStep} of 3</span>
-            <div className="flex space-x-1">
-              {[1, 2, 3].map((step) => (
-                <div
-                  key={step}
-                  className={`w-2 h-2 rounded-full ${
-                    step <= currentStep ? 'bg-primary' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
+          
+          {/* Enhanced Progress Indicator */}
+          <EnhancedProgressIndicator 
+            currentStep={currentStep} 
+            totalSteps={3}
+            stepLabels={['Home Details', 'Schedule & Extras', 'Contact Info']}
+          />
         </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
-            {/* Step 1: Service Details */}
+            {/* Step 1: Service Details with Auto-Progression */}
             {currentStep === 1 && (
-              <div className="space-y-6">
+              <AutoProgressiveWrapper
+                form={form}
+                currentStep={currentStep}
+                onNext={handleNext}
+                completionCheck={checkStep1Completion}
+              >
                 <EnhancedHomeDetailsSection 
                   form={form} 
                   onSuggestedTimeSelect={handleSuggestedTimeSelect}
                 />
-              </div>
+              </AutoProgressiveWrapper>
             )}
 
-            {/* Step 2: Calendar and Extras */}
+            {/* Step 2: Calendar and Extras with Auto-Progression */}
             {currentStep === 2 && (
-              <div className="space-y-6">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                  <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Date</label>
-                      <input
-                        type="date"
-                        {...form.register('selectedDate', { valueAsDate: true })}
-                        className="w-full p-2 border rounded-lg"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Time</label>
-                      <select
-                        {...form.register('selectedTime')}
-                        className="w-full p-2 border rounded-lg"
-                      >
-                        <option value="">Select time</option>
-                        <option value="08:00">8:00 AM</option>
-                        <option value="09:00">9:00 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="12:00">12:00 PM</option>
-                        <option value="13:00">1:00 PM</option>
-                        <option value="14:00">2:00 PM</option>
-                        <option value="15:00">3:00 PM</option>
-                        <option value="16:00">4:00 PM</option>
-                        <option value="17:00">5:00 PM</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                  <h3 className="text-lg font-semibold mb-4">Extras</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {['ironing', 'fridge', 'oven', 'cabinets', 'balcony', 'carpet'].map((extra) => (
-                      <label key={extra} className="flex items-center space-x-2">
+              <AutoProgressiveWrapper
+                form={form}
+                currentStep={currentStep}
+                onNext={handleNext}
+                completionCheck={checkStep2Completion}
+              >
+                <div className="space-y-6">
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                    <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Date</label>
                         <input
-                          type="checkbox"
-                          value={extra}
-                          {...form.register('extras')}
-                          className="rounded"
+                          type="date"
+                          {...form.register('selectedDate', { valueAsDate: true })}
+                          className="w-full p-2 border rounded-lg"
                         />
-                        <span className="capitalize">{extra}</span>
-                      </label>
-                    ))}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Time</label>
+                        <select
+                          {...form.register('selectedTime')}
+                          className="w-full p-2 border rounded-lg"
+                        >
+                          <option value="">Select time</option>
+                          <option value="08:00">8:00 AM</option>
+                          <option value="09:00">9:00 AM</option>
+                          <option value="10:00">10:00 AM</option>
+                          <option value="11:00">11:00 AM</option>
+                          <option value="12:00">12:00 PM</option>
+                          <option value="13:00">1:00 PM</option>
+                          <option value="14:00">2:00 PM</option>
+                          <option value="15:00">3:00 PM</option>
+                          <option value="16:00">4:00 PM</option>
+                          <option value="17:00">5:00 PM</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                    <h3 className="text-lg font-semibold mb-4">Extras</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {['ironing', 'fridge', 'oven', 'cabinets', 'balcony', 'carpet'].map((extra) => (
+                        <label key={extra} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={extra}
+                            {...form.register('extras')}
+                            className="rounded"
+                          />
+                          <span className="capitalize">{extra}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </AutoProgressiveWrapper>
             )}
 
             {/* Step 3: Contact Information */}
@@ -276,6 +319,9 @@ const HomeCleaningBooking = () => {
             </div>
           </form>
         </Form>
+        
+        {/* Enhanced Summary Pill */}
+        <SummaryPill form={form as any} currentStep={currentStep} />
       </div>
     </div>
   );
