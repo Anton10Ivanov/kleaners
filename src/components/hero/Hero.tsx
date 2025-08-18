@@ -39,10 +39,29 @@ export const Hero = memo(({
     }
   }, [isPreviewWindow]);
 
+  // Listen for form events from HeroContent
+  useEffect(() => {
+    const handlePostalCodeChange = (e: CustomEvent) => {
+      setPostalCode(e.detail);
+    };
+    
+    const handleServiceChange = (e: CustomEvent) => {
+      setSelectedService(e.detail);
+    };
+    
+    window.addEventListener('postalCodeChange', handlePostalCodeChange as EventListener);
+    window.addEventListener('serviceChange', handleServiceChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('postalCodeChange', handlePostalCodeChange as EventListener);
+      window.removeEventListener('serviceChange', handleServiceChange as EventListener);
+    };
+  }, [setPostalCode, setSelectedService]);
+
   const handleValidatedNextStep = () => {
     startTimer('validateAndNextStep');
-    if (!postalCode) {
-      toast.error("Please enter your postal code");
+    if (!postalCode || postalCode.length < 5) {
+      toast.error("Please enter a valid 5-digit postal code");
       endTimer('validateAndNextStep');
       return;
     }

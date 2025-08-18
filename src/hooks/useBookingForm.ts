@@ -9,8 +9,12 @@ export const useBookingForm = () => {
   const { 
     currentStep, 
     formData, 
+    postalCode,
+    selectedService,
     setCurrentStep, 
     updateFormData, 
+    setPostalCode,
+    setSelectedService,
     resetForm 
   } = useBookingStore();
 
@@ -60,9 +64,13 @@ export const useBookingForm = () => {
     form,
     currentStep,
     formData,
+    postalCode,
+    selectedService,
     handleNextStep,
     handleBackStep,
     handleReset,
+    setPostalCode,
+    setSelectedService,
     watch: form.watch,
     setValue: form.setValue,
     getValues: form.getValues,

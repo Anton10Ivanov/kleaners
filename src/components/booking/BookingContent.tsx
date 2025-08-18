@@ -8,6 +8,13 @@ import BusinessStep from './business/BusinessStep';
 import FinalStep from './FinalStep';
 import { HomeDetailsSection } from './HomeDetailsSection';
 import { BookingFormData, Frequency, ServiceType } from '@/schemas/booking';
+import { 
+  HomeBookingForm, 
+  OfficeBookingForm, 
+  DeepCleaningBookingForm, 
+  MoveInOutBookingForm, 
+  PostConstructionBookingForm 
+} from '@/schemas/bookingSchemas';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -20,6 +27,12 @@ import { MobileBookingCard, MobileCalendarCard, MobileServiceSelector } from './
 import { EnhancedExtrasVisual } from './extras/EnhancedExtrasVisual';
 import { SummaryPill } from './summary/SummaryPill';
 import { ServiceTypeGrid } from '../hero/ServiceTypeGrid';
+
+// Import service-specific form components
+import EnhancedMoveInOutFields from './EnhancedMoveInOutFields';
+import EnhancedDeepCleaningFields from './EnhancedDeepCleaningFields';
+import PostConstructionFields from './postConstruction/PostConstructionFields';
+import { ProgressIndicator } from './ProgressIndicator';
 
 interface BookingContentProps {
   currentStep: number;
@@ -142,6 +155,13 @@ const BookingContent = ({ currentStep, selectedService, form, handleNext }: Book
   
   return (
     <div className="w-full" onClick={handleFormClick}>
+      {/* Progress Indicator */}
+      <ProgressIndicator 
+        currentStep={currentStep} 
+        totalSteps={3}
+        className="mb-6" 
+      />
+      
       <Form {...form}>
         <form onSubmit={e => e.preventDefault()}>
           {currentStep === 2 && (
@@ -201,7 +221,7 @@ const BookingContent = ({ currentStep, selectedService, form, handleNext }: Book
                   {/* Show remaining sections only if service is selected */}
                   {form.watch('service') && (
                     <>
-                      {/* 2. Home Details Section (only for home service) */}
+                      {/* Home Service Section */}
                       {form.watch('service') === ServiceType.Home && (
                         <>
                           <div>
@@ -258,7 +278,37 @@ const BookingContent = ({ currentStep, selectedService, form, handleNext }: Book
                         </>
                       )}
 
-                      {/* Business Service Section */}
+                      {/* Move In/Out Service Section */}
+                      {form.watch('service') === 'move-in-out' && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            Move In/Out Details
+                          </h3>
+                          <EnhancedMoveInOutFields form={form as any} />
+                        </div>
+                      )}
+
+                      {/* Deep Cleaning Service Section */}
+                      {form.watch('service') === 'deep-cleaning' && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            Deep Cleaning Details
+                          </h3>
+                          <EnhancedDeepCleaningFields form={form as any} />
+                        </div>
+                      )}
+
+                      {/* Post Construction Service Section */}
+                      {form.watch('service') === 'post-construction' && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            Post Construction Details
+                          </h3>
+                          <PostConstructionFields form={form as any} />
+                        </div>
+                      )}
+
+                      {/* Office Service Section */}
                       {form.watch('service') === ServiceType.Office && (
                         <>
                           <BusinessStep form={form} />
