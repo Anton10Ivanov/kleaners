@@ -54,7 +54,7 @@ const StarRating = ({ rating }: { rating: number }) => {
         <Star
           key={i}
           className={`h-4 w-4 ${
-            i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+            i < rating ? 'fill-muted-gold text-muted-gold' : 'text-neutral-icon'
           }`}
         />
       ))}
@@ -124,7 +124,7 @@ export const EnhancedTestimonials = memo(() => {
                 <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
                   {testimonial.service}
                 </span>
-                <div className="flex items-center gap-1 text-yellow-500">
+                <div className="flex items-center gap-1 text-muted-gold">
                   <Star className="h-3 w-3 fill-current" />
                   <span className="text-xs font-medium">{testimonial.rating}.0</span>
                 </div>

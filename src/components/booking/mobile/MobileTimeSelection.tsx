@@ -42,7 +42,7 @@ const MobileTimeSelection = ({ form, onComplete }: MobileTimeSelectionProps) => 
   const getAvailabilityStatus = (time: string) => {
     const hour = parseInt(time.split(':')[0]);
     if (hour >= 9 && hour <= 15) return { status: 'high', color: 'bg-green-50 border-green-200 text-green-700' };
-    if (hour >= 8 && hour <= 17) return { status: 'medium', color: 'bg-yellow-50 border-yellow-200 text-yellow-700' };
+    if (hour >= 8 && hour <= 17) return { status: 'medium', color: 'bg-secondary/10 border-secondary/20 text-secondary' };
     return { status: 'low', color: 'bg-red-50 border-red-200 text-red-700' };
   };
 
@@ -88,7 +88,7 @@ const MobileTimeSelection = ({ form, onComplete }: MobileTimeSelectionProps) => 
           <span>High</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded bg-yellow-200"></div>
+          <div className="w-2 h-2 rounded bg-secondary/30"></div>
           <span>Medium</span>
         </div>
         <div className="flex items-center gap-1">

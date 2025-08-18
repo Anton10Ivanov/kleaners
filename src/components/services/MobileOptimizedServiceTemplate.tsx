@@ -106,7 +106,7 @@ const MobileOptimizedServiceTemplate = ({ data, showTestimonials = false }: Mobi
             {/* Compact Trust Indicators */}
             <div className="flex justify-center items-center gap-4 mt-6 text-white/80 text-sm">
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <Star className="h-4 w-4 fill-muted-gold text-muted-gold" />
                 <span className="font-medium">{data.averageRating}</span>
               </div>
               <div className="flex items-center gap-1">

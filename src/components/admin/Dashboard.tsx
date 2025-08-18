@@ -64,7 +64,7 @@ export const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-500">{stats.pending}</div>
+            <div className="text-3xl font-bold text-secondary">{stats.pending}</div>
           </CardContent>
         </Card>
         

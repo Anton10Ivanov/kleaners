@@ -42,7 +42,7 @@ const services = [
     description: 'Moving cleaning service',
     icon: ArrowRightLeft,
     color: 'bg-orange-50 border-orange-200 hover:bg-orange-100',
-    iconColor: 'text-orange-600',
+    iconColor: 'text-neutral-icon',
     route: '/booking/move-in-out'
   },
   {
@@ -50,8 +50,8 @@ const services = [
     title: 'Post Construction',
     description: 'Construction cleanup service',
     icon: HardHat,
-    color: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
-    iconColor: 'text-yellow-600',
+    color: 'bg-secondary/10 border-secondary/20 hover:bg-secondary/20',
+    iconColor: 'text-secondary',
     route: '/booking/post-construction'
   }
 ];

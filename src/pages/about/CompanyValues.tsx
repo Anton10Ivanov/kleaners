@@ -85,7 +85,7 @@ const CompanyValues = () => {
       description: "Donating a percentage of profits to local charities and social causes."
     },
     {
-      icon: <Lightbulb className="h-6 w-6 text-yellow-500" />,
+      icon: <Lightbulb className="h-6 w-6 text-secondary" />,
       title: "Skills Development Center",
       description: "Establishing training facilities for professional cleaning and life skills development."
     }

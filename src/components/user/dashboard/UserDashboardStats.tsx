@@ -61,15 +61,15 @@ export function UserDashboardStats({
       title: "Average Rating",
       value: `${stats.avgRating}/5`,
       icon: <Star className="h-5 w-5" />,
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50 dark:bg-yellow-900/20"
+      color: "text-secondary",
+      bgColor: "bg-secondary/10"
     },
     {
       title: "Upcoming",
       value: stats.upcomingBookings,
       icon: <TrendingUp className="h-5 w-5" />,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50 dark:bg-orange-900/20"
+      color: "text-secondary",
+      bgColor: "bg-secondary/10"
     },
     {
       title: "Completed",

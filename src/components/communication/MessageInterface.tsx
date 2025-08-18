@@ -81,7 +81,7 @@ export function MessageInterface({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'online': return 'bg-green-500';
-      case 'away': return 'bg-yellow-500';
+      case 'away': return 'bg-secondary';
       default: return 'bg-gray-400';
     }
   };

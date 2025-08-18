@@ -12,7 +12,7 @@ export const QuestionStatusBadge: React.FC<QuestionStatusBadgeProps> = ({ status
   
   switch (status) {
     case 'pending':
-      return <Badge className="bg-yellow-500">Pending</Badge>;
+      return <Badge className="bg-secondary/10 text-secondary border-secondary/20">Pending</Badge>;
     case 'answered':
       return <Badge variant="success">Answered</Badge>;
     case 'ignored':

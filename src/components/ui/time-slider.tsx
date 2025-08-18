@@ -58,7 +58,7 @@ export const TimeSlider = ({ value, onChange, className }: TimeSliderProps) => {
   const availabilityStatus = getAvailabilityStatus(sliderValue[0]);
   const availabilityColors = {
     high: 'text-green-600 bg-green-50 border-green-200',
-    medium: 'text-yellow-600 bg-yellow-50 border-yellow-200',
+    medium: 'text-secondary bg-secondary/10 border-secondary/20',
     low: 'text-red-600 bg-red-50 border-red-200'
   };
 
