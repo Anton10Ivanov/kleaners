@@ -6,9 +6,13 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "0", // Remove conflicting global padding
       screens: {
-        "2xl": "95%",
+        "sm": "640px",
+        "md": "768px", 
+        "lg": "1024px",
+        "xl": "1280px",
+        "2xl": "1400px",
       },
     },
     extend: {
@@ -122,14 +126,10 @@ export default {
         '2xl': 'var(--spacing-2xl)',
         '3xl': 'var(--spacing-3xl)',
         '4xl': 'var(--spacing-4xl)',
-        // Legacy spacing - marked for migration
-        '1': 'var(--spacing1)',
-        '2': 'var(--spacing2)',
-        '3': 'var(--spacing3)',
-        '4': 'var(--spacing4)',
-        '5': 'var(--spacing5)',
-        '6': 'var(--spacing6)',
-        '7': 'var(--spacing7)',
+        // Layout spacing tokens
+        'layout-sm': 'var(--layout-padding-sm)',
+        'layout-md': 'var(--layout-padding-md)', 
+        'layout-lg': 'var(--layout-padding-lg)',
         // Touch targets
         'touch-min': 'var(--touch-minimum)',
         'touch': 'var(--touch-comfortable)',

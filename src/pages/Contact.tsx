@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Mail, Phone, MessageCircle, Clock, CheckCircle, Users } from 'lucide-react';
+import { UnifiedContainer } from '@/components/layout/UnifiedContainer';
 
 // Import Join Team components
 import { useJoinTeamForm } from '@/hooks/useJoinTeamForm';
@@ -167,8 +168,9 @@ const Contact = () => {
   if (applicationSubmitted) {
     return <SuccessSubmission email={teamEmail} applicationId={applicationId} />;
   }
-  return <div className="min-h-screen pt-24 pb-16 px-4 bg-background">
-      <div className="max-w-[90%] mx-auto">
+  return (
+    <div className="min-h-screen pt-24 pb-16 bg-background">
+      <UnifiedContainer size="xl">
         {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-heading-color mb-4">
@@ -332,7 +334,8 @@ const Contact = () => {
             </div>
           </TabsContent>
         </Tabs>
-      </div>
-    </div>;
+      </UnifiedContainer>
+    </div>
+  );
 };
 export default Contact;

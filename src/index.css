@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @import "./styles/componentLibrary.css";
-@import "./styles/spacing.css";
 @import "./styles/animations.css";
 @import "./styles/mobileOptimizations.css";
 @import "./styles/visualHarmonization.css";
@@ -34,14 +33,15 @@
     --spacing-3xl: 3rem;
     --spacing-4xl: 4rem;
     
-    /* Legacy spacing - Deprecated, use design tokens */
-    --spacing1: 4px;
-    --spacing2: 8px;
-    --spacing3: 16px;
-    --spacing4: 20px;
-    --spacing5: 40px;
-    --spacing6: 80px;
-    --spacing7: 160px;
+    /* Touch target sizes */
+    --touch-minimum: 2.75rem; /* 44px minimum */
+    --touch-comfortable: 3rem; /* 48px comfortable */
+    --touch-large: 3.5rem; /* 56px large */
+    
+    /* Layout spacing tokens */
+    --layout-padding-sm: 1rem; /* 16px */
+    --layout-padding-md: 1.5rem; /* 24px */
+    --layout-padding-lg: 2rem; /* 32px */
     
     /* STRICT COLOR SCHEME - WCAG Compliant HSL Format */
     /* Surgical White - Backgrounds, cards (60% allocation) */
