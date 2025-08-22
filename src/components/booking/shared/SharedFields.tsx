@@ -76,17 +76,62 @@ export const DirtinessLevelField = ({ form }: { form: UseFormReturn<any> }) => {
   );
 };
 
-// Last Cleaned Field - Used in all service types
-export const LastCleanedField = ({ form }: { form: UseFormReturn<any> }) => {
+// Enhanced Last Cleaned Field - Standardized for all booking forms (replaces dirtiness level)
+export const EnhancedLastCleanedField = ({ form }: { form: UseFormReturn<any> }) => {
   const lastCleanedOptions = [
-    { value: 'never', label: 'Never cleaned professionally' },
-    { value: 'over-year', label: 'Over a year ago' },
-    { value: '6-12-months', label: '6-12 months ago' },
-    { value: '3-6-months', label: '3-6 months ago' },
-    { value: '1-3-months', label: '1-3 months ago' },
-    { value: 'within-month', label: 'Within the last month' },
-    { value: 'within-week', label: 'Within the last week' },
+    { 
+      value: 'never', 
+      label: 'Never cleaned professionally',
+      description: 'This space has never been professionally cleaned',
+      severity: 'high'
+    },
+    { 
+      value: 'over-year', 
+      label: 'Over a year ago',
+      description: 'Last professional cleaning was more than 12 months ago',
+      severity: 'high'
+    },
+    { 
+      value: '6-12-months', 
+      label: '6-12 months ago',
+      description: 'Moderate cleaning needed, some buildup expected',
+      severity: 'medium'
+    },
+    { 
+      value: '3-6-months', 
+      label: '3-6 months ago',
+      description: 'Standard maintenance cleaning required',
+      severity: 'medium'
+    },
+    { 
+      value: '1-3-months', 
+      label: '1-3 months ago',
+      description: 'Light cleaning and touch-ups needed',
+      severity: 'low'
+    },
+    { 
+      value: 'within-month', 
+      label: 'Within the last month',
+      description: 'Recent cleaning, minimal work required',
+      severity: 'low'
+    },
+    { 
+      value: 'within-week', 
+      label: 'Within the last week',
+      description: 'Very recent cleaning, light maintenance only',
+      severity: 'very-low'
+    },
   ];
+
+  const getSeverityColor = (severity: string) => {
+    switch(severity) {
+      case 'very-low': return 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-200';
+      case 'low': return 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200';
+      case 'medium': return 'bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200';
+      case 'high': return 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-200';
+      default: return 'bg-gray-50 border-gray-200 text-gray-800 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200';
+    }
+  };
 
   return (
     <FormField
@@ -94,25 +139,57 @@ export const LastCleanedField = ({ form }: { form: UseFormReturn<any> }) => {
       name="lastCleaned"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            Last Cleaned
+          <FormLabel className="flex items-center gap-2 text-lg font-semibold">
+            <Clock className="h-5 w-5 text-primary" />
+            When was this space last professionally cleaned?
           </FormLabel>
           <FormControl>
-            <select
-              {...field}
-              className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-            >
-              <option value="">Select when last cleaned</option>
+            <div className="grid gap-3">
               {lastCleanedOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+                <div
+                  key={option.value}
+                  onClick={() => field.onChange(option.value)}
+                  className={cn(
+                    "p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md",
+                    field.value === option.value 
+                      ? `${getSeverityColor(option.severity)} border-current shadow-sm ring-2 ring-primary/20` 
+                      : "border-border bg-card hover:border-primary/30"
+                  )}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
+                        field.value === option.value 
+                          ? "border-primary bg-primary" 
+                          : "border-muted-foreground"
+                      )}>
+                        {field.value === option.value && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className={cn(
+                          "font-medium text-base",
+                          field.value === option.value ? "text-current" : "text-foreground"
+                        )}>
+                          {option.label}
+                        </h4>
+                        <p className={cn(
+                          "text-sm mt-1",
+                          field.value === option.value ? "text-current opacity-90" : "text-muted-foreground"
+                        )}>
+                          {option.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </select>
+            </div>
           </FormControl>
-          <FormDescription>
-            When was this space last professionally cleaned?
+          <FormDescription className="text-sm text-muted-foreground mt-3">
+            This helps us determine the appropriate cleaning approach and time required for your space.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -508,26 +585,23 @@ export const ExtrasField = ({ form, serviceType }: { form: UseFormReturn<any>; s
   );
 };
 
-// Conditional Field Renderer
+// Conditional Field Renderer - Updated to use EnhancedLastCleanedField instead of dirtiness level
 export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
-  const showDirtinessLevel = ['home', 'deep-cleaning', 'move-in-out'].includes(serviceType);
   const showDisinfection = ['deep-cleaning', 'move-in-out'].includes(serviceType);
   const showSupplies = ['home', 'office'].includes(serviceType);
   const showTargetAreas = ['deep-cleaning', 'move-in-out'].includes(serviceType);
 
   return (
     <div className="space-y-6">
-      {showDirtinessLevel && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Cleaning Assessment</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <DirtinessLevelField form={form} />
-            <LastCleanedField form={form} />
-          </CardContent>
-        </Card>
-      )}
+      {/* Enhanced Last Cleaned field - now standard for all service types */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Cleaning Assessment</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <EnhancedLastCleanedField form={form} />
+        </CardContent>
+      </Card>
 
       {showTargetAreas && (
         <Card>

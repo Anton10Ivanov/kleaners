@@ -8,9 +8,9 @@ import { Building2, Shield, Trash2, Key } from 'lucide-react';
 import { 
   WebFriendlyPropertySizeField,
   WebFriendlyBedroomsField,
-  WebFriendlyBathroomsField,
-  WebFriendlyDirtinessLevelField
+  WebFriendlyBathroomsField
 } from '@/components/booking/shared/WebFriendlyFields';
+import { EnhancedLastCleanedField } from '@/components/booking/shared/SharedFields';
 import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
 import { ConditionalFields, DisinfectionRequiredField } from '@/components/booking/shared/SharedFields';
 import { ServiceType } from '@/schemas/booking';
@@ -37,7 +37,7 @@ const EnhancedMoveInOutFields = ({ form }: EnhancedMoveInOutFieldsProps) => {
       <WebFriendlyBathroomsField form={form} />
 
       {/* Dirtiness Level */}
-      <WebFriendlyDirtinessLevelField form={form} />
+      <EnhancedLastCleanedField form={form} />
 
       {/* Cleaning Goal */}
       <FormField

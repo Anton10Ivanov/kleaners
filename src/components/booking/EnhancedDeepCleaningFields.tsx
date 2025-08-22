@@ -6,9 +6,9 @@ import { Sparkles, MapPin } from 'lucide-react';
 import { 
   WebFriendlyPropertySizeField,
   WebFriendlyBedroomsField,
-  WebFriendlyBathroomsField,
-  WebFriendlyDirtinessLevelField
+  WebFriendlyBathroomsField
 } from '@/components/booking/shared/WebFriendlyFields';
+import { EnhancedLastCleanedField } from '@/components/booking/shared/SharedFields';
 import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
 import { TargetAreasField, DisinfectionRequiredField } from '@/components/booking/shared/SharedFields';
 import { ConditionalTargetAreas } from '@/components/booking/shared/ConditionalTargetAreas';
@@ -49,7 +49,7 @@ const EnhancedDeepCleaningFields = ({ form }: EnhancedDeepCleaningFieldsProps) =
       <WebFriendlyBathroomsField form={form} />
 
       {/* Dirtiness Level */}
-      <WebFriendlyDirtinessLevelField form={form} />
+      <EnhancedLastCleanedField form={form} />
 
       {/* Enhanced Target Areas with Conditional Logic */}
       <ConditionalTargetAreas form={form} />
