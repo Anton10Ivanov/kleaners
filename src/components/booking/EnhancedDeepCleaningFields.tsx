@@ -11,6 +11,8 @@ import {
 } from '@/components/booking/shared/WebFriendlyFields';
 import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
 import { TargetAreasField, DisinfectionRequiredField } from '@/components/booking/shared/SharedFields';
+import { ConditionalTargetAreas } from '@/components/booking/shared/ConditionalTargetAreas';
+import { EnhancedDeepCleaningFields as DeepCleaningSpecificFields } from '@/components/booking/shared/EnhancedDeepCleaningFields';
 import { MobileStack } from '@/components/layout/mobile-container';
 import { ServiceType } from '@/schemas/booking';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
@@ -49,8 +51,11 @@ const EnhancedDeepCleaningFields = ({ form }: EnhancedDeepCleaningFieldsProps) =
       {/* Dirtiness Level */}
       <WebFriendlyDirtinessLevelField form={form} />
 
-      {/* Target Areas */}
-      <TargetAreasField form={form} />
+      {/* Enhanced Target Areas with Conditional Logic */}
+      <ConditionalTargetAreas form={form} />
+      
+      {/* Enhanced Deep Cleaning Specific Fields */}
+      <DeepCleaningSpecificFields form={form} />
 
       {/* Include Walls and Ceilings */}
       <FormField

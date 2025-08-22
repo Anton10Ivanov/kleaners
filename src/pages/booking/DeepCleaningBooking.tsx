@@ -9,9 +9,10 @@ import FinalStep from '@/components/booking/FinalStep';
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import EnhancedDeepCleaningFields from '@/components/booking/EnhancedDeepCleaningFields';
-import DeepCleaningStep2 from './DeepCleaningStep2';
+import { FlexibleScheduling } from '@/components/booking/shared/FlexibleScheduling';
 import { ResponsiveBookingLayout } from '@/components/booking/shared/ResponsiveBookingLayout';
 import { EnhancedProgressIndicator } from '@/components/booking/shared/EnhancedProgressIndicator';
+import { StrictAutoProgressiveWrapper } from '@/components/booking/shared/StrictAutoProgressiveWrapper';
 import { SummaryPill } from '@/components/booking/summary/SummaryPill';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
@@ -67,28 +68,19 @@ const DeepCleaningBooking = () => {
     }
   }, [currentStep, autoSave]);
 
-  // Auto-progression logic
-  const checkStepCompletion = (step: number): boolean => {
-    const values = form.getValues();
+  // Required fields for strict auto-progression
+  const getRequiredFields = (step: number): string[] => {
     switch (step) {
       case 1:
-        return !!(values.squareMeters && values.bedrooms && values.bathrooms && values.targetAreas?.length);
+        return ['squareMeters', 'bedrooms', 'bathrooms', 'dirtinessLevel', 'targetAreas', 'cleaningGoal'];
       case 2:
-        return !!(values.selectedDate && values.selectedTime);
+        return []; // Allow flexible scheduling
       default:
-        return false;
+        return [];
     }
   };
 
-  // Auto-advance when step is complete
-  useState(() => {
-    const subscription = form.watch((values) => {
-      if (currentStep === 1 && checkStepCompletion(1)) {
-        setTimeout(() => setCurrentStep(2), 800);
-      }
-    });
-    return () => subscription.unsubscribe();
-  });
+  // Removed old auto-advance logic - now handled by StrictAutoProgressiveWrapper
 
   const handleNext = () => {
     setCurrentStep(prev => Math.min(prev + 1, 3));
@@ -109,9 +101,18 @@ const DeepCleaningBooking = () => {
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <EnhancedDeepCleaningFields form={form} />;
+        return (
+          <StrictAutoProgressiveWrapper
+            form={form}
+            currentStep={currentStep}
+            onNext={handleNext}
+            requiredFields={getRequiredFields(1)}
+          >
+            <EnhancedDeepCleaningFields form={form} />
+          </StrictAutoProgressiveWrapper>
+        );
       case 2:
-        return <DeepCleaningStep2 form={form} />;
+        return <FlexibleScheduling form={form} />;
       case 3:
         return (
           <FinalStep
@@ -133,7 +134,7 @@ const DeepCleaningBooking = () => {
       totalSteps={3}
       onBack={handleBack}
       onNext={currentStep < 3 ? handleNext : undefined}
-      canProceed={checkStepCompletion(currentStep) || currentStep === 3}
+      canProceed={true} // Always allow proceeding since we handle validation in components
       showBackButton={true}
       nextButtonText={currentStep === 3 ? undefined : 'Continue'}
     >
