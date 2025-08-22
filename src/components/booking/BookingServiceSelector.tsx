@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Home, Building, Sparkles, ArrowRightLeft, HardHat } from 'lucide-react';
+import { Home, Building, Sparkles, ArrowRightLeft, HardHat, Brush, Users, Zap, PackageOpen, Construction } from 'lucide-react';
 import { ServiceType } from '@/schemas/booking';
+
+// Import background images
+import homeCleaningBg from '@/assets/home-cleaning-bg.jpg';
+import officeCleaningBg from '@/assets/office-cleaning-bg.jpg';
+import deepCleaningBg from '@/assets/deep-cleaning-bg.jpg';
+import moveInOutBg from '@/assets/move-in-out-bg.jpg';
+import postConstructionBg from '@/assets/post-construction-bg.jpg';
 
 interface BookingServiceSelectorProps {
   onServiceSelect: (service: ServiceType) => void;
@@ -12,57 +19,62 @@ const services = [
   {
     type: ServiceType.Home,
     title: 'Home Cleaning',
-    description: 'Regular cleaning for your home',
-    icon: Home,
+    description: 'Regular maintenance cleaning for your home with professional care',
+    icon: Brush,
     gradient: 'from-blue-500 to-blue-600',
     bgColor: 'bg-blue-50 dark:bg-blue-950/20',
     borderColor: 'border-blue-200 dark:border-blue-800',
     iconColor: 'text-blue-600 dark:text-blue-400',
-    route: '/booking/home-cleaning'
+    route: '/booking/home-cleaning',
+    backgroundImage: homeCleaningBg
   },
   {
     type: ServiceType.Office,
     title: 'Office Cleaning',
-    description: 'Professional business cleaning',
-    icon: Building,
+    description: 'Professional business cleaning for productive workspaces',
+    icon: Users,
     gradient: 'from-green-500 to-green-600',
     bgColor: 'bg-green-50 dark:bg-green-950/20',
     borderColor: 'border-green-200 dark:border-green-800',
     iconColor: 'text-green-600 dark:text-green-400',
-    route: '/booking/office-cleaning'
+    route: '/booking/office-cleaning',
+    backgroundImage: officeCleaningBg
   },
   {
     type: ServiceType.DeepCleaning,
     title: 'Deep Cleaning',
-    description: 'Thorough intensive cleaning',
-    icon: Sparkles,
+    description: 'Intensive restoration cleaning for maximum cleanliness',
+    icon: Zap,
     gradient: 'from-purple-500 to-purple-600',
     bgColor: 'bg-purple-50 dark:bg-purple-950/20',
     borderColor: 'border-purple-200 dark:border-purple-800',
     iconColor: 'text-purple-600 dark:text-purple-400',
-    route: '/booking/deep-cleaning'
+    route: '/booking/deep-cleaning',
+    backgroundImage: deepCleaningBg
   },
   {
     type: ServiceType.MoveInOut,
     title: 'Move In/Out',
-    description: 'Moving cleaning service',
-    icon: ArrowRightLeft,
+    description: 'Complete cleaning for property transitions and moves',
+    icon: PackageOpen,
     gradient: 'from-orange-500 to-orange-600',
     bgColor: 'bg-orange-50 dark:bg-orange-950/20',
     borderColor: 'border-orange-200 dark:border-orange-800',
     iconColor: 'text-orange-600 dark:text-orange-400',
-    route: '/booking/move-in-out'
+    route: '/booking/move-in-out',
+    backgroundImage: moveInOutBg
   },
   {
     type: ServiceType.PostConstruction,
     title: 'Post Construction',
-    description: 'Construction cleanup service',
-    icon: HardHat,
+    description: 'Specialized cleanup after construction and renovation work',
+    icon: Construction,
     gradient: 'from-secondary to-secondary/80',
     bgColor: 'bg-secondary/10 dark:bg-secondary/5',
     borderColor: 'border-secondary/20 dark:border-secondary/30',
     iconColor: 'text-secondary dark:text-secondary',
-    route: '/booking/post-construction'
+    route: '/booking/post-construction',
+    backgroundImage: postConstructionBg
   }
 ];
 
@@ -105,27 +117,36 @@ const BookingServiceSelector = ({ onServiceSelect }: BookingServiceSelectorProps
                 whileHover={{ scale: 1.02, y: -4 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
+                onClick={() => onServiceSelect(service.type)}
+                className="cursor-pointer"
               >
-                <Card className={`cursor-pointer h-full transition-all duration-300 hover:shadow-xl ${service.bgColor} ${service.borderColor} border-2 group`}>
-                  <CardHeader className="pb-4">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <IconComponent className="h-8 w-8 text-white" />
-                    </div>
-                    <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                      {service.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                      {service.description}
-                    </p>
-                    <Button 
-                      onClick={() => onServiceSelect(service.type)}
-                      className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground font-semibold rounded-xl h-12 transition-all duration-300 group-hover:shadow-lg"
-                    >
-                      Select Service
-                    </Button>
-                  </CardContent>
+                <Card className={`h-full transition-all duration-300 hover:shadow-xl ${service.bgColor} ${service.borderColor} border-2 group relative overflow-hidden`}>
+                  {/* Background Image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity duration-300"
+                    style={{ backgroundImage: `url(${service.backgroundImage})` }}
+                  />
+                  
+                  <div className="relative z-10">
+                    <CardHeader className="pb-4">
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                        <IconComponent className="h-8 w-8 text-white" />
+                      </div>
+                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        {service.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                        {service.description}
+                      </p>
+                      <Button 
+                        className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground font-semibold rounded-xl h-12 transition-all duration-300 group-hover:shadow-lg"
+                      >
+                        Select Service
+                      </Button>
+                    </CardContent>
+                  </div>
                 </Card>
               </motion.div>
             );
