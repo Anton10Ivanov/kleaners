@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { HomeCleaningSchema, type HomeBookingForm } from '@/schemas/bookingSchemas';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Package } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useEnhancedBookingSubmission } from '@/hooks/useEnhancedBookingSubmission';
 import { useNavigate } from 'react-router-dom';
@@ -292,6 +292,23 @@ const HomeCleaningBooking = () => {
             {/* Step 4: Review & Payment */}
             {currentStep === 4 && (
               <div className="space-y-6">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <h3 className="text-lg font-semibold mb-4">Supplies & Preferences</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="suppliesProvided"
+                        {...form.register('suppliesProvided')}
+                        className="rounded"
+                      />
+                      <label htmlFor="suppliesProvided" className="flex items-center gap-2 text-sm font-medium">
+                        <Package className="h-4 w-4" />
+                        We provide all necessary cleaning supplies and equipment
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
                   <h3 className="text-lg font-semibold mb-4">Review Your Booking</h3>
                   <RealTimePricing form={form} serviceType="home" />
