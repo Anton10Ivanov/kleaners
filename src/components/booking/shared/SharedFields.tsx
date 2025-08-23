@@ -510,40 +510,65 @@ export const CompactCleaningAssessmentField = ({ form }: { form: UseFormReturn<a
   );
 };
 
-// Pets Field - Used in all service types
+// Pets Field - Used in all service types (Yes/No format)
 export const PetsField = ({ form }: { form: UseFormReturn<any> }) => {
-  const petsOptions = [
-    { value: 'none', label: 'No pets' },
-    { value: 'cats', label: 'Cats only' },
-    { value: 'dogs', label: 'Dogs only' },
-    { value: 'both', label: 'Both cats and dogs' },
-    { value: 'other', label: 'Other pets' },
-  ];
-
   return (
     <FormField
       control={form.control}
-      name="pets"
+      name="hasPets"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="flex items-center gap-2">
+          <FormLabel className="flex items-center gap-2 text-base font-medium">
             <User className="h-4 w-4" />
-            Pets in Property
+            Do you have pets?
           </FormLabel>
           <FormControl>
-            <select
-              {...field}
-              className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-            >
-              <option value="">Select pet situation</option>
-              {petsOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="grid grid-cols-2 gap-3">
+              <div
+                onClick={() => field.onChange(true)}
+                className={cn(
+                  "p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-sm text-center",
+                  field.value === true 
+                    ? "ring-2 ring-primary border-primary bg-primary/5" 
+                    : "border-border hover:border-primary/30"
+                )}
+              >
+                <div className={cn(
+                  "w-4 h-4 rounded-full border-2 mx-auto mb-2 flex items-center justify-center transition-colors",
+                  field.value === true 
+                    ? "border-primary bg-primary" 
+                    : "border-muted-foreground"
+                )}>
+                  {field.value === true && (
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                  )}
+                </div>
+                <div className="text-sm font-medium">Yes</div>
+              </div>
+              <div
+                onClick={() => field.onChange(false)}
+                className={cn(
+                  "p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-sm text-center",
+                  field.value === false 
+                    ? "ring-2 ring-primary border-primary bg-primary/5" 
+                    : "border-border hover:border-primary/30"
+                )}
+              >
+                <div className={cn(
+                  "w-4 h-4 rounded-full border-2 mx-auto mb-2 flex items-center justify-center transition-colors",
+                  field.value === false 
+                    ? "border-primary bg-primary" 
+                    : "border-muted-foreground"
+                )}>
+                  {field.value === false && (
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                  )}
+                </div>
+                <div className="text-sm font-medium">No</div>
+              </div>
+            </div>
           </FormControl>
-          <FormDescription>
+          <FormDescription className="text-sm text-muted-foreground mt-2">
             Pets may require special cleaning considerations
           </FormDescription>
           <FormMessage />
@@ -612,7 +637,6 @@ export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
         <CardContent className="space-y-4">
           <PetsField form={form} />
           {showDisinfection && <DisinfectionRequiredField form={form} />}
-          {showSupplies && <SuppliesProvidedField form={form} />}
         </CardContent>
       </Card>
     </div>
