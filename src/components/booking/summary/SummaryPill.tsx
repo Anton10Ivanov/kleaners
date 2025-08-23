@@ -55,8 +55,8 @@ export const SummaryPill = ({ form, currentStep }: SummaryPillProps) => {
 
   const hasRelevantData = frequency && hours > 0;
   
-  // Don't show on final step (step 3)
-  if (!hasRelevantData || currentStep === 3) return null;
+  // Don't show on final step (step 4)
+  if (!hasRelevantData || currentStep === 4) return null;
 
   return (
     <>

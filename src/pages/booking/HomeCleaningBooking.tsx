@@ -11,6 +11,9 @@ import { EnhancedHomeDetailsSection } from '@/components/booking/EnhancedHomeDet
 import { AutoProgressiveWrapper } from '@/components/booking/shared/AutoProgressiveWrapper';
 import { EnhancedProgressIndicator } from '@/components/booking/shared/EnhancedProgressIndicator';
 import { SummaryPill } from '@/components/booking/summary/SummaryPill';
+import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
+import { RealTimePricing } from '@/components/booking/RealTimePricing';
+import { ServiceType } from '@/schemas/booking';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
 const HomeCleaningBooking = () => {
@@ -74,7 +77,7 @@ const HomeCleaningBooking = () => {
   const showCalendar = frequency && frequency !== 'custom';
 
   const handleNext = () => {
-    setCurrentStep(prev => Math.min(prev + 1, 3));
+    setCurrentStep(prev => Math.min(prev + 1, 4));
   };
 
   const handleBack = () => {
@@ -95,11 +98,15 @@ const HomeCleaningBooking = () => {
 
   // Completion checks for auto-progression
   const checkStep1Completion = (values: HomeBookingForm) => {
-    return !!(values.propertySize && values.bedrooms && values.bathrooms && values.frequency && values.hours);
+    return !!(values.propertySize && values.bedrooms && values.bathrooms && values.frequency && values.lastCleaned);
   };
 
   const checkStep2Completion = (values: HomeBookingForm) => {
     return !!(values.selectedDate && values.selectedTime);
+  };
+
+  const checkStep3Completion = (values: HomeBookingForm) => {
+    return !!(values.firstName && values.lastName && values.email && values.phone && values.postalCode && values.address && values.city);
   };
 
   return (
@@ -113,8 +120,8 @@ const HomeCleaningBooking = () => {
           {/* Enhanced Progress Indicator */}
           <EnhancedProgressIndicator 
             currentStep={currentStep} 
-            totalSteps={3}
-            stepLabels={['Home Details', 'Schedule & Extras', 'Contact Info']}
+            totalSteps={4}
+            stepLabels={['Home Details', 'Schedule & Extras', 'Contact Info', 'Review & Payment']}
           />
         </div>
 
@@ -135,66 +142,62 @@ const HomeCleaningBooking = () => {
               </AutoProgressiveWrapper>
             )}
 
-            {/* Step 2: Calendar and Extras with Auto-Progression */}
+            {/* Step 2: Schedule & Extras with Auto-Progression */}
             {currentStep === 2 && (
-              <AutoProgressiveWrapper
-                form={form}
-                currentStep={currentStep}
-                onNext={handleNext}
-                completionCheck={checkStep2Completion}
-              >
-                <div className="space-y-6">
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Date</label>
-                        <input
-                          type="date"
-                          {...form.register('selectedDate', { valueAsDate: true })}
+              <div className="space-y-6">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Date</label>
+                      <input
+                        type="date"
+                        {...form.register('selectedDate', { valueAsDate: true })}
+                        className="w-full p-2 border rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Time</label>
+                      <select
+                        {...form.register('selectedTime')}
+                        className="w-full p-2 border rounded-lg"
+                      >
+                        <option value="">Select time</option>
+                        <option value="not-sure">📝 Not sure yet</option>
+                        <option value="08:00">8:00 AM</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="13:00">1:00 PM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                      </select>
+                    </div>
+                    {form.watch('selectedTime') === 'not-sure' && (
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-2">Preferred Time Details</label>
+                        <textarea
+                          {...form.register('preferredTimeDetails')}
+                          rows={3}
                           className="w-full p-2 border rounded-lg"
+                          placeholder="Here you can write the approx. dates in which you think the cleaning should take place."
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Time</label>
-                        <select
-                          {...form.register('selectedTime')}
-                          className="w-full p-2 border rounded-lg"
-                        >
-                          <option value="">Select time</option>
-                          <option value="08:00">8:00 AM</option>
-                          <option value="09:00">9:00 AM</option>
-                          <option value="10:00">10:00 AM</option>
-                          <option value="11:00">11:00 AM</option>
-                          <option value="12:00">12:00 PM</option>
-                          <option value="13:00">1:00 PM</option>
-                          <option value="14:00">2:00 PM</option>
-                          <option value="15:00">3:00 PM</option>
-                          <option value="16:00">4:00 PM</option>
-                          <option value="17:00">5:00 PM</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                    <h3 className="text-lg font-semibold mb-4">Extras</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {['ironing', 'fridge', 'oven', 'cabinets', 'balcony', 'carpet'].map((extra) => (
-                        <label key={extra} className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            value={extra}
-                            {...form.register('extras')}
-                            className="rounded"
-                          />
-                          <span className="capitalize">{extra}</span>
-                        </label>
-                      ))}
-                    </div>
+                    )}
                   </div>
                 </div>
-              </AutoProgressiveWrapper>
+
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <FlatExtrasSelector
+                    serviceType={ServiceType.Home}
+                    selectedExtras={(form.watch('extras') || []) as any}
+                    onExtrasChange={(extras) => form.setValue('extras', extras as any)}
+                  />
+                </div>
+              </div>
             )}
 
             {/* Step 3: Contact Information */}
@@ -286,6 +289,16 @@ const HomeCleaningBooking = () => {
               </div>
             )}
 
+            {/* Step 4: Review & Payment */}
+            {currentStep === 4 && (
+              <div className="space-y-6">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
+                  <h3 className="text-lg font-semibold mb-4">Review Your Booking</h3>
+                  <RealTimePricing form={form} serviceType="home" />
+                </div>
+              </div>
+            )}
+
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-8">
               <Button
@@ -298,7 +311,7 @@ const HomeCleaningBooking = () => {
                 {currentStep === 1 ? 'Back to Services' : 'Previous'}
               </Button>
               
-              {currentStep < 3 ? (
+              {currentStep < 4 ? (
                 <Button
                   type="button"
                   onClick={handleNext}

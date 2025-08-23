@@ -20,6 +20,7 @@ const sharedFields = {
   cleaningPace: CleaningPaceEnum.optional(),
   selectedDate: z.coerce.date().optional(),
   selectedTime: z.string().min(2, "Please select a time").optional(),
+  preferredTimeDetails: z.string().optional(),
   address: z.string().min(5, "Street address must be at least 5 characters").max(100, "Street address cannot exceed 100 characters"),
   city: z.string().min(2, "City name must be at least 2 characters").max(50, "City name cannot exceed 50 characters").regex(/^[a-zA-ZäöüÄÖÜß\s-]+$/, "City name can only contain letters, spaces, and hyphens"),
   floor: z.string().max(20, "Floor description cannot exceed 20 characters").optional(),
