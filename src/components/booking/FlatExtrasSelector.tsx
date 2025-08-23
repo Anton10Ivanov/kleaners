@@ -215,7 +215,6 @@ const FlatExtrasSelector: React.FC<FlatExtrasSelectorProps> = ({
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       checked={isSelected}
-                      onChange={() => {}}
                       className="pointer-events-none"
                     />
                     <h4 className="font-medium text-sm">{extra.title}</h4>
