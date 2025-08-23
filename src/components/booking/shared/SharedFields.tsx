@@ -593,15 +593,6 @@ export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Enhanced Last Cleaned field - now standard for all service types */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Cleaning Assessment</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EnhancedLastCleanedField form={form} />
-        </CardContent>
-      </Card>
 
       {showTargetAreas && (
         <Card>
