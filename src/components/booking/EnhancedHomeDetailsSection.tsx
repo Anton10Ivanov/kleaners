@@ -44,10 +44,7 @@ export const EnhancedHomeDetailsSection = ({ form, onSuggestedTimeSelect }: Enha
 
         {/* Service Options */}
         <div className="md:col-span-2">
-          <div className="space-y-6">
-            <WebFriendlyFrequencyField form={form} />
-            <WebFriendlyCleaningPaceField form={form} />
-          </div>
+          <WebFriendlyFrequencyField form={form} />
         </div>
 
         {/* Compact Cleaning Assessment */}

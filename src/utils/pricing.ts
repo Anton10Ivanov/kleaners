@@ -52,6 +52,22 @@ export const calculatePrice = (data: any): number => {
     if (homeData.suppliesProvided) {
       serviceAdjustment -= basePrice * 0.05; // 5% discount for providing supplies
     }
+    
+    // Supply-specific price adjustments (+5% each if not provided)
+    if (!homeData.cleaningSolventsProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    if (!homeData.vacuumCleanerProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    if (!homeData.microfiberClothsProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    
+    // Insurance discount (-5% if no insurance)
+    if (homeData.insurance === false) {
+      serviceAdjustment -= basePrice * 0.05;
+    }
   } else if (serviceType === 'office') {
     const officeData = data as any;
     if (officeData.cleaningDuringWorkHours) {
@@ -137,6 +153,31 @@ export const getPriceBreakdown = (data: any) => {
   const basePrice = duration * hourlyRate * cleanerCount;
   const extrasPrice = calculateExtrasPrice(data.extras || []);
   
+  // Calculate service adjustments
+  let serviceAdjustment = 0;
+  
+  if (serviceType === 'home') {
+    const homeData = data as any;
+    
+    // Supply-specific price adjustments (+5% each if not provided)
+    if (!homeData.cleaningSolventsProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    if (!homeData.vacuumCleanerProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    if (!homeData.microfiberClothsProvided) {
+      serviceAdjustment += basePrice * 0.05;
+    }
+    
+    // Insurance discount (-5% if no insurance)
+    if (homeData.insurance === false) {
+      serviceAdjustment -= basePrice * 0.05;
+    }
+  }
+  
+  const finalTotal = basePrice + extrasPrice + serviceAdjustment;
+  
   return {
     duration,
     cleanerCount,
@@ -144,8 +185,9 @@ export const getPriceBreakdown = (data: any) => {
     hourlyRate: Math.round(hourlyRate),
     basePrice: Math.round(basePrice),
     extrasPrice: Math.round(extrasPrice),
+    serviceAdjustment: Math.round(serviceAdjustment),
     discountPercent,
-    total: Math.round(basePrice + extrasPrice)
+    total: Math.round(finalTotal)
   };
 };
 

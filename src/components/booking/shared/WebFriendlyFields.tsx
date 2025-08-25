@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Minus, Plus, Home, Droplets, Clock, Star, Percent } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Minus, Plus, Home, Droplets, Clock, Star, Percent, Info as InfoIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 interface WebFriendlyFieldsProps {
   form: UseFormReturn<any>;
@@ -19,7 +21,7 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
   label?: string;
 }) => {
   const handleIncrement = (field: any) => {
-    const newValue = Math.min(500, field.value + 10);
+    const newValue = Math.min(250, field.value + 10);
     field.onChange(newValue);
   };
 
@@ -37,6 +39,17 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
           <FormLabel className="flex items-center gap-2">
             <Home className="h-4 w-4" />
             {label} (m²)
+            <Tooltip>
+              <TooltipTrigger className="ml-1 cursor-help">
+                <InfoIcon className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Properties larger than 250m² require a custom quote.</p>
+                <p className="text-xs mt-1">
+                  <Link to="/contact" className="underline text-primary">Contact us</Link> for personalized pricing.
+                </p>
+              </TooltipContent>
+            </Tooltip>
           </FormLabel>
           <FormControl>
             <div className="space-y-3">
@@ -61,7 +74,7 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
                   variant="outline"
                   size="sm"
                   onClick={() => handleIncrement(field)}
-                  disabled={field.value >= 500}
+                  disabled={field.value >= 250}
                   className="h-10 w-10 rounded-full p-0"
                 >
                   <Plus className="h-4 w-4" />
@@ -69,7 +82,7 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
               </div>
               <div className="flex justify-between text-xs text-muted-foreground px-2">
                 <span>Min: 10m²</span>
-                <span>Max: 500m²</span>
+                <span>Max: 250m²</span>
               </div>
             </div>
           </FormControl>

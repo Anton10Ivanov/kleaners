@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Calculator, Clock, Users, TrendingUp, Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { calculatePrice, getPriceBreakdown } from '@/utils/pricing';
 import { calculateDuration, calculateCleanerCount, calculateComplexityScore } from '@/utils/bookingCalculations';
 
@@ -126,6 +127,20 @@ export const RealTimePricing: React.FC<RealTimePricingProps> = ({ form, serviceT
               <div className="flex justify-between items-center">
                 <span>Additional Services</span>
                 <span className="font-semibold">€{pricing.extrasPrice}</span>
+              </div>
+            )}
+            
+            {pricing.serviceAdjustment && pricing.serviceAdjustment !== 0 && (
+              <div className={cn(
+                "flex justify-between items-center",
+                pricing.serviceAdjustment > 0 ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"
+              )}>
+                <span>
+                  {pricing.serviceAdjustment > 0 ? "Supply & Service Fees" : "Insurance & Supply Savings"}
+                </span>
+                <span className="font-semibold">
+                  {pricing.serviceAdjustment > 0 ? "+" : ""}€{Math.abs(pricing.serviceAdjustment)}
+                </span>
               </div>
             )}
           </div>

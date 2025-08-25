@@ -13,6 +13,7 @@ import { EnhancedProgressIndicator } from '@/components/booking/shared/EnhancedP
 import { SummaryPill } from '@/components/booking/summary/SummaryPill';
 import FlatExtrasSelector from '@/components/booking/FlatExtrasSelector';
 import { RealTimePricing } from '@/components/booking/RealTimePricing';
+import { ModifyAndSaveSection } from '@/components/booking/shared/ModifyAndSaveSection';
 import { ServiceType } from '@/schemas/booking';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
@@ -37,6 +38,10 @@ const HomeCleaningBooking = () => {
       pets: 'none',
       lastCleaned: '',
       suppliesProvided: false,
+      cleaningSolventsProvided: true,
+      vacuumCleanerProvided: true,
+      microfiberClothsProvided: true,
+      insurance: true,
       postalCode: '',
       address: '',
       city: '',
@@ -292,23 +297,7 @@ const HomeCleaningBooking = () => {
             {/* Step 4: Review & Payment */}
             {currentStep === 4 && (
               <div className="space-y-6">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
-                  <h3 className="text-lg font-semibold mb-4">Supplies & Preferences</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="suppliesProvided"
-                        {...form.register('suppliesProvided')}
-                        className="rounded"
-                      />
-                      <label htmlFor="suppliesProvided" className="flex items-center gap-2 text-sm font-medium">
-                        <Package className="h-4 w-4" />
-                        We provide all necessary cleaning supplies and equipment
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                <ModifyAndSaveSection form={form} />
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
                   <h3 className="text-lg font-semibold mb-4">Review Your Booking</h3>
                   <RealTimePricing form={form} serviceType="home" />
