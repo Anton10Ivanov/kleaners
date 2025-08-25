@@ -141,7 +141,7 @@ export const EnhancedLastCleanedField = ({ form }: { form: UseFormReturn<any> })
         <FormItem>
           <FormLabel className="flex items-center gap-2 text-lg font-semibold">
             <Clock className="h-5 w-5 text-primary" />
-            When was this space last professionally cleaned?
+            Current condition assessment
           </FormLabel>
           <FormControl>
             <div className="grid gap-3">
@@ -442,32 +442,32 @@ export const BathroomsField = ({ form }: { form: UseFormReturn<any> }) => {
   );
 };
 
-// Compact Cleaning Assessment Field - optimized for space
+// Compact Cleaning Assessment Field - optimized for space - using frequency UI style
 export const CompactCleaningAssessmentField = ({ form }: { form: UseFormReturn<any> }) => {
   const lastCleanedOptions = [
     { 
       value: 'never', 
-      label: 'Never / More than a year',
-      severity: 'high',
-      icon: '🔴'
+      label: 'Never / >1 year',
+      description: 'Deep restoration needed',
+      severity: 'high'
     },
     { 
       value: 'six-months', 
       label: '3-6 months ago',
-      severity: 'medium',
-      icon: '🟡'
+      description: 'Standard cleaning',
+      severity: 'medium'
     },
     { 
       value: 'within-month', 
-      label: 'Within the last month',
-      severity: 'low',
-      icon: '🟢'
+      label: 'Within last month',
+      description: 'Light maintenance',
+      severity: 'low'
     },
     { 
       value: 'within-week', 
-      label: 'Within the last week',
-      severity: 'very-low',
-      icon: '✅'
+      label: 'Within last week',
+      description: 'Touch-ups only',
+      severity: 'very-low'
     },
   ];
 
@@ -479,24 +479,24 @@ export const CompactCleaningAssessmentField = ({ form }: { form: UseFormReturn<a
         <FormItem>
           <FormLabel className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            When was this space last professionally cleaned?
+            Current condition assessment
           </FormLabel>
           <FormControl>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {lastCleanedOptions.map((option) => (
-                <div
+                <Card
                   key={option.value}
-                  onClick={() => field.onChange(option.value)}
                   className={cn(
-                    "p-3 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-sm text-center",
-                    field.value === option.value 
-                      ? "ring-2 ring-primary border-primary bg-primary/5" 
-                      : "border-border hover:border-primary/30"
+                    "cursor-pointer transition-all duration-200 hover:shadow-md",
+                    field.value === option.value ? 'ring-2 ring-primary border-primary bg-primary/5' : ''
                   )}
+                  onClick={() => field.onChange(option.value)}
                 >
-                  <div className="text-lg mb-1">{option.icon}</div>
-                  <div className="text-sm font-medium">{option.label}</div>
-                </div>
+                  <CardContent className="p-3 text-center">
+                    <div className="font-medium text-sm">{option.label}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{option.description}</div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </FormControl>
