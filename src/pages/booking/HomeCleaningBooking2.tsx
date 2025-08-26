@@ -17,7 +17,7 @@ import { ModifyAndSaveSection } from '@/components/booking/shared/ModifyAndSaveS
 import { ServiceType } from '@/schemas/booking';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
 
-const HomeCleaningBooking = () => {
+const HomeCleaningBooking2 = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { submitBooking } = useEnhancedBookingSubmission();
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const HomeCleaningBooking = () => {
       phone: '',
       selectedDate: new Date(),
       selectedTime: '',
-      ...enhancedFormPersistence.load('home'), // Load persisted data
+      ...enhancedFormPersistence.load('home2'), // Load persisted data for home2
     },
   });
 
@@ -60,7 +60,7 @@ const HomeCleaningBooking = () => {
   useEffect(() => {
     const autoSaveInstance = new FormAutoSave(
       () => form.getValues(),
-      'home',
+      'home2', // Different key for home2
       30000 // 30 seconds
     );
     autoSaveInstance.start();
@@ -124,7 +124,7 @@ const HomeCleaningBooking = () => {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Home Cleaning Booking
+            Home Cleaning Booking (Premium)
           </h1>
           
           {/* Enhanced Progress Indicator */}
@@ -152,7 +152,7 @@ const HomeCleaningBooking = () => {
               </AutoProgressiveWrapper>
             )}
 
-            {/* Step 2: Schedule & Extras with Auto-Progression */}
+            {/* Step 2: Schedule & Extras */}
             {currentStep === 2 && (
               <div className="space-y-6">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border">
@@ -193,7 +193,7 @@ const HomeCleaningBooking = () => {
                         <textarea
                           {...form.register('preferredTimeDetails')}
                           rows={3}
-                          className="w-full p-2 border rounded-lg"
+                          className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                           placeholder="Here you can write the approx. dates in which you think the cleaning should take place."
                         />
                       </div>
@@ -222,7 +222,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="text"
                         {...form.register('firstName')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -230,7 +230,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="text"
                         {...form.register('lastName')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -238,7 +238,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="email"
                         {...form.register('email')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -246,7 +246,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="tel"
                         {...form.register('phone')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -254,7 +254,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="text"
                         {...form.register('postalCode')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -262,7 +262,7 @@ const HomeCleaningBooking = () => {
                       <input
                         type="text"
                         {...form.register('address')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -270,14 +270,14 @@ const HomeCleaningBooking = () => {
                       <input
                         type="text"
                         {...form.register('city')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Access Method</label>
                       <select
                         {...form.register('accessMethod')}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                       >
                         <option value="">Select access method</option>
                         <option value="key">Key</option>
@@ -291,7 +291,7 @@ const HomeCleaningBooking = () => {
                       <textarea
                         {...form.register('specialInstructions')}
                         rows={3}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         placeholder="Any special instructions for the cleaner..."
                       />
                     </div>
@@ -352,4 +352,4 @@ const HomeCleaningBooking = () => {
   );
 };
 
-export default HomeCleaningBooking;
+export default HomeCleaningBooking2;

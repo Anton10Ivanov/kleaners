@@ -81,6 +81,8 @@ export const HomeCleaningSchema = z.object({
   cleaningSolventsProvided: z.boolean().default(true),
   vacuumCleanerProvided: z.boolean().default(true),
   microfiberClothsProvided: z.boolean().default(true),
+  clientSupplies: z.boolean().default(false),
+  cleaningPaceValue: z.number().min(0.5).max(1.5).default(1.0),
   // Insurance field
   insurance: z.boolean().default(true),
 }).merge(addressFields).merge(contactFields)

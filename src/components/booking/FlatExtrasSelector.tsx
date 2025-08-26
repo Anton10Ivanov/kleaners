@@ -31,8 +31,8 @@ const FlatExtrasSelector: React.FC<FlatExtrasSelectorProps> = ({
 
   const extrasByCategory = getExtrasByCategory(serviceType);
   
-  // Flatten all extras into a single array
-  const allExtras = Object.values(extrasByCategory).flat();
+  // Flatten all extras into a single array and filter out carpet deep cleaning
+  const allExtras = Object.values(extrasByCategory).flat().filter(extra => extra.id !== 'carpet-deep-cleaning');
 
   const isExtraSelected = (extraId: string) => {
     return selectedExtras.some(selected => selected.id === extraId);
@@ -86,6 +86,10 @@ const FlatExtrasSelector: React.FC<FlatExtrasSelectorProps> = ({
 
   const getSelectedExtra = (extraId: string) => {
     return selectedExtras.find(selected => selected.id === extraId);
+  };
+
+  const handleRemoveExtra = (extraId: string) => {
+    onExtrasChange(selectedExtras.filter(selected => selected.id !== extraId));
   };
 
   const getTotalPrice = () => {
@@ -206,11 +210,24 @@ const FlatExtrasSelector: React.FC<FlatExtrasSelectorProps> = ({
           return (
             <div key={extra.id}>
               <div
-                className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
+                className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md relative ${
                   isSelected ? 'ring-2 ring-primary border-primary bg-primary/5' : 'hover:border-primary/50'
                 }`}
                 onClick={() => handleExtraToggle(extra)}
               >
+                {isSelected && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="absolute top-2 right-2 h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveExtra(extra.id);
+                    }}
+                  >
+                    ×
+                  </Button>
+                )}
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <Checkbox 

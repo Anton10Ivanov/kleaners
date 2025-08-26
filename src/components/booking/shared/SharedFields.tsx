@@ -20,6 +20,7 @@ import ExtrasSelector from '@/components/booking/ExtrasSelector';
 interface SharedFieldsProps {
   form: UseFormReturn<any>;
   serviceType: ServiceType;
+  showPets?: boolean;
 }
 
 // Dirtiness Level Field - Used in Home, Deep Cleaning, Move In/Out
@@ -611,7 +612,7 @@ export const ExtrasField = ({ form, serviceType }: { form: UseFormReturn<any>; s
 };
 
 // Conditional Field Renderer - Updated to use EnhancedLastCleanedField instead of dirtiness level
-export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
+export const ConditionalFields = ({ form, serviceType, showPets = true }: SharedFieldsProps) => {
   const showDisinfection = ['deep-cleaning', 'move-in-out'].includes(serviceType);
   const showSupplies = ['home', 'office'].includes(serviceType);
   const showTargetAreas = ['deep-cleaning', 'move-in-out'].includes(serviceType);
@@ -635,7 +636,7 @@ export const ConditionalFields = ({ form, serviceType }: SharedFieldsProps) => {
           <CardTitle className="text-base">Property Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <PetsField form={form} />
+          {showPets && <PetsField form={form} />}
           {showDisinfection && <DisinfectionRequiredField form={form} />}
         </CardContent>
       </Card>
