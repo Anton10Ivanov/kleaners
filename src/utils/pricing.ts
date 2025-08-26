@@ -53,15 +53,12 @@ export const calculatePrice = (data: any): number => {
       serviceAdjustment -= basePrice * 0.05; // 5% discount for providing supplies
     }
     
-    // Supply-specific price adjustments (+5% each if not provided)
-    if (!homeData.cleaningSolventsProvided) {
-      serviceAdjustment += basePrice * 0.05;
+    // Supply-specific price adjustments
+    if (homeData.clientSupplies) {
+      serviceAdjustment -= 2; // €2 discount for client supplies
     }
     if (!homeData.vacuumCleanerProvided) {
-      serviceAdjustment += basePrice * 0.05;
-    }
-    if (!homeData.microfiberClothsProvided) {
-      serviceAdjustment += basePrice * 0.05;
+      serviceAdjustment += 12; // €12 charge for no vacuum
     }
     
     // Insurance discount (-5% if no insurance)
@@ -159,15 +156,12 @@ export const getPriceBreakdown = (data: any) => {
   if (serviceType === 'home') {
     const homeData = data as any;
     
-    // Supply-specific price adjustments (+5% each if not provided)
-    if (!homeData.cleaningSolventsProvided) {
-      serviceAdjustment += basePrice * 0.05;
+    // Supply-specific price adjustments
+    if (homeData.clientSupplies) {
+      serviceAdjustment -= 2; // €2 discount for client supplies
     }
     if (!homeData.vacuumCleanerProvided) {
-      serviceAdjustment += basePrice * 0.05;
-    }
-    if (!homeData.microfiberClothsProvided) {
-      serviceAdjustment += basePrice * 0.05;
+      serviceAdjustment += 12; // €12 charge for no vacuum
     }
     
     // Insurance discount (-5% if no insurance)
