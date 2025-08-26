@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { Minus, Plus, Home, Droplets, Clock, Star, Percent, Info as InfoIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
@@ -39,17 +39,19 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
           <FormLabel className="flex items-center gap-2">
             <Home className="h-4 w-4" />
             {label} (m²)
-            <Tooltip>
-              <TooltipTrigger className="ml-1 cursor-help">
-                <InfoIcon className="h-4 w-4 text-muted-foreground" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Properties larger than 250m² require a custom quote.</p>
-                <p className="text-xs mt-1">
-                  <Link to="/contact" className="underline text-primary">Contact us</Link> for personalized pricing.
-                </p>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="ml-1 cursor-help">
+                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Properties larger than 250m² require a custom quote.</p>
+                  <p className="text-xs mt-1">
+                    <Link to="/contact" className="underline text-primary">Contact us</Link> for personalized pricing.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </FormLabel>
           <FormControl>
             <div className="space-y-3">
