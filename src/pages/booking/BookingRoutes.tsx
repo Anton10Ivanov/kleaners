@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import BookingServiceSelector from '@/components/booking/BookingServiceSelector';
 import HomeCleaningBooking from './HomeCleaningBooking';
+import HomeCleaningBooking2 from './HomeCleaningBooking2';
 import DeepCleaningBooking from './DeepCleaningBooking';
 import MoveInOutBooking from './MoveInOutBooking';
 import OfficeCleaningBooking from './OfficeCleaningBooking';
@@ -42,6 +43,10 @@ const BookingRoutes = () => {
       <Route 
         path="home-cleaning" 
         element={<HomeCleaningBooking />} 
+      />
+      <Route 
+        path="home-cleaning2" 
+        element={<HomeCleaningBooking2 />} 
       />
       <Route 
         path="office-cleaning" 

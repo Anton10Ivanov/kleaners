@@ -68,7 +68,7 @@ const contactFields = z.object({
 export const HomeCleaningSchema = z.object({
   ...sharedFields,
   serviceType: z.literal("home"),
-  propertySize: z.number().min(20, "Property size must be at least 20 m²").max(250, "Property size cannot exceed 250 m²"),
+  propertySize: z.number().min(20, "Property size must be at least 20 m²").max(250, "Property size cannot exceed 250 m². Please contact us for larger properties"),
   bedrooms: z.number().min(0, "Bedrooms cannot be negative").max(5, "Maximum 5 bedrooms allowed"),
   bathrooms: z.number().min(1, "At least 1 bathroom is required").max(5, "Maximum 5 bathrooms allowed"),
   frequency: FrequencyEnum,

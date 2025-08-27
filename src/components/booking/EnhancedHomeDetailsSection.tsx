@@ -53,7 +53,7 @@ export const EnhancedHomeDetailsSection = ({ form, onSuggestedTimeSelect }: Enha
         </div>
       </div>
 
-      {/* Shared Fields - removed pets field */}
+      {/* Shared Fields - pets field removed for home cleaning */}
       <div className="mt-6">
         <ConditionalFields form={form} serviceType={ServiceType.Home} showPets={false} />
       </div>

@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Minus, Plus, Home, Droplets, Clock, Star, Percent, Info as InfoIcon } from 'lucide-react';
+import { Minus, Plus, Home, Droplets, Clock, Star, Percent, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface WebFriendlyFieldsProps {
   form: UseFormReturn<any>;
@@ -41,13 +42,19 @@ export const WebFriendlyPropertySizeField = ({ form, fieldName = 'propertySize',
             {label} (m²)
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger className="ml-1 cursor-help">
-                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 text-muted-foreground hover:text-primary"
+                  >
+                    <Info className="h-4 w-4" />
+                  </Button>
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p>Properties larger than 250m² require a custom quote.</p>
-                  <p className="text-xs mt-1">
-                    <Link to="/contact" className="underline text-primary">Contact us</Link> for personalized pricing.
+                <TooltipContent side="top" className="max-w-xs">
+                  <p className="text-sm">
+                    Maximum size is 250 m². For larger properties, please contact us for a custom quote.
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -352,45 +359,122 @@ export const WebFriendlyFrequencyField = ({ form }: WebFriendlyFieldsProps) => {
   );
 };
 
-// Cleaning Pace Toggle
+// Cleaning Pace Slider with 3 speed options
 export const WebFriendlyCleaningPaceField = ({ form }: WebFriendlyFieldsProps) => {
+  const [showInfoPopup, setShowInfoPopup] = useState(false);
+  const cleaningPaceValue = form.watch('cleaningPaceValue') || 1.0;
+
+  const speedOptions = [
+    { value: 0.5, label: '0.5x', color: 'text-blue-600', bgColor: 'bg-blue-50 border-blue-200' },
+    { value: 1.0, label: '1x', color: 'text-gray-600', bgColor: 'bg-gray-50 border-gray-200' },
+    { value: 1.5, label: '1.5x', color: 'text-red-600', bgColor: 'bg-red-50 border-red-200' }
+  ];
+
+  const getSpeedDescription = (value: number) => {
+    switch (value) {
+      case 0.5:
+        return "Thorough & detailed cleaning. Perfect for regularly maintained homes where attention to detail is above price. The cleaner may not cover the entire space but will focus on quality.";
+      case 1.5:
+        return "Quick refresh cleaning. Ideal for places that were not regularly cleaned and need to be refreshed. Affects detail quality but covers more square meters.";
+      default:
+        return "Standard pace cleaning. Balanced approach between coverage and detail quality.";
+    }
+  };
+
   return (
     <FormField
       control={form.control}
-      name="cleaningPace"
+      name="cleaningPaceValue"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="flex items-center gap-2">
             <Star className="h-4 w-4" />
-            Cleaning Pace
+            Cleaning Pace/Speed
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-6 w-6 p-0 text-muted-foreground hover:text-primary"
+              onClick={() => setShowInfoPopup(true)}
+            >
+              <Info className="h-4 w-4" />
+            </Button>
           </FormLabel>
           <FormControl>
-            <div className="flex items-center space-x-3 p-3 bg-muted rounded-lg">
-              <span className={cn(
-                "text-sm font-medium transition-colors",
-                field.value === 'standard' ? 'text-primary' : 'text-muted-foreground'
-              )}>
-                Standard
-              </span>
-              <Switch
-                checked={field.value === 'quick'}
-                onCheckedChange={(checked) => field.onChange(checked ? 'quick' : 'standard')}
-              />
-              <span className={cn(
-                "text-sm font-medium transition-colors",
-                field.value === 'quick' ? 'text-primary' : 'text-muted-foreground'
-              )}>
-                Quick
-              </span>
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                {speedOptions.map((option) => (
+                  <Card
+                    key={option.value}
+                    className={cn(
+                      "cursor-pointer transition-all duration-200 hover:shadow-md border-2",
+                      field.value === option.value 
+                        ? `ring-2 ring-primary ${option.bgColor}` 
+                        : 'hover:border-primary/50'
+                    )}
+                    onClick={() => field.onChange(option.value)}
+                  >
+                    <CardContent className="p-3 text-center">
+                      <div className={cn("font-bold text-lg", option.color)}>
+                        {option.label}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {option.value === 0.5 && "Detailed"}
+                        {option.value === 1.0 && "Standard"}
+                        {option.value === 1.5 && "Quick"}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              <div className="p-3 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  {getSpeedDescription(field.value)}
+                </p>
+              </div>
             </div>
           </FormControl>
-          <FormDescription>
-            {field.value === 'quick' 
-              ? 'Faster cleaning with focus on essential areas' 
-              : 'Thorough cleaning with attention to detail'
-            }
-          </FormDescription>
           <FormMessage />
+
+          {/* Info Popup Dialog */}
+          <Dialog open={showInfoPopup} onOpenChange={setShowInfoPopup}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5" />
+                  Cleaning Pace Guide
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-3">
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="font-medium text-blue-800 mb-1">0.5x Speed (Detailed)</div>
+                    <p className="text-sm text-blue-700">
+                      More thorough cleaning but the cleaner may not be able to cover the whole place. 
+                      Best for regularly maintained homes where attention to detail is above price.
+                    </p>
+                  </div>
+                  
+                  <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                    <div className="font-medium text-gray-800 mb-1">1x Speed (Standard)</div>
+                    <p className="text-sm text-gray-700">
+                      Balanced approach between coverage and attention to detail. 
+                      Standard cleaning pace with good coverage and quality.
+                    </p>
+                  </div>
+                  
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="font-medium text-red-800 mb-1">1.5x Speed (Quick)</div>
+                    <p className="text-sm text-red-700">
+                      Faster cleaning affects square meter coverage but reduces detail quality. 
+                      Suited for places which were not regularly cleaned and need to be refreshed.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </FormItem>
       )}
     />

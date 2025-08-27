@@ -43,28 +43,28 @@ export const ModifyAndSaveSection = ({ form }: ModifyAndSaveSectionProps) => {
           </h4>
           
           <div className="grid gap-4">
-            {/* Cleaning Solvents */}
+            {/* Combined Client Supplies */}
             <FormField
               control={form.control}
-              name="cleaningSolventsProvided"
+              name="clientSupplies"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 border rounded-lg bg-primary/5">
                     <div className="flex items-center space-x-3">
-                      <Droplets className="h-4 w-4 text-primary" />
+                      <Droplets className="h-5 w-5 text-primary" />
                       <div>
-                        <FormLabel className="text-sm font-medium">We provide cleaning solvents</FormLabel>
-                        <FormDescription className="text-xs">Professional-grade cleaning solutions included</FormDescription>
+                        <FormLabel className="text-base font-medium">I want the cleaning specialist to use my cleaning solvents and microfiber cloths</FormLabel>
+                        <FormDescription className="text-sm">Use your own cleaning supplies instead of professional ones</FormDescription>
                       </div>
                     </div>
                     <FormControl>
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
-                        {!field.value && (
-                          <Badge variant="outline" className="text-xs">+5%</Badge>
+                        {field.value && (
+                          <Badge variant="destructive" className="text-xs">-2€</Badge>
                         )}
                       </div>
                     </FormControl>
@@ -80,53 +80,22 @@ export const ModifyAndSaveSection = ({ form }: ModifyAndSaveSectionProps) => {
               name="vacuumCleanerProvided"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 border rounded-lg bg-secondary/5">
                     <div className="flex items-center space-x-3">
-                      <Zap className="h-4 w-4 text-primary" />
+                      <Zap className="h-5 w-5 text-primary" />
                       <div>
-                        <FormLabel className="text-sm font-medium">We have a vacuum cleaner</FormLabel>
-                        <FormDescription className="text-xs">Professional vacuum equipment available</FormDescription>
+                        <FormLabel className="text-base font-medium">I have a vacuum cleaner</FormLabel>
+                        <FormDescription className="text-sm">Professional vacuum equipment available at the location</FormDescription>
                       </div>
                     </div>
                     <FormControl>
                       <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                         {!field.value && (
-                          <Badge variant="outline" className="text-xs">+5%</Badge>
-                        )}
-                      </div>
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Microfiber Cloths */}
-            <FormField
-              control={form.control}
-              name="microfiberClothsProvided"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Brush className="h-4 w-4 text-primary" />
-                      <div>
-                        <FormLabel className="text-sm font-medium">We have minimum 8 standard microfiber cleaning cloths</FormLabel>
-                        <FormDescription className="text-xs">High-quality microfiber cloths for optimal cleaning</FormDescription>
-                      </div>
-                    </div>
-                    <FormControl>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        {!field.value && (
-                          <Badge variant="outline" className="text-xs">+5%</Badge>
+                          <Badge variant="outline" className="text-xs">+12€</Badge>
                         )}
                       </div>
                     </FormControl>
@@ -143,7 +112,7 @@ export const ModifyAndSaveSection = ({ form }: ModifyAndSaveSectionProps) => {
           <PetsField form={form} />
         </div>
 
-        {/* Cleaning Pace */}
+        {/* Cleaning Pace Slider */}
         <div>
           <WebFriendlyCleaningPaceField form={form} />
         </div>
