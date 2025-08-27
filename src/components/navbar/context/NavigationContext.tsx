@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 import { NavItem } from '@/types/navigation';
 
 interface NavigationState {
@@ -40,7 +40,7 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
     isLoading: false,
   });
 
-  const actions: NavigationActions = {
+  const actions: NavigationActions = useMemo(() => ({
     setIsMenuOpen: (open: boolean) => 
       setState(prev => ({ ...prev, isMenuOpen: open })),
     
@@ -66,7 +66,7 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
         isMobileServicesOpen: false,
         activeNavItem: null 
       })),
-  };
+  }), []);
 
   return (
     <NavigationContext.Provider value={{ state, actions, navItems }}>

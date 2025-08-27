@@ -10,7 +10,7 @@ export const useNavigationEffects = () => {
   // Close menus when route changes
   useEffect(() => {
     actions.closeAllMenus();
-  }, [location, actions]);
+  }, [location, actions.closeAllMenus]);
 
   // Handle escape key
   useEffect(() => {
@@ -22,7 +22,7 @@ export const useNavigationEffects = () => {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [actions]);
+  }, [actions.closeAllMenus]);
 
   // Handle outside clicks
   useEffect(() => {
@@ -35,7 +35,7 @@ export const useNavigationEffects = () => {
 
     document.addEventListener('mousedown', handleOutsideClick);
     return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [actions]);
+  }, [actions.closeAllMenus]);
 };
 
 export const useMenuToggle = () => {
