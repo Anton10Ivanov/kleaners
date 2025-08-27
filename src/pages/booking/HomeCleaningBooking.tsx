@@ -87,6 +87,8 @@ const HomeCleaningBooking = () => {
   const showCalendar = frequency && frequency !== 'custom';
 
   const handleNext = () => {
+    // Scroll to top immediately when next is clicked
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setCurrentStep(prev => Math.min(prev + 1, 4));
   };
 
