@@ -18,39 +18,31 @@ const GoogleCalendarCallback = () => {
       }
 
       try {
-        // Exchange the code for tokens
-        const response = await fetch('https://oauth2.googleapis.com/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            code,
-            client_id: process.env.GOOGLE_CLIENT_ID!,
-            client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-            redirect_uri: window.location.origin + '/auth/callback',
-            grant_type: 'authorization_code',
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to exchange authorization code');
+        // Get current session for authentication
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          toast.error('Please log in to connect Google Calendar');
+          navigate('/');
+          return;
         }
 
-        const { access_token, refresh_token, expires_in } = await response.json();
+        // Use secure edge function to exchange tokens
+        const { data, error } = await supabase.functions.invoke('google-oauth-exchange', {
+          body: {
+            code,
+            redirectUri: window.location.origin + '/auth/callback'
+          },
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
 
-        // Store the tokens in Supabase
-        const { error: insertError } = await supabase
-          .from('calendar_credentials')
-          .insert({
-            user_id: (await supabase.auth.getUser()).data.user?.id,
-            access_token,
-            refresh_token,
-            expiry_date: new Date(Date.now() + expires_in * 1000).toISOString(),
-          });
+        if (error) {
+          throw new Error(error.message || 'Failed to exchange authorization code');
+        }
 
-        if (insertError) {
-          throw new Error('Failed to store calendar credentials');
+        if (!data?.success) {
+          throw new Error(data?.error || 'Failed to connect to Google Calendar');
         }
 
         toast.success('Successfully connected to Google Calendar');
