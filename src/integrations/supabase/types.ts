@@ -180,6 +180,7 @@ export type Database = {
         Row: {
           access_token: string
           created_at: string | null
+          encryption_version: number | null
           expiry_date: string
           id: string
           refresh_token: string
@@ -189,6 +190,7 @@ export type Database = {
         Insert: {
           access_token: string
           created_at?: string | null
+          encryption_version?: number | null
           expiry_date: string
           id?: string
           refresh_token: string
@@ -198,6 +200,7 @@ export type Database = {
         Update: {
           access_token?: string
           created_at?: string | null
+          encryption_version?: number | null
           expiry_date?: string
           id?: string
           refresh_token?: string
