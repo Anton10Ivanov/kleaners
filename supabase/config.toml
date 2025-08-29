@@ -6,3 +6,6 @@ verify_jwt = false
 
 [functions.enhanced-auth-security]
 verify_jwt = false
+
+[functions.google-oauth-exchange]
+verify_jwt = true
