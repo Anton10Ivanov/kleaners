@@ -264,7 +264,15 @@ describe('Checklist & Proof of Work', () => {
           photo_type: 'before'
         });
 
-      expect(result.data?.[0]?.booking_id).toBe(mockBooking.id);
+      expect(result.data).toBeTruthy();
+      // Type assertion to tell TypeScript we know this is an array with our expected structure
+      const resultData = result.data as Array<{ booking_id: string; photo_url: string; photo_type: string }>;
+      expect(resultData).toHaveLength(1);
+      expect(resultData[0]).toMatchObject({
+        booking_id: mockBooking.id,
+        photo_url: photoUrl,
+        photo_type: 'before'
+      });
     });
   });
 
