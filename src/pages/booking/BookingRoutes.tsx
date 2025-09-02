@@ -18,6 +18,9 @@ const BookingRoutes = () => {
       case ServiceType.Home:
         navigate('/booking/home-cleaning');
         break;
+      case 'home-cleaning-22' as ServiceType:
+        navigate('/booking/home-cleaning22');
+        break;
       case ServiceType.Office:
         navigate('/booking/office-cleaning');
         break;
