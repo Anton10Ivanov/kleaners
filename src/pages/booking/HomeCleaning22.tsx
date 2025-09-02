@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MobileCard, MobileCardContent, MobileCardHeader, MobileCardTitle } from '@/components/ui/mobile-card';
+import { MobileForm, MobileFormField, MobileFormLabel } from '@/components/ui/mobile-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +11,23 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Calendar as CalendarIcon, Clock, Euro, Key, CheckCircle } from 'lucide-react';
+import { 
+  Calendar as CalendarIcon, 
+  Clock, 
+  Euro, 
+  Key, 
+  CheckCircle, 
+  ChevronRight, 
+  Star, 
+  Sparkles, 
+  Heart, 
+  Zap,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Minus,
+  Plus
+} from 'lucide-react';
 
 type FlowType22 = 'one-time' | 'recurring';
 type Step22 = 0 | 1 | 2 | 3 | 4 | 5;
@@ -126,66 +144,134 @@ const HomeCleaning22 = () => {
 
   // Step 0: Service Selection
   const renderStep0 = () => (
-    <Card className="max-w-4xl mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold">Find Your Cleaning Solution</CardTitle>
-        <p className="text-lg text-muted-foreground">Choose the option that fits your needs.</p>
-      </CardHeader>
-      <CardContent className="grid md:grid-cols-2 gap-6">
+    <div className="max-w-4xl mx-auto px-layout-sm">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-heading-color mb-4">
+          Find Your Cleaning Solution
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Choose the option that fits your needs.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* One-Time Clean */}
-        <Card className="border-2 hover:border-primary cursor-pointer transition-colors"
-              onClick={() => { updateBookingData22({ flowType: 'one-time' }); nextStep22(); }}>
-          <CardHeader>
-            <CardTitle className="text-xl text-center">Try Us Out</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Perfect for your first clean</strong> or if you need flexibility.</span>
+        <MobileCard 
+          className="h-full cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 hover:border-primary/20"
+          onClick={() => { updateBookingData22({ flowType: 'one-time' }); nextStep22(); }}
+        >
+          <MobileCardHeader>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-primary/10 rounded-xl">
+                <Sparkles className="h-6 w-6 text-primary" />
+              </div>
+              <MobileCardTitle className="text-xl">Try Us Out</MobileCardTitle>
             </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>No commitment required.</strong> Book once and see if we're the right fit.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span>Pay a flat rate based on the time we work (<strong>€50/hour</strong>).</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Secure your spot with a payment today.</strong></span>
-            </div>
-          </CardContent>
-        </Card>
+          </MobileCardHeader>
+          <MobileCardContent className="space-y-4">
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Perfect for your first clean</strong> or if you need flexibility.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">No commitment required.</strong> Book once and see if we're the right fit.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  Pay a flat rate based on the time we work (<strong className="text-primary">€50/hour</strong>).
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Secure your spot with a payment today.</strong>
+                </span>
+              </li>
+            </ul>
+            
+            <Button className="w-full h-touch bg-primary hover:bg-primary-hover text-primary-foreground font-medium flex items-center justify-center gap-2 mt-6">
+              Get Started
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </MobileCardContent>
+        </MobileCard>
 
         {/* Recurring Plan */}
-        <Card className="border-2 hover:border-primary cursor-pointer transition-colors border-primary"
-              onClick={() => { updateBookingData22({ flowType: 'recurring' }); nextStep22(); }}>
-          <CardHeader>
-            <CardTitle className="text-xl text-center">Never Clean Again</CardTitle>
-            <Badge className="mx-auto">Most Popular</Badge>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Lock in a regular schedule</strong> and save 10% vs. one-time rates.</span>
+        <MobileCard 
+          className="h-full cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 border-accent/20"
+          onClick={() => { updateBookingData22({ flowType: 'recurring' }); nextStep22(); }}
+        >
+          <MobileCardHeader>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-accent/10 rounded-xl">
+                <Heart className="h-6 w-6 text-accent" />
+              </div>
+              <MobileCardTitle className="text-xl">Never Clean Again</MobileCardTitle>
             </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Your priority crew</strong> knows your home and your preferences.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Forget upfront payments.</strong> You only pay <em>after</em> we clean.</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <span><strong>Requires a 3-month commitment</strong> to secure your discount.</span>
-            </div>
-          </CardContent>
-        </Card>
-      </CardContent>
-    </Card>
+            <Badge variant="secondary" className="w-fit bg-accent/10 text-accent border-accent/20">
+              <Zap className="h-3 w-3 mr-1" />
+              Most Popular
+            </Badge>
+          </MobileCardHeader>
+          <MobileCardContent className="space-y-4">
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Lock in a regular schedule</strong> and save 10% vs. one-time rates.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Your priority crew</strong> knows your home and your preferences.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Forget upfront payments.</strong> You only pay <em>after</em> we clean.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="mt-1">
+                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                </div>
+                <span className="text-sm text-foreground">
+                  <strong className="text-heading-color">Requires a 3-month commitment</strong> to secure your discount.
+                </span>
+              </li>
+            </ul>
+            
+            <Button className="w-full h-touch bg-accent hover:bg-accent-hover text-accent-foreground font-medium flex items-center justify-center gap-2 mt-6">
+              Get Started
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </MobileCardContent>
+        </MobileCard>
+      </div>
+    </div>
   );
 
   // Flow A Steps (One-Time)
@@ -194,61 +280,110 @@ const HomeCleaning22 = () => {
     const estimatedPrice = calculatePrice22(recommendedHours, null, null);
 
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Let's see what you need.</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="propertySize22">Property Size (sq. m.)</Label>
-            <Input
-              id="propertySize22"
-              type="number"
-              value={bookingData22.propertySize}
-              onChange={(e) => updateBookingData22({ propertySize: parseInt(e.target.value) || 70 })}
-              min="30"
-              max="500"
-            />
-          </div>
+      <div className="max-w-2xl mx-auto px-layout-sm">
+        <MobileCard>
+          <MobileCardHeader>
+            <MobileCardTitle className="text-2xl mb-2">Get a Custom Estimate</MobileCardTitle>
+            <p className="text-muted-foreground">Let's see what you need.</p>
+          </MobileCardHeader>
+          <MobileCardContent>
+            <MobileForm className="space-y-6">
+              <MobileFormField>
+                <MobileFormLabel htmlFor="propertySize22" required>
+                  Property Size (sq. m.)
+                </MobileFormLabel>
+                <Input
+                  id="propertySize22"
+                  type="number"
+                  placeholder="e.g., 85"
+                  value={bookingData22.propertySize || ''}
+                  onChange={(e) => updateBookingData22({ propertySize: parseInt(e.target.value) || 70 })}
+                  className="h-touch text-base"
+                  min="30"
+                  max="500"
+                />
+              </MobileFormField>
 
-          <div className="space-y-2">
-            <Label>How would you describe the clutter level?</Label>
-            <Select onValueChange={(value: ClutterLevel22) => updateBookingData22({ clutterLevel: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select clutter level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="minimalist">Minimalist</SelectItem>
-                <SelectItem value="lived-in">Lived-in</SelectItem>
-                <SelectItem value="cluttered">Cluttered</SelectItem>
-                <SelectItem value="full">Full</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+              <MobileFormField>
+                <MobileFormLabel htmlFor="clutterLevel22" required>
+                  How would you describe the clutter level?
+                </MobileFormLabel>
+                <Select 
+                  value={bookingData22.clutterLevel || ''} 
+                  onValueChange={(value: ClutterLevel22) => updateBookingData22({ clutterLevel: value })}
+                >
+                  <SelectTrigger className="h-touch text-base">
+                    <SelectValue placeholder="Select clutter level" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border shadow-lg z-50">
+                    <SelectItem value="minimalist" className="text-base py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-secondary rounded-full"></div>
+                        Minimalist
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="lived-in" className="text-base py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        Lived-in
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="cluttered" className="text-base py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        Cluttered
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="full" className="text-base py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-destructive rounded-full"></div>
+                        Full
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </MobileFormField>
 
-          {bookingData22.clutterLevel && (
-            <Card className="bg-blue-50 border-blue-200">
-              <CardContent className="pt-6">
-                <p className="text-center">
-                  For a home of <strong>{bookingData22.propertySize} sq. m.</strong>, we recommend starting with{' '}
-                  <strong>{recommendedHours} hours</strong> to see a real difference.
-                </p>
-                <p className="text-center text-xl font-semibold mt-2">
-                  Estimated Price: {recommendedHours}h × €50/h = <span className="text-green-600">€{estimatedPrice}</span>
-                </p>
-              </CardContent>
-            </Card>
-          )}
+              {bookingData22.clutterLevel && (
+                <div className="bg-gradient-to-r from-primary/5 to-accent/5 p-6 rounded-xl border border-primary/10">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Star className="h-5 w-5 text-primary" />
+                    <h4 className="font-semibold text-heading-color">Our Recommendation</h4>
+                  </div>
+                  <p className="text-foreground text-sm mb-4 leading-relaxed">
+                    For a home of <span className="font-medium text-primary">{bookingData22.propertySize} sq. m.</span>, we recommend starting with <span className="font-medium text-primary">{recommendedHours} hours</span> to see a real difference.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Euro className="h-4 w-4 text-primary" />
+                    <p className="text-heading-color font-semibold text-lg">
+                      Estimated Price: {recommendedHours}h × €50/h = €{estimatedPrice}
+                    </p>
+                  </div>
+                </div>
+              )}
 
-          <Button 
-            onClick={nextStep22} 
-            className="w-full" 
-            disabled={!bookingData22.clutterLevel}
-          >
-            Continue
-          </Button>
-        </CardContent>
-      </Card>
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={prevStep22}
+                  className="h-touch flex-1 border-border"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back
+                </Button>
+                <Button 
+                  onClick={nextStep22}
+                  disabled={!bookingData22.clutterLevel}
+                  className="h-touch flex-1 bg-primary hover:bg-primary-hover text-primary-foreground"
+                >
+                  Continue
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </MobileForm>
+          </MobileCardContent>
+        </MobileCard>
+      </div>
     );
   };
 
@@ -256,53 +391,66 @@ const HomeCleaning22 = () => {
     const currentPrice = calculatePrice22(bookingData22.hours, null, null);
 
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Adjust & Confirm Time</CardTitle>
-          <p className="text-muted-foreground">
-            You can book fewer hours to start. We'll focus on the most important areas to show you what we can do.
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center justify-center gap-4">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => updateBookingData22({ hours: Math.max(3, bookingData22.hours - 1) })}
-              disabled={bookingData22.hours <= 3}
-            >
-              -
-            </Button>
-            <div className="text-center">
-              <div className="text-3xl font-bold">{bookingData22.hours}</div>
-              <div className="text-sm text-muted-foreground">hours</div>
+      <div className="max-w-2xl mx-auto px-layout-sm">
+        <MobileCard>
+          <MobileCardHeader>
+            <MobileCardTitle className="text-2xl mb-2">Adjust & Confirm Time</MobileCardTitle>
+            <p className="text-muted-foreground">
+              You can book fewer hours to start. We'll focus on the most important areas to show you what we can do.
+            </p>
+          </MobileCardHeader>
+          <MobileCardContent className="space-y-6">
+            <div className="flex items-center justify-center gap-6">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => updateBookingData22({ hours: Math.max(3, bookingData22.hours - 1) })}
+                disabled={bookingData22.hours <= 3}
+                className="h-touch w-touch rounded-xl border-2"
+              >
+                <Minus className="h-5 w-5" />
+              </Button>
+              <div className="text-center min-w-[120px]">
+                <div className="text-4xl font-bold text-heading-color">{bookingData22.hours}</div>
+                <div className="text-sm text-muted-foreground">hours</div>
+              </div>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => updateBookingData22({ hours: bookingData22.hours + 1 })}
+                className="h-touch w-touch rounded-xl border-2"
+              >
+                <Plus className="h-5 w-5" />
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => updateBookingData22({ hours: bookingData22.hours + 1 })}
-            >
-              +
-            </Button>
-          </div>
 
-          <Card className="bg-green-50 border-green-200">
-            <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-green-600">€{currentPrice}</div>
-              <div className="text-sm text-muted-foreground">Total Price</div>
-            </CardContent>
-          </Card>
+            <div className="bg-gradient-to-r from-secondary/5 to-primary/5 p-6 rounded-xl border border-secondary/20">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-secondary mb-1">€{currentPrice}</div>
+                <div className="text-sm text-muted-foreground">Total Price</div>
+              </div>
+            </div>
 
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={prevStep22} className="flex-1">
-              Back
-            </Button>
-            <Button onClick={nextStep22} className="flex-1">
-              Continue
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button 
+                variant="outline" 
+                onClick={prevStep22} 
+                className="h-touch flex-1 border-border"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <Button 
+                onClick={nextStep22} 
+                className="h-touch flex-1 bg-primary hover:bg-primary-hover text-primary-foreground"
+              >
+                Continue
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </MobileCardContent>
+        </MobileCard>
+      </div>
     );
   };
 
