@@ -29,6 +29,18 @@ const services = [
     backgroundImage: homeCleaningBg
   },
   {
+    type: 'home-cleaning-22' as ServiceType,
+    title: 'Home Cleaning 22',
+    description: 'Advanced booking flow with package options and flexible scheduling',
+    icon: Sparkles,
+    gradient: 'from-pink-500 to-pink-600',
+    bgColor: 'bg-pink-50 dark:bg-pink-950/20',
+    borderColor: 'border-pink-200 dark:border-pink-800',
+    iconColor: 'text-pink-600 dark:text-pink-400',
+    route: '/booking/home-cleaning22',
+    backgroundImage: homeCleaningBg
+  },
+  {
     type: ServiceType.Office,
     title: 'Office Cleaning',
     description: 'Professional business cleaning for productive workspaces',
