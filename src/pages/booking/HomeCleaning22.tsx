@@ -108,6 +108,14 @@ const HomeCleaning22 = () => {
     setBookingData22(prev => ({ ...prev, ...updates }));
   };
 
+  // Handle automatic hours calculation when property size or clutter changes
+  useEffect(() => {
+    if (bookingData22.flowType === 'one-time' && bookingData22.clutterLevel) {
+      const recommendedHours = calculateRecommendedHours22(bookingData22.propertySize, bookingData22.clutterLevel);
+      updateBookingData22({ hours: recommendedHours });
+    }
+  }, [bookingData22.propertySize, bookingData22.clutterLevel, bookingData22.flowType]);
+
   const nextStep22 = () => {
     setCurrentStep22(prev => prev + 1 as Step22);
   };
@@ -184,10 +192,6 @@ const HomeCleaning22 = () => {
   const renderOneTimeEstimate = () => {
     const recommendedHours = calculateRecommendedHours22(bookingData22.propertySize, bookingData22.clutterLevel);
     const estimatedPrice = calculatePrice22(recommendedHours, null, null);
-
-    useEffect(() => {
-      updateBookingData22({ hours: recommendedHours });
-    }, [recommendedHours]);
 
     return (
       <Card className="max-w-2xl mx-auto">
