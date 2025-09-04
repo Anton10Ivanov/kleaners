@@ -625,76 +625,131 @@ const HomeCleaning22 = () => {
     const monthlyStandard = bookingData22.frequency ? calculateMonthlyTotal22(basePrice, bookingData22.frequency) : 0;
 
     return (
-      <Card className="max-w-3xl mx-auto">
-        <CardHeader className="text-center">
-          <CardTitle>Maximize your savings! How flexible can you be?</CardTitle>
-          <p className="text-muted-foreground">Help us optimize our routes and we'll reward you with an extra discount.</p>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <RadioGroup
-            value={bookingData22.flexibilityType || ''}
-            onValueChange={(value: FlexibilityType22) => updateBookingData22({ flexibilityType: value })}
-          >
-            <Card className="p-4">
-              <div className="flex items-center space-x-2 mb-3">
-                <RadioGroupItem value="flexible" id="flexible22" />
-                <Label htmlFor="flexible22" className="text-lg font-semibold">
-                  💰 Flexible Super Saver (Extra 5% Discount - 15% Total)
-                </Label>
-              </div>
-              <p className="ml-6 text-sm">
-                I provide key access/am always home. Schedule me on any weekday within 8 AM - 6 PM.
-              </p>
-              <div className="ml-6 mt-2 text-green-600 font-semibold">
-                Save an extra 5% (15% total off!) - €{monthlyFlexible}/month
-              </div>
-            </Card>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-heading-color mb-2">Maximize your savings!</h1>
+          <p className="text-muted-foreground text-lg">How flexible can you be? Help us optimize our routes and we'll reward you with an extra discount.</p>
+        </div>
 
-            <Card className="p-4">
-              <div className="flex items-center space-x-2 mb-3">
-                <RadioGroupItem value="preferred" id="preferred22" />
-                <Label htmlFor="preferred22" className="text-lg font-semibold">
-                  👍 Preferred Window (Standard Discount - 10% Total)
-                </Label>
-              </div>
-              <p className="ml-6 text-sm">
-                I prefer a specific window. Choose a day and a 4-hour block.
-              </p>
-              <div className="ml-6 mt-2 text-blue-600 font-semibold">
-                Your standard 10% discount applies - €{monthlyStandard}/month
-              </div>
-            </Card>
-
-            <Card className="p-4">
-              <div className="flex items-center space-x-2 mb-3">
-                <RadioGroupItem value="fixed" id="fixed22" />
-                <Label htmlFor="fixed22" className="text-lg font-semibold">
-                  ⏰ Fixed Time (Standard Discount - 10% Total)
-                </Label>
-              </div>
-              <p className="ml-6 text-sm">
-                I need a guaranteed time. Choose a day and exact start time.
-              </p>
-              <div className="ml-6 mt-2 text-blue-600 font-semibold">
-                Your standard 10% discount applies - €{monthlyStandard}/month
-              </div>
-            </Card>
-          </RadioGroup>
-
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={prevStep22} className="flex-1">
-              Back
-            </Button>
-            <Button 
-              onClick={nextStep22} 
-              className="flex-1"
-              disabled={!bookingData22.flexibilityType}
+        <MobileCard className="border-2 border-accent/10 shadow-lg">
+          <MobileCardContent className="p-8">
+            <RadioGroup
+              value={bookingData22.flexibilityType || ''}
+              onValueChange={(value: FlexibilityType22) => updateBookingData22({ flexibilityType: value })}
+              className="space-y-6"
             >
-              Continue
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+              <MobileCard 
+                className={`p-6 cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
+                  bookingData22.flexibilityType === 'flexible' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                }`}
+                onClick={() => updateBookingData22({ flexibilityType: 'flexible' })}
+              >
+                <div className="flex items-start space-x-4">
+                  <RadioGroupItem value="flexible" id="flexible22" className="mt-1" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="text-2xl">💰</div>
+                      <Label htmlFor="flexible22" className="text-lg font-bold text-heading-color cursor-pointer">
+                        Flexible Super Saver
+                      </Label>
+                      <Badge className="bg-primary/15 text-primary border-primary/30">
+                        Extra 5% Off
+                      </Badge>
+                    </div>
+                    <p className="text-foreground mb-3 leading-relaxed">
+                      I provide key access/am always home. Schedule me on any weekday within 8 AM - 6 PM.
+                    </p>
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <div className="text-primary font-bold text-lg">
+                        Save an extra 5% (15% total off!) - €{monthlyFlexible}/month
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </MobileCard>
+
+              <MobileCard 
+                className={`p-6 cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
+                  bookingData22.flexibilityType === 'preferred' ? 'border-secondary bg-secondary/5' : 'border-border hover:border-secondary/30'
+                }`}
+                onClick={() => updateBookingData22({ flexibilityType: 'preferred' })}
+              >
+                <div className="flex items-start space-x-4">
+                  <RadioGroupItem value="preferred" id="preferred22" className="mt-1" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="text-2xl">👍</div>
+                      <Label htmlFor="preferred22" className="text-lg font-bold text-heading-color cursor-pointer">
+                        Preferred Window
+                      </Label>
+                      <Badge variant="secondary" className="bg-secondary/15 text-secondary">
+                        Standard Discount
+                      </Badge>
+                    </div>
+                    <p className="text-foreground mb-3 leading-relaxed">
+                      I prefer a specific window. Choose a day and a 4-hour block.
+                    </p>
+                    <div className="bg-secondary/10 p-3 rounded-lg">
+                      <div className="text-secondary font-bold text-lg">
+                        Your standard 10% discount applies - €{monthlyStandard}/month
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </MobileCard>
+
+              <MobileCard 
+                className={`p-6 cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
+                  bookingData22.flexibilityType === 'fixed' ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/30'
+                }`}
+                onClick={() => updateBookingData22({ flexibilityType: 'fixed' })}
+              >
+                <div className="flex items-start space-x-4">
+                  <RadioGroupItem value="fixed" id="fixed22" className="mt-1" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="text-2xl">⏰</div>
+                      <Label htmlFor="fixed22" className="text-lg font-bold text-heading-color cursor-pointer">
+                        Fixed Time
+                      </Label>
+                      <Badge variant="secondary" className="bg-accent/15 text-accent">
+                        Standard Discount
+                      </Badge>
+                    </div>
+                    <p className="text-foreground mb-3 leading-relaxed">
+                      I need a guaranteed time. Choose a day and exact start time.
+                    </p>
+                    <div className="bg-accent/10 p-3 rounded-lg">
+                      <div className="text-accent font-bold text-lg">
+                        Your standard 10% discount applies - €{monthlyStandard}/month
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </MobileCard>
+            </RadioGroup>
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <Button 
+                variant="outline" 
+                onClick={prevStep22} 
+                className="h-14 flex-1 border-2 rounded-xl text-lg font-medium"
+              >
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Back
+              </Button>
+              <Button 
+                onClick={nextStep22} 
+                disabled={!bookingData22.flexibilityType}
+                className="h-14 flex-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                Continue
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+          </MobileCardContent>
+        </MobileCard>
+      </div>
     );
   };
 
@@ -829,8 +884,8 @@ const HomeCleaning22 = () => {
     } else {
       switch (currentStep22) {
         case 1: return renderFrequencySelection();
-        case 2: return renderPackageSelection();
-        case 3: return renderFlexibilityOptions();
+        case 2: return renderFlexibilityOptions();
+        case 3: return renderPackageSelection();
         case 4: return renderFinalDetails();
         default: return renderStep0();
       }
