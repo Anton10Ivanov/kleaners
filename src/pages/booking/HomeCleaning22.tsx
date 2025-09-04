@@ -519,24 +519,32 @@ const HomeCleaning22 = () => {
       <Card className="max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle>Find Your Package</CardTitle>
-          <div className="space-y-2 text-sm text-muted-foreground">
-            <div>• Studio / 1-bed: ~50-70m²</div>
-            <div>• 2-bed Apartment: ~70-90m²</div>
-            <div>• 3-bed Home: ~90-120m²</div>
-            <div>• 4+bed Home: 120m²+</div>
-          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="propertySizeRecurring22">What is your home's size? (sq. m.)</Label>
-            <Input
-              id="propertySizeRecurring22"
-              type="number"
-              value={bookingData22.propertySize}
-              onChange={(e) => updateBookingData22({ propertySize: parseInt(e.target.value) || 70 })}
-              min="30"
-              max="500"
-            />
+            <Label htmlFor="propertySizeRecurring22">What is your home's size?</Label>
+            <Select 
+              value={bookingData22.propertySize.toString()} 
+              onValueChange={(value) => updateBookingData22({ propertySize: parseInt(value) })}
+            >
+              <SelectTrigger className="h-14 text-lg border-2 rounded-xl">
+                <SelectValue placeholder="Select your home size" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-2 border-border shadow-xl z-50 rounded-xl">
+                <SelectItem value="60" className="text-lg py-4 cursor-pointer">
+                  Studio / 1-bed (~50-70m²)
+                </SelectItem>
+                <SelectItem value="80" className="text-lg py-4 cursor-pointer">
+                  2-bed Apartment (~70-90m²)
+                </SelectItem>
+                <SelectItem value="105" className="text-lg py-4 cursor-pointer">
+                  3-bed Home (~90-120m²)
+                </SelectItem>
+                <SelectItem value="140" className="text-lg py-4 cursor-pointer">
+                  4+bed Home (120m²+)
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
