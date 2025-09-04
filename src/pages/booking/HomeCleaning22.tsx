@@ -144,129 +144,114 @@ const HomeCleaning22 = () => {
 
   // Step 0: Service Selection
   const renderStep0 = () => (
-    <div className="max-w-4xl mx-auto px-layout-sm">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-heading-color mb-4">
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-heading-color mb-4 tracking-tight">
           Find Your Cleaning Solution
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Choose the option that fits your needs.
         </p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {/* One-Time Clean */}
         <MobileCard 
-          className="h-full cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 hover:border-primary/20"
+          className="relative overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border-2 hover:border-primary/30 bg-gradient-to-br from-background to-primary/2"
           onClick={() => { updateBookingData22({ flowType: 'one-time' }); nextStep22(); }}
         >
-          <MobileCardHeader>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Sparkles className="h-6 w-6 text-primary" />
+          <MobileCardHeader className="pb-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-4 bg-primary/10 rounded-2xl">
+                <Sparkles className="h-8 w-8 text-primary" />
               </div>
-              <MobileCardTitle className="text-xl">Try Us Out</MobileCardTitle>
+              <MobileCardTitle className="text-2xl font-bold">Try Us Out</MobileCardTitle>
             </div>
           </MobileCardHeader>
-          <MobileCardContent className="space-y-4">
-            <ul className="space-y-3">
+          <MobileCardContent className="space-y-6">
+            <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Perfect for your first clean</strong> or if you need flexibility.
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">Perfect for your first clean</strong> — no commitment required
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">No commitment required.</strong> Book once and see if we're the right fit.
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">€50/hour</strong> — pay only for the time we work
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  Pay a flat rate based on the time we work (<strong className="text-primary">€50/hour</strong>).
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
-                </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Secure your spot with a payment today.</strong>
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">Secure spot with payment</strong> today
                 </span>
               </li>
             </ul>
             
-            <Button className="w-full h-touch bg-primary hover:bg-primary-hover text-primary-foreground font-medium flex items-center justify-center gap-2 mt-6">
-              Get Started
-              <ChevronRight className="h-4 w-4" />
+            <Button className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-lg rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl">
+              Book One-Time
+              <ChevronRight className="h-5 w-5" />
             </Button>
           </MobileCardContent>
         </MobileCard>
 
         {/* Recurring Plan */}
         <MobileCard 
-          className="h-full cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 border-accent/20"
+          className="relative overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border-2 border-accent/30 bg-gradient-to-br from-background to-accent/5"
           onClick={() => { updateBookingData22({ flowType: 'recurring' }); nextStep22(); }}
         >
-          <MobileCardHeader>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-accent/10 rounded-xl">
-                <Heart className="h-6 w-6 text-accent" />
+          <MobileCardHeader className="pb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="p-4 bg-accent/10 rounded-2xl">
+                  <Heart className="h-8 w-8 text-accent" />
+                </div>
+                <MobileCardTitle className="text-2xl font-bold">Never Clean Again</MobileCardTitle>
               </div>
-              <MobileCardTitle className="text-xl">Never Clean Again</MobileCardTitle>
+              <Badge className="bg-accent/15 text-accent border-accent/30 font-semibold px-3 py-1">
+                Most Popular
+              </Badge>
             </div>
-            <Badge variant="secondary" className="w-fit bg-accent/10 text-accent border-accent/20">
-              <Zap className="h-3 w-3 mr-1" />
-              Most Popular
-            </Badge>
           </MobileCardHeader>
-          <MobileCardContent className="space-y-4">
-            <ul className="space-y-3">
+          <MobileCardContent className="space-y-6">
+            <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Lock in a regular schedule</strong> and save 10% vs. one-time rates.
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">Lock in a regular schedule</strong> & save 10%
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Your priority crew</strong> knows your home and your preferences.
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">Your priority crew</strong> — 3-month commitment
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
+                <div className="p-1 bg-secondary/10 rounded-full mt-0.5">
+                  <Check className="h-4 w-4 text-secondary" />
                 </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Forget upfront payments.</strong> You only pay <em>after</em> we clean.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="h-4 w-4 text-secondary flex-shrink-0" />
-                </div>
-                <span className="text-sm text-foreground">
-                  <strong className="text-heading-color">Requires a 3-month commitment</strong> to secure your discount.
+                <span className="text-foreground leading-relaxed">
+                  <strong className="text-heading-color">Pay after each clean</strong> — no upfront costs
                 </span>
               </li>
             </ul>
             
-            <Button className="w-full h-touch bg-accent hover:bg-accent-hover text-accent-foreground font-medium flex items-center justify-center gap-2 mt-6">
-              Get Started
-              <ChevronRight className="h-4 w-4" />
+            <Button className="w-full h-14 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl">
+              Subscribe & Save
+              <ChevronRight className="h-5 w-5" />
             </Button>
           </MobileCardContent>
         </MobileCard>
@@ -280,17 +265,18 @@ const HomeCleaning22 = () => {
     const estimatedPrice = calculatePrice22(recommendedHours, null, null);
 
     return (
-      <div className="max-w-2xl mx-auto px-layout-sm">
-        <MobileCard>
-          <MobileCardHeader>
-            <MobileCardTitle className="text-2xl mb-2">Get a Custom Estimate</MobileCardTitle>
-            <p className="text-muted-foreground">Let's see what you need.</p>
-          </MobileCardHeader>
-          <MobileCardContent>
-            <MobileForm className="space-y-6">
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-heading-color mb-2">Let's see what you need.</h1>
+          <p className="text-muted-foreground text-lg">Get your custom estimate in seconds</p>
+        </div>
+        
+        <MobileCard className="border-2 border-primary/10 shadow-lg">
+          <MobileCardContent className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <MobileFormField>
-                <MobileFormLabel htmlFor="propertySize22" required>
-                  Property Size (sq. m.)
+                <MobileFormLabel htmlFor="propertySize22" className="text-lg font-semibold mb-3">
+                  Property Size (sq. m.) *
                 </MobileFormLabel>
                 <Input
                   id="propertySize22"
@@ -298,89 +284,98 @@ const HomeCleaning22 = () => {
                   placeholder="e.g., 85"
                   value={bookingData22.propertySize || ''}
                   onChange={(e) => updateBookingData22({ propertySize: parseInt(e.target.value) || 70 })}
-                  className="h-touch text-base"
+                  className="h-14 text-lg border-2 rounded-xl"
                   min="30"
                   max="500"
                 />
+                <p className="text-sm text-muted-foreground mt-2">≈ 2-3 rooms</p>
               </MobileFormField>
 
               <MobileFormField>
-                <MobileFormLabel htmlFor="clutterLevel22" required>
-                  How would you describe the clutter level?
+                <MobileFormLabel htmlFor="clutterLevel22" className="text-lg font-semibold mb-3">
+                  Clutter Level *
                 </MobileFormLabel>
                 <Select 
                   value={bookingData22.clutterLevel || ''} 
                   onValueChange={(value: ClutterLevel22) => updateBookingData22({ clutterLevel: value })}
                 >
-                  <SelectTrigger className="h-touch text-base">
-                    <SelectValue placeholder="Select clutter level" />
+                  <SelectTrigger className="h-14 text-lg border-2 rounded-xl">
+                    <SelectValue placeholder="How cluttered is your space?" />
                   </SelectTrigger>
-                  <SelectContent className="bg-background border border-border shadow-lg z-50">
-                    <SelectItem value="minimalist" className="text-base py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-secondary rounded-full"></div>
-                        Minimalist
+                  <SelectContent className="bg-background border-2 border-border shadow-xl z-50 rounded-xl">
+                    <SelectItem value="minimalist" className="text-lg py-4 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 bg-secondary rounded-full"></div>
+                        <span>Minimalist</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="lived-in" className="text-base py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        Lived-in
+                    <SelectItem value="lived-in" className="text-lg py-4 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 bg-primary rounded-full"></div>
+                        <span>Lived-in</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="cluttered" className="text-base py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-accent rounded-full"></div>
-                        Cluttered
+                    <SelectItem value="cluttered" className="text-lg py-4 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 bg-accent rounded-full"></div>
+                        <span>Cluttered</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="full" className="text-base py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-destructive rounded-full"></div>
-                        Full
+                    <SelectItem value="full" className="text-lg py-4 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 bg-destructive rounded-full"></div>
+                        <span>Full</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
                 </Select>
               </MobileFormField>
+            </div>
 
-              {bookingData22.clutterLevel && (
-                <div className="bg-gradient-to-r from-primary/5 to-accent/5 p-6 rounded-xl border border-primary/10">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Star className="h-5 w-5 text-primary" />
-                    <h4 className="font-semibold text-heading-color">Our Recommendation</h4>
+            {bookingData22.clutterLevel && (
+              <div className="mt-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 p-8 rounded-2xl border-2 border-primary/10">
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-primary/10 rounded-full">
+                      <Star className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold text-heading-color">Your Custom Recommendation</h3>
                   </div>
-                  <p className="text-foreground text-sm mb-4 leading-relaxed">
-                    For a home of <span className="font-medium text-primary">{bookingData22.propertySize} sq. m.</span>, we recommend starting with <span className="font-medium text-primary">{recommendedHours} hours</span> to see a real difference.
+                  
+                  <p className="text-foreground text-lg mb-6 leading-relaxed max-w-lg mx-auto">
+                    For a home of <span className="font-bold text-primary text-xl">{bookingData22.propertySize} sq. m.</span>, we recommend starting with <span className="font-bold text-primary text-xl">{recommendedHours} hours</span> to see a real difference.
                   </p>
-                  <div className="flex items-center gap-2">
-                    <Euro className="h-4 w-4 text-primary" />
-                    <p className="text-heading-color font-semibold text-lg">
-                      Estimated Price: {recommendedHours}h × €50/h = €{estimatedPrice}
-                    </p>
+                  
+                  <div className="bg-background/60 p-6 rounded-xl border border-primary/20">
+                    <div className="text-4xl font-bold text-primary mb-2">
+                      €{estimatedPrice}
+                    </div>
+                    <div className="text-muted-foreground text-lg">
+                      {recommendedHours}h × €50/h
+                    </div>
                   </div>
                 </div>
-              )}
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={prevStep22}
-                  className="h-touch flex-1 border-border"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Button>
-                <Button 
-                  onClick={nextStep22}
-                  disabled={!bookingData22.clutterLevel}
-                  className="h-touch flex-1 bg-primary hover:bg-primary-hover text-primary-foreground"
-                >
-                  Continue
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
               </div>
-            </MobileForm>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <Button 
+                variant="outline" 
+                onClick={prevStep22}
+                className="h-14 flex-1 border-2 rounded-xl text-lg font-medium"
+              >
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Back
+              </Button>
+              <Button 
+                onClick={nextStep22}
+                disabled={!bookingData22.clutterLevel}
+                className="h-14 flex-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                Continue
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
           </MobileCardContent>
         </MobileCard>
       </div>
@@ -391,42 +386,46 @@ const HomeCleaning22 = () => {
     const currentPrice = calculatePrice22(bookingData22.hours, null, null);
 
     return (
-      <div className="max-w-2xl mx-auto px-layout-sm">
-        <MobileCard>
-          <MobileCardHeader>
-            <MobileCardTitle className="text-2xl mb-2">Adjust & Confirm Time</MobileCardTitle>
-            <p className="text-muted-foreground">
-              You can book fewer hours to start. We'll focus on the most important areas to show you what we can do.
-            </p>
-          </MobileCardHeader>
-          <MobileCardContent className="space-y-6">
-            <div className="flex items-center justify-center gap-6">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => updateBookingData22({ hours: Math.max(3, bookingData22.hours - 1) })}
-                disabled={bookingData22.hours <= 3}
-                className="h-touch w-touch rounded-xl border-2"
-              >
-                <Minus className="h-5 w-5" />
-              </Button>
-              <div className="text-center min-w-[120px]">
-                <div className="text-4xl font-bold text-heading-color">{bookingData22.hours}</div>
-                <div className="text-sm text-muted-foreground">hours</div>
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-heading-color mb-2">Adjust & Confirm Time</h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            You can book fewer hours to start. We'll focus on the most important areas to show you what we can do.
+          </p>
+        </div>
+        
+        <MobileCard className="border-2 border-primary/10 shadow-lg">
+          <MobileCardContent className="p-8">
+            <div className="text-center space-y-8">
+              <div className="inline-flex items-center gap-8 p-6 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl border border-primary/10">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => updateBookingData22({ hours: Math.max(3, bookingData22.hours - 1) })}
+                  disabled={bookingData22.hours <= 3}
+                  className="h-16 w-16 rounded-2xl border-2 border-primary/20 hover:border-primary/40 disabled:opacity-50"
+                >
+                  <Minus className="h-6 w-6" />
+                </Button>
+                
+                <div className="text-center min-w-[160px]">
+                  <div className="text-6xl font-bold text-primary mb-2">{bookingData22.hours}</div>
+                  <div className="text-lg text-muted-foreground font-medium">Hours</div>
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => updateBookingData22({ hours: bookingData22.hours + 1 })}
+                  className="h-16 w-16 rounded-2xl border-2 border-primary/20 hover:border-primary/40"
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
               </div>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => updateBookingData22({ hours: bookingData22.hours + 1 })}
-                className="h-touch w-touch rounded-xl border-2"
-              >
-                <Plus className="h-5 w-5" />
-              </Button>
-            </div>
 
-            <div className="bg-gradient-to-r from-secondary/5 to-primary/5 p-6 rounded-xl border border-secondary/20">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-secondary mb-1">€{currentPrice}</div>
+              <div className="bg-gradient-to-br from-secondary/5 via-background to-primary/5 p-8 rounded-2xl border-2 border-secondary/20">
+                <p className="text-muted-foreground mb-4 text-lg">Updated Price</p>
+                <div className="text-5xl font-bold text-secondary mb-2">€{currentPrice}</div>
                 <div className="text-sm text-muted-foreground">Total Price</div>
               </div>
             </div>
