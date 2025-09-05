@@ -6,6 +6,7 @@ import { BackgroundElements } from "./BackgroundElements";
 import { performanceMonitor } from "@/utils/performance";
 import { useComponentTimer } from "@/hooks/useComponentTimer";
 import environmentUtils from "@/utils/environment";
+import { FullWidthSection } from "../layout/FullWidthSection";
 
 export const Hero = memo(() => {
   const navigate = useNavigate();
@@ -33,17 +34,20 @@ export const Hero = memo(() => {
   };
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden pt-16">
+    <FullWidthSection 
+      background="gradient" 
+      spacing="xl" 
+      containerSize="ultra-wide"
+      className="relative min-h-screen overflow-hidden pt-16 flex items-center"
+    >
       {/* Clean background */}
       <BackgroundElements />
       
-      {/* Content container with proper spacing */}
-      <div className="relative z-10 flex items-center justify-center px-6 sm:px-8 lg:px-12 py-20 lg:py-32">
-        <div className="w-full max-w-7xl mx-auto">
-          <HeroContent onGetQuote={handleGetQuote} />
-        </div>
+      {/* Content with modern spacing */}
+      <div className="relative z-10 w-full">
+        <HeroContent onGetQuote={handleGetQuote} />
       </div>
-    </section>
+    </FullWidthSection>
   );
 });
 

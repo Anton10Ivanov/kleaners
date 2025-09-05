@@ -1,9 +1,10 @@
-
-// Layout Components
-// Centralized exports for all layout components
-
-export { ResponsiveGrid } from './ResponsiveGrid';
-export { LayoutSection } from './LayoutSection';
+// Modern Layout System Exports
 export { UnifiedContainer } from './UnifiedContainer';
+export { ModernContainer } from './ModernContainer';
+export { FullWidthSection } from './FullWidthSection';
+export { ContentGrid } from './ContentGrid';
+export { FluidTypography } from './FluidTypography';
+export { ModernCard } from './ModernCard';
 export { Section } from './Section';
-export { PageHeader } from './PageHeader';
+export { LayoutSection } from './LayoutSection';
+export { ResponsiveGrid } from './ResponsiveGrid';
