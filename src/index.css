@@ -8,6 +8,7 @@
 @import "./styles/mobileOptimizations.css";
 @import "./styles/visualHarmonization.css";
 @import "./styles/globals.css";
+@import "./styles/modern-layout.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

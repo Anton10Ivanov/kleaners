@@ -4,11 +4,11 @@ import { UnifiedContainer } from "./layout/UnifiedContainer";
 
 interface PageLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "ultra-wide" | "full";
 }
 
 const PageLayout = React.forwardRef<HTMLDivElement, PageLayoutProps>(
-  ({ className, children, size = "xl", ...props }, ref) => {
+  ({ className, children, size = "2xl", ...props }, ref) => {
     return (
       <main
         ref={ref}
