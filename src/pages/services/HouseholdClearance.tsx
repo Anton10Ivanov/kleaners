@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { householdClearanceData } from "@/data/services/householdClearance";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default HouseholdClearance;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { householdClearanceData } from "@/data/services/householdClearance";
+
+const HouseholdClearance = () => {
+  return <ModernServiceTemplate data={householdClearanceData} />;
+};
+
+export default HouseholdClearance;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

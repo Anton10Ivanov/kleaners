@@ -24,11 +24,19 @@ if (typeof window !== 'undefined') {
     userAgent: navigator.userAgent
   };
   
+<<<<<<< HEAD
   // Performance Monitor initialized - removed console.log for production
   
   // Monitor hydration issues specific to preview windows
   if (environmentContext.isPreviewWindow) {
     // Preview window detected - removed console.log for production
+=======
+  console.log('Performance Monitor initialized with context:', environmentContext);
+  
+  // Monitor hydration issues specific to preview windows
+  if (environmentContext.isPreviewWindow) {
+    console.log('Preview window detected - enabling enhanced monitoring');
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     
     // Check for hydration mismatches
     window.addEventListener('error', (event) => {
@@ -68,7 +76,11 @@ if (typeof window !== 'undefined') {
     if (!scriptsLoaded) {
       // Temporarily commenting out this warning as it's likely related to the gptengineer script issue
       // console.warn('Scripts loading timeout or failed');
+<<<<<<< HEAD
       // Scripts loading check completed - removed console.log for production
+=======
+      console.log('Note: Scripts loading check completed. Previous warnings might be related to gptengineer.js.');
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     }
     
     // Verify loading order
@@ -77,13 +89,26 @@ if (typeof window !== 'undefined') {
       // Temporarily commenting out this warning as it's directly related to `verifyLoadingOrder`
       // reporting issues due to the missing gptengineer script, which is expected.
       // console.warn('Script loading order issues detected');
+<<<<<<< HEAD
       // Script loading order check completed - removed console.log for production
+=======
+      console.log('Note: Script loading order check completed. Previous warnings might be related to gptengineer.js.');
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     }
     
     // Start error monitoring
     scriptUtils.monitorScriptErrors();
     
+<<<<<<< HEAD
     // Monitoring systems initialized - removed console.log for production
+=======
+    console.log('Monitoring systems initialized', {
+      router: routerAvailable,
+      styles: stylesLoaded,
+      scripts: scriptsLoaded, // This will still report false if waitForScripts timed out
+      loadingOrder: loadingOrderCorrect // This will still report false if verifyLoadingOrder failed
+    });
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   };
   
   // Initialize after DOM is ready

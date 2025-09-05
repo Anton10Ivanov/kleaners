@@ -6,7 +6,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+<<<<<<< HEAD
 import { LazyImage } from "@/components/ui/LazyImage";
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
 interface ServiceCategoryCardDSProps {
   title: string;
@@ -75,7 +78,11 @@ export function ServiceCategoryCardDS({
 
         {image && (
           <div className="mt-4 rounded-lg overflow-hidden">
+<<<<<<< HEAD
             <LazyImage 
+=======
+            <img 
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
               src={image} 
               alt={title}
               className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"

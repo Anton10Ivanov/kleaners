@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { graffitiRemovalData } from "@/data/services/graffitiRemoval";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default GraffitiRemoval;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { graffitiRemovalData } from "@/data/services/graffitiRemoval";
+
+const GraffitiRemoval = () => {
+  return <ModernServiceTemplate data={graffitiRemovalData} />;
+};
+
+export default GraffitiRemoval;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

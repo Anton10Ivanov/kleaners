@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { careFacilityCleaningData } from "@/data/services/careFacilityCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default CareFacilityCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { careFacilityCleaningData } from "@/data/services/careFacilityCleaning";
+
+const CareFacilityCleaning = () => {
+  return <ModernServiceTemplate data={careFacilityCleaningData} />;
+};
+
+export default CareFacilityCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { gardeningData } from "@/data/services/gardening";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default Gardening;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { gardeningData } from "@/data/services/gardening";
+
+const Gardening = () => {
+  return <ModernServiceTemplate data={gardeningData} />;
+};
+
+export default Gardening;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

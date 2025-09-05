@@ -6,7 +6,10 @@
 @import "./styles/animations.css";
 @import "./styles/hero-animations.css";
 @import "./styles/mobileOptimizations.css";
+<<<<<<< HEAD
 @import "./styles/mobile-ui-improvements.css";
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 @import "./styles/visualHarmonization.css";
 @import "./styles/globals.css";
 @import "./styles/modern-layout.css";
@@ -63,6 +66,10 @@
 
     /* Yale Blue - Navigation & Headers (20% allocation) */
     --accent: 208 73 23; /* #0D3B66 - Yale Blue */
+<<<<<<< HEAD
+=======
+    --accent-hover: 208 73 18; /* Darker Yale Blue for hover */
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     --accent-foreground: 0 0 100; /* #FFFFFF - White text on Yale Blue */
     --heading-color: 208 73 23; /* #0D3B66 - Headers use Yale Blue */
     --ring: 32 85 59; /* #F19A3E - Focus rings use Orange */

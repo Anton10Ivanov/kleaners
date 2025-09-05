@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { petHairRemovalData } from "@/data/services/petHairRemoval";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default PetHairRemoval;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { petHairRemovalData } from "@/data/services/petHairRemoval";
+
+const PetHairRemoval = () => {
+  return <ModernServiceTemplate data={petHairRemovalData} />;
+};
+
+export default PetHairRemoval;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

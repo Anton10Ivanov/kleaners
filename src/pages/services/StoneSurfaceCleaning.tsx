@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { stoneSurfaceCleaningData } from "@/data/services/stoneSurfaceCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default StoneSurfaceCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { stoneSurfaceCleaningData } from "@/data/services/stoneSurfaceCleaning";
+
+const StoneSurfaceCleaning = () => {
+  return <ModernServiceTemplate data={stoneSurfaceCleaningData} />;
+};
+
+export default StoneSurfaceCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

@@ -1,5 +1,8 @@
 
+<<<<<<< HEAD
 import { memo } from 'react';
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import { useNavbarLogic } from './core/NavbarLogic';
 import { useNavbarHandlers } from './core/NavbarHandlers';
 import { DesktopNavigation } from './desktop/DesktopNavigation';
@@ -10,11 +13,21 @@ import { useNavigationEffects } from './hooks/useNavigationState';
 import { navItems } from './navigationData';
 
 // Centralized component imports
+<<<<<<< HEAD
 import { Logo } from './Logo';
 import { MobileMenu } from './MobileMenu';
 import { default as NavbarContainer } from './NavbarContainer';
 
 const NavbarContent = memo(() => {
+=======
+import {
+  Logo,
+  MobileMenu,
+  NavbarContainer
+} from './';
+
+const NavbarContent = () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   const {
     isMenuOpen,
     setIsMenuOpen,
@@ -68,18 +81,28 @@ const NavbarContent = memo(() => {
       />
     </NavbarContainer>
   );
+<<<<<<< HEAD
 });
 
 NavbarContent.displayName = 'NavbarContent';
 
 const Navbar = memo(() => {
+=======
+};
+
+const Navbar = () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   return (
     <NavigationProvider navItems={navItems}>
       <NavbarContent />
     </NavigationProvider>
   );
+<<<<<<< HEAD
 });
 
 Navbar.displayName = 'Navbar';
+=======
+};
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
 export default Navbar;

@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import React, { useState, memo, useCallback } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import { UserBooking } from '@/types/bookings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -30,7 +34,11 @@ export interface BookingCardProps {
  * @param {BookingCardProps} props Component props
  * @returns {JSX.Element} Booking card component
  */
+<<<<<<< HEAD
 export const BookingCard = memo(function BookingCard({
+=======
+export function BookingCard({
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   booking,
   onCancel,
   onReschedule
@@ -42,17 +50,28 @@ export const BookingCard = memo(function BookingCard({
   );
   
   // Handle booking cancellation
+<<<<<<< HEAD
   const handleCancel = useCallback(async () => {
+=======
+  const handleCancel = async () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     setIsCancelling(true);
     try {
       await onCancel();
     } finally {
       setIsCancelling(false);
     }
+<<<<<<< HEAD
   }, [onCancel]);
   
   // Handle booking rescheduling
   const handleReschedule = useCallback(async () => {
+=======
+  };
+  
+  // Handle booking rescheduling
+  const handleReschedule = async () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     if (!selectedDate) return;
     
     setIsRescheduling(true);
@@ -62,7 +81,11 @@ export const BookingCard = memo(function BookingCard({
     } finally {
       setIsRescheduling(false);
     }
+<<<<<<< HEAD
   }, [selectedDate, onReschedule]);
+=======
+  };
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   
   return (
     <Card>
@@ -113,4 +136,8 @@ export const BookingCard = memo(function BookingCard({
       )}
     </Card>
   );
+<<<<<<< HEAD
 });
+=======
+}
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

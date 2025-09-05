@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿
 import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { carpetCleaningData } from "@/data/services/carpetCleaning";
@@ -50,3 +51,14 @@ export default CarpetCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { carpetCleaningData } from "@/data/services/carpetCleaning";
+
+const CarpetCleaning = () => {
+  return <ModernServiceTemplate data={carpetCleaningData} />;
+};
+
+export default CarpetCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

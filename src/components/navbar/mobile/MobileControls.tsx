@@ -20,6 +20,7 @@ export const MobileControls = ({
   const navigate = useNavigate();
 
   return (
+<<<<<<< HEAD
     <div className="flex md:hidden items-center gap-2">
       {user && (
         <button
@@ -48,12 +49,50 @@ export const MobileControls = ({
           isMenuOpen 
             ? "bg-primary text-primary-foreground shadow-lg" 
             : "hover:bg-primary/10 hover:text-primary text-accent"
+=======
+    <div className="flex md:hidden items-center gap-1">
+      {user && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleBookingsClick}
+          className="h-10 w-10 p-0 hover:bg-muted"
+          aria-label="View bookings"
+        >
+          <Calendar className="h-5 w-5 text-secondary-text" />
+        </Button>
+      )}
+      
+      {!user && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate('/auth/login')}
+          className="h-10 w-10 p-0 hover:bg-muted"
+          aria-label="Login"
+        >
+          <LogIn className="h-5 w-5 text-secondary-text" />
+        </Button>
+      )}
+      
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className={cn(
+          "h-10 w-10 p-0 hover:bg-muted transition-colors",
+          isMenuOpen && "bg-primary/10 text-primary"
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
         )}
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         aria-expanded={isMenuOpen}
       >
         <Menu className="h-5 w-5" />
+<<<<<<< HEAD
       </button>
+=======
+      </Button>
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     </div>
   );
 };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { glassCleaningWinterGardenData } from "@/data/services/glassCleaningWinterGarden";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default GlassCleaningWinterGarden;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { glassCleaningWinterGardenData } from "@/data/services/glassCleaningWinterGarden";
+
+const GlassCleaningWinterGarden = () => {
+  return <ModernServiceTemplate data={glassCleaningWinterGardenData} />;
+};
+
+export default GlassCleaningWinterGarden;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

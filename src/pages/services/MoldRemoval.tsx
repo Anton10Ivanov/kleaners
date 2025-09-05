@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { moldRemovalData } from "@/data/services/moldRemoval";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default MoldRemoval;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { moldRemovalData } from "@/data/services/moldRemoval";
+
+const MoldRemoval = () => {
+  return <ModernServiceTemplate data={moldRemovalData} />;
+};
+
+export default MoldRemoval;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

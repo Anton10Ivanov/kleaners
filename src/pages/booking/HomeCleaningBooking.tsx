@@ -4,7 +4,11 @@ import { HomeCleaningSchema, type HomeBookingForm } from '@/schemas/bookingSchem
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Package } from 'lucide-react';
+<<<<<<< HEAD
 import { useState, useEffect, useCallback, useMemo } from 'react';
+=======
+import { useState, useEffect } from 'react';
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import { useEnhancedBookingSubmission } from '@/hooks/useEnhancedBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import { EnhancedHomeDetailsSection } from '@/components/booking/EnhancedHomeDetailsSection';
@@ -56,12 +60,19 @@ const HomeCleaningBooking = () => {
     },
   });
 
+<<<<<<< HEAD
   // Enhanced form persistence - memoized to prevent recreation
   const getFormValues = useCallback(() => form.getValues(), [form]);
   
   useEffect(() => {
     const autoSaveInstance = new FormAutoSave(
       getFormValues,
+=======
+  // Enhanced form persistence
+  useEffect(() => {
+    const autoSaveInstance = new FormAutoSave(
+      () => form.getValues(),
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
       'home',
       30000 // 30 seconds
     );
@@ -71,7 +82,11 @@ const HomeCleaningBooking = () => {
     return () => {
       autoSaveInstance.stop();
     };
+<<<<<<< HEAD
   }, [getFormValues]);
+=======
+  }, [form]);
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
   // Save on step changes
   useEffect(() => {
@@ -88,6 +103,7 @@ const HomeCleaningBooking = () => {
   const frequency = form.watch('frequency');
   const showCalendar = frequency && frequency !== 'custom';
 
+<<<<<<< HEAD
   const handleNext = useCallback(() => {
     // Scroll to top immediately when next is clicked
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -95,12 +111,25 @@ const HomeCleaningBooking = () => {
   }, []);
 
   const handleBack = useCallback(() => {
+=======
+  const handleNext = () => {
+    // Scroll to top immediately when next is clicked
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentStep(prev => Math.min(prev + 1, 4));
+  };
+
+  const handleBack = () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     if (currentStep === 1) {
       navigate('/');
     } else {
       setCurrentStep(prev => Math.max(prev - 1, 1));
     }
+<<<<<<< HEAD
   }, [currentStep, navigate]);
+=======
+  };
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
   const handleSubmit = async (data: HomeBookingForm) => {
     await submitBooking(data);
