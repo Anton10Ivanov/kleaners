@@ -1,0 +1,378 @@
+/**
+ * Mobile UI Improvements
+ * Comprehensive mobile-first design system with consistent color scheme
+ */
+
+/* Mobile-First Color Standardization */
+@layer base {
+  /* Enhanced mobile touch targets */
+  .mobile-touch-target {
+    min-height: 48px;
+    min-width: 48px;
+    @apply touch-manipulation;
+  }
+
+  .mobile-touch-large {
+    min-height: 56px;
+    min-width: 56px;
+    @apply touch-manipulation;
+  }
+
+  /* Mobile-optimized buttons */
+  .mobile-btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-primary-foreground;
+    @apply h-12 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl;
+    @apply transition-all duration-200 touch-manipulation;
+    @apply focus:ring-2 focus:ring-primary/20 focus:outline-none;
+  }
+
+  .mobile-btn-secondary {
+    @apply bg-accent hover:bg-accent/90 text-accent-foreground;
+    @apply h-12 px-6 rounded-xl font-medium shadow-md hover:shadow-lg;
+    @apply transition-all duration-200 touch-manipulation;
+    @apply focus:ring-2 focus:ring-accent/20 focus:outline-none;
+  }
+
+  .mobile-btn-ghost {
+    @apply bg-transparent hover:bg-primary/10 hover:text-primary;
+    @apply h-12 px-4 rounded-xl font-medium text-accent;
+    @apply transition-all duration-200 touch-manipulation;
+    @apply focus:ring-2 focus:ring-primary/20 focus:outline-none;
+  }
+
+  /* Mobile input styling */
+  .mobile-input {
+    @apply h-12 px-4 rounded-xl border border-border bg-input;
+    @apply text-base text-foreground placeholder:text-muted-foreground;
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none;
+    @apply transition-all duration-200 touch-manipulation;
+  }
+
+  /* Mobile card styling */
+  .mobile-card {
+    @apply bg-card rounded-xl p-6 shadow-sm border border-border;
+    @apply hover:shadow-md transition-all duration-200;
+  }
+
+  .mobile-card-interactive {
+    @apply mobile-card hover:shadow-lg hover:scale-[1.02];
+    @apply cursor-pointer touch-manipulation;
+  }
+}
+
+/* Mobile Navigation Improvements */
+@layer components {
+  .mobile-nav-enhanced {
+    @apply fixed top-0 left-0 right-0 z-50;
+    @apply bg-background/95 backdrop-blur-md border-b border-border;
+    @apply transition-all duration-300;
+  }
+
+  .mobile-nav-scrolled {
+    @apply shadow-lg;
+    background-color: hsl(var(--background) / 0.98);
+  }
+
+  .mobile-menu-overlay {
+    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-40;
+    @apply transition-opacity duration-300;
+  }
+
+  .mobile-menu-panel {
+    @apply fixed top-0 right-0 h-full w-80 max-w-[90vw];
+    @apply bg-background border-l border-border shadow-2xl z-50;
+    @apply transform transition-all duration-300 ease-out;
+  }
+
+  .mobile-menu-item {
+    @apply w-full flex items-center gap-4 px-4 py-4 rounded-xl;
+    @apply text-base font-medium transition-all duration-200 touch-manipulation;
+    @apply hover:bg-primary/10 hover:text-primary hover:shadow-md;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20;
+  }
+
+  .mobile-menu-item-active {
+    @apply bg-primary text-primary-foreground shadow-lg;
+    @apply border-l-4 border-primary-foreground;
+  }
+
+  .mobile-menu-item-inactive {
+    @apply text-accent hover:scale-[1.02];
+  }
+}
+
+/* Mobile Typography Enhancements */
+@layer components {
+  .mobile-heading-xl {
+    @apply text-2xl sm:text-3xl font-bold text-heading-color;
+    @apply leading-tight tracking-tight;
+  }
+
+  .mobile-heading-lg {
+    @apply text-xl sm:text-2xl font-semibold text-heading-color;
+    @apply leading-tight;
+  }
+
+  .mobile-heading-md {
+    @apply text-lg sm:text-xl font-medium text-heading-color;
+    @apply leading-snug;
+  }
+
+  .mobile-body-lg {
+    @apply text-base sm:text-lg text-secondary-text;
+    @apply leading-relaxed;
+  }
+
+  .mobile-body {
+    @apply text-sm sm:text-base text-secondary-text;
+    @apply leading-relaxed;
+  }
+
+  .mobile-caption {
+    @apply text-xs sm:text-sm text-muted-foreground;
+    @apply leading-normal;
+  }
+}
+
+/* Mobile Layout Improvements */
+@layer components {
+  .mobile-container-fluid {
+    @apply w-full px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto;
+  }
+
+  .mobile-section {
+    @apply py-8 sm:py-12 lg:py-16;
+  }
+
+  .mobile-section-compact {
+    @apply py-6 sm:py-8 lg:py-12;
+  }
+
+  .mobile-grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col space-y-4 sm:space-y-6;
+  }
+
+  .mobile-hero {
+    @apply min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh];
+    @apply flex flex-col justify-center items-center;
+    @apply px-4 py-12 sm:py-16 lg:py-20;
+    @apply text-center;
+  }
+}
+
+/* Mobile Form Improvements */
+@layer components {
+  .mobile-form {
+    @apply space-y-6;
+  }
+
+  .mobile-form-group {
+    @apply space-y-2;
+  }
+
+  .mobile-form-label {
+    @apply block text-sm font-medium text-heading-color;
+    @apply mb-2;
+  }
+
+  .mobile-form-input {
+    @apply mobile-input w-full;
+  }
+
+  .mobile-form-textarea {
+    @apply mobile-input min-h-[120px] resize-y;
+  }
+
+  .mobile-form-select {
+    @apply mobile-input appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Mobile Status and Feedback */
+@layer components {
+  .mobile-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full;
+    @apply text-xs font-medium;
+  }
+
+  .mobile-badge-primary {
+    @apply mobile-badge bg-primary/10 text-primary;
+  }
+
+  .mobile-badge-success {
+    @apply mobile-badge bg-success/10 text-success;
+  }
+
+  .mobile-badge-warning {
+    @apply mobile-badge bg-warning/10 text-warning;
+  }
+
+  .mobile-badge-error {
+    @apply mobile-badge bg-destructive/10 text-destructive;
+  }
+
+  .mobile-alert {
+    @apply p-4 rounded-xl border;
+    @apply flex items-start gap-3;
+  }
+
+  .mobile-alert-info {
+    @apply mobile-alert bg-primary/5 border-primary/20 text-primary;
+  }
+
+  .mobile-alert-success {
+    @apply mobile-alert bg-success/5 border-success/20 text-success;
+  }
+
+  .mobile-alert-warning {
+    @apply mobile-alert bg-warning/5 border-warning/20 text-warning;
+  }
+
+  .mobile-alert-error {
+    @apply mobile-alert bg-destructive/5 border-destructive/20 text-destructive;
+  }
+}
+
+/* Mobile Animation Enhancements */
+@layer utilities {
+  .mobile-fade-in {
+    animation: mobileSlideUp 0.4s ease-out;
+  }
+
+  .mobile-slide-in-right {
+    animation: mobileSlideInRight 0.3s ease-out;
+  }
+
+  .mobile-slide-in-left {
+    animation: mobileSlideInLeft 0.3s ease-out;
+  }
+
+  .mobile-scale-in {
+    animation: mobileScaleIn 0.2s ease-out;
+  }
+
+  @keyframes mobileSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes mobileSlideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes mobileSlideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes mobileScaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* Mobile Performance Optimizations */
+@layer utilities {
+  .mobile-gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .mobile-smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .mobile-no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Mobile Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .mobile-card {
+    @apply bg-card/80 backdrop-blur-sm;
+  }
+
+  .mobile-nav-enhanced {
+    @apply bg-background/90 backdrop-blur-lg;
+  }
+
+  .mobile-menu-panel {
+    @apply bg-background/95 backdrop-blur-lg;
+  }
+}
+
+/* Mobile Accessibility Improvements */
+@layer utilities {
+  .mobile-focus-visible {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20;
+    @apply focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .mobile-sr-only {
+    @apply sr-only;
+  }
+
+  .mobile-high-contrast {
+    @apply contrast-125 saturate-110;
+  }
+}
+
+/* Mobile Safe Area Support */
+@layer utilities {
+  .mobile-safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .mobile-safe-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .mobile-safe-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}

@@ -1,0 +1,195 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@import "./styles/componentLibrary.css";
+@import "./styles/brand-colors.css";
+@import "./styles/animations.css";
+@import "./styles/hero-animations.css";
+@import "./styles/mobileOptimizations.css";
+@import "./styles/mobile-ui-improvements.css";
+@import "./styles/visualHarmonization.css";
+@import "./styles/globals.css";
+@import "./styles/modern-layout.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Font family variables - Unified to Inter */
+    --ff: 'Inter', sans-serif;
+    --ff2: 'Inter', sans-serif;
+    --ff-heading: 'Inter', sans-serif;
+    --ff-label: 'Inter', sans-serif;
+    
+    /* Typography values - Standardized */
+    --p: 1rem/1.5em var(--ff);
+    --h1: 600 3rem/1.2em var(--ff-heading);
+    --h2: 600 2rem/1.2em var(--ff-heading);
+    
+    /* Design System Spacing - From designTokens.ts */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 0.75rem;
+    --spacing-lg: 1rem;
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 3rem;
+    --spacing-4xl: 4rem;
+    
+    /* Touch target sizes */
+    --touch-minimum: 2.75rem; /* 44px minimum */
+    --touch-comfortable: 3rem; /* 48px comfortable */
+    --touch-large: 3.5rem; /* 56px large */
+    
+    /* Layout spacing tokens */
+    --layout-padding-sm: 1rem; /* 16px */
+    --layout-padding-md: 1.5rem; /* 24px */
+    --layout-padding-lg: 2rem; /* 32px */
+    
+    /* UPDATED COLOR SCHEME - Exact Usage Guidelines */
+    /* Light Neutral Backgrounds - 70% coverage */
+    --background: 210 17 98; /* #F8F9FA - Light Neutral Background */
+    --card: 0 0 100; /* #FFFFFF - White for cards */
+    --popover: 0 0 100; /* #FFFFFF - White for popovers */
+    --surface: 0 0 100; /* #FFFFFF - White surfaces */
+    --input: 0 0 100; /* #FFFFFF - White form inputs */
+    --off-white: 48 67 94; /* #FAF3E0 - Alternate section background */
+
+    /* Carrot Orange - PRIMARY CTA ONLY (10% allocation) */
+    --primary: 32 85 59; /* #F19A3E - Carrot Orange */
+    --primary-hover: 32 85 48; /* #D97F28 - Darker orange for hover */
+    --primary-foreground: 0 0 100; /* #FFFFFF - White text on orange */
+
+    /* Yale Blue - Navigation & Headers (20% allocation) */
+    --accent: 208 73 23; /* #0D3B66 - Yale Blue */
+    --accent-foreground: 0 0 100; /* #FFFFFF - White text on Yale Blue */
+    --heading-color: 208 73 23; /* #0D3B66 - Headers use Yale Blue */
+    --ring: 32 85 59; /* #F19A3E - Focus rings use Orange */
+
+    /* Hunter Green - Secondary Actions (15% allocation) */
+    --secondary: 124 31 32; /* #386641 - Hunter Green */
+    --secondary-foreground: 0 0 100; /* #FFFFFF - White text on Hunter Green */
+
+    /* Dark Neutral - Body text (#222) */
+    --foreground: 0 0 13; /* #222 - Dark Neutral */
+    --secondary-text: 0 0 13; /* #222 - Body text */
+    --card-foreground: 0 0 13; /* #222 */
+    --popover-foreground: 0 0 13; /* #222 */
+
+    /* Soft Gray - Borders, Form backgrounds, Dividers */
+    --border: 0 0 88; /* #E0E0E0 - Soft Gray */
+    --muted: 0 0 96; /* #F5F5F5 - Lighter gray for muted backgrounds */
+    --muted-foreground: 0 0 40; /* #666 - Muted text */
+
+    /* Muted Gold - Accent highlights, Active states */
+    --muted-gold: 46 73 67; /* #E9C46A - Muted Gold */
+    --muted-gold-foreground: 0 0 13; /* #222 - Dark text on gold */
+
+    /* Slate Gray - Icons, SVGs, Supporting elements (NEW) */
+    --neutral-icon: 215 28 47; /* #64748B - Slate Gray for icons */
+    --neutral-icon-foreground: 0 0 100; /* #FFFFFF - White text on slate */
+
+    /* Link colors - Yale Blue, hover Orange */
+    --link: 208 73 23; /* #0D3B66 - Yale Blue */
+    --link-hover: 32 85 59; /* #F19A3E - Carrot Orange hover */
+    
+    /* Status Colors */
+    --warning: 36 100 50; /* #FF9E00 - Warning Orange */
+    --destructive: 0 84 60; /* Red for errors */
+    --success: 142 76 36; /* Green for success */
+    
+    /* Dark backgrounds for footer */
+    --dark-bg: 0 0 13; /* #222 - Dark neutral background */
+    --dark-foreground: 0 0 100; /* #FFFFFF - White text on dark */
+    
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border selection:bg-primary/10 selection:text-primary;
+  }
+  
+  html {
+    @apply scroll-smooth;
+    /* Removed scrollbar-width: none as it was causing build errors */
+    -ms-overflow-style: none;
+  }
+  
+  html::-webkit-scrollbar {
+    display: none;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    font: var(--p);
+    line-height: 1.5;
+    /* Removed scrollbar-width: none as it was causing build errors */
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Enhanced typography styles - Design System */
+  h1 {
+    font: var(--h1);
+    @apply text-heading-color;
+  }
+
+  h2 {
+    font: var(--h2);
+    @apply text-heading-color;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.3em;
+    font-weight: 600;
+    font-family: var(--ff-heading);
+    @apply text-heading-color;
+  }
+
+  h4, h5, h6 {
+    font-size: 1.25rem;
+    line-height: 1.3em;
+    font-weight: 600;
+    font-family: var(--ff-heading);
+    @apply text-heading-color;
+  }
+
+  p {
+    font: var(--p);
+    @apply text-secondary-text;
+  }
+
+  a {
+    font-family: var(--ff);
+    color: hsl(var(--link));
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: hsl(var(--link-hover));
+  }
+
+  button, input, select, textarea {
+    font-family: var(--ff);
+    font-size: 1rem;
+    line-height: 1.5em;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+  
+  body {
+    overflow-x: hidden;
+    width: 100vw;
+    position: relative;
+  }
+}

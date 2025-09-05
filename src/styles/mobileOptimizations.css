@@ -1,0 +1,139 @@
+
+/**
+ * Mobile Optimizations CSS
+ * Mobile-first responsive design patterns and touch-friendly interactions
+ */
+
+/* Touch Interaction Improvements */
+@layer utilities {
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .touch-pan {
+    touch-action: pan-x pan-y;
+  }
+  
+  .touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+}
+
+/* Mobile-First Layout Patterns */
+@layer components {
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto;
+    @apply w-full;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col space-y-4;
+    @apply w-full;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 gap-4;
+    @apply w-full;
+  }
+
+  .mobile-card {
+    @apply bg-card rounded-xl p-4 shadow-sm;
+    @apply border border-border;
+    @apply w-full;
+  }
+
+  /* Mobile Navigation */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50;
+    @apply bg-background border-t border-border;
+    @apply safe-area-inset-bottom;
+  }
+
+  .mobile-nav-item {
+    @apply flex flex-col items-center justify-center;
+    @apply py-2 px-1 text-xs;
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Mobile Section */
+  .mobile-section {
+    @apply w-full;
+    @apply border-b border-border/10 pb-4 last:border-b-0 last:pb-0;
+  }
+}
+
+/* Responsive Breakpoint Utilities */
+@layer utilities {
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+  
+  .tablet-up {
+    @apply hidden sm:block;
+  }
+  
+  .desktop-up {
+    @apply hidden lg:block;
+  }
+}
+
+/* Mobile Performance Optimizations */
+@layer utilities {
+  .mobile-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .mobile-smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Safe Area Support */
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile Hero Section Fixes */
+@layer components {
+  .mobile-hero {
+    @apply min-h-[60vh] w-full;
+    @apply flex flex-col justify-center items-center;
+    @apply px-4 py-8;
+    @apply relative z-10;
+  }
+}
+
+/* Mobile Menu Z-Index Fix */
+@layer utilities {
+  .mobile-menu-overlay {
+    z-index: 9998;
+  }
+  
+  .mobile-menu-content {
+    z-index: 9999;
+  }
+}
