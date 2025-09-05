@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { disinfectionCleaningData } from "@/data/services/disinfectionCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default DisinfectionCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { disinfectionCleaningData } from "@/data/services/disinfectionCleaning";
+
+const DisinfectionCleaning = () => {
+  return <ModernServiceTemplate data={disinfectionCleaningData} />;
+};
+
+export default DisinfectionCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

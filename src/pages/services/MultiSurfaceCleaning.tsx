@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { multiSurfaceCleaningData } from "@/data/services/multiSurfaceCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default MultiSurfaceCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { multiSurfaceCleaningData } from "@/data/services/multiSurfaceCleaning";
+
+const MultiSurfaceCleaning = () => {
+  return <ModernServiceTemplate data={multiSurfaceCleaningData} />;
+};
+
+export default MultiSurfaceCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

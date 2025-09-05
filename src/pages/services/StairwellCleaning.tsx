@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { stairwellCleaningData } from "@/data/services/stairwellCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default StairwellCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { stairwellCleaningData } from "@/data/services/stairwellCleaning";
+
+const StairwellCleaning = () => {
+  return <ModernServiceTemplate data={stairwellCleaningData} />;
+};
+
+export default StairwellCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

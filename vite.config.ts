@@ -24,16 +24,20 @@ export default defineConfig(({ mode }) => ({
     // Improve build performance and support BigInt
     target: 'es2020',
     minify: 'esbuild',
+<<<<<<< HEAD
     // Remove console logs in production
     ...(mode === 'production' && {
       esbuild: {
         drop: ['console', 'debugger'],
       },
     }),
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     // Split chunks for better caching
     rollupOptions: {
       output: {
         manualChunks: {
+<<<<<<< HEAD
           // Core React libraries
           vendor: ['react', 'react-dom', 'react-router-dom'],
           // UI component libraries
@@ -60,6 +64,13 @@ export default defineConfig(({ mode }) => ({
           query: ['@tanstack/react-query', 'zustand'],
           // Charts and data visualization
           charts: ['recharts']
+=======
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          auth: ['@supabase/supabase-js'],
+          utils: ['date-fns', 'clsx', 'tailwind-merge'],
+          framer: ['framer-motion']
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
         },
         assetFileNames: (assetInfo) => {
           if (!assetInfo.name) return 'assets/[name]-[hash][extname]';

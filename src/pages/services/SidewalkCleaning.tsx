@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { sidewalkCleaningData } from "@/data/services/sidewalkCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default SidewalkCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { sidewalkCleaningData } from "@/data/services/sidewalkCleaning";
+
+const SidewalkCleaning = () => {
+  return <ModernServiceTemplate data={sidewalkCleaningData} />;
+};
+
+export default SidewalkCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

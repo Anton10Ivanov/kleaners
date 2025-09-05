@@ -25,7 +25,11 @@ export class PerformanceMonitor {
    */
   public markAsImportant(markName: string): void {
     this.importantMarks.add(markName);
+<<<<<<< HEAD
     // Marked as important for performance monitoring - removed console.log for production
+=======
+    console.log(`Marked ${markName} as important for performance monitoring.`);
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
   }
   
   /**

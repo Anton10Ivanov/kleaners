@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { hoarderCleaningData } from "@/data/services/hoarderCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default HoarderCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { hoarderCleaningData } from "@/data/services/hoarderCleaning";
+
+const HoarderCleaning = () => {
+  return <ModernServiceTemplate data={hoarderCleaningData} />;
+};
+
+export default HoarderCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

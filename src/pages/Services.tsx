@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as React from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -10,6 +11,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 import { popularServices } from '@/components/navbar/navigationData';
+=======
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Search, Filter, ArrowRight, Star, ChevronDown, ChevronUp, Home, Building2, Sparkles } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { serviceCategories, popularServices } from '@/components/navbar/navigationData';
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 const Services = () => {
@@ -17,7 +29,10 @@ const Services = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showAllServices, setShowAllServices] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
+<<<<<<< HEAD
   const { isMobile: isMobileOpt } = useMobileOptimizations();
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
   // All services from App.tsx routes - expanded list
   const allServicesFromRoutes = [
@@ -147,7 +162,11 @@ const Services = () => {
             </p>
             {!isMobile && (
               <Link to="/business-solutions">
+<<<<<<< HEAD
                 <Button className="gap-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
+=======
+                <Button variant="outline" className="gap-2">
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                   <Star className="h-4 w-4" />
                   Business Solutions
                 </Button>
@@ -190,7 +209,11 @@ const Services = () => {
                           </div>
                         </div>
                         {service.isPopular && (
+<<<<<<< HEAD
                           <Badge className={`bg-primary/10 text-primary ${isMobile ? 'text-xs px-2 py-0.5' : ''}`}>
+=======
+                          <Badge variant="secondary" className={`bg-primary/10 text-primary ${isMobile ? 'text-xs px-2 py-0.5' : ''}`}>
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                             Popular
                           </Badge>
                         )}
@@ -202,7 +225,12 @@ const Services = () => {
                       </CardDescription>
                       <Link to={service.href}>
                         <Button 
+<<<<<<< HEAD
                           className={`w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 border border-input bg-background hover:bg-accent hover:text-accent-foreground ${isMobile ? 'h-10 text-sm' : ''}`}
+=======
+                          variant="outline" 
+                          className={`w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 ${isMobile ? 'h-10 text-sm' : ''}`}
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                         >
                           Learn More & Book
                           <ArrowRight className={`ml-2 group-hover:translate-x-1 transition-transform ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
@@ -219,8 +247,14 @@ const Services = () => {
           {isMobile && filteredServices.length > 8 && (
             <div className="text-center mt-6">
               <Button
+<<<<<<< HEAD
                 onClick={() => setShowAllServices(!showAllServices)}
                 className="w-full h-12 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+=======
+                variant="outline"
+                onClick={() => setShowAllServices(!showAllServices)}
+                className="w-full h-12"
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
               >
                 {showAllServices ? (
                   <>
@@ -247,7 +281,12 @@ const Services = () => {
                   setSearchTerm('');
                   setSelectedCategory('all');
                 }}
+<<<<<<< HEAD
                 className="mt-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+=======
+                variant="outline"
+                className="mt-4"
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
               >
                 Clear Filters
               </Button>
@@ -274,14 +313,26 @@ const Services = () => {
             <div className={`justify-center ${isMobile ? 'space-y-3' : 'flex flex-col sm:flex-row gap-4'}`}>
               <Link to="/contact">
                 <Button 
+<<<<<<< HEAD
                   className={`bg-white text-primary hover:bg-gray-100 px-8 py-3 ${isMobile ? 'w-full h-12' : ''}`}
+=======
+                  size="lg" 
+                  variant="secondary" 
+                  className={`bg-white text-primary hover:bg-gray-100 ${isMobile ? 'w-full h-12' : ''}`}
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                 >
                   Get Custom Quote
                 </Button>
               </Link>
               <Link to="/business-solutions">
                 <Button 
+<<<<<<< HEAD
                   className={`border-white text-white hover:bg-white hover:text-primary px-8 py-3 border ${isMobile ? 'w-full h-12' : ''}`}
+=======
+                  size="lg" 
+                  variant="outline" 
+                  className={`border-white text-white hover:bg-white hover:text-primary ${isMobile ? 'w-full h-12' : ''}`}
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                 >
                   Business Solutions
                 </Button>

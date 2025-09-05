@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿
+=======
+
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import React from 'react';
 import { ServicePageTemplate } from '@/components/services/ServicePageTemplate';
 import { useNavigate } from 'react-router-dom';
@@ -110,9 +114,12 @@ const MoveInOut = () => {
 };
 
 export default MoveInOut;
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

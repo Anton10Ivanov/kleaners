@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { holidayApartmentCleaningData } from "@/data/services/holidayApartmentCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default HolidayApartmentCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { holidayApartmentCleaningData } from "@/data/services/holidayApartmentCleaning";
+
+const HolidayApartmentCleaning = () => {
+  return <ModernServiceTemplate data={holidayApartmentCleaningData} />;
+};
+
+export default HolidayApartmentCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

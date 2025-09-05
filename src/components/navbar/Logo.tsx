@@ -1,7 +1,10 @@
 
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import { LazyImage } from "@/components/ui/LazyImage";
+=======
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
 export const Logo = () => {
   const navigate = useNavigate();
@@ -15,7 +18,11 @@ export const Logo = () => {
       onClick={handleClick}
       className="flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 rounded-lg p-1"
     >
+<<<<<<< HEAD
       <LazyImage 
+=======
+      <img 
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
         src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
         alt="Kleaners.de Logo" 
         className="h-8 w-8 object-contain" 

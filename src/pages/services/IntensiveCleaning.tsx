@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿
 import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { deepCleaningData } from "@/data/services/deepCleaning";
@@ -44,3 +45,14 @@ export default IntensiveCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { intensiveCleaningData } from "@/data/services/intensiveCleaning";
+
+const IntensiveCleaning = () => {
+  return <ModernServiceTemplate data={intensiveCleaningData} />;
+};
+
+export default IntensiveCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import React, { memo, useMemo } from 'react';
+=======
+import React from 'react';
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { BookingStatus } from '@/types/enums';
@@ -8,9 +12,15 @@ interface StatusBadgeProps {
   status: BookingStatus;
 }
 
+<<<<<<< HEAD
 export const StatusBadge = memo(function StatusBadge({ status }: StatusBadgeProps): JSX.Element {
   // Memoize status color calculation
   const statusColor = useMemo(() => {
+=======
+export function StatusBadge({ status }: StatusBadgeProps): JSX.Element {
+  // Get status badge color
+  const getStatusColor = () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     switch (status) {
       case BookingStatus.Completed:
         return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
@@ -24,15 +34,23 @@ export const StatusBadge = memo(function StatusBadge({ status }: StatusBadgeProp
       default:
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
     }
+<<<<<<< HEAD
   }, [status]);
   
   // Memoize status text calculation
   const statusText = useMemo(() => {
+=======
+  };
+  
+  // Get display status text
+  const getStatusText = () => {
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
     if (status === BookingStatus.Pending) {
       return 'Upcoming';
     }
     // Capitalize first letter of status
     return status.charAt(0).toUpperCase() + status.slice(1);
+<<<<<<< HEAD
   }, [status]);
   
   return (
@@ -41,3 +59,13 @@ export const StatusBadge = memo(function StatusBadge({ status }: StatusBadgeProp
     </Badge>
   );
 });
+=======
+  };
+  
+  return (
+    <Badge className={cn("ml-2", getStatusColor())}>
+      {getStatusText()}
+    </Badge>
+  );
+}
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf

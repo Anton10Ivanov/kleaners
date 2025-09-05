@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿import { ServicePageTemplate } from "@/components/services/ServicePageTemplate";
 import { tradeFairCleaningData } from "@/data/services/tradeFairCleaning";
 import { useNavigate } from "react-router-dom";
@@ -49,3 +50,14 @@ export default TradeFairCleaning;
 
 
 
+=======
+
+import ModernServiceTemplate from "@/components/services/ModernServiceTemplate";
+import { tradeFairCleaningData } from "@/data/services/tradeFairCleaning";
+
+const TradeFairCleaning = () => {
+  return <ModernServiceTemplate data={tradeFairCleaningData} />;
+};
+
+export default TradeFairCleaning;
+>>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
