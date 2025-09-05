@@ -1,0 +1,172 @@
+
+/* Remove the padding from #root so layout aligns with the navbar,
+   and place padding on content sections as needed instead. */
+
+#root {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Make the admin panel full-width */
+.admin-panel-container {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  height: 100vh !important; /* Force full height */
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5em;
+  }
+  
+  /* Improved touch targets */
+  button, 
+  [role="button"],
+  input,
+  select,
+  .clickable {
+    min-height: 44px;
+  }
+  
+  /* Fix bottom padding when modals are present */
+  .has-bottom-sheet {
+    padding-bottom: 80px;
+  }
+  
+  /* Optimize tables for mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  /* Stack form controls on mobile */
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+/* Better scrolling on mobile */
+@media (max-width: 768px) {
+  :root {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent scrolling when modals are open */
+  body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* Fix for admin panel visibility - consolidated #root styles */
+
+.admin-layout {
+  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Fix content visibility in admin and user areas */
+.admin-content,
+.user-content,
+.provider-content {
+  overflow-y: auto;
+  max-height: calc(100vh - 64px);
+  width: 100%;
+}
+
+/* Override the root container for admin, user and provider layouts */
+.admin-route #root,
+.user-route #root,
+.provider-route #root {
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  overflow-y: auto;
+}
+
+/* Fix navbar height for mobile */
+@media (max-width: 768px) {
+  .fixed.w-full.z-50 {
+    min-height: 64px;
+  }
+}
+
+/* Removed padding-top: 64px from .flex-grow for landing page/hero positioning */
+/* Ensure main content is always visible */
+main.flex-grow {
+  width: 100%;
+  /* padding-top: 64px;  Height of the navbar (REMOVED!) */
+}
+
+/* Ensure RootLayout takes full height and width */
+.min-h-screen.flex.flex-col {
+  min-height: 100vh;
+  width: 100%;
+}
+

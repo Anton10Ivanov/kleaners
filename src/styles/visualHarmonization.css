@@ -1,0 +1,236 @@
+
+/**
+ * Visual Harmonization CSS - Homepage Design Improvements
+ * Addresses style inconsistencies and creates cohesive visual flow
+ */
+
+@layer components {
+  /* STRICT COLOR SCHEME - Section Backgrounds */
+  .section-primary {
+    @apply bg-background; /* Surgical White */
+  }
+  
+  .section-secondary {
+    @apply bg-card; /* Surgical White */
+  }
+  
+  .section-accent {
+    @apply bg-muted; /* Light gray for subtle contrast */
+  }
+
+  /* Phase 2: Typography & Spacing Standardization */
+  .section-container {
+    @apply py-20 lg:py-24;
+  }
+  
+  .section-container-compact {
+    @apply py-16 lg:py-20;
+  }
+  
+  .container-lg {
+    @apply max-w-7xl mx-auto px-4 lg:px-6;
+  }
+
+  /* STRICT COLOR SCHEME - Standardized Card System */
+  .service-card {
+    /* Surgical White background with Prussian Blue borders */
+    @apply bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl;
+    @apply border border-border transition-all duration-300;
+    @apply hover:-translate-y-2 h-full flex flex-col;
+    @apply hover:border-primary/50;
+  }
+  
+  .feature-card {
+    /* Surgical White background with subtle borders */
+    @apply bg-card rounded-xl p-6 shadow-sm;
+    @apply border border-border h-full flex flex-col;
+    @apply transition-all duration-300 hover:shadow-lg;
+    @apply hover:-translate-y-1 hover:border-primary/30;
+  }
+
+  /* Phase 2: Enhanced Typography Hierarchy */
+  .section-title {
+    @apply text-3xl lg:text-4xl xl:text-5xl font-bold text-heading-color;
+    @apply leading-tight tracking-tight mb-6;
+  }
+  
+  .section-subtitle {
+    @apply text-lg lg:text-xl text-secondary-text;
+    @apply leading-relaxed max-w-3xl mx-auto mb-16;
+  }
+  
+  .card-title {
+    @apply text-xl lg:text-2xl font-semibold text-heading-color mb-4;
+    @apply leading-tight;
+  }
+  
+  .card-description {
+    @apply text-secondary-text leading-relaxed flex-grow;
+    @apply text-base lg:text-lg;
+  }
+
+  /* STRICT COLOR SCHEME - Consistent Button System */
+  .btn-primary-consistent {
+    /* Laser Lime background with Prussian Blue text */
+    @apply bg-accent hover:bg-accent/90 text-accent-foreground;
+    @apply px-8 py-4 rounded-xl font-semibold text-base;
+    @apply transition-all duration-300 shadow-md hover:shadow-lg;
+    @apply focus:ring-4 focus:ring-accent/20 focus:outline-none;
+    @apply hover:scale-105 active:scale-95;
+  }
+  
+  .btn-secondary-consistent {
+    /* White background with Prussian Blue text and border */
+    @apply bg-card hover:bg-muted text-primary;
+    @apply border-2 border-primary hover:border-primary/80;
+    @apply px-8 py-4 rounded-xl font-semibold text-base;
+    @apply transition-all duration-300 shadow-sm hover:shadow-md;
+    @apply focus:ring-4 focus:ring-primary/20 focus:outline-none;
+    @apply hover:scale-105 active:scale-95;
+  }
+
+  /* Enhanced Service Grid */
+  .service-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .service-category-card {
+    @apply service-card cursor-pointer;
+  }
+  
+  .service-category-icon-wrapper {
+    @apply flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl;
+    @apply transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110;
+  }
+  
+  .service-category-icon {
+    @apply w-8 h-8 text-primary transition-all duration-300;
+  }
+
+  /* STRICT COLOR SCHEME - Trust Section Styling */
+  .trust-badge {
+    /* Surgical White background with Prussian Blue borders */
+    @apply bg-card rounded-2xl p-8 text-center shadow-sm;
+    @apply border border-border transition-all duration-300;
+    @apply hover:shadow-lg hover:-translate-y-1 hover:border-primary/50;
+  }
+  
+  .trust-number {
+    @apply text-3xl lg:text-4xl font-bold text-primary mb-3;
+  }
+  
+  .trust-label {
+    @apply text-sm lg:text-base text-secondary-text font-medium;
+  }
+
+  /* Phase 4: Enhanced Process Steps Styling */
+  .process-step {
+    @apply text-center relative;
+  }
+  
+  .process-step-number {
+    /* Prussian Blue background with white text */
+    @apply w-16 h-16 bg-primary text-primary-foreground rounded-full;
+    @apply flex items-center justify-center font-bold text-xl;
+    @apply mx-auto mb-6 shadow-lg;
+  }
+  
+  .process-step-title {
+    @apply text-lg lg:text-xl font-semibold text-heading-color mb-3;
+  }
+  
+  .process-step-description {
+    @apply text-secondary-text text-base leading-relaxed;
+  }
+
+  /* Phase 4: Enhanced Visual Transitions & Animations */
+  .smooth-transition {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .hover-lift {
+    @apply hover:-translate-y-2 hover:shadow-xl transition-all duration-300;
+  }
+  
+  .scale-on-hover {
+    @apply hover:scale-105 transition-transform duration-300;
+  }
+
+  /* Phase 4: Enhanced Interactive Elements */
+  .interactive-card {
+    @apply transition-all duration-300 hover:shadow-lg;
+    @apply hover:-translate-y-1 hover:border-primary/20;
+  }
+  
+  .feature-highlight {
+    /* Light background with Prussian Blue accent border */
+    @apply bg-muted;
+    @apply border-l-4 border-primary rounded-r-lg;
+  }
+  
+  .accent-highlight {
+    /* Laser Lime background for key highlights */
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+/* Phase 5: Mobile Responsiveness Fine-tuning */
+@media (max-width: 768px) {
+  .section-container {
+    @apply py-16;
+  }
+  
+  .section-container-compact {
+    @apply py-12;
+  }
+  
+  .section-title {
+    @apply text-2xl lg:text-3xl mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-base mb-12;
+  }
+  
+  .service-grid {
+    @apply grid-cols-1 gap-6;
+  }
+  
+  .service-card {
+    @apply p-6;
+  }
+  
+  .trust-badge {
+    @apply p-6;
+  }
+  
+  .trust-number {
+    @apply text-2xl mb-2;
+  }
+  
+  .process-step-number {
+    @apply w-12 h-12 text-lg mb-4;
+  }
+  
+  .btn-primary-consistent,
+  .btn-secondary-consistent {
+    @apply px-6 py-3 text-sm;
+  }
+  
+  .card-title {
+    @apply text-lg mb-3;
+  }
+  
+  .card-description {
+    @apply text-sm;
+  }
+  
+  .hover-lift {
+    @apply hover:-translate-y-1;
+  }
+  
+  .service-category-icon {
+    @apply w-10 h-10 mb-4;
+  }
+}

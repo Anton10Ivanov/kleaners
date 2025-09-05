@@ -1,0 +1,4 @@
+.next/**/*.pack filter=lfs diff=lfs merge=lfs -text
+.next/**/*.js filter=lfs diff=lfs merge=lfs -text
+.next/**/*.map filter=lfs diff=lfs merge=lfs -text
+.next/**/*.json filter=lfs diff=lfs merge=lfs -text

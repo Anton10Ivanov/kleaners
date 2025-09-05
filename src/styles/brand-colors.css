@@ -1,0 +1,75 @@
+/**
+ * Brand Color Replacements for Accessible Design
+ * Replaces problematic yellow colors with WCAG compliant alternatives
+ */
+
+@layer components {
+  /* Star Rating System - Use Muted Gold (WCAG compliant) */
+  .star-rating {
+    @apply text-muted-gold fill-muted-gold;
+  }
+  
+  .star-empty {
+    @apply text-muted-foreground;
+  }
+
+  /* Status Colors - WCAG Compliant */
+  .status-pending {
+    @apply bg-warning/10 text-warning border-warning/20;
+  }
+  
+  .status-warning {
+    @apply bg-warning/10 text-warning border-warning/20;
+  }
+  
+  .status-medium {
+    @apply bg-secondary/10 text-secondary border-secondary/20;
+  }
+
+  /* Form Validation - High Contrast */
+  .validation-warning {
+    @apply bg-warning/10 text-warning border-warning/20;
+  }
+  
+  .validation-medium {
+    @apply bg-secondary/10 text-secondary border-secondary/20;
+  }
+}
+
+@layer utilities {
+  /* Replace yellow utilities with brand colors */
+  .text-rating {
+    @apply text-muted-gold;
+  }
+  
+  .fill-rating {
+    @apply fill-muted-gold;
+  }
+  
+  .bg-rating {
+    @apply bg-muted-gold/10;
+  }
+  
+  .border-rating {
+    @apply border-muted-gold/20;
+  }
+
+  /* Icon color utilities - Slate Gray for consistency */
+  .text-icon {
+    @apply text-neutral-icon;
+  }
+  
+  .text-icon-hover {
+    @apply text-secondary;
+  }
+
+  /* Form elements - Hunter Green theme */
+  .form-accent {
+    @apply border-secondary focus:border-secondary focus:ring-secondary/20;
+  }
+
+  /* Secondary action elements - Hunter Green */
+  .secondary-accent {
+    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+  }
+}
