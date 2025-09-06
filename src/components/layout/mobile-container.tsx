@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import * as React from "react";
 import { UnifiedContainer } from "./UnifiedContainer";
 import { cn } from "@/lib/utils";
@@ -46,44 +45,6 @@ export const MobileContainer = React.forwardRef<HTMLDivElement, MobileContainerP
     );
   }
 );
-=======
-
-import * as React from "react"
-import { cn } from "@/lib/utils"
-
-interface MobileContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  padding?: boolean;
-  safe?: boolean;
-}
-
-const MobileContainer = React.forwardRef<HTMLDivElement, MobileContainerProps>(
-  ({ className, size = 'lg', padding = true, safe = false, ...props }, ref) => {
-    const sizeClasses = {
-      xs: 'max-w-xs',
-      sm: 'max-w-sm', 
-      md: 'max-w-md',
-      lg: 'max-w-lg',
-      xl: 'max-w-xl',
-      full: 'max-w-full',
-    };
-    
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'mx-auto w-full',
-          sizeClasses[size],
-          padding && 'px-4 sm:px-6',
-          safe && 'safe-area-top safe-area-bottom',
-          className
-        )}
-        {...props}
-      />
-    )
-  }
-)
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 MobileContainer.displayName = "MobileContainer"
 
 const MobileSection = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -124,8 +85,4 @@ const MobileStack = React.forwardRef<
 })
 MobileStack.displayName = "MobileStack"
 
-<<<<<<< HEAD
-export { MobileSection, MobileStack };
-=======
-export { MobileContainer, MobileSection, MobileStack }
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
+export { MobileContainer, MobileSection, MobileStack };

@@ -4,10 +4,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { popularServices } from '@/components/navbar/navigationData';
-<<<<<<< HEAD
-import { LazyImage } from '@/components/ui/LazyImage';
-=======
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -20,11 +16,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-<<<<<<< HEAD
-              <LazyImage 
-=======
               <img 
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
                 src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
                 alt="Kleaners.de Logo" 
                 className="h-8 w-8 object-contain" 

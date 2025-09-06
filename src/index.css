@@ -5,6 +5,7 @@
 @import "./styles/hero-animations.css";
 @import "./styles/mobile-ui-improvements.css";
 @import "./styles/globals.css";
+@import "./styles/modern-layout.css";
 
 @tailwind base;
 @tailwind components;
