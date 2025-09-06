@@ -5,10 +5,6 @@ import heroCleanerImage from "@/assets/hero-cleaner-orange.jpg";
 import { ContentGrid } from "../layout/ContentGrid";
 import { FluidTypography } from "../layout/FluidTypography";
 import { ModernCard } from "../layout/ModernCard";
-<<<<<<< HEAD
-import { LazyImage } from "@/components/ui/LazyImage";
-=======
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
 
 interface HeroContentProps {
   onGetQuote: () => void;
@@ -88,11 +84,7 @@ export const HeroContent = memo(({
           padding="none" 
           className="aspect-[4/5] relative overflow-hidden card-modern-hover"
         >
-<<<<<<< HEAD
-          <LazyImage 
-=======
           <img 
->>>>>>> dc44d81132ea9da53ee6737f03f43d7881530caf
             src={heroCleanerImage} 
             alt="Professional cleaning service specialist with orange uniform" 
             className="w-full h-full object-cover"
