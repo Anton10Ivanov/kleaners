@@ -1,0 +1,366 @@
+/**
+ * Standardized Booking Forms CSS
+ * Consistent styling for all booking forms across the application
+ */
+
+/* Form Layout Base */
+@layer components {
+  .booking-form-container {
+    @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800;
+    @apply pt-20 pb-24;
+  }
+
+  .booking-form-wrapper {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
+  }
+
+  .booking-form-card {
+    @apply bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700;
+    @apply overflow-hidden;
+  }
+
+  .booking-form-header {
+    @apply bg-gradient-to-r from-primary to-primary/80 text-white p-8;
+  }
+
+  .booking-form-title {
+    @apply text-3xl sm:text-4xl font-bold mb-2;
+  }
+
+  .booking-form-description {
+    @apply text-primary-foreground/90 text-lg;
+  }
+
+  .booking-form-content {
+    @apply p-8 space-y-8;
+  }
+
+  /* Progress Indicator */
+  .booking-progress-container {
+    @apply mb-8;
+  }
+
+  .booking-progress-bar {
+    @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2;
+  }
+
+  .booking-progress-fill {
+    @apply bg-primary h-2 rounded-full transition-all duration-300;
+  }
+
+  .booking-progress-steps {
+    @apply flex items-center justify-between mt-4;
+  }
+
+  .booking-progress-step {
+    @apply flex items-center space-x-2;
+  }
+
+  .booking-progress-step-number {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium;
+    @apply transition-all duration-200;
+  }
+
+  .booking-progress-step-number.active {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .booking-progress-step-number.completed {
+    @apply bg-green-500 text-white;
+  }
+
+  .booking-progress-step-number.pending {
+    @apply bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400;
+  }
+
+  .booking-progress-step-label {
+    @apply text-sm font-medium text-gray-700 dark:text-gray-300;
+    @apply hidden sm:block;
+  }
+
+  /* Form Sections */
+  .booking-form-section {
+    @apply space-y-6;
+  }
+
+  .booking-form-section-title {
+    @apply text-xl font-semibold text-gray-900 dark:text-white mb-4;
+  }
+
+  .booking-form-section-description {
+    @apply text-gray-600 dark:text-gray-400 mb-6;
+  }
+
+  .booking-form-field-group {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .booking-form-field-group-3 {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  /* Form Fields */
+  .booking-form-field {
+    @apply space-y-2;
+  }
+
+  .booking-form-label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+  }
+
+  .booking-form-label.required::after {
+    @apply text-red-500 ml-1;
+    content: '*';
+  }
+
+  .booking-form-input {
+    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg;
+    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white;
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary;
+    @apply transition-all duration-200;
+  }
+
+  .booking-form-input:disabled {
+    @apply bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400;
+    @apply cursor-not-allowed;
+  }
+
+  .booking-form-textarea {
+    @apply booking-form-input min-h-[100px] resize-y;
+  }
+
+  .booking-form-select {
+    @apply booking-form-input appearance-none cursor-pointer;
+  }
+
+  .booking-form-checkbox {
+    @apply h-4 w-4 text-primary border-gray-300 dark:border-gray-600 rounded;
+    @apply focus:ring-2 focus:ring-primary/20;
+  }
+
+  .booking-form-radio {
+    @apply h-4 w-4 text-primary border-gray-300 dark:border-gray-600;
+    @apply focus:ring-2 focus:ring-primary/20;
+  }
+
+  .booking-form-error {
+    @apply text-sm text-red-600 dark:text-red-400 mt-1;
+  }
+
+  .booking-form-help {
+    @apply text-sm text-gray-500 dark:text-gray-400 mt-1;
+  }
+
+  /* Extra Services */
+  .booking-extra-services {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .booking-extra-service {
+    @apply flex items-center space-x-3 p-4 border rounded-lg cursor-pointer;
+    @apply transition-all duration-200 hover:border-primary/50;
+  }
+
+  .booking-extra-service.selected {
+    @apply border-primary bg-primary/5;
+  }
+
+  .booking-extra-service-label {
+    @apply flex-1 font-medium text-gray-900 dark:text-white;
+  }
+
+  .booking-extra-service-price {
+    @apply text-sm text-gray-500 dark:text-gray-400;
+  }
+
+  /* Calendar Integration */
+  .booking-calendar-container {
+    @apply space-y-4;
+  }
+
+  .booking-calendar-header {
+    @apply flex items-center justify-between;
+  }
+
+  .booking-calendar-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+
+  .booking-time-slots {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4;
+  }
+
+  .booking-time-slot {
+    @apply px-3 py-2 text-sm border rounded-lg cursor-pointer;
+    @apply transition-all duration-200 hover:border-primary/50;
+  }
+
+  .booking-time-slot.available {
+    @apply border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300;
+    @apply hover:bg-primary/5 hover:border-primary;
+  }
+
+  .booking-time-slot.selected {
+    @apply border-primary bg-primary text-primary-foreground;
+  }
+
+  .booking-time-slot.unavailable {
+    @apply border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500;
+    @apply cursor-not-allowed;
+  }
+
+  /* Booking Summary */
+  .booking-summary {
+    @apply bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-4;
+  }
+
+  .booking-summary-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+
+  .booking-summary-item {
+    @apply flex justify-between items-center text-sm;
+  }
+
+  .booking-summary-label {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  .booking-summary-value {
+    @apply font-medium text-gray-900 dark:text-white;
+  }
+
+  .booking-summary-total {
+    @apply flex justify-between items-center text-lg font-semibold;
+    @apply pt-4 border-t border-gray-200 dark:border-gray-700;
+  }
+
+  .booking-summary-total-label {
+    @apply text-gray-900 dark:text-white;
+  }
+
+  .booking-summary-total-value {
+    @apply text-primary;
+  }
+
+  /* Action Buttons */
+  .booking-form-actions {
+    @apply flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200 dark:border-gray-700;
+  }
+
+  .booking-form-button {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .booking-form-button-primary {
+    @apply booking-form-button bg-primary text-primary-foreground;
+    @apply hover:bg-primary/90 focus:ring-primary/20;
+  }
+
+  .booking-form-button-secondary {
+    @apply booking-form-button border border-gray-300 dark:border-gray-600;
+    @apply text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700;
+    @apply focus:ring-gray-500/20;
+  }
+
+  .booking-form-button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* Loading States */
+  .booking-form-loading {
+    @apply flex items-center justify-center py-8;
+  }
+
+  .booking-form-spinner {
+    @apply animate-spin h-6 w-6 text-primary;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .booking-form-container {
+      @apply pt-16 pb-16;
+    }
+
+    .booking-form-wrapper {
+      @apply px-4;
+    }
+
+    .booking-form-content {
+      @apply p-4 space-y-6;
+    }
+
+    .booking-form-field-group {
+      @apply grid-cols-1 gap-4;
+    }
+
+    .booking-form-field-group-3 {
+      @apply grid-cols-1 gap-4;
+    }
+
+    .booking-extra-services {
+      @apply grid-cols-1;
+    }
+
+    .booking-time-slots {
+      @apply grid-cols-2;
+    }
+
+    .booking-form-actions {
+      @apply flex-col;
+    }
+
+    .booking-form-button {
+      @apply w-full;
+    }
+  }
+
+  /* Dark Mode Enhancements */
+  .dark .booking-form-container {
+    @apply from-gray-900 to-gray-800;
+  }
+
+  .dark .booking-form-card {
+    @apply bg-gray-900 border-gray-700;
+  }
+
+  .dark .booking-form-header {
+    @apply from-gray-800 to-gray-700;
+  }
+
+  .dark .booking-extra-service {
+    @apply border-gray-600 hover:border-primary/50;
+  }
+
+  .dark .booking-extra-service.selected {
+    @apply border-primary bg-primary/10;
+  }
+
+  .dark .booking-summary {
+    @apply bg-gray-800;
+  }
+
+  .dark .booking-summary-total {
+    @apply border-gray-600;
+  }
+
+  .dark .booking-form-actions {
+    @apply border-gray-700;
+  }
+}
+
+/* Animation Classes */
+@layer utilities {
+  .booking-form-fade-in {
+    @apply animate-in fade-in duration-300;
+  }
+
+  .booking-form-slide-up {
+    @apply animate-in slide-in-from-bottom-4 duration-300;
+  }
+
+  .booking-form-scale-in {
+    @apply animate-in zoom-in-95 duration-200;
+  }
+}

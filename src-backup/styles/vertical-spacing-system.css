@@ -1,0 +1,814 @@
+/**
+ * Vertical Spacing System - Kleaners
+ * Standardized vertical spacing for consistent layout rhythm
+ * Mobile-first responsive design with clear hierarchy
+ */
+
+:root {
+  /* Vertical Spacing Scale - Based on 8px grid system */
+  --spacing-vertical-xs: 0.5rem;    /* 8px */
+  --spacing-vertical-sm: 1rem;      /* 16px */
+  --spacing-vertical-md: 1.5rem;    /* 24px */
+  --spacing-vertical-lg: 2rem;      /* 32px */
+  --spacing-vertical-xl: 3rem;      /* 48px */
+  --spacing-vertical-2xl: 4rem;     /* 64px */
+  --spacing-vertical-3xl: 6rem;     /* 96px */
+  --spacing-vertical-4xl: 8rem;     /* 128px */
+  
+  /* Responsive Multipliers */
+  --mobile-multiplier: 1;
+  --tablet-multiplier: 1.25;
+  --desktop-multiplier: 1.5;
+  --large-multiplier: 1.75;
+}
+
+/* Base Vertical Spacing Utilities */
+@layer utilities {
+  /* Section Spacing - Primary vertical rhythm */
+  .section-spacing-none {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .section-spacing-xs {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-xs {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-xs {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+  
+  .section-spacing-sm {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-sm {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-sm {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  .section-spacing-md {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-md {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-md {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  .section-spacing-lg {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-lg {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-lg {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  .section-spacing-xl {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-xl {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-xl {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  .section-spacing-2xl {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-2xl {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-2xl {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+  
+  .section-spacing-3xl {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-3xl {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-3xl {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+  
+  .section-spacing-4xl {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-spacing-4xl {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-spacing-4xl {
+      padding-top: 10rem;
+      padding-bottom: 10rem;
+    }
+  }
+
+  /* Component Spacing - Internal element spacing */
+  .component-spacing-none > * + * {
+    margin-top: 0;
+  }
+  
+  .component-spacing-xs > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .component-spacing-sm > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .component-spacing-md > * + * {
+    margin-top: 1rem;
+  }
+  
+  .component-spacing-lg > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  .component-spacing-xl > * + * {
+    margin-top: 2rem;
+  }
+  
+  .component-spacing-2xl > * + * {
+    margin-top: 3rem;
+  }
+
+  /* Card Spacing - Internal card padding */
+  .card-spacing-none {
+    padding: 0;
+  }
+  
+  .card-spacing-xs {
+    padding: 0.75rem;
+  }
+  
+  @media (min-width: 768px) {
+    .card-spacing-xs {
+      padding: 1rem;
+    }
+  }
+  
+  .card-spacing-sm {
+    padding: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .card-spacing-sm {
+      padding: 1.5rem;
+    }
+  }
+  
+  .card-spacing-md {
+    padding: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .card-spacing-md {
+      padding: 2rem;
+    }
+  }
+  
+  .card-spacing-lg {
+    padding: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .card-spacing-lg {
+      padding: 2.5rem;
+    }
+  }
+  
+  .card-spacing-xl {
+    padding: 2.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .card-spacing-xl {
+      padding: 3rem;
+    }
+  }
+
+  /* Text Spacing - Typography vertical rhythm */
+  .text-spacing-none > * + * {
+    margin-top: 0;
+  }
+  
+  .text-spacing-tight > * + * {
+    margin-top: 0.25rem;
+  }
+  
+  .text-spacing-normal > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .text-spacing-relaxed > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .text-spacing-loose > * + * {
+    margin-top: 1rem;
+  }
+
+  /* Form Spacing - Form element spacing */
+  .form-spacing-none > * + * {
+    margin-top: 0;
+  }
+  
+  .form-spacing-tight > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .form-spacing-normal > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .form-spacing-relaxed > * + * {
+    margin-top: 1rem;
+  }
+  
+  .form-spacing-loose > * + * {
+    margin-top: 1.5rem;
+  }
+
+  /* Layout Spacing - Page and container spacing */
+  .layout-spacing-none {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .layout-spacing-xs {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-xs {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+  
+  .layout-spacing-sm {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-sm {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+  
+  .layout-spacing-md {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-md {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  .layout-spacing-lg {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-lg {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  .layout-spacing-xl {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-xl {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  .layout-spacing-2xl {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .layout-spacing-2xl {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+}
+
+/* Semantic Spacing Classes - Context-specific */
+@layer components {
+  /* Page Sections */
+  .page-hero {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .page-hero {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .page-hero {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+  
+  .page-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .page-section {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .page-section {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  .page-section-compact {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .page-section-compact {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .page-section-compact {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  .page-section-large {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  @media (min-width: 768px) {
+    .page-section-large {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .page-section-large {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  .page-footer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .page-footer {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .page-footer {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  /* Content Areas */
+  .content-main {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .content-main {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .content-main {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  .content-sidebar {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .content-sidebar {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .content-sidebar {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  .content-card {
+    padding: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .content-card {
+      padding: 2rem;
+    }
+  }
+  
+  .content-form > * + * {
+    margin-top: 0.75rem;
+  }
+
+  /* Navigation */
+  .nav-main {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .nav-main {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+  
+  .nav-mobile {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .nav-footer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .nav-footer {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+
+  /* Lists and Grids */
+  .list-spacing > * + * {
+    margin-top: 1rem;
+  }
+  
+  .grid-spacing {
+    gap: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .grid-spacing {
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid-spacing {
+      gap: 2rem;
+    }
+  }
+  
+  .grid-spacing-tight {
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .grid-spacing-tight {
+      gap: 0.75rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid-spacing-tight {
+      gap: 1rem;
+    }
+  }
+  
+  .grid-spacing-loose {
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .grid-spacing-loose {
+      gap: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid-spacing-loose {
+      gap: 3rem;
+    }
+  }
+}
+
+/* Responsive Spacing Overrides */
+@layer utilities {
+  /* Mobile-first responsive spacing */
+  @media (max-width: 640px) {
+    .mobile-spacing-tight {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    
+    .mobile-spacing-normal {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+    
+    .mobile-spacing-loose {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .tablet-spacing-tight {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+    
+    .tablet-spacing-normal {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    
+    .tablet-spacing-loose {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .desktop-spacing-tight {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    
+    .desktop-spacing-normal {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    
+    .desktop-spacing-loose {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+}
+
+/* Legacy Spacing Migration */
+@layer utilities {
+  /* Map old spacing classes to new system */
+  .py-20 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-20 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-20 {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+  
+  .py-16 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-16 {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-16 {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  .py-12 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-12 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-12 {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  .py-8 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-8 {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+  
+  .py-6 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-6 {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-6 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+  
+  .py-4 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .py-4 {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+}
+
+/* Print Spacing */
+@media print {
+  .print-spacing-none {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .print-spacing-minimal {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .print-spacing-normal {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}

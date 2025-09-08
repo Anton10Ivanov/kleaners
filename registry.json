@@ -1,0 +1,189 @@
+{
+  "version": "1.0.0",
+  "name": "Kleaners MCP Registry",
+  "description": "Registry for Kleaners cleaning service MCP servers and components",
+  "registries": {
+    "@shadcn": {
+      "name": "shadcn/ui",
+      "description": "Beautifully designed components built with Radix UI and Tailwind CSS",
+      "url": "https://ui.shadcn.com/registry",
+      "schema": "https://ui.shadcn.com/schema.json",
+      "components": {
+        "button": {
+          "name": "Button",
+          "description": "Displays a button or a component that looks like a button",
+          "files": [
+            {
+              "name": "button.tsx",
+              "path": "components/ui/button.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-slot",
+            "class-variance-authority",
+            "clsx",
+            "tailwind-merge"
+          ]
+        },
+        "card": {
+          "name": "Card",
+          "description": "Displays a card with header, content, and footer",
+          "files": [
+            {
+              "name": "card.tsx",
+              "path": "components/ui/card.tsx"
+            }
+          ],
+          "dependencies": []
+        },
+        "input": {
+          "name": "Input",
+          "description": "Displays a form input field",
+          "files": [
+            {
+              "name": "input.tsx",
+              "path": "components/ui/input.tsx"
+            }
+          ],
+          "dependencies": []
+        },
+        "label": {
+          "name": "Label",
+          "description": "Renders an accessible label associated with controls",
+          "files": [
+            {
+              "name": "label.tsx",
+              "path": "components/ui/label.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-label"
+          ]
+        },
+        "select": {
+          "name": "Select",
+          "description": "Displays a list of options for the user to pick from",
+          "files": [
+            {
+              "name": "select.tsx",
+              "path": "components/ui/select.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-select"
+          ]
+        },
+        "textarea": {
+          "name": "Textarea",
+          "description": "Displays a form textarea or a component that looks like a textarea",
+          "files": [
+            {
+              "name": "textarea.tsx",
+              "path": "components/ui/textarea.tsx"
+            }
+          ],
+          "dependencies": []
+        },
+        "toast": {
+          "name": "Toast",
+          "description": "A succinct message that is displayed temporarily",
+          "files": [
+            {
+              "name": "toast.tsx",
+              "path": "components/ui/toast.tsx"
+            },
+            {
+              "name": "use-toast.ts",
+              "path": "hooks/use-toast.ts"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-toast"
+          ]
+        },
+        "dialog": {
+          "name": "Dialog",
+          "description": "A window overlaid on either the primary window or another dialog window",
+          "files": [
+            {
+              "name": "dialog.tsx",
+              "path": "components/ui/dialog.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-dialog"
+          ]
+        },
+        "dropdown-menu": {
+          "name": "Dropdown Menu",
+          "description": "Displays a menu to the user — such as a set of actions or functions — triggered by a button",
+          "files": [
+            {
+              "name": "dropdown-menu.tsx",
+              "path": "components/ui/dropdown-menu.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-dropdown-menu"
+          ]
+        },
+        "sheet": {
+          "name": "Sheet",
+          "description": "Extends the Dialog component to display content that complements the main content of the screen",
+          "files": [
+            {
+              "name": "sheet.tsx",
+              "path": "components/ui/sheet.tsx"
+            }
+          ],
+          "dependencies": [
+            "@radix-ui/react-dialog"
+          ]
+        }
+      }
+    },
+    "@ai-elements": {
+      "name": "AI Elements",
+      "description": "AI-powered UI components and elements",
+      "url": "https://registry.ai-sdk.dev",
+      "schema": "https://registry.ai-sdk.dev/schema.json",
+      "components": {
+        "ai-chat": {
+          "name": "AI Chat",
+          "description": "Interactive chat interface with AI capabilities",
+          "files": [
+            {
+              "name": "ai-chat.tsx",
+              "path": "components/ai/ai-chat.tsx"
+            }
+          ],
+          "dependencies": [
+            "ai",
+            "@ai-sdk/react"
+          ]
+        }
+      }
+    }
+  },
+  "mcpServers": {
+    "shadcn": {
+      "name": "shadcn/ui MCP Server",
+      "description": "MCP server for shadcn/ui component management",
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"],
+      "version": "latest",
+      "capabilities": [
+        "component_management",
+        "registry_access",
+        "component_installation"
+      ]
+    }
+  },
+  "metadata": {
+    "lastUpdated": "2024-01-15T00:00:00Z",
+    "maintainer": "Kleaners Development Team",
+    "license": "MIT",
+    "repository": "https://github.com/kleaners/kleaners",
+    "documentation": "https://docs.kleaners.com"
+  }
+}

@@ -1,0 +1,64 @@
+/**
+ * Development Optimizations CSS
+ * Reduces bundle size and improves live preview performance
+ */
+
+/* Only load in development */
+@media screen {
+  /* Disable heavy animations in development for faster HMR */
+  @media (prefers-reduced-motion: no-preference) {
+    * {
+      animation-duration: 0.1s !important;
+      transition-duration: 0.1s !important;
+    }
+  }
+  
+  /* Optimize font loading for development */
+  @font-face {
+    font-family: 'Inter';
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  /* Reduce complexity of complex selectors in development */
+  .dev-optimized * {
+    /* Simplify complex CSS selectors for faster parsing */
+    will-change: auto;
+  }
+  
+  /* Disable expensive CSS features in development */
+  .dev-optimized {
+    /* Disable backdrop-filter for better performance */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    
+    /* Disable complex shadows */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    
+    /* Simplify gradients */
+    background: linear-gradient(45deg, #f0f0f0, #e0e0e0) !important;
+  }
+}
+
+/* Development-specific utility classes */
+.dev-fast {
+  animation: none !important;
+  transition: none !important;
+}
+
+.dev-simple {
+  backdrop-filter: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px !important;
+}
+
+/* Optimize for live preview */
+.live-preview-optimized {
+  /* Reduce repaints during development */
+  contain: layout style;
+  
+  /* Optimize for frequent updates */
+  will-change: auto;
+}
