@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { popularServices } from '@/components/navbar/navigationData';
+<<<<<<< HEAD:components/Footer.tsx
 
+=======
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/Footer.tsx
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -15,9 +18,15 @@ const Footer = () => {
       <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-[12px]">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2">
+<<<<<<< HEAD:components/Footer.tsx
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
               <img
                 src="/Images/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
+=======
+            <Link to="/" className="inline-flex items-center gap-2 mb-4">
+              <img 
+                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/Footer.tsx
                 alt="Kleaners.de Logo" 
                 className="h-8 w-8 object-contain" 
                 style={{

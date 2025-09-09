@@ -5,7 +5,10 @@ import Image from 'next/image';
 import { ContentGrid } from "../layout/ContentGrid";
 import { FluidTypography } from "../layout/FluidTypography";
 import { ModernCard } from "../layout/ModernCard";
+<<<<<<< HEAD:components/hero/HeroContent.tsx
 
+=======
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/hero/HeroContent.tsx
 
 interface HeroContentProps {
   onGetQuote: () => void;
@@ -85,12 +88,19 @@ export const HeroContent = memo(({
           padding="none" 
           className="aspect-[4/5] relative overflow-hidden card-modern-hover"
         >
+<<<<<<< HEAD:components/hero/HeroContent.tsx
           <Image
             src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
             alt="Professional cleaning service specialist with orange uniform"
             fill
             className="object-cover"
             priority
+=======
+          <img 
+            src={heroCleanerImage} 
+            alt="Professional cleaning service specialist with orange uniform" 
+            className="w-full h-full object-cover"
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/hero/HeroContent.tsx
           />
         </ModernCard>
         

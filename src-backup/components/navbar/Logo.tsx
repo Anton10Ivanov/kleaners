@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD:src-backup/components/navbar/Logo.tsx
 
+=======
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/navbar/Logo.tsx
 
 export const Logo = () => {
   const navigate = useNavigate();
@@ -14,7 +17,11 @@ export const Logo = () => {
       onClick={handleClick}
       className="flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 rounded-lg p-1"
     >
+<<<<<<< HEAD:src-backup/components/navbar/Logo.tsx
       <img
+=======
+      <img 
+>>>>>>> 72b3d18d84dbeda4e435b91c20b5a4c4fd882474:src/components/navbar/Logo.tsx
         src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
         alt="Kleaners.de Logo" 
         className="h-8 w-8 object-contain" 

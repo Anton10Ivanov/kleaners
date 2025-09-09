@@ -7,6 +7,7 @@
 @import "./styles/mobile-ui-improvements.css";
 @import "./styles/booking-forms.css";
 @import "./styles/globals.css";
+@import "./styles/modern-layout.css";
 
 /* Development optimizations - only loaded in development */
 @import "./styles/dev-optimizations.css" layer(utilities);
