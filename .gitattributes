@@ -1,3 +1,6 @@
+*.pack filter=lfs diff=lfs merge=lfs -text
+*.js.map filter=lfs diff=lfs merge=lfs -text
+*.css.map filter=lfs diff=lfs merge=lfs -text
 .next/**/*.pack filter=lfs diff=lfs merge=lfs -text
 .next/**/*.js filter=lfs diff=lfs merge=lfs -text
 .next/**/*.map filter=lfs diff=lfs merge=lfs -text
