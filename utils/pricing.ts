@@ -1,6 +1,6 @@
 
 import { BookingFormData, FrequencyEnum } from "@/schemas/bookingSchemas";
-import { calculateDuration, calculateCleanerCount, calculateComplexityScore } from "./bookingCalculations";
+import { calculateDuration, calculateCleanerCount, calculateComplexityScore } from "./1bookingCalculations";
 
 // Enhanced pricing calculation system
 export const calculatePrice = (data: any): number => {

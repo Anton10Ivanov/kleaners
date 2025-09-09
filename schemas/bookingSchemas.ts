@@ -13,6 +13,41 @@ export const ServiceTypeEnum = z.enum([
 ]);
 export const CleaningPaceEnum = z.enum(["standard", "quick"]);
 
+
+// PRD-specific enums and types
+export const CleaningFrequencyEnum = z.enum(["ONE_TIME", "REGULAR"]);
+export const RegularityPackageEnum = z.enum(["WEEKLY", "BIWEEKLY", "MONTHLY"]);
+export const ServiceTypeEnum = z.enum(["HOME_CLEANING", "OFFICE_CLEANING"]);
+
+// PRD-specific interfaces
+export interface BaseBookingData {
+  customerName: string;
+  address: string;
+  contactInfo: string;
+}
+
+export interface OneTimeCleaningData extends BaseBookingData {
+  propertySize: string;
+  bathroomCount: number;
+  hasPets: boolean;
+}
+
+export interface RegularCleaningData extends BaseBookingData {
+  propertySize: string;
+  bathroomCount: number;
+  hasPets: boolean;
+  package: RegularityPackage;
+}
+
+export interface Estimate {
+  estimatedHours: number;
+  recommendedHours: number;
+  totalPrice: number;
+  baseRate: number;
+  discount?: number;
+  finalRate?: number;
+}
+
 // ---------- SHARED FIELDS ----------
 const sharedFields = {
   serviceType: ServiceTypeEnum,
@@ -193,6 +228,61 @@ export const PostConstructionSchema = z.object({
   lastCleaned: z.string().optional(),
 }).merge(addressFields).merge(contactFields);
 
+// ---------- PRD-SPECIFIC SCHEMAS ----------
+
+// One-time cleaning schema based on PRD
+export const OneTimeCleaningSchema = z.object({
+  serviceType: z.literal("HOME_CLEANING"),
+  frequency: z.literal("ONE_TIME"),
+  propertySize: z.string().min(1, "Please select a property size"),
+  bathroomCount: z.number().min(1, "At least 1 bathroom is required").max(5, "Maximum 5 bathrooms"),
+  hasPets: z.boolean().default(false),
+  customHours: z.number().min(0.5).max(12).optional(),
+  isCustomHoursSelected: z.boolean().default(false),
+}).merge(addressFields).merge(contactFields);
+
+// Regular cleaning schema based on PRD
+export const RegularCleaningSchema = z.object({
+  serviceType: z.literal("HOME_CLEANING"),
+  frequency: z.literal("REGULAR"),
+  propertySize: z.string().min(1, "Please select a property size"),
+  bathroomCount: z.number().min(1, "At least 1 bathroom is required").max(5, "Maximum 5 bathrooms"),
+  hasPets: z.boolean().default(false),
+  package: RegularityPackageEnum,
+}).merge(addressFields).merge(contactFields);
+
+// Office cleaning schema based on PRD
+export const OfficeCleaningSchemaPRD = z.object({
+  serviceType: z.literal("OFFICE_CLEANING"),
+  officeType: z.string().min(1, "Please select an office type"),
+  workstations: z.number().min(1, "At least 1 workstation is required").max(100, "Maximum 100 workstations"),
+  commonAreas: z.number().min(0, "Common areas cannot be negative").max(20, "Maximum 20 common areas"),
+  frequency: CleaningFrequencyEnum.optional(),
+  package: RegularityPackageEnum.optional(),
+}).merge(addressFields).merge(contactFields);
+
+// Booking flow state schema
+export const BookingFlowStateSchema = z.object({
+  currentStep: z.number().min(0).max(10),
+  serviceType: ServiceTypeEnum.nullable(),
+  cleaningFrequency: CleaningFrequencyEnum.nullable(),
+  formData: z.record(z.any()).optional(),
+  estimate: z.object({
+    estimatedHours: z.number(),
+    recommendedHours: z.number(),
+    totalPrice: z.number(),
+    baseRate: z.number(),
+    discount: z.number().optional(),
+    finalRate: z.number().optional(),
+  }).nullable(),
+  schedule: z.object({
+    date: z.date(),
+    timeSlot: z.string(),
+  }).nullable(),
+  isSubmitting: z.boolean().default(false),
+  errors: z.record(z.string()).default({}),
+});
+
 // ---------- EXPORT SCHEMA MAP ----------
 export const bookingSchemas = {
   home: HomeCleaningSchema,
@@ -200,6 +290,10 @@ export const bookingSchemas = {
   "deep-cleaning": DeepCleaningSchema,
   "move-in-out": MoveInOutSchema,
   "post-construction": PostConstructionSchema,
+  // PRD-specific schemas
+  "one-time-cleaning": OneTimeCleaningSchema,
+  "regular-cleaning": RegularCleaningSchema,
+  "office-cleaning-prd": OfficeCleaningSchemaPRD,
 } as const;
 
 // ---------- SUPABASE TYPE LINKING ----------

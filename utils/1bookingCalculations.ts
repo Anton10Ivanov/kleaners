@@ -5,12 +5,15 @@
 
 import { 
   OneTimeCleaningData, 
-  RegularCleaningData, 
+  RegularCleaningData,
+  OfficeCleaningData,
   Estimate, 
   RegularityPackage, 
   PricingConfig,
   PropertySizeRange,
-  PackageRecommendation
+  PackageRecommendation,
+  TimeSlot,
+  CleaningFrequency
 } from '@/types/bookingFlow';
 
 // Pricing configuration as defined in PRD
@@ -142,4 +145,155 @@ export const calculateRegularEstimate = (data: RegularCleaningData): Estimate =>
     discount: PRICING_CONFIG.packageDiscounts[packageType] * 100,
     finalRate
   };
+};
+
+/**
+ * Calculate office cleaning estimate
+ * Implements office-specific business logic
+ */
+export const calculateOfficeEstimate = (data: OfficeCleaningData): Estimate => {
+  const { officeType, workstations, commonAreas } = data;
+  
+  // Base hours calculation for office cleaning
+  let estimatedHours = 2; // Minimum 2 hours
+  
+  // Add time based on workstations (0.25 hours per workstation)
+  estimatedHours += workstations * 0.25;
+  
+  // Add time for common areas (0.5 hours per common area)
+  estimatedHours += commonAreas * 0.5;
+  
+  // Office type multiplier
+  const officeMultipliers = {
+    'small-office': 1.0,
+    'medium-office': 1.2,
+    'large-office': 1.5,
+    'warehouse': 1.8,
+    'retail': 1.3,
+    'medical': 1.6,
+    'restaurant': 1.4
+  };
+  
+  const multiplier = officeMultipliers[officeType as keyof typeof officeMultipliers] || 1.0;
+  estimatedHours *= multiplier;
+  
+  // Calculate recommended hours (add 0.5-1 hour buffer)
+  const recommendedHours = Math.ceil(estimatedHours + 0.5);
+  
+  // Office cleaning uses higher base rate
+  const baseRate = 60; // $60 per hour for office cleaning
+  const totalPrice = recommendedHours * baseRate;
+  
+  return {
+    estimatedHours: Math.round(estimatedHours * 2) / 2, // Round to nearest 0.5
+    recommendedHours,
+    totalPrice,
+    baseRate,
+    finalRate: baseRate
+  };
+};
+
+/**
+ * Format price for display
+ */
+export const formatPrice = (price: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }).format(price);
+};
+
+/**
+ * Format price in EUR for display
+ */
+export const formatPriceEUR = (price: number): string => {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }).format(price);
+};
+
+/**
+ * Calculate time slot availability
+ */
+export const getAvailableTimeSlots = (date: Date): TimeSlot[] => {
+  const slots: TimeSlot[] = [];
+  const startHour = 8; // 8 AM
+  const endHour = 18; // 6 PM
+  
+  for (let hour = startHour; hour < endHour; hour++) {
+    const timeString = `${hour.toString().padStart(2, '0')}:00`;
+    const isRecommended = hour >= 9 && hour <= 15; // 9 AM to 3 PM are recommended
+    
+    slots.push({
+      id: `${date.toISOString().split('T')[0]}-${timeString}`,
+      time: timeString,
+      isAvailable: true, // In real implementation, check against bookings
+      isRecommended
+    });
+  }
+  
+  return slots;
+};
+
+/**
+ * Validate property size against bathroom count
+ */
+export const validatePropertySize = (size: number, bathrooms: number): boolean => {
+  const minSizePerBathroom = 8; // Minimum 8 m² per bathroom
+  const maxSize = 1000; // Maximum 1000 m²
+  
+  const estimatedMinSize = (bathrooms * minSizePerBathroom) + 20;
+  
+  return size >= estimatedMinSize && size <= maxSize;
+};
+
+/**
+ * Get property size range by size value
+ */
+export const getPropertySizeRange = (size: number): PropertySizeRange | null => {
+  return PROPERTY_SIZE_RANGES.find(range => 
+    size >= range.minSize && size <= range.maxSize
+  ) || null;
+};
+
+/**
+ * Calculate cleaning frequency discount
+ */
+export const calculateFrequencyDiscount = (frequency: CleaningFrequency): number => {
+  switch (frequency) {
+    case CleaningFrequency.ONE_TIME:
+      return 0;
+    case CleaningFrequency.REGULAR:
+      return 0.1; // 10% discount for regular cleaning
+    default:
+      return 0;
+  }
+};
+
+/**
+ * Calculate total booking price with all discounts
+ */
+export const calculateTotalPrice = (
+  basePrice: number,
+  frequency: CleaningFrequency,
+  packageType?: RegularityPackage
+): number => {
+  let totalPrice = basePrice;
+  
+  // Apply frequency discount
+  const frequencyDiscount = calculateFrequencyDiscount(frequency);
+  totalPrice *= (1 - frequencyDiscount);
+  
+  // Apply package discount if regular cleaning
+  if (frequency === CleaningFrequency.REGULAR && packageType) {
+    const packageDiscount = PRICING_CONFIG.packageDiscounts[packageType];
+    totalPrice *= (1 - packageDiscount);
+  }
+  
+  return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
 };
