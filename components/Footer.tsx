@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="col-span-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
               <img
-                src="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
+                src="/Images/81a146c8-f4d6-4adf-8dd6-7d590780093e.png" 
                 alt="Kleaners.de Logo" 
                 className="h-8 w-8 object-contain" 
                 style={{

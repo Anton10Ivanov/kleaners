@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,7 @@ const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isValidSession, setIsValidSession] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
-  const navigate = useRouter();
+  const router = useRouter();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
 
@@ -34,7 +34,7 @@ const ResetPassword = () => {
             title: "Invalid Reset Link",
             description: "This password reset link is invalid or has expired. Please request a new one.",
           });
-          navigate('/login');
+          router.push('/login');
           return;
         }
 
@@ -59,7 +59,7 @@ const ResetPassword = () => {
                 title: "Invalid Reset Link",
                 description: "This password reset link is invalid or has expired. Please request a new one.",
               });
-              navigate('/login');
+              router.push('/login');
               return;
             }
             
@@ -70,7 +70,7 @@ const ResetPassword = () => {
               title: "Invalid Reset Link",
               description: "This password reset link is invalid or has expired. Please request a new one.",
             });
-            navigate('/login');
+            router.push('/login');
           }
         }
       } catch (error) {
@@ -80,14 +80,14 @@ const ResetPassword = () => {
           title: "Error",
           description: "An error occurred while verifying your reset link. Please try again.",
         });
-        navigate('/login');
+        router.push('/login');
       } finally {
         setIsCheckingSession(false);
       }
     };
 
     checkSession();
-  }, [navigate, toast]);
+  }, [router, toast]);
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,7 +128,7 @@ const ResetPassword = () => {
 
       // Sign out and redirect to login
       await supabase.auth.signOut();
-      navigate('/login');
+      router.push('/login');
     } catch (error) {
       logger.error('Password reset failed', { 
         error: error instanceof Error ? error.message : 'Unknown error' 

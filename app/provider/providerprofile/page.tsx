@@ -3,12 +3,12 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { supabase } from '@/integrations/supabase/client";
-import { ErrorBoundaryWrapper } from '@/components/provider/ErrorBoundaryWrapper";
-import { useTitle } from '@/hooks/useTitle";
-import { ProfileCompletionIndicator } from '@/components/provider/profile/ProfileCompletionIndicator";
-import { useProfileCompletion } from '@/hooks/useProfileCompletion";
-import { ProfileContent } from '@/components/provider/profile/ProfileContent";
+import { supabase } from '@/integrations/supabase/client';
+import { ErrorBoundaryWrapper } from '@/components/provider/ErrorBoundaryWrapper';
+import { useTitle } from '@/hooks/useTitle';
+import { ProfileCompletionIndicator } from '@/components/provider/profile/ProfileCompletionIndicator'; 
+import { useProfileCompletion } from '@/hooks/useProfileCompletion';
+import { ProfileContent } from '@/components/provider/profile/ProfileContent';
 
 const ProviderProfile = () => {
   useTitle('Provider Profile');

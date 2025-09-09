@@ -1,8 +1,8 @@
 
-import { Button } from '@/components/ui/button";
-import { useToast } from '@/hooks/use-toast";
-import { supabase } from '@/integrations/supabase/client";
-import { logger } from '@/utils/logging";
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logging';
 
 interface SocialLoginProps {
   context?: 'login' | 'signup';

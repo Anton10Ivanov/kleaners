@@ -1,10 +1,10 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form";
-import { cn } from '@/lib/utils";
+import { BookingFormData } from '@/schemas/booking';
+import { FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { cn } from '@/lib/utils';
 import { Clock } from "lucide-react";
-import { TimeSlider } from '@/components/ui/time-slider";
+import { TimeSlider } from '@/components/ui/time-slider';
 
 interface TimeSlotSelectorProps {
   form: UseFormReturn<BookingFormData>;

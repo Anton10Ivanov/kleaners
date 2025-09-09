@@ -22,7 +22,7 @@ export function useInvoices() {
    * Downloads an invoice PDF for a specific booking
    * @param bookingId Booking ID to download invoice for
    * @returns URL to the downloaded file or null if error
-   
+   */
   const downloadInvoice = async (bookingId: string): Promise<string | null> => {
     setIsDownloading(true);
     try {
@@ -64,7 +64,7 @@ export function useInvoices() {
   /**
    * Opens the invoice in a new tab for viewing
    * @param bookingId Booking ID to view invoice for
-   
+   */
   const viewInvoice = async (bookingId: string): Promise<void> => {
     const url = await downloadInvoice(bookingId);
     if (url) {
@@ -76,7 +76,7 @@ export function useInvoices() {
    * Checks if a booking has an invoice associated with it
    * @param bookingId Booking ID to check
    * @returns Boolean indicating if invoice exists
-   
+   */
   const hasInvoice = async (bookingId: string): Promise<boolean> => {
     try {
       // For development mode, return true immediately to avoid network requests

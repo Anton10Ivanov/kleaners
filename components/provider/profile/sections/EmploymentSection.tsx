@@ -1,8 +1,8 @@
 
 import React from "react";
 import { MapPin } from "lucide-react";
-import { Separator } from '@/components/ui/separator";
-import { Badge } from '@/components/ui/badge";
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 
 export const EmploymentSection: React.FC = () => {
   return (

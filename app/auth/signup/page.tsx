@@ -2,18 +2,19 @@
 
 
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from '@/integrations/supabase/client";
-import SignupForm from '@/components/auth/SignupForm";
-import { getRedirectPathForUser } from '@/utils/auth-redirect";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { supabase } from '@/integrations/supabase/client';
+import SignupForm from '@/components/auth/SignupForm';
+import { getRedirectPathForUser } from '@/utils/auth-redirect';
 
 const Signup = () => {
-  const navigate = useRouter();
-  const location = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   
   // Parse the return URL from query params or use default routes
   const getReturnUrl = () => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(searchParams.toString());
     return params.get('returnUrl') || '/';
   };
 

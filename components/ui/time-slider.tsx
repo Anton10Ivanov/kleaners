@@ -1,6 +1,6 @@
 
-import { Slider } from '@/components/ui/slider";
-import { cn } from '@/lib/utils";
+import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
 import { Clock, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";

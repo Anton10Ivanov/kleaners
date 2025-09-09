@@ -1,6 +1,6 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData, Frequency } from '@/schemas/booking";
+import { BookingFormData, Frequency } from '@/schemas/booking';
 import { BusinessTypeSelector } from "./components/BusinessTypeSelector";
 import { CleaningOptionsSelector } from "./components/CleaningOptionsSelector";
 import { AdditionalFields } from "./components/AdditionalFields";

@@ -1,6 +1,6 @@
 
-import { Button } from '@/components/ui/button";
-import { Label } from '@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Plus, Minus } from 'lucide-react';
 
 interface PropertyDetailsProps {

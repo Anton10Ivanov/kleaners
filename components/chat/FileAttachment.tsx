@@ -35,9 +35,13 @@ const FileAttachmentComponent = ({
     )}>
       {isImage ? (
         <div className="w-8 h-8 flex-shrink-0 rounded overflow-hidden bg-muted">
-          <Image src={file.url} alt={file.name} 
+          <Image 
+            src={file.url} 
+            alt={file.name} 
+            width={500} 
+            height={300}
             className="w-full h-full object-cover"
-            onError={(e) = width={500} height={300} /> {
+            onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://placehold.co/40x40/gray/white?text=IMG';
             }}
           />

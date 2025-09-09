@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid';
 import { ServiceCategoryCardDS } from "./ServiceCategoryCardDS";
 import { Home, Building, Sparkles } from "lucide-react";
 

@@ -35,29 +35,29 @@ export interface AccountPreferences {
 
 /**
  * Interface for user data
- 
+ */
 export interface UserData {
-  /** User's unique identifier 
+  /** User's unique identifier */
   id: string;
   
-  /** User's full name 
+  /** User's full name */
   fullName: string;
   
-  /** User's email address 
+  /** User's email address */
   email: string;
   
-  /** User's phone number 
+  /** User's phone number */
   phone: string;
   
-  /** URL to user's avatar image 
+  /** URL to user's avatar image */
   avatarUrl: string;
   
-  /** User's notification preferences 
+  /** User's notification preferences */
   notificationPreferences: NotificationPreferences;
   
-  /** User's account preferences 
+  /** User's account preferences */
   accountPreferences: AccountPreferences;
   
-  /** User's created date 
+  /** User's created date */
   createdAt: string;
 }

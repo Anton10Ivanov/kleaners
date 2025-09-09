@@ -1,6 +1,6 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
+import { BookingFormData } from '@/schemas/booking';
 import { UnifiedBookingCalendar } from "../UnifiedBookingCalendar";
 
 interface CalendarProps {

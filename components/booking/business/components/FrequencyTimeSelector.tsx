@@ -1,13 +1,13 @@
 
 import { useState, useEffect } from "react";
-import { Frequency } from '@/schemas/booking";
-import { Label } from '@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group";
-import { cn } from '@/lib/utils";
+import { Frequency } from '@/schemas/booking';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
 import { Check } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
+import { BookingFormData } from '@/schemas/booking';
 
 interface FrequencyTimeSelectorProps {
   form: UseFormReturn<BookingFormData>;

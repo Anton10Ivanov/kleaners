@@ -99,7 +99,7 @@ const MoveInOut = () => {
     <ServicePageTemplate
       title="Move-In/Move-Out Cleaning"
       description="Make your move stress-free with our comprehensive move-in/move-out cleaning service. Get your security deposit back or start fresh in your new home with our thorough deep cleaning."
-      heroImage="/lovable-uploads/opciya1 (1) 2.png"
+      heroImage="/Images/opciya1 (1) 2.png"
       features={features}
       packages={packages}
       benefits={benefits}

@@ -6,20 +6,20 @@ import { PendingBookingsPool } from '@/components/admin/sections/bookings/Pendin
 import { Booking } from '@/components/admin/sections/bookings/types';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { toast } from 'sonner';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { UserRole } from '@/integrations/supabase/types/roles';
 import { hasRole } from '@/integrations/supabase/auth';
 
-export const AdminPendingBookingsPool = () => {
+export default function AdminPendingBookingsPool() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isProviderView, setIsProviderView] = useState<boolean>(false);
-  const location = usePathname();
+  const pathname = usePathname();
   
   // Check if we're on the provider route
   useEffect(() => {
-    const isProviderRoute = location.pathname.includes('/provider');
+    const isProviderRoute = pathname.includes('/provider');
     setIsProviderView(isProviderRoute);
     
     // In a real app, we would check the user's role here
@@ -41,7 +41,7 @@ export const AdminPendingBookingsPool = () => {
     };
     
     checkUserRole();
-  }, [location.pathname]);
+  }, [pathname]);
   
   // Function to fetch pending bookings from mock data
   const fetchPendingBookings = () => {

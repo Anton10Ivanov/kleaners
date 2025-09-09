@@ -40,7 +40,7 @@ interface BookingWithStatus {
 
 /**
  * Enhanced hook for handling booking submission with support for both legacy and new schemas
- 
+ */
 export const useEnhancedBookingSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmationData, setConfirmationData] = useState<{
@@ -55,7 +55,7 @@ export const useEnhancedBookingSubmission = () => {
   
   /**
    * Send confirmation email
-   
+   */
   const sendConfirmationEmail = async (bookingData: AnyBookingFormData, referenceNumber: string): Promise<boolean> => {
     try {
       logInfo('Sending confirmation email for booking', { referenceNumber }, 'useEnhancedBookingSubmission');
@@ -90,7 +90,7 @@ export const useEnhancedBookingSubmission = () => {
   
   /**
    * Update booking status
-   
+   */
   const updateBookingStatus = (newStatus: BookingStatus) => {
     setBookingStatus(newStatus);
     logInfo('Booking status updated', { newStatus }, 'useEnhancedBookingSubmission');
@@ -98,7 +98,7 @@ export const useEnhancedBookingSubmission = () => {
 
   /**
    * Map enhanced form data to database schema
-   
+   */
   const mapEnhancedDataToDatabase = (data: EnhancedBookingFormData): Database['public']['Tables']['bookings']['Insert'] => {
     const serviceTypeMap = {
       'home': 'regular' as const,
@@ -175,7 +175,7 @@ export const useEnhancedBookingSubmission = () => {
 
   /**
    * Map legacy form data to database schema
-   
+   */
   const mapLegacyDataToDatabase = (data: BookingFormData): Database['public']['Tables']['bookings']['Insert'] => {
     const mapFrequency = (freq: string) => {
       switch (freq) {
@@ -212,7 +212,7 @@ export const useEnhancedBookingSubmission = () => {
   
   /**
    * Submit booking data with enhanced error handling, confirmation, and email flow
-   
+   */
   const submitBooking = async (data: AnyBookingFormData): Promise<BookingSubmissionResult> => {
     setIsSubmitting(true);
     updateBookingStatus(BookingStatus.PENDING);
@@ -327,7 +327,7 @@ export const useEnhancedBookingSubmission = () => {
   
   /**
    * Clear confirmation data and reset form
-   
+   */
   const clearConfirmation = () => {
     setConfirmationData(null);
     setBookingStatus(BookingStatus.PENDING);
@@ -336,7 +336,7 @@ export const useEnhancedBookingSubmission = () => {
   
   /**
    * Get current booking status with display text
-   
+   */
   const getStatusDisplay = (status: BookingStatus) => {
     switch (status) {
       case BookingStatus.PENDING:

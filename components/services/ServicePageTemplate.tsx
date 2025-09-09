@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { UnifiedContainer } from '@/components/layout/UnifiedContainer";
-import { LayoutSection } from '@/components/layout/LayoutSection";
-import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid";
-import { ResponsiveBookingCard } from '@/components/booking/shared/ResponsiveBookingCard";
-import { Button } from '@/components/ui/button";
-import { Badge } from '@/components/ui/badge";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { UnifiedContainer } from '@/components/layout/UnifiedContainer';
+import { LayoutSection } from '@/components/layout/LayoutSection';
+import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid';
+import { ResponsiveBookingCard } from '@/components/booking/shared/ResponsiveBookingCard';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, Star, ArrowRight } from "lucide-react";
 
 
@@ -32,8 +32,11 @@ interface ServicePackage {
 interface ServicePageTemplateProps {
   title: string;
   description: string;
+  heroImage?: string;
   features: ServiceFeature[];
   packages: ServicePackage[];
+  benefits?: string[];
+  onBookingClick?: (packageId?: string) => void;
   className?: string;
 }
 
@@ -44,8 +47,11 @@ interface ServicePageTemplateProps {
 export const ServicePageTemplate: React.FC<ServicePageTemplateProps> = ({
   title,
   description,
+  heroImage,
   features,
   packages,
+  benefits,
+  onBookingClick,
   className
 }) => {
   const { isMobile } = useMobileOptimizations();
@@ -55,6 +61,15 @@ export const ServicePageTemplate: React.FC<ServicePageTemplateProps> = ({
       {/* Hero Section */}
       <LayoutSection spacing="lg">
         <UnifiedContainer variant="hero">
+          {heroImage && (
+            <div className="mb-8">
+              <img 
+                src={heroImage} 
+                alt={title}
+                className="w-full h-64 md:h-96 object-cover rounded-lg"
+              />
+            </div>
+          )}
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               {title}

@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from "react";
-import { supabase } from '@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 import { ClientQuestion } from "./types";
-import { useToast } from '@/components/ui/use-toast";
+import { useToast } from '@/components/ui/use-toast';
 
 export const useCustomerQuestions = () => {
   const [questions, setQuestions] = useState<ClientQuestion[]>([]);

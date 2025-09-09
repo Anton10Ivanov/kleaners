@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-09-09T00:23:42.452Z",
+  "summary": {
+    "totalJSSize": 152025,
+    "totalCSSSize": 0,
+    "totalAssetSize": 7918086,
+    "totalSize": 8070111,
+    "jsFileCount": 4,
+    "cssFileCount": 0,
+    "assetFileCount": 8
+  },
+  "jsFiles": [
+    {
+      "file": "assets\\js\\react-vendor-CsF3zuHB.js",
+      "size": 137461,
+      "sizeKB": 134.24,
+      "sizeMB": 0.13
+    },
+    {
+      "file": "sw.js",
+      "size": 9174,
+      "sizeKB": 8.96,
+      "sizeMB": 0.01
+    },
+    {
+      "file": "assets\\js\\vendor-CzFDRTuY.js",
+      "size": 4104,
+      "sizeKB": 4.01,
+      "sizeMB": 0
+    },
+    {
+      "file": "assets\\js\\index-l9uEi7QM.js",
+      "size": 1286,
+      "sizeKB": 1.26,
+      "sizeMB": 0
+    }
+  ],
+  "cssFiles": [],
+  "assets": [
+    {
+      "file": "lovable-uploads\\62d7d885-67bd-4c03-9be2-bbcb3836edc1.png",
+      "size": 2470267,
+      "sizeKB": 2412.37
+    },
+    {
+      "file": "lovable-uploads\\1272a6a1-a120-49b1-aa28-d9e5631c14b2.png",
+      "size": 1909404,
+      "sizeKB": 1864.65
+    },
+    {
+      "file": "lovable-uploads\\c953fdaf-6489-4857-8cb3-ec5c96f26285.png",
+      "size": 1691202,
+      "sizeKB": 1651.56
+    },
+    {
+      "file": "lovable-uploads\\d0852217-53a8-414a-b080-073eec924014.png",
+      "size": 1593574,
+      "sizeKB": 1556.22
+    },
+    {
+      "file": "og-image.png",
+      "size": 233240,
+      "sizeKB": 227.77
+    },
+    {
+      "file": "favicon.ico",
+      "size": 15086,
+      "sizeKB": 14.73
+    },
+    {
+      "file": "placeholder.svg",
+      "size": 3253,
+      "sizeKB": 3.18
+    },
+    {
+      "file": "lovable-uploads\\81a146c8-f4d6-4adf-8dd6-7d590780093e.png",
+      "size": 2060,
+      "sizeKB": 2.01
+    }
+  ],
+  "largeChunks": [],
+  "recommendations": [
+    "Bundle size is large. Consider further code splitting."
+  ]
+}

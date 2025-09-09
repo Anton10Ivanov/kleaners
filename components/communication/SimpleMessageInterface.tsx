@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState } from 'react';
-import { cn } from '@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Input } from '@/components/ui/input";
-import { Badge } from '@/components/ui/badge";
-import { ScrollArea } from '@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar";
+import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send, Phone, Video, MoreVertical } from "lucide-react";
 
 interface Message {

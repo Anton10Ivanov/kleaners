@@ -2,17 +2,17 @@
 
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Switch } from '@/components/ui/switch";
-import { Label } from '@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs";
-import { Input } from '@/components/ui/input";
-import { Textarea } from '@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export const AdminSettings = () => {
+export default function AdminSettings() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [defaultServiceDuration, setDefaultServiceDuration] = useState("2");

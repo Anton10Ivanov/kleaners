@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Calendar, Clock } from "lucide-react";
-import { Separator } from '@/components/ui/separator";
-import { Badge } from '@/components/ui/badge";
-import { Button } from '@/components/ui/button";
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useProviderSchedule } from '@/hooks/useProviderSchedule";
+import { useProviderSchedule } from '@/hooks/useProviderSchedule';
 
 interface AvailabilitySectionProps {
   availability: string[];

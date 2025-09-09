@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Switch } from '@/components/ui/switch";
-import { Badge } from '@/components/ui/badge";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 import { 
   Bell, 
   Shield, 

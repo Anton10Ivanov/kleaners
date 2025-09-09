@@ -1,11 +1,11 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { FormField, FormItem, FormLabel } from '@/components/ui/form";
-import { Checkbox } from '@/components/ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
+import { BookingFormData } from '@/schemas/booking';
+import { FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cleaningOptions } from "../config/cleaningOptions";
-import { cn } from '@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface CleaningOptionsSelectorProps {
   form: UseFormReturn<BookingFormData>;

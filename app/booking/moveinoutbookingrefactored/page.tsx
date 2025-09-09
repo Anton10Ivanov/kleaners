@@ -7,7 +7,7 @@ import { MoveInOutSchema, type MoveInOutBookingForm } from '@/schemas/bookingSch
 import { useBookingSubmission } from '@/hooks/useBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
-import { StandardizedBookingForm, BookingFormData } from '@/components/forms/StandardizedBookingForm';
+import { UnifiedBookingForm, UnifiedBookingFormData } from '@/components/forms/UnifiedBookingForm';
 import { motion } from 'framer-motion';
 
 const MoveInOutBookingRefactored = () => {

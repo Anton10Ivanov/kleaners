@@ -1,6 +1,6 @@
 
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 
 interface FlexLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

@@ -2,17 +2,17 @@
 
 
 import React, { useState, useEffect } from "react";
-import { useTitle } from '@/hooks/useTitle";
-import { BookingList } from '@/components/user/bookings/BookingList";
-import { useUserBookings } from '@/hooks/useUserBookings";
+import { useTitle } from '@/hooks/useTitle';
+import { BookingList } from '@/components/user/bookings/BookingList';
+import { useUserBookings } from '@/hooks/useUserBookings';
 import { ErrorBoundary } from "react-error-boundary";
-import { Card } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { FilterableStatsCards } from '@/components/user/bookings/FilterableStatsCards";
-import { BookingEmptyState } from '@/components/user/bookings/BookingEmptyState";
-import { BookingActionButton } from '@/components/user/bookings/BookingActionButton";
-import { useSearchParams } from "react-router-dom";
-import { BookingStatus } from '@/types/enums";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FilterableStatsCards } from '@/components/user/bookings/FilterableStatsCards';
+import { BookingEmptyState } from '@/components/user/bookings/BookingEmptyState';
+import { BookingActionButton } from '@/components/user/bookings/BookingActionButton';
+import { useSearchParams } from "next/navigation";
+import { BookingStatus } from '@/types/enums';
 
 /**
  * ClientBookings Page

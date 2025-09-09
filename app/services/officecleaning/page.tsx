@@ -98,7 +98,7 @@ const OfficeCleaning = () => {
     <ServicePageTemplate
       title="Professional Office Cleaning"
       description="Maintain a pristine, professional workspace with our comprehensive office cleaning services. We work around your schedule to keep your business environment spotless."
-      heroImage="/lovable-uploads/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png"
+      heroImage="/Images/62d7d885-67bd-4c03-9be2-bbcb3836edc1.png"
       features={features}
       packages={packages}
       benefits={benefits}

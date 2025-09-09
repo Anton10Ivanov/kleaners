@@ -12,7 +12,7 @@ const STATIC_ASSETS = [
   '/manifest.json',
   '/favicon.ico',
   '/og-image.png',
-  '/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png', // Logo
+  '/Images/81a146c8-f4d6-4adf-8dd6-7d590780093e.png', // Logo
 ];
 
 // API endpoints to cache with different strategies
@@ -26,7 +26,7 @@ const API_CACHE_PATTERNS = [
 // Image patterns to cache
 const IMAGE_PATTERNS = [
   /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-  /\/lovable-uploads\//,
+  /\/Images\//,
   /\/assets\//,
 ];
 

@@ -1,6 +1,6 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+// import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { RefreshCw } from "lucide-react";
 
 interface BookingTrendsProps {
@@ -24,28 +24,9 @@ export const BookingTrends = ({ isLoading, data }: BookingTrendsProps) => {
               <RefreshCw className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={data}
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Area 
-                  type="monotone" 
-                  dataKey="bookings" 
-                  stroke="hsl(var(--primary))" 
-                  fill="hsl(var(--primary) / 0.2)" 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            <div className="w-full h-full flex items-center justify-center bg-muted rounded-lg">
+              <p className="text-muted-foreground">Chart will be implemented here</p>
+            </div>
           )}
         </div>
       </CardContent>

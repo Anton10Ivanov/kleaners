@@ -1,8 +1,8 @@
 
 import { useState } from "react";
-import { Button } from '@/components/ui/button";
-import { Card, CardContent } from '@/components/ui/card";
-import { Badge } from '@/components/ui/badge";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Star, Clock, Shield, CheckCircle, Phone, ChevronDown, ChevronUp } from "lucide-react";
 import { LucideIcon } from "lucide-react";

@@ -12,7 +12,7 @@ import {
   Key,
   Euro
 } from 'lucide-react';
-import { ClutterLevelInfo, PackageInfo } from '../types/HomeCleaning22Types';
+import { ClutterLevelInfo, PackageInfo } from '../../types/HomeCleaning22Types';
 
 export const CLUTTER_LEVELS: ClutterLevelInfo[] = [
   {

@@ -94,9 +94,13 @@ export const EnhancedTestimonials = memo(() => {
               <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
               
               <div className="flex items-center gap-4 mb-4">
-                <Image src={testimonial.avatar} alt={testimonial.name}
+                <Image 
+                  src={testimonial.avatar} 
+                  alt={testimonial.name}
+                  width={500} 
+                  height={300}
                   className="w-12 h-12 rounded-full object-cover"
-                / width={500} height={300} />
+                />
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">
                     {testimonial.name}

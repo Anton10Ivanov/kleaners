@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
+const path = require('path')
+
 const nextConfig = {
+  // Fix workspace root detection
+  outputFileTracingRoot: path.join(__dirname, '../../'),
+  
   // Enable experimental features for better performance
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],

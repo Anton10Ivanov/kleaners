@@ -1,7 +1,7 @@
 
 import { format, isBefore, isAfter } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from '@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface DatePickerProps {
   weekDates: Date[];

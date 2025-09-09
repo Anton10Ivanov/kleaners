@@ -1,18 +1,18 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { BusinessCleaningFormData } from '@/schemas/booking";
+import { BusinessCleaningFormData } from '@/schemas/booking';
 import PersonalInformation from "../final/PersonalInformation";
 import CleaningAddress from "../final/CleaningAddress";
 import SpecialInstructions from "../final/SpecialInstructions";
 import PromoCode from "../final/PromoCode";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card";
-import { ValidatedInput } from '@/components/booking/ValidatedInput";
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { ValidatedInput } from '@/components/booking/ValidatedInput';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Info } from 'lucide-react';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select";
-import { Checkbox } from '@/components/ui/checkbox";
-import { Separator } from '@/components/ui/separator";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 
 const businessTypes = [
   { value: "office", label: "Office", description: "Standard office spaces and co-working areas." },

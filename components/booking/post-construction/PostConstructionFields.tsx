@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { PostConstructionBookingForm } from '@/schemas/bookingSchemas";
+import { PostConstructionBookingForm } from '@/schemas/bookingSchemas';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';

@@ -1,5 +1,5 @@
-// Bridge for Next.js alias @/integrations/supabase/client
-// Re-export from the existing implementation under src/
-export * from '../../src-backup/integrations/supabase/client'
+import { createClient } from '@/lib/supabase/client'
+import type { Database } from '@/types/database'
 
-
+// Create a single instance of the Supabase client for client-side usage
+export const supabase = createClient()

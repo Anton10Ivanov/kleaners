@@ -28,10 +28,6 @@ export const environmentUtils = {
     return typeof window !== 'undefined' && window.location.href.includes('preview');
   },
 
-  // Check if running in Lovable sandbox
-  isLovableSandbox: (): boolean => {
-    return typeof window !== 'undefined' && window.location.href.includes('lovable.dev');
-  },
 
   // Get environment variable with validation
   getEnvVar: (key: string, defaultValue?: string): string => {
@@ -65,7 +61,7 @@ export const environmentUtils = {
     if (src.startsWith('http') || src.startsWith('/')) {
       return src;
     }
-    return `/assets/${src}`;
+    return `/Images/${src}`;
   },
 
   // Feature flags object

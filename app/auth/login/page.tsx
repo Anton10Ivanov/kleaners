@@ -2,34 +2,35 @@
 
 
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from '@/integrations/supabase/client";
-import LoginForm from '@/components/auth/LoginForm";
-import ResetPasswordForm from '@/components/auth/ResetPasswordForm";
-import { getRedirectPathForUser } from '@/utils/auth-redirect";
-import { logInfo, logError } from '@/utils/console-cleanup";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { supabase } from '@/integrations/supabase/client';
+import LoginForm from '@/components/auth/LoginForm';
+import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
+import { getRedirectPathForUser } from '@/utils/auth-redirect';
+import { logInfo, logError } from '@/utils/console-cleanup';
 
 const Login = () => {
   const [isResetMode, setIsResetMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useRouter();
-  const location = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // Check if the path indicates password reset mode
   useEffect(() => {
-    if (location.pathname.includes('forgot-password') || location.pathname.includes('reset-password')) {
+    if (pathname.includes('forgot-password') || pathname.includes('reset-password')) {
       setIsResetMode(true);
     }
-  }, [location.pathname]);
+  }, [pathname]);
 
   // Store return URL in session storage for persistence through auth flow
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(searchParams.toString());
     const returnUrl = params.get('returnUrl');
     if (returnUrl) {
       sessionStorage.setItem('authReturnUrl', returnUrl);
     }
-  }, [location]);
+  }, [searchParams]);
 
   useEffect(() => {
     // Check if already logged in

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { handleApiError, ErrorSeverity } from '@/utils/errors';
 import { boolToString } from '@/utils/typeUtils';
@@ -11,8 +11,8 @@ import { getNavItems } from './navigation/getNavItems';
 const AdminLayout = () => {
   const [activeItem, setActiveItem] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const location = usePathname();
-  const navigate = useRouter();
+  const pathname = usePathname();
+  const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   // Get nav items
@@ -21,10 +21,10 @@ const AdminLayout = () => {
   // Set active nav item based on current location
   useEffect(() => {
     try {
-      const path = location.pathname.split('/')[2] || '';
+      const path = pathname.split('/')[2] || '';
       
       // Handle the special case for the questions tab
-      if (location.pathname === '/admin' && location.search.includes('tab=questions')) {
+      if (pathname === '/admin' && pathname.includes('tab=questions')) {
         setActiveItem('questions');
         return;
       }
@@ -42,12 +42,12 @@ const AdminLayout = () => {
         ErrorSeverity.HIGH
       );
     }
-  }, [location]);
+  }, [pathname]);
   
   // Handle navigation click
   const handleNavClick = (href: string) => {
     try {
-      navigate(href);
+      router.push(href);
       if (isMobile) {
         setIsSidebarOpen(false);
       }
@@ -64,7 +64,7 @@ const AdminLayout = () => {
   // Handle logout
   const handleLogout = () => {
     try {
-      navigate('/auth/login');
+      router.push('/auth/login');
     } catch (error) {
       handleApiError(
         error, 
@@ -101,7 +101,7 @@ const AdminLayout = () => {
       <div className="flex-1 overflow-hidden">
         {/* Main content area with scrolling */}
         <main className="flex-1 overflow-auto bg-theme-lightblue h-full">
-          <Outlet />
+          {/* Content will be rendered by Next.js page components */}
         </main>
       </div>
     </div>

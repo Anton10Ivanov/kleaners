@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { Card, CardContent, CardHeader } from '@/components/ui/card";
-import { Badge } from '@/components/ui/badge";
-import { Button } from '@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { ArrowRight } from "lucide-react";
 
 

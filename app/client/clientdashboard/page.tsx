@@ -2,18 +2,18 @@
 
 
 import React, { useState } from "react";
-import { useUserProfileData } from '@/hooks/useUserProfileData";
-import { useNotifications } from '@/hooks/useNotifications";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
+import { useUserProfileData } from '@/hooks/useUserProfileData';
+import { useNotifications } from '@/hooks/useNotifications';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
 import { Calendar, Clock, Star, MessageSquare, Bell, X } from "lucide-react";
-import { NotificationsList } from '@/components/user/profile/notifications/NotificationsList";
-import { useIsMobile } from '@/hooks/use-mobile";
-import ChatInterface from '@/components/chat/ChatInterface";
-import ConversationList from '@/components/chat/ConversationList";
-import { createConversation } from '@/utils/chat";
-import { useToast } from '@/hooks/use-toast";
+import { NotificationsList } from '@/components/user/profile/notifications/NotificationsList';
+import { useIsMobile } from '@/hooks/use-mobile';
+import ChatInterface from '@/components/chat/ChatInterface';
+import ConversationList from '@/components/chat/ConversationList';
+import { createConversation } from '@/utils/chat';
+import { useToast } from '@/hooks/use-toast';
 
 /**
  * ClientDashboard component 

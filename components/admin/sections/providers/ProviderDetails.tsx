@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import { Badge } from '@/components/ui/badge";
-import { Button } from '@/components/ui/button";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,8 +9,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar";
+} from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { StarIcon } from "lucide-react";
 
 export const ProviderDetails = ({ provider, onClose }: { provider: any; onClose: () => void }) => {

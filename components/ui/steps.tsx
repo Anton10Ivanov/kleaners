@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { cn } from '@/lib/utils";
+import { cn } from '@/lib/utils';
 import { CheckCircle } from "lucide-react";
 
 type StepStatus = "complete" | "incomplete" | "current" | "waiting";

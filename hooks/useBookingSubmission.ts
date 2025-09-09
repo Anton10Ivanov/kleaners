@@ -34,7 +34,7 @@ interface BookingWithStatus extends BookingFormData {
 
 /**
  * Enhanced hook for handling booking submission with confirmation and email flow
- 
+ */
 export const useBookingSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmationData, setConfirmationData] = useState<{
@@ -48,7 +48,7 @@ export const useBookingSubmission = () => {
   
   /**
    * Send confirmation email
-   
+   */
   const sendConfirmationEmail = async (bookingData: BookingFormData, referenceNumber: string): Promise<boolean> => {
     try {
       logInfo('Sending confirmation email for booking', { referenceNumber }, 'useBookingSubmission');
@@ -84,7 +84,7 @@ export const useBookingSubmission = () => {
   
   /**
    * Update booking status
-   
+   */
   const updateBookingStatus = (newStatus: BookingStatus) => {
     setBookingStatus(newStatus);
     logInfo('Booking status updated', { newStatus }, 'useBookingSubmission');
@@ -92,7 +92,7 @@ export const useBookingSubmission = () => {
   
   /**
    * Submit booking data with enhanced error handling, confirmation, and email flow
-   
+   */
   const submitBooking = async (data: BookingFormData): Promise<BookingSubmissionResult> => {
     setIsSubmitting(true);
     updateBookingStatus(BookingStatus.PENDING);
@@ -198,7 +198,7 @@ export const useBookingSubmission = () => {
   
   /**
    * Clear confirmation data and reset form
-   
+   */
   const clearConfirmation = () => {
     setConfirmationData(null);
     setBookingStatus(BookingStatus.PENDING);
@@ -207,7 +207,7 @@ export const useBookingSubmission = () => {
   
   /**
    * Get current booking status with display text
-   
+   */
   const getStatusDisplay = (status: BookingStatus) => {
     switch (status) {
       case BookingStatus.PENDING:

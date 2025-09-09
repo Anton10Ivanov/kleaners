@@ -60,7 +60,6 @@ export class AdvancedErrorBoundary extends Component<Props, State> {
       componentStack: errorInfo.componentStack,
       environment: {
         isPreviewWindow: environmentUtils.isPreviewWindow(),
-        isLovableSandbox: environmentUtils.isLovableSandbox(),
         userAgent: typeof window !== 'undefined' ? navigator.userAgent : 'SSR'
       }
     });

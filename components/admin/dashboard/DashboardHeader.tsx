@@ -1,8 +1,8 @@
 
-import { Card, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { LayoutDashboard, RefreshCw, Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 interface DashboardHeaderProps {
   userName: string | null;
@@ -12,7 +12,7 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader = ({ userName, isLoading, onRefresh, isMobile }: DashboardHeaderProps) => {
-  const navigate = useRouter();
+  const router = useRouter();
   
   return (
     <CardHeader className="form-spacing-none pb-4">
@@ -40,7 +40,7 @@ export const DashboardHeader = ({ userName, isLoading, onRefresh, isMobile }: Da
           <Button
             variant="default"
             size={isMobile ? "sm" : "default"}
-            onClick={() => navigate('/admin')}
+            onClick={() => router.push('/admin/adminpanel')}
           >
             <Home className="w-4 h-4 mr-2" />
             Admin Panel

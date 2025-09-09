@@ -1,10 +1,10 @@
 
 import { useState } from "react";
-import { Calendar } from '@/components/ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { addDays, isWithinInterval, parseISO, format } from "date-fns";
-import { useBookings } from '@/hooks/useBookings";
-import { Badge } from '@/components/ui/badge";
+import { useBookings } from '@/hooks/useBookings';
+import { Badge } from '@/components/ui/badge';
 import { Loader2 } from "lucide-react";
 
 export const CalendarSection = () => {

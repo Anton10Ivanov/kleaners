@@ -1,7 +1,7 @@
 
 /**
  * Error severity levels for the application
- 
+ */
 export enum ErrorSeverity {
   LOW = "LOW",
   MEDIUM = "MEDIUM", 
@@ -14,7 +14,7 @@ export enum ErrorSeverity {
 
 /**
  * Error context information
- 
+ */
 export interface ErrorContext {
   component?: string;
   action?: string;
@@ -23,7 +23,7 @@ export interface ErrorContext {
 
 /**
  * Standardized error object
- 
+ */
 export interface AppError {
   message: string;
   severity: ErrorSeverity;

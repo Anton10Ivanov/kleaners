@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -5,7 +7,7 @@ import { AdminScheduleManager } from '@/components/calendar/AdminScheduleManager
 import { useScheduleData } from '@/hooks/useScheduleData';
 import { Calendar, Settings, Users } from 'lucide-react';
 
-const ScheduleManagement: React.FC = () => {
+export default function ScheduleManagement() {
   const {
     cleaners,
     bookingRules,
@@ -232,4 +234,3 @@ const ScheduleManagement: React.FC = () => {
   );
 };
 
-export default ScheduleManagement;

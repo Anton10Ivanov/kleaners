@@ -149,12 +149,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/about/faq">
 }
 
-// Validate ../../app/about/page.tsx
-{
-  const handler = {} as typeof import("../../app/about/page.js")
-  handler satisfies AppPageConfig<"/about">
-}
-
 // Validate ../../app/admin/adminbookings/page.tsx
 {
   const handler = {} as typeof import("../../app/admin/adminbookings/page.js")
@@ -189,12 +183,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   const handler = {} as typeof import("../../app/admin/dashboard/page.js")
   handler satisfies AppPageConfig<"/admin/dashboard">
-}
-
-// Validate ../../app/admin/page.tsx
-{
-  const handler = {} as typeof import("../../app/admin/page.js")
-  handler satisfies AppPageConfig<"/admin">
 }
 
 // Validate ../../app/admin/pendingbookingspool/page.tsx
@@ -255,12 +243,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   const handler = {} as typeof import("../../app/auth/verifyprovider/page.js")
   handler satisfies AppPageConfig<"/auth/verifyprovider">
-}
-
-// Validate ../../app/booking/bookingroutes/page.tsx
-{
-  const handler = {} as typeof import("../../app/booking/bookingroutes/page.js")
-  handler satisfies AppPageConfig<"/booking/bookingroutes">
 }
 
 // Validate ../../app/booking/components/homecleaning22/propertydetailsstep/page.tsx
@@ -461,12 +443,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/client/dashboard">
 }
 
-// Validate ../../app/contact/page.tsx
-{
-  const handler = {} as typeof import("../../app/contact/page.js")
-  handler satisfies AppPageConfig<"/contact">
-}
-
 // Validate ../../app/index/page.tsx
 {
   const handler = {} as typeof import("../../app/index/page.js")
@@ -483,12 +459,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   const handler = {} as typeof import("../../app/legal/termsofservice/page.js")
   handler satisfies AppPageConfig<"/legal/termsofservice">
-}
-
-// Validate ../../app/login/page.tsx
-{
-  const handler = {} as typeof import("../../app/login/page.js")
-  handler satisfies AppPageConfig<"/login">
 }
 
 // Validate ../../app/notfound/page.tsx
@@ -725,12 +695,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/services/roofcleaning">
 }
 
-// Validate ../../app/services/servicepageloader/page.tsx
-{
-  const handler = {} as typeof import("../../app/services/servicepageloader/page.js")
-  handler satisfies AppPageConfig<"/services/servicepageloader">
-}
-
 // Validate ../../app/services/sidewalkcleaning/page.tsx
 {
   const handler = {} as typeof import("../../app/services/sidewalkcleaning/page.js")
@@ -791,10 +755,10 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/services/windowcleaning">
 }
 
-// Validate ../../app/signup/page.tsx
+// Validate ../../app/test/page.tsx
 {
-  const handler = {} as typeof import("../../app/signup/page.js")
-  handler satisfies AppPageConfig<"/signup">
+  const handler = {} as typeof import("../../app/test/page.js")
+  handler satisfies AppPageConfig<"/test">
 }
 
 // Validate ../../app/user/userbookings/page.tsx
@@ -846,6 +810,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+
+// Validate ../../app/(auth)/layout.tsx
+{
+  const handler = {} as typeof import("../../app/(auth)/layout.js")
+  handler satisfies LayoutConfig<"/">
+}
+
+// Validate ../../app/(dashboard)/layout.tsx
+{
+  const handler = {} as typeof import("../../app/(dashboard)/layout.js")
+  handler satisfies LayoutConfig<"/">
+}
+
+// Validate ../../app/(public)/layout.tsx
+{
+  const handler = {} as typeof import("../../app/(public)/layout.js")
+  handler satisfies LayoutConfig<"/">
+}
 
 // Validate ../../app/layout.tsx
 {

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { AlertCircle } from "lucide-react";
 
 interface ErrorFallbackProps {

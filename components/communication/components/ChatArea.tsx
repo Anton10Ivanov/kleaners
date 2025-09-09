@@ -1,16 +1,16 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Input } from '@/components/ui/input";
-import { Badge } from '@/components/ui/badge";
-import { ScrollArea } from '@/components/ui/scroll-area";
-import { Textarea } from '@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar";
+import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send, Paperclip, Image, Phone, Video, MoreVertical, ArrowLeft } from "lucide-react";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 
 interface Message {
   id: string;

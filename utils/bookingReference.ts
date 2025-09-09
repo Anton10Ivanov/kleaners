@@ -2,7 +2,7 @@
 /**
  * Generate booking reference in format DDMMYYXX
  * where DD = day, MM = month, YY = year, XX = random digits
- 
+ */
 export const generateBookingReference = (): string => {
   const now = new Date();
   
@@ -19,7 +19,7 @@ export const generateBookingReference = (): string => {
 
 /**
  * Validate booking reference format
- 
+ */
 export const isValidBookingReference = (reference: string): boolean => {
   const pattern = /^\d{8}$/;
   return pattern.test(reference);
@@ -27,7 +27,7 @@ export const isValidBookingReference = (reference: string): boolean => {
 
 /**
  * Parse booking reference to extract date components
- 
+ */
 export const parseBookingReference = (reference: string) => {
   if (!isValidBookingReference(reference)) {
     throw new Error('Invalid booking reference format');

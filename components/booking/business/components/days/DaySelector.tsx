@@ -1,12 +1,12 @@
 
 import { useState } from "react";
-import { Button } from '@/components/ui/button";
-import { Card, CardContent } from '@/components/ui/card";
-import { Calendar } from '@/components/ui/calendar";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
 import { format } from "date-fns";
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { Badge } from '@/components/ui/badge";
+import { BookingFormData } from '@/schemas/booking';
+import { Badge } from '@/components/ui/badge';
 
 interface DaySelectorProps {
   form: UseFormReturn<BookingFormData>;

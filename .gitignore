@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Backup directory - preserve but exclude from compilation
+src-backup/

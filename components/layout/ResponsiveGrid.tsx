@@ -1,5 +1,5 @@
 
-import { cn } from '@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface ResponsiveGridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

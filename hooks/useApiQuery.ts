@@ -10,30 +10,30 @@ import {
 /**
  * Configuration options for useApiQuery hook
  * @template TData The type of data returned by the query
- 
+ */
 export interface UseApiQueryOptions<TData> {
-  /** Unique query key for caching 
+  /** Unique query key for caching */
   queryKey: string[];
   
-  /** Function that fetches the data 
+  /** Function that fetches the data */
   queryFn: () => Promise<TData>;
   
-  /** Initial data to use before the query resolves 
+  /** Initial data to use before the query resolves */
   initialData?: TData;
   
-  /** Whether to automatically refetch on window focus 
+  /** Whether to automatically refetch on window focus */
   refetchOnWindowFocus?: boolean;
   
-  /** How long the data should be considered fresh (in ms) 
+  /** How long the data should be considered fresh (in ms) */
   staleTime?: number;
   
-  /** Whether to retry failed queries 
+  /** Whether to retry failed queries */
   retry?: boolean | number;
   
-  /** Custom error handler 
+  /** Custom error handler */
   onErrorHandler?: (error: Error) => void;
   
-  /** Whether to enable the query 
+  /** Whether to enable the query */
   enabled?: boolean;
 }
 
@@ -52,7 +52,7 @@ export interface UseApiQueryOptions<TData> {
  *   onErrorHandler: (error) => console.error('Custom error handling:', error)
  * });
  * ```
- 
+ */
 export function useApiQuery<TData>(
   options: UseApiQueryOptions<TData>
 ): UseQueryResult<TData, Error> {

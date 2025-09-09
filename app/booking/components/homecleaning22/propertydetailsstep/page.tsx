@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, ArrowRight, Home, Building, Sparkles, Heart } from 'lucide-react';
 import { ClutterLevel22, BookingData22 } from '../../types/HomeCleaning22Types';
-import { CLUTTER_LEVELS } from '../../constants/HomeCleaning22Constants';
+import { CLUTTER_LEVELS } from '../../../constants/homecleaning22constants/page';
 
 interface PropertyDetailsStepProps {
   bookingData: BookingData22;

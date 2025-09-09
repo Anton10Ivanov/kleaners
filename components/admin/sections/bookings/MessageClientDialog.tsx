@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog";
-import { Textarea } from '@/components/ui/textarea";
-import { Label } from '@/components/ui/label";
-import { Input } from '@/components/ui/input";
-import { useToast } from '@/hooks/use-toast";
-import { supabase } from '@/integrations/supabase/client";
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from "lucide-react";
 import { Booking } from "./types";
 

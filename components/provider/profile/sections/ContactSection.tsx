@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Mail, Phone, User } from "lucide-react";
-import { Separator } from '@/components/ui/separator";
+import { Separator } from '@/components/ui/separator';
 
 interface ContactSectionProps {
   provider: any;

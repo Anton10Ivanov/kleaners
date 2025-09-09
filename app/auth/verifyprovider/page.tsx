@@ -2,21 +2,22 @@
 
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from '@/integrations/supabase/client";
-import { useToast } from '@/hooks/use-toast";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Spinner } from '@/components/ui/spinner";
-import Navbar from '@/components/Navbar";
-import Footer from '@/components/Footer";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const VerifyProvider = () => {
   const [isVerifying, setIsVerifying] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useRouter();
-  const location = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const VerifyProvider = () => {
         if (data.user && data.user.email) {
           // The user is now verified, redirect to provider dashboard after a delay
           setTimeout(() => {
-            navigate("/provider/dashboard");
+            router.push("/provider/dashboard");
           }, 3000);
         }
       } catch (err) {
@@ -64,7 +65,7 @@ const VerifyProvider = () => {
     };
 
     verifyToken();
-  }, [location.search, navigate, toast]);
+  }, [searchParams, router, toast]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -111,7 +112,7 @@ const VerifyProvider = () => {
             {!isVerifying && (
               <Button 
                 variant={isSuccess ? "default" : "outline"}
-                onClick={() => navigate("/")}
+                onClick={() => router.push("/")}
                 className="w-full"
               >
                 {isSuccess ? "Go to Dashboard" : "Return to Home"}

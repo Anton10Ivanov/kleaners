@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader } from '@/components/ui/card";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ProfileHeader } from "./ProfileHeader";
 import { ContactSection } from "./sections/ContactSection";
 import { ExperienceSection } from "./sections/ExperienceSection";
@@ -10,7 +10,7 @@ import { SkillsSection } from "./sections/SkillsSection";
 import { AvailabilitySection } from "./sections/AvailabilitySection";
 import { EmploymentSection } from "./sections/EmploymentSection";
 import { Settings } from "lucide-react";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { useNavigate } from "react-router-dom";
 
 interface ProfileContentProps {

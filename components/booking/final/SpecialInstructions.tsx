@@ -1,9 +1,9 @@
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Textarea } from '@/components/ui/textarea";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { Card, CardContent } from '@/components/ui/card";
+import { BookingFormData } from '@/schemas/booking';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface SpecialInstructionsProps {
   form: UseFormReturn<BookingFormData>;

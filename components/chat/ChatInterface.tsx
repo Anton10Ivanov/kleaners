@@ -1,4 +1,6 @@
 
+'use client'
+
 import { Box } from '@/components/layout/Box';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';

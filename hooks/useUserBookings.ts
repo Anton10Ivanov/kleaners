@@ -14,7 +14,7 @@ import {
  * Custom hook to fetch and manage user bookings
  * 
  * @returns {UseUserBookingsResult} Object containing bookings data and status
- 
+ */
 export function useUserBookings(): UseUserBookingsResult {
   // Use mock user ID for demo
   const mockUserId = 'mock-user-1';

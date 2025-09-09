@@ -2,12 +2,12 @@
 
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client";
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
 
 const GoogleCalendarCallback = () => {
-  const navigate = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -15,7 +15,7 @@ const GoogleCalendarCallback = () => {
       
       if (!code) {
         toast.error('No authorization code received');
-        navigate('/');
+        router.push('/');
         return;
       }
 
@@ -24,7 +24,7 @@ const GoogleCalendarCallback = () => {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
           toast.error('Please log in to connect Google Calendar');
-          navigate('/');
+          router.push('/');
           return;
         }
 
@@ -48,11 +48,11 @@ const GoogleCalendarCallback = () => {
         }
 
         toast.success('Successfully connected to Google Calendar');
-        navigate('/');
+        router.push('/');
       } catch (error) {
         console.error('Error handling callback:', error);
         toast.error('Failed to connect to Google Calendar');
-        navigate('/');
+        router.push('/');
       }
     };
 

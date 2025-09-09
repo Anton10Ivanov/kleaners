@@ -1,7 +1,8 @@
 'use client'
 
 
-import { useLocation, Link } from "react-router-dom";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useEffect } from "react";
 
 const NotFound = () => {

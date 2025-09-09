@@ -5,11 +5,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table";
-import { Badge } from '@/components/ui/badge";
-import { Button } from '@/components/ui/button";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Pencil, Trash2, ChevronLeft, ChevronRight, Eye } from "lucide-react";
-import { Database } from '@/integrations/supabase/types";
+import { Database } from '@/integrations/supabase/types';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +19,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import { useState } from "react";
 import { ProviderDetails } from "./ProviderDetails";
 import {
@@ -27,7 +27,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 

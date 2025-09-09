@@ -1,6 +1,6 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import RootLayout from '@/components/RootLayout";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import RootLayout from '@/components/RootLayout';
 
 const TermsOfService = () => {
   return (

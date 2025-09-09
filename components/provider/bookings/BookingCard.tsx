@@ -1,10 +1,10 @@
 
 import { format } from "date-fns";
 import { CalendarIcon, Clock, MapPin, AlertCircle } from "lucide-react";
-import { Button } from '@/components/ui/button";
-import { Card, CardContent, CardFooter } from '@/components/ui/card";
-import { Badge } from '@/components/ui/badge";
-import { cn } from '@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface BookingCardProps {
   booking: any;

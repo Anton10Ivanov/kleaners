@@ -1,16 +1,16 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from '@/components/ui/button";
-import { Input } from '@/components/ui/input";
-import { useToast } from '@/hooks/use-toast";
-import { supabase } from '@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card";
-import { Separator } from '@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import SocialLogin from "./SocialLogin";
-import { logger } from '@/utils/logging";
-import { sanitizeInput, cleanupAuthState } from '@/utils/security";
-import { getRedirectPathForUser } from '@/utils/auth-redirect";
+import { logger } from '@/utils/logging';
+import { sanitizeInput, cleanupAuthState } from '@/utils/security';
+import { getRedirectPathForUser } from '@/utils/auth-redirect';
 
 interface LoginFormProps {
   onResetMode: () => void;
@@ -22,7 +22,7 @@ const LoginForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useRouter();
+  const router = useRouter();
   const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -58,7 +58,7 @@ const LoginForm = ({
         // Get the appropriate redirect path based on user role
         const redirectPath = await getRedirectPathForUser(data.user.id);
         logger.info('Redirecting user to', { redirectPath, userId: data.user.id }, 'LoginForm');
-        navigate(redirectPath);
+        router.push(redirectPath);
       }
     } catch (error) {
       logger.error('Login failed', { 
@@ -97,10 +97,10 @@ const LoginForm = ({
         </div>
         <form onSubmit={handleLogin} className="form-spacing-relaxed">
           <div className="form-spacing-tight">
-            <Input type="email" placeholder="m@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+            <Input type="email" placeholder="m@example.com" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} required />
           </div>
           <div className="form-spacing-tight">
-            <Input type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
+            <Input type="password" placeholder="••••••••" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} required />
           </div>
           <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isLoading}>
             {isLoading ? "Processing..." : "Login"}
@@ -110,7 +110,7 @@ const LoginForm = ({
           <Button type="button" variant="link" onClick={onResetMode} className="px-0 text-sm text-gray-600 hover:text-gray-900">
             Forgot your password?
           </Button>
-          <Button type="button" variant="link" onClick={() => navigate('/signup')} className="px-0 rounded-sm text-primary bg-white font-bold text-base text-center">
+          <Button type="button" variant="link" onClick={() => router.push('/signup')} className="px-0 rounded-sm text-primary bg-white font-bold text-base text-center">
             Sign up
           </Button>
         </div>
@@ -118,11 +118,11 @@ const LoginForm = ({
       <CardFooter className="text-center text-xs text-gray-500">
         <p className="w-full">
           By clicking continue, you agree to our{' '}
-          <Button variant="link" className="h-auto card-spacing-none text-xs" onClick={() => navigate('/legal/terms')}>
+          <Button variant="link" className="h-auto card-spacing-none text-xs" onClick={() => router.push('/legal/terms')}>
             Terms of Service
           </Button>
           {' '}and{' '}
-          <Button variant="link" className="h-auto card-spacing-none text-xs" onClick={() => navigate('/legal/privacy')}>
+          <Button variant="link" className="h-auto card-spacing-none text-xs" onClick={() => router.push('/legal/privacy')}>
             Privacy Policy
           </Button>
         </p>

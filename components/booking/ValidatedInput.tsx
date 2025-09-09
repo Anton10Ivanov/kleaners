@@ -1,7 +1,7 @@
 
 import { useFormContext } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Input } from '@/components/ui/input";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { CheckCircle } from "lucide-react";
 
 interface ValidatedInputProps extends React.InputHTMLAttributes<HTMLInputElement> {

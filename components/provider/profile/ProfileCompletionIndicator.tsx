@@ -1,7 +1,7 @@
 
-import { Progress } from '@/components/ui/progress";
+import { Progress } from '@/components/ui/progress';
 import { Info } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export type ProfileSection = {
   name: string;

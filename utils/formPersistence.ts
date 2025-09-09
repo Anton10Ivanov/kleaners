@@ -8,11 +8,11 @@ const EXPIRY_HOURS = 24;
 
 /**
  * Enhanced form persistence with auto-save and expiration
- 
+ */
 export const formPersistence = {
   /**
    * Save form data to localStorage with timestamp
-   
+   */
   save: (data: Partial<BookingFormData>): boolean => {
     try {
       const timestamp = Date.now();
@@ -27,7 +27,7 @@ export const formPersistence = {
 
   /**
    * Load form data from localStorage if not expired
-   
+   */
   load: (): Partial<BookingFormData> | null => {
     try {
       const timestampStr = localStorage.getItem(TIMESTAMP_KEY);
@@ -55,7 +55,7 @@ export const formPersistence = {
 
   /**
    * Clear stored form data
-   
+   */
   clear: (): void => {
     try {
       localStorage.removeItem(STORAGE_KEY);
@@ -67,7 +67,7 @@ export const formPersistence = {
 
   /**
    * Check if stored data exists and is not expired
-   
+   */
   hasValidData: (): boolean => {
     const data = formPersistence.load();
     return data !== null;
@@ -75,7 +75,7 @@ export const formPersistence = {
 
   /**
    * Get age of stored data in hours
-   
+   */
   getDataAge: (): number | null => {
     try {
       const timestampStr = localStorage.getItem(TIMESTAMP_KEY);
@@ -92,7 +92,7 @@ export const formPersistence = {
 
 /**
  * Auto-save functionality for forms
- 
+ */
 export class FormAutoSave {
   private saveInterval: NodeJS.Timeout | null = null;
   private lastSaveData: string | null = null;

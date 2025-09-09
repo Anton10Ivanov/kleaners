@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { useClients } from '@/hooks/useClients";
+import { useClients } from '@/hooks/useClients';
 import { ClientForm } from "./clients/ClientForm";
 import { ClientsTable } from "./clients/ClientsTable";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { PlusCircle } from "lucide-react";
-import { Database } from '@/integrations/supabase/types";
+import { Database } from '@/integrations/supabase/types';
 
 type Client = Database["public"]["Tables"]["clients"]["Row"];
 

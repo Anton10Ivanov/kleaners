@@ -1,12 +1,12 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { MoveInOutFormData } from '@/schemas/booking";
+import { MoveInOutFormData } from '@/schemas/booking';
 import { PropertySizeField } from '../PropertySizeField';
 import PropertyCondition from './PropertyCondition';
 import CleaningPersonnel from './CleaningPersonnel';
 import SpecialConditions from './SpecialConditions';
 import AdditionalNotesField from './components/AdditionalNotesField';
-import { logger } from '@/utils/logging";
+import { logger } from '@/utils/logging';
 
 interface MoveInOutFieldsProps {
   form: UseFormReturn<MoveInOutFormData>;

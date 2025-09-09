@@ -31,18 +31,12 @@ import {
   Package22, 
   FlexibilityType22,
   BookingData22 
-} from './types/HomeCleaning22Types';
-import { 
-  calculateRecommendedHours22, 
-  calculatePrice22, 
-  calculateMonthlyTotal22,
-  calculateFinalPrice 
-} from './utils/HomeCleaning22Logic';
-import { CLUTTER_LEVELS, PACKAGES, FREQUENCY_OPTIONS, FLEXIBILITY_OPTIONS } from './constants/HomeCleaning22Constants';
+} from '../types/HomeCleaning22Types';
+import { CLUTTER_LEVELS, PACKAGES, FREQUENCY_OPTIONS, FLEXIBILITY_OPTIONS } from '../constants/homecleaning22constants/page';
 
 // Import step components
-import { ServiceSelectionStep } from './components/HomeCleaning22/ServiceSelectionStep';
-import { PropertyDetailsStep } from './components/HomeCleaning22/PropertyDetailsStep';
+import { ServiceSelectionStep } from '../components/homecleaning22/serviceselectionstep/page';
+import { PropertyDetailsStep } from '../components/homecleaning22/propertydetailsstep/page';
 
 const HomeCleaning22Refactored: React.FC = () => {
   const [currentStep22, setCurrentStep22] = useState<Step22>(0);

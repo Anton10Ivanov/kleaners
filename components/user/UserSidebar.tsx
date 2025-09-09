@@ -1,9 +1,9 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { cn } from '@/lib/utils";
-import { Button } from '@/components/ui/button";
-import { useMediaQuery } from '@/hooks/use-media-query";
-import { ScrollArea } from '@/components/ui/scroll-area";
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   User, 
   Calendar, 

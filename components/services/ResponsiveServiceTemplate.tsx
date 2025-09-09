@@ -1,5 +1,5 @@
 
-import { useMediaQuery } from '@/hooks/use-media-query";
+import { useMediaQuery } from '@/hooks/use-media-query';
 import ModernServiceTemplate from "./ModernServiceTemplate";
 import MobileOptimizedServiceTemplate from "./MobileOptimizedServiceTemplate";
 

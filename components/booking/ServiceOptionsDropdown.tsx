@@ -1,19 +1,19 @@
 
 import { useEffect } from "react";
-import { Frequency } from '@/schemas/booking";
+import { Frequency } from '@/schemas/booking';
 import { 
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue 
-} from '@/components/ui/select";
+} from '@/components/ui/select';
 import { 
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@/components/ui/popover";
-import { Button } from '@/components/ui/button";
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
 import { Info, Check } from "lucide-react";
 import { 
   Table,
@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@/components/ui/table";
+} from '@/components/ui/table';
 
 interface ServiceOptionsDropdownProps {
   frequency: Frequency | undefined;

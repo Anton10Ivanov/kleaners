@@ -7,7 +7,7 @@ import { HomeCleaningSchema, type HomeBookingForm } from '@/schemas/bookingSchem
 import { useEnhancedBookingSubmission } from '@/hooks/useEnhancedBookingSubmission';
 import { useNavigate } from 'react-router-dom';
 import { enhancedFormPersistence, FormAutoSave } from '@/utils/enhancedFormPersistence';
-import { StandardizedBookingForm, BookingFormData } from '@/components/forms/StandardizedBookingForm';
+import { UnifiedBookingForm, UnifiedBookingFormData } from '@/components/forms/UnifiedBookingForm';
 import { motion } from 'framer-motion';
 
 const HomeCleaningBookingRefactored = () => {

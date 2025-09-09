@@ -1,6 +1,6 @@
 
 import React, { memo, useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calendar, DollarSign, TrendingUp } from "lucide-react";
 
 /**

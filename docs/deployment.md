@@ -1,46 +1,62 @@
 
 # Deployment Guide
 
-## Lovable Platform Deployment
+## Local Development
 
-The easiest way to deploy is using the Lovable platform:
+### Running on Localhost
 
-1. Click "Publish" in the Lovable editor
-2. Your app will be available at `yourproject.lovable.app`
-3. Configure custom domain in Project Settings if needed
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## External Deployment Options
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Open your browser to `http://localhost:3000`
+
+### Environment Setup
+
+Create a `.env.local` file with the following variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## Production Deployment Options
+
+### Vercel (Recommended)
+
+1. Import your GitHub repository
+2. Configure environment variables in Vercel dashboard
+3. Vercel automatically handles Next.js routing and optimization
 
 ### Netlify
 
 1. Connect your GitHub repository
 2. Configure build settings:
    - Build command: `npm run build`
-   - Publish directory: `dist`
+   - Publish directory: `.next`
 3. Add environment variables in Netlify dashboard
-4. Configure SPA redirects: `_redirects` file with `/* /index.html 200`
-
-### Vercel
-
-1. Import your GitHub repository
-2. Configure environment variables
-3. Vercel automatically handles SPA routing
 
 ### Environment Variables
 
 Required environment variables:
 ```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ## Build Configuration
 
-The project uses Vite with the following optimizations:
-- Path aliases with `@/` prefix
-- Automatic code splitting
+The project uses Next.js 15 with the following optimizations:
+- App Router for file-based routing
+- Automatic code splitting and optimization
 - CSS optimization with TailwindCSS
 - TypeScript type checking
+- Image optimization
 
 ## Supabase Configuration
 

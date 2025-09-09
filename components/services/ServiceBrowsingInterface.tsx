@@ -1,9 +1,9 @@
 
 import React, { useState, useMemo } from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { UnifiedContainer } from '@/components/layout/UnifiedContainer";
-import { LayoutSection } from '@/components/layout/LayoutSection";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { UnifiedContainer } from '@/components/layout/UnifiedContainer';
+import { LayoutSection } from '@/components/layout/LayoutSection';
 import { ServiceSearch } from "./ServiceSearch";
 import { ServiceCategoriesGrid } from "./ServiceCategoriesGrid";
 

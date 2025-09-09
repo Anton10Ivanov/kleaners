@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Award, Briefcase } from "lucide-react";
-import { Separator } from '@/components/ui/separator";
+import { Separator } from '@/components/ui/separator';
 
 interface ExperienceSectionProps {
   provider: any;

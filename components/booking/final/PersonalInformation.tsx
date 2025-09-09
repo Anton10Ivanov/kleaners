@@ -1,11 +1,11 @@
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Input } from '@/components/ui/input";
-import { Checkbox } from '@/components/ui/checkbox";
-import { Label } from '@/components/ui/label";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { Card, CardContent } from '@/components/ui/card";
+import { BookingFormData } from '@/schemas/booking';
+import { Card, CardContent } from '@/components/ui/card';
 import { UserPlus, LogIn, User } from "lucide-react";
 import { useState } from 'react';
 

@@ -1,8 +1,10 @@
 
-import { useMediaQuery } from '@/hooks/use-media-query";
-import { ProvidersSection } from '@/components/admin";
+'use client'
 
-export const AdminProviders = () => {
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { ProvidersSection } from '@/components/admin';
+
+export default function AdminProviders() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   return (
@@ -13,4 +15,4 @@ export const AdminProviders = () => {
       </div>
     </div>
   );
-};
+}

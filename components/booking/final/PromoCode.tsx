@@ -1,9 +1,9 @@
 
-import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form";
-import { Input } from '@/components/ui/input";
-import { Button } from '@/components/ui/button";
+import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
+import { BookingFormData } from '@/schemas/booking';
 import { toast } from "sonner";
 
 interface PromoCodeProps {

@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card";
-import { ScrollArea } from '@/components/ui/scroll-area";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bell, Check, Trash2 } from "lucide-react";
 import { useNotifications, Notification } from '@/hooks/useNotifications';
 

@@ -1,11 +1,11 @@
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog";
-import { Input } from '@/components/ui/input";
-import { Label } from '@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea";
-import { Database } from '@/integrations/supabase/types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Database } from '@/integrations/supabase/types';
 import { useState } from "react";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 type Client = Database["public"]["Tables"]["clients"]["Row"];
 

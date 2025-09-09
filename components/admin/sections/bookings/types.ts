@@ -1,6 +1,6 @@
 
-import { Database } from '@/integrations/supabase/types";
-import { BookingStatus as BookingStatusEnum } from '@/types/enums";
+import { Database } from '@/integrations/supabase/types';
+import { BookingStatus as BookingStatusEnum } from '@/types/enums';
 
 // Define the enum values that are used throughout the application
 export type BookingStatus = 

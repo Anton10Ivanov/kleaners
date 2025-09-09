@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { PostConstructionBookingForm } from '@/schemas/bookingSchemas";
-import { EnhancedCalendar } from '@/components/booking/EnhancedCalendar";
+import { PostConstructionBookingForm } from '@/schemas/bookingSchemas';
+import Calendar from '@/components/booking/calendar/Calendar';
 
 interface PostConstructionStep2Props {
   form: UseFormReturn<PostConstructionBookingForm>;

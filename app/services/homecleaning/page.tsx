@@ -1,7 +1,9 @@
+'use client'
+
 import React from 'react';
 import { ServicePageTemplate } from '@/components/services/ServicePageTemplate';
 import { useRouter } from 'next/navigation';
-import { Sparkles, Clock, Shield, CheckCircle } from 'lucide-react';
+import { Sparkles, Clock, Shield } from 'lucide-react';
 
 const HomeCleaning = () => {
   const router = useRouter();
@@ -83,7 +85,7 @@ const HomeCleaning = () => {
     '100% satisfaction guarantee on all services'
   ];
 
-  const handleBookingClick = (packageId: string) => {
+  const handleBookingClick = () => {
     // Navigate to booking with selected package
     router.push('/booking');
   };
@@ -92,7 +94,7 @@ const HomeCleaning = () => {
     <ServicePageTemplate
       title="Professional Home Cleaning"
       description="Keep your home spotless with our reliable, professional cleaning services. From regular maintenance to deep cleaning, we've got you covered."
-      heroImage="/lovable-uploads/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
+      heroImage="/Images/81a146c8-f4d6-4adf-8dd6-7d590780093e.png"
       features={features}
       packages={packages}
       benefits={benefits}

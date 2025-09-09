@@ -1,8 +1,8 @@
 
 import React from "react";
 import { Award } from "lucide-react";
-import { Separator } from '@/components/ui/separator";
-import { Badge } from '@/components/ui/badge";
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 
 interface SkillsSectionProps {
   skills: string[];

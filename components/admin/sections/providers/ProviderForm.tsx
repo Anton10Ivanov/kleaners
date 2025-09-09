@@ -1,17 +1,17 @@
 
 import { useState } from "react";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog";
-import { Input } from '@/components/ui/input";
-import { Label } from '@/components/ui/label";
-import { Database } from '@/integrations/supabase/types";
-import { Badge } from '@/components/ui/badge";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Database } from '@/integrations/supabase/types';
+import { Badge } from '@/components/ui/badge';
 import { X } from "lucide-react";
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];

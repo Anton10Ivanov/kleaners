@@ -8,15 +8,15 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Bell } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const AdminPanel = () => {
   const { notifications, loading, unreadCount } = useNotifications();
-  const navigate = useRouter();
-  const location = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   
   // Determine which tab to display by default
-  const searchParams = new URLSearchParams(location.search);
   const defaultTab = searchParams.get('tab') || 'questions';
   
   // Filter for question notifications only

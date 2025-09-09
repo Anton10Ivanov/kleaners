@@ -8,14 +8,14 @@ import { toast } from 'sonner';
  * Hook for password strength checking and password management
  * 
  * @returns Functions and state for password management
- 
+ */
 export function usePasswordManagement() {
   // Password strength state (as a number from 0-100)
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
 
   /**
    * Check password strength and return a value from 0-100
-   
+   */
   const checkPasswordStrength = (password: string): void => {
     if (!password) {
       setPasswordStrength(0);
@@ -39,7 +39,7 @@ export function usePasswordManagement() {
   /**
    * Change user password
    * @returns {Promise<void>} Promise that resolves when password is changed
-   
+   */
   const changePassword = async (currentPassword: string, newPassword: string): Promise<void> => {
     try {
       // In a real app, this would update the password in Supabase Auth

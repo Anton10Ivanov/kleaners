@@ -1,9 +1,9 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, TooltipProps } from "recharts";
 import { Activity } from "lucide-react";
-import { useMediaQuery } from '@/hooks/use-media-query";
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface ServiceData {
   name: string;

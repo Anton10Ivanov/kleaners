@@ -1,12 +1,12 @@
 
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useMediaQuery } from '@/hooks/use-media-query";
-import { ScrollArea } from '@/components/ui/scroll-area";
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import ProviderBottomNav from "./ProviderBottomNav";
 import { TopNav } from "./TopNav";
-import { UnifiedContainer } from '@/components/layout/UnifiedContainer";
-import { supabase } from '@/integrations/supabase/client";
+import { UnifiedContainer } from '@/components/layout/UnifiedContainer';
+import { supabase } from '@/integrations/supabase/client';
 
 const ProviderLayout = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");

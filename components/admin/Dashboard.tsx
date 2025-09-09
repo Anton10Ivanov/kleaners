@@ -1,8 +1,8 @@
 
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from "lucide-react";
-import { useBookings } from '@/hooks/useBookings";
+import { useBookings } from '@/hooks/useBookings';
 
 export const Dashboard = () => {
   // Use the same hook that powers the bookings table

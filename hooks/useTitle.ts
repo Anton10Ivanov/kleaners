@@ -7,7 +7,7 @@ import { useEffect } from 'react';
  * Hook to set the document title
  * 
  * @param title - The title to set for the page
- 
+ */
 export function useTitle(title: string): void {
   useEffect(() => {
     // Set the document title

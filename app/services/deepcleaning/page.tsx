@@ -1,15 +1,17 @@
-import { ServicePageTemplate } from '@/components/services/ServicePageTemplate";
-import { deepCleaningData } from '@/data/services/deepCleaning";
-import { useNavigate } from "react-router-dom";
+'use client'
+
+import { ServicePageTemplate } from '@/components/services/ServicePageTemplate';
+import { deepCleaningData } from '@/data/services/deepCleaning';
+import { useRouter } from "next/navigation";
 
 const DeepCleaning = () => {
-  const navigate = useRouter();
+  const router = useRouter();
 
   const handleBookingClick = (packageId?: string) => {
     const bookingPath = packageId 
       ? `/booking/deep-cleaning?package=${packageId}`
       : '/booking/deep-cleaning';
-    navigate(bookingPath);
+    router.push(bookingPath);
   };
 
   return (

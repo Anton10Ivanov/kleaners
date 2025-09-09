@@ -1,5 +1,5 @@
 
-import { cn } from '@/lib/utils";
+import { cn } from '@/lib/utils';
 import { UnifiedContainer } from "./UnifiedContainer";
 
 interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,16 +1,16 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Badge } from '@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs";
-import { Avatar, AvatarFallback } from '@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { CheckCircle, XCircle, AlertCircle, FileText, User, Calendar } from "lucide-react";
-import { Label } from '@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select";
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from "sonner";
-import { supabase } from '@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 import { useQueryClient } from "@tanstack/react-query";
 
 type VerificationStatus = 'pending' | 'in_progress' | 'approved' | 'rejected';

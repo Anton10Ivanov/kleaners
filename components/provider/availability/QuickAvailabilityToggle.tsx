@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { Switch } from '@/components/ui/switch";
-import { Label } from '@/components/ui/label";
-import { Button } from '@/components/ui/button";
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
 import { Calendar, Clock } from "lucide-react";
-import { supabase } from '@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
 interface QuickAvailabilityToggleProps {
   initialAvailability: boolean;

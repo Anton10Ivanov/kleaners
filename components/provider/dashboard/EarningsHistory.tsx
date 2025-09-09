@@ -1,9 +1,9 @@
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { DollarSign } from "lucide-react";
-import { useMediaQuery } from '@/hooks/use-media-query";
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 // This is demo data; in a real app, this would come from an API
 const data = [

@@ -4,15 +4,15 @@ import { DateRange } from "react-day-picker";
 import { BookingStatus, SortField, SortOrder } from "./bookings/types";
 import { BookingsFilter } from "./bookings/BookingsFilter";
 import { BookingsTable } from "./bookings/BookingsTable";
-import { useBookings } from '@/hooks/useBookings";
-import { useToast } from '@/components/ui/use-toast";
-import { useMediaQuery } from '@/hooks/use-media-query";
+import { useBookings } from '@/hooks/useBookings';
+import { useToast } from '@/components/ui/use-toast';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { BookingsPagination } from "./bookings/components/BookingsPagination";
 import { BookingsLoadingState } from "./bookings/components/BookingsLoadingState";
 import { BookingsErrorState } from "./bookings/components/BookingsErrorState";
 import { BookingsEmptyState } from "./bookings/components/BookingsEmptyState";
 import { BookingsStatusBadge } from "./bookings/components/BookingsStatusBadge";
-import { logger } from '@/utils/logging";
+import { logger } from '@/utils/logging';
 
 export const BookingsSection = () => {
   const { toast } = useToast();

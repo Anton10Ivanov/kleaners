@@ -1,14 +1,14 @@
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Input } from '@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from "react-hook-form";
-import { BookingFormData } from '@/schemas/booking";
-import { Card, CardContent } from '@/components/ui/card";
-import { AddressAutocomplete } from '@/components/forms/AddressAutocomplete";
-import FormErrorBoundary from '@/components/forms/FormErrorBoundary";
+import { BookingFormData } from '@/schemas/booking';
+import { Card, CardContent } from '@/components/ui/card';
+import { AddressAutocomplete } from '@/components/forms/AddressAutocomplete';
+import FormErrorBoundary from '@/components/forms/FormErrorBoundary';
 import SpecialInstructions from "./SpecialInstructions";
-import { logger } from '@/utils/logging";
+import { logger } from '@/utils/logging';
 
 interface CleaningAddressProps {
   form: UseFormReturn<BookingFormData>;

@@ -86,7 +86,7 @@ export const logPerformance = (operation: string, duration: number, component?: 
 
 /**
  * Helper for user action logging
- 
+ */
 export const logUserAction = (action: string, details?: Record<string, unknown>, component?: string) => {
   logger.info(`User action: ${action}`, details, component);
 };

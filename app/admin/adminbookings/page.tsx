@@ -1,8 +1,10 @@
 
-import { useMediaQuery } from '@/hooks/use-media-query";
-import { BookingsSection } from '@/components/admin";
+'use client'
 
-export const AdminBookings = () => {
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { BookingsSection } from '@/components/admin';
+
+export default function AdminBookings() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   return (
@@ -13,4 +15,4 @@ export const AdminBookings = () => {
       </div>
     </div>
   );
-};
+}

@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import { Button } from '@/components/ui/button";
-import { Badge } from '@/components/ui/badge";
-import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid';
 import { Check, X, Star } from "lucide-react";
 
 interface ServiceComparisonItem {

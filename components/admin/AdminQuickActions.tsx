@@ -1,10 +1,10 @@
 
 import React, { memo, useMemo } from "react";
-import { Button } from '@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Plus, RotateCw, Send, UserPlus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { logger } from '@/utils/logging";
+import { useRouter } from "next/navigation";
+import { logger } from '@/utils/logging';
 import { toast } from "sonner";
 
 /**
@@ -25,34 +25,34 @@ interface QuickActionButton {
  * @returns {JSX.Element} Admin quick actions component
  */
 export const AdminQuickActions = memo(function AdminQuickActions(): JSX.Element {
-  const navigate = useRouter();
+  const router = useRouter();
   
   /**
    * Navigate to customer creation page
    */
   const goToAddCustomer = () => {
-    navigate("/admin/customers/new");
+    router.push("/admin/admincustomers");
   };
   
   /**
    * Navigate to booking creation page
    */
   const goToAddBooking = () => {
-    navigate("/admin/bookings/new");
+    router.push("/admin/adminbookings");
   };
 
   /**
    * View schedule page
    */
   const goToSchedule = () => {
-    navigate("/admin/bookings?view=calendar");
+    router.push("/admin/schedulemanagement");
   };
 
   /**
    * Send updates to customers
    */
   const goToSendUpdates = () => {
-    navigate("/admin/customers?action=message");
+    router.push("/admin/admincustomers");
   };
 
   /**

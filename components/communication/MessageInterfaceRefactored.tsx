@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState } from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 import { ConversationList } from "./components/ConversationList";
 import { ChatArea } from "./components/ChatArea";
 

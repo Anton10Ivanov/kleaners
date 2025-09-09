@@ -2,12 +2,11 @@
 
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client";
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
 
 const GoogleCalendarCallback = () => {
-  const navigate = useRouter();
 
   useEffect(() => {
     const handleCallback = async () => {

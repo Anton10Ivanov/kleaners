@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { cn } from '@/lib/utils";
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations";
-import { Input } from '@/components/ui/input";
-import { Button } from '@/components/ui/button";
-import { Badge } from '@/components/ui/badge";
+import { cn } from '@/lib/utils';
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Search, Filter, X } from "lucide-react";
 
 interface ServiceSearchProps {

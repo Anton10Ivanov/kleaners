@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { Button } from '@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Plus } from "lucide-react";
 import { ProvidersTable } from "./providers/ProvidersTable";
 import { ProviderForm } from "./providers/ProviderForm";
-import { useProviders } from '@/hooks/useProviders";
-import { Database } from '@/integrations/supabase/types";
+import { useProviders } from '@/hooks/useProviders';
+import { Database } from '@/integrations/supabase/types';
 
 type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
 

@@ -19,7 +19,7 @@ import { useAvatarManagement } from './useAvatarManagement';
  * 
  * return <ProfileForm profile={profile} onSave={updateProfile} />;
  * ```
- 
+ */
 export function useProfileData() {
   // Fetch user profile
   const fetchUserProfile = async (): Promise<UserData> => {
@@ -69,7 +69,7 @@ export function useProfileData() {
 
   /**
    * Update user profile
-   
+   */
   const updateProfile = async (updates: Partial<UserData>): Promise<void> => {
     try {
       // In a real app, this would update the user profile in Supabase

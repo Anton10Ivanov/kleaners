@@ -2,7 +2,7 @@
 import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { Card, CardContent } from '@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 
 const testimonials = [
   {

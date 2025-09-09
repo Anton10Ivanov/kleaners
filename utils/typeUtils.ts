@@ -94,7 +94,7 @@ export type PickByValueType<T, ValueType> = {
 
 /**
  * Recursively make all properties in an object optional
- 
+ */
 export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T;

@@ -8,7 +8,7 @@ import { ErrorSeverity } from './types';
  * @param fallbackMessage - Optional fallback message if error doesn't have one
  * @param component - Optional component name for logging
  * @param severity - Optional severity level
- 
+ */
 export const handleApiError = (
   error: unknown, 
   fallbackMessage = 'An error occurred. Please try again.',

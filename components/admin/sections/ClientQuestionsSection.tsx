@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useCustomerQuestions } from "./client-questions/useCustomerQuestions";
 import { QuestionsTable } from "./client-questions/QuestionsTable";
 import { QuestionFilters } from "./client-questions/QuestionFilters";
-import { Input } from '@/components/ui/input";
+import { Input } from '@/components/ui/input';
 import { CustomerQuestion } from './client-questions/types';
 import { QuestionDetailsDialog } from './client-questions/QuestionDetailsDialog';
 

@@ -1,7 +1,7 @@
 
 import { UseFormReturn } from "react-hook-form";
-import { MoveInOutBookingForm } from '@/schemas/bookingSchemas";
-import { EnhancedCalendar } from '@/components/booking/EnhancedCalendar";
+import { MoveInOutBookingForm } from '@/schemas/bookingSchemas';
+import Calendar from '@/components/booking/calendar/Calendar';
 
 interface MoveInOutStep2Props {
   form: UseFormReturn<MoveInOutBookingForm>;

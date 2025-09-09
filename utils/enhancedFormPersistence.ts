@@ -4,11 +4,11 @@ const EXPIRY_HOURS = 24;
 
 /**
  * Enhanced form persistence utility extracted from unused components
- 
+ */
 export const enhancedFormPersistence = {
   /**
    * Save form data to localStorage with timestamp
-   
+   */
   save: (data: any, formType?: string): boolean => {
     try {
       const timestamp = Date.now();
@@ -26,7 +26,7 @@ export const enhancedFormPersistence = {
 
   /**
    * Load form data from localStorage if not expired
-   
+   */
   load: (formType?: string): any | null => {
     try {
       const key = formType ? `${STORAGE_KEY}-${formType}` : STORAGE_KEY;
@@ -57,7 +57,7 @@ export const enhancedFormPersistence = {
 
   /**
    * Clear stored form data
-   
+   */
   clear: (formType?: string): void => {
     try {
       const key = formType ? `${STORAGE_KEY}-${formType}` : STORAGE_KEY;
@@ -72,7 +72,7 @@ export const enhancedFormPersistence = {
 
   /**
    * Check if stored data exists and is not expired
-   
+   */
   hasValidData: (formType?: string): boolean => {
     const data = enhancedFormPersistence.load(formType);
     return data !== null;
@@ -80,7 +80,7 @@ export const enhancedFormPersistence = {
 
   /**
    * Create an auto-save instance for a form
-   
+   */
   createAutoSave: (form: any, formType?: string, intervalMs: number = 30000): FormAutoSave => {
     return new FormAutoSave(
       () => form.getValues(),
@@ -92,7 +92,7 @@ export const enhancedFormPersistence = {
 
 /**
  * Auto-save hook for forms
- 
+ */
 export class FormAutoSave {
   private saveInterval: NodeJS.Timeout | null = null;
   private lastSaveData: string | null = null;

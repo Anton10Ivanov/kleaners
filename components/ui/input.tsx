@@ -1,7 +1,7 @@
 
 import * as React from "react"
-import { cn } from '@/lib/utils"
-import { useMobileOptimizations } from '@/hooks/useMobileOptimizations"
+import { cn } from '@/lib/utils'
+import { useMobileOptimizations } from '@/hooks/useMobileOptimizations'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;

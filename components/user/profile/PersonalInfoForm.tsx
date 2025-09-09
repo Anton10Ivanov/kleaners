@@ -1,8 +1,8 @@
 
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form";
-import { Input } from '@/components/ui/input";
-import { Button } from '@/components/ui/button";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2, Save, Mail, Phone, MapPin } from "lucide-react";
 import { useForm, UseFormReturn } from "react-hook-form";
 

@@ -4,11 +4,11 @@
 import React from 'react';
 import { useTitle } from '@/hooks/useTitle';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
-import { cn } from '@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card";
-import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid";
-import { Button } from '@/components/ui/button";
-import { Badge } from '@/components/ui/badge";
+import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ResponsiveGrid } from '@/components/layout/ResponsiveGrid';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
   Calendar,
   Clock, 
